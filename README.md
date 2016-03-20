@@ -1,4 +1,4 @@
-# cloudscribe.SimpleContent
+# cloudscribe SimpleContent
 
 A simple, yet flexible content and blogging engine for ASP.NET Core that can work with or without a database. This project has borrowed significantly from [Mads Kristensen's MiniBlog](https://github.com/madskristensen/MiniBlog) both for ideas and code but re-implemented and extended in the newer ASP.NET Core framework. 
 
@@ -8,6 +8,20 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 [![Join the chat at https://gitter.im/joeaudette/cloudscribe](https://badges.gitter.im/joeaudette/cloudscribe.svg)](https://gitter.im/joeaudette/cloudscribe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+## Current Status
+
+This project is in fairly early stages, lots of things will change or be refactored but it is starting to shape up nicely and I thought I should go ahead and make the proejct public.
+
+There are no releases or nugets yet, but you can try it in visual studio. If you launch it with IIS Express it will have a single tenant running at localhost:60000, change to port-tenants in the debugging dropdown (instead of IISExpress), you can debug with 2 tenants running. You can also run both configured tenants by opening a command window in the root of the example.WebApp project and execute the command:
+
+    dnx port-tenants
+	
+that will get you both localhost:60000 and localhost:60002 which you can open in your web browser. Both sites are pre-configured with some content and you can login with admin/admin in either or both tenants.
+
+After you login a little pencil will appear int he upper right corner, it toggles the editor toolbar.
+
+You should also be able to [create and edit blog posts and pages using Open Live Writer](https://github.com/joeaudette/cloudscribe.SimpleContent/wiki/Using-Open-Live-Writer)
+
 ## Start simple with no database and migrate to a database later if you need one
 
 Not all web site projects need a database, there can be many benefits to not using one including performance, scalability, portability, lower cost, and ease of making backup copies of the entire site. It should even be possible to make a site that runs from a thumb drive.
@@ -16,7 +30,7 @@ In fact, for blogs, there has been kind of a trend towards using [Static Site Ge
 
 Some sites do need a database though and we plan to support using both Entity Framework Core and MongoDb. If you need users to be able to register on your site or if you have more than a few editors, or for larger projects, you will typically want a database.
 
-My plan is to usually build sites without a database, but implement a migration utility to be able to migrate any site from files to a database later if the needs of the project require it.
+My plan is to usually build sites without a database (except for large projects), but implement a migration utility to be able to migrate any site from files to a database later if the needs of the project require it.
 
 ### Current Features
 * Cross platform, works on Windows, OSX, and Linux
@@ -42,7 +56,7 @@ My plan is to usually build sites without a database, but implement a migration 
 * Uses HTML 5 __microdata__ to add semantic meaning
 * Works on any ASP.NET Core host including __Windows Azure__ Websites
 
-### Planned Features
+### Planned Features - see also the to-do.md in the notes folder
 * Support for using Entity Framework Core
 * Support for using cloudscribe.Core for user and site management
 * Support for using MongoDb
@@ -51,33 +65,4 @@ My plan is to usually build sites without a database, but implement a migration 
 * Support for __robots.txt__ and __sitemap.xml__
 * Automatically __optimizes uploaded images__
 
-
-###### below should go in the wiki
-
-### Connecting with Open Live Writer (OLW) or Windows Live Writer (WLW)
-
-To connect 
-
-- Launch OLW/WLW
-
-- If you have not used OLW/WLW to connect to a blog you will get a dialog window asking you to specify what blog service you use. If you have already connected OLW/WLW to a blog, you can go to _Blogs -> Add blog account..._ and get to the same dialog window.
-
-- In the __What blog service do you use?__ dialog window you will tick the _Other services_ radio option and click next.
-
-- The __Add a blog account__ dialog window will ask you for the web address of your blog, the username and password. The web address is the blog page address of your site. ie http://yourdomain/blog 
-
-- The __Download Blog Theme__ dialog window will let you know OLW/WLW can download your blog theme if you allow it to publish a temporary post. Selecting yes will allow you to view how your posts will look directly from the OLW/WLW editor. 
-
-- The __Select blog type__ dialog window will let you know OLW/WLW was not able to detect your blog type. It will ask you for the type of blog and the remote posting URL.  
-Type of blog that you are using: _Metaweblog API_  
-Remote posting URL for your blog: _http://yourdomain/api/metaweblog
-Click next.
-
-- The __Your blog has been set up__ dialog window will let you give your blog a nickname for the OLW/WLW instance. Change that if you want and click finish to get to posting!
-
-Open Live Writer can be downloaded at:
-[http://openlivewriter.org/](http://openlivewriter.org/)
-
-Windows Live Writer can be downloaded at:  
-[http://windows.microsoft.com/en-us/windows-live/essentials](http://windows.microsoft.com/en-us/windows-live/essentials)  
 
