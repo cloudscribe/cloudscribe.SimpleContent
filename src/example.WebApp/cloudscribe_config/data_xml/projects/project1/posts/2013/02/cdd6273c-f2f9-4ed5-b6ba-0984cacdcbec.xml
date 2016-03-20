@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<post>
+  <title>Foo Radley</title>
+  <slug>foo-radley</slug>
+  <author>Joe Audette</author>
+  <pubDate>2013-02-14T02:23:00.0000000Z</pubDate>
+  <lastModified>2016-03-14T15:37:00.5687298Z</lastModified>
+  <excerpt>do the meta boogie</excerpt>
+  <content>whats up doc&lt;br /&gt;&lt;img src="/images/blogmedia/7b138fa7-54bc-4676-8b99-8fa71f720a9a.jpeg" alt="" /&gt;&lt;br /&gt;another day in paradise&lt;br /&gt;</content>
+  <ispublished>true</ispublished>
+  <categories>
+    <category>boo</category>
+    <category> foo</category>
+    <category>vacation</category>
+  </categories>
+  <comments></comments>
+</post>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<post>
+  <title>Relative Image Urls?</title>
+  <slug>relative-image-urls</slug>
+  <author>Joe Audette</author>
+  <pubDate>2016-02-21T17:10:00.0000000Z</pubDate>
+  <lastModified>2016-03-14T15:40:16.3170425Z</lastModified>
+  <excerpt />
+  <content>this is content&lt;br /&gt;more more more&lt;br /&gt;more more more hmmmm&lt;br /&gt;&lt;img alt="" src="/images/blogmedia/553da8bc-a73f-428d-8482-6d011157495d.jpeg" /&gt;&lt;br /&gt;more more more&lt;br /&gt;&lt;img alt="" src="/images/blogmedia/ba4f140e-72a9-4f8f-afab-88c8db6d24ca.jpeg" /&gt;&lt;br /&gt;this is more content</content>
+  <ispublished>true</ispublished>
+  <categories>
+    <category>web design</category>
+  </categories>
+  <comments></comments>
+</post>

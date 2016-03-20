@@ -1,0 +1,27 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Common
+
+@section Meta {
+    @{await Html.RenderPartialAsync("MetaPartial", Model); }
+}
+@section Styles {
+    @{await Html.RenderPartialAsync("StylePartial", Model); }
+}
+@{await Html.RenderPartialAsync("PageDetailPartial", Model); }
+@section Bottom {
+    @if (Model.CanEdit)
+    {
+        await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+    }
+}
+@section Scripts {
+    @if (Model.CanEdit)
+    {
+        await Html.RenderPartialAsync("EditorScriptsPartial");
+    }
+    @if (Model.CommentsAreOpen && Model.Mode.Length == 0)
+    {
+        await Html.RenderPartialAsync("CommentScriptsPartial");
+    }
+}

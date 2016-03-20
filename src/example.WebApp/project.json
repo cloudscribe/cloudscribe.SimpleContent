@@ -1,0 +1,74 @@
+﻿{
+  "webroot": "wwwroot",
+  "userSecretsId": "aspnet5-NavigationDemo.Web-b2a5da14-879a-4891-9037-4cfff0e182de",
+  "version": "1.0.0-*",
+
+    "dependencies": {
+        "cloudscribe.Web.Common": "1.0.0-*",
+        "cloudscribe.Web.Navigation": "1.0.0-*",
+        "cloudscribe.Web.Pagination": "1.0.0-*",
+        "cloudscribe.Web.SimpleAuth": "1.0.0-*",
+        "cloudscribe.SimpleContent.Services": "1.0.0-*",
+        "cloudscribe.SimpleContent.Storage.Xml": "1.0.0-*",
+        "cloudscribe.SimpleContent.Storage.Json": "1.0.0-*",
+        "cloudscribe.SimpleContent.MetaWeblog": "1.0.0-*",
+        "cloudscribe.SimpleContent.Security.SimpleAuth": "1.0.0-*",
+        "cloudscribe.SimpleContent.Blog.Web": "1.0.0-*",
+        "cloudscribe.SimpleContent.Pages.Web": "1.0.0-*",
+        "cloudscribe.MetaWeblog": "1.0.0-*",
+        "Glimpse": "2.0.0-*",
+        "SaasKit.Multitenancy": "1.1.0-*",
+        "EntityFramework.Commands": "7.0.0-rc1-final",
+        "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.Facebook": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.Google": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.MicrosoftAccount": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Authentication.Twitter": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Diagnostics.Entity": "7.0.0-rc1-final",
+        "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Http.Features": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Http": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
+        "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+        "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+        "Microsoft.AspNet.Mvc.Formatters.Xml": "6.0.0-rc1-final",
+        "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final"
+    },
+
+    "commands": {
+        "web": "Microsoft.AspNet.Server.Kestrel --ASPNET_ENV Development",
+        "port-tenants": "Microsoft.AspNet.Server.Kestrel --ASPNET_ENV Development --server.urls=http://localhost:60000;http://localhost:60002",
+        "host-tenants": "Microsoft.AspNet.Server.Kestrel --ASPNET_ENV Development --server.urls=http://tenant1.local:60000;http://tenant2.local:60002",
+        "ef": "EntityFramework.Commands"
+    },
+
+  "frameworks": {
+    "dnx451": { },
+    "dnxcore50": { }
+  },
+
+  "exclude": [
+    "wwwroot",
+    "node_modules"
+  ],
+  "publishExclude": [
+    "**.user",
+    "**.vspscc"
+  ],
+  "scripts": {
+    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ]
+  }
+}

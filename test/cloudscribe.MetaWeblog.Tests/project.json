@@ -1,0 +1,43 @@
+﻿{
+    "version": "1.0.0-*",
+    "description": "cloudscribe.MetaWeblog.Tests Class Library",
+    "authors": [ "Joe" ],
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": "",
+
+    "commands": {
+        "test": "xunit.runner.dnx"
+    },
+
+    "dependencies": {
+        "xunit": "2.1.0-*",
+        "xunit.runner.dnx": "2.1.0-*",
+        "cloudscribe.MetaWeblog": "1.0.0-*"
+
+
+    },
+
+    "frameworks": {
+        "dnx451": {
+            "frameworkAssemblies": {
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "Microsoft.CSharp": "4.0.1-beta-23516",
+                "System.Collections": "4.0.11-beta-23516",
+                "System.Linq": "4.0.1-beta-23516",
+                "System.IO": "4.0.11-beta-23516",
+                "System.Runtime": "4.0.21-beta-23516",
+                "System.Threading": "4.0.11-beta-23516",
+                "System.Xml.XmlDocument": "4.0.1-beta-23516",
+                "System.Xml.XDocument": "4.0.11-beta-23516",
+                "System.Xml.XPath": "4.0.1-beta-23516",
+                "System.Xml.ReaderWriter": "4.0.11-beta-23516"
+            }
+        }
+    }
+}

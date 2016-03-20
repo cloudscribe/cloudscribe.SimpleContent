@@ -1,0 +1,55 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IUrlHelper myhelper
+@using cloudscribe.SimpleContent.Web
+@section Meta {
+    @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
+}
+@section Styles {
+    @{await Html.RenderPartialAsync("BlogStylePartial", Model); }
+}
+<div class="blog-container">
+    @if (Model.ProjectSettings.ShowTitle)
+    {
+        await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
+    }
+    <div itemscope itemtype="http://schema.org/Blog" class="@(User.Identity.IsAuthenticated ? "row blogroot admin": "row blogroot")">
+
+        <main role="main" class="col-md-8">
+            @{await Html.RenderPartialAsync("PostListPartial", Model); }
+
+            <nav>
+                <cs-pager cs-paging-info="@Model.Paging"
+                          cs-pager-ul-class="pager"
+                          cs-pagenumber-param="page"
+                          cs-show-first-last="false"
+                          cs-show-numbered="false"
+                          cs-use-reverse-increment="true"
+                          cs-suppress-empty-nextprev="true"
+                          cs-previous-page-text="< Older"
+                          cs-next-page-text="Newer >"
+                          asp-route="blogarchive"
+                          asp-route-year="@Model.Year"
+                          asp-route-month="@Model.Month.ToString("00")"
+                          asp-route-day="@Model.Day.ToString("00")"
+                          ></cs-pager>
+            </nav>
+        </main>
+        <aside role="complementary" class="col-md-3 col-md-offset-1">
+            @{await Html.RenderPartialAsync("AboutPartial"); }
+            @{await Html.RenderPartialAsync("CategoryListPartial", Model.Categories); }
+            @{await Html.RenderPartialAsync("ArchiveListPartial", Model.Archives); }
+        </aside>
+    </div>
+</div>
+@section Bottom {
+    @if (Model.CanEdit)
+    {
+        await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+    }
+}
+@section Scripts {
+    @if (Model.CanEdit)
+    {
+        await Html.RenderPartialAsync("EditorScriptsPartial");
+    }
+}

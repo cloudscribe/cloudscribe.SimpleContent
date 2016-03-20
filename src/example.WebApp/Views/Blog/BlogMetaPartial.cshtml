@@ -1,0 +1,13 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+
+@if (Model.CurrentPost != null && !string.IsNullOrEmpty(Model.CurrentPost.MetaDescription))
+{
+    <meta name="description" content="@Model.CurrentPost.MetaDescription" />
+}
+@*
+    TODO: implement this stuff
+    <link type="application/rsd+xml" rel="edituri" title="RSD" href="~/views/robots/rsd" />
+    <link type="application/rss+xml" rel="alternate" title="@Model.BlogSettings.Title" href="~/feed/rss/" />
+    <link type="application/atom+xml" rel="alternate" title="@Model.BlogSettings.Title" href="~/feed/atom/" />
+*@
+<link type="application/wlwmanifest+xml" rel="wlwmanifest"  href="~/wlwmanifest.xml" />

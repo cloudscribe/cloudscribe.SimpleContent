@@ -1,0 +1,38 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@using cloudscribe.SimpleContent.Models
+<article class="post" data-id="@Model.TmpPost.Id" itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+    <header class="jumbotron">
+        <h1 itemprop="headline name">
+            @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+            {
+                <a asp-route="postwithdate"
+                   asp-route-year="@Model.TmpPost.PubDate.Year"
+                   asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
+                   asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
+                   asp-route-slug="@Model.TmpPost.Slug" 
+                   itemprop="url">@Model.TmpPost.Title</a>
+            }
+            else
+            {
+                <a asp-route="postwithoutdate" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@Model.TmpPost.Title</a>
+            }
+            
+        </h1>
+
+        <div class="bh">
+            <time datetime="@Model.FormatDateForEdit(Model.TmpPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
+            <a href="@Model.TmpPost.Slug#comments">
+                <em class="glyphicon glyphicon-comment"></em>
+               @Model.TmpPost.ApprovedCommentCount()   Comments
+            </a>
+            <ul class="categories">
+                <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</li>
+                @foreach (string cat in Model.TmpPost.Categories)
+                {
+                    <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Categoty" asp-route-category="@cat">@cat</a></li>
+                }
+            </ul>
+        </div>
+    </header>
+    <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.TmpPost))</div>
+</article>

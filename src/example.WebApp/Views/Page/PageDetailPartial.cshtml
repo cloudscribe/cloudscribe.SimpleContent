@@ -1,0 +1,102 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Common
+@functions{
+
+    public string GetFooterClass()
+    {
+        if (Model.Mode.Length > 0) return "";
+        return "bh";
+    }
+
+}
+<article class="page" data-id="@Model.CurrentPage.Id"
+         data-approve-comment-url="@Url.Action("AjaxApproveComment", "Page")"
+         data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Page")"
+         itemscope itemtype="http://schema.org/Article">
+    @if ((Model.CurrentPage.ShowHeading) || (Model.Mode == "new"))
+    {
+        <header class="">
+            @if (Model.Mode == "new")
+            {
+                <h1 id="article-title" itemprop="headline name"></h1>
+            }
+            else
+            {
+                <h1 id="article-title" itemprop="headline">
+                    <a asp-controller="Page" asp-action="Index"
+                       asp-route-slug="@Model.CurrentPage.Slug"
+                       itemprop="url">@Model.CurrentPage.Title</a>
+                </h1>
+            }
+        </header>
+    }
+    @if (string.IsNullOrEmpty(Model.CurrentPage.Id))
+    {
+        <div id="excerpt" style="display:none;">
+            <h4>meta description:</h4>
+            <div itemprop="description">@Model.CurrentPage.MetaDescription</div>
+        </div>
+    }
+    @if (string.IsNullOrEmpty(Model.Mode))
+    {
+        <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
+    }
+    else
+    {
+        <div itemprop="articleBody">@Html.Raw(Model.CurrentPage.Content)</div>
+    }
+    @if ((Model.CurrentPage != null) && (!string.IsNullOrEmpty(Model.CurrentPage.Id)) && (Model.CurrentPage.ShowComments))
+    {
+        <section id="comments" aria-label="Comments">
+            @if (Model.CurrentPage.ApprovedCommentCount() > 0)
+                {
+                <h2>Comments</h2>
+            }
+            @foreach (var comment in Model.CurrentPage.Comments)
+            {
+                Model.TmpComment = comment;
+                if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || User.CanEditProject(Model.ProjectSettings.ProjectId))
+                {
+                    await Html.RenderPartialAsync("CommentPartial", Model);
+                }
+            }
+        </section>
+        @if (Model.CommentsAreOpen)
+        {
+            await Html.RenderPartialAsync("CommentFormPartial", Model);
+        }
+    }
+    @if ((Model.Mode.Length > 10) || (Model.CurrentPage.ShowComments) || (Model.CurrentPage.ShowCategories))
+    {
+        <div class="@GetFooterClass()">
+            @if (Model.Mode.Length > 10)
+            {
+                <input type='text' itemprop="datePublished" id='datetimepicker' value="@Model.FormatDateForEdit(Model.CurrentPage.PubDate)" />
+            }
+            else if (Model.CurrentPage.ShowPubDate)
+            {
+                <time datetime="@Model.FormatDateForEdit(Model.CurrentPage.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.CurrentPage.PubDate)</time>
+            }
+            @if (Model.CurrentPage.ShowComments)
+            {
+                <a href="@Model.CurrentPage.Slug#comments">
+                    <em class="glyphicon glyphicon-comment"></em>
+                    @Model.CurrentPage.ApprovedCommentCount()   Comments
+                </a>
+            }
+            @if (Model.CurrentPage.ShowCategories)
+            {
+                <ul class="categories">
+                    <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</li>
+                    @foreach (string cat in Model.CurrentPage.Categories)
+                    {
+                        <li itemprop="articleSection">
+                            <a asp-controller="Blog" asp-action="Categoty" asp-route-category="@cat">@cat</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+</article>

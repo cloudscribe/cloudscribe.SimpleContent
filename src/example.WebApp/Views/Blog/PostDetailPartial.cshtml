@@ -1,0 +1,104 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@using cloudscribe.SimpleContent.Common
+@using cloudscribe.SimpleContent.Models
+@using Microsoft.AspNet.Mvc.ViewFeatures
+@inject IHtmlGenerator generator
+@functions{
+
+    public string GetHeaderDivClass()
+    {
+        if (Model.Mode.Length > 0) return "";
+        return "bh";
+    }
+    public string GetHeaderClass()
+    {
+        if (Model.Mode.Length > 0) return "jumbotron editor-jumbotron"; // we don't want jumbotron while editing because it has too much bottom padding
+        return "jumbotron";
+    }
+
+}
+
+@{
+//this is not needed because token is already in the page for the logout form
+//var antiforgeryTag = generator.GenerateAntiforgery(ViewContext);
+//@Html.Raw(antiforgeryTag)
+// <a href="~/category/@System.Net.WebUtility.UrlEncode(cat.ToLowerInvariant())">@cat</a>
+}
+<article class="post" data-id="@Model.CurrentPost.Id" 
+         data-approve-comment-url="@Url.Action("AjaxApproveComment", "Blog")"
+         data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Blog")"
+         itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+    <header class="@GetHeaderClass()">
+        @if (Model.Mode == "new")
+        {
+            <h1 itemprop="headline name"></h1>
+        }
+        else
+        {
+            <h1 itemprop="headline name">
+                <a asp-controller="Blog" asp-action="Post"
+                   asp-route-slug="@Model.CurrentPost.Slug"
+                   itemprop="url">@Model.CurrentPost.Title</a>
+            </h1>
+        }
+        <div class="@GetHeaderDivClass()">
+@if (Model.Mode.Length > 0)
+{
+    <input type='text' itemprop="datePublished" id='datetimepicker' value="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" />  
+}
+else
+{
+    <time datetime="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.CurrentPost.PubDate)</time>
+}
+            <a href="@Model.CurrentPost.Slug#comments">
+                <em class="glyphicon glyphicon-comment"></em>
+                 @Model.CurrentPost.ApprovedCommentCount()   Comments
+            </a>
+            <ul class="categories">
+                <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</li>
+                @foreach (string cat in Model.CurrentPost.Categories)
+                {
+                    <li itemprop="articleSection">
+                        <a asp-controller="Blog" asp-action="Categoty" asp-route-category="@cat">@cat</a>       
+                    </li>
+                }
+            </ul>
+        </div>
+    </header>
+        @if (Model.CanEdit && (Model.Mode.Length > 0))
+        {
+            <div id="excerpt" style="display:none;">
+                <h4>meta description:</h4>
+                <div itemprop="description">@Model.CurrentPost.MetaDescription</div>
+            </div>
+        }
+    @if (string.IsNullOrEmpty(Model.Mode))
+    {
+        <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPost))</div>
+    }
+    else
+    {
+        <div itemprop="articleBody">@Html.Raw(Model.CurrentPost.Content)</div>
+    }
+        @if ((Model.CurrentPost != null)&&(!string.IsNullOrEmpty(Model.CurrentPost.Id))&&(Model.ShowComments))
+        {
+            <section id="comments" aria-label="Comments">
+                @if (Model.CurrentPost.ApprovedCommentCount() > 0)
+                {
+                    <h2>Comments</h2>
+                }
+                @foreach (var comment in Model.CurrentPost.Comments)
+                {
+                    Model.TmpComment = comment;
+                    if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || User.CanEditProject(Model.ProjectSettings.ProjectId))
+                    {
+                        await Html.RenderPartialAsync("CommentPartial", Model);
+                    }
+                }
+            </section>
+            @if (Model.CommentsAreOpen)
+            {
+                await Html.RenderPartialAsync("CommentFormPartial", Model);
+            }
+        }
+</article>

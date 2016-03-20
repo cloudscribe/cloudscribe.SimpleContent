@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<methodCall>
+  <methodName>wp.newPage</methodName>
+  <params>
+    <param>
+      <value>
+        <string>default</string>
+      </value>
+    </param>
+    <param>
+      <value>
+        <string>frodobaggins</string>
+      </value>
+    </param>
+    <param>
+      <value>
+        <string>thekeystupid</string>
+      </value>
+    </param>
+    <param>
+      <value>
+        <struct>
+          <member>
+            <name>title</name>
+            <value>
+              <string>First Page</string>
+            </value>
+          </member>
+          <member>
+            <name>description</name>
+            <value>
+              <string>&lt;p&gt;This is a page&lt;/p&gt; &lt;p&gt;don’t think it is a post, it isn’t&lt;/p&gt;</string>
+            </value>
+          </member>
+          <member>
+            <name>wp_slug</name>
+            <value>
+              <string />
+            </value>
+          </member>
+          <member>
+            <name>mt_basename</name>
+            <value>
+              <string />
+            </value>
+          </member>
+          <member>
+            <name>wp_page_parent_id</name>
+            <value>
+              <string>0</string>
+            </value>
+          </member>
+        </struct>
+      </value>
+    </param>
+    <param>
+      <value>
+        <boolean>1</boolean>
+      </value>
+    </param>
+  </params>
+</methodCall>

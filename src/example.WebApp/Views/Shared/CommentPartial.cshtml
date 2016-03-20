@@ -1,0 +1,34 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Common
+@{
+
+}
+<article data-id="@Model.TmpComment.Id" itemscope itemtype="http://schema.org/UserComments" itemprop="comment" class="@(Model.TmpComment.IsAdmin ? "self" : null)">
+    <img gravatar-email="@Model.TmpComment.Email" gravatar-size="@Model.ProjectSettings.GravatarSize" alt="Comment by @Model.TmpComment.Author" />
+    <div>
+        <time datetime="@Model.TmpComment.PubDate.ToString("yyyy-MM-ddTHH:mm")" itemprop="commentTime">@Model.TmpComment.PubDate.ToString("MMMM d. yyyy HH:mm")</time>
+        <p itemprop="commentText">@Html.Raw(Model.FilterComment(Model.TmpComment))</p>
+        @if (string.IsNullOrEmpty(Model.TmpComment.Website))
+        {
+        <strong itemprop="creator">@Model.TmpComment.Author</strong>
+        }
+        else
+        {
+        <strong itemprop="creator"><a href="@Model.TmpComment.Website" itemprop="url" rel="nofollow">@Model.TmpComment.Author</a></strong>
+        }
+
+        @if (User.CanEditProject(Model.ProjectSettings.ProjectId))
+        {
+            <button class="deletecomment btn btn-link">Delete</button>
+            @if (Model.ProjectSettings.ModerateComments && !Model.TmpComment.IsApproved)
+            {
+                <button class="approvecomment btn btn-link">Approve</button>
+            }
+        }
+    </div>
+    @if (Model.ProjectSettings.ModerateComments && !Model.TmpComment.IsApproved && !User.CanEditProject(Model.ProjectSettings.ProjectId))
+    {
+        <div itemprop="approvalWarning">! The comment will not be visible until a moderator approves it !</div>
+    } 
+</article>

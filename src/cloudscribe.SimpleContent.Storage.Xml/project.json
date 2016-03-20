@@ -1,0 +1,47 @@
+﻿{
+    "version": "1.0.0-*",
+    "title": "cloudscribe.Blog.Storage.Xml",
+    "description": "cloudscribe.SimpleContent.Storage.Xml Class Library",
+    "authors": [ "Joe Audette" ],
+    "owners": [ "Source Tree Solutions" ],
+    "tags": [ "cloudscribe", "sqlce" ],
+    "projectUrl": "https://github.com/joeaudette/cloudscribe.DbHelpers",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "copyright": "2015 Source Tree Solutions",
+    "iconUrl": "https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png",
+    "requireLicenseAcceptance": false,
+    "releaseNotes": "",
+
+    "dependencies": {
+        "cloudscribe.SimpleContent.Models": "1.0.0-*",
+
+
+        "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
+        "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final"
+    },
+
+    "frameworks": {
+        "net451": {
+            "frameworkAssemblies": {
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "Microsoft.CSharp": "4.0.1-beta-23516",
+                "System.Collections": "4.0.11-beta-23516",
+                "System.IO": "4.0.11-beta-23516",
+                "System.Linq": "4.0.1-beta-23516",
+                "System.Runtime": "4.0.21-beta-23516",
+                "System.Threading": "4.0.11-beta-23516",
+                "System.Xml.XmlDocument": "4.0.1-beta-23516",
+                "System.Xml.XDocument": "4.0.11-beta-23516",
+                "System.Xml.XPath": "4.0.1-beta-23516",
+                "System.Xml.ReaderWriter": "4.0.11-beta-23516"
+            }
+        }
+    }
+}

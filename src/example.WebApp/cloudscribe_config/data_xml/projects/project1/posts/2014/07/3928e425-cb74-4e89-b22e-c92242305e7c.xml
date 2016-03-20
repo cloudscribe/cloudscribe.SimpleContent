@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<post>
+  <title>post it notes</title>
+  <slug>post-it-notes</slug>
+  <author>Joe Audette</author>
+  <pubDate>2014-07-21T13:28:00.0000000Z</pubDate>
+  <lastModified>2016-03-14T15:38:09.2470345Z</lastModified>
+  <excerpt>foo</excerpt>
+  <content>&lt;p&gt;are useful to use&lt;/p&gt; &lt;p&gt;&lt;a href="/images/blogmedia/8c7ce108-0732-4a05-a187-bfe729e404d9.jpg"&gt;&lt;img title="IMG_1179" style="border-top: 0px; border-right: 0px; background-image: none; border-bottom: 0px; padding-top: 0px; padding-left: 0px; border-left: 0px; display: inline; padding-right: 0px" border="0" alt="IMG_1179" src="/images/blogmedia/51dd570c-6efc-4970-b6eb-a412ac6f6834.jpg" width="617" height="464" /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;if you use them&lt;/p&gt;</content>
+  <ispublished>true</ispublished>
+  <categories>
+    <category>food</category>
+  </categories>
+  <comments></comments>
+</post>
