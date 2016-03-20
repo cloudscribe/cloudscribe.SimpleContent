@@ -18,7 +18,7 @@ There are no releases or nugets yet, but you can try it in visual studio. If you
 	
 that will get you both localhost:60000 and localhost:60002 which you can open in your web browser. Both sites are pre-configured with some content and you can login with admin/admin in either or both tenants.
 
-After you login a little pencil will appear int he upper right corner, it toggles the editor toolbar.
+After you login a little pencil will appear in the upper right corner, it toggles the editor toolbar.
 
 You should also be able to [create and edit blog posts and pages using Open Live Writer](https://github.com/joeaudette/cloudscribe.SimpleContent/wiki/Using-Open-Live-Writer)
 
