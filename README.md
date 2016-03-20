@@ -35,8 +35,8 @@ My plan is to usually build sites without a database (except for large projects)
 ### Current Features
 * Cross platform, works on Windows, OSX, and Linux
 * __No database__ required uses json for pages and can use json or xml for blog posts
-* For blog posts, supports the same XML format as MiniBlog and BlogEngine.NET
-* Move your existing blog to MiniBlog using [MiniBlog Formatter](https://github.com/madskristensen/MiniBlogFormatter)
+* For blog posts, supports the same XML format as MiniBlog and BlogEngine.NET, to convert from one of those, just drop in your files
+* Migrate your existing blog to SimpleContent using [MiniBlog Formatter](https://github.com/madskristensen/MiniBlogFormatter)
 * __Inline editing__ of blog posts and pages
 * Supports multiple tenants by host name even without a database
 * Easy setting for serving static files from another domain. 
