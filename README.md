@@ -10,7 +10,7 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 ## Current Status
 
-This project is in fairly early stages, lots of things will change or be refactored but it is starting to shape up nicely and I thought I should go ahead and make the proejct public.
+This project is in fairly early stages, lots of things will change or be refactored but it is starting to shape up nicely and I thought I should go ahead and make the project public.
 
 There are no releases or nugets yet, but you can try it in visual studio. If you launch it with IIS Express it will have a single tenant running at localhost:60000, change to port-tenants in the debugging dropdown (instead of IISExpress), you can debug with 2 tenants running. You can also run both configured tenants by opening a command window in the root of the example.WebApp project and execute the command:
 
