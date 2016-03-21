@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-03-19
+// Last Modified:           2016-03-21
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -63,7 +63,17 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = await blogService.GetCount(category);
-            model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
+            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
+            try
+            {
+                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
+            }
+            catch(Exception)
+            {
+                //temporary workaround for mac/linux
+                model.TimeZone = TimeZoneInfo.Utc;
+            }
+            
             model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
             if(model.CanEdit)
             {
@@ -112,8 +122,17 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 month,
                 day);
 
-            model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
-            
+            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
+            try
+            {
+                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
+            }
+            catch (Exception)
+            {
+                //temporary workaround for mac/linux
+                model.TimeZone = TimeZoneInfo.Utc;
+            }
+
             model.Year = year;
             model.Month = month;
             model.Day = day;
@@ -231,7 +250,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.ShowComments = mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = await blogService.CommentsAreOpen(post, canEdit);
             //model.ApprovedCommentCount = post.Comments.Where(c => c.IsApproved == true).Count();
-            model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
+            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
+            try
+            {
+                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
+            }
+            catch (Exception)
+            {
+                //temporary workaround for mac/linux
+                model.TimeZone = TimeZoneInfo.Utc;
+            }
 
             if (canEdit)
             {
@@ -366,19 +394,30 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             post.IsPublished = model.IsPublished;
             if(!string.IsNullOrEmpty(model.PubDate))
             {
-                var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
                 var localTime = DateTime.Parse(model.PubDate);
-                var pubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
-
-                // TODO: this logic probably needs to also be implemented in the metaweblog service in case the pubdate is changed from there
-                if (!isNew)
+                try
                 {
-                    if(pubDate != post.PubDate)
+                    //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
+                    var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
+                    
+                    var pubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
+                    // TODO: this logic probably needs to also be implemented in the metaweblog service in case the pubdate is changed from there
+                    if (!isNew)
                     {
-                        await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
+                        if (pubDate != post.PubDate)
+                        {
+                            await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
+                        }
                     }
+                    post.PubDate = pubDate;
                 }
-                post.PubDate = pubDate;
+                catch(Exception)
+                {
+                    post.PubDate = localTime;
+                }
+                
+
+                
                 
             }
             

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-03-07
+// Last Modified:           2016-03-21
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -116,8 +116,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.ShowComments = mode.Length == 0; // do we need this for a global disable
             //model.CommentsAreOpen = await blogService.CommentsAreOpen(post, canEdit);
             model.CommentsAreOpen = false;
-            model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(projectSettings.TimeZoneId);
-            if(canEdit)
+            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
+            try
+            {
+                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
+            }
+            catch (Exception)
+            {
+                //temporary workaround for mac/linux
+                model.TimeZone = TimeZoneInfo.Utc;
+            }
+
+            if (canEdit)
             {
                 if(model.CurrentPage != null)
                 {
@@ -228,9 +238,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             page.IsPublished = model.IsPublished;
             if (!string.IsNullOrEmpty(model.PubDate))
             {
-                var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
                 var localTime = DateTime.Parse(model.PubDate);
-                page.PubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
+                try
+                {
+                    //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
+                    var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
+                    page.PubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
+                }
+                catch(Exception)
+                {
+                    page.PubDate = localTime;
+                }
+                
 
             }
 
