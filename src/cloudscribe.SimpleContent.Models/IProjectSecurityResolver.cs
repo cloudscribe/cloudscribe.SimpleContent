@@ -12,7 +12,7 @@ namespace cloudscribe.SimpleContent.Models
 {
     public interface IProjectSecurityResolver
     {
-        Task<ContentSecurityResult> ValidatePermissions(
+        Task<ProjectSecurityResult> ValidatePermissions(
             string blogId, 
             string userName,
             string providedPassword,

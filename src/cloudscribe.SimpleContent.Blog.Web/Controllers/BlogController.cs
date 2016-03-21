@@ -36,7 +36,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             this.projectService = projectService;
             this.blogService = blogService;
-           // this.urlHelper = urlHelper;
             log = logger;
         }
 
@@ -44,7 +43,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private IBlogService blogService;
         private ILogger log;
 
-        // GET: /Account/index
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index(

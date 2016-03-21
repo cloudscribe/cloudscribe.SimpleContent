@@ -35,7 +35,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 blogResult.DisplayName,
                 blogResult.ProjectId,
                 blogResult.IsAllowed, 
-                blogResult.IsBlogOwner);
+                blogResult.IsProjectOwner);
             
         }
     }

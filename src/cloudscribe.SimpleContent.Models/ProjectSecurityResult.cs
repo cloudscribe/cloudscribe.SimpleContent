@@ -2,35 +2,31 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-15
-// Last Modified:           2016-02-16
+// Last Modified:           2016-03-21
 // 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public class ContentSecurityResult
+    public class ProjectSecurityResult
     {
-        public ContentSecurityResult(
+        public ProjectSecurityResult(
             string displayName,
             string projectId,
             bool isAllowed, 
-            bool isBlogOwner
+            bool isProjectOwner
             )
         {
             this.displayName = displayName;
             this.projectId = projectId;
             this.isAllowed = isAllowed;
-            this.isBlogOwner = isBlogOwner;
+            this.isProjectOwner = isProjectOwner;
         }
 
         private string displayName = string.Empty;
         private string projectId = string.Empty;
         private bool isAllowed = false;
-        private bool isBlogOwner = false;
+        private bool isProjectOwner = false;
 
         public string DisplayName
         {
@@ -47,9 +43,9 @@ namespace cloudscribe.SimpleContent.Models
             get { return isAllowed; }
         }
 
-        public bool IsBlogOwner
+        public bool IsProjectOwner
         {
-            get { return isBlogOwner; }
+            get { return isProjectOwner; }
         }
     }
 }

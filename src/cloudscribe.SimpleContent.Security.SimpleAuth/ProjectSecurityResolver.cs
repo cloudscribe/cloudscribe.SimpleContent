@@ -22,7 +22,7 @@ namespace cloudscribe.SimpleContent.Security.SimpleAuth
 
         private SignInManager signInManager;
 
-        public Task<ContentSecurityResult> ValidatePermissions(
+        public Task<ProjectSecurityResult> ValidatePermissions(
             string projectId,
             string userName,
             string providedPassword,
@@ -50,7 +50,7 @@ namespace cloudscribe.SimpleContent.Security.SimpleAuth
                 displayName = claimsPrincipal.GetDisplayName();
             }
             
-            var blogSecurity = new ContentSecurityResult(displayName, projectId, isAllowed, isBlogOwner);
+            var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAllowed, isBlogOwner);
 
             return Task.FromResult(blogSecurity);
 
