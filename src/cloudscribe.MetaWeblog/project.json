@@ -1,44 +1,44 @@
 ﻿{
-  "version": "1.0.0-*",
-  "description": "cloudscribe.MetaWeblog Class Library",
-  "authors": [ "Joe Audette" ],
-  "owners": [ "Source Tree Solutions" ],
-  "tags": [ "cloudscribe", "sqlce" ],
-  "projectUrl": "https://github.com/joeaudette/cloudscribe.DbHelpers",
-  "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
-  "copyright": "2015 Source Tree Solutions",
-  "iconUrl": "https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png",
-  "requireLicenseAcceptance": false,
-  "releaseNotes": "",
+    "version": "1.0.0-beta1",
+    "description": "a re-useable implementation of the metaweblog api for asp.net core",
+    "authors": [ "Joe Audette" ],
+    "owners": [ "Source Tree Solutions" ],
+    "tags": [ "cloudscribe", "metaweblog", "api","asp.net core" ],
+    "projectUrl": "https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/src/cloudscribe.MetaWeblog",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "copyright": "2016 Source Tree Solutions",
+    "iconUrl": "https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png",
+    "requireLicenseAcceptance": false,
+    "releaseNotes": "",
 
-  "dependencies": {
-    "Microsoft.AspNet.Http": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final"
+    "dependencies": {
+        "Microsoft.AspNet.Http": "1.0.0-rc1-final",
+        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+        "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+        "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final"
 
-  },
-
-  "frameworks": {
-    "net451": {
-      "frameworkAssemblies": {
-        "System.Xml": "4.0.0.0",
-        "System.Xml.Linq": "4.0.0.0"
-      }
     },
-    "dnxcore50": {
-      "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.IO": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516",
-        "System.Xml.XmlDocument": "4.0.1-beta-23516",
-        "System.Xml.XDocument": "4.0.11-beta-23516",
-        "System.Xml.XPath": "4.0.1-beta-23516",
-        "System.Xml.ReaderWriter": "4.0.11-beta-23516"
-      }
+
+    "frameworks": {
+        "net451": {
+            "frameworkAssemblies": {
+                "System.Xml": "4.0.0.0",
+                "System.Xml.Linq": "4.0.0.0"
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "Microsoft.CSharp": "4.0.1-beta-23516",
+                "System.Collections": "4.0.11-beta-23516",
+                "System.IO": "4.0.11-beta-23516",
+                "System.Linq": "4.0.1-beta-23516",
+                "System.Runtime": "4.0.21-beta-23516",
+                "System.Threading": "4.0.11-beta-23516",
+                "System.Xml.XmlDocument": "4.0.1-beta-23516",
+                "System.Xml.XDocument": "4.0.11-beta-23516",
+                "System.Xml.XPath": "4.0.1-beta-23516",
+                "System.Xml.ReaderWriter": "4.0.11-beta-23516"
+            }
+        }
     }
-  }
 }
