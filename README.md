@@ -2,7 +2,7 @@
 
 A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database. This project has borrowed significantly from [Mads Kristensen's MiniBlog](https://github.com/madskristensen/MiniBlog) both for ideas and code but re-implemented and extended in the newer ASP.NET Core framework. 
 
-This project supports content pages in addition to blog posts, you can create and edit both pages and blog posts in the web browser or using [Open Live Writer](https://github.com/OpenLiveWriter/OpenLiveWriter)
+This project supports content pages in addition to blog posts, you can create and edit both pages and blog posts in the web browser or using [Open Live Writer](https://github.com/OpenLiveWriter/OpenLiveWriter) via the MetaWeblog API. I created a separate project, [cloudscribe.MetaWeblog](https://github.com/joeaudette/cloudscribe.MetaWeblog) project in order to support using Open Live Writer, but it could be used in other apps as well, so I moved it to its own code repository.
 
 If you have questions or just want to be social, say hello in our gitter chat room. I try to monitor that room on a regular basis while I'm working, but if I'm not around you can leave  message.
 
