@@ -26,7 +26,7 @@ You should also be able to [create and edit blog posts and pages using Open Live
 
 Not all web site projects need a database, there can be many benefits to not using one including performance, scalability, portability, lower cost, and ease of making backup copies of the entire site. It should even be possible to make a site that runs from a thumb drive.
 
-In fact, for blogs, there has been kind of a trend towards using [Static Site Generators](https://www.staticgen.com/). This project is not a static site generator, but by storing content as json files it can get some of the same benefits and be used in a similar way to using a static site generator. For example you could host a localhost or intranet version of your site for producing and reviewing content, then when ready to publish you could committ the changes to a git repository and then do deployment from git to Azure for example, which would give you a highly scaleable site without the need or cost of a database and with a complete history of changes in git. Personal blogs and sites and small brochure sites are good candidates for not using a database.
+In fact, for blogs, there has been kind of a trend towards using [Static Site Generators](https://www.staticgen.com/). This project is not a static site generator, but by storing content as json files it can get some of the same benefits and be used in a similar way to using a static site generator. For example you could host a localhost or intranet version of your site for producing and reviewing content, then when ready to publish you could commit the changes to a git repository and then do deployment from git to Azure for example, which would give you a highly scaleable site without the need or cost of a database and with a complete history of changes in git. Personal blogs and sites and small brochure sites are good candidates for not using a database.
 
 Some sites do need a database though and we plan to support using both Entity Framework Core and MongoDb. If you need users to be able to register on your site or if you have more than a few editors, or for larger projects, you will typically want a database.
 
@@ -34,7 +34,7 @@ My plan is to usually build sites without a database (except for large projects)
 
 ### Current Features
 * Cross platform, works on Windows, OSX, and Linux
-* __No database__ required uses json for pages and can use json or xml for blog posts
+* __No database required__ uses json for pages and can use json or xml for blog posts
 * For blog posts, supports the same XML format as MiniBlog and BlogEngine.NET, to convert from one of those, just drop in your files
 * Migrate your existing blog to SimpleContent using [MiniBlog Formatter](https://github.com/madskristensen/MiniBlogFormatter)
 * __Inline editing__ of blog posts and pages
@@ -45,14 +45,11 @@ My plan is to usually build sites without a database (except for large projects)
 * Schedule posts to be published on a future date
 * Supports blog urls with or without date segments
 * Url date segments are hackable, ie /blog/2016/03/16 shows posts for the day, /blog/2016/03 shows posts for the month and /blog/2016 shows posts for the year
-* Comments support
+* Comments support - can easily be replaced by 3rd-party commenting systems such as Disqus
 * [Recaptcha support](https://www.google.com/recaptcha/intro/index.html) to reduce comment spam
 * __Gravatar__ support 
-* Can easily be replaced by 3rd-party commenting systems such as Disqus
-* __Drag 'n drop__ images to upload
-* __OpenGraph__ enabled
-* Responsive Theming support based on Bootstrap
-* __SEO__ optimized
+* __Drag and drop images__ to upload
+* Responsive theming support based on Bootstrap
 * Uses HTML 5 __microdata__ to add semantic meaning
 * Works on any ASP.NET Core host including __Windows Azure__ Websites
 
