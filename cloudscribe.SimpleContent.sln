@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.MetaWeblog", "src\cloudscribe.MetaWeblog\cloudscribe.MetaWeblog.xproj", "{4DE7BDCB-1393-42E8-8B1A-61BB95BE3DA4}"
-EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "example.WebApp", "src\example.WebApp\example.WebApp.xproj", "{89E82551-B299-4372-A942-5C69E39E5061}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Models", "src\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.xproj", "{ECE01E6F-27BC-4DF6-A90B-671106CCC813}"
@@ -23,8 +21,6 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Security.SimpleAuth", "src\cloudscribe.SimpleContent.Security.SimpleAuth\cloudscribe.SimpleContent.Security.SimpleAuth.xproj", "{E277420E-BC31-4E8A-BDF5-13BB94B2F8F3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D4A6056F-096B-41EE-9778-0D76AD1D0F81}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.MetaWeblog.Tests", "test\cloudscribe.MetaWeblog.Tests\cloudscribe.MetaWeblog.Tests.xproj", "{03C80782-E813-4769-918E-7E4E9002EF74}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Storage.Json", "src\cloudscribe.SimpleContent.Storage.Json\cloudscribe.SimpleContent.Storage.Json.xproj", "{8C61BC72-8446-4FE2-8B37-1075977E5E38}"
 EndProject
@@ -40,10 +36,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4DE7BDCB-1393-42E8-8B1A-61BB95BE3DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DE7BDCB-1393-42E8-8B1A-61BB95BE3DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DE7BDCB-1393-42E8-8B1A-61BB95BE3DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DE7BDCB-1393-42E8-8B1A-61BB95BE3DA4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89E82551-B299-4372-A942-5C69E39E5061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89E82551-B299-4372-A942-5C69E39E5061}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89E82551-B299-4372-A942-5C69E39E5061}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,10 +56,6 @@ Global
 		{E277420E-BC31-4E8A-BDF5-13BB94B2F8F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E277420E-BC31-4E8A-BDF5-13BB94B2F8F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E277420E-BC31-4E8A-BDF5-13BB94B2F8F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03C80782-E813-4769-918E-7E4E9002EF74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03C80782-E813-4769-918E-7E4E9002EF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03C80782-E813-4769-918E-7E4E9002EF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03C80782-E813-4769-918E-7E4E9002EF74}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C61BC72-8446-4FE2-8B37-1075977E5E38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C61BC72-8446-4FE2-8B37-1075977E5E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C61BC72-8446-4FE2-8B37-1075977E5E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -89,13 +77,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4DE7BDCB-1393-42E8-8B1A-61BB95BE3DA4} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{89E82551-B299-4372-A942-5C69E39E5061} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{ECE01E6F-27BC-4DF6-A90B-671106CCC813} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{1BD52A38-EBD8-4312-8F97-6719E170EDBE} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{6C2D2776-104D-46F4-9050-D66AB476AA1F} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{E277420E-BC31-4E8A-BDF5-13BB94B2F8F3} = {6D88A8AD-A29C-4A41-8225-27538812204B}
-		{03C80782-E813-4769-918E-7E4E9002EF74} = {D4A6056F-096B-41EE-9778-0D76AD1D0F81}
 		{8C61BC72-8446-4FE2-8B37-1075977E5E38} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{8D34A4B7-24C9-40D8-A8AC-2E6FD3FAFB4E} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{53669691-C2F4-4524-9AF0-BC08357E47C8} = {6D88A8AD-A29C-4A41-8225-27538812204B}
