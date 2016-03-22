@@ -4,7 +4,7 @@ It was implemented for use in [cloudscribe SimpleContent](https://github.com/joe
 
 ## What the heck is Metaweblog API
 
-MetaWeblog API is something you can use to create, edit, and publish content using desktop tools such as [Open Live Writer](https://github.com/OpenLiveWriter/OpenLiveWrite). I specifically created this project in order to be able to use Open Live Writer with cloudscribe.SimpleContent, but I abstracted things so that others could use it too. Just implement and plugin your own implementation of IMetaWeblogService.
+MetaWeblog API is something you can use to create, edit, and publish content using desktop tools such as [Open Live Writer](https://github.com/OpenLiveWriter/OpenLiveWrite). I specifically created this project in order to be able to use Open Live Writer with cloudscribe.SimpleContent, but I abstracted things so that others could use it too. Just implement and plugin your own implementation of [IMetaWeblogService](https://github.com/joeaudette/cloudscribe.SimpleContent/blob/master/src/cloudscribe.MetaWeblog/IMetaWeblogService.cs).
 
 Note that this is not a generalized solution for XmlRpc, it is specifically an implementation of the MetaWeblog API
 
