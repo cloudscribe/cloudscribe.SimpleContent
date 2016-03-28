@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Services
 {
-    public static class HttpRequestExtenssions
+    public static class HttpRequestExtensions
     {
         public static string RawUrl(this HttpRequest request)
         {
