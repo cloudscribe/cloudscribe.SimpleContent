@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-15
-// Last Modified:           2016-03-20
+// Last Modified:           2016-03-29
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -29,28 +29,28 @@ namespace cloudscribe.SimpleContent.Security.SimpleAuth
             CancellationToken cancellationToken)
         {
             var displayName = string.Empty;
-            var isAllowed = false;
-            var isBlogOwner = false;
+            var isAuthenticated = false;
+            var canEdit = false;
 
             var authUser = signInManager.GetUser(userName);
 
             if (authUser != null)
             {
-                isAllowed = signInManager.ValidatePassword(authUser, providedPassword);
+                isAuthenticated = signInManager.ValidatePassword(authUser, providedPassword);
             }
             
-            if (isAllowed)
+            if (isAuthenticated)
             {
                 var claimsPrincipal = signInManager.GetClaimsPrincipal(authUser);
                 if(string.IsNullOrEmpty(projectId))
                 {
                     projectId = claimsPrincipal.GetProjectId();
                 }
-                isBlogOwner = claimsPrincipal.CanEditProject(projectId);
+                canEdit = claimsPrincipal.CanEditProject(projectId);
                 displayName = claimsPrincipal.GetDisplayName();
             }
             
-            var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAllowed, isBlogOwner);
+            var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAuthenticated, canEdit);
 
             return Task.FromResult(blogSecurity);
 
