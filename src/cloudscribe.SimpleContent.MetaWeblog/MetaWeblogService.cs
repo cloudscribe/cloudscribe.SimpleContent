@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2016-03-14
+// Last Modified:           2016-03-29
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -35,9 +35,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         private IBlogService blogService;
         private IPageService pageService;
         private MetaWeblogModelMapper mapper;
-
-//TODO: should pass the username and password on up to the blogservice
-       
+        
         public async Task<string> NewPost(
             string blogId,
             string userName,
@@ -54,7 +52,14 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             post.Author = authorDisplayName;
             post.IsPublished = publish;
             
-            await blogService.Save(blogId, post, true, publish).ConfigureAwait(false);
+            await blogService.Save(
+                blogId, 
+                userName,
+                password,
+                post, 
+                true, 
+                publish
+                ).ConfigureAwait(false);
             return post.Id; 
         }
 
@@ -66,7 +71,12 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             PostStruct post,
             bool publish)
         {
-            var existing = await blogService.GetPost(blogId, postId).ConfigureAwait(false);
+            var existing = await blogService.GetPost(
+                blogId, 
+                postId,
+                userName,
+                password
+                ).ConfigureAwait(false);
             
             if (existing == null) { return false; }
 
@@ -100,7 +110,13 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             existing.Categories = update.Categories;
             existing.IsPublished = publish;
 
-            await blogService.Save(blogId, existing, false, publish).ConfigureAwait(false);
+            await blogService.Save(
+                blogId, 
+                userName,
+                password,
+                existing, 
+                false, 
+                publish).ConfigureAwait(false);
 
             return true;
         }
@@ -113,7 +129,12 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             CancellationToken cancellationToken)
         {
             
-            var existing = await blogService.GetPost(blogId, postId).ConfigureAwait(false);
+            var existing = await blogService.GetPost(
+                blogId, 
+                postId,
+                userName,
+                password
+                ).ConfigureAwait(false);
             
             if (existing == null) { return new PostStruct(); }
 
@@ -136,10 +157,13 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             string blogId,
             string userName,
             string password,
-            bool userIsBlogOwner,
             CancellationToken cancellationToken)
         {
-            var cats = await blogService.GetCategories(blogId, userIsBlogOwner).ConfigureAwait(false);
+            var cats = await blogService.GetCategories(
+                blogId, 
+                userName, 
+                password
+                ).ConfigureAwait(false);
             
             List<CategoryStruct> output = new List<CategoryStruct>();
             foreach(var c in cats)
@@ -161,6 +185,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             
             var blogPosts = await blogService.GetRecentPosts(
                 blogId,
+                userName,
+                password,
                 numberOfPosts
                 ).ConfigureAwait(false);
 
@@ -195,7 +221,13 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         {
             string extension = Path.GetExtension(mediaObject.name);
             string fileName = Guid.NewGuid().ToString() + extension;
-            await blogService.SaveMedia(blogId, mediaObject.bytes, fileName).ConfigureAwait(false);
+            await blogService.SaveMedia(
+                blogId, 
+                userName,
+                password,
+                mediaObject.bytes, 
+                fileName
+                ).ConfigureAwait(false);
 
             var mediaUrl = await blogService.ResolveMediaUrl(fileName); ;
             var result = new MediaInfoStruct() { url = mediaUrl };
@@ -210,36 +242,40 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             string password
             )
         {
-            return await blogService.Delete(blogId, postId);
+            return await blogService.Delete(
+                blogId, 
+                postId,
+                userName,
+                password);
         }
-
-        // the rest of these were not implemented in MiniBlog so can come back later on these for now
-        //
-
+        
         public async Task<List<BlogInfoStruct>> GetUserBlogs(
             string key, 
             string userName,
             string password,
-            MetaWeblogSecurityResult permissions,
             CancellationToken cancellationToken)
         {
             var result = new List<BlogInfoStruct>();
 
-            var blog= await projectService.GetProjectSettings(permissions.BlogId);
-            if(blog != null)
-            {
-                var url = await blogService.ResolveBlogUrl(blog).ConfigureAwait(false);
-                var b = mapper.GetStructFromBlog(blog, url);
-                result.Add(b);
-            }
-
-            //var userBlogs = await blogService.GetUserBlogs(userName);
-            //foreach(BlogSettings blog in userBlogs)
+            //var blog= await projectService.GetProjectSettings(
+            //    permissions.BlogId
+            //    );
+            //if(blog != null)
             //{
             //    var url = await blogService.ResolveBlogUrl(blog).ConfigureAwait(false);
             //    var b = mapper.GetStructFromBlog(blog, url);
             //    result.Add(b);
             //}
+
+            var userBlogs = await projectService.GetUserProjects(userName, password)
+                .ConfigureAwait(false);
+
+            foreach (ProjectSettings blog in userBlogs)
+            {
+                var url = await blogService.ResolveBlogUrl(blog).ConfigureAwait(false);
+                var b = mapper.GetStructFromBlog(blog, url);
+                result.Add(b);
+            }
 
             return result;
         }
@@ -264,7 +300,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         {
             var list = new List<PageStruct>();
 
-            var pages = await pageService.GetAllPages(blogId).ConfigureAwait(false);
+            var pages = await pageService.GetAllPages(
+                blogId,
+                userName,
+                password
+                ).ConfigureAwait(false);
 
             foreach (var p in pages)
             {
@@ -298,7 +338,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         {
             var list = new List<PageStruct>();
 
-            var pages = await pageService.GetAllPages(blogId).ConfigureAwait(false);
+            var pages = await pageService.GetAllPages(
+                blogId,
+                userName,
+                password
+                ).ConfigureAwait(false);
             
             foreach (var p in pages)
             {
@@ -332,7 +376,12 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             string password,
             CancellationToken cancellationToken)
         {
-            var existing = await pageService.GetPage(blogId, pageId).ConfigureAwait(false);
+            var existing = await pageService.GetPage(
+                blogId, 
+                pageId,
+                userName,
+                password
+                ).ConfigureAwait(false);
 
             if (existing == null) { return new PageStruct(); }
 
@@ -366,7 +415,15 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             //page.Author = authorDisplayName;
             page.IsPublished = publish;
 
-            await pageService.Save(blogId, page, true, publish).ConfigureAwait(false);
+            await pageService.Save(
+                blogId, 
+                userName,
+                password,
+                page, 
+                true, 
+                publish
+                ).ConfigureAwait(false);
+
             return page.Id;
             
         }
@@ -379,7 +436,12 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             PageStruct page, 
             bool publish)
         {
-            var existing = await pageService.GetPage(blogId, pageId).ConfigureAwait(false);
+            var existing = await pageService.GetPage(
+                blogId, 
+                pageId,
+                userName,
+                password
+                ).ConfigureAwait(false);
             if(existing == null) { return false; }
 
             var update = mapper.GetPageFromStruct(page);
@@ -388,7 +450,15 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             existing.ParentId = update.ParentId;
             existing.Title = update.Title;
             
-            await pageService.Save(blogId, existing, false, publish).ConfigureAwait(false);
+            await pageService.Save(
+                blogId, 
+                userName,
+                password,
+                existing, 
+                false, 
+                publish
+                ).ConfigureAwait(false);
+
             return true;
         }
 

@@ -19,7 +19,14 @@ namespace cloudscribe.SimpleContent.Models
             int month = 0,
             int day = 0);
         Task<Post> GetPost(string postId);
-        
+
+        Task<Post> GetPost(
+            string projectId, 
+            string postId,
+            string userName,
+            string password
+            );
+
         Task<Post> GetPostBySlug(string slug);
         Task<List<Post>> GetRecentPosts(int numberToGet);
           
@@ -29,8 +36,14 @@ namespace cloudscribe.SimpleContent.Models
         Task<string> ResolveMediaUrl(string fileName);
         Task<string> ResolvePostUrl(Post post);
         
-        Task<Post> GetPost(string projectId, string postId);
-        Task<List<Post>> GetRecentPosts(string projectId, int numberToGet);
+        
+        Task<List<Post>> GetRecentPosts(
+            string projectId,
+            string userName,
+            string password,
+            int numberToGet
+            );
+
         Task<List<Post>> GetPosts(
             string projectId,
             int year,
@@ -40,14 +53,38 @@ namespace cloudscribe.SimpleContent.Models
             int pageSize = 10);
 
         Task<Dictionary<string, int>> GetCategories();
-        Task<Dictionary<string, int>> GetCategories(string projectId, bool userIsOwner);
+        Task<Dictionary<string, int>> GetCategories(
+            string projectId,
+            string userName,
+            string password
+            );
         Task<Dictionary<string, int>> GetArchives();
 
         Task<bool> SlugIsAvailable(string projectId, string slug);
-        Task<bool> Delete(string projectId, string postId);
+
+        Task<bool> Delete(
+            string projectId, 
+            string postId,
+            string userName,
+            string password);
+
         Task Save(Post post, bool isNew);
-        Task Save(string projectId, Post post, bool isNew, bool publish);
-        Task SaveMedia(string projectId, byte[] bytes, string fileName);
+        Task Save(
+            string projectId,
+            string userName,
+            string password,
+            Post post, 
+            bool isNew, 
+            bool publish
+            );
+
+        Task SaveMedia(
+            string projectId,
+            string userName,
+            string password,
+            byte[] bytes, 
+            string fileName);
+
         Task HandlePubDateAboutToChange(Post post, DateTime newPubDate);
     }
 }

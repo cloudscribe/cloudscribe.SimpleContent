@@ -8,6 +8,6 @@ namespace cloudscribe.SimpleContent.Models
     {
         Task<ProjectSettings> GetCurrentProjectSettings();
         Task<ProjectSettings> GetProjectSettings(string projectId);
-        Task<List<ProjectSettings>> GetUserProjects(string userName);
+        Task<List<ProjectSettings>> GetUserProjects(string userName, string password);
     }
 }

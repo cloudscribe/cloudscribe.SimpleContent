@@ -27,6 +27,11 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
+        public Task<bool> Delete(string projectId, string postId, string userName, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Dictionary<string, int>> GetArchives()
         {
             throw new NotImplementedException();
@@ -38,6 +43,11 @@ namespace cloudscribe.SimpleContent.Models
         }
 
         public Task<Dictionary<string, int>> GetCategories(string blogId, bool userIsOwner)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Dictionary<string, int>> GetCategories(string projectId, string userName, string password)
         {
             throw new NotImplementedException();
         }
@@ -58,6 +68,11 @@ namespace cloudscribe.SimpleContent.Models
         }
 
         public Task<Post> GetPost(string blogId, string postId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Post> GetPost(string projectId, string postId, string userName, string password)
         {
             throw new NotImplementedException();
         }
@@ -87,7 +102,10 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        
+        public Task<List<Post>> GetRecentPosts(string projectId, string userName, string password, int numberToGet)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<List<Post>> GetVisiblePosts()
         {
@@ -129,7 +147,17 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
+        public Task Save(string projectId, string userName, string password, Post post, bool isNew, bool publish)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task SaveMedia(string blogId, byte[] bytes, string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveMedia(string projectId, string userName, string password, byte[] bytes, string fileName)
         {
             throw new NotImplementedException();
         }

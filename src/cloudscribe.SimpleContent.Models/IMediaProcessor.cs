@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-12
-// Last Modified:           2016-02-16
+// Last Modified:           2016-03-29
 // 
 
 
@@ -23,6 +23,7 @@ namespace cloudscribe.SimpleContent.Models
     public interface IMediaProcessor
     {
         Task ConvertBase64EmbeddedImagesToFilesWithUrls(string mediaVirtualPath, Post post);
+        Task ConvertBase64EmbeddedImagesToFilesWithUrls(string mediaVirtualPath, Page page);
 
         Task SaveMedia(string mediaVirtualPath, string fileName, byte[] bytes);
     }

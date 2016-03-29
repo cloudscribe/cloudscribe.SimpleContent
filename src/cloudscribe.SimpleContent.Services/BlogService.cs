@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-03-20
+// Last Modified:           2016-03-29
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -22,29 +22,28 @@ namespace cloudscribe.SimpleContent.Services
     {
         public BlogService(
             IProjectService projectService,
+            IProjectSecurityResolver security,
             IPostRepository blogRepository,
             IMediaProcessor mediaProcessor,
             IUrlHelper urlHelper,
             IHttpContextAccessor contextAccessor = null)
         {
+            this.security = security;
             repo = blogRepository;
             context = contextAccessor?.HttpContext;
             this.mediaProcessor = mediaProcessor;
-            //settingsResolver = blogSettingsResolver;
             this.urlHelper = urlHelper;
-            //this.settingsRepo = settingsRepo;
             this.projectService = projectService;
             htmlProcessor = new HtmlProcessor();
         }
 
         private IProjectService projectService;
+        private IProjectSecurityResolver security;
         private readonly HttpContext context;
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
         private IUrlHelper urlHelper;
         private IPostRepository repo;
         private IMediaProcessor mediaProcessor;
-       // private IProjectSettingsRepository settingsRepo;
-       // private IProjectSettingsResolver settingsResolver;
         private ProjectSettings settings = null;
         private bool userIsBlogOwner = false;
         private HtmlProcessor htmlProcessor;
@@ -162,11 +161,25 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<Post>> GetRecentPosts(string projectId, int numberToGet)
+        public async Task<List<Post>> GetRecentPosts(
+            string projectId, 
+            string userName,
+            string password,
+            int numberToGet)
         {
-            //await EnsureBlogSettings().ConfigureAwait(false);
-            //var settings = await settingsRepo.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
 
+            if(!permission.CanEdit)
+            {
+                return new List<Post>(); // empty
+            }
+
+            
             return await repo.GetRecentPosts(
                 projectId,
                 numberToGet,
@@ -187,10 +200,24 @@ namespace cloudscribe.SimpleContent.Services
 
         public async Task Save(
             string projectId, 
+            string userName,
+            string password,
             Post post, 
             bool isNew, 
             bool publish)
         {
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return; 
+            }
+
             var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
             if(isNew)
@@ -220,10 +247,10 @@ namespace cloudscribe.SimpleContent.Services
             // since this overload of Save is only called from metaweblog
             // and metaweblog does not base64 encode the images like the browser client
             // this call may not be needed here
-            await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-                settings.LocalMediaVirtualPath,
-                post
-                ).ConfigureAwait(false);
+            //await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            //    settings.LocalMediaVirtualPath,
+            //    post
+            //    ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)
@@ -321,9 +348,26 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<Post> GetPost(string projectId, string postId)
+        public async Task<Post> GetPost(
+            string projectId, 
+            string postId,
+            string userName,
+            string password
+            )
         {
-           // await EnsureBlogSettings().ConfigureAwait(false);
+
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return null;
+            }
+            // await EnsureBlogSettings().ConfigureAwait(false);
 
             return await repo.GetPost(
                 projectId,
@@ -382,8 +426,23 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<bool> Delete(string projectId, string postId)
+        public async Task<bool> Delete(
+            string projectId, 
+            string postId,
+            string userName,
+            string password)
         {
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return false;
+            }
             //await EnsureBlogSettings().ConfigureAwait(false);
             //var settings = await settingsRepo.GetBlogSetings(projectId, CancellationToken).ConfigureAwait(false);
 
@@ -402,13 +461,27 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<Dictionary<string, int>> GetCategories(string projectId, bool userIsOwner)
+        public async Task<Dictionary<string, int>> GetCategories(
+            string projectId, 
+            string userName,
+            string password)
         {
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return new Dictionary<string, int>(); //empty
+            }
             var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
             return await repo.GetCategories(
                 settings.ProjectId,
-                userIsOwner,
+                permission.CanEdit,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
@@ -434,8 +507,25 @@ namespace cloudscribe.SimpleContent.Services
             return result;
         }
 
-        public async Task SaveMedia(string projectId, byte[] bytes, string fileName)
+        public async Task SaveMedia(
+            string projectId, 
+            string userName,
+            string password,
+            byte[] bytes, string 
+            fileName)
         {
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return;
+            }
+
             var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
             await mediaProcessor.SaveMedia(settings.LocalMediaVirtualPath, fileName, bytes).ConfigureAwait(false);

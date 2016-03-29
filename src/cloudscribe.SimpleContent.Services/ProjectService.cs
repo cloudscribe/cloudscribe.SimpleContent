@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-02-25
+// Last Modified:           2016-03-29
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -22,9 +22,11 @@ namespace cloudscribe.SimpleContent.Services
 
         public ProjectService(
             IProjectSettingsResolver settingsResolver,
+            IProjectSecurityResolver security,
             IProjectSettingsRepository settingsRepo,
             IHttpContextAccessor contextAccessor = null)
         {
+            this.security = security;
             this.settingsRepo = settingsRepo;
             this.settingsResolver = settingsResolver;
             context = contextAccessor?.HttpContext;
@@ -32,6 +34,7 @@ namespace cloudscribe.SimpleContent.Services
 
         private readonly HttpContext context;
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
+        private IProjectSecurityResolver security;
         private IProjectSettingsRepository settingsRepo;
         private IProjectSettingsResolver settingsResolver;
         private ProjectSettings currentSettings = null;
@@ -69,8 +72,19 @@ namespace cloudscribe.SimpleContent.Services
             return await settingsRepo.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<ProjectSettings>> GetUserProjects(string userName)
+        public async Task<List<ProjectSettings>> GetUserProjects(string userName, string password)
         {
+            var permission = await security.ValidatePermissions(
+                string.Empty,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if(!permission.CanEdit)
+            {
+                return new List<ProjectSettings>(); //empty
+            }
             //await EnsureBlogSettings().ConfigureAwait(false);
             //return settings;
             return await settingsRepo.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);

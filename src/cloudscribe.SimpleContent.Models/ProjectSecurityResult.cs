@@ -13,20 +13,20 @@ namespace cloudscribe.SimpleContent.Models
         public ProjectSecurityResult(
             string displayName,
             string projectId,
-            bool isAllowed, 
-            bool isProjectOwner
+            bool isAuthenticated, 
+            bool canEdit
             )
         {
             this.displayName = displayName;
             this.projectId = projectId;
-            this.isAllowed = isAllowed;
-            this.isProjectOwner = isProjectOwner;
+            this.isAuthenticated = isAuthenticated;
+            this.canEdit = canEdit;
         }
 
         private string displayName = string.Empty;
         private string projectId = string.Empty;
-        private bool isAllowed = false;
-        private bool isProjectOwner = false;
+        private bool isAuthenticated = false;
+        private bool canEdit = false;
 
         public string DisplayName
         {
@@ -38,14 +38,14 @@ namespace cloudscribe.SimpleContent.Models
             get { return projectId; }
         }
 
-        public bool IsAllowed
+        public bool IsAuthenticated
         {
-            get { return isAllowed; }
+            get { return isAuthenticated; }
         }
 
-        public bool IsProjectOwner
+        public bool CanEdit
         {
-            get { return isProjectOwner; }
+            get { return canEdit; }
         }
     }
 }

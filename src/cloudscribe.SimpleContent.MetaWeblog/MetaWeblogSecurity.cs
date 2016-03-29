@@ -34,8 +34,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             return new MetaWeblogSecurityResult(
                 blogResult.DisplayName,
                 blogResult.ProjectId,
-                blogResult.IsAllowed, 
-                blogResult.IsProjectOwner);
+                blogResult.IsAuthenticated, 
+                blogResult.CanEdit);
             
         }
     }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-03-20
+// Last Modified:           2016-03-29
 // 
 
 
@@ -22,6 +22,7 @@ namespace cloudscribe.SimpleContent.Services
     {
         public PageService(
             IProjectService projectService,
+            IProjectSecurityResolver security,
             IPageRepository pageRepository,
             IMediaProcessor mediaProcessor,
             IUrlHelper urlHelper,
@@ -29,6 +30,7 @@ namespace cloudscribe.SimpleContent.Services
         {
 
             this.projectService = projectService;
+            this.security = security;
             pageRepo = pageRepository;
             context = contextAccessor?.HttpContext;
             this.mediaProcessor = mediaProcessor;
@@ -39,6 +41,7 @@ namespace cloudscribe.SimpleContent.Services
         private readonly HttpContext context;
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
         private IUrlHelper urlHelper;
+        private IProjectSecurityResolver security;
         private IPageRepository pageRepo;
         private IMediaProcessor mediaProcessor;
         private IProjectService projectService;
@@ -85,10 +88,24 @@ namespace cloudscribe.SimpleContent.Services
 
         public async Task Save(
             string projectId,
+            string userName,
+            string password,
             Page page,
             bool isNew,
             bool publish)
         {
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return; 
+            }
+
             var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
             if (isNew)
@@ -141,9 +158,59 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
-            await pageRepo.Save(settings.ProjectId, page, isNew).ConfigureAwait(false);
+            await pageRepo.Save(projectId, page, isNew).ConfigureAwait(false);
         }
 
+        public async Task Save(
+            Page page,
+            bool isNew,
+            bool publish)
+        {
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            
+
+            if (isNew)
+            {
+                if (publish)
+                {
+                    page.PubDate = DateTime.UtcNow;
+                }
+
+                if (string.IsNullOrEmpty(page.Slug))
+                {
+                    var slug = ContentUtils.CreateSlug(page.Title);
+                    var available = await PageSlugIsAvailable(slug);
+                    if (available)
+                    {
+                        page.Slug = slug;
+                    }
+
+                }
+            }
+
+            var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
+            if (context != null)
+            {
+                imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
+            }
+
+            
+
+            
+            await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+                settings.LocalMediaVirtualPath,
+                page
+                ).ConfigureAwait(false);
+
+            var nonPublishedDate = new DateTime(1, 1, 1);
+            if (page.PubDate == nonPublishedDate)
+            {
+                page.PubDate = DateTime.UtcNow;
+            }
+
+            await pageRepo.Save(settings.ProjectId, page, isNew).ConfigureAwait(false);
+        }
 
         public async Task<bool> DeletePage(string projectId, string pageId)
         {
@@ -151,14 +218,41 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<Page> GetPage(string projectId, string pageId)
+        public async Task<Page> GetPage(
+            string projectId, 
+            string pageId,
+            string userName,
+            string password)
         {
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return null;
+            }
+
             return await pageRepo.GetPage(
                 projectId,
                 pageId,
                 CancellationToken)
                 .ConfigureAwait(false);
 
+        }
+
+        public async Task<Page> GetPage(string pageId)
+        {
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            return await pageRepo.GetPage(
+                settings.ProjectId,
+                pageId,
+                CancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<Page> GetPageBySlug(string projectId, string slug)
@@ -171,8 +265,22 @@ namespace cloudscribe.SimpleContent.Services
         }
 
         public async Task<List<Page>> GetAllPages(
-            string projectId)
+            string projectId,
+            string userName,
+            string password)
         {
+            var permission = await security.ValidatePermissions(
+                projectId,
+                userName,
+                password,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            if (!permission.CanEdit)
+            {
+                return new List<Page>(); // empty
+            }
+
             return await pageRepo.GetAllPages(
                 projectId,
                 CancellationToken)

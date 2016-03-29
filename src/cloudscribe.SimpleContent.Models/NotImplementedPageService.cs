@@ -17,12 +17,22 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
+        public Task<List<Page>> GetAllPages(string projectId, string userName, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<Page>> GetChildPages(string pageId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Page> GetPage(string blogId, string pageId)
+        public Task<Page> GetPage(string pageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Page> GetPage(string projectId, string pageId, string userName, string password)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +62,12 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task Save(string blogId, Page page, bool isNew, bool publish)
+        public Task Save(Page page, bool isNew, bool publish)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Save(string projectId, string userName, string password, Page page, bool isNew, bool publish)
         {
             throw new NotImplementedException();
         }
