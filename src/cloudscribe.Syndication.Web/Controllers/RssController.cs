@@ -80,36 +80,53 @@ namespace cloudscribe.Syndication.Web.Controllers
 
         private XDocument BuildXml(RssChannel channel)
         {
-            //TODO: is this sufficient or incomplete?
+            //TODO: improve and complete this
+            //http://cyber.law.harvard.edu/rss/rss.html
+            //http://cyber.law.harvard.edu/rss/examples/rss2sample.xml
 
             var rss = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement(Rss20Constants.RssTag,
-                  new XAttribute(Rss20Constants.VersionTag, Rss20Constants.Version),
-                    new XElement(Rss20Constants.ChannelTag,
+                  new XAttribute(Rss20Constants.VersionTag, Rss20Constants.Version)
+                )
+              );
+
+            var rssChannel = new XElement(Rss20Constants.ChannelTag,
                       new XElement(Rss20Constants.TitleTag, channel.Title),
-                      new XElement(Rss20Constants.LinkTag, Url.Content(channel.Link.ToString()),
+                      new XElement(Rss20Constants.LinkTag, Url.Content(channel.Link.ToString())),
                       new XElement(Rss20Constants.DescriptionTag, channel.Description),
-                      new XElement(Rss20Constants.CopyrightTag, channel.Copyright),
-                        channel.Items.Select(item =>
-                            new XElement(Rss20Constants.ItemTag,
+                      new XElement(Rss20Constants.CopyrightTag, channel.Copyright)
+                        );
+
+            rss.Add(channel);
+
+            foreach (var item in channel.Items)
+            {
+                AddItem(rssChannel, item);
+            }
+
+            return rss;
+
+        }
+
+        private void AddItem(XElement channel, RssItem item)
+        {
+            var rssItem = new XElement(Rss20Constants.ItemTag,
                             new XElement(Rss20Constants.TitleTag, item.Title),
                             new XElement(Rss20Constants.DescriptionTag, item.Description),
                             new XElement(Rss20Constants.LinkTag, Url.Content(item.Link.ToString())),
                             new XElement(Rss20Constants.PubDateTag, item.PublicationDate.ToString("R"))
-                           //,item.Categories.Select(cat => 
-                           //  new XElement(Rss20Constants.CategoryTag, cat.Value)
-                           // )
-                           )
-                        )
-                      )
-                    )
-                )
-              );
+                           );
 
-            return rss;
+            if(item.Categories.Count > 0)
+            {
+                foreach(var cat in item.Categories)
+                {
+                    var ele = new XElement(Rss20Constants.CategoryTag, cat.Value);
+                    rssItem.Add(ele);
+                }
+            }
 
-
-
+            channel.Add(rssItem);
         }
 
     }
