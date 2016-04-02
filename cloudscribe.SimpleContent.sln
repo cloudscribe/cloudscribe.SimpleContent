@@ -34,6 +34,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.Syndication.Web
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.Syndication", "src\cloudscribe.Syndication\cloudscribe.Syndication.xproj", "{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Syndication", "src\cloudscribe.SimpleContent.Syndication\cloudscribe.SimpleContent.Syndication.xproj", "{232B4D96-9D2F-42B8-9BAE-61B377C0BE59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{232B4D96-9D2F-42B8-9BAE-61B377C0BE59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{232B4D96-9D2F-42B8-9BAE-61B377C0BE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{232B4D96-9D2F-42B8-9BAE-61B377C0BE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{232B4D96-9D2F-42B8-9BAE-61B377C0BE59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,5 +106,6 @@ Global
 		{A9A26102-219C-4863-A00E-69B78EC6EA42} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{3DC2884F-77FF-44F2-8B09-51C9BD72F799} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB} = {6D88A8AD-A29C-4A41-8225-27538812204B}
+		{232B4D96-9D2F-42B8-9BAE-61B377C0BE59} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 	EndGlobalSection
 EndGlobal
