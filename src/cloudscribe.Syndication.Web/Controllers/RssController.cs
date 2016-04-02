@@ -19,7 +19,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Http;
 using System.Xml.Linq;
-using cloudscribe.SimpleContent.Syndication;
 using cloudscribe.Syndication.Models.Rss;
 
 namespace cloudscribe.Syndication.Web.Controllers
@@ -30,7 +29,8 @@ namespace cloudscribe.Syndication.Web.Controllers
         public RssController(
             ILogger<RssController> logger,
             IEnumerable<IChannelProvider> channelProviders = null,
-            IChannelProviderResolver channelResolver = null
+            IChannelProviderResolver channelResolver = null,
+            IXmlFormatter xmlFormatter = null
             )
         {
             log = logger;
@@ -45,6 +45,7 @@ namespace cloudscribe.Syndication.Web.Controllers
             }
 
             this.channelResolver = channelResolver ?? new DefaultChannelProviderResolver();
+            this.xmlFormatter = xmlFormatter ?? new DefaultXmlFormatter();
 
         }
 
@@ -52,6 +53,7 @@ namespace cloudscribe.Syndication.Web.Controllers
         private IChannelProviderResolver channelResolver;
         private IEnumerable<IChannelProvider> channelProviders;
         private IChannelProvider currentChannelProvider;
+        private IXmlFormatter xmlFormatter;
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -64,7 +66,7 @@ namespace cloudscribe.Syndication.Web.Controllers
                 return new EmptyResult();
             }
 
-            RssChannel currentChannel = await currentChannelProvider.GetChannel();
+            var currentChannel = await currentChannelProvider.GetChannel();
 
             if (currentChannel == null)
             {
@@ -72,61 +74,10 @@ namespace cloudscribe.Syndication.Web.Controllers
                 return new EmptyResult();
             }
 
-            var xml = BuildXml(currentChannel);
+            var xml = xmlFormatter.BuildXml(currentChannel, Url);
 
             return new XmlResult(xml);
 
-        }
-
-        private XDocument BuildXml(RssChannel channel)
-        {
-            //TODO: improve and complete this
-            //http://cyber.law.harvard.edu/rss/rss.html
-            //http://cyber.law.harvard.edu/rss/examples/rss2sample.xml
-
-            var rss = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement(Rss20Constants.RssTag,
-                  new XAttribute(Rss20Constants.VersionTag, Rss20Constants.Version)
-                )
-              );
-
-            var rssChannel = new XElement(Rss20Constants.ChannelTag,
-                      new XElement(Rss20Constants.TitleTag, channel.Title),
-                      new XElement(Rss20Constants.LinkTag, Url.Content(channel.Link.ToString())),
-                      new XElement(Rss20Constants.DescriptionTag, channel.Description),
-                      new XElement(Rss20Constants.CopyrightTag, channel.Copyright)
-                        );
-
-            rss.Add(channel);
-
-            foreach (var item in channel.Items)
-            {
-                AddItem(rssChannel, item);
-            }
-
-            return rss;
-
-        }
-
-        private void AddItem(XElement channel, RssItem item)
-        {
-            var rssItem = new XElement(Rss20Constants.ItemTag,
-                            new XElement(Rss20Constants.TitleTag, item.Title),
-                            new XElement(Rss20Constants.DescriptionTag, item.Description),
-                            new XElement(Rss20Constants.LinkTag, Url.Content(item.Link.ToString())),
-                            new XElement(Rss20Constants.PubDateTag, item.PublicationDate.ToString("R"))
-                           );
-
-            if(item.Categories.Count > 0)
-            {
-                foreach(var cat in item.Categories)
-                {
-                    var ele = new XElement(Rss20Constants.CategoryTag, cat.Value);
-                    rssItem.Add(ele);
-                }
-            }
-
-            channel.Add(rssItem);
         }
 
     }

@@ -1,4 +1,4 @@
-﻿namespace cloudscribe.SimpleContent.Syndication
+﻿namespace cloudscribe.Syndication.Models.Rss
 {
     public static class Rss20Constants
     {

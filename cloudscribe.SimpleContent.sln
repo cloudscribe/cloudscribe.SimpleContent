@@ -30,9 +30,9 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.P
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Services", "src\cloudscribe.SimpleContent.Services\cloudscribe.SimpleContent.Services.xproj", "{A9A26102-219C-4863-A00E-69B78EC6EA42}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.Syndication.Models", "src\cloudscribe.Syndication.Models\cloudscribe.Syndication.Models.xproj", "{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}"
-EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.Syndication.Web", "src\cloudscribe.Syndication.Web\cloudscribe.Syndication.Web.xproj", "{3DC2884F-77FF-44F2-8B09-51C9BD72F799}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.Syndication", "src\cloudscribe.Syndication\cloudscribe.Syndication.xproj", "{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,14 +76,14 @@ Global
 		{A9A26102-219C-4863-A00E-69B78EC6EA42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9A26102-219C-4863-A00E-69B78EC6EA42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9A26102-219C-4863-A00E-69B78EC6EA42}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3DC2884F-77FF-44F2-8B09-51C9BD72F799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3DC2884F-77FF-44F2-8B09-51C9BD72F799}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DC2884F-77FF-44F2-8B09-51C9BD72F799}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DC2884F-77FF-44F2-8B09-51C9BD72F799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,7 +98,7 @@ Global
 		{8D34A4B7-24C9-40D8-A8AC-2E6FD3FAFB4E} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{53669691-C2F4-4524-9AF0-BC08357E47C8} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{A9A26102-219C-4863-A00E-69B78EC6EA42} = {6D88A8AD-A29C-4A41-8225-27538812204B}
-		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 		{3DC2884F-77FF-44F2-8B09-51C9BD72F799} = {6D88A8AD-A29C-4A41-8225-27538812204B}
+		{1CEFB133-1B64-45AC-BF21-E682C13B6BDB} = {6D88A8AD-A29C-4A41-8225-27538812204B}
 	EndGlobalSection
 EndGlobal

@@ -1,20 +1,10 @@
-﻿{
+{
   "version": "1.0.0-*",
-  "description": "cloudscribe.Syndication.Web Class Library",
+  "description": "cloudscribe.Syndication Class Library",
   "authors": [ "Joe" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
-
-  "dependencies": {
-        "cloudscribe.Syndication": "1.0.0-*",
-        "Microsoft.AspNet.Http": "1.0.0-rc1-final",
-        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-        "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-        "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final"
-
-    },
-
     "frameworks": {
         "net451": {
             "frameworkAssemblies": {
@@ -36,7 +26,8 @@
                 "System.Xml.ReaderWriter": "4.0.11-beta-23516"
             }
         }
-
+    },
+    "dependencies": {
+        "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final"
     }
-  
 }

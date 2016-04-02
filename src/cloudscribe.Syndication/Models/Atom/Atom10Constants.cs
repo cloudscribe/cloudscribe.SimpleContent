@@ -1,4 +1,4 @@
-﻿namespace cloudscribe.SimpleContent.Syndication
+﻿namespace cloudscribe.Syndication.Models.Atom
 {
     public static class Atom10Constants
     {
