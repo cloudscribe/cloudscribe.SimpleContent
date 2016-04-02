@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
-//http://www.mikesdotnetting.com/article/174/generating-rss-and-atom-feeds-in-webmatrix
 
 namespace cloudscribe.Syndication.Models.Rss
 {

@@ -15,7 +15,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using cloudscribe.Syndication.Models.Rss;
 using Microsoft.AspNet.Mvc;
 
 namespace cloudscribe.Syndication.Models.Rss
@@ -32,6 +31,7 @@ namespace cloudscribe.Syndication.Models.Rss
             //TODO: improve and complete this
             //http://cyber.law.harvard.edu/rss/rss.html
             //http://cyber.law.harvard.edu/rss/examples/rss2sample.xml
+            //http://www.mikesdotnetting.com/article/174/generating-rss-and-atom-feeds-in-webmatrix
 
             var rss = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement(Rss20Constants.RssTag,
