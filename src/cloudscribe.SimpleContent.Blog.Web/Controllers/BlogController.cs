@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-03-21
+// Last Modified:           2016-04-03
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -75,7 +75,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
             if(model.CanEdit)
             {
-                model.EditorSettings.NewItemPath = Url.Link("newpost", null);
+                model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
                 model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
                 model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
                 model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
@@ -138,7 +138,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
             if (model.CanEdit)
             {
-                model.EditorSettings.NewItemPath = Url.Link("newpost", null);
+                model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
                 model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
                 model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
                 model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
@@ -190,7 +190,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 if(year > 0)
                 {
                     //TODO: an option for permanent redirect
-                    return RedirectToRoute("postwithoutdate", new { slug = slug });
+                    return RedirectToRoute(ProjectConstants.PostWithoutDateRouteName, new { slug = slug });
                 }
             }
 
@@ -226,7 +226,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     if(year == 0)
                     {
                         //TODO: option whether to use permanent redirect
-                        return RedirectToRoute("postwithdate", 
+                        return RedirectToRoute(ProjectConstants.PostWithDateRouteName, 
                             new {
                                 year = post.PubDate.Year,
                                 month = post.PubDate.Month.ToString("00"),
@@ -276,7 +276,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.IsPublished = model.CurrentPost.IsPublished;
                     if(model.ProjectSettings.IncludePubDateInPostUrls)
                     {
-                        model.EditorSettings.EditPath = Url.Link("postwithdate",  
+                        model.EditorSettings.EditPath = Url.Link(ProjectConstants.PostWithDateRouteName,  
                             new {
                             year = model.CurrentPost.PubDate.Year,
                             month = model.CurrentPost.PubDate.Month.ToString("00"),
@@ -284,7 +284,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                             slug = model.CurrentPost.Slug,
                             mode = "edit" });
 
-                        model.EditorSettings.CancelEditPath = Url.Link("postwithdate",
+                        model.EditorSettings.CancelEditPath = Url.Link(ProjectConstants.PostWithDateRouteName,
                             new
                             {
                                 year = model.CurrentPost.PubDate.Year,
@@ -295,8 +295,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
                     else
                     {
-                        model.EditorSettings.EditPath = Url.Link("postwithoutdate", new { slug = model.CurrentPost.Slug, mode = "edit" });
-                        model.EditorSettings.CancelEditPath = Url.Link("postwithoutdate", new { slug = model.CurrentPost.Slug});
+                        model.EditorSettings.EditPath = Url.Link(ProjectConstants.PostWithoutDateRouteName, 
+                            new { slug = model.CurrentPost.Slug, mode = "edit" });
+
+                        model.EditorSettings.CancelEditPath = Url.Link(ProjectConstants.PostWithoutDateRouteName, 
+                            new { slug = model.CurrentPost.Slug});
                     }
                     
                 }
@@ -307,7 +310,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.CategoryPath = Url.Action("Category", "Blog"); // TODO: should we support categories on pages? this action doesn't exist right now
                 model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Blog");
                 model.EditorSettings.SavePath = Url.Action("AjaxPost", "Blog");
-                model.EditorSettings.NewItemPath = Url.Link("newpost", null);
+                model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
 
             }
 
@@ -423,7 +426,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             string url;
             if(project.IncludePubDateInPostUrls)
             {
-                url = Url.Link("postwithdate", 
+                url = Url.Link(ProjectConstants.PostWithDateRouteName, 
                     new {
                         year = post.PubDate.Year,
                         month = post.PubDate.Month.ToString("00"),
@@ -433,7 +436,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             else
             {
-                url = Url.Link("postwithoutdate", new { slug = post.Slug });
+                url = Url.Link(ProjectConstants.PostWithoutDateRouteName, new { slug = post.Slug });
             }
             
             

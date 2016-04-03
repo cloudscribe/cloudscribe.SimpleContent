@@ -245,14 +245,14 @@ namespace example.WebApp
             {
 
                 routes.MapRoute(
-                   name: "blogcategory",
+                   name: ProjectConstants.BlogCategoryRouteName,
                    template: "blog/category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    );
 
                 
                 routes.MapRoute(
-                      "blogarchive",
+                      ProjectConstants.BlogArchiveRouteName,
                       "blog/{year}/{month}/{day}",
                       new { controller = "Blog", action = "Archive", month = "00", day = "00" },
                       //new { controller = "Blog", action = "Archive" },
@@ -260,20 +260,20 @@ namespace example.WebApp
                     );
 
                 routes.MapRoute(
-                      "postwithdate",
+                      ProjectConstants.PostWithDateRouteName,
                       "blog/{year}/{month}/{day}/{slug}",
                       new { controller = "Blog", action = "PostWithDate" },
                       new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                     );
 
                 routes.MapRoute(
-                   name: "newpost",
+                   name: ProjectConstants.NewPostRouteName,
                    template: "blog/new"
                    , defaults: new { controller = "Blog", action = "New" }
                    );
 
                 routes.MapRoute(
-                   name: "postwithoutdate",
+                   name: ProjectConstants.PostWithoutDateRouteName,
                    template: "blog/{slug}"
                    , defaults: new { controller = "Blog", action = "PostNoDate" }
                    );
@@ -281,13 +281,13 @@ namespace example.WebApp
                 
 
                 routes.MapRoute(
-                   name: "blogindex",
+                   name: ProjectConstants.BlogIndexRouteName,
                    template: "blog/"
                    , defaults: new { controller = "Blog", action = "Index" }
                    );
                 
                 routes.MapRoute(
-                   name: "pageindex",
+                   name: ProjectConstants.PageIndexRouteName,
                    template: "{slug=none}"
                    , defaults: new { controller = "Page", action = "Index" }
                    );
