@@ -2,11 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-04-02
+// Last Modified:           2016-04-04
 // 
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,15 +49,38 @@ namespace cloudscribe.SimpleContent.Syndication
             var channel = new RssChannel();
             channel.Title = project.Title;
             channel.Description = project.Description;
-            //channel.Copyright = 
-            //channel.Categories = 
+            channel.Copyright = project.CopyrightNotice;
+            if(project.ChannelCategoriesCsv.Length > 0)
+            {
+                var channelCats = project.ChannelCategoriesCsv.Split(',');
+                foreach(var cat in channelCats)
+                {
+                    channel.Categories.Add(new RssCategory(cat));
+                }
+            }
+            
             channel.Generator = Name;
-            //channel.Image = 
-            //channel.Language = 
+            if(project.Image.Length > 0)
+            {
+                channel.Image.Url = new Uri(urlHelper.Content(project.Image));
+            }
+            if(project.LanguageCode.Length > 0)
+            {
+                channel.Language = new CultureInfo(project.LanguageCode);
+            }
+             
             channel.Link = new Uri(urlHelper.RouteUrl(ProjectConstants.BlogIndexRouteName));
-            //channel.ManagingEditor = 
-            //channel.PublicationDate = 
-            //channel.Rating =
+            if(project.ManagingEditorEmail.Length > 0)
+            {
+                channel.ManagingEditor = project.ManagingEditorEmail;
+            }
+
+            if(project.ChannelRating.Length > 0)
+            {
+                channel.Rating = project.ChannelRating;
+            }
+            
+            
             var feedUrl = string.Concat(
                         contextAccessor.HttpContext.Request.Scheme,
                         "://",
@@ -66,8 +90,12 @@ namespace cloudscribe.SimpleContent.Syndication
                         contextAccessor.HttpContext.Request.QueryString.ToUriComponent());
             channel.SelfLink = new Uri(feedUrl);
             //channel.TextInput = 
-            //channel.TimeToLive = 
-            //channel.Webmaster = 
+            channel.TimeToLive = project.ChannelTimeToLive;
+            if(project.WebmasterEmail.Length > 0)
+            {
+                channel.Webmaster = project.WebmasterEmail;
+            }
+           
             DateTime mostRecentPubDate = DateTime.MinValue;
             var items = new List<RssItem>();
             foreach(var post in posts)
@@ -75,7 +103,16 @@ namespace cloudscribe.SimpleContent.Syndication
                 if(post.PubDate > mostRecentPubDate) { mostRecentPubDate = post.PubDate; }
                 var rssItem = new RssItem();
                 rssItem.Author = post.Author;
-                //rssItem.Categories
+
+                if(post.Categories.Count > 0)
+                {
+                    foreach(var c in post.Categories)
+                    {
+                        rssItem.Categories.Add(new RssCategory(c));
+                    }
+                }
+
+                
                 //rssItem.Comments
                 rssItem.Description = post.Content;
                 //rssItem.Enclosures

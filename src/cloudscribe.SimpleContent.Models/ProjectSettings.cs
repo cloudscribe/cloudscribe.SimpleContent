@@ -23,7 +23,8 @@ namespace cloudscribe.SimpleContent.Models
         public string ProjectId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
+        public string CopyrightNotice { get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
         public int PostsPerPage { get; set; }
         public int DaysToComment { get; set; }
         public bool ModerateComments { get; set; }
@@ -51,6 +52,15 @@ namespace cloudscribe.SimpleContent.Models
         public int BlogPagePosition { get; set; } = 2; // right after home page
         public string BlogPageText { get; set; } = "Blog";
         public string BlogPageNavComponentVisibility { get; set; } = "topnav";
+
+        // feed settings
+        public int ChannelTimeToLive { get; set; } = 60;
+        public string LanguageCode { get; set; } = "en-US";
+        public string ChannelCategoriesCsv { get; set; } = string.Empty;
+        public string ManagingEditorEmail { get; set; } = string.Empty;
+        public string ChannelRating { get; set; } = string.Empty;
+        public string WebmasterEmail { get; set; } = string.Empty;
+
 
     }
 }
