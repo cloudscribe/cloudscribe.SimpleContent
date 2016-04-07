@@ -28,7 +28,6 @@ namespace cloudscribe.Syndication.Models.Rss
 
         public XDocument BuildXml(RssChannel channel, IUrlHelper urlHelper)
         {
-            //TODO: improve and complete this
             //http://cyber.law.harvard.edu/rss/rss.html
             //http://cyber.law.harvard.edu/rss/examples/rss2sample.xml
             //http://www.mikesdotnetting.com/article/174/generating-rss-and-atom-feeds-in-webmatrix
@@ -64,6 +63,11 @@ namespace cloudscribe.Syndication.Models.Rss
                 rssChannel.Add(new XElement(Rss20Constants.CopyrightTag, channel.Copyright));
             }
 
+            if (!string.IsNullOrEmpty(channel.Generator))
+            {
+                rssChannel.Add(new XElement(Rss20Constants.GeneratorTag, channel.Generator));
+            }
+
             XNamespace ns = Rss20Constants.AtomNamespace;
 
             if (channel.SelfLink != null)
@@ -83,11 +87,11 @@ namespace cloudscribe.Syndication.Models.Rss
 
             
 
-            var rss = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
+            var rss = new XDocument(
+                new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement(Rss20Constants.RssTag,
                   new XAttribute(Rss20Constants.VersionTag, Rss20Constants.Version),
-                   new XAttribute(ns + "atom", Rss20Constants.AtomNamespace)
-                  //new XAttribute("xmlns",ns)
+                  new XAttribute(XNamespace.Xmlns + "atom", ns)   
                   ,
                   rssChannel
                 )

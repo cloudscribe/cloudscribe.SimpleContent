@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -68,7 +69,16 @@ namespace cloudscribe.Syndication.Web
 
             if (Xml != null)
             {
-                string response = Xml.ToString(SaveOptions.DisableFormatting);
+                string response;
+                using (var wr = new Utf8StringWriter())
+                {
+                    //wr.Encoding = Encoding.UTF8;
+                    Xml.Save(wr, SaveOptions.None);
+                    response = wr.GetStringBuilder().ToString();
+                }
+                    
+
+                //string response = Xml.ToString(SaveOptions.None);
                 context.HttpContext.Response.ContentType = "text/xml";
                 byte[] responseBytes = Encoding.UTF8.GetBytes(response);
 
@@ -88,5 +98,10 @@ namespace cloudscribe.Syndication.Web
 
 
 
+    }
+
+    public class Utf8StringWriter : StringWriter
+    {
+        public override Encoding Encoding { get { return Encoding.UTF8; } }
     }
 }

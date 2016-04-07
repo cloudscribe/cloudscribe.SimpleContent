@@ -3,7 +3,6 @@
     public static class Rss20Constants
     {
         public const string AtomNamespace = "http://www.w3.org/2005/Atom";
-        //public const string AtomSelfLinkTag = "atom:link";
         public const string AuthorTag = "author";
         public const string CategoryTag = "category";
         public const string ChannelTag = "channel";
