@@ -2,11 +2,14 @@
 {
     public static class Rss20Constants
     {
+        public const string AtomNamespace = "http://www.w3.org/2005/Atom";
+        //public const string AtomSelfLinkTag = "atom:link";
         public const string AuthorTag = "author";
         public const string CategoryTag = "category";
         public const string ChannelTag = "channel";
         public const string CopyrightTag = "copyright";
         public const string DescriptionTag = "description";
+        public const string DocsTag = "docs";
         public const string DomainTag = "domain";
         public const string EnclosureTag = "enclosure";
         public const string ExtensionWrapperTag = "extensionWrapper";
@@ -27,9 +30,12 @@
         public const string SpecificationLink = "http://blogs.law.harvard.edu/tech/rss";
         public const string TitleTag = "title";
         public const string TypeTag = "type";
+        public const string TtlTag = "ttl";
         public const string UrlTag = "url";
         public const string Version = "2.0";
         public const string VersionTag = "version";
+        public const string WebMasterTag = "webMaster";
+        
 
     }
 }

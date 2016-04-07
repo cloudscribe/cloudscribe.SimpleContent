@@ -3,18 +3,21 @@ using cloudscribe.SimpleContent.Models;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
 
 namespace cloudscribe.SimpleContent.Services
 {
     public class HtmlProcessor
     {
+        public HtmlProcessor()
+        { }
 
-        
 
-        private static readonly Regex _linkRegex = new Regex("((http://|https://|www\\.)([A-Z0-9.\\-]{1,})\\.[0-9A-Z?;~&%\\(\\)#,=\\-_\\./\\+]{2,}[0-9A-Z?~&%#=\\-_/\\+])", 
+        private static readonly Regex _linkRegex = new Regex("((http://|https://|www\\.)([A-Z0-9.\\-]{1,})\\.[0-9A-Z?;~&%\\(\\)#,=\\-_\\./\\+]{2,}[0-9A-Z?~&%#=\\-_/\\+])",
             RegexOptions.Compiled | RegexOptions.IgnoreCase
             );
 
@@ -119,8 +122,8 @@ namespace cloudscribe.SimpleContent.Services
 
             if (!rootPath.StartsWith("/"))
                 rootPath = "/" + rootPath;
-            
-            if(cdnUrl.Length > 0)
+
+            if (cdnUrl.Length > 0)
             {
                 htmlOutput = Regex.Replace(htmlOutput, "<img.*?src=\"([^\"]+)\"", (Match m) =>
                 {
@@ -137,7 +140,7 @@ namespace cloudscribe.SimpleContent.Services
                 });
 
             }
-            
+
 
 
             return htmlOutput;
@@ -154,7 +157,7 @@ namespace cloudscribe.SimpleContent.Services
             // convert any fully qualified image urls to relative urls
             if (absoluteBaseMediaUrl.Length > 0)
             {
-                
+
                 // need to change absolute urls to relative urls
                 // absolute image urls are created when posting from open live writer
 
@@ -189,10 +192,35 @@ namespace cloudscribe.SimpleContent.Services
                 //post.Content = htmlOutput;
 
             }
-            
+
             return Task.FromResult(htmlOutput);
         }
 
+        public string ConvertUrlsToAbsolute(
+            string absoluteBaseMediaUrl,
+            string htmlInput)
+        {
+            var writer = new StringWriter();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlInput);
+
+            foreach (var img in doc.DocumentNode.Descendants("img"))
+            {
+                img.Attributes["src"].Value = new Uri(new Uri(absoluteBaseMediaUrl), img.Attributes["src"].Value).AbsoluteUri;
+            }
+
+            foreach (var a in doc.DocumentNode.Descendants("a"))
+            {
+                a.Attributes["href"].Value = new Uri(new Uri(absoluteBaseMediaUrl), a.Attributes["href"].Value).AbsoluteUri;
+            }
+
+            doc.Save(writer);
+
+            var newHtml = writer.ToString();
+
+            return newHtml;
+
+        }
 
     }
 }

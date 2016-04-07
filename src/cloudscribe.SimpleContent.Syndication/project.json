@@ -2,13 +2,18 @@
     "version": "1.0.0-*",
     "description": "cloudscribe.SimpleContent.Syndication Class Library",
     "authors": [ "Joe" ],
-    "tags": [ "" ],
-    "projectUrl": "",
-    "licenseUrl": "",
+    "owners": [ "Source Tree Solutions" ],
+    "tags": [ "syndication", "rss", "atom", "cloudscribe" ],
+    "projectUrl": "https://github.com/joeaudette/cloudscribe.SimpleContent",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "copyright": "2015 Source Tree Solutions",
+    "iconUrl": "https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png",
+    "requireLicenseAcceptance": false,
+    "releaseNotes": "",
 
     "dependencies": {
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
-        
+        "cloudscribe.SimpleContent.Services": "1.0.0-*",
         "cloudscribe.Syndication": "1.0.0-*",
         "Microsoft.AspNet.Http": "1.0.0-rc1-final",
         "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",

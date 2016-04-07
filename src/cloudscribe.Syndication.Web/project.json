@@ -1,12 +1,17 @@
 ﻿{
-  "version": "1.0.0-*",
-  "description": "cloudscribe.Syndication.Web Class Library",
-  "authors": [ "Joe" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+    "version": "1.0.0-*",
+    "description": "cloudscribe.Syndication.Web Class Library",
+    "authors": [ "Joe Audette" ],
+    "owners": [ "Source Tree Solutions" ],
+    "tags": [ "cloudscribe", "syndication", "rss", "atom","feed" ],
+    "projectUrl": "https://github.com/joeaudette/cloudscribe.SimpleContent",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "copyright": "2015 Source Tree Solutions",
+    "iconUrl": "https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png",
+    "requireLicenseAcceptance": false,
+    "releaseNotes": "",
 
-  "dependencies": {
+    "dependencies": {
         "cloudscribe.Syndication": "1.0.0-*",
         "Microsoft.AspNet.Http": "1.0.0-rc1-final",
         "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
@@ -38,5 +43,5 @@
         }
 
     }
-  
+
 }

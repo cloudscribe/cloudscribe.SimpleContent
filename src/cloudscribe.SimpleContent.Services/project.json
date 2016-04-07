@@ -3,8 +3,8 @@
     "description": "cloudscribe.SimpleContent.Services Class Library",
     "authors": [ "Joe Audette" ],
     "owners": [ "Source Tree Solutions" ],
-    "tags": [ "cloudscribe", "sqlce" ],
-    "projectUrl": "https://github.com/joeaudette/cloudscribe.DbHelpers",
+    "tags": [ "cloudscribe", "blog","cms","content" ],
+    "projectUrl": "https://github.com/joeaudette/cloudscribe.SimpleContent",
     "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
     "copyright": "2015 Source Tree Solutions",
     "iconUrl": "https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png",
@@ -15,13 +15,14 @@
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
         "cloudscribe.Web.Navigation": "1.0.0-*",
         "cloudscribe.Web.Pagination": "1.0.0-*",
+        "HtmlAgilityPack.NetCore": "1.4.9.2",
         "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
         "Microsoft.AspNet.Http.Features": "1.0.0-rc1-final",
         "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
         "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final"
     },
 
-    
+
 
     "frameworks": {
         "net451": {

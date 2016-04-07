@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-04-05
+// Last Modified:           2016-04-07
 // 
 
 using System;
@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Syndication.Models.Rss;
+using cloudscribe.SimpleContent.Services;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Http;
 
@@ -24,18 +25,21 @@ namespace cloudscribe.SimpleContent.Syndication
             IProjectService projectService,
             IBlogService blogService,
             IHttpContextAccessor contextAccessor,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            HtmlProcessor htmlProcessor)
         {
             this.projectService = projectService;
             this.blogService = blogService;
             this.contextAccessor = contextAccessor;
             this.urlHelper = urlHelper;
+            this.htmlProcessor = htmlProcessor;
         }
 
         private IUrlHelper urlHelper;
         private IHttpContextAccessor contextAccessor;
         private IProjectService projectService;
         private IBlogService blogService;
+        private HtmlProcessor htmlProcessor;
         private int maxFeedItems = 20;
 
         public string Name { get; } = "cloudscribe.SimpleContent.Syndication.RssChannelProvider";
@@ -70,20 +74,23 @@ namespace cloudscribe.SimpleContent.Syndication
                 channel.Language = new CultureInfo(project.LanguageCode);
             }
 
+            var baseUrl = string.Concat(
+                        contextAccessor.HttpContext.Request.Scheme,
+                        "://",
+                        contextAccessor.HttpContext.Request.Host.ToUriComponent()
+                        );
+
             // asp.net bug? the comments for this method say it returns an absolute fully qualified url but it returns relative
             // looking at latest code seems ok so maybe just a bug in rc1
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/UrlHelperExtensions.cs
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/Routing/UrlHelper.cs
 
             var indexUrl = urlHelper.RouteUrl(ProjectConstants.BlogIndexRouteName);
+            //TODO: revisit the need for this logic after RC2
             if (indexUrl.StartsWith("/"))
             {
 
-                indexUrl = string.Concat(
-                        contextAccessor.HttpContext.Request.Scheme,
-                        "://",
-                        contextAccessor.HttpContext.Request.Host.ToUriComponent(),
-                        indexUrl);
+                indexUrl = string.Concat(baseUrl, indexUrl);
             }
             channel.Link = new Uri(indexUrl);
             if(project.ManagingEditorEmail.Length > 0)
@@ -130,7 +137,8 @@ namespace cloudscribe.SimpleContent.Syndication
 
                 
                 //rssItem.Comments
-                rssItem.Description = post.Content;
+                //TODO: need to change relative urls in content to absolute
+                rssItem.Description = htmlProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
                 //rssItem.Enclosures
                 rssItem.Guid = new RssGuid(post.Id);
                 string postUrl;
@@ -157,6 +165,7 @@ namespace cloudscribe.SimpleContent.Syndication
                     continue;
                 }
 
+                //TODO: revisit the need for this logic after RC2
                 if (postUrl.StartsWith("/"))
                 {
                     //postUrl = urlHelper.Content(postUrl);

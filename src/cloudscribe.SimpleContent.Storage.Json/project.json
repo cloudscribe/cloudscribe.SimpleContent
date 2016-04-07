@@ -4,7 +4,7 @@
     "authors": [ "Joe Audette" ],
     "owners": [ "Source Tree Solutions" ],
     "tags": [ "cloudscribe", "blog", "json" ],
-    "projectUrl": "https://github.com/joeaudette/cloudscribe.Blog",
+    "projectUrl": "https://github.com/joeaudette/cloudscribe.SimpleContent",
     "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
     "copyright": "2015 Source Tree Solutions",
     "iconUrl": "https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png",
