@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-04-04
+// Last Modified:           2016-04-05
 // 
 
 using System;
@@ -18,7 +18,7 @@ using Microsoft.AspNet.Http;
 
 namespace cloudscribe.SimpleContent.Syndication
 {
-    public class RssChannelProvider
+    public class RssChannelProvider : IChannelProvider
     {
         public RssChannelProvider(
             IProjectService projectService,
@@ -28,6 +28,7 @@ namespace cloudscribe.SimpleContent.Syndication
         {
             this.projectService = projectService;
             this.blogService = blogService;
+            this.contextAccessor = contextAccessor;
             this.urlHelper = urlHelper;
         }
 
@@ -68,8 +69,23 @@ namespace cloudscribe.SimpleContent.Syndication
             {
                 channel.Language = new CultureInfo(project.LanguageCode);
             }
-             
-            channel.Link = new Uri(urlHelper.RouteUrl(ProjectConstants.BlogIndexRouteName));
+
+            // asp.net bug? the comments for this method say it returns an absolute fully qualified url but it returns relative
+            // looking at latest code seems ok so maybe just a bug in rc1
+            //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/UrlHelperExtensions.cs
+            //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/Routing/UrlHelper.cs
+
+            var indexUrl = urlHelper.RouteUrl(ProjectConstants.BlogIndexRouteName);
+            if (indexUrl.StartsWith("/"))
+            {
+
+                indexUrl = string.Concat(
+                        contextAccessor.HttpContext.Request.Scheme,
+                        "://",
+                        contextAccessor.HttpContext.Request.Host.ToUriComponent(),
+                        indexUrl);
+            }
+            channel.Link = new Uri(indexUrl);
             if(project.ManagingEditorEmail.Length > 0)
             {
                 channel.ManagingEditor = project.ManagingEditorEmail;
@@ -116,7 +132,7 @@ namespace cloudscribe.SimpleContent.Syndication
                 //rssItem.Comments
                 rssItem.Description = post.Content;
                 //rssItem.Enclosures
-                rssItem.Guid.Value = post.Id;
+                rssItem.Guid = new RssGuid(post.Id);
                 string postUrl;
                 if(project.IncludePubDateInPostUrls)
                 {
@@ -134,6 +150,23 @@ namespace cloudscribe.SimpleContent.Syndication
                     postUrl = urlHelper.RouteUrl(ProjectConstants.PostWithoutDateRouteName, 
                         new { slug = post.Slug });
                 }
+
+                if(string.IsNullOrEmpty(postUrl))
+                {
+                    //TODO: log 
+                    continue;
+                }
+
+                if (postUrl.StartsWith("/"))
+                {
+                    //postUrl = urlHelper.Content(postUrl);
+                    postUrl = string.Concat(
+                        contextAccessor.HttpContext.Request.Scheme,
+                        "://",
+                        contextAccessor.HttpContext.Request.Host.ToUriComponent(),
+                        postUrl);
+                }
+
                 rssItem.Link = new Uri(postUrl);
                 rssItem.PublicationDate = post.PubDate;
                 //rssItem.Source

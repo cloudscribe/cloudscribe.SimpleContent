@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-04-02
+// Last Modified:           2016-04-07
 // 
 
 
@@ -32,26 +32,25 @@ namespace cloudscribe.Syndication.Models.Rss
             //http://cyber.law.harvard.edu/rss/rss.html
             //http://cyber.law.harvard.edu/rss/examples/rss2sample.xml
             //http://www.mikesdotnetting.com/article/174/generating-rss-and-atom-feeds-in-webmatrix
-
-            var rss = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
-                new XElement(Rss20Constants.RssTag,
-                  new XAttribute(Rss20Constants.VersionTag, Rss20Constants.Version)
-                )
-              );
-
+            
             var rssChannel = new XElement(Rss20Constants.ChannelTag,
                       new XElement(Rss20Constants.TitleTag, channel.Title),
                       new XElement(Rss20Constants.LinkTag, urlHelper.Content(channel.Link.ToString())),
                       new XElement(Rss20Constants.DescriptionTag, channel.Description),
                       new XElement(Rss20Constants.CopyrightTag, channel.Copyright)
                         );
-
-            rss.Add(channel);
-
+            
             foreach (var item in channel.Items)
             {
                 AddItem(rssChannel, item, urlHelper);
             }
+
+            var rss = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
+                new XElement(Rss20Constants.RssTag,
+                  new XAttribute(Rss20Constants.VersionTag, Rss20Constants.Version),
+                  rssChannel
+                )
+              );
 
             return rss;
 

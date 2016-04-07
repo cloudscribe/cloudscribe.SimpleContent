@@ -127,7 +127,8 @@ namespace example.WebApp
             services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();
             services.Configure<ApiOptions>(Configuration.GetSection("MetaWeblogApiOptions"));
             services.AddScoped<IMetaWeblogSecurity, MetaWeblogSecurity>();
-            
+            services.AddScoped<cloudscribe.Syndication.Models.Rss.IChannelProvider, cloudscribe.SimpleContent.Syndication.RssChannelProvider>();
+
             services.AddScoped<NavigationTreeBuilderService, NavigationTreeBuilderService>();
             //services.TryAddScoped<ITreeCache, MemoryTreeCache>();
             services.AddScoped<INavigationTreeBuilder, XmlNavigationTreeBuilder>();
