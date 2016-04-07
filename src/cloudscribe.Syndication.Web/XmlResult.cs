@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
-using System.Text;
-using System.IO;
+﻿using Microsoft.AspNet.Mvc;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 //http://tech-journals.com/jonow/2012/01/25/implementing-xml-rpc-services-with-asp-net-mvc
@@ -23,85 +19,44 @@ namespace cloudscribe.Syndication.Web
         {
             this.Xml = xml;
             this.ContentType = "text/xml";
-            //this.Encoding = Encoding.UTF8;
-
-            //responseDoc = new XDocument(new XElement("methodResponse"));
-
-            //if (data is Exception)
-            //{
-            //    //Encode as a fault
-            //    responseDoc.Element("methodResponse").Add(
-            //        new XElement("fault",
-            //            new XElement("value",
-            //                new XElement("string",
-            //                    (data as Exception).Message))));
-            //}
-            //else
-            //{
-            //    //Encode as params
-            //    responseDoc.Element("methodResponse").Add(
-            //        new XElement("params",
-            //            new XElement("param",
-            //                XmlRpcHelper.SerializeValue(data))));
-            //}
         }
 
-#if !DNXCORE50
+//#if !DNXCORE50
         public override void ExecuteResult(ActionContext context)
         {
-            //base.ExecuteResult(context);
-            context.HttpContext.Response.ContentType = this.ContentType;
-            //context.HttpContext.Response.HeaderEncoding = this.Encoding;
-            XmlTextWriter writer = new XmlTextWriter(context.HttpContext.Response.Body, Encoding.UTF8);
-            Xml.WriteTo(writer);
-            writer.Close();
-        }
-#endif
-
-        public override Task ExecuteResultAsync(ActionContext context)
-        {
-            context.HttpContext.Response.ContentType = this.ContentType;
-            //context.HttpContext.Response.HeaderEncoding = this.Encoding;
+            //context.HttpContext.Response.ContentType = this.ContentType;
             //XmlTextWriter writer = new XmlTextWriter(context.HttpContext.Response.Body, Encoding.UTF8);
             //Xml.WriteTo(writer);
             //writer.Close();
 
-
+            context.HttpContext.Response.ContentType = this.ContentType;
             if (Xml != null)
             {
-                string response;
-                using (var wr = new Utf8StringWriter())
-                {
-                    //wr.Encoding = Encoding.UTF8;
-                    Xml.Save(wr, SaveOptions.None);
-                    response = wr.GetStringBuilder().ToString();
-                }
-                    
+                Xml.Save(context.HttpContext.Response.Body, SaveOptions.DisableFormatting);
+   
+            }   
+        }
+//#endif
 
-                //string response = Xml.ToString(SaveOptions.None);
-                context.HttpContext.Response.ContentType = "text/xml";
-                byte[] responseBytes = Encoding.UTF8.GetBytes(response);
-
-                context.HttpContext.Response.Headers["content-length"] = responseBytes.Length.ToString();
-
-                return context.HttpContext.Response.WriteAsync(response);
+        public override Task ExecuteResultAsync(ActionContext context)
+        {
+            context.HttpContext.Response.ContentType = this.ContentType;
+            
+            if (Xml != null)
+            {
+                Xml.Save(context.HttpContext.Response.Body, SaveOptions.DisableFormatting);  
+                return Task.FromResult(0);
+                
             }
             else
             {
                 return base.ExecuteResultAsync(context);
             }
-
-
-
         }
-
-
-
-
     }
 
-    public class Utf8StringWriter : StringWriter
-    {
-        public override Encoding Encoding { get { return Encoding.UTF8; } }
-    }
+    //public class Utf8StringWriter : StringWriter
+    //{
+    //    public override Encoding Encoding { get { return Encoding.UTF8; } }
+    //}
 }
