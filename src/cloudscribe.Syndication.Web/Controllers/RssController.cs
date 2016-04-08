@@ -6,20 +6,11 @@
 // 
 
 
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.OptionsModel;
-using Microsoft.Extensions.PlatformAbstractions;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Http;
-using System.Xml.Linq;
 using cloudscribe.Syndication.Models.Rss;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace cloudscribe.Syndication.Web.Controllers
 {
@@ -74,7 +65,7 @@ namespace cloudscribe.Syndication.Web.Controllers
                 return new EmptyResult();
             }
 
-            var xml = xmlFormatter.BuildXml(currentChannel, Url);
+            var xml = xmlFormatter.BuildXml(currentChannel);
 
             return new XmlResult(xml);
 

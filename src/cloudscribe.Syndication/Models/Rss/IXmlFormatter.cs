@@ -5,6 +5,6 @@ namespace cloudscribe.Syndication.Models.Rss
 {
     public interface IXmlFormatter
     {
-        XDocument BuildXml(RssChannel channel, IUrlHelper urlHelper);
+        XDocument BuildXml(RssChannel channel);
     }
 }

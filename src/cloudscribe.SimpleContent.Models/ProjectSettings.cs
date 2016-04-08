@@ -54,6 +54,11 @@ namespace cloudscribe.SimpleContent.Models
         public string BlogPageNavComponentVisibility { get; set; } = "topnav";
 
         // feed settings
+        /// <summary>
+        /// default is false, set to true if you want to use the metadescription instead of the full 
+        /// post content in the feed.
+        /// </summary>
+        public bool UseMetaDescriptionInFeed { get; set; } = false;
         public int ChannelTimeToLive { get; set; } = 60;
         public string LanguageCode { get; set; } = "en-US";
         public string ChannelCategoriesCsv { get; set; } = string.Empty;

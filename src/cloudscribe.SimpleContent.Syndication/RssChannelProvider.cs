@@ -137,8 +137,16 @@ namespace cloudscribe.SimpleContent.Syndication
 
                 
                 //rssItem.Comments
-                //TODO: need to change relative urls in content to absolute
-                rssItem.Description = htmlProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
+                if(project.UseMetaDescriptionInFeed)
+                {
+                    rssItem.Description = post.MetaDescription;
+                }
+                else
+                {
+                    // change relative urls in content to absolute
+                    rssItem.Description = htmlProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
+                }
+                
                 //rssItem.Enclosures
                 rssItem.Guid = new RssGuid(post.Id);
                 string postUrl;

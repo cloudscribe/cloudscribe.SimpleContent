@@ -14,6 +14,7 @@
         public const string ExtensionWrapperTag = "extensionWrapper";
         public const string GeneratorTag = "generator";
         public const string GuidTag = "guid";
+        public const string HeightTag = "height";
         public const string ImageTag = "image";
         public const string IsPermaLinkTag = "isPermaLink";
         public const string ItemTag = "item";
@@ -33,6 +34,7 @@
         public const string UrlTag = "url";
         public const string Version = "2.0";
         public const string VersionTag = "version";
+        public const string WidthTag = "width";
         public const string WebMasterTag = "webMaster";
         
 

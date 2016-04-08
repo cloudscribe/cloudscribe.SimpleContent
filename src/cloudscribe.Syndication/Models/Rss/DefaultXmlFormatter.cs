@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-04-07
+// Last Modified:           2016-04-08
 // 
 
 
@@ -26,7 +26,9 @@ namespace cloudscribe.Syndication.Models.Rss
 
         }
 
-        public XDocument BuildXml(RssChannel channel, IUrlHelper urlHelper)
+        public XDocument BuildXml(RssChannel channel
+            //, IUrlHelper urlHelper
+            )
         {
             //http://cyber.law.harvard.edu/rss/rss.html
             //http://cyber.law.harvard.edu/rss/examples/rss2sample.xml
@@ -35,11 +37,11 @@ namespace cloudscribe.Syndication.Models.Rss
 
             var rssChannel = new XElement(Rss20Constants.ChannelTag,
                       new XElement(Rss20Constants.TitleTag, channel.Title),
-                      new XElement(Rss20Constants.LinkTag, urlHelper.Content(channel.Link.ToString())),
+                      new XElement(Rss20Constants.LinkTag, channel.Link.ToString()),
                       new XElement(Rss20Constants.DescriptionTag, channel.Description),
                       new XElement(Rss20Constants.LanguageTag, channel.Language),
                       new XElement(Rss20Constants.PubDateTag, channel.PublicationDate.ToString("R")),
-                      new XElement(Rss20Constants.DocsTag, "http://blogs.law.harvard.edu/tech/rss"),
+                      new XElement(Rss20Constants.DocsTag, Rss20Constants.SpecificationLink),
                       new XElement(Rss20Constants.TtlTag, channel.TimeToLive)
                         );
 
@@ -53,9 +55,44 @@ namespace cloudscribe.Syndication.Models.Rss
                 rssChannel.Add(new XElement(Rss20Constants.WebMasterTag, channel.Webmaster));
             }
 
-            if (!(channel.Image == null))
+            // image is optional
+            // The image MUST contain three child elements: link, title and url. It also MAY contain three 
+            // OPTIONAL elements: description, height and width.
+            if (
+                !(channel.Image == null) 
+                && (channel.Image.Url != null)
+                && (channel.Image.Link != null)
+                && (!string.IsNullOrEmpty(channel.Image.Title))
+                )
             {
-                rssChannel.Add(new XElement(Rss20Constants.ImageTag, channel.Image));
+                var imageElement = new XElement(Rss20Constants.ImageTag,
+                    new XElement(Rss20Constants.LinkTag, channel.Image.Link),
+                    new XElement(Rss20Constants.TitleTag, channel.Image.Title),
+                    new XElement(Rss20Constants.UrlTag, channel.Image.Url)
+
+                    );
+                
+                if (!string.IsNullOrEmpty(channel.Image.Description))
+                {
+                    imageElement.Add(new XElement(Rss20Constants.DescriptionTag, channel.Image.Description));
+                }
+
+                // The image's height element contains the height, in pixels, of the image (OPTIONAL). 
+                // The image MUST be no taller than 400 pixels. If this element is omitted, the image is 
+                // assumed to be 31 pixels tall.
+                if (channel.Image.Height > int.MinValue)
+                {
+                    imageElement.Add(new XElement(Rss20Constants.HeightTag, channel.Image.Height));
+                }
+
+                //The image's width element contains the width, in pixels, of the image (OPTIONAL). The image MUST be no wider than 144 pixels. 
+                // If this element is omitted, the image is assumed to be 88 pixels wide.
+                if (channel.Image.Width > int.MinValue)
+                {
+                    imageElement.Add(new XElement(Rss20Constants.WidthTag, channel.Image.Width));
+                }
+
+                rssChannel.Add(imageElement);
             }
 
             if (!string.IsNullOrEmpty(channel.Copyright))
@@ -82,11 +119,9 @@ namespace cloudscribe.Syndication.Models.Rss
 
             foreach (var item in channel.Items)
             {
-                AddItem(rssChannel, item, urlHelper);
+                AddItem(rssChannel, item);
             }
-
             
-
             var rss = new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
                 new XElement(Rss20Constants.RssTag,
@@ -103,17 +138,21 @@ namespace cloudscribe.Syndication.Models.Rss
 
         private void AddItem(
             XElement channel, 
-            RssItem item, 
-            IUrlHelper urlHelper
+            RssItem item
             )
         {
             var rssItem = new XElement(Rss20Constants.ItemTag,
                             new XElement(Rss20Constants.TitleTag, item.Title),
                             new XElement(Rss20Constants.DescriptionTag, item.Description),
-                            new XElement(Rss20Constants.LinkTag, urlHelper.Content(item.Link.ToString())),
-                            new XElement(Rss20Constants.GuidTag, urlHelper.Content(item.Link.ToString())),
+                            new XElement(Rss20Constants.LinkTag, item.Link.ToString()),
+                            new XElement(Rss20Constants.GuidTag, item.Link.ToString()),
                             new XElement(Rss20Constants.PubDateTag, item.PublicationDate.ToString("R"))
                            );
+
+           
+
+            // author: A feed published by an individual SHOULD omit this element and use the managingEditor or 
+            // webMaster channel elements to provide contact information.
 
             if (item.Categories.Count > 0)
             {
