@@ -2,8 +2,6 @@
 
 a re-useable lib for json file storage that saves by typename and key
 caching
-RSS feed
-recaptcha on comment form
 email notification
 editable side content
 recent posts viewcomponent for homepage
