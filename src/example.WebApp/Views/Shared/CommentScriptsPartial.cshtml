@@ -1,7 +1,9 @@
 ﻿<environment names="Development">
     <script src="~/js/blog-comments.js" asp-append-version="true"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </environment>
 <environment names="Staging,Production">
     @* TODO use cdn or grunt it into js folder *@
     <script src="~/js/blog-comments.js" async defer></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </environment>

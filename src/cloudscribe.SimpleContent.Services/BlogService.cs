@@ -503,6 +503,8 @@ namespace cloudscribe.SimpleContent.Services
             if(userIsBlogOwner) { return true; }
             await EnsureBlogSettings().ConfigureAwait(false);
 
+            if(settings.DaysToComment == -1) { return true; }
+
             var result = post.PubDate > DateTime.UtcNow.AddDays(-settings.DaysToComment);
             return result;
         }

@@ -2,12 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-04-03
+// Last Modified:           2016-04-12
 // 
 
 using cloudscribe.SimpleContent.Common;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.ViewModels;
+using cloudscribe.Web.Common.Extensions;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.Http.Features.Authentication;
 using Microsoft.AspNet.Authorization;
@@ -495,7 +496,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             
             // this should validate the [EmailAddress] on the model
-            // failure here should indicate invalid email since it it the only attribute in use
+            // failure here should indicate invalid email since it is the only attribute in use
             if (!ModelState.IsValid)
             {
                 
@@ -507,9 +508,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             //TODO: validate captcha server side
 
 
-            var blog = await projectService.GetCurrentProjectSettings();
+            var project = await projectService.GetCurrentProjectSettings();
 
-            if (blog == null)
+            if (project == null)
             {
                 log.LogDebug("returning 500 blog not found");
                 Response.StatusCode = 500;
@@ -539,6 +540,30 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return new EmptyResult();
             }
 
+            var blogPost = await blogService.GetPost(model.PostId);
+
+            if (blogPost == null)
+            {
+                log.LogDebug("returning 500 blog post not found");
+                Response.StatusCode = 500;
+                return new EmptyResult();
+            }
+
+            if(!HttpContext.User.Identity.IsAuthenticated)
+            {
+                if(!string.IsNullOrEmpty(project.RecaptchaPublicKey))
+                {
+                    var captchaResponse = await this.ValidateRecaptcha(Request, project.RecaptchaPrivateKey);
+                    if (!captchaResponse.Success)
+                    {
+                        log.LogDebug("returning 403 captcha validation failed");
+                        Response.StatusCode = 403;
+                        await Response.WriteAsync("captcha validation failed");
+                        return new EmptyResult();
+                    }
+                }
+            }
+
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
             var comment = new Comment()
@@ -549,13 +574,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 Website = GetUrl(model.WebSite),
                 Ip = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString(),
                 UserAgent = userAgent,
-                IsAdmin = User.CanEditProject(blog.ProjectId),
+                IsAdmin = User.CanEditProject(project.ProjectId),
                 Content = HtmlEncoder.Default.HtmlEncode(model.Content.Trim()).Replace("\n", "<br />"),
-                IsApproved = !blog.ModerateComments,
+                IsApproved = !project.ModerateComments,
                 PubDate = DateTime.UtcNow
             };
 
-            var blogPost = await blogService.GetPost(model.PostId);
+            
 
             blogPost.Comments.Add(comment);
             await blogService.Save(blogPost, false);
@@ -573,7 +598,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             //RenderComment(context, comment);
 
             var viewModel = new BlogViewModel();
-            viewModel.ProjectSettings = blog;
+            viewModel.ProjectSettings = project;
             viewModel.CurrentPost = blogPost;
             viewModel.TmpComment = comment;
 
@@ -708,6 +733,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         private string GetUrl(string website)
         {
+            if(string.IsNullOrEmpty(website)) { return string.Empty; }
+
             if (!website.Contains("://"))
                 website = "http://" + website;
 
