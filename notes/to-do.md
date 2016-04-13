@@ -1,5 +1,8 @@
 # A list of things I haven't done yet
 
+sitemap for posts and pages
+http://www.sitemaps.org/schemas/sitemap/0.9
+
 a re-useable lib for json file storage that saves by typename and key
 caching
 email notification

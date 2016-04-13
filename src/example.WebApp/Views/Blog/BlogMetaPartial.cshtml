@@ -6,8 +6,12 @@
 }
 @*
     TODO: implement this stuff
+    RSD: Discoverability of Blog APIs
+    http://mashupguide.net/1.0/html/ch05s06.xhtml
+    http://en.wikipedia.org/wiki/Really_Simple_Discovery
     <link type="application/rsd+xml" rel="edituri" title="RSD" href="~/views/robots/rsd" />
-    <link type="application/rss+xml" rel="alternate" title="@Model.BlogSettings.Title" href="~/feed/rss/" />
+
     <link type="application/atom+xml" rel="alternate" title="@Model.BlogSettings.Title" href="~/feed/atom/" />
 *@
+<link type="application/rss+xml" rel="alternate" title="@Model.ProjectSettings.Title" href="~/api/rss/" />
 <link type="application/wlwmanifest+xml" rel="wlwmanifest"  href="~/wlwmanifest.xml" />
