@@ -28,6 +28,7 @@ namespace cloudscribe.SimpleContent.Models
         public int PostsPerPage { get; set; }
         public int DaysToComment { get; set; }
         public bool ModerateComments { get; set; }
+        public string CommentNotificationEmail { get; set; }
         public string LocalMediaVirtualPath { get; set; } = string.Empty;
         public string LocalMediaAbsoluteBaseUrl { get; set; } = string.Empty;
         public string CdnUrl { get; set; } = string.Empty;
@@ -65,6 +66,16 @@ namespace cloudscribe.SimpleContent.Models
         public string ManagingEditorEmail { get; set; } = string.Empty;
         public string ChannelRating { get; set; } = string.Empty;
         public string WebmasterEmail { get; set; } = string.Empty;
+
+        //smtp settings
+        public string EmailFromAddress { get; set; }
+        public string SmtpServer { get; set; }
+        public string SmtpUser { get; set; }
+        public string SmtpPassword { get; set; }
+        public int SmtpPort { get; set; } = 25;
+        public string SmtpPreferredEncoding { get; set; }
+        public bool SmtpRequiresAuth { get; set; } = false;
+        public bool SmtpUseSsl { get; set; } = false;
 
 
     }

@@ -125,6 +125,8 @@ namespace example.WebApp
             services.AddScoped<MetaWeblogModelMapper, MetaWeblogModelMapper>();
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
             services.AddScoped<HtmlProcessor, HtmlProcessor>();
+            services.AddScoped<IProjectEmailService, ProjectEmailService>();
+            
 
             services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();
             services.Configure<ApiOptions>(Configuration.GetSection("MetaWeblogApiOptions"));

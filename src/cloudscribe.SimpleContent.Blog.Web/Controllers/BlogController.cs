@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-04-12
+// Last Modified:           2016-04-21
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -33,15 +33,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public BlogController(
             IProjectService projectService,
             IBlogService blogService,
+            IProjectEmailService emailService,
             ILogger<BlogController> logger)
         {
             this.projectService = projectService;
             this.blogService = blogService;
+            this.emailService = emailService;
             log = logger;
         }
 
         private IProjectService projectService;
         private IBlogService blogService;
+        private IProjectEmailService emailService;
         private ILogger log;
 
         [HttpGet]
@@ -579,30 +582,37 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 IsApproved = !project.ModerateComments,
                 PubDate = DateTime.UtcNow
             };
-
             
-
             blogPost.Comments.Add(comment);
             await blogService.Save(blogPost, false);
+            
+            //no need to send notification when project owner posts a comment, ie in response
+            var shouldSendEmail = !HttpContext.User.CanEditProject(project.ProjectId);
 
+            if(shouldSendEmail)
+            {
+                var postUrl = await blogService.ResolvePostUrl(blogPost);
+                var baseUrl = string.Concat(HttpContext.Request.Scheme,
+                        "://",
+                        HttpContext.Request.Host.ToUriComponent());
 
-            //post.Comments.Add(comment);
-            //Storage.Save(post);
+                postUrl = baseUrl + postUrl;
 
-            //if (!context.User.Identity.IsAuthenticated)
-            //{
-            //    MailMessage mail = GenerateEmail(comment, post, context.Request);
-            //    System.Threading.ThreadPool.QueueUserWorkItem((s) => SendEmail(mail));
-            //}
-
-            //RenderComment(context, comment);
-
+                emailService.SendCommentNotificationEmailAsync(
+                    project,
+                    blogPost,
+                    comment,
+                    postUrl,
+                    postUrl,
+                    postUrl
+                    ).Forget(); //async but don't want to wait
+            }
+            
             var viewModel = new BlogViewModel();
             viewModel.ProjectSettings = project;
             viewModel.CurrentPost = blogPost;
             viewModel.TmpComment = comment;
-
-
+            
             return PartialView("CommentPartial", viewModel);
             
         }
