@@ -52,14 +52,14 @@ My plan is to usually build sites without a database (except for large projects)
 * Responsive theming support based on Bootstrap
 * Uses HTML 5 __microdata__ to add semantic meaning
 * Works on any ASP.NET Core host including __Windows Azure__ Websites
-* RSS feed via [cloudscribe.Syndication project](https://github.com/joeaudette/cloudscribe.Syndication)
+* RSS feed built in at /api/rss via [cloudscribe.Syndication project](https://github.com/joeaudette/cloudscribe.Syndication) 
+* Sitemap - built in [sitemap](http://www.sitemaps.org/schemas/sitemap/0.9) at /api/sitemap via [cloudscribe.Web.SiteMap](https://github.com/joeaudette/cloudscribe.Web.Navigation/tree/master/src/cloudscribe.Web.SiteMap) 
 
 ### Planned Features - see also the to-do.md in the notes folder
 * Support for using Entity Framework Core
-* Support for using cloudscribe.Core for user and site management
+* Support for using cloudscribe.Core for user and site/tenant management
 * Support for using MongoDb
 * A Utility for importing the json or xml content into Entity Framework Core or MongoDb for easy migration
-* Support for __robots.txt__ and __sitemap.xml__
 * Automatically __optimizes uploaded images__
 
 

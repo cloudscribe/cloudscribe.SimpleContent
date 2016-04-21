@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-03-29
+// Last Modified:           2016-04-21
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -313,14 +313,32 @@ namespace cloudscribe.SimpleContent.Services
             return settings.LocalMediaVirtualPath + fileName;
         }
 
-        public Task<string> ResolvePostUrl(Post post)
+        public async Task<string> ResolvePostUrl(Post post)
         {
-            //await EnsureBlogSettings().ConfigureAwait(false);
+            await EnsureBlogSettings().ConfigureAwait(false);
 
+            string postUrl;
+            if (settings.IncludePubDateInPostUrls)
+            {
+                postUrl = urlHelper.RouteUrl(ProjectConstants.PostWithDateRouteName,
+                    new
+                    {
+                        year = post.PubDate.Year,
+                        month = post.PubDate.Month.ToString("00"),
+                        day = post.PubDate.Day.ToString("00"),
+                        slug = post.Slug
+                    });
+            }
+            else
+            {
+                postUrl = urlHelper.RouteUrl(ProjectConstants.PostWithoutDateRouteName,
+                    new { slug = post.Slug });
+            }
 
-            var result = urlHelper.Action("Post", "Blog", new { slug = post.Slug });
+            return postUrl;
+            //var result = urlHelper.Action("Post", "Blog", new { slug = post.Slug });
 
-            return Task.FromResult(result);
+            //return result;
         }
 
         

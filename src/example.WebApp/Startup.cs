@@ -3,6 +3,7 @@ using cloudscribe.Web.SimpleAuth.Services;
 using cloudscribe.Web.SimpleAuth.Models;
 using cloudscribe.Web.Navigation;
 using cloudscribe.Web.Navigation.Caching;
+using cloudscribe.Web.SiteMap;
 using cloudscribe.Web.Pagination;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.MetaWeblog;
@@ -134,6 +135,8 @@ namespace example.WebApp
             //services.TryAddScoped<ITreeCache, MemoryTreeCache>();
             services.AddScoped<INavigationTreeBuilder, XmlNavigationTreeBuilder>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
+            services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
+            services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
 
             services.Configure<NavigationOptions>(options =>
             {
@@ -149,7 +152,19 @@ namespace example.WebApp
             // Add MVC services to the services container.
             services.Configure<MvcOptions>(options =>
             {
-               // options.InputFormatters.Add(new Xm)
+                // options.InputFormatters.Add(new Xm)
+                options.CacheProfiles.Add("SiteMapCacheProfile",
+                     new CacheProfile
+                     {
+                         Duration = 30
+                     });
+
+                options.CacheProfiles.Add("RssCacheProfile",
+                     new CacheProfile
+                     {
+                         Duration = 100
+                     });
+
             });
 
             services.AddMvc();
