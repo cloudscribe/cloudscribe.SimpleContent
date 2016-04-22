@@ -51,12 +51,13 @@ namespace cloudscribe.SimpleContent.Services
             }
             
             var subject = "Blog comment: " + post.Title;
-
+            //TODO: there should be a customizable template system for all html emails
             var htmlMessage = "<div style=\"font: 11pt/1.5 calibri, arial;\">" +
                             comment.Author + " on <a href=\"" +  postUrl + "\">" + post.Title + "</a>:<br /><br />" +
-                            comment.Content + "<br /><br />" +
-                            (project.ModerateComments ? "<a href=\"" + approveUrl + "\">Approve comment</a> | " : string.Empty) +
-                            "<a href=\"" + deleteUrl + "\">Delete comment</a>" +
+                            comment.Content + "<br /><br />" 
+                            +
+                            //(project.ModerateComments ? "<a href=\"" + approveUrl + "\">Approve comment</a> | " : string.Empty) +
+                            //"<a href=\"" + deleteUrl + "\">Delete comment</a>" +
                             "<br /><br /><hr />" +
                             "Website: " + comment.Website + "<br />" +
                             "E-mail: " + comment.Email + "<br />" +

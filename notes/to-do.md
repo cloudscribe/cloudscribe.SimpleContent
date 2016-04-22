@@ -1,9 +1,9 @@
 # A list of things I haven't done yet
 
-email notification
 caching of post/page data
 recent posts viewcomponent for homepage
 
+template system for html emails
 a re-useable lib for json file system storage that saves by typename and key
 tenant management - file editing
 editable side content ?
