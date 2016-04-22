@@ -421,9 +421,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     post.PubDate = localTime;
                 }
                 
-
-                
-                
             }
             
             await blogService.Save(post, isNew);
@@ -598,14 +595,14 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
                 postUrl = baseUrl + postUrl;
 
-                emailService.SendCommentNotificationEmailAsync(
+                await emailService.SendCommentNotificationEmailAsync(
                     project,
                     blogPost,
                     comment,
                     postUrl,
                     postUrl,
                     postUrl
-                    ).Forget(); //async but don't want to wait
+                    );  //.Forget(); //async but don't want to wait
             }
             
             var viewModel = new BlogViewModel();

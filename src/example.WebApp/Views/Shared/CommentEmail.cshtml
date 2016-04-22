@@ -1,0 +1,15 @@
+﻿@model cloudscribe.SimpleContent.Services.CommentNotificationModel
+
+@{
+    Layout = "_LayoutEmail";
+}
+
+<div style="font: 11pt/1.5 calibri, arial;">
+    @Model.Comment.Author   on <a href="@Model.PostUrl"> @Model.Post.Title </a>:<br /><br />
+    @Model.Comment.Content  <br /><br />
+
+    <br /><br /><hr />
+    Website:  @Model.Comment.Website <br />
+    E-mail:  @Model.Comment.Email <br />
+    IP-address: @Model.Comment.Ip
+</div>

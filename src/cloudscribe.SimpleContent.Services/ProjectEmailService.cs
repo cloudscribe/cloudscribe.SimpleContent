@@ -18,12 +18,15 @@ namespace cloudscribe.SimpleContent.Services
     {
 
         public ProjectEmailService(
+            ViewRenderer viewRenderer,
             ILogger<ProjectEmailService> logger)
         {
+            this.viewRenderer = viewRenderer;
             log = logger;
         }
 
-        ILogger log;
+        private ViewRenderer viewRenderer;
+        private ILogger log;
 
         public async Task SendCommentNotificationEmailAsync(
             ProjectSettings project,
@@ -52,17 +55,21 @@ namespace cloudscribe.SimpleContent.Services
             
             var subject = "Blog comment: " + post.Title;
             //TODO: there should be a customizable template system for all html emails
-            var htmlMessage = "<div style=\"font: 11pt/1.5 calibri, arial;\">" +
-                            comment.Author + " on <a href=\"" +  postUrl + "\">" + post.Title + "</a>:<br /><br />" +
-                            comment.Content + "<br /><br />" 
-                            +
-                            //(project.ModerateComments ? "<a href=\"" + approveUrl + "\">Approve comment</a> | " : string.Empty) +
-                            //"<a href=\"" + deleteUrl + "\">Delete comment</a>" +
-                            "<br /><br /><hr />" +
-                            "Website: " + comment.Website + "<br />" +
-                            "E-mail: " + comment.Email + "<br />" +
-                            "IP-address: " + comment.Ip +
-                        "</div>";
+            //var htmlMessage = "<div style=\"font: 11pt/1.5 calibri, arial;\">" +
+            //                comment.Author + " on <a href=\"" +  postUrl + "\">" + post.Title + "</a>:<br /><br />" +
+            //                comment.Content + "<br /><br />" 
+            //                +
+            //                //(project.ModerateComments ? "<a href=\"" + approveUrl + "\">Approve comment</a> | " : string.Empty) +
+            //                //"<a href=\"" + deleteUrl + "\">Delete comment</a>" +
+            //                "<br /><br /><hr />" +
+            //                "Website: " + comment.Website + "<br />" +
+            //                "E-mail: " + comment.Email + "<br />" +
+            //                "IP-address: " + comment.Ip +
+            //            "</div>";
+
+            var model = new CommentNotificationModel(project, post, comment, postUrl);
+          
+            var htmlMessage = await viewRenderer.RenderPartialViewToString<CommentNotificationModel>("CommentEmail", model);
 
             string plainTextMessage = null;
             var sender = new EmailSender();
