@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-21
-// Last Modified:           2016-04-21
+// Last Modified:           2016-04-22
 // 
-
 
 using cloudscribe.Messaging.Email;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Logging;
+using cloudscribe.Web.Common.Razor;
 using System;
 using System.Threading.Tasks;
 
@@ -53,24 +53,10 @@ namespace cloudscribe.SimpleContent.Services
                 return;
             }
             
-            var subject = "Blog comment: " + post.Title;
-            //TODO: there should be a customizable template system for all html emails
-            //var htmlMessage = "<div style=\"font: 11pt/1.5 calibri, arial;\">" +
-            //                comment.Author + " on <a href=\"" +  postUrl + "\">" + post.Title + "</a>:<br /><br />" +
-            //                comment.Content + "<br /><br />" 
-            //                +
-            //                //(project.ModerateComments ? "<a href=\"" + approveUrl + "\">Approve comment</a> | " : string.Empty) +
-            //                //"<a href=\"" + deleteUrl + "\">Delete comment</a>" +
-            //                "<br /><br /><hr />" +
-            //                "Website: " + comment.Website + "<br />" +
-            //                "E-mail: " + comment.Email + "<br />" +
-            //                "IP-address: " + comment.Ip +
-            //            "</div>";
-
             var model = new CommentNotificationModel(project, post, comment, postUrl);
-          
-            var htmlMessage = await viewRenderer.RenderPartialViewToString<CommentNotificationModel>("CommentEmail", model);
-
+            var subject = "Blog comment: " + post.Title;
+            var htmlMessage 
+                = await viewRenderer.RenderViewAsString<CommentNotificationModel>("CommentEmail", model);
             string plainTextMessage = null;
             var sender = new EmailSender();
             

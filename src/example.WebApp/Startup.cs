@@ -126,7 +126,7 @@ namespace example.WebApp
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
             services.AddScoped<HtmlProcessor, HtmlProcessor>();
             services.AddScoped<IProjectEmailService, ProjectEmailService>();
-            services.AddScoped<ViewRenderer, ViewRenderer>();
+            services.AddScoped<cloudscribe.Web.Common.Razor.ViewRenderer, cloudscribe.Web.Common.Razor.ViewRenderer>();
             
 
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Models;
 
-namespace cloudscribe.SimpleContent.Services
+namespace cloudscribe.SimpleContent.Models
 {
     public class CommentNotificationModel
     {

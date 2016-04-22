@@ -595,14 +595,14 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
                 postUrl = baseUrl + postUrl;
 
-                await emailService.SendCommentNotificationEmailAsync(
+                emailService.SendCommentNotificationEmailAsync(
                     project,
                     blogPost,
                     comment,
                     postUrl,
                     postUrl,
                     postUrl
-                    );  //.Forget(); //async but don't want to wait
+                    ).Forget(); //async but don't want to wait
             }
             
             var viewModel = new BlogViewModel();
