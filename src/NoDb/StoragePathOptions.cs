@@ -5,14 +5,7 @@
 // Last Modified:           2016-04-23
 // 
 
-/*
- example query files by lastwrite:
-var directory = new DirectoryInfo(your_dir);
-DateTime from_date = DateTime.Now.AddMonths(-3);
-DateTime to_date = DateTime.Now;
-var files = directory.GetFiles()
-  .Where(file=>file.LastWriteTime >= from_date && file.LastWriteTime <= to_date);
-  */
+
 
 using System.IO;
 
