@@ -4,7 +4,7 @@
 
 In my SimpleContent project I had very specific ideas about how best to specifically persist blog posts, organizing them into year/month folders according to publication date. This made it easy to query posts from the file system by year or month. Therefore I believe Posts deserved optimal fs storage decisions rather than a generic approach.
 
-But for other objects that I want to persist without a database, I do want a generic solution, and that is what the NoDb project is about. The name NoDb is inspired by the NoSql movement which uses non-relational document storage such as MongoDb or DocumentDb. I think for small projects it is reasonable to do document and object storage simialr to a NoSql approach but using the file system and not requiring any separate hosted service.
+But for other objects that I want to persist without a database, I do want a generic solution, and that is what the NoDb project is about. The name NoDb is inspired by the NoSql movement which uses non-relational document storage such as MongoDb or DocumentDb. I think for small projects it is reasonable to do document and object storage similar to a NoSql approach but using the file system and not requiring any separate hosted service.
 
 My basic plan is to serialize to json, group into folders by type so that we can easily query by type. Files will be named [key].json, so we will only be able to query by key or by file properties such as lastwritedate. This project is only for scenarios where those limitations are acceptable, for things that need more complex querying then probably that should use a custom storage plan with domain specific folder arrangements that make it easy to query things. A generic storage pattern will be like this:
 
