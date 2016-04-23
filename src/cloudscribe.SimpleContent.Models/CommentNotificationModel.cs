@@ -1,11 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using cloudscribe.SimpleContent.Models;
-
-namespace cloudscribe.SimpleContent.Models
+﻿namespace cloudscribe.SimpleContent.Models
 {
     public class CommentNotificationModel
     {

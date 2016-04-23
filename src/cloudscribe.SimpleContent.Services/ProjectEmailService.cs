@@ -55,13 +55,15 @@ namespace cloudscribe.SimpleContent.Services
             
             var model = new CommentNotificationModel(project, post, comment, postUrl);
             var subject = "Blog comment: " + post.Title;
-            var htmlMessage 
-                = await viewRenderer.RenderViewAsString<CommentNotificationModel>("CommentEmail", model);
+            
             string plainTextMessage = null;
             var sender = new EmailSender();
             
             try
             {
+                var htmlMessage
+                = await viewRenderer.RenderViewAsString<CommentNotificationModel>("CommentEmail", model);
+
                 await sender.SendEmailAsync(
                     smtpOptions,
                     project.CommentNotificationEmail, //to
@@ -74,7 +76,7 @@ namespace cloudscribe.SimpleContent.Services
             }
             catch (Exception ex)
             {
-                log.LogError("error sending account confirmation email", ex);
+                log.LogError("error sending comment notification email", ex);
             }
 
         }
