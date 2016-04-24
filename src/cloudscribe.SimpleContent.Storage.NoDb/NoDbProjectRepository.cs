@@ -15,16 +15,17 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
+    //TODO: implement this with NoDb instead of list configured from startup
     public class NoDbProjectRepository : IProjectSettingsRepository
     {
 
         public NoDbProjectRepository(
             IOptions<List<ProjectSettings>> projectListAccessor)
         {
-            allBlogs = projectListAccessor.Value;
+            allProjects = projectListAccessor.Value;
         }
 
-        private List<ProjectSettings> allBlogs;
+        private List<ProjectSettings> allProjects;
 
         public Task<ProjectSettings> GetProjectSettings(
             string blogId,
@@ -32,7 +33,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             )
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var result = allBlogs.Where(b => b.ProjectId == blogId).FirstOrDefault();
+            var result = allProjects.Where(b => b.ProjectId == blogId).FirstOrDefault();
             return Task.FromResult(result);
         }
 
