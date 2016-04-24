@@ -2,16 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-23
-// Last Modified:           2016-04-23
+// Last Modified:           2016-04-24
 // 
 
 
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,14 +18,17 @@ namespace NoDb
     {
         public Command(
             ILogger<Command<T>> logger,
+            IStringSerializer<T> serializer,
             IStoragePathResolver<T> pathResolver
             
             )
         {
+            this.serializer = serializer;
             this.pathResolver = pathResolver;
             log = logger;
         }
 
+        private IStringSerializer<T> serializer;
         private IStoragePathResolver<T> pathResolver;
         private ILogger log;
         
@@ -45,21 +45,15 @@ namespace NoDb
 
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
-
             
-            var json = JsonConvert.SerializeObject(
-                obj,
-                Formatting.None,
-                new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include }
-                );
-            
+            var serialized = serializer.Serialize(obj);
             var pathToFile = await pathResolver.ResolvePath(projectId, key, obj, true).ConfigureAwait(false);
 
             if (File.Exists(pathToFile)) throw new InvalidOperationException("can't create file that already exists: " + pathToFile);
             
             using (StreamWriter s = File.CreateText(pathToFile))
             {
-                await s.WriteAsync(json);
+                await s.WriteAsync(serialized);
             }
             
             return true;
@@ -78,13 +72,8 @@ namespace NoDb
 
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
-            
-            var json = JsonConvert.SerializeObject(
-                obj,
-                Formatting.None,
-                new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include }
-                );
-            
+
+            var serialized = serializer.Serialize(obj);
             var pathToFile = await pathResolver.ResolvePath(projectId, key, obj, false).ConfigureAwait(false);
 
             if (!File.Exists(pathToFile)) throw new InvalidOperationException("can't update file that doesn't exist: " + pathToFile);
@@ -93,7 +82,7 @@ namespace NoDb
 
             using (StreamWriter s = File.CreateText(pathToFile))
             {
-                await s.WriteAsync(json);
+                await s.WriteAsync(serialized);
             }
 
             return true;
@@ -120,21 +109,7 @@ namespace NoDb
             return true;
 
         }
-
-
         
-
-
-        //private TObject LoadObject(string pathToFile)
-        //{
-        //    using (StreamReader reader = File.OpenText(pathToFile))
-        //    {
-        //        var payload = reader.ReadToEnd();
-        //        var result = JsonConvert.DeserializeObject<TObject>(payload);
-        //        return result;
-        //    }
-        //}
-
         private bool _disposed;
 
         protected void ThrowIfDisposed()

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-23
-// Last Modified:           2016-04-23
+// Last Modified:           2016-04-24
 // 
 
 /*
@@ -15,11 +15,9 @@ var files = directory.GetFiles()
   */
 
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,14 +27,17 @@ namespace NoDb
     {
         public Query(
             ILogger<Query<T>> logger,
+            IStringSerializer<T> serializer,
             IStoragePathResolver<T> pathResolver
 
             )
         {
+            this.serializer = serializer;
             this.pathResolver = pathResolver;
             log = logger;
         }
 
+        private IStringSerializer<T> serializer;
         private IStoragePathResolver<T> pathResolver;
         private ILogger log;
         
@@ -108,7 +109,7 @@ namespace NoDb
             using (StreamReader reader = File.OpenText(pathToFile))
             {
                 var payload = reader.ReadToEnd();
-                var result = JsonConvert.DeserializeObject<T>(payload);
+                var result = serializer.Deserialize(payload);
                 return result;
             }
         }

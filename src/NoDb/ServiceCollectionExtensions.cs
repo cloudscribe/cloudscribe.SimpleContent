@@ -13,10 +13,11 @@ namespace NoDb
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddNoDb<TObject>(this IServiceCollection services) where TObject : class
+        public static IServiceCollection AddNoDb<T>(this IServiceCollection services) where T : class
         {
+            services.TryAddScoped<IStringSerializer<T>, StringSerializer<T>>();
             services.TryAddScoped<IStoragePathOptionsResolver, DefaultStoragePathOptionsResolver>();
-            services.TryAddScoped<IStoragePathResolver<TObject>, DefaultStoragePathResolver<TObject>>();
+            services.TryAddScoped<IStoragePathResolver<T>, DefaultStoragePathResolver<T>>();
 
             return services;
         }
