@@ -27,12 +27,11 @@ namespace NoDb
     {
         public Query(
             ILogger<Query<T>> logger,
-            IStringSerializer<T> serializer,
-            IStoragePathResolver<T> pathResolver
-
+            IStoragePathResolver<T> pathResolver,
+            IStringSerializer<T> serializer = null
             )
         {
-            this.serializer = serializer;
+            this.serializer = serializer ?? new StringSerializer<T>();
             this.pathResolver = pathResolver;
             log = logger;
         }

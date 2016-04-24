@@ -13,6 +13,11 @@ namespace NoDb
 {
     public class StringSerializer<T> : IStringSerializer<T> where T : class
     {
+        public StringSerializer()
+        {
+
+        }
+
         public string Serialize(T obj)
         {
             return JsonConvert.SerializeObject(
