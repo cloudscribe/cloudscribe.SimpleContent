@@ -17,11 +17,11 @@ using System.Threading.Tasks;
 
 namespace NoDb
 {
-    public class Command<TObject> : ICommand<TObject> where TObject : class
+    public class Command<T> : ICommand<T> where T : class
     {
         public Command(
-            ILogger<Command<TObject>> logger,
-            IStoragePathResolver<TObject> pathResolver
+            ILogger<Command<T>> logger,
+            IStoragePathResolver<T> pathResolver
             
             )
         {
@@ -29,13 +29,13 @@ namespace NoDb
             log = logger;
         }
 
-        private IStoragePathResolver<TObject> pathResolver;
+        private IStoragePathResolver<T> pathResolver;
         private ILogger log;
         
         public async Task<bool> CreateAsync(
             string projectId,
             string key,
-            TObject obj, 
+            T obj, 
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -68,7 +68,7 @@ namespace NoDb
         public async Task<bool> UpdateAsync(
             string projectId,
             string key,
-            TObject obj,
+            T obj,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -102,12 +102,10 @@ namespace NoDb
         public async Task<bool> DeleteAsync(
             string projectId,
             string key,
-            Type type,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             if (string.IsNullOrWhiteSpace(projectId)) throw new ArgumentException("projectId must be provided");
-            if (type == null) throw new ArgumentException("type must be provided");
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("key must be provided");
 
             cancellationToken.ThrowIfCancellationRequested();

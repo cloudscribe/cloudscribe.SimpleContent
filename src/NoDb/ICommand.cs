@@ -15,29 +15,28 @@ using System.Threading.Tasks;
 namespace NoDb
 {
     /// <summary>
-    /// TObject must be serializable to json
+    /// T must be a class serializable to json
     /// </summary>
-    /// <typeparam name="TObject"></typeparam>
-    public interface ICommand<TObject> : IDisposable where TObject : class
+    /// <typeparam name="T"></typeparam>
+    public interface ICommand<T> : IDisposable where T : class
     {
         Task<bool> CreateAsync(
             string projectId,
             string key,
-            TObject obj, 
+            T obj, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<bool> UpdateAsync(
             string projectId,
             string key,
-            TObject obj, 
+            T obj, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<bool> DeleteAsync(
             string projectId, 
             string key, 
-            Type type, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 

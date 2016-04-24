@@ -25,11 +25,11 @@ using System.Threading.Tasks;
 
 namespace NoDb
 {
-    public class Query<TObject> : IQuery<TObject> where TObject : class
+    public class Query<T> : IQuery<T> where T : class
     {
         public Query(
-            ILogger<Query<TObject>> logger,
-            IStoragePathResolver<TObject> pathResolver
+            ILogger<Query<T>> logger,
+            IStoragePathResolver<T> pathResolver
 
             )
         {
@@ -37,10 +37,10 @@ namespace NoDb
             log = logger;
         }
 
-        private IStoragePathResolver<TObject> pathResolver;
+        private IStoragePathResolver<T> pathResolver;
         private ILogger log;
         
-        public async Task<TObject> FetchAsync(
+        public async Task<T> FetchAsync(
             string projectId,
             string key,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -62,13 +62,11 @@ namespace NoDb
 
         public async Task<int> GetCountAsync(
             string projectId,
-            Type type,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             if (string.IsNullOrWhiteSpace(projectId)) throw new ArgumentException("projectId must be provided");
-            if (type == null) throw new ArgumentException("type must be provided");
-
+           
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfDisposed();
 
@@ -80,7 +78,7 @@ namespace NoDb
         }
 
 
-        public async Task<List<TObject>> GetAllAsync(
+        public async Task<List<T>> GetAllAsync(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             )
@@ -92,7 +90,7 @@ namespace NoDb
 
             var pathToFolder = await pathResolver.ResolvePath(projectId).ConfigureAwait(false);
 
-            var list = new List<TObject>();
+            var list = new List<T>();
             if (!Directory.Exists(pathToFolder)) return list;
             foreach (string file in Directory.EnumerateFiles(pathToFolder, "*.json", SearchOption.TopDirectoryOnly))
             {
@@ -105,12 +103,12 @@ namespace NoDb
         }
 
 
-        private TObject LoadObject(string pathToFile)
+        private T LoadObject(string pathToFile)
         {
             using (StreamReader reader = File.OpenText(pathToFile))
             {
                 var payload = reader.ReadToEnd();
-                var result = JsonConvert.DeserializeObject<TObject>(payload);
+                var result = JsonConvert.DeserializeObject<T>(payload);
                 return result;
             }
         }

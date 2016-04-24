@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace NoDb
 {
-    public interface IQuery<TObject> : IDisposable where TObject : class
+    public interface IQuery<T> : IDisposable where T : class
     {
-        Task<TObject> FetchAsync(
+        Task<T> FetchAsync(
             string projectId,
             string key,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -24,26 +24,23 @@ namespace NoDb
 
         Task<int> GetCountAsync(
             string projectId,
-            Type type,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<List<TObject>> GetAllAsync(
+        Task<List<T>> GetAllAsync(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        //Task<IEnumerable<TObject>> GetPage(
+        //Task<IEnumerable<T>> GetPage(
         //    string projectId,
-        //    string type,
         //    int pageNumber,
         //    int pageSize,
         //    CancellationToken cancellationToken = default(CancellationToken)
         //    );
 
-        //Task<IEnumerable<TObject>> GetPage(
+        //Task<IEnumerable<T>> GetPage(
         //    string projectId,
-        //    string type,
         //    DateTime modifiedBeginDate,
         //    DateTime modifiedEndDate,
         //    int pageNumber,
