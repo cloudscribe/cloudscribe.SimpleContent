@@ -14,7 +14,7 @@ namespace cloudscribe.SimpleContent.Storage.Xml
         public string BaseFolderVPath { get; set; } = "/cloudscribe_config/data_xml";
         public string ProjectsFolderName { get; set; } = "projects";
         public string ProjectIdFolderName { get; set; } = "project1";
-        public string PostsFolderName { get; set; } = "posts";
+        public string PostsFolderName { get; set; } = "post";
 
         // not supporting xml for pages at this time, json is a better format, the main benefit
         // of xml format is compatibility with MiniBlog files and MiniBlog importer which can import other formats as well

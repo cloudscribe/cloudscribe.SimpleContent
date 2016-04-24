@@ -15,8 +15,8 @@ namespace cloudscribe.SimpleContent.Storage.Json
         public string BaseFolderVPath { get; set; } = "/cloudscribe_config/data_json";
         public string ProjectsFolderName { get; set; } = "projects";
         public string ProjectIdFolderName { get; set; } = "project1";
-        public string PagesFolderName { get; set; } = "pages";
-        public string PostsFolderName { get; set; } = "posts";
+        public string PagesFolderName { get; set; } = "page";
+        public string PostsFolderName { get; set; } = "post";
 
         public string FolderSeparator
         {

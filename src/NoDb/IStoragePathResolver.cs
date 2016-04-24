@@ -10,6 +10,7 @@ namespace NoDb
             string projectId, 
             string key = "", 
             bool ensureFoldersExist = false,
+            string fileExtension = ".json",
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
@@ -29,6 +30,7 @@ namespace NoDb
             string key, 
             TObject obj, 
             bool ensureFoldersExist = false,
+            string fileExtension = ".json",
             CancellationToken cancellationToken = default(CancellationToken)
             );
     }

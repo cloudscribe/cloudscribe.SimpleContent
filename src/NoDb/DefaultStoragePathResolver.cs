@@ -35,6 +35,7 @@ namespace NoDb
             string projectId, 
             string key = "", 
             bool ensureFoldersExist = false,
+            string fileExtension = ".json",
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -97,7 +98,7 @@ namespace NoDb
                 return typeFolderPath;
             }
 
-            return typeFolderPath + key + ".json";
+            return typeFolderPath + key + fileExtension;
         }
 
 
@@ -117,13 +118,14 @@ namespace NoDb
             string key,
             TObject obj,
             bool ensureFoldersExist = false,
+            string fileExtension = ".json",
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             // in the default implementation we are not doing anything based on the object properties
             // but some custom logic could be plugged in here by implementing the interface yourself
 
-            return await ResolvePath(projectId, key, ensureFoldersExist, cancellationToken).ConfigureAwait(false);
+            return await ResolvePath(projectId, key, ensureFoldersExist, fileExtension, cancellationToken).ConfigureAwait(false);
 
         }
     }
