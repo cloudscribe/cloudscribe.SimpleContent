@@ -8,7 +8,7 @@ using cloudscribe.Web.Pagination;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.MetaWeblog;
 using cloudscribe.SimpleContent.Storage.Xml;
-using cloudscribe.SimpleContent.Storage.Json;
+using cloudscribe.SimpleContent.Storage.NoDb;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.MetaWeblog;
 using cloudscribe.MetaWeblog.Models;
@@ -103,14 +103,15 @@ namespace example.WebApp
             services.AddScoped<SignInManager, SignInManager>();
 
 
-            services.AddScoped<IProjectSettingsRepository, cloudscribe.SimpleContent.Storage.Json.ProjectSettingsRepository>();
+            services.AddScoped<IProjectSettingsRepository, NoDbProjectRepository>();
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
             services.AddScoped<IProjectService, ProjectService>();
             
             services.AddXmlBlogStorage();
 
-            services.AddJsonPageStorage();
-            
+            //services.AddJsonPageStorage();
+            services.AddNoDbPageStorage();
+
             //services.AddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IPageService, PageService>();

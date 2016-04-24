@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("cloudscribe.SimpleContent.Storage.Json")]
+[assembly: AssemblyTitle("cloudscribe.SimpleContent.Storage.NoDb")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("cloudscribe.SimpleContent.Storage.Json")]
+[assembly: AssemblyProduct("cloudscribe.SimpleContent.Storage.NoDb")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,4 +20,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8c61bc72-8446-4fe2-8b37-1075977e5e38")]
+[assembly: Guid("b575d9f6-7553-4953-b70c-4d26e67c0ffd")]
