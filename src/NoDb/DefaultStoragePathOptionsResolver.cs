@@ -6,9 +6,6 @@
 // 
 
 using Microsoft.Extensions.PlatformAbstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NoDb
@@ -32,7 +29,7 @@ namespace NoDb
 
             var result = new StoragePathOptions();
             result.AppRootFolderPath = env.ApplicationBasePath;
-            result.ProjectIdFolderName = projectId;
+            //result.ProjectIdFolderName = projectId;
 
             return Task.FromResult(result);
         }
