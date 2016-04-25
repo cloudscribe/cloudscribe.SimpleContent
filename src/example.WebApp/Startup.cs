@@ -7,7 +7,6 @@ using cloudscribe.Web.SiteMap;
 using cloudscribe.Web.Pagination;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.MetaWeblog;
-
 using cloudscribe.SimpleContent.Storage.NoDb;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.MetaWeblog;
