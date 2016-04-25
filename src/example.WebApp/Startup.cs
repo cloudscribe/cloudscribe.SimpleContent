@@ -7,7 +7,7 @@ using cloudscribe.Web.SiteMap;
 using cloudscribe.Web.Pagination;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.MetaWeblog;
-using cloudscribe.SimpleContent.Storage.Xml;
+
 using cloudscribe.SimpleContent.Storage.NoDb;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.MetaWeblog;
@@ -106,8 +106,11 @@ namespace example.WebApp
             services.AddScoped<IProjectSettingsRepository, NoDbProjectRepository>();
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
             services.AddScoped<IProjectService, ProjectService>();
-            
-            services.AddXmlBlogStorage();
+
+            //services.AddXmlBlogStorage();
+            services.AddScoped<NoDb.IStringSerializer<Post>, PostXmlSerializer>();
+            services.AddScoped<NoDb.IStoragePathResolver<Post>, PostStoragePathResolver>();
+            services.AddNoDbPostStorage();
 
             //services.AddJsonPageStorage();
             services.AddNoDbPageStorage();

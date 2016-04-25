@@ -22,5 +22,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             return services;
         }
+
+        public static IServiceCollection AddNoDbPostStorage(this IServiceCollection services)
+        {
+            services.AddNoDb<Post>();
+            services.TryAddScoped<IPostRepository, NoDbPostRepository>();
+
+            return services;
+        }
     }
 }

@@ -46,11 +46,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             {
                 page.PubDate = DateTime.UtcNow;
 
-                var pages = await query.GetAllAsync(
-                    projectId,
-                    CancellationToken.None).ConfigureAwait(false);
-                pages.Insert(0, page);
-                pages.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
+                //var pages = await query.GetAllAsync(
+                //    projectId,
+                //    CancellationToken.None).ConfigureAwait(false);
+                //pages.Insert(0, page);
+                //pages.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
 
                 result = await commands.CreateAsync(projectId, page.Id, page).ConfigureAwait(false);
             }

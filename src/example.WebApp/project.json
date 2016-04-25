@@ -10,7 +10,6 @@
         "cloudscribe.Web.Pagination": "1.0.0-*",
         "cloudscribe.Web.SimpleAuth": "1.0.0-*",
         "cloudscribe.SimpleContent.Services": "1.0.0-*",
-        "cloudscribe.SimpleContent.Storage.Xml": "1.0.0-*",
         "cloudscribe.SimpleContent.Storage.NoDb": "1.0.0-*",
         "cloudscribe.SimpleContent.MetaWeblog": "1.0.0-*",
         "cloudscribe.SimpleContent.Security.SimpleAuth": "1.0.0-*",

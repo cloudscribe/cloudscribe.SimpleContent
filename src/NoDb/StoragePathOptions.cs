@@ -16,9 +16,7 @@ namespace NoDb
         public string AppRootFolderPath { get; set; }
         public string BaseFolderVPath { get; set; } = "/nodb_storage";
         public string ProjectsFolderName { get; set; } = "projects";
-        //public string ProjectIdFolderName { get; set; } = "project1";
         
-
         public string FolderSeparator
         {
             get { return Path.DirectorySeparatorChar.ToString(); }
