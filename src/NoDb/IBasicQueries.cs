@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-23
-// Last Modified:           2016-04-24
+// Last Modified:           2016-04-25
 // 
 
 
@@ -14,33 +14,38 @@ using System.Threading.Tasks;
 
 namespace NoDb
 {
-    /// <summary>
-    /// T must be a class serializable to json
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface ICommand<T> : IDisposable where T : class
+    public interface IBasicQueries<T> : IDisposable where T : class
     {
-        Task<bool> CreateAsync(
+        Task<T> FetchAsync(
             string projectId,
             string key,
-            T obj, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<bool> UpdateAsync(
+        Task<int> GetCountAsync(
             string projectId,
-            string key,
-            T obj, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<bool> DeleteAsync(
-            string projectId, 
-            string key, 
+        Task<List<T>> GetAllAsync(
+            string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
+        //Task<IEnumerable<T>> GetPage(
+        //    string projectId,
+        //    int pageNumber,
+        //    int pageSize,
+        //    CancellationToken cancellationToken = default(CancellationToken)
+        //    );
+
+        //Task<IEnumerable<T>> GetPage(
+        //    string projectId,
+        //    DateTime modifiedBeginDate,
+        //    DateTime modifiedEndDate,
+        //    int pageNumber,
+        //    int pageSize,
+        //    CancellationToken cancellationToken = default(CancellationToken)
+        //    );
     }
-
-    
 }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-04-24
+// Last Modified:           2016-04-25
 // 
 
 
@@ -20,8 +20,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     public class NoDbPageRepository : IPageRepository
     {
         public NoDbPageRepository(
-            ICommand<Page> pageCommands,
-            IQuery<Page> pageQuery,
+            IBasicCommands<Page> pageCommands,
+            IBasicQueries<Page> pageQuery,
             ILogger<NoDbPageRepository> logger
             )
         {
@@ -30,8 +30,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             log = logger;
         }
 
-        private ICommand<Page> commands;
-        private IQuery<Page> query;
+        private IBasicCommands<Page> commands;
+        private IBasicQueries<Page> query;
         private ILogger log;
 
         public async Task Save(

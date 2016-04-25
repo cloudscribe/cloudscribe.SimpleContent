@@ -14,38 +14,33 @@ using System.Threading.Tasks;
 
 namespace NoDb
 {
-    public interface IQuery<T> : IDisposable where T : class
+    /// <summary>
+    /// T must be a class serializable to json
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IBasicCommands<T> : IDisposable where T : class
     {
-        Task<T> FetchAsync(
+        Task<bool> CreateAsync(
             string projectId,
             string key,
+            T obj, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<int> GetCountAsync(
+        Task<bool> UpdateAsync(
             string projectId,
+            string key,
+            T obj, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<List<T>> GetAllAsync(
-            string projectId,
+        Task<bool> DeleteAsync(
+            string projectId, 
+            string key, 
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        //Task<IEnumerable<T>> GetPage(
-        //    string projectId,
-        //    int pageNumber,
-        //    int pageSize,
-        //    CancellationToken cancellationToken = default(CancellationToken)
-        //    );
-
-        //Task<IEnumerable<T>> GetPage(
-        //    string projectId,
-        //    DateTime modifiedBeginDate,
-        //    DateTime modifiedEndDate,
-        //    int pageNumber,
-        //    int pageSize,
-        //    CancellationToken cancellationToken = default(CancellationToken)
-        //    );
     }
+
+    
 }

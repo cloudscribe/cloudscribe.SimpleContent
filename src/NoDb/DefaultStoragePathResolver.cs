@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-23
-// Last Modified:           2016-04-24
+// Last Modified:           2016-04-25
 // 
 
 
@@ -33,9 +33,9 @@ namespace NoDb
         /// <returns></returns>
         public async Task<string> ResolvePath(
             string projectId, 
-            string key = "", 
-            bool ensureFoldersExist = false,
+            string key = "",
             string fileExtension = ".json",
+            bool ensureFoldersExist = false,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -117,15 +117,15 @@ namespace NoDb
             string projectId,
             string key,
             TObject obj,
-            bool ensureFoldersExist = false,
             string fileExtension = ".json",
+            bool ensureFoldersExist = false,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             // in the default implementation we are not doing anything based on the object properties
             // but some custom logic could be plugged in here by implementing the interface yourself
 
-            return await ResolvePath(projectId, key, ensureFoldersExist, fileExtension, cancellationToken).ConfigureAwait(false);
+            return await ResolvePath(projectId, key, fileExtension, ensureFoldersExist, cancellationToken).ConfigureAwait(false);
 
         }
     }

@@ -8,9 +8,9 @@ namespace NoDb
     {
         Task<string> ResolvePath(
             string projectId, 
-            string key = "", 
-            bool ensureFoldersExist = false,
+            string key = "",
             string fileExtension = ".json",
+            bool ensureFoldersExist = false,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
@@ -28,9 +28,9 @@ namespace NoDb
         Task<string> ResolvePath(
             string projectId, 
             string key, 
-            TObject obj, 
-            bool ensureFoldersExist = false,
+            TObject obj,
             string fileExtension = ".json",
+            bool ensureFoldersExist = false,
             CancellationToken cancellationToken = default(CancellationToken)
             );
     }

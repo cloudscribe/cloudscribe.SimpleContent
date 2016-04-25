@@ -15,8 +15,8 @@ namespace NoDb
 
         public static IServiceCollection AddNoDb<T>(this IServiceCollection services) where T : class
         {
-            services.TryAddScoped<ICommand<T>, Command<T>>();
-            services.TryAddScoped<IQuery<T>, Query<T>>();
+            services.TryAddScoped<IBasicCommands<T>, BasicCommands<T>>();
+            services.TryAddScoped<IBasicQueries<T>, BasicQueries<T>>();
             //services.TryAddScoped<IStringSerializer<T>, StringSerializer<T>>();
             services.TryAddScoped<IStoragePathOptionsResolver, DefaultStoragePathOptionsResolver>();
             services.TryAddScoped<IStoragePathResolver<T>, DefaultStoragePathResolver<T>>();
