@@ -21,12 +21,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     {
         public NoDbPageRepository(
             IBasicCommands<Page> pageCommands,
-            IBasicQueries<Page> pageQuery,
+            IBasicQueries<Page> pageQueries,
             ILogger<NoDbPageRepository> logger
             )
         {
             commands = pageCommands;
-            query = pageQuery;
+            query = pageQueries;
             log = logger;
         }
 

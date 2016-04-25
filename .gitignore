@@ -198,8 +198,7 @@ src/example.WebApp/cloudscribe_config/sqlitedb/*
 
 src/example.WebApp/Themes/joeaudette/**
 src/example.WebApp/wwwroot/media/**
-src/example.WebApp/cloudscribe_config/data_json/projects/joeaudettecom/**
-src/example.WebApp/cloudscribe_config/data_xml/projects/joeaudettecom/**
+src/example.WebApp/nodb_storage/projects/joeaudettecom/**
 
 .vscode/launch.json
 src/cloudscribe.Core.Repositories.EF/appsettings.local.overrides.json

@@ -11,7 +11,7 @@ namespace cloudscribe.SimpleContent.Storage.Xml
     public class XmlFileSystemOptions
     {
         public string AppRootFolderPath { get; set; }
-        public string BaseFolderVPath { get; set; } = "/cloudscribe_config/data_xml";
+        public string BaseFolderVPath { get; set; } = "/nodb_storage";
         public string ProjectsFolderName { get; set; } = "projects";
         public string ProjectIdFolderName { get; set; } = "project1";
         public string PostsFolderName { get; set; } = "post";

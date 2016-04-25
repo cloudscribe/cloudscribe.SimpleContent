@@ -39,8 +39,8 @@ namespace NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            if (string.IsNullOrWhiteSpace(projectId)) throw new ArgumentException("projectId must be provied");
-            var type = typeof(TObject).Name.ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(projectId)) throw new ArgumentException("projectId must be provided");
+            
             var pathOptions = await optionsResolver.Resolve(projectId).ConfigureAwait(false);
 
             var firstFolderPath = pathOptions.AppRootFolderPath
@@ -76,6 +76,8 @@ namespace NoDb
             {
                 Directory.CreateDirectory(projectIdFolderPath);
             }
+
+            var type = typeof(TObject).Name.ToLowerInvariant();
 
             var typeFolderPath = pathOptions.AppRootFolderPath
                 + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)

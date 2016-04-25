@@ -14,7 +14,7 @@ namespace NoDb
     public class StoragePathOptions
     {
         public string AppRootFolderPath { get; set; }
-        public string BaseFolderVPath { get; set; } = "/cloudscribe_config/data_json";
+        public string BaseFolderVPath { get; set; } = "/nodb_storage";
         public string ProjectsFolderName { get; set; } = "projects";
         //public string ProjectIdFolderName { get; set; } = "project1";
         
