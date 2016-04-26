@@ -3,7 +3,6 @@
 caching of post/page data
 recent posts viewcomponent for homepage
 
-a re-useable lib for json file system storage that saves by typename and key
 tenant management - file editing
 editable side content ?
 
