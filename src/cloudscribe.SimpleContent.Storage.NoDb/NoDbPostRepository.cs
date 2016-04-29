@@ -93,8 +93,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             //TODO: caching
             //if (HttpRuntime.Cache["posts"] == null)
 
-            var list = await query.GetAllAsync(blogId, cancellationToken).ConfigureAwait(false);
-
+            var l = await query.GetAllAsync(blogId, cancellationToken).ConfigureAwait(false);
+            var list = l.ToList();
             //if (list.Count > 0)
             //{
             //    list.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));

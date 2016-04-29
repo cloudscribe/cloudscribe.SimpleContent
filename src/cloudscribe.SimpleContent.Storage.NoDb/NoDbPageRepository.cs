@@ -67,7 +67,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var page = await query.FetchAsync(projectId, pageId, CancellationToken.None);
             if (page != null)
             {
-                var pages = await query.GetAllAsync(projectId, CancellationToken.None).ConfigureAwait(false);
+                var pages = await GetAllPages(projectId, CancellationToken.None).ConfigureAwait(false);
                 await commands.DeleteAsync(projectId, pageId).ConfigureAwait(false);
                 pages.Remove(page);
                 return true;
@@ -81,16 +81,15 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             string projectId,
             CancellationToken cancellationToken)
         {
-            //TODO: caching
-            //if (HttpRuntime.Cache["posts"] == null)
+            
+            var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
+            var list = l.ToList();
 
-            var list = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
-
-            if (list.Count > 0)
-            {
-                list.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
-                //HttpRuntime.Cache.Insert("posts", list);
-            }
+            //if (list.Count > 0)
+            //{
+            //    list.Sort((p1, p2) => p2.PageOrder.CompareTo(p1.PageOrder));
+            //    //HttpRuntime.Cache.Insert("posts", list);
+            //}
 
             //if (HttpRuntime.Cache["posts"] != null)
             //{
@@ -119,7 +118,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             )
         {
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
-            return allPages.Where(p => p.ParentId == "0").OrderBy(p => p.PageOrder).ToList();
+            return allPages.Where(p => p.ParentId == "0")
+                .OrderBy(p => p.PageOrder).ToList();
 
         }
 
@@ -130,7 +130,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             )
         {
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
-            return allPages.Where(p => p.ParentId == pageId).OrderBy(p => p.PageOrder).ToList();
+            return allPages.Where(p => p.ParentId == pageId)
+                .OrderBy(p => p.PageOrder).ToList();
 
         }
 
