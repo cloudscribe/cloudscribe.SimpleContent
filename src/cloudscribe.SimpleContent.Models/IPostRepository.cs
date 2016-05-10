@@ -19,7 +19,7 @@ namespace cloudscribe.SimpleContent.Models
 
     public interface IPostCommands
     {
-        Task<bool> Delete(string blogId, string postId);
+        Task Delete(string blogId, string postId);
 
         Task Save(
             string blogId,

@@ -301,7 +301,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; //new EmptyResult();
             }
 
-            var result = await pageService.DeletePage(project.ProjectId, page.Id);
+            await pageService.DeletePage(project.ProjectId, page.Id);
 
             // TODO: clear the page tree cache
 

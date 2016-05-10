@@ -242,11 +242,13 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             string password
             )
         {
-            return await blogService.Delete(
+            await blogService.Delete(
                 blogId, 
                 postId,
                 userName,
                 password);
+
+            return true;
         }
         
         public async Task<List<BlogInfoStruct>> GetUserBlogs(

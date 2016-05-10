@@ -212,9 +212,9 @@ namespace cloudscribe.SimpleContent.Services
             await pageRepo.Save(settings.ProjectId, page, isNew).ConfigureAwait(false);
         }
 
-        public async Task<bool> DeletePage(string projectId, string pageId)
+        public async Task DeletePage(string projectId, string pageId)
         {
-            return await pageRepo.Delete(projectId, pageId).ConfigureAwait(false);
+            await pageRepo.Delete(projectId, pageId).ConfigureAwait(false);
 
         }
 

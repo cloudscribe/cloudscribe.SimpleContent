@@ -47,8 +47,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             Post post,
             bool isNew)
         {
-            bool result = false;
-
+            
             post.LastModified = DateTime.UtcNow;
             
             if (string.IsNullOrEmpty(post.Id)) { post.Id = Guid.NewGuid().ToString(); }
@@ -61,17 +60,17 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 //posts.Insert(0, post);
                 //posts.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
 
-                result = await commands.CreateAsync(blogId, post.Id, post).ConfigureAwait(false);
+                await commands.CreateAsync(blogId, post.Id, post).ConfigureAwait(false);
             }
             else
             {
-                result = await commands.UpdateAsync(blogId, post.Id, post).ConfigureAwait(false);
+                await commands.UpdateAsync(blogId, post.Id, post).ConfigureAwait(false);
             }
 
           
         }
 
-        public async Task<bool> Delete(string blogId, string postId)
+        public async Task Delete(string blogId, string postId)
         {
             var post = await query.FetchAsync(blogId, postId, CancellationToken.None).ConfigureAwait(false);
             if (post != null)
@@ -79,10 +78,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 var allPosts = await GetAllPosts(blogId, CancellationToken.None).ConfigureAwait(false);
                 await commands.DeleteAsync(blogId, postId).ConfigureAwait(false);
                 allPosts.Remove(post);
-                return true;
+                
                 //Blog.ClearStartPageCache();
             }
-            return false;
+            
 
         }
         

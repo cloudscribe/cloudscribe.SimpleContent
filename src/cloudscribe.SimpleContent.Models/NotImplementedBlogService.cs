@@ -17,17 +17,17 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(string postId)
+        public Task Delete(string postId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(string blogId, string postId)
+        public Task Delete(string blogId, string postId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(string projectId, string postId, string userName, string password)
+        public Task Delete(string projectId, string postId, string userName, string password)
         {
             throw new NotImplementedException();
         }

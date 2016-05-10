@@ -15,7 +15,7 @@ namespace cloudscribe.SimpleContent.Models
             Page page,
             bool isNew);
 
-        Task<bool> Delete(string blogId, string pageId);
+        Task Delete(string blogId, string pageId);
 
         Task<bool> SlugIsAvailable(
             string blogId,

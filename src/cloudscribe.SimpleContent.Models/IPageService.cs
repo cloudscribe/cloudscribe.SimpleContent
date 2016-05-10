@@ -6,7 +6,7 @@ namespace cloudscribe.SimpleContent.Models
 {
     public interface IPageService
     {
-        Task<bool> DeletePage(string projectId, string pageId);
+        Task DeletePage(string projectId, string pageId);
         Task<List<Page>> GetAllPages(
             string projectId,
             string userName,

@@ -7,10 +7,11 @@ namespace cloudscribe.SimpleContent.Models
     public interface IBlogService
     {
         
+
         Task<bool> CommentsAreOpen(Post post, bool userIsOwner);
         string CreateSlug(string title);
         Task<bool> SlugIsAvailable(string slug);
-        Task<bool> Delete(string postId);
+        
         
         Task<int> GetCount(string category);
         Task<int> GetCount(
@@ -62,7 +63,9 @@ namespace cloudscribe.SimpleContent.Models
 
         Task<bool> SlugIsAvailable(string projectId, string slug);
 
-        Task<bool> Delete(
+        Task Delete(string postId);
+
+        Task Delete(
             string projectId, 
             string postId,
             string userName,

@@ -482,7 +482,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; //new EmptyResult();
             }
 
-            var result = await blogService.Delete(post.Id);
+            await blogService.Delete(post.Id);
 
             Response.StatusCode = 200;
             return; //new EmptyResult();

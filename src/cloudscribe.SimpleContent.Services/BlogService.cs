@@ -436,15 +436,15 @@ namespace cloudscribe.SimpleContent.Services
 
         
 
-        public async Task<bool> Delete(string postId)
+        public async Task Delete(string postId)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await repo.Delete(settings.ProjectId, postId).ConfigureAwait(false);
+            await repo.Delete(settings.ProjectId, postId).ConfigureAwait(false);
 
         }
 
-        public async Task<bool> Delete(
+        public async Task Delete(
             string projectId, 
             string postId,
             string userName,
@@ -459,12 +459,12 @@ namespace cloudscribe.SimpleContent.Services
 
             if (!permission.CanEdit)
             {
-                return false;
+                return; //TODO: exception here?
             }
             //await EnsureBlogSettings().ConfigureAwait(false);
             //var settings = await settingsRepo.GetBlogSetings(projectId, CancellationToken).ConfigureAwait(false);
 
-            return await repo.Delete(projectId, postId).ConfigureAwait(false);
+            await repo.Delete(projectId, postId).ConfigureAwait(false);
 
         }
 

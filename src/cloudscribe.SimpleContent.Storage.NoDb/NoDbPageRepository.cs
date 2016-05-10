@@ -39,7 +39,6 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             Page page,
             bool isNew)
         {
-            bool result = false;
             if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
             page.LastModified = DateTime.UtcNow;
             if (isNew) // New page
@@ -52,16 +51,16 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 //pages.Insert(0, page);
                 //pages.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
 
-                result = await commands.CreateAsync(projectId, page.Id, page).ConfigureAwait(false);
+                await commands.CreateAsync(projectId, page.Id, page).ConfigureAwait(false);
             }
             else
             {
-                result = await commands.UpdateAsync(projectId, page.Id, page).ConfigureAwait(false);
+                await commands.UpdateAsync(projectId, page.Id, page).ConfigureAwait(false);
             }
             
         }
 
-        public async Task<bool> Delete(string projectId, string pageId)
+        public async Task Delete(string projectId, string pageId)
         {
 
             var page = await query.FetchAsync(projectId, pageId, CancellationToken.None);
@@ -70,10 +69,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 var pages = await GetAllPages(projectId, CancellationToken.None).ConfigureAwait(false);
                 await commands.DeleteAsync(projectId, pageId).ConfigureAwait(false);
                 pages.Remove(page);
-                return true;
                 
             }
-            return false;
+            
 
         }
 

@@ -7,7 +7,7 @@ namespace cloudscribe.SimpleContent.Models
 {
     public class NotImplementedPageService : IPageService
     {
-        public Task<bool> DeletePage(string blogId, string pageId)
+        public Task DeletePage(string blogId, string pageId)
         {
             throw new NotImplementedException();
         }
