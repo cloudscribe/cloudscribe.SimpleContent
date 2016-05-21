@@ -6,6 +6,7 @@
                 "SiteName": "SimpleContent Demo",
                 "Hostnames": [
                     "localhost:60000",
+                    "localhost:53941",
                     "tenant1.local:60000"
                 ],
                 "Theme": "superhero",

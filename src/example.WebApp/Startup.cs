@@ -1,55 +1,28 @@
-﻿
-using cloudscribe.Web.SimpleAuth.Services;
-using cloudscribe.Web.SimpleAuth.Models;
-using cloudscribe.Web.Navigation;
-using cloudscribe.Web.Navigation.Caching;
-using cloudscribe.Web.SiteMap;
-using cloudscribe.Web.Pagination;
-using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.MetaWeblog;
-using cloudscribe.SimpleContent.Storage.NoDb;
-using cloudscribe.SimpleContent.Services;
-using cloudscribe.MetaWeblog;
-using cloudscribe.MetaWeblog.Models;
-using Glimpse;
-using SaasKit.Multitenancy;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authentication.Cookies;
-using Microsoft.AspNet.Authentication.Google;
-using Microsoft.AspNet.Authentication.MicrosoftAccount;
-using Microsoft.AspNet.Authentication.Twitter;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Diagnostics.Entity;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Razor;
-using Microsoft.AspNet.Mvc.Formatters.Xml;
-using Microsoft.Data.Entity;
-using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.OptionsModel;
-
-
-
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
+using cloudscribe.SimpleContent.Models;
 
 namespace example.WebApp
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
+        public Startup(IHostingEnvironment env)
         {
-            
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             builder.AddJsonFile("app-tenants-users.json");
@@ -59,34 +32,32 @@ namespace example.WebApp
             // this file name is ignored by gitignore
             // so you can create it and use on your local dev machine
             // remember last config source added wins if it has the same settings
-            builder.AddJsonFile("appsettings.local.overrides.json", optional: true);
+            //builder.AddJsonFile("appsettings.local.overrides.json", optional: true);
 
             if (env.IsDevelopment())
             {
-                // This reads the configuration keys from the secret store.
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
             }
+
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-
-            
         }
 
-        public IConfigurationRoot Configuration { get; set; }
+        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGlimpse();
+            //services.AddGlimpse();
 
             ConfigureAuthPolicy(services);
 
             // Hosting doesn't add IHttpContextAccessor by default
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+            //services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             // single tenant
-            services.Configure<SimpleAuthSettings>(Configuration.GetSection("SimpleAuthSettings"));
+            services.Configure<cloudscribe.Web.SimpleAuth.Models.SimpleAuthSettings>(Configuration.GetSection("SimpleAuthSettings"));
             //services.AddScoped<IUserLookupProvider, DefaultUserLookupProvider>(); 
             //services.AddScoped<IAuthSettingsResolver, DefaultAuthSettingsResolver>();
             //services.Configure<List<SimpleAuthUser>>(Configuration.GetSection("Users"));
@@ -94,66 +65,49 @@ namespace example.WebApp
             // multi tenant
             services.Configure<MultiTenancyOptions>(Configuration.GetSection("MultiTenancy"));
             services.AddMultitenancy<SiteSettings, CachingSiteResolver>();
-            services.AddScoped<IUserLookupProvider, SiteUserLookupProvider>();
-            services.AddScoped<IAuthSettingsResolver, SiteAuthSettingsResolver>();
+            services.AddScoped<cloudscribe.Web.SimpleAuth.Models.IUserLookupProvider, SiteUserLookupProvider>();
+            services.AddScoped<cloudscribe.Web.SimpleAuth.Models.IAuthSettingsResolver, SiteAuthSettingsResolver>();
+            services.AddCloudscribeSimpleAuth();
+
+            services.AddNoDbProjectStorage();
             
-            // common
-            services.AddScoped<IPasswordHasher<SimpleAuthUser>, PasswordHasher<SimpleAuthUser>>();
-            services.AddScoped<SignInManager, SignInManager>();
-
-
-            services.AddScoped<IProjectSettingsRepository, NoDbProjectRepository>();
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
-            services.AddScoped<IProjectService, ProjectService>();
-
-            //services.AddXmlBlogStorage();
-            services.AddScoped<NoDb.IStringSerializer<Post>, PostXmlSerializer>();
-            services.AddScoped<NoDb.IStoragePathResolver<Post>, PostStoragePathResolver>();
+            services.AddScoped<IProjectService, cloudscribe.SimpleContent.Services.ProjectService>();
+;
+            services.AddScoped<NoDb.IStringSerializer<Post>, cloudscribe.SimpleContent.Storage.NoDb.PostXmlSerializer>();
+            services.AddScoped<NoDb.IStoragePathResolver<Post>, cloudscribe.SimpleContent.Storage.NoDb.PostStoragePathResolver>();
             services.AddNoDbPostStorage();
 
-            //services.AddJsonPageStorage();
             services.AddNoDbPageStorage();
 
-            //services.AddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
-            services.AddScoped<IBlogService, BlogService>();
-            services.AddScoped<IPageService, PageService>();
+            services.AddScoped<IBlogService, cloudscribe.SimpleContent.Services.BlogService>();
+            services.AddScoped<IPageService, cloudscribe.SimpleContent.Services.PageService>();
 
-            services.AddScoped<IMediaProcessor, FileSystemMediaProcessor>();
+            services.AddScoped<IMediaProcessor, cloudscribe.SimpleContent.Services.FileSystemMediaProcessor>();
+
+            services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
             
-            services.AddScoped<IMetaWeblogService, MetaWeblogService>();
-            services.AddScoped<IMetaWeblogRequestParser, MetaWeblogRequestParser>();
-            services.AddScoped<IMetaWeblogRequestProcessor, MetaWeblogRequestProcessor>();
-            services.AddScoped<IMetaWeblogResultFormatter, MetaWeblogResultFormatter>();
-            services.AddScoped<IMetaWeblogRequestValidator, MetaWeblogRequestValidator>();
-            services.AddScoped<MetaWeblogModelMapper, MetaWeblogModelMapper>();
+
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
-            services.AddScoped<HtmlProcessor, HtmlProcessor>();
-            services.AddScoped<IProjectEmailService, ProjectEmailService>();
+            services.AddScoped<cloudscribe.SimpleContent.Services.HtmlProcessor, cloudscribe.SimpleContent.Services.HtmlProcessor>();
+            //services.AddScoped<cloudscribe.SimpleContent.Models.IProjectEmailService, ProjectEmailService>();
+            services.AddScoped<IProjectEmailService, cloudscribe.SimpleContent.Services.ProjectEmailServiceFake>();
             services.AddScoped<cloudscribe.Web.Common.Razor.ViewRenderer, cloudscribe.Web.Common.Razor.ViewRenderer>();
             
-
-
             services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();
-            services.Configure<ApiOptions>(Configuration.GetSection("MetaWeblogApiOptions"));
-            services.AddScoped<IMetaWeblogSecurity, MetaWeblogSecurity>();
+           
             services.AddScoped<cloudscribe.Syndication.Models.Rss.IChannelProvider, cloudscribe.SimpleContent.Syndication.RssChannelProvider>();
 
-            services.AddScoped<NavigationTreeBuilderService, NavigationTreeBuilderService>();
-            //services.TryAddScoped<ITreeCache, MemoryTreeCache>();
-            services.AddScoped<INavigationTreeBuilder, XmlNavigationTreeBuilder>();
-            services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
-            services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
-            services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
+            services.AddCloudscribeNavigation(Configuration.GetSection("NavigationOptions"));
+            services.AddScoped<cloudscribe.Web.Navigation.INavigationTreeBuilder, cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder>();
+            services.AddScoped<cloudscribe.Web.SiteMap.ISiteMapNodeService, cloudscribe.Web.SiteMap.NavigationTreeSiteMapNodeService>();
+            services.AddScoped<cloudscribe.Web.SiteMap.ISiteMapNodeService, cloudscribe.SimpleContent.Services.BlogSiteMapNodeService>();
 
-            services.Configure<NavigationOptions>(options =>
-            {
-                //options.RootTreeBuilderName = "cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder";
-            });
+            //services.Configure<NavigationOptions>(options =>
+            //{
+            //    //options.RootTreeBuilderName = "cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder";
+            //});
 
-            
-            services.AddScoped<INodeUrlPrefixProvider, DefaultNodeUrlPrefixProvider>();
-            services.AddScoped<INavigationNodePermissionResolver, NavigationNodePermissionResolver>();
-            //services.Configure<NavigationOptions>(Configuration.GetSection("NavigationOptions"));
             
 
             // Add MVC services to the services container.
@@ -180,101 +134,63 @@ namespace example.WebApp
             {
                 options.ViewLocationExpanders.Add(new SiteViewLocationExpander());
             });
-            
+
 
         }
 
-        private void ConfigureAuthPolicy(IServiceCollection services)
-        {
-            //https://docs.asp.net/en/latest/security/authorization/policies.html
-
-            services.AddAuthorization(options =>
-            {
-                // this policy currently means any user with a blogId claim can edit
-                // would require somthing more for multi tenant blogs
-                options.AddPolicy(
-                    "BlogEditPolicy",
-                    authBuilder =>
-                    {
-                        authBuilder.RequireClaim("blogId"); 
-                    }
-                 );
-
-                // add other policies here 
-
-            });
-
-        }
-
-
-
-        // Configure is called after ConfigureServices is called.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app, 
             IHostingEnvironment env, 
             ILoggerFactory loggerFactory,
-            IOptions<SimpleAuthSettings> authSettingsAccessor)
+            IOptions<cloudscribe.Web.SimpleAuth.Models.SimpleAuthSettings> authSettingsAccessor
+            )
         {
-            app.UseGlimpse();
+            //app.UseGlimpse();
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // Configure the HTTP request pipeline.
-
-            // Add the following to the request pipeline only in development environment.
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
-
-                
                 //app.UseDatabaseErrorPage();
+                app.UseBrowserLink();
             }
             else
             {
-                // Add Error handling middleware which catches all application specific errors and
-                // sends the request to the following path or controller action.
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // Add the platform handler to the request pipeline.
-            app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
-
-            // Add static files to the request pipeline.
             app.UseStaticFiles();
 
             app.UseMultitenancy<SiteSettings>();
 
-            // Add cookie-based authentication to the request pipeline
-            
             app.UsePerTenant<SiteSettings>((ctx, builder) =>
             {
-                builder.UseCookieAuthentication(options =>
-                {
-                    options.AuthenticationScheme = ctx.Tenant.AuthenticationScheme;
-                    options.LoginPath = new PathString("/login");
-                    options.AccessDeniedPath = new PathString("/");
-                    options.AutomaticAuthenticate = true;
-                    options.AutomaticChallenge = true;
-
-                    options.CookieName = ctx.Tenant.AuthenticationScheme;
-                });
+                var authCookieOptions = new CookieAuthenticationOptions();
+                authCookieOptions.AuthenticationScheme = ctx.Tenant.AuthenticationScheme;
+                authCookieOptions.LoginPath = new PathString("/login");
+                authCookieOptions.AccessDeniedPath = new PathString("/");
+                authCookieOptions.AutomaticAuthenticate = true;
+                authCookieOptions.AutomaticChallenge = true;
+                authCookieOptions.CookieName = ctx.Tenant.AuthenticationScheme;
+                builder.UseCookieAuthentication(authCookieOptions);
 
                 
+
             });
 
-            // Add MVC to the request pipeline.
+
             app.UseMvc(routes =>
             {
-
                 routes.MapRoute(
                    name: ProjectConstants.BlogCategoryRouteName,
                    template: "blog/category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    );
 
-                
+
                 routes.MapRoute(
                       ProjectConstants.BlogArchiveRouteName,
                       "blog/{year}/{month}/{day}",
@@ -302,14 +218,14 @@ namespace example.WebApp
                    , defaults: new { controller = "Blog", action = "PostNoDate" }
                    );
 
-                
+
 
                 routes.MapRoute(
                    name: ProjectConstants.BlogIndexRouteName,
                    template: "blog/"
                    , defaults: new { controller = "Blog", action = "Index" }
                    );
-                
+
                 routes.MapRoute(
                    name: ProjectConstants.PageIndexRouteName,
                    template: "{slug=none}"
@@ -318,12 +234,36 @@ namespace example.WebApp
 
                 routes.MapRoute(
                     name: "def",
-                    template: "{controller}/{action}" 
+                    template: "{controller}/{action}"
                     );
 
+                //routes.MapRoute(
+                //    name: "default",
+                //    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
+        private void ConfigureAuthPolicy(IServiceCollection services)
+        {
+            //https://docs.asp.net/en/latest/security/authorization/policies.html
+
+            services.AddAuthorization(options =>
+            {
+                // this policy currently means any user with a blogId claim can edit
+                // would require somthing more for multi tenant blogs
+                options.AddPolicy(
+                    "BlogEditPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireClaim("blogId");
+                    }
+                 );
+
+                // add other policies here 
+
+            });
+
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc.Razor;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Razor;
 using System;
 using System.Collections.Generic;
 using System.Linq;

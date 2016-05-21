@@ -2,13 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-03-29
+// Last Modified:           2016-05-21
 // 
 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +27,8 @@ namespace cloudscribe.SimpleContent.Services
             IProjectSecurityResolver security,
             IPageRepository pageRepository,
             IMediaProcessor mediaProcessor,
-            IUrlHelper urlHelper,
+            IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
         {
 
@@ -34,13 +37,15 @@ namespace cloudscribe.SimpleContent.Services
             pageRepo = pageRepository;
             context = contextAccessor?.HttpContext;
             this.mediaProcessor = mediaProcessor;
-            this.urlHelper = urlHelper;
+            this.urlHelperFactory = urlHelperFactory;
+            this.actionContextAccesor = actionContextAccesor;
             htmlProcessor = new HtmlProcessor();
         }
 
         private readonly HttpContext context;
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
-        private IUrlHelper urlHelper;
+        private IUrlHelperFactory urlHelperFactory;
+        private IActionContextAccessor actionContextAccesor;
         private IProjectSecurityResolver security;
         private IPageRepository pageRepo;
         private IMediaProcessor mediaProcessor;
@@ -60,8 +65,9 @@ namespace cloudscribe.SimpleContent.Services
         public Task<string> ResolvePageUrl(Page page)
         {
             //await EnsureBlogSettings().ConfigureAwait(false);
-            
-            var result = urlHelper.Action("Home", "About", new { slug = page.Slug });
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+       
+            var result = urlHelper.Action("Index", "Page", new { slug = page.Slug });
 
             return Task.FromResult(result);
         }
@@ -127,6 +133,7 @@ namespace cloudscribe.SimpleContent.Services
                 }
             }
 
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
             if (context != null)
             {
@@ -188,7 +195,7 @@ namespace cloudscribe.SimpleContent.Services
 
                 }
             }
-
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
             if (context != null)
             {

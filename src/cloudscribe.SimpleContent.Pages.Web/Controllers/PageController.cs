@@ -2,21 +2,21 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-03-29
+// Last Modified:           2016-05-21
 // 
 
 using cloudscribe.SimpleContent.Common;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.ViewModels;
-using Microsoft.AspNet.Http.Authentication;
-using Microsoft.AspNet.Http.Features.Authentication;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Http.Features.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,18 +31,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public PageController(
             IProjectService projectService,
             IPageService blogService,
-            IUrlHelper urlHelper,
+           // IUrlHelper urlHelper,
             ILogger<PageController> logger)
         {
             this.projectService = projectService;
             this.pageService = blogService;
-            this.urlHelper = urlHelper;
+            //this.urlHelper = urlHelper;
             log = logger;
         }
 
         private IProjectService projectService;
         private IPageService pageService;
-        private IUrlHelper urlHelper;
+        //private IUrlHelper urlHelper;
         private ILogger log;
 
         [HttpGet]
@@ -259,7 +259,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 // TODO: clear the page tree cache
             }
 
-            var url = urlHelper.Action("Index", "Page", new { slug = page.Slug });
+            var url = Url.Action("Index", "Page", new { slug = page.Slug });
             await Response.WriteAsync(url);
 
         }

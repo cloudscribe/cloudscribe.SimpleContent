@@ -1,8 +1,8 @@
 ﻿
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using SaasKit.Multitenancy;
 using System;
 using System.Collections.Generic;

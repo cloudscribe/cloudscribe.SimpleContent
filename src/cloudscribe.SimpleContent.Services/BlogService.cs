@@ -2,13 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-04-21
+// Last Modified:           2016-05-21
 // 
 
 using cloudscribe.SimpleContent.Common;
 using cloudscribe.SimpleContent.Models;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,14 +27,16 @@ namespace cloudscribe.SimpleContent.Services
             IProjectSecurityResolver security,
             IPostRepository blogRepository,
             IMediaProcessor mediaProcessor,
-            IUrlHelper urlHelper,
+            IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
         {
             this.security = security;
             repo = blogRepository;
             context = contextAccessor?.HttpContext;
             this.mediaProcessor = mediaProcessor;
-            this.urlHelper = urlHelper;
+            this.urlHelperFactory = urlHelperFactory;
+            this.actionContextAccesor = actionContextAccesor;
             this.projectService = projectService;
             htmlProcessor = new HtmlProcessor();
         }
@@ -41,7 +45,8 @@ namespace cloudscribe.SimpleContent.Services
         private IProjectSecurityResolver security;
         private readonly HttpContext context;
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
-        private IUrlHelper urlHelper;
+        private IUrlHelperFactory urlHelperFactory;
+        private IActionContextAccessor actionContextAccesor;
         private IPostRepository repo;
         private IMediaProcessor mediaProcessor;
         private ProjectSettings settings = null;
@@ -227,6 +232,7 @@ namespace cloudscribe.SimpleContent.Services
 
 
             //contextAccessor
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
             if(context != null)
             {
@@ -316,7 +322,7 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<string> ResolvePostUrl(Post post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             string postUrl;
             if (settings.IncludePubDateInPostUrls)
             {
@@ -347,7 +353,7 @@ namespace cloudscribe.SimpleContent.Services
         {
             //await EnsureBlogSettings().ConfigureAwait(false);
 
-
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var result = urlHelper.Action("Index", "Blog");
 
             return Task.FromResult(result);
