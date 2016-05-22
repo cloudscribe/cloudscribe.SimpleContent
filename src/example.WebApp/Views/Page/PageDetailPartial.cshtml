@@ -14,7 +14,7 @@
          data-approve-comment-url="@Url.Action("AjaxApproveComment", "Page")"
          data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Page")"
          itemscope itemtype="http://schema.org/Article">
-    @if ((Model.CurrentPage.ShowHeading) || (Model.Mode == "new"))
+    @if ((Model.CurrentPage.ShowHeading) || (Model.Mode == "new") || (Model.Mode == "edit"))
     {
         <header class="">
             @if (Model.Mode == "new")
@@ -31,6 +31,7 @@
             }
         </header>
     }
+   
     @if (string.IsNullOrEmpty(Model.CurrentPage.Id))
     {
         <div id="excerpt" style="display:none;">

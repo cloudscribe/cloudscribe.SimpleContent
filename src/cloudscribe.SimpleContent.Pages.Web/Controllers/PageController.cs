@@ -165,9 +165,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             if (string.IsNullOrEmpty(model.Title))
             {
-                log.LogInformation("returning 500 because no title was posted");
-                Response.StatusCode = 500;
-                return;
+                // if a page has been configured to not show the title
+                // this may be null on edit, if it is a new page then it should be required
+                // because it is used for generating the slug
+                //if (string.IsNullOrEmpty(model.Slug))
+                //{
+                    log.LogInformation("returning 500 because no title was posted");
+                    Response.StatusCode = 500;
+                    return;
+                //}
+                
             }
 
             var project = await projectService.GetCurrentProjectSettings();
