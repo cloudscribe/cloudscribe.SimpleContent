@@ -9,7 +9,7 @@
                     "localhost:53941",
                     "tenant1.local:60000"
                 ],
-                "Theme": "yeti",
+                "Theme": "default",
                 "ContentProjectId": "project1",
                 "EnablePasswordHasherUi": "true",
                 "RecaptchaPublicKey": "",

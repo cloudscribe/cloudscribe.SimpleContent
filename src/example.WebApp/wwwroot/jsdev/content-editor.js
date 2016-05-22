@@ -293,12 +293,12 @@
     },
     addToolBarPadding = function () {
         toolbarHeight = editorBar.height();
-        var mainDiv = $(".body-content").first();
-        mainDiv.animate({ "padding-top": toolbarHeight + mainNavHeight }, 500, "swing");
+        //var mainDiv = $(".body-content").first();
+        //mainDiv.animate({ "padding-top": toolbarHeight + mainNavHeight }, 500, "swing");
         //mainDiv.css("background-color", "pink");
     },
     removeToolbarPadding = function () {
-        $(".body-content").first().animate({ "padding-top": mainNavHeight }, 500, "swing");
+        //$(".body-content").first().animate({ "padding-top": mainNavHeight }, 500, "swing");
     }
     ;
 
