@@ -2,16 +2,16 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-02-24
+// Last Modified:           2016-05-21
 // 
 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.DependencyInjection;
+using cloudscribe.SimpleContent.Storage.NoDb;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NoDb;
 
-namespace cloudscribe.SimpleContent.Storage.NoDb
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
@@ -27,6 +27,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             services.AddNoDb<Post>();
             services.TryAddScoped<IPostRepository, NoDbPostRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddNoDbProjectStorage(this IServiceCollection services)
+        {
+            services.AddScoped<IProjectSettingsRepository, NoDbProjectRepository>();
 
             return services;
         }

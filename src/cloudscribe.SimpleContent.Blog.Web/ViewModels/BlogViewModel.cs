@@ -7,12 +7,10 @@
 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Pagination;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using cloudscribe.SimpleContent.Services;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {

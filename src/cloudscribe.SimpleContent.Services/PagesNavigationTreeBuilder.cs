@@ -2,7 +2,9 @@
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Navigation;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +17,23 @@ namespace cloudscribe.SimpleContent.Services
         public PagesNavigationTreeBuilder(
             IProjectService projectService,
             IPageService pageService,
-            IUrlHelper urlHelper)
+            IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccesor
+            //IUrlHelper urlHelper
+            )
         {
             this.projectService = projectService;
             this.pageService = pageService;
-            this.urlHelper = urlHelper;
+            //this.urlHelper = urlHelper;
+            this.urlHelperFactory = urlHelperFactory;
+            this.actionContextAccesor = actionContextAccesor;
         }
 
         private IProjectService projectService;
         private IPageService pageService;
-        private IUrlHelper urlHelper;
+        //private IUrlHelper urlHelper;
+        private IUrlHelperFactory urlHelperFactory;
+        private IActionContextAccessor actionContextAccesor;
         private TreeNode<NavigationNode> rootNode = null;
 
         public string Name
@@ -61,15 +70,16 @@ namespace cloudscribe.SimpleContent.Services
                 homePage = await pageService.GetPageBySlug(project.ProjectId, project.DefaultPageSlug);
 
             }
-           
-            if(homePage != null)
+
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            if (homePage != null)
             {
                 rootNav = new NavigationNode();
                 rootNav.IsRootNode = true;
                 rootNav.Key = homePage.Id;
                 //rootNav.Title = homePage.Title;
                 rootNav.Text = homePage.Title;
-
+                
                 rootNav.Url = urlHelper.Action("Index", "Page", new { slug = homePage.Slug });
             }
             else
@@ -141,6 +151,7 @@ namespace cloudscribe.SimpleContent.Services
         private async Task AddChildNodes(TreeNode<NavigationNode> treeNode)
         {
             var childList = await pageService.GetChildPages(treeNode.Value.Key).ConfigureAwait(false);
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             foreach (var page in childList)
             {
                 var node = new NavigationNode();

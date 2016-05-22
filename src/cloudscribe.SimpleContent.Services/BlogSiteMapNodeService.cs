@@ -7,8 +7,8 @@
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.SiteMap;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;

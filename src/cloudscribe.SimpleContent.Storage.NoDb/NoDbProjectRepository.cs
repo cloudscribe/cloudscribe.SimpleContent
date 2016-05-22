@@ -6,7 +6,7 @@
 // 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
