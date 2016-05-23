@@ -20,7 +20,8 @@
         "cloudscribe.Web.SiteMap": "1.0.0-*",
         "cloudscribe.Web.Common": "1.0.0-*",
         "cloudscribe.Web.Navigation": "1.0.0-*",
-        "HtmlAgilityPack.NetCore":"1.4.9.2"
+        "cloudscribe.Messaging.Email": "1.0.0-*",
+        "cloudscribe.HtmlAgilityPack":"1.0.0-*"
     },
 
     "frameworks": {

@@ -32,7 +32,7 @@ namespace example.WebApp
             // this file name is ignored by gitignore
             // so you can create it and use on your local dev machine
             // remember last config source added wins if it has the same settings
-            //builder.AddJsonFile("appsettings.local.overrides.json", optional: true);
+            builder.AddJsonFile("appsettings.local.overrides.json", optional: true);
 
             if (env.IsDevelopment())
             {
@@ -91,7 +91,7 @@ namespace example.WebApp
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
             services.AddScoped<cloudscribe.SimpleContent.Services.HtmlProcessor, cloudscribe.SimpleContent.Services.HtmlProcessor>();
             //services.AddScoped<cloudscribe.SimpleContent.Models.IProjectEmailService, ProjectEmailService>();
-            services.AddScoped<IProjectEmailService, cloudscribe.SimpleContent.Services.ProjectEmailServiceFake>();
+            services.AddScoped<IProjectEmailService, cloudscribe.SimpleContent.Services.ProjectEmailService>();
             services.AddScoped<cloudscribe.Web.Common.Razor.ViewRenderer, cloudscribe.Web.Common.Razor.ViewRenderer>();
             
             services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();

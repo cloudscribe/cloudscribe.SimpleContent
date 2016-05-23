@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-04-21
+// Last Modified:           2016-05-23
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -566,6 +566,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
+            
+
             var comment = new Comment()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -575,7 +577,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 Ip = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString(),
                 UserAgent = userAgent,
                 IsAdmin = User.CanEditProject(project.ProjectId),
-                Content = HtmlEncoder.Default.HtmlEncode(model.Content.Trim()).Replace("\n", "<br />"),
+                Content = System.Text.Encodings.Web.HtmlEncoder.Default.Encode(
+                    model.Content.Trim()).Replace("\n", "<br />"),
+
+
                 IsApproved = !project.ModerateComments,
                 PubDate = DateTime.UtcNow
             };

@@ -7,7 +7,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
+using cloudscribe.HtmlAgilityPack;
 
 namespace cloudscribe.SimpleContent.Services
 {

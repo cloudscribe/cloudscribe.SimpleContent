@@ -70,3 +70,18 @@ img, video, iframe {
 td img, video, iframe {
     max-width: none;
 }
+
+/*
+article[data-id="0fe39377-57a9-4d42-a9f1-22fc0c5ba18c"] {
+    padding: 0 0 0 0; margin: 0 0 0 0; min-height:0;
+}
+#myCarousel {
+   
+    position:relative; top:-60px;
+    max-height:420px;
+        
+}
+
+    */
+
+
