@@ -8,12 +8,16 @@
 @section Styles {
     @{await Html.RenderPartialAsync("StylePartial", Model); }
 }
-@{await Html.RenderPartialAsync("PageDetailPartial", Model); }
-@section Bottom {
+@section Toolbar {
     @if (Model.CanEdit)
     {
         await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
     }
+
+}
+@{await Html.RenderPartialAsync("PageDetailPartial", Model); }
+@section Bottom {
+   
 }
 @section Scripts {
     @if (Model.CanEdit)

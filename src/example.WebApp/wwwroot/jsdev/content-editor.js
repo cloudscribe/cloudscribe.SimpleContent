@@ -261,20 +261,23 @@
     },
     toggleToolbar = function () {
         var editorHidden = editorBar.hasClass("invisible");
-        if (editorHidden) {
+        var isVisible = editorBar.is(':visible');
+        if (!isVisible) {
             // editor was hidden, show it
-            editorBar.removeClass("invisible");
-            toolbarHeight = editorBar.height();
-            editorBar.animate({ "top": mainNavHeight }, 500, "swing");
-            addToolBarPadding();
+            //editorBar.removeClass("invisible");
+            //toolbarHeight = editorBar.height();
+            //editorBar.animate({ "top": mainNavHeight }, 500, "swing");
+            //addToolBarPadding();
+            editorBar.show();
             btnOuterToggle.hide();
             if (!toolBarCookieExists()) { setToolbarCookie(); }  
         }
         else {
             //editor was visible toggle it to invisible
-            editorBar.addClass("invisible");
-            removeToolbarPadding();
+            //editorBar.addClass("invisible");
+            //removeToolbarPadding();
             // show the button to get the toolbar back
+            editorBar.hide();
             btnOuterToggle.show();
             btnOuterToggle.animate({ "top": mainNavHeight, right: "0px" }, 500, "swing");
             clearToolbarCookie();
@@ -284,10 +287,12 @@
         if (toolBarCookieExists()) {
             // show the toolbar
             //alert('cookie exists');
-            toggleToolbar(); // initial state hidden
+            //toggleToolbar(); // initial state hidden
+            editorBar.show();
 
         }
         else { // no cookie so toolbar is hidden
+            editorBar.hide();
             btnOuterToggle.animate({ "top": mainNavHeight, right: "0px" }, 500, "swing");  
         }
     },

@@ -7,6 +7,13 @@
 @section Styles {
 @{await Html.RenderPartialAsync("BlogStylePartial", Model); }
 }
+@section Toolbar {
+    @if (Model.CanEdit)
+    {
+        await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+    }
+
+}
 <div class="blog-container">
     @if (Model.ProjectSettings.ShowTitle)
     {
@@ -39,10 +46,7 @@
     </div>
 </div>
 @section Bottom {
-@if(Model.CanEdit)
-{
-    await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
-}
+
 }
 @section Scripts {
 @if (Model.CanEdit)
