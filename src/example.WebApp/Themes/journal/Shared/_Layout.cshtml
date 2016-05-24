@@ -36,6 +36,7 @@
       </nav>
     </div>
   </header>
+    @RenderSection("Toolbar", required: false)
   <div class="container body-content">
    @await Component.InvokeAsync("Navigation", new { viewName = "BootstrapBreadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
     @RenderBody()
