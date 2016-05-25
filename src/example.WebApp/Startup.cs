@@ -128,12 +128,22 @@ namespace example.WebApp
 
             });
 
-            services.AddMvc();
-
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationExpanders.Add(new SiteViewLocationExpander());
             });
+
+            services.AddMvc()
+                .AddRazorOptions(options =>
+            {
+                // if you download the cloudscribe.Web.Navigation Views and put them in your views folder
+                // then you don't need this line and can customize the views
+                options.AddEmbeddedViewsForNavigation();
+
+                options.ViewLocationExpanders.Add(new SiteViewLocationExpander());
+            });
+
+            
 
 
         }
