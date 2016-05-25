@@ -28,8 +28,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.S
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Security.SimpleAuth", "src\cloudscribe.SimpleContent.Security.SimpleAuth\cloudscribe.SimpleContent.Security.SimpleAuth.xproj", "{495BACBA-D796-44CF-ACBD-3678D4BF9679}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SaasKit.Multitenancy", "src\SaasKit.Multitenancy\SaasKit.Multitenancy.xproj", "{A5A518C1-DA51-4946-8B2A-A690BF144799}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,10 +70,6 @@ Global
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5A518C1-DA51-4946-8B2A-A690BF144799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5A518C1-DA51-4946-8B2A-A690BF144799}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5A518C1-DA51-4946-8B2A-A690BF144799}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5A518C1-DA51-4946-8B2A-A690BF144799}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +84,5 @@ Global
 		{80EAB768-C2FC-4D61-A185-5A51314B8505} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{CA2F82DA-6218-4520-AD21-6B7BC27414DD} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679} = {5243DE57-7C89-4208-8876-405E13605D16}
-		{A5A518C1-DA51-4946-8B2A-A690BF144799} = {5243DE57-7C89-4208-8876-405E13605D16}
 	EndGlobalSection
 EndGlobal
