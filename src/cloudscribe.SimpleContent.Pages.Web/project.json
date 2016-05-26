@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "1.0.0-*",
     "description": "cloudscribe.SimpleContent.Pages.Web Class Library",
     "authors": [ "Joe Audette" ],
@@ -13,6 +13,9 @@
         "releaseNotes": ""
     },
 
+    "buildOptions": {
+        "embed": "Views/**"
+    },
 
     "dependencies": {
         "NETStandard.Library": "1.5.0-rc2-24027",
@@ -20,7 +23,9 @@
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
         "cloudscribe.SimpleContent.Services": "1.0.0-*",
         "cloudscribe.Web.Pagination": "1.0.0-*",
-        "cloudscribe.Web.Common": "1.0.0-*"
+        "cloudscribe.Web.Common": "1.0.0-*",
+        "Microsoft.AspNetCore.Mvc.Razor": "1.0.0-rc2-final",
+        "Microsoft.Extensions.FileProviders.Embedded": "1.0.0-rc2-final"
     },
 
     "frameworks": {

@@ -1,0 +1,18 @@
+﻿<environment names="Development">
+    <script src="~/lib/jQuery.Hotkeys/jquery.hotkeys.js"></script> 
+    <script src="~/lib/moment/min/moment-with-locales.min.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script src="~/jsdev/bootstrap-wysiwyg.js"></script>
+    <script src="~/jsdev/content-editor.js" asp-append-version="true"></script>
+    
+</environment>
+<environment names="Staging,Production">
+    @* TODO use cdn or grunt it into js folder *@
+    <script src="~/lib/jQuery.Hotkeys/jquery.hotkeys.js"></script>
+    <script src="~/lib/moment/min/moment-with-locales.min.js"></script>
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/lib/jquery-cookie/jquery.cookie.js"></script>
+    <script src="~/js/bootstrap-wysiwyg.js"></script>
+    <script src="~/js/content-editor.js"></script>
+</environment>

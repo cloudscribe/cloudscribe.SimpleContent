@@ -4,11 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
@@ -128,24 +126,21 @@ namespace example.WebApp
 
             });
 
-            services.Configure<RazorViewEngineOptions>(options =>
-            {
-                options.ViewLocationExpanders.Add(new SiteViewLocationExpander());
-            });
-
+            
             services.AddMvc()
                 .AddRazorOptions(options =>
             {
                 // if you download the cloudscribe.Web.Navigation Views and put them in your views folder
                 // then you don't need this line and can customize the views
                 options.AddEmbeddedViewsForNavigation();
+                options.AddEmbeddedViewsForSimpleAuth();
+                options.AddEmbeddedViewsForBlog();
+                options.AddEmbeddedViewsForPages();
 
                 options.ViewLocationExpanders.Add(new SiteViewLocationExpander());
             });
 
             
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
