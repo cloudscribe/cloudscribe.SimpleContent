@@ -16,17 +16,13 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "example.WebApp", "src\examp
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Storage.NoDb", "src\cloudscribe.SimpleContent.Storage.NoDb\cloudscribe.SimpleContent.Storage.NoDb.xproj", "{325BCC90-44DF-40B7-ADAC-F2C0FCBE9525}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Services", "src\cloudscribe.SimpleContent.Services\cloudscribe.SimpleContent.Services.xproj", "{6C0F24DB-FA3A-4E6D-BD40-5B05630E459B}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Blog.Web", "src\cloudscribe.SimpleContent.Blog.Web\cloudscribe.SimpleContent.Blog.Web.xproj", "{85F44E62-E6E3-458A-ADED-BE3E619EABB2}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Pages.Web", "src\cloudscribe.SimpleContent.Pages.Web\cloudscribe.SimpleContent.Pages.Web.xproj", "{34903D05-C1BE-4F50-BB7C-56B3F8E81520}"
-EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.MetaWeblog", "src\cloudscribe.SimpleContent.MetaWeblog\cloudscribe.SimpleContent.MetaWeblog.xproj", "{80EAB768-C2FC-4D61-A185-5A51314B8505}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Syndication", "src\cloudscribe.SimpleContent.Syndication\cloudscribe.SimpleContent.Syndication.xproj", "{CA2F82DA-6218-4520-AD21-6B7BC27414DD}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Security.SimpleAuth", "src\cloudscribe.SimpleContent.Security.SimpleAuth\cloudscribe.SimpleContent.Security.SimpleAuth.xproj", "{495BACBA-D796-44CF-ACBD-3678D4BF9679}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.SimpleContent.Web", "src\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.xproj", "{93EB904A-E929-4B6E-B135-8A34DB2E8CD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,18 +42,6 @@ Global
 		{325BCC90-44DF-40B7-ADAC-F2C0FCBE9525}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{325BCC90-44DF-40B7-ADAC-F2C0FCBE9525}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{325BCC90-44DF-40B7-ADAC-F2C0FCBE9525}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C0F24DB-FA3A-4E6D-BD40-5B05630E459B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C0F24DB-FA3A-4E6D-BD40-5B05630E459B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C0F24DB-FA3A-4E6D-BD40-5B05630E459B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C0F24DB-FA3A-4E6D-BD40-5B05630E459B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85F44E62-E6E3-458A-ADED-BE3E619EABB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85F44E62-E6E3-458A-ADED-BE3E619EABB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85F44E62-E6E3-458A-ADED-BE3E619EABB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85F44E62-E6E3-458A-ADED-BE3E619EABB2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34903D05-C1BE-4F50-BB7C-56B3F8E81520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34903D05-C1BE-4F50-BB7C-56B3F8E81520}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34903D05-C1BE-4F50-BB7C-56B3F8E81520}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34903D05-C1BE-4F50-BB7C-56B3F8E81520}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80EAB768-C2FC-4D61-A185-5A51314B8505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80EAB768-C2FC-4D61-A185-5A51314B8505}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80EAB768-C2FC-4D61-A185-5A51314B8505}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,6 +54,10 @@ Global
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93EB904A-E929-4B6E-B135-8A34DB2E8CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93EB904A-E929-4B6E-B135-8A34DB2E8CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93EB904A-E929-4B6E-B135-8A34DB2E8CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93EB904A-E929-4B6E-B135-8A34DB2E8CD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,11 +66,9 @@ Global
 		{8D2014C8-8699-45A1-A47D-46B392678722} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{270305AD-6913-49C9-82E6-6D4713591DAB} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{325BCC90-44DF-40B7-ADAC-F2C0FCBE9525} = {5243DE57-7C89-4208-8876-405E13605D16}
-		{6C0F24DB-FA3A-4E6D-BD40-5B05630E459B} = {5243DE57-7C89-4208-8876-405E13605D16}
-		{85F44E62-E6E3-458A-ADED-BE3E619EABB2} = {5243DE57-7C89-4208-8876-405E13605D16}
-		{34903D05-C1BE-4F50-BB7C-56B3F8E81520} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{80EAB768-C2FC-4D61-A185-5A51314B8505} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{CA2F82DA-6218-4520-AD21-6B7BC27414DD} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{495BACBA-D796-44CF-ACBD-3678D4BF9679} = {5243DE57-7C89-4208-8876-405E13605D16}
+		{93EB904A-E929-4B6E-B135-8A34DB2E8CD8} = {5243DE57-7C89-4208-8876-405E13605D16}
 	EndGlobalSection
 EndGlobal

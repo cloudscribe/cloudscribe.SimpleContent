@@ -134,8 +134,8 @@ namespace example.WebApp
                 // then you don't need this line and can customize the views
                 options.AddEmbeddedViewsForNavigation();
                 options.AddEmbeddedViewsForSimpleAuth();
-                options.AddEmbeddedViewsForBlog();
-                options.AddEmbeddedViewsForPages();
+                options.AddEmbeddedViewsForSimpleContent();
+                
 
                 options.ViewLocationExpanders.Add(new SiteViewLocationExpander());
             });
@@ -216,15 +216,13 @@ namespace example.WebApp
                    template: "blog/new"
                    , defaults: new { controller = "Blog", action = "New" }
                    );
-
+                
                 routes.MapRoute(
                    name: ProjectConstants.PostWithoutDateRouteName,
                    template: "blog/{slug}"
                    , defaults: new { controller = "Blog", action = "PostNoDate" }
                    );
-
-
-
+                
                 routes.MapRoute(
                    name: ProjectConstants.BlogIndexRouteName,
                    template: "blog/"

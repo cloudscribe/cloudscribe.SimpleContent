@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>34903d05-c1be-4f50-bb7c-56b3f8e81520</ProjectGuid>
-    <RootNamespace>cloudscribe.SimpleContent.Pages.Web</RootNamespace>
+    <ProjectGuid>93eb904a-e929-4b6e-b135-8a34db2e8cd8</ProjectGuid>
+    <RootNamespace>cloudscribe.SimpleContent.Web</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

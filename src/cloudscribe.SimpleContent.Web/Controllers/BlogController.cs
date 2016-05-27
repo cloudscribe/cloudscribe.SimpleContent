@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-05-23
+// Last Modified:           2016-05-27
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.WebEncoders;
+
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -24,6 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Services;
+
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -756,6 +757,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             return string.Empty;
         }
+
+        
 
     }
 }

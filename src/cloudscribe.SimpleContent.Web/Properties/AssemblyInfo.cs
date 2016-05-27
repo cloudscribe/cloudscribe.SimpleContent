@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("cloudscribe.SimpleContent.Services")]
+[assembly: AssemblyProduct("cloudscribe.SimpleContent.Web")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6c0f24db-fa3a-4e6d-bd40-5b05630e459b")]
+[assembly: Guid("93eb904a-e929-4b6e-b135-8a34db2e8cd8")]
