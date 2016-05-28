@@ -62,52 +62,25 @@ namespace example.WebApp
 
             // multi tenant
             services.Configure<MultiTenancyOptions>(Configuration.GetSection("MultiTenancy"));
+           
             services.AddMultitenancy<SiteSettings, CachingSiteResolver>();
             services.AddScoped<cloudscribe.Web.SimpleAuth.Models.IUserLookupProvider, SiteUserLookupProvider>();
             services.AddScoped<cloudscribe.Web.SimpleAuth.Models.IAuthSettingsResolver, SiteAuthSettingsResolver>();
             services.AddCloudscribeSimpleAuth();
-
-            services.AddNoDbProjectStorage();
             
-            services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
-            services.AddScoped<IProjectService, cloudscribe.SimpleContent.Services.ProjectService>();
-;
-            services.AddScoped<NoDb.IStringSerializer<Post>, cloudscribe.SimpleContent.Storage.NoDb.PostXmlSerializer>();
-            services.AddScoped<NoDb.IStoragePathResolver<Post>, cloudscribe.SimpleContent.Storage.NoDb.PostStoragePathResolver>();
-            services.AddNoDbPostStorage();
-
-            services.AddNoDbPageStorage();
-
-            services.AddScoped<IBlogService, cloudscribe.SimpleContent.Services.BlogService>();
-            services.AddScoped<IPageService, cloudscribe.SimpleContent.Services.PageService>();
-
-            services.AddScoped<IMediaProcessor, cloudscribe.SimpleContent.Services.FileSystemMediaProcessor>();
-
-            services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
-            
-
-            services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
-            services.AddScoped<cloudscribe.SimpleContent.Services.HtmlProcessor, cloudscribe.SimpleContent.Services.HtmlProcessor>();
-            //services.AddScoped<cloudscribe.SimpleContent.Models.IProjectEmailService, ProjectEmailService>();
-            services.AddScoped<IProjectEmailService, cloudscribe.SimpleContent.Services.ProjectEmailService>();
-            services.AddScoped<cloudscribe.Web.Common.Razor.ViewRenderer, cloudscribe.Web.Common.Razor.ViewRenderer>();
-            
-            services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();
-           
-            services.AddScoped<cloudscribe.Syndication.Models.Rss.IChannelProvider, cloudscribe.SimpleContent.Syndication.RssChannelProvider>();
+            services.AddNoDbStorageForSimpleContent();
 
             services.AddCloudscribeNavigation(Configuration.GetSection("NavigationOptions"));
-            services.AddScoped<cloudscribe.Web.Navigation.INavigationTreeBuilder, cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder>();
-            services.AddScoped<cloudscribe.Web.SiteMap.ISiteMapNodeService, cloudscribe.Web.SiteMap.NavigationTreeSiteMapNodeService>();
-            services.AddScoped<cloudscribe.Web.SiteMap.ISiteMapNodeService, cloudscribe.SimpleContent.Services.BlogSiteMapNodeService>();
-
-            //services.Configure<NavigationOptions>(options =>
-            //{
-            //    //options.RootTreeBuilderName = "cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder";
-            //});
-
+            services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
+            services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
+            services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();
+            services.AddSimpleContent();
             
+            services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
 
+            services.AddSimpleContentRssSyndiction();
+            
+            
             // Add MVC services to the services container.
             services.Configure<MvcOptions>(options =>
             {
@@ -133,7 +106,12 @@ namespace example.WebApp
                 // if you download the cloudscribe.Web.Navigation Views and put them in your views folder
                 // then you don't need this line and can customize the views
                 options.AddEmbeddedViewsForNavigation();
+
+
                 options.AddEmbeddedViewsForSimpleAuth();
+
+                // If you download and install the views below your view folder you don't need this method and you can customize the views.
+                // You can get the views from https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/src/cloudscribe.SimpleContent.Blog.Web/Views
                 options.AddEmbeddedViewsForSimpleContent();
                 
 
@@ -189,52 +167,8 @@ namespace example.WebApp
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                   name: ProjectConstants.BlogCategoryRouteName,
-                   template: "blog/category/{category=''}/{pagenumber=1}"
-                   , defaults: new { controller = "Blog", action = "Category" }
-                   );
-
-
-                routes.MapRoute(
-                      ProjectConstants.BlogArchiveRouteName,
-                      "blog/{year}/{month}/{day}",
-                      new { controller = "Blog", action = "Archive", month = "00", day = "00" },
-                      //new { controller = "Blog", action = "Archive" },
-                      new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
-                    );
-
-                routes.MapRoute(
-                      ProjectConstants.PostWithDateRouteName,
-                      "blog/{year}/{month}/{day}/{slug}",
-                      new { controller = "Blog", action = "PostWithDate" },
-                      new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
-                    );
-
-                routes.MapRoute(
-                   name: ProjectConstants.NewPostRouteName,
-                   template: "blog/new"
-                   , defaults: new { controller = "Blog", action = "New" }
-                   );
+                routes.AddStandardRoutesForSimpleContent();
                 
-                routes.MapRoute(
-                   name: ProjectConstants.PostWithoutDateRouteName,
-                   template: "blog/{slug}"
-                   , defaults: new { controller = "Blog", action = "PostNoDate" }
-                   );
-                
-                routes.MapRoute(
-                   name: ProjectConstants.BlogIndexRouteName,
-                   template: "blog/"
-                   , defaults: new { controller = "Blog", action = "Index" }
-                   );
-
-                routes.MapRoute(
-                   name: ProjectConstants.PageIndexRouteName,
-                   template: "{slug=none}"
-                   , defaults: new { controller = "Page", action = "Index" }
-                   );
-
                 routes.MapRoute(
                     name: "def",
                     template: "{controller}/{action}"

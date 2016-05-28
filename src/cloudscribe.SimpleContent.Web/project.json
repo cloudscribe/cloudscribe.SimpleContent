@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "1.0.0-*",
     "description": "Simple blog and content system that works with Open Live Writer",
     "authors": [ "Joe Audette" ],
@@ -14,7 +14,7 @@
     },
 
     "buildOptions": {
-        "embed": [ "Views/**", "js/**" ]
+        "embed": [ "Views/**", "js/**", "css/**" ]
     },
 
     "dependencies": {
@@ -22,14 +22,18 @@
         "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
         "Microsoft.AspNetCore.Mvc.Razor": "1.0.0-rc2-final",
         "Microsoft.Extensions.FileProviders.Embedded": "1.0.0-rc2-final",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-rc2-final",
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
-        "cloudscribe.Web.Pagination": "1.0.0-*",
+        "cloudscribe.Web.Pagination": "1.0.1-*",
         "cloudscribe.Web.Common": "1.0.0-*",
         "cloudscribe.Web.SiteMap": "1.0.0-*",
-        "cloudscribe.Web.Navigation": "1.0.0-*",
+        "cloudscribe.Web.SiteMap.FromNavigation": "1.0.0-*",
+        "cloudscribe.Web.Navigation": "1.0.1-*",
         "cloudscribe.Messaging.Email": "1.0.0-*",
         "cloudscribe.HtmlAgilityPack": "1.0.0-*",
-        "System.IO": "4.1.0-rc2-24027"
+        "System.IO": "4.1.0-rc2-24027",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
+        "Microsoft.AspNetCore.Routing": "1.0.0-rc2-final"
     },
 
     "frameworks": {

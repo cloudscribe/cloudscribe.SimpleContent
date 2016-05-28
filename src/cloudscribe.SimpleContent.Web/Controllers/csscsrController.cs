@@ -19,18 +19,21 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
-    public class SimpleContentJsController : Controller
+    /// <summary>
+    /// csscsr:cloudscribe SimpleContent static resource controller
+    /// </summary>
+    public class csscsrController : Controller
     {
-        public SimpleContentJsController()
+        public csscsrController()
         {
 
         }
         //TODO: caching - can we have a cache dependency on file changes?
         [HttpGet]
         [AllowAnonymous]
-        public async Task editor()
+        public async Task editorjs()
         {
-            var assembly = typeof(SimpleContentJsController).GetTypeInfo().Assembly;
+            var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
             var resourceStream = assembly.GetManifestResourceStream("cloudscribe.SimpleContent.Web.js.content-editor.js");
             string jsResult;
             using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
@@ -45,9 +48,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task bootstrapwysiwyg()
+        public async Task bootstrapwysiwygjs()
         {
-            var assembly = typeof(SimpleContentJsController).GetTypeInfo().Assembly;
+            var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
             var resourceStream = assembly.GetManifestResourceStream("cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.js");
             string jsResult;
             using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
@@ -62,9 +65,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task comment()
+        public async Task commentjs()
         {
-            var assembly = typeof(SimpleContentJsController).GetTypeInfo().Assembly;
+            var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
             var resourceStream = assembly.GetManifestResourceStream("cloudscribe.SimpleContent.Web.js.blog-comments.js");
             string jsResult;
             using (var reader = new StreamReader(resourceStream, Encoding.UTF8))

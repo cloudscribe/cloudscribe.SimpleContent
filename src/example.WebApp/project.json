@@ -38,9 +38,8 @@
             "version": "1.0.0-preview1-final",
             "type": "build"
         },
-        "cloudscribe.Web.Common": "1.0.0-*",
+        
         "cloudscribe.Web.Navigation": "1.0.1-*",
-        "cloudscribe.Web.SiteMap.FromNavigation": "1.0.0-*",
         "cloudscribe.Web.Pagination": "1.0.1-*",
         "cloudscribe.Web.SimpleAuth": "1.0.1-*",
         "cloudscribe.SimpleContent.Storage.NoDb": "1.0.0-*",
@@ -48,9 +47,6 @@
         "cloudscribe.SimpleContent.Security.SimpleAuth": "1.0.0-*",
         "cloudscribe.SimpleContent.Web": "1.0.0-*",
         "cloudscribe.SimpleContent.Syndication": "1.0.0-*",
-        "cloudscribe.Syndication": "1.0.0-*",
-        "cloudscribe.Syndication.Web": "1.0.0-*",
-        "cloudscribe.MetaWeblog": "1.0.0-*",
         "SaasKit.Multitenancy": "1.1.2-rc2"
     },
 
