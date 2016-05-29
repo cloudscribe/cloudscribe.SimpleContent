@@ -1,9 +1,18 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
-
-<link rel="stylesheet" href="~/css/blog-common.css" />
-<link rel="dns-prefetch" href="http://gravatar.com/" />
-@if (Model.CanEdit)
-{
-    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-    <link rel="stylesheet" href="~/css/content-admin.css" />
-}
+<environment names="Development">
+    <link rel="stylesheet" href="~/csscsr/blogcommoncss" />
+    @if (Model.CanEdit)
+    {
+        <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercss" />
+        <link rel="stylesheet" href="~/csscsr/contentadmincss" />
+    }
+</environment>
+<environment names="Staging,Production">
+    <link rel="stylesheet" href="~/csscsr/blogcommoncssmin" />
+    @if (Model.CanEdit)
+    {
+        <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
+        <link rel="stylesheet" href="~/csscsr/contentadmincssmin" />
+    }
+</environment>
+<link rel="dns-prefetch" href="//gravatar.com/" />

@@ -1,6 +1,6 @@
 {
     "version": "1.0.0-*",
-    "description": "Simple blog and content system that works with Open Live Writer",
+    "description": "A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database",
     "authors": [ "Joe Audette" ],
     "packOptions": {
         "owners": [ "Source Tree Solutions" ],
