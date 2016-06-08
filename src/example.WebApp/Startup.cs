@@ -74,6 +74,7 @@ namespace example.WebApp
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
             services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();
+            services.AddCloudscribeCommmon();
             services.AddSimpleContent();
             
             services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));

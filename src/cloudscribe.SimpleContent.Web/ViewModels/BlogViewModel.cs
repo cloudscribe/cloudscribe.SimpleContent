@@ -2,12 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-03-19
+// Last Modified:           2016-06-06
 // 
 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
+using cloudscribe.Web.Common;
 using cloudscribe.Web.Pagination;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public Comment TmpComment { get; set; } = null;
         public Post TmpPost { get; set; } = null;
-        public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.Utc;
+        public ITimeZoneHelper TimeZoneHelper { get; set; }
+        public string TimeZoneId { get; set; } = "GMT";
 
         public string FilterHtml(Post p)
         {
@@ -67,13 +69,19 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string FormatDate(DateTime pubDate)
         {
-            var localTime = TimeZoneInfo.ConvertTime(pubDate, TimeZone);
+            var localTime = TimeZoneHelper.ConvertToLocalTime(pubDate, TimeZoneId);
             return localTime.ToString(ProjectSettings.PubDateFormat);
         }
 
         public string FormatDateForEdit(DateTime pubDate)
         {
-            var localTime = TimeZoneInfo.ConvertTime(pubDate, TimeZone);
+            var localTime = TimeZoneHelper.ConvertToLocalTime(pubDate, TimeZoneId);
+            return localTime.ToString();
+        }
+
+        public string FormatCommentDate(DateTime pubDate)
+        {
+            var localTime = TimeZoneHelper.ConvertToLocalTime(pubDate, TimeZoneId);
             return localTime.ToString();
         }
 

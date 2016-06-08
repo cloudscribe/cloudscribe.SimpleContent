@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-05-21
+// Last Modified:           2016-06-07
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Services;
+using cloudscribe.Web.Common;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -31,18 +32,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public PageController(
             IProjectService projectService,
             IPageService blogService,
-           // IUrlHelper urlHelper,
+            ITimeZoneHelper timeZoneHelper,
             ILogger<PageController> logger)
         {
             this.projectService = projectService;
             this.pageService = blogService;
-            //this.urlHelper = urlHelper;
+            this.timeZoneHelper = timeZoneHelper;
             log = logger;
         }
 
         private IProjectService projectService;
         private IPageService pageService;
-        //private IUrlHelper urlHelper;
+        private ITimeZoneHelper timeZoneHelper;
         private ILogger log;
 
         [HttpGet]
@@ -61,7 +62,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(slug == "none") { slug = string.Empty; }
             
-
             var canEdit = User.CanEditProject(projectSettings.ProjectId);
             var isNew = canEdit && (mode == "new");
             var isEditing = canEdit && (mode == "edit");
@@ -116,16 +116,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.ShowComments = mode.Length == 0; // do we need this for a global disable
             //model.CommentsAreOpen = await blogService.CommentsAreOpen(post, canEdit);
             model.CommentsAreOpen = false;
-            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
-            try
-            {
-                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
-            }
-            catch (Exception)
-            {
-                //temporary workaround for mac/linux
-                model.TimeZone = TimeZoneInfo.Utc;
-            }
+            model.TimeZoneHelper = timeZoneHelper;
+            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
 
             if (canEdit)
             {
@@ -249,8 +241,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 try
                 {
                     //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
-                    var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
-                    page.PubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
+                    //var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
+                    //page.PubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
+                    page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
                 }
                 catch(Exception)
                 {

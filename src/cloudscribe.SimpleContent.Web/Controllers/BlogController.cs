@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-05-27
+// Last Modified:           2016-06-07
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -24,7 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Services;
-
+using cloudscribe.Web.Common;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -35,11 +35,14 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IProjectService projectService,
             IBlogService blogService,
             IProjectEmailService emailService,
-            ILogger<BlogController> logger)
+            ITimeZoneHelper timeZoneHelper,
+            ILogger<BlogController> logger
+            )
         {
             this.projectService = projectService;
             this.blogService = blogService;
             this.emailService = emailService;
+            this.timeZoneHelper = timeZoneHelper;
             log = logger;
         }
 
@@ -47,6 +50,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private IBlogService blogService;
         private IProjectEmailService emailService;
         private ILogger log;
+        private ITimeZoneHelper timeZoneHelper;
 
         [HttpGet]
         [AllowAnonymous]
@@ -66,16 +70,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = await blogService.GetCount(category);
-            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
-            try
-            {
-                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
-            }
-            catch(Exception)
-            {
-                //temporary workaround for mac/linux
-                model.TimeZone = TimeZoneInfo.Utc;
-            }
+            model.TimeZoneHelper = timeZoneHelper;
+            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+            
             
             model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
             if(model.CanEdit)
@@ -125,17 +122,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 month,
                 day);
 
-            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
-            try
-            {
-                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
-            }
-            catch (Exception)
-            {
-                //temporary workaround for mac/linux
-                model.TimeZone = TimeZoneInfo.Utc;
-            }
-
+            model.TimeZoneHelper = timeZoneHelper;
+            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             model.Year = year;
             model.Month = month;
             model.Day = day;
@@ -253,16 +241,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.ShowComments = mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = await blogService.CommentsAreOpen(post, canEdit);
             //model.ApprovedCommentCount = post.Comments.Where(c => c.IsApproved == true).Count();
-            //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
-            try
-            {
-                model.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(model.ProjectSettings.TimeZoneId);
-            }
-            catch (Exception)
-            {
-                //temporary workaround for mac/linux
-                model.TimeZone = TimeZoneInfo.Utc;
-            }
+            model.TimeZoneHelper = timeZoneHelper;
+            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
 
             if (canEdit)
             {
@@ -403,10 +383,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 var localTime = DateTime.Parse(model.PubDate);
                 try
                 {
-                    //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
-                    var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
                     
-                    var pubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
+                    var pubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
                     // TODO: this logic probably needs to also be implemented in the metaweblog service in case the pubdate is changed from there
                     if (!isNew)
                     {
