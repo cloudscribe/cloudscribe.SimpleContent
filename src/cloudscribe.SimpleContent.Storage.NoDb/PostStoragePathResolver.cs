@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-04-25
+// Last Modified:           2016-06-26
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -59,26 +59,28 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Directory.CreateDirectory(firstFolderPath);
             }
 
-            var projectsFolderPath = pathOptions.AppRootFolderPath
-                + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-                + pathOptions.FolderSeparator
-                + pathOptions.ProjectsFolderName
-                + pathOptions.FolderSeparator
-                ;
+            //var projectsFolderPath = pathOptions.AppRootFolderPath
+            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
+            //    + pathOptions.FolderSeparator
+            //    + pathOptions.ProjectsFolderName
+            //    + pathOptions.FolderSeparator
+            //    ;
+            var projectsFolderPath = Path.Combine(firstFolderPath, pathOptions.ProjectsFolderName);
 
             if (ensureFoldersExist && !Directory.Exists(projectsFolderPath))
             {
                 Directory.CreateDirectory(projectsFolderPath);
             }
 
-            var projectIdFolderPath = pathOptions.AppRootFolderPath
-                + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-                + pathOptions.FolderSeparator
-                + pathOptions.ProjectsFolderName
-                + pathOptions.FolderSeparator
-                + projectId
-                + pathOptions.FolderSeparator
-                ;
+            //var projectIdFolderPath = pathOptions.AppRootFolderPath
+            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
+            //    + pathOptions.FolderSeparator
+            //    + pathOptions.ProjectsFolderName
+            //    + pathOptions.FolderSeparator
+            //    + projectId
+            //    + pathOptions.FolderSeparator
+            //    ;
+            var projectIdFolderPath = Path.Combine(projectsFolderPath, projectId);
 
             if (ensureFoldersExist && !Directory.Exists(projectIdFolderPath))
             {
@@ -87,16 +89,17 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var type = typeof(Post).Name.ToLowerInvariant();
 
-            var typeFolderPath = pathOptions.AppRootFolderPath
-                + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-                + pathOptions.FolderSeparator
-                + pathOptions.ProjectsFolderName
-                + pathOptions.FolderSeparator
-                + projectId
-                + pathOptions.FolderSeparator
-                + type.ToLowerInvariant().Trim()
-                + pathOptions.FolderSeparator
-                ;
+            //var typeFolderPath = pathOptions.AppRootFolderPath
+            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
+            //    + pathOptions.FolderSeparator
+            //    + pathOptions.ProjectsFolderName
+            //    + pathOptions.FolderSeparator
+            //    + projectId
+            //    + pathOptions.FolderSeparator
+            //    + type.ToLowerInvariant().Trim()
+            //    + pathOptions.FolderSeparator
+            //    ;
+            var typeFolderPath = Path.Combine(projectIdFolderPath, type.ToLowerInvariant().Trim());
 
             if (ensureFoldersExist && !Directory.Exists(typeFolderPath))
             {
@@ -109,7 +112,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
 
             var fileName = key + fileExtension;
-            var filePath =  typeFolderPath + key + fileExtension;
+            var filePath =  Path.Combine(typeFolderPath, key + fileExtension);
             if (File.Exists(filePath)) return filePath;
 
             // if the file is not found in the type folder
@@ -163,26 +166,28 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Directory.CreateDirectory(firstFolderPath);
             }
 
-            var projectsFolderPath = pathOptions.AppRootFolderPath
-                + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-                + pathOptions.FolderSeparator
-                + pathOptions.ProjectsFolderName
-                + pathOptions.FolderSeparator
-                ;
+            //var projectsFolderPath = pathOptions.AppRootFolderPath
+            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
+            //    + pathOptions.FolderSeparator
+            //    + pathOptions.ProjectsFolderName
+            //    + pathOptions.FolderSeparator
+            //    ;
+            var projectsFolderPath = Path.Combine(firstFolderPath, pathOptions.ProjectsFolderName);
 
             if (ensureFoldersExist && !Directory.Exists(projectsFolderPath))
             {
                 Directory.CreateDirectory(projectsFolderPath);
             }
 
-            var projectIdFolderPath = pathOptions.AppRootFolderPath
-                + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-                + pathOptions.FolderSeparator
-                + pathOptions.ProjectsFolderName
-                + pathOptions.FolderSeparator
-                + projectId
-                + pathOptions.FolderSeparator
-                ;
+            //var projectIdFolderPath = pathOptions.AppRootFolderPath
+            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
+            //    + pathOptions.FolderSeparator
+            //    + pathOptions.ProjectsFolderName
+            //    + pathOptions.FolderSeparator
+            //    + projectId
+            //    + pathOptions.FolderSeparator
+            //    ;
+            var projectIdFolderPath = Path.Combine(projectsFolderPath, projectId);
 
             if (ensureFoldersExist && !Directory.Exists(projectIdFolderPath))
             {
@@ -191,16 +196,17 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var type = typeof(Post).Name.ToLowerInvariant();
 
-            var typeFolderPath = pathOptions.AppRootFolderPath
-                + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-                + pathOptions.FolderSeparator
-                + pathOptions.ProjectsFolderName
-                + pathOptions.FolderSeparator
-                + projectId
-                + pathOptions.FolderSeparator
-                + type.ToLowerInvariant().Trim()
-                + pathOptions.FolderSeparator
-                ;
+            //var typeFolderPath = pathOptions.AppRootFolderPath
+            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
+            //    + pathOptions.FolderSeparator
+            //    + pathOptions.ProjectsFolderName
+            //    + pathOptions.FolderSeparator
+            //    + projectId
+            //    + pathOptions.FolderSeparator
+            //    + type.ToLowerInvariant().Trim()
+            //    + pathOptions.FolderSeparator
+            //    ;
+            var typeFolderPath = Path.Combine(projectIdFolderPath, type.ToLowerInvariant().Trim());
 
             if (ensureFoldersExist && !Directory.Exists(typeFolderPath))
             {
@@ -210,18 +216,14 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var yearFolderName = post.PubDate.Year.ToString(CultureInfo.InvariantCulture);
             var monthFolderName = post.PubDate.Month.ToString("00", CultureInfo.InvariantCulture);
 
-            var yearPath = typeFolderPath
-                    + yearFolderName
-                    + pathOptions.FolderSeparator;
+            var yearPath = Path.Combine(typeFolderPath, yearFolderName);
 
             if (ensureFoldersExist && !Directory.Exists(yearPath))
             {
                 Directory.CreateDirectory(yearPath);
             }
 
-            var monthPath = yearPath
-                    + monthFolderName
-                    + pathOptions.FolderSeparator;
+            var monthPath = Path.Combine(yearPath, monthFolderName);
 
             if (ensureFoldersExist && !Directory.Exists(monthPath))
             {
@@ -230,7 +232,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             // we don't care if this file eists
             // this method is for calculating where to save a post
-            return monthPath + key + fileExtension;
+            return Path.Combine(monthPath, key + fileExtension);
         }
 
     }
