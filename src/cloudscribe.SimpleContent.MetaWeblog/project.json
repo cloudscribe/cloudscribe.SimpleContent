@@ -15,14 +15,17 @@
 
 
     "dependencies": {
-        "NETStandard.Library": "1.5.0-rc2-24027",
-        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-rc2-final",
+        "NETStandard.Library": "1.6.0-*",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-*",
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
-        "cloudscribe.MetaWeblog": "1.0.0-*"
+        "cloudscribe.MetaWeblog": "1.0.1-*"
     },
 
     "frameworks": {
-        "netstandard1.5": {
+        "net46": {},
+        "net452": {},
+        "net451": {},
+        "netstandard1.6": {
             "imports": "dnxcore50"
         }
     }
