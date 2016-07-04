@@ -187,7 +187,7 @@ FakesAssemblies/
 
 src/cloudscribe-core/.vs/config/applicationhost.config
 
-src/example.WebApp/wwwroot/lib*
+**/wwwroot/lib*
 src/example.WebApp/wwwroot/js/*
 src/example.WebApp/wwwroot/css/site.min.css
 
@@ -205,3 +205,5 @@ src/cloudscribe.Core.Repositories.EF/appsettings.local.overrides.json
 src/cloudscribe.Logging.EF/appsettings.local.overrides.json
 **/dp_keys/**
 src/cloudscribe.MetaWeblog/README.md
+samples/simpleauthnodb/.vs/config/applicationhost.config
+samples/simpleauthnodb/.vs/restore.dg
