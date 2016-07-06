@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-05-21
+// Last Modified:           2016-07-06
 // 
 
 
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Caching.Memory;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -28,6 +28,7 @@ namespace cloudscribe.SimpleContent.Services
             IPageRepository pageRepository,
             IMediaProcessor mediaProcessor,
             IUrlHelperFactory urlHelperFactory,
+            IMemoryCache cache,
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
         {
@@ -40,6 +41,7 @@ namespace cloudscribe.SimpleContent.Services
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
             htmlProcessor = new HtmlProcessor();
+            this.cache = cache;
         }
 
         private readonly HttpContext context;
@@ -52,6 +54,7 @@ namespace cloudscribe.SimpleContent.Services
         private IProjectService projectService;
         private ProjectSettings settings = null;
         private HtmlProcessor htmlProcessor;
+        private IMemoryCache cache;
 
         private async Task<bool> EnsureProjectSettings()
         {
@@ -61,7 +64,16 @@ namespace cloudscribe.SimpleContent.Services
             return false;
         }
 
-        
+        public void ClearNavigationCache()
+        {
+            var cacheKey = "cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder";
+            cache.Remove(cacheKey);
+            cacheKey = "cloudscribe.Web.Navigation.XmlNavigationTreeBuilder";
+            cache.Remove(cacheKey);
+            cacheKey = "JsonNavigationTreeBuilder";
+            cache.Remove(cacheKey);
+        }
+
         public Task<string> ResolvePageUrl(Page page)
         {
             //await EnsureBlogSettings().ConfigureAwait(false);

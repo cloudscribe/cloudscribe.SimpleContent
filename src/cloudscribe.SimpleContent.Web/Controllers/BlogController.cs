@@ -58,9 +58,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             string category = "",
             int page = 1)
         {
+            var projectSettings = await projectService.GetCurrentProjectSettings();
+
+            if (projectSettings == null)
+            {
+                HttpContext.Response.StatusCode = 404;
+                return new EmptyResult();
+            }
 
             var model = new BlogViewModel();
-            model.ProjectSettings = await projectService.GetCurrentProjectSettings();
+            model.ProjectSettings = projectSettings;
 
             ViewData["Title"] = model.ProjectSettings.Title;
 
