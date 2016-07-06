@@ -95,9 +95,19 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
                     else
                     {
+                        var rootList = await pageService.GetRootPages().ConfigureAwait(false);
+                        if(rootList.Count > 0)
+                        {
+                            Response.StatusCode = 404;
+                            return new EmptyResult();
+                        }
+                        else
+                        {
+                            Response.StatusCode = 404;
+                            return View("NoPages", 404);
+                        }
+
                         
-                        Response.StatusCode = 404;
-                        return new EmptyResult();
                     }
 
                     
@@ -256,7 +266,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             await pageService.Save(page, isNew, model.IsPublished);
             if(isNew)
             {
-                // TODO: clear the page tree cache
+                pageService.ClearNavigationCache();
             }
 
             var url = Url.Action("Index", "Page", new { slug = page.Slug });

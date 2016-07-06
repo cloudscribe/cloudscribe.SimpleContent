@@ -7,6 +7,11 @@ namespace cloudscribe.SimpleContent.Models
 {
     public class NotImplementedPageService : IPageService
     {
+        public void ClearNavigationCache()
+        {
+            
+        }
+
         public Task DeletePage(string blogId, string pageId)
         {
             throw new NotImplementedException();

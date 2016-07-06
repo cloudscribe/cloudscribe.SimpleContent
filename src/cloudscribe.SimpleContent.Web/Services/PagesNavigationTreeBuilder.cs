@@ -87,9 +87,10 @@ namespace cloudscribe.SimpleContent.Services
                 rootNav = new NavigationNode();
                 rootNav.IsRootNode = true;
                 rootNav.Key = "pagesRoot";
-                rootNav.Title = "pagesRoot";
-                rootNav.Text = "pagesRoot";
-                rootNav.ChildContainerOnly = true;
+                rootNav.Title = "Home";
+                rootNav.Text = "Home";
+                rootNav.Url = urlHelper.Content("~/");
+                //rootNav.ChildContainerOnly = true;
             }
 
             

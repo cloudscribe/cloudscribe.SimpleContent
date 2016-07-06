@@ -35,5 +35,7 @@ namespace cloudscribe.SimpleContent.Models
             bool publish);
 
         Task<bool> SlugIsAvailable(string projectId, string slug);
+
+        void ClearNavigationCache();
     }
 }
