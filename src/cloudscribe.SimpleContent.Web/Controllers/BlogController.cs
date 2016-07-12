@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-06-07
+// Last Modified:           2016-07-12
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -35,6 +35,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IProjectService projectService,
             IBlogService blogService,
             IProjectEmailService emailService,
+            IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
             ILogger<BlogController> logger
             )
@@ -42,6 +43,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.projectService = projectService;
             this.blogService = blogService;
             this.emailService = emailService;
+            this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
             log = logger;
         }
@@ -51,6 +53,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private IProjectEmailService emailService;
         private ILogger log;
         private ITimeZoneHelper timeZoneHelper;
+        private IAuthorizationService authorizationService;
 
         [HttpGet]
         [AllowAnonymous]
@@ -80,8 +83,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             
-            
+            // check if the user has the projectid claim
             model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
+            if(!model.CanEdit)
+            {
+                model.CanEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
+
             if(model.CanEdit)
             {
                 model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
@@ -136,6 +144,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Day = day;
 
             model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
+            if (!model.CanEdit)
+            {
+                model.CanEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
             if (model.CanEdit)
             {
                 model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
@@ -195,6 +207,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             var canEdit = User.CanEditProject(projectSettings.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
             var isNew = false;
             Post post = null;
             if(!string.IsNullOrEmpty(slug))
@@ -332,7 +348,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; 
             }
 
-            if (!User.CanEditProject(project.ProjectId))
+            bool canEdit = User.CanEditProject(project.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
+
+            if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
                 Response.StatusCode = 403;
@@ -436,16 +458,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task AjaxDelete(string id)
         {
-            var blog = await projectService.GetCurrentProjectSettings();
+            var project = await projectService.GetCurrentProjectSettings();
 
-            if (blog == null)
+            if (project == null)
             {
                 log.LogInformation("returning 500 blog not found");
                 Response.StatusCode = 500;
                 return; // new EmptyResult();
             }
 
-            if (!User.CanEditProject(blog.ProjectId))
+            bool canEdit = User.CanEditProject(project.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
+
+            if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
                 Response.StatusCode = 403;
@@ -626,16 +654,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            var blog = await projectService.GetCurrentProjectSettings();
+            var project = await projectService.GetCurrentProjectSettings();
 
-            if (blog == null)
+            if (project == null)
             {
                 log.LogDebug("returning 500 blog not found");
                 Response.StatusCode = 500;
                 return;// new EmptyResult();
             }
 
-            if (!User.CanEditProject(blog.ProjectId))
+            bool canEdit = User.CanEditProject(project.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
+
+            if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
                 Response.StatusCode = 403;
@@ -688,16 +722,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            var blog = await projectService.GetCurrentProjectSettings();
+            var project = await projectService.GetCurrentProjectSettings();
 
-            if (blog == null)
+            if (project == null)
             {
                 log.LogDebug("returning 500 blog not found");
                 Response.StatusCode = 500;
                 return;// new EmptyResult();
             }
 
-            if (!User.CanEditProject(blog.ProjectId))
+            bool canEdit = User.CanEditProject(project.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
+
+            if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
                 Response.StatusCode = 403;
