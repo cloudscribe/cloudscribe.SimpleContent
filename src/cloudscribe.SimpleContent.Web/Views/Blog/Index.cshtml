@@ -1,6 +1,8 @@
-﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+﻿@using cloudscribe.SimpleContent.Web
+@using cloudscribe.Web.Pagination
+@addTagHelper "*, cloudscribe.Web.Pagination"
+@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
-@using cloudscribe.SimpleContent.Web
 @section Meta {
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
 }
@@ -12,7 +14,6 @@
     {
         await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
     }
-
 }
 <div class="blog-container">
     @if (Model.ProjectSettings.ShowTitle)

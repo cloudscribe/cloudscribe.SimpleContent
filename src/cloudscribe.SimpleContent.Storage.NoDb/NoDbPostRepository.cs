@@ -167,6 +167,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var result = new PagedResult<Post>();
             result.Data = posts;
+            result.TotalItems = totalPosts;
 
             return result;
         }
