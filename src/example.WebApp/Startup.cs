@@ -198,6 +198,13 @@ namespace example.WebApp
                     }
                  );
 
+                options.AddPolicy(
+                    "PageEditPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Administrators");
+                    });
+
                 // add other policies here 
 
             });

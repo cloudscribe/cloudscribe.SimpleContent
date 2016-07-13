@@ -32,7 +32,7 @@ namespace cloudscribe.SimpleContent.Models
         Task<List<Post>> GetRecentPosts(int numberToGet);
           
         Task<List<Post>> GetVisiblePosts();
-        Task<List<Post>> GetVisiblePosts(string category, int pageNumber);
+        Task<PagedResult<Post>> GetVisiblePosts(string category, int pageNumber);
         Task<string> ResolveBlogUrl(ProjectSettings blog);
         Task<string> ResolveMediaUrl(string fileName);
         Task<string> ResolvePostUrl(Post post);
@@ -45,7 +45,7 @@ namespace cloudscribe.SimpleContent.Models
             int numberToGet
             );
 
-        Task<List<Post>> GetPosts(
+        Task<PagedResult<Post>> GetPosts(
             string projectId,
             int year,
             int month = 0,

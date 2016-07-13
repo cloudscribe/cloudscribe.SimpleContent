@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-07-12
+// Last Modified:           2016-07-13
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -73,13 +73,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.ProjectSettings = projectSettings;
 
             ViewData["Title"] = model.ProjectSettings.Title;
-
-            model.Posts = await blogService.GetVisiblePosts(category, page);
+            var result = await blogService.GetVisiblePosts(category, page);
+            model.Posts = result.Data;
             model.Categories = await blogService.GetCategories();
             model.Archives = await blogService.GetArchives();
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
-            model.Paging.TotalItems = await blogService.GetCount(category);
+            model.Paging.TotalItems = result.TotalItems; //await blogService.GetCount(category);
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             
@@ -118,7 +118,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             ViewData["Title"] = model.ProjectSettings.Title;
 
-            model.Posts = await blogService.GetPosts(
+            var result = await blogService.GetPosts(
                 model.ProjectSettings.ProjectId,
                 year,
                 month,
@@ -126,16 +126,17 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 page,
                 model.ProjectSettings.PostsPerPage
                 );
-
+            model.Posts = result.Data;
             model.Categories = await blogService.GetCategories();
             model.Archives = await blogService.GetArchives();
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
-            model.Paging.TotalItems = await blogService.GetCount(
-                model.ProjectSettings.ProjectId,
-                year,
-                month,
-                day);
+            model.Paging.TotalItems = result.TotalItems;
+            //model.Paging.TotalItems = await blogService.GetCount(
+            //    model.ProjectSettings.ProjectId,
+            //    year,
+            //    month,
+            //    day);
 
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;

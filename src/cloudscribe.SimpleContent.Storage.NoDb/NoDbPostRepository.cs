@@ -134,7 +134,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             return list;
         }
 
-        public async Task<List<Post>> GetVisiblePosts(
+        public async Task<PagedResult<Post>> GetVisiblePosts(
             string blogId,
             string category,
             bool userIsBlogOwner,
@@ -143,7 +143,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken)
         {
             var posts = await GetVisiblePosts(blogId, userIsBlogOwner, cancellationToken);
-
+            var totalPosts = posts.Count;
             if (!string.IsNullOrEmpty(category))
             {
                 //var i = posts as IEnumerable<Post>;
@@ -165,7 +165,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             }
 
-            return posts;
+            var result = new PagedResult<Post>();
+            result.Data = posts;
+
+            return result;
         }
 
         public async Task<int> GetCount(
@@ -199,7 +202,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         }
 
-        public async Task<List<Post>> GetPosts(
+        public async Task<PagedResult<Post>> GetPosts(
             string blogId,
             int year,
             int month = 0,
@@ -210,6 +213,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             cancellationToken.ThrowIfCancellationRequested();
             var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
+            var totalItems = posts.Count;
 
             if (day > 0 && month > 0)
             {
@@ -245,7 +249,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             }
 
-            return posts;
+            var result = new PagedResult<Post>();
+            result.Data = posts;
+            result.TotalItems = totalItems;
+
+            return result;
 
             //return posts.Where(
             //    x => x.PubDate.Year == year
