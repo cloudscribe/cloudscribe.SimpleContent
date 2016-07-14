@@ -56,6 +56,7 @@ My plan is to usually build sites without a database (except for large projects)
 * Sitemap - built in [sitemap](http://www.sitemaps.org/schemas/sitemap/0.9) at /api/sitemap via [cloudscribe.Web.SiteMap](https://github.com/joeaudette/cloudscribe.Web.Navigation/tree/master/src/cloudscribe.Web.SiteMap) 
 
 ### Planned Features - see also the to-do.md in the notes folder
+* Support for automatic image resizing and optimization - pending progress on [ImageProcessor project](https://github.com/JimBobSquarePants/ImageProcessor). This is needed for images added via the wysiwyg editor in the web browser. The best current solution is to use Open Live Writer which will resize the image before it posts to the server, or optimize the images yourself before adding them to content in the wysiwyg editor in the web browser.
 * Support for using Entity Framework Core
 * Support for using cloudscribe.Core for user and site/tenant management
 * Support for using MongoDb

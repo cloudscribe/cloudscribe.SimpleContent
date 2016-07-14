@@ -17,6 +17,19 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IRouteBuilder AddStandardRoutesForSimpleContent(this IRouteBuilder routes)
         {
+            routes.AddBlogRoutesForSimpleContent();
+            
+            routes.MapRoute(
+               name: ProjectConstants.PageIndexRouteName,
+               template: "{slug=none}"
+               , defaults: new { controller = "Page", action = "Index" }
+               );
+
+            return routes;
+        }
+
+        public static IRouteBuilder AddBlogRoutesForSimpleContent(this IRouteBuilder routes)
+        {
             routes.MapRoute(
                    name: ProjectConstants.BlogCategoryRouteName,
                    template: "blog/category/{category=''}/{pagenumber=1}"
@@ -56,13 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
                template: "blog/"
                , defaults: new { controller = "Blog", action = "Index" }
                );
-
-            routes.MapRoute(
-               name: ProjectConstants.PageIndexRouteName,
-               template: "{slug=none}"
-               , defaults: new { controller = "Page", action = "Index" }
-               );
-
+            
             return routes;
         }
 

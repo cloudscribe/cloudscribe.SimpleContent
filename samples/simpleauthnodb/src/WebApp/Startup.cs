@@ -170,6 +170,13 @@ namespace WebApp
                         authBuilder.RequireClaim("blogId");
                     }
                  );
+				 
+				 options.AddPolicy(
+                    "PageEditPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Administrators");
+                    });
 
                 // add other policies here 
 

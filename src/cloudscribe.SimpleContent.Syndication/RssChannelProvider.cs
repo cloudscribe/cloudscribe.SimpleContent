@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-05-21
+// Last Modified:           2016-07-14
 // 
 
 using System;
@@ -15,6 +15,8 @@ using cloudscribe.Syndication.Models.Rss;
 using cloudscribe.SimpleContent.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace cloudscribe.SimpleContent.Syndication
 {
@@ -24,17 +26,20 @@ namespace cloudscribe.SimpleContent.Syndication
             IProjectService projectService,
             IBlogService blogService,
             IHttpContextAccessor contextAccessor,
-            IUrlHelper urlHelper,
+            IUrlHelperFactory urlHelperFactory,
+            IActionContextAccessor actionContextAccesor,
             HtmlProcessor htmlProcessor)
         {
             this.projectService = projectService;
             this.blogService = blogService;
             this.contextAccessor = contextAccessor;
-            this.urlHelper = urlHelper;
+            this.urlHelperFactory = urlHelperFactory;
+            this.actionContextAccesor = actionContextAccesor;
             this.htmlProcessor = htmlProcessor;
         }
 
-        private IUrlHelper urlHelper;
+        private IUrlHelperFactory urlHelperFactory;
+        private IActionContextAccessor actionContextAccesor;
         private IHttpContextAccessor contextAccessor;
         private IProjectService projectService;
         private IBlogService blogService;
@@ -64,7 +69,10 @@ namespace cloudscribe.SimpleContent.Syndication
             }
             
             channel.Generator = Name;
-            if(project.Image.Length > 0)
+
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+
+            if (project.Image.Length > 0)
             {
                 channel.Image.Url = new Uri(urlHelper.Content(project.Image));
             }

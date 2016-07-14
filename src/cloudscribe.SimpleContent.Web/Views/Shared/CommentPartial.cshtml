@@ -1,6 +1,7 @@
-﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
-@using cloudscribe.SimpleContent.Models
+﻿@using cloudscribe.SimpleContent.Models
 @using cloudscribe.SimpleContent.Common
+@addTagHelper "*, cloudscribe.Web.Common"
+@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 <article data-id="@Model.TmpComment.Id" itemscope itemtype="http://schema.org/UserComments" itemprop="comment" class="@(Model.TmpComment.IsAdmin ? "self" : null)">
     <img gravatar-email="@Model.TmpComment.Email" gravatar-size="@Model.ProjectSettings.GravatarSize" alt="Comment by @Model.TmpComment.Author" />
     <div>

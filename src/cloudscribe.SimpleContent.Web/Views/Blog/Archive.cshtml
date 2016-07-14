@@ -1,6 +1,9 @@
-﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
-@inject IUrlHelper myhelper
+﻿@using cloudscribe.Web.Pagination
+@addTagHelper "*, cloudscribe.Web.Pagination"
 @using cloudscribe.SimpleContent.Web
+@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IUrlHelper myhelper
+
 @section Meta {
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
 }

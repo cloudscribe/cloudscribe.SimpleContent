@@ -87,7 +87,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetPosts(string blogId, int year, int month = 0, int day = 0, int pageNumber = 1, int pageSize = 10)
+        public Task<PagedResult<Post>> GetPosts(string blogId, int year, int month = 0, int day = 0, int pageNumber = 1, int pageSize = 10)
         {
             throw new NotImplementedException();
         }
@@ -112,7 +112,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetVisiblePosts(string category, int pageNumber)
+        public Task<PagedResult<Post>> GetVisiblePosts(string category, int pageNumber)
         {
             throw new NotImplementedException();
         }

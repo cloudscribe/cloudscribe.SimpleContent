@@ -32,17 +32,20 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public PageController(
             IProjectService projectService,
             IPageService blogService,
+            IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
             ILogger<PageController> logger)
         {
             this.projectService = projectService;
             this.pageService = blogService;
+            this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
             log = logger;
         }
 
         private IProjectService projectService;
         private IPageService pageService;
+        private IAuthorizationService authorizationService;
         private ITimeZoneHelper timeZoneHelper;
         private ILogger log;
 
@@ -63,6 +66,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if(slug == "none") { slug = string.Empty; }
             
             var canEdit = User.CanEditProject(projectSettings.ProjectId);
+            if(!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
+            }
             var isNew = canEdit && (mode == "new");
             var isEditing = canEdit && (mode == "edit");
             if(!isNew && string.IsNullOrEmpty(slug)) { slug = projectSettings.DefaultPageSlug; }
@@ -188,7 +195,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;
             }
 
-            if (!User.CanEditProject(project.ProjectId))
+            var canEdit = User.CanEditProject(project.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
+            }
+
+            if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
                 Response.StatusCode = 403;
@@ -288,7 +301,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; // new EmptyResult();
             }
 
-            if (!User.CanEditProject(project.ProjectId))
+            var canEdit = User.CanEditProject(project.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
+            }
+
+            if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
                 Response.StatusCode = 403;

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-03-14
+// Last Modified:           2016-07-13
 // 
 
 using System;
@@ -73,7 +73,7 @@ namespace cloudscribe.SimpleContent.Models
             bool userIsBlogOwner,
             CancellationToken cancellationToken);
 
-        Task<List<Post>> GetVisiblePosts(
+        Task<PagedResult<Post>> GetVisiblePosts(
             string blogId,
             string category,
             bool userIsBlogOwner,
@@ -81,7 +81,7 @@ namespace cloudscribe.SimpleContent.Models
             int pageSize,
             CancellationToken cancellationToken);
 
-        Task<List<Post>> GetPosts(
+        Task<PagedResult<Post>> GetPosts(
             string blogId,
             int year,
             int month = 0,
