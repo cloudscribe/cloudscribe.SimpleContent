@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Models;
@@ -142,18 +143,18 @@ namespace cloudscribe.SimpleContent.Syndication
                     }
                 }
 
-                
+
                 //rssItem.Comments
-                if(project.UseMetaDescriptionInFeed)
+                if (project.UseMetaDescriptionInFeed)
                 {
-                    rssItem.Description = post.MetaDescription;
+                    rssItem.Description = HtmlEncoder.Default.Encode(post.MetaDescription);
                 }
                 else
                 {
                     // change relative urls in content to absolute
-                    rssItem.Description = htmlProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
+                    rssItem.Description = HtmlEncoder.Default.Encode(htmlProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content));
                 }
-                
+
                 //rssItem.Enclosures
                 rssItem.Guid = new RssGuid(post.Id);
                 string postUrl;
