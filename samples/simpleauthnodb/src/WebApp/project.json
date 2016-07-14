@@ -29,6 +29,7 @@
         "cloudscribe.SimpleContent.Security.SimpleAuth": "1.0.0-*",
         "cloudscribe.SimpleContent.Web": "1.0.0-*",
         "cloudscribe.SimpleContent.Syndication": "1.0.0-*",
+		"cloudscribe.Syndication.Web": "1.0.1-*",
         "Microsoft.Extensions.Options": "1.0.0",
         "Microsoft.Extensions.Configuration": "1.0.0"
     },
