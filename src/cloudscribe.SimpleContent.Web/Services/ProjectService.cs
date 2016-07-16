@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-05-21
+// Last Modified:           2016-07-16
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -81,10 +81,20 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if(!permission.CanEdit)
+            var result = new List<ProjectSettings>(); //empty
+
+            if (!permission.CanEdit)
             {
-                return new List<ProjectSettings>(); //empty
+                return result; //empty
             }
+
+            var project = await settingsRepo.GetProjectSettings(permission.ProjectId, CancellationToken);
+            if(project != null)
+            {
+                result.Add(project);
+                return result;
+            }
+            
             //await EnsureBlogSettings().ConfigureAwait(false);
             //return settings;
             return await settingsRepo.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);

@@ -64,8 +64,13 @@
     "include": [
       "wwwroot",
       "Views",
+	  "nodb_storage",
+	  "Themes",
       "Areas/**/Views",
       "appsettings.json",
+	  "app-content-project-settings.json",
+	  "app-tenants-users.json",
+	  "navigation.xml",
       "web.config"
     ]
   },

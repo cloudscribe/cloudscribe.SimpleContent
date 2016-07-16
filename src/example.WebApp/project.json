@@ -91,6 +91,7 @@
             "Views",
             "Areas/**/Views",
             "appsettings.json",
+            "navigation.xml",
             "web.config"
         ]
     },

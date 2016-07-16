@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-04-24
+// Last Modified:           2016-07-16
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -45,7 +45,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             cancellationToken.ThrowIfCancellationRequested();
             var result = new List<ProjectSettings>();
             var defaultBlog = await GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
-            result.Add(defaultBlog);
+            if(defaultBlog != null)
+            {
+                result.Add(defaultBlog);
+            }
+            
 
             //var result = allBlogs.Where(b => b.BlogId == blogId).FirstOrDefault();
             return result;
