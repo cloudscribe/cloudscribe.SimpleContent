@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-04-25
+// Last Modified:           2016-07-15
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -199,7 +199,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             cancellationToken.ThrowIfCancellationRequested();
             var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
-            return posts.Take(numberToGet).ToList<Post>();
+            return posts.Where(p =>
+                p.IsPublished
+                && p.PubDate <= DateTime.UtcNow)
+                .OrderByDescending(p => p.PubDate)
+                .Take(numberToGet).ToList<Post>();
 
         }
 
