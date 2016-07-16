@@ -199,11 +199,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             cancellationToken.ThrowIfCancellationRequested();
             var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
-            return posts.Where(p =>
+            posts = posts.Where(p =>
                 p.IsPublished
                 && p.PubDate <= DateTime.UtcNow)
                 .OrderByDescending(p => p.PubDate)
                 .Take(numberToGet).ToList<Post>();
+
+            return posts;
 
         }
 

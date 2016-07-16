@@ -93,10 +93,9 @@ namespace cloudscribe.SimpleContent.Syndication
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/Routing/UrlHelper.cs
 
             var indexUrl = urlHelper.RouteUrl(ProjectConstants.BlogIndexRouteName);
-            //TODO: revisit the need for this logic after RC2
+            
             if (indexUrl.StartsWith("/"))
             {
-
                 indexUrl = string.Concat(baseUrl, indexUrl);
             }
             channel.Link = new Uri(indexUrl);
@@ -156,23 +155,8 @@ namespace cloudscribe.SimpleContent.Syndication
                 
                 //rssItem.Enclosures
                 rssItem.Guid = new RssGuid(post.Id);
-                string postUrl;
-                if(project.IncludePubDateInPostUrls)
-                {
-                    postUrl = urlHelper.RouteUrl(ProjectConstants.PostWithDateRouteName,
-                        new
-                        {
-                            year = post.PubDate.Year,
-                            month = post.PubDate.Month,
-                            day = post.PubDate.Day,
-                            slug = post.Slug
-                        });
-                }
-                else
-                {
-                    postUrl = urlHelper.RouteUrl(ProjectConstants.PostWithoutDateRouteName, 
-                        new { slug = post.Slug });
-                }
+                var postUrl = await blogService.ResolvePostUrl(post);
+                
 
                 if(string.IsNullOrEmpty(postUrl))
                 {
@@ -180,7 +164,7 @@ namespace cloudscribe.SimpleContent.Syndication
                     continue;
                 }
 
-                //TODO: revisit the need for this logic after RC2
+                
                 if (postUrl.StartsWith("/"))
                 {
                     //postUrl = urlHelper.Content(postUrl);
@@ -196,8 +180,6 @@ namespace cloudscribe.SimpleContent.Syndication
                 //rssItem.Source
                 rssItem.Title = post.Title;
                
-
-
                 items.Add(rssItem);
 
             }
@@ -207,7 +189,6 @@ namespace cloudscribe.SimpleContent.Syndication
 
             return channel;
         }
-
 
     }
 }
