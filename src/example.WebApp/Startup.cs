@@ -95,7 +95,7 @@ namespace example.WebApp
                 options.CacheProfiles.Add("RssCacheProfile",
                      new CacheProfile
                      {
-                         Duration = 100
+                         Duration = 10
                      });
 
             });
