@@ -2,13 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-21
-// Last Modified:           2016-04-21
+// Last Modified:           2016-07-23
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.SiteMap;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,20 +23,23 @@ namespace cloudscribe.SimpleContent.Services
     {
         public BlogSiteMapNodeService(
             IBlogService blogService,
-            IUrlHelper urlHelper,
+           // IUrlHelperFactory urlHelperFactory,
+            //IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor,
             ILogger<BlogSiteMapNodeService> logger)
         {
 
             this.blogService = blogService;
-            this.urlHelper = urlHelper;
+            //this.urlHelperFactory = urlHelperFactory;
+            //this.actionContextAccesor = actionContextAccesor;
             this.contextAccessor = contextAccessor;
             log = logger;
 
         }
 
         private IBlogService blogService;
-        private IUrlHelper urlHelper;
+        //private IUrlHelperFactory urlHelperFactory;
+        //private IActionContextAccessor actionContextAccesor;
         private ILogger log;
         private IHttpContextAccessor contextAccessor;
         private string baseUrl = string.Empty;
@@ -67,7 +72,8 @@ namespace cloudscribe.SimpleContent.Services
                 return mapNodes;
             }
 
-            foreach(var post in posts)
+            
+            foreach (var post in posts)
             {
                 if (!post.IsPublished) continue;
                 if (post.PubDate > DateTime.UtcNow) continue;

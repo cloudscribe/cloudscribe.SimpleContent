@@ -1,0 +1,92 @@
+﻿@model cloudscribe.SimpleContent.Models.EditorModel
+<nav id="editor-toolbar" data-role="editor-toolbar" class="navbar navbar-default  blogadmin "
+     data-current-slug="@Model.CurrentSlug"
+     data-ispublished="@Model.IsPublished"
+     data-edit-mode="@Model.EditMode"
+     data-index-path="@Model.IndexUrl"
+     data-supports-categories="@Model.SupportsCategories"
+     data-content-type="@Model.ContentType"
+     data-category-path="@Model.CategoryPath"
+     data-delete-path="@Model.DeletePath"
+     data-save-path="@Model.SavePath"
+     data-cancel-edit-path="@Model.CancelEditPath">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#edit-tool-container" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="edit-tool-container">
+            <ul class="nav navbar-nav">
+                <li id="liNewItem"><a onclick="location.href='@Model.NewItemPath'" id="btnNew">@Model.NewItemButtonText</a></li>
+                <li id="liEdit"><a onclick="location.href='@Model.EditPath'" id="btnEdit" disabled>Edit</a></li>        
+                <li id="liSave"><a id="btnSave" disabled>Save</a></li>
+                <li id="liCancel"><a id="btnCancel" disabled>Cancel</a></li> 
+                <li id="liPageOrder" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Page Order <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <input id="PageOrder" type="text" placeholder="10" value="@Model.SortOrder">
+                        </li>
+                    </ul>
+                </li> 
+                <li id="liPublished" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Publishing <span class="caret"></span></a>
+                    <ul class="dropdown-menu" id="reasonDropdown">
+                        <li>
+                            <label class="btn btn-success" style="width:100%">
+                            <input id="published" name="isPublished" value="true" type="radio" checked="@Model.IsPublished">Published
+                            </label>
+                        </li>
+                        <li>
+                            <label class="btn btn-warning" style="width:100%">
+                                <input name="isPublished" value="false" type="radio" checked="@(!Model.IsPublished)">Not Published
+                            </label>
+                        </li>                  
+                    </ul>
+                </li> 
+                <li id="liDelete"><a id="btnDelete" disabled>Delete</a></li> 
+                <li><a id="btnHide" title="Hide Toolbar"><span class="fa fa-chevron-right" aria-hidden="true"></span> </a></li>   
+            </ul>
+            <ul id="tools" class="nav navbar-nav navbar-right bootstrap-wysiwyg">
+                <li><a title="Paragraph"  data-edit="formatBlock <p>">&para;</a></li>
+                <li><a title="Heading level 1" data-edit="formatBlock <h1>">H1</a></li>
+                <li><a title="Heading level 2" data-edit="formatBlock <h2>">H2</a></li>
+                <li><a title="Heading level 3" data-edit="formatBlock <h3>">H3</a></li>
+                <li><a title="Emphasis/Italic" data-edit="italic"><em>I</em></a></li>
+                <li><a title="Strong/Bold" data-edit="bold"><strong>B</strong></a></li>
+                <li><a title="Underline" data-edit="underline"><ins>U</ins></a></li>
+                <li><a title="Strikethrough" data-edit="strikethrough"><s>S</s></a></li>
+                <li><a title="Justify left" data-edit="justifyleft"><i class="fa fa-align-left"></i></a></li>
+                <li><a title="Justify center" data-edit="justifycenter"><i class="fa fa-align-center"></i></a></li>
+                <li><a title="Justify right" data-edit="justifyright"><i class="fa fa-align-right"></i></a></li>
+                <li><a title="Justify full" data-edit="justifyfull"><i class="fa fa-align-justify"></i></a></li>
+                <li><a title="Bullet points" data-edit="insertunorderedlist"><i class="fa fa-list-ul"></i></a></li>
+                <li><a title="Numbered bullet points" data-edit="insertorderedlist"><i class="fa fa-list-ol"></i></a></li>
+                <li><a title="Indent left" data-edit="outdent"><i class="fa fa-indent"></i></a></li>
+                <li><a title="Indent right" data-edit="indent"><i class="fa fa-outdent"></i></a></li>
+                <li>
+                    <a title="Hyperlink" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-link"></i></a>
+                    <div class="dropdown-menu row" role="menu">
+                        <input class="col-md-9 col-lg-9" placeholder="URL" type="text" data-edit="createLink" />
+                        <button class="btn btn-xs col-md-3 col-lg-3" type="button">Add</button>
+                    </div>
+                </li>
+                <li><a title="Remove hyperlink" data-edit="unlink"><i class="fa fa-unlink"></i></a></li>
+                <li><a class="uploadimage"><i class="fa fa-file-image-o"></i></a>
+                    <input type="file" id="txtImage" data-edit="insertImage" style="width:0; height: 0;position:absolute" />
+                </li>
+                <li><a title="Toggle source/design view" class="source" data-cmd="source"><i class="fa fa-eye"></i></a></li>
+            </ul>
+        </div>
+     </div>
+    <aside>
+        <p class="alert"></p>
+    </aside>
+</nav>
+<button id="editor-outer-toggle" type="button" title="Show Editor Toolbar" class="btn btn-sm">
+    <span class="fa fa-pencil" aria-hidden="true"></span>  
+</button>
