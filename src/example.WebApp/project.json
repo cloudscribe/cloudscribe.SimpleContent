@@ -47,7 +47,7 @@
         "cloudscribe.SimpleContent.Security.SimpleAuth": "1.0.0-*",
         "cloudscribe.SimpleContent.Web": "1.0.0-*",
         "cloudscribe.SimpleContent.Syndication": "1.0.0-*",
-        "cloudscribe.Syndication.Web": "1.0.1-*",
+        "cloudscribe.Syndication.Web": "1.0.4-*",
         "SaasKit.Multitenancy": "1.1.3-*"
     },
 

@@ -67,6 +67,16 @@ namespace cloudscribe.SimpleContent.Models
         public string ChannelRating { get; set; } = string.Empty;
         public string WebmasterEmail { get; set; } = string.Empty;
 
+        /// <summary>
+        /// ie feedburner url
+        /// </summary>
+        public string RemoteFeedUrl { get; set; } = string.Empty;
+
+        /// <summary>
+        /// ie Feedburner User Agent fragment "FeedBurner"
+        /// </summary>
+        public string RemoteFeedProcessorUseAgentFragment { get; set; } = string.Empty;
+
         //smtp settings
         public string EmailFromAddress { get; set; }
         public string SmtpServer { get; set; }
