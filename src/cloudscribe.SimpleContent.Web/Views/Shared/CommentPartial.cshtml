@@ -15,7 +15,7 @@
         {
         <strong itemprop="creator"><a href="@Model.TmpComment.Website" itemprop="url" rel="nofollow">@Model.TmpComment.Author</a></strong>
         }
-        @if (User.CanEditProject(Model.ProjectSettings.ProjectId))
+        @if (Model.CanEdit)
         {
             <button class="deletecomment btn btn-link">Delete</button>
             @if (Model.ProjectSettings.ModerateComments && !Model.TmpComment.IsApproved)
@@ -24,7 +24,7 @@
             }
         }
     </div>
-    @if (Model.ProjectSettings.ModerateComments && !Model.TmpComment.IsApproved && !User.CanEditProject(Model.ProjectSettings.ProjectId))
+    @if (Model.ProjectSettings.ModerateComments && !Model.TmpComment.IsApproved && !Model.CanEdit)
     {
         <div itemprop="approvalWarning">! The comment will not be visible until a moderator approves it !</div>
     } 

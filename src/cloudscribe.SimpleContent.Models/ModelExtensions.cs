@@ -15,6 +15,12 @@ namespace cloudscribe.SimpleContent.Models
             return post.Comments.Where(c => c.IsApproved == true).Count();
         }
 
+        public static int CommentCount(this Post post)
+        {
+            if (post.Comments == null) { return 0; }
+            return post.Comments.Count();
+        }
+
         public static int ApprovedCommentCount(this Page page)
         {
             if (page.Comments == null) { return 0; }

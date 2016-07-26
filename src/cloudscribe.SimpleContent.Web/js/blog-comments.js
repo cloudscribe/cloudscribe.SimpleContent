@@ -129,7 +129,7 @@
 
     //#endregion
 
-    var endpoint = "/comment.ashx";
+    //var endpoint = "/comment.ashx";
 
     function deleteComment(commentId, element) {
         var deleteEndpoint = document.querySelector("[itemprop=blogPost]").getAttribute("data-delete-comment-url");
