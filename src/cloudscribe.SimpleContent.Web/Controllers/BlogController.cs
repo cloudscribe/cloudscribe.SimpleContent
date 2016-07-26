@@ -513,16 +513,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             // this should validate the [EmailAddress] on the model
             // failure here should indicate invalid email since it is the only attribute in use
             if (!ModelState.IsValid)
-            {
-                
+            {  
                 Response.StatusCode = 403;
                 await Response.WriteAsync("Please enter a valid e-mail address");
                 return new EmptyResult();
             }
-
-            //TODO: validate captcha server side
-
-
+            
             var project = await projectService.GetCurrentProjectSettings();
 
             if (project == null)
@@ -581,7 +577,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            
+            var canEdit = User.CanEditProject(project.ProjectId);
+            if (!canEdit)
+            {
+                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
+            }
+            var isApproved = canEdit;
+            if (!isApproved) isApproved = !project.ModerateComments;
 
             var comment = new Comment()
             {
@@ -595,8 +597,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 Content = System.Text.Encodings.Web.HtmlEncoder.Default.Encode(
                     model.Content.Trim()).Replace("\n", "<br />"),
 
-
-                IsApproved = !project.ModerateComments,
+                IsApproved = isApproved,
                 PubDate = DateTime.UtcNow
             };
             
@@ -629,7 +630,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             viewModel.ProjectSettings = project;
             viewModel.CurrentPost = blogPost;
             viewModel.TmpComment = comment;
+            viewModel.TimeZoneHelper = timeZoneHelper;
+            viewModel.TimeZoneId = viewModel.ProjectSettings.TimeZoneId;
+
             
+            viewModel.CanEdit = canEdit;
+
             return PartialView("CommentPartial", viewModel);
             
         }
