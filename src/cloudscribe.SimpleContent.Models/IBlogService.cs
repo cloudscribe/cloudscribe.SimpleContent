@@ -28,7 +28,7 @@ namespace cloudscribe.SimpleContent.Models
             string password
             );
 
-        Task<Post> GetPostBySlug(string slug);
+        Task<PostResult> GetPostBySlug(string slug);
         Task<List<Post>> GetRecentPosts(int numberToGet);
           
         Task<List<Post>> GetVisiblePosts();

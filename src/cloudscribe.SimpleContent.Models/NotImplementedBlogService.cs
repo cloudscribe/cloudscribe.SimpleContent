@@ -77,7 +77,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetPostBySlug(string slug)
+        public Task<PostResult> GetPostBySlug(string slug)
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-06-06
+// Last Modified:           2016-07-26
 // 
 
 
@@ -53,6 +53,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public Post TmpPost { get; set; } = null;
         public ITimeZoneHelper TimeZoneHelper { get; set; }
         public string TimeZoneId { get; set; } = "GMT";
+
+        public string PreviousPostUrl { get; set; } = string.Empty;
+
+        public string NextPostUrl { get; set; } = string.Empty;
 
         public string FilterHtml(Post p)
         {

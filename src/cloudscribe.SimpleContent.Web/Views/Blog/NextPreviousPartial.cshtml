@@ -1,0 +1,17 @@
+﻿@using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Common
+@addTagHelper "*, cloudscribe.Web.Common"
+@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@if ((!string.IsNullOrEmpty(Model.PreviousPostUrl)) || (!string.IsNullOrEmpty(Model.NextPostUrl)))
+{
+    <div class="row ">
+        @if (!string.IsNullOrEmpty(Model.PreviousPostUrl))
+        {
+            <div class="col-md-6"><a class="btn btn-link" title="Previous Post" href="@Model.PreviousPostUrl"><i class="glyphicon glyphicon-backward"></i></a></div>
+        }
+        @if (!string.IsNullOrEmpty(Model.NextPostUrl))
+        {
+            <div class="col-md-6 "><a class="btn btn-link pull-right" title="Next Post" href="@Model.NextPostUrl"><i class="glyphicon glyphicon-forward"></i></a></div>
+        }
+    </div>
+}

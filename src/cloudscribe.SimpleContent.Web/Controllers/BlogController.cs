@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-07-13
+// Last Modified:           2016-07-26
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -213,21 +213,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
             }
             var isNew = false;
-            Post post = null;
+            PostResult result = null;
             if(!string.IsNullOrEmpty(slug))
             {
-                post = await blogService.GetPostBySlug(slug);
+                result = await blogService.GetPostBySlug(slug);
             }
             
             var model = new BlogViewModel();
 
-            if (post == null)
+            if ((result == null)||(result.Post == null))
             {
                 ViewData["Title"] = "New Post";
                 if ((canEdit) && (mode.Length > 0))
                 {
-                    post = new Post();
-                    post.BlogId = projectSettings.ProjectId;
+                    if (result == null) result = new PostResult();
+                    if (result.Post == null) result.Post = new Post();
+                    result.Post.BlogId = projectSettings.ProjectId;
                     isNew = true;
                 }
                 else
@@ -245,25 +246,34 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         //TODO: option whether to use permanent redirect
                         return RedirectToRoute(ProjectConstants.PostWithDateRouteName, 
                             new {
-                                year = post.PubDate.Year,
-                                month = post.PubDate.Month.ToString("00"),
-                                day = post.PubDate.Day.ToString("00"),
-                                slug = post.Slug
+                                year = result.Post.PubDate.Year,
+                                month = result.Post.PubDate.Month.ToString("00"),
+                                day = result.Post.PubDate.Day.ToString("00"),
+                                slug = result.Post.Slug
                             });
                     }
                 }
 
-                ViewData["Title"] = post.Title;
+                ViewData["Title"] = result.Post.Title;
             }
 
             model.Mode = mode;
-            model.CurrentPost = post;
+            model.CurrentPost = result.Post;
+            if(result.PreviousPost != null)
+            {
+                model.PreviousPostUrl = await blogService.ResolvePostUrl(result.PreviousPost);
+            }
+            if (result.NextPost != null)
+            {
+                model.NextPostUrl = await blogService.ResolvePostUrl(result.NextPost);
+            }
+            
             model.ProjectSettings = projectSettings;
             model.Categories = await blogService.GetCategories();
             model.Archives = await blogService.GetArchives();
             model.CanEdit = canEdit;
             model.ShowComments = mode.Length == 0; // do we need this for a global disable
-            model.CommentsAreOpen = await blogService.CommentsAreOpen(post, canEdit);
+            model.CommentsAreOpen = await blogService.CommentsAreOpen(result.Post, canEdit);
             //model.ApprovedCommentCount = post.Comments.Where(c => c.IsApproved == true).Count();
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
