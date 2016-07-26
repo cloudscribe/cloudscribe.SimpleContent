@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-07-13
+// Last Modified:           2016-07-26
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -401,7 +401,7 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<Post> GetPostBySlug(string slug)
+        public async Task<PostResult> GetPostBySlug(string slug)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 

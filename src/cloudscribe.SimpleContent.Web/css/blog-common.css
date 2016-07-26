@@ -234,4 +234,15 @@ footer {
 
 */
 
+.nextpost {
+    float:right;
+    text-align:right;
+}
+.prevpost {
+    float:left;
+    text-align:left;
+}
+.post .jumbotron {margin-bottom:0;}
+
+
 

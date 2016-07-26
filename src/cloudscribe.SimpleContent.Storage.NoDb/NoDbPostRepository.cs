@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-07-15
+// Last Modified:           2016-07-26
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -316,14 +316,40 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         }
 
-        public async Task<Post> GetPostBySlug(
+        public async Task<PostResult> GetPostBySlug(
             string blogId,
             string slug,
             CancellationToken cancellationToken)
         {
+            var result = new PostResult();
             var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
-            return allPosts.FirstOrDefault(p => p.Slug == slug);
+            result.Post = allPosts.FirstOrDefault(p => p.Slug == slug);
 
+            if(result.Post != null)
+            {
+                var cutoff = result.Post.PubDate;
+
+                result.PreviousPost = allPosts
+                    .Where(
+                    p => p.PubDate < cutoff
+                    && p.IsPublished == true
+                    )
+                    .OrderByDescending(p => p.PubDate)
+                    .Take(1)
+                    .FirstOrDefault();
+                
+                result.NextPost = allPosts
+                    .Where(
+                    p => p.PubDate > cutoff
+                    && p.IsPublished == true
+                    )
+                    .OrderBy(p => p.PubDate)
+                    .Take(1)
+                    .FirstOrDefault();
+
+            }
+
+            return result;
         }
 
         public async Task<bool> SlugIsAvailable(

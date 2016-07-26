@@ -51,7 +51,7 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken
             );
 
-        Task<Post> GetPostBySlug(
+        Task<PostResult> GetPostBySlug(
             string blogId,
             string slug,
             CancellationToken cancellationToken
