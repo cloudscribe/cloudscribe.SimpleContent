@@ -53,6 +53,13 @@ namespace cloudscribe.SimpleContent.Services
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(project.EmailFromAddress))
+            {
+                var logMessage = $"failed to send comment notification email because EmailFromAddress is not populated for project {project.ProjectId}";
+                log.LogError(logMessage);
+                return;
+            }
+
             var model = new CommentNotificationModel(project, post, comment, postUrl);
             var subject = "Blog comment: " + post.Title;
 

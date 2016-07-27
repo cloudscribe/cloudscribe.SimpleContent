@@ -77,7 +77,7 @@
     }
     @if ((Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)) && (Model.ShowComments))
     {
-        @if ((Model.CanEdit && Model.CurrentPost.CommentCount() > 0) || (Model.CurrentPost.ApprovedCommentCount() > 0))
+        @if ((Model.CommentsAreOpen) || (Model.CanEdit && Model.CurrentPost.CommentCount() > 0) || (Model.CurrentPost.ApprovedCommentCount() > 0))
         {
             <section id="comments" aria-label="Comments">
                 <h2>Comments</h2>
