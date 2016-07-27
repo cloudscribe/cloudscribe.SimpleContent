@@ -615,7 +615,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             await blogService.Save(blogPost, false);
             
             //no need to send notification when project owner posts a comment, ie in response
-            var shouldSendEmail = !HttpContext.User.CanEditProject(project.ProjectId);
+            var shouldSendEmail = !canEdit;
        
             if(shouldSendEmail)
             {
