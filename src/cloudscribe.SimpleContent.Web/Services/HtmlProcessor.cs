@@ -206,12 +206,20 @@ namespace cloudscribe.SimpleContent.Services
 
             foreach (var img in doc.DocumentNode.Descendants("img"))
             {
-                img.Attributes["src"].Value = new Uri(new Uri(absoluteBaseMediaUrl), img.Attributes["src"].Value).AbsoluteUri;
+                if(img.Attributes["src"] != null)
+                {
+                    img.Attributes["src"].Value = new Uri(new Uri(absoluteBaseMediaUrl), img.Attributes["src"].Value).AbsoluteUri;
+                }
+                
             }
 
             foreach (var a in doc.DocumentNode.Descendants("a"))
             {
-                a.Attributes["href"].Value = new Uri(new Uri(absoluteBaseMediaUrl), a.Attributes["href"].Value).AbsoluteUri;
+                if(a.Attributes["href"] != null)
+                {
+                    a.Attributes["href"].Value = new Uri(new Uri(absoluteBaseMediaUrl), a.Attributes["href"].Value).AbsoluteUri;
+                }
+                
             }
 
             doc.Save(writer);
