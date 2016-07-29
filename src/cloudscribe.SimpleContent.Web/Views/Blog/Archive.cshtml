@@ -3,8 +3,8 @@
 @using cloudscribe.SimpleContent.Web
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
-
 @section Meta {
+<meta name="robots" content="noindex" />
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
 }
 @section Styles {
@@ -16,10 +16,8 @@
         await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
     }
     <div itemscope itemtype="http://schema.org/Blog" class="@(User.Identity.IsAuthenticated ? "row blogroot admin": "row blogroot")">
-
         <main role="main" class="col-md-8">
             @{await Html.RenderPartialAsync("PostListPartial", Model); }
-
             <nav>
                 <cs-pager cs-paging-info="@Model.Paging"
                           cs-pager-ul-class="pager"
