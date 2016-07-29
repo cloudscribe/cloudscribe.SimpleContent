@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-21
-// Last Modified:           2016-04-22
+// Last Modified:           2016-07-29
 // 
 
 using cloudscribe.Messaging.Email;
@@ -64,13 +64,22 @@ namespace cloudscribe.SimpleContent.Services
             var subject = "Blog comment: " + post.Title;
 
             string plainTextMessage = null;
+            string htmlMessage = null;
             var sender = new EmailSender();
 
             try
             {
-                var htmlMessage
-                = await viewRenderer.RenderViewAsString<CommentNotificationModel>("CommentEmail", model);
-
+                try
+                {
+                    htmlMessage 
+                        = await viewRenderer.RenderViewAsString<CommentNotificationModel>("CommentEmail", model);
+                }
+                catch(Exception ex)
+                {
+                    log.LogError("error generating html email from razor template", ex);
+                    return;
+                }
+                
                 await sender.SendEmailAsync(
                     smtpOptions,
                     project.CommentNotificationEmail, //to
