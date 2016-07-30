@@ -265,23 +265,35 @@ namespace example.WebApp
         {
             app.UseMvc(routes =>
             {
-                //routes.AddBlogRoutesForSimpleContent();
+                if (useFolders)
+                {
+                    routes.AddBlogRoutesForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                }
 
-                routes.AddStandardRoutesForSimpleContent();
+                routes.AddBlogRoutesForSimpleContent();
+
+                //routes.AddStandardRoutesForSimpleContent();
+
+                if (useFolders)
+                {
+                    routes.MapRoute(
+                        name: "folderdefault",
+                        template: "{sitefolder}/{controller}/{action}/{id?}",
+                        defaults: new { controller = "Home", action = "Index" },
+                        constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                        );
+
+                    routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                }
 
                 routes.MapRoute(
                     name: "def",
                     template: "{controller}/{action}"
                     );
 
-                //if (useFolders)
-                //{
-                //    routes.MapRoute(
-                //        name: "folderdefault",
-                //        template: "{sitefolder}/{controller}/{action}/{id?}",
-                //        defaults: new { controller = "Home", action = "Index" },
-                //        constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() });
-                //}
+                routes.AddDefaultPageRouteForSimpleContent();
+
+                
 
                
 

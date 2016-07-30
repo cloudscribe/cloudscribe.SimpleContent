@@ -18,11 +18,34 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IRouteBuilder AddStandardRoutesForSimpleContent(this IRouteBuilder routes)
         {
             routes.AddBlogRoutesForSimpleContent();
+            routes.AddDefaultPageRouteForSimpleContent();
             
+            return routes;
+        }
+
+        public static IRouteBuilder AddDefaultPageRouteForSimpleContent(this IRouteBuilder routes)
+        {
+           
             routes.MapRoute(
                name: ProjectConstants.PageIndexRouteName,
                template: "{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
+               );
+
+            return routes;
+        }
+
+        public static IRouteBuilder AddDefaultPageRouteForSimpleContent(
+            this IRouteBuilder routes,
+            IRouteConstraint siteFolderConstraint
+            )
+        {
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageIndexRouteName,
+               template: "{sitefolder}/{slug=none}"
+               , defaults: new { controller = "Page", action = "Index" }
+               , constraints: new { name = siteFolderConstraint }
                );
 
             return routes;
@@ -70,6 +93,57 @@ namespace Microsoft.Extensions.DependencyInjection
                , defaults: new { controller = "Blog", action = "Index" }
                );
             
+            return routes;
+        }
+
+        public static IRouteBuilder AddBlogRoutesForSimpleContent(
+            this IRouteBuilder routes,
+            IRouteConstraint siteFolderConstraint
+            )
+        {
+            routes.MapRoute(
+                   name: ProjectConstants.FolderBlogCategoryRouteName,
+                   template: "{sitefolder}/blog/category/{category=''}/{pagenumber=1}"
+                   , defaults: new { controller = "Blog", action = "Category" }
+                   , constraints: new { name = siteFolderConstraint }
+                   );
+
+            routes.MapRoute(
+                  ProjectConstants.FolderBlogArchiveRouteName,
+                  "{sitefolder}/blog/{year}/{month}/{day}",
+                  new { controller = "Blog", action = "Archive", month = "00", day = "00" },
+                  new { name = siteFolderConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
+                );
+
+            routes.MapRoute(
+                  ProjectConstants.FolderPostWithDateRouteName,
+                  "{sitefolder}/blog/{year}/{month}/{day}/{slug}",
+                  new { controller = "Blog", action = "PostWithDate" },
+                  new { name = siteFolderConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
+                );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderNewPostRouteName,
+               template: "{sitefolder}/blog/new"
+               , defaults: new { controller = "Blog", action = "New" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPostWithoutDateRouteName,
+               template: "{sitefolder}/blog/{slug}"
+               , defaults: new { controller = "Blog", action = "PostNoDate" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderBlogIndexRouteName,
+               template: "{sitefolder}/blog/"
+               , defaults: new { controller = "Blog", action = "Index" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+
             return routes;
         }
 

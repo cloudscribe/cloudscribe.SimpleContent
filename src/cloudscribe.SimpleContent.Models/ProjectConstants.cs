@@ -15,5 +15,13 @@ namespace cloudscribe.SimpleContent.Models
         public const string NewPostRouteName = "newpost";
         public const string PageIndexRouteName = "pageindex";
 
+        public const string FolderPostWithDateRouteName = "folderpostwithdate";
+        public const string FolderPostWithoutDateRouteName = "folderpostwithoutdate";
+        public const string FolderBlogCategoryRouteName = "folderblogcategory";
+        public const string FolderBlogArchiveRouteName = "folderblogarchive";
+        public const string FolderBlogIndexRouteName = "folderblogindex";
+        public const string FolderNewPostRouteName = "foldernewpost";
+        public const string FolderPageIndexRouteName = "folderpageindex";
+
     }
 }
