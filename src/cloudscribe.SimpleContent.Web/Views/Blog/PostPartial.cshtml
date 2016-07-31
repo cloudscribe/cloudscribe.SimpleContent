@@ -27,14 +27,14 @@
                    asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
                    asp-route-slug="@Model.TmpPost.Slug" 
                    asp-fragment="comments"
-                   itemprop="url"><em class="glyphicon glyphicon-comment"></em>@Model.TmpPost.ApprovedCommentCount() Comments</a>
+                   itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.TmpPost.ApprovedCommentCount() Comments</a>
             }
             else
             {
-                <a asp-route="postwithoutdate" asp-route-slug="@Model.TmpPost.Slug" asp-fragment="comments" itemprop="url"><em class="glyphicon glyphicon-comment"></em>@Model.TmpPost.ApprovedCommentCount() Comments</a>
+                <a asp-route="postwithoutdate" asp-route-slug="@Model.TmpPost.Slug" asp-fragment="comments" itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.TmpPost.ApprovedCommentCount() Comments</a>
             } 
             <ul class="categories">
-                <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</l>
+                <li><i class="glyphicon glyphicon-tags"></i>&nbsp; Posted in:&nbsp;</li>
                 @foreach (string cat in Model.TmpPost.Categories)
                 {
                     <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a></li>
