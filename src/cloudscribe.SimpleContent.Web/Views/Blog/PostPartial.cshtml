@@ -15,21 +15,29 @@
             else
             {
                 <a asp-route="postwithoutdate" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@Model.TmpPost.Title</a>
-            }
-            
+            } 
         </h1>
-
         <div class="bh">
             <time datetime="@Model.FormatDateForEdit(Model.TmpPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
-            <a href="@Model.TmpPost.Slug#comments">
-                <em class="glyphicon glyphicon-comment"></em>
-               @Model.TmpPost.ApprovedCommentCount()   Comments
-            </a>
+             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+            {
+                <a asp-route="postwithdate"
+                   asp-route-year="@Model.TmpPost.PubDate.Year"
+                   asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
+                   asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
+                   asp-route-slug="@Model.TmpPost.Slug" 
+                   asp-fragment="comments"
+                   itemprop="url"><em class="glyphicon glyphicon-comment"></em>@Model.TmpPost.ApprovedCommentCount() Comments</a>
+            }
+            else
+            {
+                <a asp-route="postwithoutdate" asp-route-slug="@Model.TmpPost.Slug" asp-fragment="comments" itemprop="url"><em class="glyphicon glyphicon-comment"></em>@Model.TmpPost.ApprovedCommentCount() Comments</a>
+            } 
             <ul class="categories">
-                <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</li>
+                <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</l>
                 @foreach (string cat in Model.TmpPost.Categories)
                 {
-                    <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Categoty" asp-route-category="@cat">@cat</a></li>
+                    <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a></li>
                 }
             </ul>
         </div>

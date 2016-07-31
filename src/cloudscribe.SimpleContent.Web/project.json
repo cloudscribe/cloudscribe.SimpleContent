@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-rc20160729",
+    "version": "1.0.0-rc20160730",
     "description": "A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database",
     "authors": [ "Joe Audette" ],
     "packOptions": {
