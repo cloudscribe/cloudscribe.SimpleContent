@@ -12,7 +12,7 @@
     "Comment-About-This": "a content project is the container of settings for a blog and an optional set of pages, in the current implementation there should be a one to one relationship between a tenant and a project",
     "ContentProjects": [
         {
-            "ProjectId": "project1",
+            "ProjectId": "site-2",
             "Title": "Hi, I'm Bilbo Baggins",
             "ShowTitle": "true",
             "Description": "here I'll be telling my tale there and back again",
@@ -31,7 +31,7 @@
 
         },
         {
-            "ProjectId": "project2",
+            "ProjectId": "site-1",
             "Title": "Hi, I'm Frodo Baggins",
             "ShowTitle": "false",
             "Description": "here I'll be telling the tale of my journey to mordor",

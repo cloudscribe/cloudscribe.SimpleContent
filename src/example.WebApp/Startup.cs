@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using cloudscribe.SimpleContent.Models;
+using Microsoft.AspNetCore.DataProtection;
+using cloudscribe.Core.SimpleContent.Integration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace example.WebApp
 {
@@ -23,7 +26,7 @@ namespace example.WebApp
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            builder.AddJsonFile("app-tenants-users.json");
+            //builder.AddJsonFile("app-tenants-users.json");
 
             builder.AddJsonFile("app-content-project-settings.json");
 
@@ -40,8 +43,12 @@ namespace example.WebApp
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            appBasePath = env.ContentRootPath;
+            environment = env;
         }
 
+        private string appBasePath;
+        public IHostingEnvironment environment { get; set; }
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -49,43 +56,92 @@ namespace example.WebApp
         {
             //services.AddGlimpse();
 
+            string pathToCryptoKeys = appBasePath + System.IO.Path.DirectorySeparatorChar + "dp_keys" + System.IO.Path.DirectorySeparatorChar;
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new System.IO.DirectoryInfo(pathToCryptoKeys));
+            
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+            });
+
+            services.AddMemoryCache();
+            // we currently only use session for alerts, so we can fire an alert on the next request
+            // if session is disabled this feature fails quietly with no errors
+            services.AddSession();
+
             ConfigureAuthPolicy(services);
 
-            // Hosting doesn't add IHttpContextAccessor by default
-            //services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddOptions();
+            services.AddCloudscribeCoreNoDbStorage();
+            services.AddCloudscribeLoggingNoDbStorage(Configuration);
+            services.AddCloudscribeLogging();
 
-            // single tenant
-            services.Configure<cloudscribe.Web.SimpleAuth.Models.SimpleAuthSettings>(Configuration.GetSection("SimpleAuthSettings"));
-            //services.AddScoped<IUserLookupProvider, DefaultUserLookupProvider>(); 
-            //services.AddScoped<IAuthSettingsResolver, DefaultAuthSettingsResolver>();
-            //services.Configure<List<SimpleAuthUser>>(Configuration.GetSection("Users"));
+            services.AddScoped<cloudscribe.Web.Navigation.Caching.ITreeCache, cloudscribe.Web.Navigation.Caching.NotCachedTreeCache>();
+            services.AddCloudscribeCore(Configuration);
 
-            // multi tenant
-            services.Configure<MultiTenancyOptions>(Configuration.GetSection("MultiTenancy"));
-           
-            services.AddMultitenancy<SiteSettings, CachingSiteResolver>();
-            services.AddScoped<cloudscribe.Web.SimpleAuth.Models.IUserLookupProvider, SiteUserLookupProvider>();
-            services.AddScoped<cloudscribe.Web.SimpleAuth.Models.IAuthSettingsResolver, SiteAuthSettingsResolver>();
-            services.AddCloudscribeSimpleAuth();
-            
+            services.AddCloudscribeIdentity();
+
             services.AddNoDbStorageForSimpleContent();
 
-            services.AddCloudscribeNavigation(Configuration.GetSection("NavigationOptions"));
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
-            services.AddScoped<IProjectSecurityResolver, cloudscribe.SimpleContent.Security.SimpleAuth.ProjectSecurityResolver>();
-            services.AddCloudscribeCommmon();
+            services.AddScoped<IProjectSecurityResolver, ProjectSecurityResolver>();
+
+            //services.Configure<List<CustomClaimMap>>(Configuration.GetSection("ClaimMaps"));
+            //services.AddScoped<cloudscribe.Core.Identity.ICustomClaimProvider, CustomClaimProvider>();
+
+
+
             services.AddSimpleContent();
-            
+
             services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
 
             services.AddSimpleContentRssSyndiction();
-            
-            
-            // Add MVC services to the services container.
+
+            services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
+
+            //services.Configure<RequestLocalizationOptions>(options =>
+            //{
+            //    var supportedCultures = new[]
+            //    {
+            //        new CultureInfo("en-US"),
+
+            //    };
+
+            //    // State what the default culture for your application is. This will be used if no specific culture
+            //    // can be determined for a given request.
+            //    options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+
+            //    // You must explicitly state which cultures your application supports.
+            //    // These are the cultures the app supports for formatting numbers, dates, etc.
+            //    options.SupportedCultures = supportedCultures;
+
+            //    // These are the cultures the app supports for UI strings, i.e. we have localized resources for.
+            //    options.SupportedUICultures = supportedCultures;
+
+            //    // You can change which providers are configured to determine the culture for requests, or even add a custom
+            //    // provider with your own logic. The providers will be asked in order to provide a culture for each request,
+            //    // and the first to provide a non-null result that is in the configured supported cultures list will be used.
+            //    // By default, the following built-in providers are configured:
+            //    // - QueryStringRequestCultureProvider, sets culture via "culture" and "ui-culture" query string values, useful for testing
+            //    // - CookieRequestCultureProvider, sets culture via "ASPNET_CULTURE" cookie
+            //    // - AcceptLanguageHeaderRequestCultureProvider, sets culture via the "Accept-Language" request header
+            //    //options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(async context =>
+            //    //{
+            //    //  // My custom request culture logic
+            //    //  return new ProviderCultureResult("en");
+            //    //}));
+            //});
+
             services.Configure<MvcOptions>(options =>
             {
-                // options.InputFormatters.Add(new Xm)
+                //  if(environment.IsProduction())
+                //  {
+                options.Filters.Add(new RequireHttpsAttribute());
+                //   }
+
+
                 options.CacheProfiles.Add("SiteMapCacheProfile",
                      new CacheProfile
                      {
@@ -95,50 +151,44 @@ namespace example.WebApp
                 options.CacheProfiles.Add("RssCacheProfile",
                      new CacheProfile
                      {
-                         Duration = 10
+                         Duration = 100
                      });
-
             });
 
-            
             services.AddMvc()
                 .AddRazorOptions(options =>
-            {
-                // if you download the cloudscribe.Web.Navigation Views and put them in your views folder
-                // then you don't need this line and can customize the views
-                options.AddEmbeddedViewsForNavigation();
+                {
+                    options.AddCloudscribeViewLocationFormats();
+
+                    options.AddEmbeddedViewsForNavigation();
+                    options.AddEmbeddedViewsForCloudscribeCore();
+                    options.AddEmbeddedViewsForCloudscribeLogging();
+                    options.AddEmbeddedViewsForSimpleContent();
+
+                    options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
+                })
+                    ;
 
 
-                options.AddEmbeddedViewsForSimpleAuth();
-
-                // If you download and install the views below your view folder you don't need this method and you can customize the views.
-                // You can get the views from https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/src/cloudscribe.SimpleContent.Blog.Web/Views
-                options.AddEmbeddedViewsForSimpleContent();
-                
-
-                options.ViewLocationExpanders.Add(new SiteViewLocationExpander());
-            });
-
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
-            IHostingEnvironment env, 
+            IApplicationBuilder app,
+            IHostingEnvironment env,
             ILoggerFactory loggerFactory,
-            IOptions<cloudscribe.Web.SimpleAuth.Models.SimpleAuthSettings> authSettingsAccessor
+            IOptions<cloudscribe.Core.Models.MultiTenantOptions> multiTenantOptionsAccessor,
+            IServiceProvider serviceProvider,
+            cloudscribe.Logging.Web.ILogRepository logRepo
             )
         {
-            //app.UseGlimpse();
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            ConfigureLogging(loggerFactory, serviceProvider, logRepo);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
             }
             else
@@ -146,41 +196,114 @@ namespace example.WebApp
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseForwardedHeaders();
             app.UseStaticFiles();
 
-            app.UseMultitenancy<SiteSettings>();
+            // custom 404 and error page - this preserves the status code (ie 404)
+            app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
-            app.UsePerTenant<SiteSettings>((ctx, builder) =>
+            app.UseSession();
+
+            app.UseMultitenancy<cloudscribe.Core.Models.SiteSettings>();
+
+            var multiTenantOptions = multiTenantOptionsAccessor.Value;
+
+            app.UsePerTenant<cloudscribe.Core.Models.SiteSettings>((ctx, builder) =>
             {
-                var authCookieOptions = new CookieAuthenticationOptions();
-                authCookieOptions.AuthenticationScheme = ctx.Tenant.AuthenticationScheme;
-                authCookieOptions.LoginPath = new PathString("/login");
-                authCookieOptions.AccessDeniedPath = new PathString("/");
-                authCookieOptions.AutomaticAuthenticate = true;
-                authCookieOptions.AutomaticChallenge = true;
-                authCookieOptions.CookieName = ctx.Tenant.AuthenticationScheme;
-                builder.UseCookieAuthentication(authCookieOptions);
+                var tenant = ctx.Tenant;
 
-                
+                var shouldUseFolder = !multiTenantOptions.UseRelatedSitesMode
+                                        && multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName
+                                        && tenant.SiteFolderName.Length > 0;
+
+                var externalCookieOptions = SetupOtherCookies(
+                    cloudscribe.Core.Identity.AuthenticationScheme.External,
+                    multiTenantOptions.UseRelatedSitesMode,
+                    tenant);
+                builder.UseCookieAuthentication(externalCookieOptions);
+
+                var twoFactorRememberMeCookieOptions = SetupOtherCookies(
+                    cloudscribe.Core.Identity.AuthenticationScheme.TwoFactorRememberMe,
+                    multiTenantOptions.UseRelatedSitesMode,
+                    tenant);
+                builder.UseCookieAuthentication(twoFactorRememberMeCookieOptions);
+
+                var twoFactorUserIdCookie = SetupOtherCookies(
+                    cloudscribe.Core.Identity.AuthenticationScheme.TwoFactorUserId,
+                    multiTenantOptions.UseRelatedSitesMode,
+                    tenant);
+                builder.UseCookieAuthentication(twoFactorUserIdCookie);
+
+                var cookieEvents = new CookieAuthenticationEvents();
+                var logger = loggerFactory.CreateLogger<cloudscribe.Core.Identity.SiteAuthCookieValidator>();
+                var cookieValidator = new cloudscribe.Core.Identity.SiteAuthCookieValidator(logger);
+                var appCookieOptions = SetupAppCookie(
+                    cookieEvents,
+                    cookieValidator,
+                    cloudscribe.Core.Identity.AuthenticationScheme.Application,
+                    multiTenantOptions.UseRelatedSitesMode,
+                    tenant
+                    );
+                builder.UseCookieAuthentication(appCookieOptions);
+
+                // known issue here is if a site is updated to populate the
+                // social auth keys, it currently requires a restart so that the middleware gets registered
+                // in order for it to work or for the social auth buttons to appear 
+                builder.UseSocialAuth(ctx.Tenant, externalCookieOptions, shouldUseFolder);
 
             });
 
+            UseMvc(app, multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName);
 
+            CoreNoDbStartup.InitializeDataAsync(app.ApplicationServices).Wait();
+
+        }
+
+
+
+        private void UseMvc(IApplicationBuilder app, bool useFolders)
+        {
             app.UseMvc(routes =>
             {
-                routes.AddStandardRoutesForSimpleContent();
-                
+                if (useFolders)
+                {
+                    routes.AddBlogRoutesForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                }
+
+                routes.AddBlogRoutesForSimpleContent();
+
+                //routes.AddStandardRoutesForSimpleContent();
+
+                if (useFolders)
+                {
+                    routes.MapRoute(
+                        name: "folderdefault",
+                        template: "{sitefolder}/{controller}/{action}/{id?}",
+                        defaults: new { controller = "Home", action = "Index" },
+                        constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                        );
+
+                    routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                }
+
                 routes.MapRoute(
                     name: "def",
                     template: "{controller}/{action}"
                     );
 
+                routes.AddDefaultPageRouteForSimpleContent();
+
+                
+
+               
+
                 //routes.MapRoute(
                 //    name: "default",
-                //    template: "{controller=Home}/{action=Index}/{id?}");
+                //    template: "{controller=Home}/{action=Index}/{id?}"
+                //    //,defaults: new { controller = "Home", action = "Index" }
+                //    );
             });
         }
-
 
         private void ConfigureAuthPolicy(IServiceCollection services)
         {
@@ -188,13 +311,55 @@ namespace example.WebApp
 
             services.AddAuthorization(options =>
             {
-                // this policy currently means any user with a blogId claim can edit
-                // would require somthing more for multi tenant blogs
+                options.AddPolicy(
+                    "ServerAdminPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("ServerAdmins");
+                    });
+
+                options.AddPolicy(
+                    "CoreDataPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("ServerAdmins");
+                    });
+
+                options.AddPolicy(
+                    "AdminPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("ServerAdmins", "Administrators");
+                    });
+
+                options.AddPolicy(
+                    "UserManagementPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("ServerAdmins", "Administrators");
+                    });
+
+                options.AddPolicy(
+                    "RoleAdminPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Role Administrators", "Administrators");
+                    });
+
+                options.AddPolicy(
+                    "SystemLogPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("ServerAdmins");
+                    });
+
+
                 options.AddPolicy(
                     "BlogEditPolicy",
                     authBuilder =>
                     {
-                        authBuilder.RequireClaim("blogId");
+                        //authBuilder.RequireClaim("blogId");
+                        authBuilder.RequireRole("Administrators");
                     }
                  );
 
@@ -208,6 +373,117 @@ namespace example.WebApp
                 // add other policies here 
 
             });
+
+        }
+
+        private void ConfigureLogging(
+            ILoggerFactory loggerFactory,
+            IServiceProvider serviceProvider
+            , cloudscribe.Logging.Web.ILogRepository logRepo
+            )
+        {
+            // a customizable filter for logging
+            LogLevel minimumLevel;
+            if (environment.IsProduction())
+            {
+                minimumLevel = LogLevel.Warning;
+            }
+            else
+            {
+                minimumLevel = LogLevel.Information;
+            }
+
+
+            // add exclusions to remove noise in the logs
+            var excludedLoggers = new List<string>
+            {
+                "Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware",
+                "Microsoft.AspNetCore.Hosting.Internal.WebHost",
+            };
+
+            Func<string, LogLevel, bool> logFilter = (string loggerName, LogLevel logLevel) =>
+            {
+                if (logLevel < minimumLevel)
+                {
+                    return false;
+                }
+
+                if (excludedLoggers.Contains(loggerName))
+                {
+                    return false;
+                }
+
+                return true;
+            };
+
+            loggerFactory.AddDbLogger(serviceProvider, logFilter, logRepo);
+        }
+
+        
+
+        private CookieAuthenticationOptions SetupAppCookie(
+            CookieAuthenticationEvents cookieEvents,
+            cloudscribe.Core.Identity.SiteAuthCookieValidator siteValidator,
+            string scheme,
+            bool useRelatedSitesMode,
+            cloudscribe.Core.Models.SiteSettings tenant
+            )
+        {
+            var options = new CookieAuthenticationOptions();
+            if (useRelatedSitesMode)
+            {
+                options.AuthenticationScheme = scheme;
+                options.CookieName = scheme;
+                options.CookiePath = "/";
+            }
+            else
+            {
+                options.AuthenticationScheme = $"{scheme}-{tenant.SiteFolderName}";
+                options.CookieName = $"{scheme}-{tenant.SiteFolderName}";
+                options.CookiePath = "/" + tenant.SiteFolderName;
+                cookieEvents.OnValidatePrincipal = siteValidator.ValidatePrincipal;
+            }
+
+            var tenantPathBase = string.IsNullOrEmpty(tenant.SiteFolderName)
+                ? PathString.Empty
+                : new PathString("/" + tenant.SiteFolderName);
+
+            options.LoginPath = tenantPathBase + "/account/login";
+            options.LogoutPath = tenantPathBase + "/account/logoff";
+            options.AccessDeniedPath = tenantPathBase + "/account/accessdenied";
+
+            options.Events = cookieEvents;
+
+            options.AutomaticAuthenticate = true;
+            options.AutomaticChallenge = false;
+
+
+            return options;
+        }
+
+        private CookieAuthenticationOptions SetupOtherCookies(
+            string scheme,
+            bool useRelatedSitesMode,
+            cloudscribe.Core.Models.SiteSettings tenant
+            )
+        {
+            var options = new CookieAuthenticationOptions();
+            if (useRelatedSitesMode)
+            {
+                options.AuthenticationScheme = scheme;
+                options.CookieName = scheme;
+                options.CookiePath = "/";
+            }
+            else
+            {
+                options.AuthenticationScheme = $"{scheme}-{tenant.SiteFolderName}";
+                options.CookieName = $"{scheme}-{tenant.SiteFolderName}";
+                options.CookiePath = "/" + tenant.SiteFolderName;
+            }
+
+            options.AutomaticAuthenticate = false;
+
+            return options;
 
         }
     }

@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace example.WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        public HomeController(ILogger<HomeController> logger)
+        {
+            log = logger;
+        }
+
+        private ILogger log;
         public IActionResult Index()
         {
             return View();
@@ -27,9 +35,19 @@ namespace example.WebApp.Controllers
             return View();
         }
 
-        public IActionResult Error()
+        public IActionResult Error(int statusCode)
         {
-            return View();
+            if (statusCode == 404)
+            {
+                var statusFeature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+                if (statusFeature != null)
+                {
+                    log.LogWarning("handled 404 for url: {OriginalPath}", statusFeature.OriginalPath);
+                }
+
+            }
+            return View(statusCode);
         }
+
     }
 }

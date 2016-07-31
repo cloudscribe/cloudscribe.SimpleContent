@@ -1,4 +1,5 @@
 ﻿@using cloudscribe.Web.Navigation
+@using cloudscribe.Core.Models
 @inject SiteSettings Tenant
 <!DOCTYPE html>
 <html>
@@ -40,13 +41,12 @@
     @RenderSection("Toolbar", required: false)
     <div class="container body-content">
         @await Component.InvokeAsync("Navigation", new { viewName = "BootstrapBreadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
+        @await Html.PartialAsync("AlertsPartial")
         @RenderBody()
-        <hr />
         <footer class="container text-center" role="contentinfo" itemscope itemtype="http://schema.org/Person" itemprop="author">
             <small>Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</small>
         </footer>
     </div>
-    @RenderSection("Bottom", required: false)
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -63,7 +63,7 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
+    @RenderSection("Bottom", required: false)
     @RenderSection("scripts", required: false)
 </body>
 </html>
