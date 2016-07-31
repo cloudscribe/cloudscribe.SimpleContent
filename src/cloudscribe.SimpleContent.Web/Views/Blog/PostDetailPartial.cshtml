@@ -41,16 +41,26 @@
             {
                 <time datetime="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.CurrentPost.PubDate)</time>
             }
-            <a href="@Model.CurrentPost.Slug#comments">
-                <em class="glyphicon glyphicon-comment"></em>
-                @Model.CurrentPost.ApprovedCommentCount()   Comments
-            </a>
+            @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+            {
+                <a asp-route="postwithdate"
+                   asp-route-year="@Model.CurrentPost.PubDate.Year"
+                   asp-route-month="@Model.CurrentPost.PubDate.Month.ToString("00")"
+                   asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
+                   asp-route-slug="@Model.CurrentPost.Slug"
+                   asp-fragment="comments"
+                   itemprop="url"><em class="glyphicon glyphicon-comment"></em>@Model.CurrentPost.ApprovedCommentCount() Comments</a>
+            }
+            else
+            {
+                <a asp-route="postwithoutdate" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><em class="glyphicon glyphicon-comment"></em>@Model.CurrentPost.ApprovedCommentCount() Comments</a>
+            } 
             <ul class="categories">
                 <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</li>
                 @foreach (string cat in Model.CurrentPost.Categories)
                 {
                     <li itemprop="articleSection">
-                        <a asp-controller="Blog" asp-action="Categoty" asp-route-category="@cat">@cat</a>
+                        <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a>
                     </li>
                 }
             </ul>
