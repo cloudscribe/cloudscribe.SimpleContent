@@ -223,6 +223,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             var needToClearCache = false;
+            var isNew = false;
             if (page != null)
             {
                 page.Title = model.Title;
@@ -233,6 +234,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             else
             {
+                isNew = true;
                 needToClearCache = true;
                 var slug = ContentUtils.CreateSlug(model.Title);
                 var available = await pageService.SlugIsAvailable(project.ProjectId, slug);
@@ -272,12 +274,19 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 catch(Exception)
                 {
                     page.PubDate = localTime;
-                }
-                
-
+                } 
             }
 
-            await pageService.Save(page, needToClearCache, model.IsPublished);
+            if(isNew)
+            {
+                await pageService.Create(page, model.IsPublished);
+            }
+            else
+            {
+                await pageService.Update(page, model.IsPublished);
+            }
+
+            
             if(needToClearCache)
             {
                 pageService.ClearNavigationCache();

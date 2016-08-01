@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-04-25
+// Last Modified:           2016-08-01
 // 
 
 
@@ -17,12 +17,12 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class NoDbPageRepository : IPageRepository
+    public class PageQueries : IPageQueries
     {
-        public NoDbPageRepository(
+        public PageQueries(
             IBasicCommands<Page> pageCommands,
             IBasicQueries<Page> pageQueries,
-            ILogger<NoDbPageRepository> logger
+            ILogger<PageQueries> logger
             )
         {
             commands = pageCommands;
@@ -34,46 +34,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         private IBasicQueries<Page> query;
         private ILogger log;
 
-        public async Task Save(
-            string projectId,
-            Page page,
-            bool isNew)
-        {
-            if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
-            page.LastModified = DateTime.UtcNow;
-            if (isNew) // New page
-            {
-                page.PubDate = DateTime.UtcNow;
-
-                //var pages = await query.GetAllAsync(
-                //    projectId,
-                //    CancellationToken.None).ConfigureAwait(false);
-                //pages.Insert(0, page);
-                //pages.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
-
-                await commands.CreateAsync(projectId, page.Id, page).ConfigureAwait(false);
-            }
-            else
-            {
-                await commands.UpdateAsync(projectId, page.Id, page).ConfigureAwait(false);
-            }
-            
-        }
-
-        public async Task Delete(string projectId, string pageId)
-        {
-
-            var page = await query.FetchAsync(projectId, pageId, CancellationToken.None);
-            if (page != null)
-            {
-                var pages = await GetAllPages(projectId, CancellationToken.None).ConfigureAwait(false);
-                await commands.DeleteAsync(projectId, pageId).ConfigureAwait(false);
-                pages.Remove(page);
-                
-            }
-            
-
-        }
+        
 
         public async Task<List<Page>> GetAllPages(
             string projectId,

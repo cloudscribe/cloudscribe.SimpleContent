@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public interface IProjectSettingsRepository
+    public interface IProjectQueries
     {
         Task<ProjectSettings> GetProjectSettings(
-            string blogId,
+            string projectId,
             CancellationToken cancellationToken
             );
 

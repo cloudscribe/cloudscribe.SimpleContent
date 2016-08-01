@@ -19,13 +19,13 @@ namespace cloudscribe.SimpleContent.Services
     public class DefaultProjectSettingsResolver : IProjectSettingsResolver
     {
         public DefaultProjectSettingsResolver(
-            IProjectSettingsRepository blogSettingsRepository
+            IProjectQueries blogSettingsRepository
             )
         {
             blogRepo = blogSettingsRepository;
         }
 
-        private IProjectSettingsRepository blogRepo;
+        private IProjectQueries blogRepo;
 
         public async Task<ProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {

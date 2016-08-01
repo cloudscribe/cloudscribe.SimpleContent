@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-07-26
+// Last Modified:           2016-08-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -16,12 +16,12 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class NoDbPostRepository : IPostRepository
+    public class PostQueries : IPostQueries
     {
-        public NoDbPostRepository(
+        public PostQueries(
             IBasicCommands<Post> postCommands,
             IBasicQueries<Post> postQueries,
-            ILogger<NoDbPostRepository> logger)
+            ILogger<PostQueries> logger)
         {
             commands = postCommands;
             query = postQueries;
@@ -33,57 +33,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         private ILogger log;
 
 
-        public async Task HandlePubDateAboutToChange(Post post, DateTime newPubDate)
-        {
-            // because with the filesystem storage we are storing posts in a year folder
-            // if the year changes we need to delete the old file and save the updated post to the
-            // new year folder
-            //await filePersister.DeletePostFile(post.BlogId, post.Id, post.PubDate).ConfigureAwait(false);
-            await commands.DeleteAsync(post.BlogId, post.Id).ConfigureAwait(false);
-        }
-
-        public async Task Save(
-            string blogId,
-            Post post,
-            bool isNew)
-        {
-            
-            post.LastModified = DateTime.UtcNow;
-            
-            if (string.IsNullOrEmpty(post.Id)) { post.Id = Guid.NewGuid().ToString(); }
-
-            if (isNew) // New post
-            {
-                //var posts = await query.GetAllAsync(
-                //    blogId,
-                //    CancellationToken.None).ConfigureAwait(false);
-                //posts.Insert(0, post);
-                //posts.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
-
-                await commands.CreateAsync(blogId, post.Id, post).ConfigureAwait(false);
-            }
-            else
-            {
-                await commands.UpdateAsync(blogId, post.Id, post).ConfigureAwait(false);
-            }
-
-          
-        }
-
-        public async Task Delete(string blogId, string postId)
-        {
-            var post = await query.FetchAsync(blogId, postId, CancellationToken.None).ConfigureAwait(false);
-            if (post != null)
-            {
-                var allPosts = await GetAllPosts(blogId, CancellationToken.None).ConfigureAwait(false);
-                await commands.DeleteAsync(blogId, postId).ConfigureAwait(false);
-                allPosts.Remove(post);
-                
-                //Blog.ClearStartPageCache();
-            }
-            
-
-        }
+        
         
         public async Task<List<Post>> GetAllPosts(
             string blogId,

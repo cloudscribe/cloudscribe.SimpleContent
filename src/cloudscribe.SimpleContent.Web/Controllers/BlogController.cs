@@ -2,26 +2,19 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-07-26
+// Last Modified:           2016-08-01
 // 
 
 using cloudscribe.SimpleContent.Common;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
-using Microsoft.AspNetCore.Http.Authentication;
-using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-
-using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Common;
@@ -441,8 +434,17 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
                 
             }
+
+            if(isNew)
+            {
+                await blogService.Create(post);
+            }
+            else
+            {
+                await blogService.Update(post);
+            }
             
-            await blogService.Save(post, isNew);
+            
             string url;
             if(project.IncludePubDateInPostUrls)
             {
@@ -612,7 +614,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             };
             
             blogPost.Comments.Add(comment);
-            await blogService.Save(blogPost, false);
+            await blogService.Update(blogPost);
             
             //no need to send notification when project owner posts a comment, ie in response
             var shouldSendEmail = !canEdit;
@@ -713,7 +715,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             comment.IsApproved = true;
             //blogPost.Comments.Add(comment);
-            await blogService.Save(blogPost, false);
+            await blogService.Update(blogPost);
 
             Response.StatusCode = 200;
 
@@ -781,7 +783,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             //comment.IsApproved = true;
             blogPost.Comments.Remove(comment);
-            await blogService.Save(blogPost, false);
+            await blogService.Update(blogPost);
 
             Response.StatusCode = 200;
         }
