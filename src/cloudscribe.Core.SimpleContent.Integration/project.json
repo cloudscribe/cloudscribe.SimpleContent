@@ -4,7 +4,11 @@
     "dependencies": {
         "NETStandard.Library": "1.6.0",
         "Microsoft.Extensions.Options": "1.0.0",
+        "Microsoft.AspNetCore.Mvc": "1.0.0-*",
         "Microsoft.AspNetCore.Authorization": "1.0.0",
+        "Microsoft.Extensions.FileProviders.Embedded": "1.0.0-*",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-*",
+        "Microsoft.AspNetCore.Routing": "1.0.0-*",
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
         "cloudscribe.Core.Models": "1.0.2-*",
         "cloudscribe.Core.Identity": "1.0.0-*"

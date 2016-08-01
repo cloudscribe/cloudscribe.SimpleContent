@@ -67,12 +67,22 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task Save(Page page, bool isNew, bool publish)
+        public Task Create(Page page, bool publish)
         {
             throw new NotImplementedException();
         }
 
-        public Task Save(string projectId, string userName, string password, Page page, bool isNew, bool publish)
+        public Task Update(Page page, bool publish)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Create(string projectId, string userName, string password, Page page, bool publish)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(string projectId, string userName, string password, Page page, bool publish)
         {
             throw new NotImplementedException();
         }

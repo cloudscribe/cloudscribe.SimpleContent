@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-07-16
+// Last Modified:           2016-08-01
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -23,11 +23,11 @@ namespace cloudscribe.SimpleContent.Services
         public ProjectService(
             IProjectSettingsResolver settingsResolver,
             IProjectSecurityResolver security,
-            IProjectSettingsRepository settingsRepo,
+            IProjectQueries projectQueries,
             IHttpContextAccessor contextAccessor = null)
         {
             this.security = security;
-            this.settingsRepo = settingsRepo;
+            this.projectQueries = projectQueries;
             this.settingsResolver = settingsResolver;
             context = contextAccessor?.HttpContext;
         }
@@ -35,7 +35,7 @@ namespace cloudscribe.SimpleContent.Services
         private readonly HttpContext context;
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
         private IProjectSecurityResolver security;
-        private IProjectSettingsRepository settingsRepo;
+        private IProjectQueries projectQueries;
         private IProjectSettingsResolver settingsResolver;
         private ProjectSettings currentSettings = null;
 
@@ -69,7 +69,7 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<ProjectSettings> GetProjectSettings(string projectId)
         {
             
-            return await settingsRepo.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
+            return await projectQueries.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<ProjectSettings>> GetUserProjects(string userName, string password)
@@ -88,7 +88,7 @@ namespace cloudscribe.SimpleContent.Services
                 return result; //empty
             }
 
-            var project = await settingsRepo.GetProjectSettings(permission.ProjectId, CancellationToken);
+            var project = await projectQueries.GetProjectSettings(permission.ProjectId, CancellationToken);
             if(project != null)
             {
                 result.Add(project);
@@ -97,7 +97,7 @@ namespace cloudscribe.SimpleContent.Services
             
             //await EnsureBlogSettings().ConfigureAwait(false);
             //return settings;
-            return await settingsRepo.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);
+            return await projectQueries.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
     {
         public SiteProjectSettingsResolver(
             SiteSettings currentSite,
-            IProjectSettingsRepository projectSettingsRepository
+            IProjectQueries projectSettingsRepository
             )
         {
             this.currentSite = currentSite;
@@ -27,7 +27,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
         }
 
         private SiteSettings currentSite;
-        private IProjectSettingsRepository projectRepo;
+        private IProjectQueries projectRepo;
 
         public async Task<ProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {

@@ -21,17 +21,26 @@ namespace cloudscribe.SimpleContent.Models
         Task<bool> PageSlugIsAvailable(string projectId, string slug);
         Task<string> ResolvePageUrl(Page page);
 
-        Task Save(
+        Task Create(
             Page page,
-            bool isNew,
             bool publish);
 
-        Task Save(
+        Task Update(
+            Page page,
+            bool publish);
+
+        Task Create(
             string projectId, 
             string userName,
             string password,
             Page page, 
-            bool isNew, 
+            bool publish);
+
+        Task Update(
+            string projectId,
+            string userName,
+            string password,
+            Page page,
             bool publish);
 
         Task<bool> SlugIsAvailable(string projectId, string slug);

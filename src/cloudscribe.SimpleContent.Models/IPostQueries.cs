@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-07-13
+// Last Modified:           2016-08-02
 // 
 
 using System;
@@ -12,24 +12,10 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public interface IPostRepository : IPostQueries, IPostCommands
-    {
-       
-    }
-
-    public interface IPostCommands
-    {
-        Task Delete(string blogId, string postId);
-
-        Task Save(
-            string blogId,
-            Post post,
-            bool isNew);
-    }
-
+    
     public interface IPostQueries
     {
-        //TODO: can we remove this? do we ever reall yneed to get all of them?
+        
         //Task<List<Post>> GetAllPosts(
         //    string blogId,
         //    CancellationToken cancellationToken);
@@ -103,6 +89,6 @@ namespace cloudscribe.SimpleContent.Models
             int day = 0,
             CancellationToken cancellationToken = default(CancellationToken));
 
-        Task HandlePubDateAboutToChange(Post post, DateTime newPubDate);
+        
     }
 }

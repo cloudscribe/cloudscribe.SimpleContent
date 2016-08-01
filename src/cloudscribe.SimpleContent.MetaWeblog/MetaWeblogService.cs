@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2016-03-29
+// Last Modified:           2016-08-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -52,12 +52,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             post.Author = authorDisplayName;
             post.IsPublished = publish;
             
-            await blogService.Save(
+            await blogService.Create(
                 blogId, 
                 userName,
                 password,
                 post, 
-                true, 
                 publish
                 ).ConfigureAwait(false);
             return post.Id; 
@@ -110,12 +109,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             existing.Categories = update.Categories;
             existing.IsPublished = publish;
 
-            await blogService.Save(
+            await blogService.Update(
                 blogId, 
                 userName,
                 password,
                 existing, 
-                false, 
                 publish).ConfigureAwait(false);
 
             return true;
@@ -417,12 +415,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             //page.Author = authorDisplayName;
             page.IsPublished = publish;
 
-            await pageService.Save(
+            await pageService.Create(
                 blogId, 
                 userName,
                 password,
                 page, 
-                true, 
                 publish
                 ).ConfigureAwait(false);
 
@@ -452,12 +449,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             existing.ParentId = update.ParentId;
             existing.Title = update.Title;
             
-            await pageService.Save(
+            await pageService.Update(
                 blogId, 
                 userName,
                 password,
                 existing, 
-                false, 
                 publish
                 ).ConfigureAwait(false);
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-05-28
+// Last Modified:           2016-08-01
 // 
 
 
@@ -29,7 +29,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddNoDbPageStorage(this IServiceCollection services)
         {
             services.AddNoDb<Page>();
-            services.TryAddScoped<IPageRepository, NoDbPageRepository>();
+            services.TryAddScoped<IPageQueries, PageQueries>();
+            services.TryAddScoped<IPageCommands, PageCommands>();
 
             return services;
         }
@@ -37,14 +38,15 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddNoDbPostStorage(this IServiceCollection services)
         {
             services.AddNoDb<Post>();
-            services.TryAddScoped<IPostRepository, NoDbPostRepository>();
+            services.TryAddScoped<IPostQueries, PostQueries>();
+            services.TryAddScoped<IPostCommands, PostCommands>();
 
             return services;
         }
 
         public static IServiceCollection AddNoDbProjectStorage(this IServiceCollection services)
         {
-            services.TryAddScoped<IProjectSettingsRepository, NoDbProjectRepository>();
+            services.TryAddScoped<IProjectQueries, ProjectQueries>();
 
             return services;
         }

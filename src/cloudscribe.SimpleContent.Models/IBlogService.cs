@@ -71,13 +71,22 @@ namespace cloudscribe.SimpleContent.Models
             string userName,
             string password);
 
-        Task Save(Post post, bool isNew);
-        Task Save(
+        Task Create(Post post);
+
+        Task Update(Post post);
+        Task Create(
             string projectId,
             string userName,
             string password,
             Post post, 
-            bool isNew, 
+            bool publish
+            );
+
+        Task Update(
+            string projectId,
+            string userName,
+            string password,
+            Post post,
             bool publish
             );
 

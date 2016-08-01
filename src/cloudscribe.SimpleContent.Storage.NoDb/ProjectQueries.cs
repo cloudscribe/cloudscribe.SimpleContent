@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-07-16
+// Last Modified:           2016-08-02
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -16,10 +16,10 @@ using System.Threading.Tasks;
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
     //TODO: implement this with NoDb instead of list configured from startup
-    public class NoDbProjectRepository : IProjectSettingsRepository
+    public class ProjectQueries : IProjectQueries
     {
 
-        public NoDbProjectRepository(
+        public ProjectQueries(
             IOptions<List<ProjectSettings>> projectListAccessor)
         {
             allProjects = projectListAccessor.Value;
