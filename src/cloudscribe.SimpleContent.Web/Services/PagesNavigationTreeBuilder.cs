@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-07-30
+// Last Modified:           2016-08-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -22,19 +22,21 @@ namespace cloudscribe.SimpleContent.Services
         public PagesNavigationTreeBuilder(
             IProjectService projectService,
             IPageService pageService,
+            INodeUrlPrefixProvider prefixProvider,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor
             )
         {
             this.projectService = projectService;
             this.pageService = pageService;
+            this.prefixProvider = prefixProvider;
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
         }
 
         private IProjectService projectService;
         private IPageService pageService;
-        //private IUrlHelper urlHelper;
+        private INodeUrlPrefixProvider prefixProvider;
         private IUrlHelperFactory urlHelperFactory;
         private IActionContextAccessor actionContextAccesor;
         private TreeNode<NavigationNode> rootNode = null;
@@ -92,7 +94,7 @@ namespace cloudscribe.SimpleContent.Services
                 rootNav.Key = "pagesRoot";
                 rootNav.Title = "Home";
                 rootNav.Text = "Home";
-                rootNav.Url = urlHelper.Content("~/");
+                rootNav.Url = urlHelper.Content("~/" + prefixProvider.GetPrefix());
                 //rootNav.ChildContainerOnly = true;
             }
 
