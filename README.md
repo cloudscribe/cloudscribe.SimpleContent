@@ -8,11 +8,9 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 [![Join the chat at https://gitter.im/joeaudette/cloudscribe](https://badges.gitter.im/joeaudette/cloudscribe.svg)](https://gitter.im/joeaudette/cloudscribe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## Current Status
+## Sample Apps
 
-This project is in fairly early stages, lots of things will change or be refactored but it is starting to shape up nicely and I thought I should go ahead and make the project public.
-
-There are no releases or nugets yet, but you can try it in visual studio. If you launch it with IIS Express it will have a single tenant running at localhost:53941, change to port-tenants in the debugging dropdown (instead of IISExpress), you can debug with 2 tenants running. You can also run both configured tenants by opening a command window in the root of the example.WebApp project and execute the command:
+There is a [sample app available](https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/samples/simpleauthnodb) with NuGet dependencies on cloudscribe SimpleContent and SimpleAuth. If you launch it with IIS Express it will have a single tenant running at localhost:53941, change to port-tenants in the debugging dropdown (instead of IISExpress), you can debug with 2 tenants running. You can also run both configured tenants by opening a command window in the root of the example.WebApp project and execute the command:
 
     dotnet run
 	
@@ -21,6 +19,12 @@ that will get you both localhost:60000 and localhost:60002 which you can open in
 After you login a little pencil will appear in the upper right corner, it toggles the editor toolbar.
 
 You should also be able to [create and edit blog posts and pages using Open Live Writer](https://github.com/joeaudette/cloudscribe.SimpleContent/wiki/Using-Open-Live-Writer)
+
+[More Samples are planned](https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/samples/)
+
+## Main Solution
+
+The main solution in the src folder is where main development work is happening. Currently the work to integrate with [cloudscribe Core](https://github.com/joeaudette/cloudscribe) is in progress. To login to the example.WebApp use admin@admin.com and password admin
 
 ## Start simple with no database and migrate to a database later if you need one
 
