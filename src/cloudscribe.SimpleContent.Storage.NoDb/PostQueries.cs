@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-02
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -31,13 +31,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         private IBasicCommands<Post> commands;
         private IBasicQueries<Post> query;
         private ILogger log;
-
-
         
         
         public async Task<List<Post>> GetAllPosts(
             string blogId,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             //TODO: caching
             //if (HttpRuntime.Cache["posts"] == null)
@@ -62,7 +61,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<List<Post>> GetVisiblePosts(
             string blogId,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             var list = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
@@ -90,7 +90,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             bool userIsBlogOwner,
             int pageNumber,
             int pageSize,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             var posts = await GetVisiblePosts(blogId, userIsBlogOwner, cancellationToken);
             var totalPosts = posts.Count;
@@ -126,7 +127,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             string blogId,
             string category,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             var posts = await GetVisiblePosts(blogId, userIsBlogOwner, cancellationToken);
             
@@ -144,7 +146,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<List<Post>> GetRecentPosts(
             string blogId,
             int numberToGet,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             cancellationToken.ThrowIfCancellationRequested();
             var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
@@ -166,7 +169,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             int day = 0,
             int pageNumber = 1,
             int pageSize = 10,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             cancellationToken.ThrowIfCancellationRequested();
             var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
@@ -224,7 +228,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             int year,
             int month = 0,
             int day = 0,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             cancellationToken.ThrowIfCancellationRequested();
             var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
@@ -258,7 +263,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<Post> GetPost(
             string blogId,
             string postId,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             return await query.FetchAsync(blogId, postId, cancellationToken).ConfigureAwait(false);
             //var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
@@ -269,7 +275,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<PostResult> GetPostBySlug(
             string blogId,
             string slug,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             var result = new PostResult();
             var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
@@ -305,7 +312,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<bool> SlugIsAvailable(
             string blogId,
             string slug,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
@@ -318,7 +326,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<Dictionary<string, int>> GetCategories(
             string blogId,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             var result = new Dictionary<string, int>();
 
@@ -346,7 +355,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<Dictionary<string, int>> GetArchives(
             string blogId,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             var result = new Dictionary<string, int>();
 

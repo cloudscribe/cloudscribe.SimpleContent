@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-02
 // 
 
 
@@ -38,7 +38,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         public async Task<List<Page>> GetAllPages(
             string projectId,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             
             var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
@@ -63,7 +64,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<Page> GetPage(
             string projectId,
             string pageId,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
@@ -73,7 +74,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         public async Task<List<Page>> GetRootPages(
             string projectId,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
@@ -85,7 +86,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<List<Page>> GetChildPages(
             string projectId,
             string pageId,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
@@ -97,7 +98,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<Page> GetPageBySlug(
             string projectId,
             string slug,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             )
         {
 
@@ -108,7 +109,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<bool> SlugIsAvailable(
             string projectId,
             string slug,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
@@ -126,7 +127,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             string projectId,
             string category,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             return Task.FromResult(0);
         }
