@@ -7,6 +7,7 @@
 
 using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Options;
+using NoDb;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,26 +16,33 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    //TODO: implement this with NoDb instead of list configured from startup
+    
     public class ProjectQueries : IProjectQueries
     {
 
         public ProjectQueries(
-            IOptions<List<ProjectSettings>> projectListAccessor)
+            IBasicQueries<ProjectSettings> queries,
+            IOptions<List<ProjectSettings>> projectListAccessor
+            )
         {
-            allProjects = projectListAccessor.Value;
+            configProjects = projectListAccessor.Value;
+            this.queries = queries;
         }
 
-        private List<ProjectSettings> allProjects;
+        private IBasicQueries<ProjectSettings> queries;
 
-        public Task<ProjectSettings> GetProjectSettings(
-            string blogId,
+        private List<ProjectSettings> configProjects;
+
+        public async Task<ProjectSettings> GetProjectSettings(
+            string projectId,
             CancellationToken cancellationToken
             )
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var result = allProjects.Where(b => b.ProjectId == blogId).FirstOrDefault();
-            return Task.FromResult(result);
+            var result = configProjects.Where(b => b.ProjectId == projectId).FirstOrDefault();
+            if(result != null) { return result; }
+            result = await queries.FetchAsync(projectId, projectId, cancellationToken);
+            return result;
         }
 
         public async Task<List<ProjectSettings>> GetProjectSettingsByUser(
@@ -44,22 +52,16 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             cancellationToken.ThrowIfCancellationRequested();
             var result = new List<ProjectSettings>();
-            var defaultBlog = await GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
-            if(defaultBlog != null)
+            var defaultProject = await GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
+            if(defaultProject != null)
             {
-                result.Add(defaultBlog);
+                result.Add(defaultProject);
             }
             
-
-            //var result = allBlogs.Where(b => b.BlogId == blogId).FirstOrDefault();
             return result;
         }
 
 
-        //public Task<BlogSettings> GetCurrentBlogSettings(CancellationToken cancellationToken)
-        //{
-        //    cancellationToken.ThrowIfCancellationRequested();
-        //    return GetBlogSetings("default", cancellationToken);
-        //}
+        
     }
 }

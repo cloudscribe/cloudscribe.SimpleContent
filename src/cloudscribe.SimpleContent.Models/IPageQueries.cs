@@ -18,34 +18,35 @@ namespace cloudscribe.SimpleContent.Models
         Task<bool> SlugIsAvailable(
             string blogId,
             string slug,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<Page> GetPage(
             string blogId,
             string postId,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<Page> GetPageBySlug(
             string blogId,
             string slug,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<List<Page>> GetAllPages(
             string blogId,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         Task<List<Page>> GetRootPages(
             string blogId,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<List<Page>> GetChildPages(
             string blogId,
             string pageId,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
     }
 }

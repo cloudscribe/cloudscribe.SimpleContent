@@ -197,9 +197,8 @@ src/example.WebApp/cloudscribe_config/firebirddb/*
 src/example.WebApp/cloudscribe_config/sqlitedb/*
 
 src/example.WebApp/Themes/joeaudette/**
-src/example.WebApp/wwwroot/media/**
 src/example.WebApp/nodb_storage/projects/joeaudettecom/**
-src/example.WebApp/nodb_storage/projects/default/**
+src/example.WebApp/nodb_storage/projects/default/logitem/**
 
 .vscode/launch.json
 src/cloudscribe.Core.Repositories.EF/appsettings.local.overrides.json

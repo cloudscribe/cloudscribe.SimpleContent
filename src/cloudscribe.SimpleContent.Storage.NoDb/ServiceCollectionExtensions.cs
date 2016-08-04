@@ -46,7 +46,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddNoDbProjectStorage(this IServiceCollection services)
         {
+            services.AddNoDb<ProjectSettings>();
             services.TryAddScoped<IProjectQueries, ProjectQueries>();
+            services.TryAddScoped<IProjectCommands, ProjectCommands>();
 
             return services;
         }

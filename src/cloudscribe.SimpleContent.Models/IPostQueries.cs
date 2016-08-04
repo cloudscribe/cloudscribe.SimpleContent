@@ -23,41 +23,44 @@ namespace cloudscribe.SimpleContent.Models
         Task<Dictionary<string, int>> GetCategories(
             string blogId,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<Dictionary<string, int>> GetArchives(
             string blogId,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         Task<Post> GetPost(
             string blogId,
             string postId,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<PostResult> GetPostBySlug(
             string blogId,
             string slug,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<bool> SlugIsAvailable(
             string blogId,
             string slug,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<List<Post>> GetRecentPosts(
             string blogId,
             int numberToGet,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         Task<List<Post>> GetVisiblePosts(
             string blogId,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         Task<PagedResult<Post>> GetVisiblePosts(
             string blogId,
@@ -65,7 +68,8 @@ namespace cloudscribe.SimpleContent.Models
             bool userIsBlogOwner,
             int pageNumber,
             int pageSize,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         Task<PagedResult<Post>> GetPosts(
             string blogId,
@@ -74,20 +78,23 @@ namespace cloudscribe.SimpleContent.Models
             int day = 0,
             int pageNumber = 1,
             int pageSize = 10,
-            CancellationToken cancellationToken = default(CancellationToken));
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         Task<int> GetCount(
             string blogId,
             string category,
             bool userIsBlogOwner,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         Task<int> GetCount(
             string blogId,
             int year,
             int month = 0,
             int day = 0,
-            CancellationToken cancellationToken = default(CancellationToken));
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
 
         
     }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -77,6 +77,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var folderPrefix = prefixProvider.GetPrefix();
             if (homePage != null)
             {
                 rootNav = new NavigationNode();
@@ -84,8 +85,9 @@ namespace cloudscribe.SimpleContent.Services
                 rootNav.Key = homePage.Id;
                 //rootNav.Title = homePage.Title;
                 rootNav.Text = homePage.Title;
-                
-                rootNav.Url = urlHelper.Action("Index", "Page", new { slug = homePage.Slug });
+
+                //rootNav.Url = urlHelper.Action("Index", "Page", new { slug = homePage.Slug });
+                rootNav.Url = urlHelper.Content("~/" + folderPrefix);
             }
             else
             {
@@ -94,7 +96,7 @@ namespace cloudscribe.SimpleContent.Services
                 rootNav.Key = "pagesRoot";
                 rootNav.Title = "Home";
                 rootNav.Text = "Home";
-                rootNav.Url = urlHelper.Content("~/" + prefixProvider.GetPrefix());
+                rootNav.Url = urlHelper.Content("~/" + folderPrefix);
                 //rootNav.ChildContainerOnly = true;
             }
 
@@ -142,19 +144,31 @@ namespace cloudscribe.SimpleContent.Services
                 node.Key = page.Id;
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
-                node.Url = urlHelper.Action("Index", "Page", new { slug = page.Slug });
+                if(string.IsNullOrEmpty(folderPrefix))
+                {
+                    node.Url = urlHelper.RouteUrl(ProjectConstants.PageIndexRouteName, new { slug = page.Slug });
+                }
+                else
+                {
+                    //node.Url = urlHelper.Action("Index", "Page", new { slug = page.Slug });
+                    node.Url = urlHelper.RouteUrl(ProjectConstants.FolderPageIndexRouteName, new { slug = page.Slug });
+                }
+                
 
                 if (!page.IsPublished) { node.ViewRoles = project.AllowedEditRoles; }
 
                 var treeNode = treeRoot.AddChild(node);
-                await AddChildNodes(treeNode).ConfigureAwait(false);
+                await AddChildNodes(treeNode, folderPrefix).ConfigureAwait(false);
                 rootPosition += 1;
             }
 
             return treeRoot;
         }
 
-        private async Task AddChildNodes(TreeNode<NavigationNode> treeNode)
+        private async Task AddChildNodes(
+            TreeNode<NavigationNode> treeNode,
+            string folderPrefix
+            )
         {
             var childList = await pageService.GetChildPages(treeNode.Value.Key).ConfigureAwait(false);
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
@@ -164,10 +178,19 @@ namespace cloudscribe.SimpleContent.Services
                 node.Key = page.Id;
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
-                node.Url = urlHelper.Action("Index", "Pages", new { slug = page.Slug });
+                //node.Url = urlHelper.Action("Index", "Pages", new { slug = page.Slug });
+                if (string.IsNullOrEmpty(folderPrefix))
+                {
+                    node.Url = urlHelper.RouteUrl(ProjectConstants.PageIndexRouteName, new { slug = page.Slug });
+                }
+                else
+                {
+                    //node.Url = urlHelper.Action("Index", "Page", new { slug = page.Slug });
+                    node.Url = urlHelper.RouteUrl(ProjectConstants.FolderPageIndexRouteName, new { slug = page.Slug });
+                }
 
                 var childNode = treeNode.AddChild(node);
-                await AddChildNodes(childNode).ConfigureAwait(false); //recurse
+                await AddChildNodes(childNode, folderPrefix).ConfigureAwait(false); //recurse
             }
         }
 
