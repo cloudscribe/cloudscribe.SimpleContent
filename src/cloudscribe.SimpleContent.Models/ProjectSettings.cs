@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-02-27
+// Last Modified:           2016-08-04
 // 
 
 
@@ -21,32 +21,33 @@ namespace cloudscribe.SimpleContent.Models
         }
 
         public string ProjectId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = "Blog";
+        public string Description { get; set; } = string.Empty;
         public string CopyrightNotice { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
-        public int PostsPerPage { get; set; }
-        public int DaysToComment { get; set; }
-        public bool ModerateComments { get; set; }
+        public int PostsPerPage { get; set; } = 5;
+        public int DaysToComment { get; set; } = -1;
+        public bool ModerateComments { get; set; } = true;
         public string CommentNotificationEmail { get; set; }
-        public string LocalMediaVirtualPath { get; set; } = string.Empty;
+        public string LocalMediaVirtualPath { get; set; } = "/media/images/";
         public string LocalMediaAbsoluteBaseUrl { get; set; } = string.Empty;
         public string CdnUrl { get; set; } = string.Empty;
         public int GravatarSize { get; set; } = 50;
         public string PubDateFormat { get; set; } = "MMMM d. yyyy";
         public bool IncludePubDateInPostUrls { get; set; } = true;
-        private string timeZoneId = "Eastern Standard Time";
+
+        private string timeZoneId = "America/New_York";
         public string TimeZoneId
         {
-            get { return timeZoneId ?? "Eastern Standard Time"; }
+            get { return timeZoneId ?? "America/New_York"; }
             set { timeZoneId = value; }
         }
         public string RecaptchaPublicKey { get; set; }
         public string RecaptchaPrivateKey { get; set; }
         public string DefaultPageSlug { get; set; } = "home";
         public bool UseDefaultPageAsRootNode { get; set; } = true;
-        public string AllowedEditRoles { get; set; } = "Admins";
-        public bool ShowTitle { get; set; } = true;
+        public string AllowedEditRoles { get; set; } = "Administrators";
+        public bool ShowTitle { get; set; } = false;
 
         // if true automatically add the blog index
         public bool AddBlogToPagesTree { get; set; } = true;

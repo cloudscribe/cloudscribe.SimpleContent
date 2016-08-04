@@ -21,7 +21,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     {
 
         public ProjectQueries(
-            BasicQueries<ProjectSettings> queries,
+            IBasicQueries<ProjectSettings> queries,
             IOptions<List<ProjectSettings>> projectListAccessor
             )
         {
@@ -29,7 +29,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             this.queries = queries;
         }
 
-        private BasicQueries<ProjectSettings> queries;
+        private IBasicQueries<ProjectSettings> queries;
 
         private List<ProjectSettings> configProjects;
 
