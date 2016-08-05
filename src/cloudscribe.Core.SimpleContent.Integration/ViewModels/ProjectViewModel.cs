@@ -10,7 +10,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
     public class ProjectViewModel
     {
 
-        #region Blog Settings
+        
 
         public string Title { get; set; } = "Blog";
 
@@ -23,9 +23,11 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string PubDateFormat { get; set; } = "MMMM d. yyyy";
         public bool IncludePubDateInPostUrls { get; set; } = true;
 
+       
+
         //public string LocalMediaVirtualPath { get; set; } = "/media/images/";
 
-        #region
+       
 
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;
@@ -33,11 +35,11 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         
         public int GravatarSize { get; set; } = 50;
 
-        #region Navigation Settings
+        
         //public string DefaultPageSlug { get; set; } = "home";
         //public bool UseDefaultPageAsRootNode { get; set; } = true;
 
-        #endregion
+        
 
         //public string AllowedEditRoles { get; set; } = "Administrators";
         
@@ -49,7 +51,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         //public string BlogPageNavComponentVisibility { get; set; } = "topnav";
 
 
-        #region Feed Settings
+        
         public string RemoteFeedUrl { get; set; } = string.Empty;
 
         /// <summary>
@@ -64,6 +66,6 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string ChannelRating { get; set; } = string.Empty;
         public string WebmasterEmail { get; set; } = string.Empty;
 
-        #endregion
+        
     }
 }
