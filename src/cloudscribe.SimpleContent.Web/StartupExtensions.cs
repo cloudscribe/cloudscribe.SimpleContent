@@ -10,6 +10,7 @@ using cloudscribe.Web.Navigation;
 using cloudscribe.Web.SiteMap;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
+using cloudscribe.SimpleContent.Web.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -151,6 +152,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services
             )
         {
+            
             services.TryAddScoped<IBlogService, BlogService>();
             services.TryAddScoped<IPageService, PageService>();
             services.TryAddScoped<IProjectService, ProjectService>();
@@ -161,6 +163,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
 
+            services.TryAddScoped<IPageRouteHelper, DefaultPageRouteHelper>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
             services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
