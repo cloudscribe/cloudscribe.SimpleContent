@@ -7,9 +7,6 @@
 
 using cloudscribe.Core.Models;
 using cloudscribe.SimpleContent.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,7 +33,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
         {
             var settings = await projectQueries.GetProjectSettings(currentSite.Id.ToString(), cancellationToken).ConfigureAwait(false);
 
-            //ensure existance of settings
+            //ensure existence of settings
             if(settings == null)
             {
                 settings = new ProjectSettings();
