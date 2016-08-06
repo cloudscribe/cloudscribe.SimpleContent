@@ -5,7 +5,7 @@
         <h1 itemprop="headline name">
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
-                <a asp-route="postwithdate"
+                <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
                    asp-route-year="@Model.TmpPost.PubDate.Year"
                    asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
@@ -14,14 +14,14 @@
             }
             else
             {
-                <a asp-route="postwithoutdate" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@Model.TmpPost.Title</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@Model.TmpPost.Title</a>
             } 
         </h1>
         <div class="bh">
             <time datetime="@Model.FormatDateForEdit(Model.TmpPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
              @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
-                <a asp-route="postwithdate"
+                <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
                    asp-route-year="@Model.TmpPost.PubDate.Year"
                    asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
@@ -31,7 +31,7 @@
             }
             else
             {
-                <a asp-route="postwithoutdate" asp-route-slug="@Model.TmpPost.Slug" asp-fragment="comments" itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.TmpPost.ApprovedCommentCount() Comments</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" asp-fragment="comments" itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.TmpPost.ApprovedCommentCount() Comments</a>
             } 
             <ul class="categories">
                 <li><i class="glyphicon glyphicon-tags"></i>&nbsp; Posted in:&nbsp;</li>

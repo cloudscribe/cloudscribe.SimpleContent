@@ -29,7 +29,7 @@
             <h1 itemprop="headline name">
                 @if (Model.ProjectSettings.IncludePubDateInPostUrls)
                 {
-                    <a asp-route="postwithdate"
+                    <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
                    asp-route-year="@Model.CurrentPost.PubDate.Year"
                    asp-route-month="@Model.CurrentPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
@@ -38,7 +38,7 @@
                 }
                 else
                 {
-                    <a asp-route="postwithoutdate" asp-route-slug="@Model.CurrentPost.Slug"
+                    <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug"
                        itemprop="url">@Model.CurrentPost.Title</a>
                 }    
             </h1>
@@ -54,7 +54,7 @@
             }
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
-                <a asp-route="postwithdate"
+                <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
                    asp-route-year="@Model.CurrentPost.PubDate.Year"
                    asp-route-month="@Model.CurrentPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
@@ -64,7 +64,7 @@
             }
             else
             {
-                <a asp-route="postwithoutdate" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
             } 
             <ul class="categories">
                 <li><i class="glyphicon glyphicon-tags"></i>&nbsp; Posted in:&nbsp;</li>

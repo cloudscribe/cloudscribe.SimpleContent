@@ -2,16 +2,27 @@
 @using cloudscribe.SimpleContent.Common
 @addTagHelper "*, cloudscribe.Web.Common"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@functions{
+    public string GetDivClass()
+    {
+        if ((!string.IsNullOrEmpty(Model.PreviousPostUrl)) && (!string.IsNullOrEmpty(Model.NextPostUrl)))
+        {
+            return "col-md-6";
+        }
+        return "col-md-12";
+    }
+
+}
 @if ((!string.IsNullOrEmpty(Model.PreviousPostUrl)) || (!string.IsNullOrEmpty(Model.NextPostUrl)))
 {
     <div class="row ">
         @if (!string.IsNullOrEmpty(Model.PreviousPostUrl))
         {
-            <div class="col-md-6"><a class="btn btn-link" title="Previous Post" href="@Model.PreviousPostUrl"><i class="glyphicon glyphicon-backward"></i></a></div>
+            <div class="@GetDivClass()"><a class="btn btn-link" title="Previous Post" href="@Model.PreviousPostUrl"><i class="glyphicon glyphicon-backward"></i></a></div>
         }
         @if (!string.IsNullOrEmpty(Model.NextPostUrl))
         {
-            <div class="col-md-6 "><a class="btn btn-link pull-right" title="Next Post" href="@Model.NextPostUrl"><i class="glyphicon glyphicon-forward"></i></a></div>
+            <div class="@GetDivClass()"><a class="btn btn-link pull-right" title="Next Post" href="@Model.NextPostUrl"><i class="glyphicon glyphicon-forward"></i></a></div>
         }
     </div>
 }

@@ -152,7 +152,8 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services
             )
         {
-            
+
+            services.TryAddScoped<IBlogRoutes, DefaultBlogRoutes>();
             services.TryAddScoped<IBlogService, BlogService>();
             services.TryAddScoped<IPageService, PageService>();
             services.TryAddScoped<IProjectService, ProjectService>();

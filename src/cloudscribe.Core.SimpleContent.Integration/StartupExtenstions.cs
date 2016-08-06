@@ -1,11 +1,22 @@
-﻿using System;
+﻿using cloudscribe.Core.SimpleContent.Integration;
+using cloudscribe.SimpleContent.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace cloudscribe.Core.SimpleContent.Integration
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public class StartupExtenstions
+    public static class StartupExtenstions
     {
+        public static IServiceCollection AddCloudscribeCoreIntegrationForSimpleContent(
+            this IServiceCollection services
+            )
+        {
+            services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
+
+            return services;
+        }
+
     }
 }

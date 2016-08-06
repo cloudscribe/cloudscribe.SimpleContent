@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-06
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Common;
+using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -27,6 +28,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public BlogController(
             IProjectService projectService,
             IBlogService blogService,
+            IBlogRoutes blogRoutes,
             IProjectEmailService emailService,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
@@ -35,6 +37,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             this.projectService = projectService;
             this.blogService = blogService;
+            this.blogRoutes = blogRoutes;
             this.emailService = emailService;
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
@@ -43,6 +46,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         private IProjectService projectService;
         private IBlogService blogService;
+        private IBlogRoutes blogRoutes;
         private IProjectEmailService emailService;
         private ILogger log;
         private ITimeZoneHelper timeZoneHelper;
@@ -64,6 +68,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var model = new BlogViewModel();
             model.ProjectSettings = projectSettings;
+            model.BlogRoutes = blogRoutes;
 
             ViewData["Title"] = model.ProjectSettings.Title;
             var result = await blogService.GetVisiblePosts(category, page);
@@ -85,7 +90,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(model.CanEdit)
             {
-                model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
+                //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
+                model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
                 model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
                 model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
                 model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
@@ -108,6 +114,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var model = new BlogViewModel();
             model.ProjectSettings = await projectService.GetCurrentProjectSettings();
+            model.BlogRoutes = blogRoutes;
 
             ViewData["Title"] = model.ProjectSettings.Title;
 
@@ -144,7 +151,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             if (model.CanEdit)
             {
-                model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
+                //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
+                model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
                 model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
                 model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
                 model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
@@ -196,7 +204,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 if(year > 0)
                 {
                     //TODO: an option for permanent redirect
-                    return RedirectToRoute(ProjectConstants.PostWithoutDateRouteName, new { slug = slug });
+                    return RedirectToRoute(blogRoutes.PostWithoutDateRouteName, new { slug = slug });
                 }
             }
 
@@ -237,7 +245,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     if(year == 0)
                     {
                         //TODO: option whether to use permanent redirect
-                        return RedirectToRoute(ProjectConstants.PostWithDateRouteName, 
+                        return RedirectToRoute(blogRoutes.PostWithDateRouteName, 
                             new {
                                 year = result.Post.PubDate.Year,
                                 month = result.Post.PubDate.Month.ToString("00"),
@@ -262,6 +270,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             
             model.ProjectSettings = projectSettings;
+            model.BlogRoutes = blogRoutes;
             model.Categories = await blogService.GetCategories();
             model.Archives = await blogService.GetArchives();
             model.CanEdit = canEdit;
@@ -288,7 +297,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.IsPublished = model.CurrentPost.IsPublished;
                     if(model.ProjectSettings.IncludePubDateInPostUrls)
                     {
-                        model.EditorSettings.EditPath = Url.Link(ProjectConstants.PostWithDateRouteName,  
+                        model.EditorSettings.EditPath = Url.Link(blogRoutes.PostWithDateRouteName,  
                             new {
                             year = model.CurrentPost.PubDate.Year,
                             month = model.CurrentPost.PubDate.Month.ToString("00"),
@@ -296,7 +305,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                             slug = model.CurrentPost.Slug,
                             mode = "edit" });
 
-                        model.EditorSettings.CancelEditPath = Url.Link(ProjectConstants.PostWithDateRouteName,
+                        model.EditorSettings.CancelEditPath = Url.Link(blogRoutes.PostWithDateRouteName,
                             new
                             {
                                 year = model.CurrentPost.PubDate.Year,
@@ -307,7 +316,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
                     else
                     {
-                        model.EditorSettings.EditPath = Url.Link(ProjectConstants.PostWithoutDateRouteName, 
+                        model.EditorSettings.EditPath = Url.Link(blogRoutes.PostWithoutDateRouteName, 
                             new { slug = model.CurrentPost.Slug, mode = "edit" });
 
                         model.EditorSettings.CancelEditPath = Url.Link(ProjectConstants.PostWithoutDateRouteName, 
@@ -322,7 +331,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.CategoryPath = Url.Action("Category", "Blog"); // TODO: should we support categories on pages? this action doesn't exist right now
                 model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Blog");
                 model.EditorSettings.SavePath = Url.Action("AjaxPost", "Blog");
-                model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
+                //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
+                model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
 
             }
 
@@ -448,7 +458,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             string url;
             if(project.IncludePubDateInPostUrls)
             {
-                url = Url.Link(ProjectConstants.PostWithDateRouteName, 
+                url = Url.Link(blogRoutes.PostWithDateRouteName, 
                     new {
                         year = post.PubDate.Year,
                         month = post.PubDate.Month.ToString("00"),
@@ -458,7 +468,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             else
             {
-                url = Url.Link(ProjectConstants.PostWithoutDateRouteName, new { slug = post.Slug });
+                url = Url.Link(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
             }
             
             
@@ -640,6 +650,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             var viewModel = new BlogViewModel();
             viewModel.ProjectSettings = project;
+            viewModel.BlogRoutes = blogRoutes;
             viewModel.CurrentPost = blogPost;
             viewModel.TmpComment = comment;
             viewModel.TimeZoneHelper = timeZoneHelper;

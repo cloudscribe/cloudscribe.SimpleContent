@@ -92,7 +92,7 @@ namespace example.WebApp
             //services.AddScoped<cloudscribe.Core.Identity.ICustomClaimProvider, CustomClaimProvider>();
 
 
-
+            services.AddCloudscribeCoreIntegrationForSimpleContent();
             services.AddSimpleContent();
 
             services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
