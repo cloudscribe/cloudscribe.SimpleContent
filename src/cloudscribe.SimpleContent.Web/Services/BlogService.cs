@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-06
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -28,6 +28,7 @@ namespace cloudscribe.SimpleContent.Services
             IPostQueries postQueries,
             IPostCommands postCommands,
             IMediaProcessor mediaProcessor,
+            IBlogRoutes blogRoutes,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
@@ -41,6 +42,7 @@ namespace cloudscribe.SimpleContent.Services
             this.actionContextAccesor = actionContextAccesor;
             this.projectService = projectService;
             htmlProcessor = new HtmlProcessor();
+            this.blogRoutes = blogRoutes;
         }
 
         private IProjectService projectService;
@@ -55,6 +57,7 @@ namespace cloudscribe.SimpleContent.Services
         private ProjectSettings settings = null;
         private bool userIsBlogOwner = false;
         private HtmlProcessor htmlProcessor;
+        private IBlogRoutes blogRoutes;
 
         private async Task<bool> EnsureBlogSettings()
         {
@@ -402,7 +405,7 @@ namespace cloudscribe.SimpleContent.Services
             string postUrl;
             if (settings.IncludePubDateInPostUrls)
             {
-                postUrl = urlHelper.RouteUrl(ProjectConstants.PostWithDateRouteName,
+                postUrl = urlHelper.RouteUrl(blogRoutes.PostWithDateRouteName,
                     new
                     {
                         year = post.PubDate.Year,
@@ -413,7 +416,7 @@ namespace cloudscribe.SimpleContent.Services
             }
             else
             {
-                postUrl = urlHelper.RouteUrl(ProjectConstants.PostWithoutDateRouteName,
+                postUrl = urlHelper.RouteUrl(blogRoutes.PostWithoutDateRouteName,
                     new { slug = post.Slug });
             }
 

@@ -2,12 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-07-26
+// Last Modified:           2016-08-06
 // 
 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
+using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Pagination;
 using System;
@@ -27,6 +28,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             filter = new HtmlProcessor();
             cryptoHelper = new CryptoHelper();
             EditorSettings = new EditorModel();
+            BlogRoutes = new DefaultBlogRoutes();
         }
 
         private HtmlProcessor filter;
@@ -89,7 +91,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return localTime.ToString();
         }
 
-
+        public IBlogRoutes BlogRoutes { get; set; }
+        
 
 
 

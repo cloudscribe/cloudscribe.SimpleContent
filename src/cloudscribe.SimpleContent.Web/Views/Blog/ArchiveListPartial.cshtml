@@ -10,7 +10,8 @@
                 @foreach (var cat in Model)
                 {
                     <li>
-                        <a asp-route="blogarchive"
+                        <a asp-controller="Blog"
+                           asp-action="Archive"
                            asp-route-year="@cat.Key.Substring(0,4)"
                            asp-route-month="@cat.Key.Substring(5,2)">@cat.Key.Replace("/", "-") (@cat.Value)</a>
                     </li>
