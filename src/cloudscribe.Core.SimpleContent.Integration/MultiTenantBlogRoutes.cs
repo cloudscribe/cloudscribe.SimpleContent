@@ -7,10 +7,6 @@
 using cloudscribe.Core.Models;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.Core.SimpleContent.Integration
 {

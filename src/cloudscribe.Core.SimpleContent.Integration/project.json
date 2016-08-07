@@ -19,11 +19,14 @@
         "Microsoft.AspNetCore.Mvc": "1.0.0-*",
         "Microsoft.AspNetCore.Authorization": "1.0.0",
         "Microsoft.Extensions.FileProviders.Embedded": "1.0.0-*",
+        "Microsoft.Extensions.Localization": "1.0.0",
         "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-*",
         "Microsoft.AspNetCore.Routing": "1.0.0-*",
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
         "cloudscribe.Core.Models": "1.0.2-*",
-        "cloudscribe.Core.Identity": "1.0.0-*"
+        "cloudscribe.Core.Identity": "1.0.0-*",
+        "cloudscribe.Web.Common": "1.0.0-*",
+        "cloudscribe.Web.Navigation": "1.0.2-*"
     },
 
     "buildOptions": {

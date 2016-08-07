@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-07
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -24,10 +24,12 @@ namespace cloudscribe.SimpleContent.Services
             IProjectSettingsResolver settingsResolver,
             IProjectSecurityResolver security,
             IProjectQueries projectQueries,
+            IProjectCommands projectCommands,
             IHttpContextAccessor contextAccessor = null)
         {
             this.security = security;
             this.projectQueries = projectQueries;
+            this.projectCommands = projectCommands;
             this.settingsResolver = settingsResolver;
             context = contextAccessor?.HttpContext;
         }
@@ -36,6 +38,7 @@ namespace cloudscribe.SimpleContent.Services
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
         private IProjectSecurityResolver security;
         private IProjectQueries projectQueries;
+        private IProjectCommands projectCommands;
         private IProjectSettingsResolver settingsResolver;
         private ProjectSettings currentSettings = null;
 
@@ -58,6 +61,16 @@ namespace cloudscribe.SimpleContent.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task Create(ProjectSettings project)
+        {
+            await projectCommands.Create(project.ProjectId, project, CancellationToken.None).ConfigureAwait(false);
+        }
+
+        public async Task Update(ProjectSettings project)
+        {
+            await projectCommands.Update(project.ProjectId, project, CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task<ProjectSettings> GetCurrentProjectSettings()

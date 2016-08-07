@@ -28,7 +28,7 @@ namespace example.WebApp
 
             //builder.AddJsonFile("app-tenants-users.json");
 
-            builder.AddJsonFile("app-content-project-settings.json");
+            //builder.AddJsonFile("app-content-project-settings.json");
 
             // this file name is ignored by gitignore
             // so you can create it and use on your local dev machine
@@ -164,6 +164,7 @@ namespace example.WebApp
                     options.AddEmbeddedViewsForCloudscribeCore();
                     options.AddEmbeddedViewsForCloudscribeLogging();
                     options.AddEmbeddedViewsForSimpleContent();
+                    options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
                 })

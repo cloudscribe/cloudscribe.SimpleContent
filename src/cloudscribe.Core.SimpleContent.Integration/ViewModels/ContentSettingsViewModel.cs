@@ -1,23 +1,24 @@
-﻿
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Author:					Joe Audette
+// Created:					2016-08-05
+// Last Modified:			2016-08-07
+// 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 {
-    public class ProjectViewModel
-    {
 
-        
+    public class ContentSettingsViewModel
+    {
 
         public string Title { get; set; } = "Blog";
 
         public bool ShowTitle { get; set; } = false;
         public string Description { get; set; } = string.Empty;
-        public string CopyrightNotice { get; set; } = string.Empty;
-        public string Image { get; set; } = string.Empty;
+        //public string CopyrightNotice { get; set; } = string.Empty;
+        //public string Image { get; set; } = string.Empty;
         public int PostsPerPage { get; set; } = 5;
 
         public string PubDateFormat { get; set; } = "MMMM d. yyyy";
@@ -31,9 +32,12 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;
+
+        [EmailAddress(ErrorMessage = "The Notification Email field is not a valid e-mail address.")]
+        [StringLength(100, ErrorMessage = "Notification Email has a maximum length of 100 characters")]
         public string CommentNotificationEmail { get; set; } = string.Empty;
         
-        public int GravatarSize { get; set; } = 50;
+        //public int GravatarSize { get; set; } = 50;
 
         
         //public string DefaultPageSlug { get; set; } = "home";
@@ -57,13 +61,19 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         /// <summary>
         /// ie Feedburner User Agent fragment "FeedBurner"
         /// </summary>
-        public string RemoteFeedProcessorUseAgentFragment { get; set; } = string.Empty;
+        public string RemoteFeedProcessorUseAgentFragment { get; set; } = "FeedBurner";
         public bool UseMetaDescriptionInFeed { get; set; } = false;
         public int ChannelTimeToLive { get; set; } = 60;
         public string LanguageCode { get; set; } = "en-US";
         public string ChannelCategoriesCsv { get; set; } = string.Empty;
+
+        [EmailAddress(ErrorMessage = "The Notification Email field is not a valid e-mail address.")]
+        [StringLength(100, ErrorMessage = "Notification Email has a maximum length of 100 characters")]
         public string ManagingEditorEmail { get; set; } = string.Empty;
         public string ChannelRating { get; set; } = string.Empty;
+
+        [EmailAddress(ErrorMessage = "The Webmaster Email field is not a valid e-mail address.")]
+        [StringLength(100, ErrorMessage = "Webmaster Email has a maximum length of 100 characters")]
         public string WebmasterEmail { get; set; } = string.Empty;
 
         
