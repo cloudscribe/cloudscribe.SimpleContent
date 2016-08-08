@@ -1,6 +1,12 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @using cloudscribe.SimpleContent.Models
 @using cloudscribe.SimpleContent.Common
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@inject IOptions<IconCssClasses> iconClassesAccessor
+@{
+    var icons = iconClassesAccessor.Value;
+}
 @functions{
 
     public string GetFooterClass()
@@ -82,14 +88,14 @@
             @if (Model.CurrentPage.ShowComments)
             {
                 <a href="@Model.CurrentPage.Slug#comments">
-                    <em class="glyphicon glyphicon-comment"></em>
+                    <i class="@icons.Comments"></i>
                     @Model.CurrentPage.ApprovedCommentCount()   Comments
                 </a>
             }
             @if (Model.CurrentPage.ShowCategories)
             {
                 <ul class="categories">
-                    <li><em class="glyphicon glyphicon-tags"></em>&nbsp; Posted in:&nbsp;</li>
+                    <li><em class="@icons.Tags"></em>&nbsp; Posted in:&nbsp;</li>
                     @foreach (string cat in Model.CurrentPage.Categories)
                     {
                         <li itemprop="articleSection">

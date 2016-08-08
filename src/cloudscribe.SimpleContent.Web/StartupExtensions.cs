@@ -11,6 +11,8 @@ using cloudscribe.Web.SiteMap;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
 using cloudscribe.SimpleContent.Web.Services;
+using Microsoft.Extensions.Configuration;
+using cloudscribe.SimpleContent.Web.Design;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -149,7 +151,8 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         public static IServiceCollection AddSimpleContent(
-            this IServiceCollection services
+            this IServiceCollection services,
+            IConfigurationRoot configuration = null
             )
         {
 
@@ -168,6 +171,20 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
             services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
+
+            // registering an IOptions<IconCssClasses> that canbe injected into views
+            if (configuration != null)
+            {
+                // To override the css icon classes create a json config section representing the IconCssClass
+                services.Configure<IconCssClasses>(configuration.GetSection("IconCssClasses"));
+            }
+            else
+            {
+                services.Configure<IconCssClasses>(c =>
+                {
+                    // not doing anything just configuring the default
+                });    
+            }
 
             return services;
         }

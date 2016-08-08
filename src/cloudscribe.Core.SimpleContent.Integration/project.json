@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-*",
+    "version": "1.0.0-rc20160808",
     "description": "integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation",
     "authors": [ "Joe Audette" ],
     "packOptions": {

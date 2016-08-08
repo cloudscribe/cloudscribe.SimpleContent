@@ -1,10 +1,14 @@
 # A list of things I haven't done yet
 
+EF storage layer
+localization of views
 caching of post/page data
 recent posts viewcomponent for homepage
 
-tenant management - file editing
-editable side content ?
+implement a way to add a claim for ProjectId in cloudscribe Core integration to easily grant a user edit permissions - maybe make 2 claims, one for blog and one for pages, both using prokjectid as the value
+
+
+
 
 ## example project stuff
 
