@@ -2,7 +2,13 @@
 @using cloudscribe.SimpleContent.Models
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@inject IOptions<IconCssClasses> iconClassesAccessor
 @inject IHtmlGenerator generator
+@{
+    var icons = iconClassesAccessor.Value;
+}
 @functions{
     public string GetHeaderDivClass()
     {
@@ -60,11 +66,11 @@
                    asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
                    asp-route-slug="@Model.CurrentPost.Slug"
                    asp-fragment="comments"
-                   itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
+                   itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
             }
             else
             {
-                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="glyphicon glyphicon-comment"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
             } 
             <ul class="categories">
                 <li><i class="glyphicon glyphicon-tags"></i>&nbsp; Posted in:&nbsp;</li>

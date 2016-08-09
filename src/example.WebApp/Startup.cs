@@ -27,6 +27,8 @@ namespace example.WebApp
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
             //builder.AddJsonFile("app-tenants-users.json");
+            //builder.AddJsonFile("font-awesome-icon-map.json");
+
 
             //builder.AddJsonFile("app-content-project-settings.json");
 
@@ -93,7 +95,7 @@ namespace example.WebApp
 
 
             services.AddCloudscribeCoreIntegrationForSimpleContent();
-            services.AddSimpleContent();
+            services.AddSimpleContent(Configuration);
 
             services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
 

@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-rc20160731",
+    "version": "1.0.0-rc20160808",
     "description": "A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -33,7 +33,8 @@
         "cloudscribe.HtmlAgilityPack": "1.0.0-*",
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*",
         "Microsoft.AspNetCore.Routing": "1.0.0-*",
-        "Microsoft.Extensions.Caching.Abstractions": "1.0.0"
+        "Microsoft.Extensions.Caching.Abstractions": "1.0.0",
+        "Microsoft.Extensions.Configuration.Abstractions": "1.0.0"
     },
 
     "frameworks": {

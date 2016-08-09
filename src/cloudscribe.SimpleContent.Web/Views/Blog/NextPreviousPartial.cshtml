@@ -1,7 +1,13 @@
 ﻿@using cloudscribe.SimpleContent.Models
 @using cloudscribe.SimpleContent.Common
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@inject IOptions<IconCssClasses> iconClassesAccessor
 @addTagHelper "*, cloudscribe.Web.Common"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@{ 
+    var icons = iconClassesAccessor.Value;
+}
 @functions{
     public string GetDivClass()
     {
@@ -18,11 +24,11 @@
     <div class="row ">
         @if (!string.IsNullOrEmpty(Model.PreviousPostUrl))
         {
-            <div class="@GetDivClass()"><a class="btn btn-link" title="Previous Post" href="@Model.PreviousPostUrl"><i class="glyphicon glyphicon-backward"></i></a></div>
+            <div class="@GetDivClass()"><a class="btn btn-link" title="Previous Post" href="@Model.PreviousPostUrl"><i class="@icons.Previous"></i></a></div>
         }
         @if (!string.IsNullOrEmpty(Model.NextPostUrl))
         {
-            <div class="@GetDivClass()"><a class="btn btn-link pull-right" title="Next Post" href="@Model.NextPostUrl"><i class="glyphicon glyphicon-forward"></i></a></div>
+            <div class="@GetDivClass()"><a class="btn btn-link pull-right" title="Next Post" href="@Model.NextPostUrl"><i class="@icons.Next"></i></a></div>
         }
     </div>
 }
