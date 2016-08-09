@@ -51,6 +51,7 @@ namespace WebApp
             services.AddScoped<cloudscribe.Web.SimpleAuth.Models.IAuthSettingsResolver, SiteAuthSettingsResolver>();
             services.AddCloudscribeSimpleAuth();
 
+            services.AddScoped<cloudscribe.SimpleContent.Models.IProjectQueries, cloudscribe.SimpleContent.Storage.NoDb.ConfigProjectQueries>();
             services.AddNoDbStorageForSimpleContent();
 
             services.AddCloudscribeNavigation(Configuration.GetSection("NavigationOptions"));
