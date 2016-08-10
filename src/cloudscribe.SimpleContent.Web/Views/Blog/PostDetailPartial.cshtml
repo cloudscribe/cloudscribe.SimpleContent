@@ -73,7 +73,7 @@
                 <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
             } 
             <ul class="categories">
-                <li><i class="glyphicon glyphicon-tags"></i>&nbsp; Posted in:&nbsp;</li>
+                <li><i class="@icons.Tags"></i>&nbsp; Posted in:&nbsp;</li>
                 @foreach (string cat in Model.CurrentPost.Categories)
                 {
                     <li itemprop="articleSection">
