@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-07-25
+// Last Modified:           2016-08-10
 // 
 
 using System;
@@ -57,9 +57,18 @@ namespace cloudscribe.SimpleContent.Syndication
 
             var channel = new RssChannel();
             channel.Title = project.Title;
-            channel.Description = project.Description;
+            if(!string.IsNullOrEmpty(project.Description))
+            {
+                channel.Description = project.Description;
+            }
+            else
+            {
+                // prevent error, channel desc cannot be empty
+                channel.Description = "Welcome to my blog";
+            }
+            
             channel.Copyright = project.CopyrightNotice;
-            if(project.ChannelCategoriesCsv.Length > 0)
+            if(!string.IsNullOrEmpty(project.ChannelCategoriesCsv))
             {
                 var channelCats = project.ChannelCategoriesCsv.Split(',');
                 foreach(var cat in channelCats)

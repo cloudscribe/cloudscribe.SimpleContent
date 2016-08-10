@@ -1,9 +1,9 @@
 ﻿{
     "IconCssClasses": {
-        "Previous": "",
-        "Next": "",
-        "Comments": "",
-        "Tags": "",
+        "Previous": "fa fa-backward",
+        "Next": "fa fa-forward",
+        "Comments": "fa fa-comment",
+        "Tags": "fa fa-tags",
         "BadRequest": "fa fa-ban",
         "UnAuthorized": "fa fa-ban",
         "Forbidden": "fa fa-exclamation-circle",

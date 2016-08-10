@@ -3,11 +3,7 @@ using cloudscribe.Core.SimpleContent.Integration.Controllers;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.FileProviders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
