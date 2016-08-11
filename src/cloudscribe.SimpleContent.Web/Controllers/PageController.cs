@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-10
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -65,7 +65,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(slug == "none") { slug = string.Empty; }
             
-            var canEdit = User.CanEditProject(projectSettings.ProjectId);
+            var canEdit = User.CanEditPages(projectSettings.ProjectId);
             if(!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
@@ -195,7 +195,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;
             }
 
-            var canEdit = User.CanEditProject(project.ProjectId);
+            var canEdit = User.CanEditPages(project.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
@@ -248,7 +248,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 page = new Page()
                 {
                     ProjectId = project.ProjectId,
-                    Author = User.GetDisplayName(),
+                    Author = User.GetUserDisplayName(),
                     Title = model.Title,
                     MetaDescription = model.MetaDescription,
                     Content = model.Content,
@@ -311,7 +311,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; // new EmptyResult();
             }
 
-            var canEdit = User.CanEditProject(project.ProjectId);
+            var canEdit = User.CanEditPages(project.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");

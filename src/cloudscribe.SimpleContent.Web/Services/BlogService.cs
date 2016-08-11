@@ -185,7 +185,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if(!permission.CanEdit)
+            if(!permission.CanEditPosts)
             {
                 return new List<Post>(); // empty
             }
@@ -223,7 +223,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return; 
             }
@@ -282,7 +282,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return;
             }
@@ -466,7 +466,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return null;
             }
@@ -542,7 +542,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return; //TODO: exception here?
             }
@@ -576,7 +576,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return new Dictionary<string, int>(); //empty
             }
@@ -584,7 +584,7 @@ namespace cloudscribe.SimpleContent.Services
 
             return await postQueries.GetCategories(
                 settings.ProjectId,
-                permission.CanEdit,
+                permission.CanEditPosts,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
@@ -626,7 +626,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return;
             }

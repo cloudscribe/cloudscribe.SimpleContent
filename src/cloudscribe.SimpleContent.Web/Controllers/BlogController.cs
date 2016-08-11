@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-06
+// Last Modified:           2016-08-10
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -82,7 +82,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             
             // check if the user has the projectid claim
-            model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
+            model.CanEdit = User.CanEditBlog(model.ProjectSettings.ProjectId);
             if(!model.CanEdit)
             {
                 model.CanEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
@@ -144,7 +144,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Month = month;
             model.Day = day;
 
-            model.CanEdit = User.CanEditProject(model.ProjectSettings.ProjectId);
+            model.CanEdit = User.CanEditBlog(model.ProjectSettings.ProjectId);
             if (!model.CanEdit)
             {
                 model.CanEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
@@ -208,7 +208,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
             }
 
-            var canEdit = User.CanEditProject(projectSettings.ProjectId);
+            var canEdit = User.CanEditBlog(projectSettings.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
@@ -362,7 +362,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; 
             }
 
-            bool canEdit = User.CanEditProject(project.ProjectId);
+            bool canEdit = User.CanEditBlog(project.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
@@ -411,7 +411,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
                 post = new Post()
                 {
-                    Author = User.GetDisplayName(),
+                    Author = User.GetUserDisplayName(),
                     Title = model.Title,
                     MetaDescription = model.MetaDescription,
                     Content = model.Content,
@@ -490,7 +490,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; // new EmptyResult();
             }
 
-            bool canEdit = User.CanEditProject(project.ProjectId);
+            bool canEdit = User.CanEditBlog(project.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
@@ -599,7 +599,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            var canEdit = User.CanEditProject(project.ProjectId);
+            var canEdit = User.CanEditBlog(project.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
@@ -693,7 +693,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            bool canEdit = User.CanEditProject(project.ProjectId);
+            bool canEdit = User.CanEditBlog(project.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
@@ -761,7 +761,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            bool canEdit = User.CanEditProject(project.ProjectId);
+            bool canEdit = User.CanEditBlog(project.ProjectId);
             if (!canEdit)
             {
                 canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");

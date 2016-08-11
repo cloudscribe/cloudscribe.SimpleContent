@@ -24,7 +24,7 @@ namespace cloudscribe.SimpleContent.Common
             return claim != null ? claim.Value : null;
         }
 
-        public static string GetDisplayName(this ClaimsPrincipal principal)
+        public static string GetUserDisplayName(this ClaimsPrincipal principal)
         {
             if (principal == null)
             {
@@ -53,6 +53,34 @@ namespace cloudscribe.SimpleContent.Common
             var claim = principal.FindFirst("ProjectId");
             if(claim == null) { return false; }
             if(claim.Value == projectId) { return true; }
+            return false;
+        }
+
+        public static bool CanEditPages(this ClaimsPrincipal principal, string projectId)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentNullException(nameof(principal));
+            }
+            if (principal.CanEditProject(projectId)) return true;
+
+            var claim = principal.FindFirst("PageEditor");
+            if (claim == null) { return false; }
+            if (claim.Value == projectId) { return true; }
+            return false;
+        }
+
+        public static bool CanEditBlog(this ClaimsPrincipal principal, string projectId)
+        {
+            if (principal == null)
+            {
+                throw new ArgumentNullException(nameof(principal));
+            }
+            if (principal.CanEditProject(projectId)) return true;
+
+            var claim = principal.FindFirst("BlogEditor");
+            if (claim == null) { return false; }
+            if (claim.Value == projectId) { return true; }
             return false;
         }
 

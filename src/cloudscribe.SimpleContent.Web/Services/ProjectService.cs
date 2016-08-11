@@ -96,7 +96,7 @@ namespace cloudscribe.SimpleContent.Services
 
             var result = new List<ProjectSettings>(); //empty
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return result; //empty
             }
