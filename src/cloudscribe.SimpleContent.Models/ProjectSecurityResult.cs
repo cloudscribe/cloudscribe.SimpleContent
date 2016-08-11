@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-15
-// Last Modified:           2016-03-21
+// Last Modified:           2016-08-11
 // 
 
 
@@ -14,19 +14,22 @@ namespace cloudscribe.SimpleContent.Models
             string displayName,
             string projectId,
             bool isAuthenticated, 
-            bool canEdit
+            bool canEditPosts,
+            bool canEditPages
             )
         {
             this.displayName = displayName;
             this.projectId = projectId;
             this.isAuthenticated = isAuthenticated;
-            this.canEdit = canEdit;
+            this.canEditPosts = canEditPosts;
+            this.canEditPages = canEditPages;
         }
 
         private string displayName = string.Empty;
         private string projectId = string.Empty;
         private bool isAuthenticated = false;
-        private bool canEdit = false;
+        private bool canEditPosts = false;
+        private bool canEditPages = false;
 
         public string DisplayName
         {
@@ -43,9 +46,14 @@ namespace cloudscribe.SimpleContent.Models
             get { return isAuthenticated; }
         }
 
-        public bool CanEdit
+        public bool CanEditPosts
         {
-            get { return canEdit; }
+            get { return canEditPosts; }
+        }
+
+        public bool CanEditPages
+        {
+            get { return canEditPages; }
         }
     }
 }

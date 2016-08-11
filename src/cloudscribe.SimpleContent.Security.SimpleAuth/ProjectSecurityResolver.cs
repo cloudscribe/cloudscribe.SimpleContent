@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-15
-// Last Modified:           2016-03-29
+// Last Modified:           2016-08-11
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -10,19 +10,25 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.SimpleAuth.Services;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace cloudscribe.SimpleContent.Security.SimpleAuth
 {
     public class ProjectSecurityResolver : IProjectSecurityResolver
     {
-        public ProjectSecurityResolver(SignInManager signInManager)
+        public ProjectSecurityResolver(
+            SignInManager signInManager,
+            IAuthorizationService authorizationService
+            )
         {
             this.signInManager = signInManager;
+            this.authorizationService = authorizationService;
         }
 
         private SignInManager signInManager;
+        private IAuthorizationService authorizationService;
 
-        public Task<ProjectSecurityResult> ValidatePermissions(
+        public async Task<ProjectSecurityResult> ValidatePermissions(
             string projectId,
             string userName,
             string providedPassword,
@@ -30,7 +36,8 @@ namespace cloudscribe.SimpleContent.Security.SimpleAuth
         {
             var displayName = string.Empty;
             var isAuthenticated = false;
-            var canEdit = false;
+            var canEditPosts = false;
+            var canEditPages = false;
 
             var authUser = signInManager.GetUser(userName);
 
@@ -46,13 +53,21 @@ namespace cloudscribe.SimpleContent.Security.SimpleAuth
                 {
                     projectId = claimsPrincipal.GetProjectId();
                 }
-                canEdit = claimsPrincipal.CanEditProject(projectId);
-                displayName = claimsPrincipal.GetDisplayName();
+                if (!string.IsNullOrEmpty(projectId))
+                {
+                    canEditPosts = claimsPrincipal.CanEditBlog(projectId);
+                    if (!canEditPosts) canEditPosts = await authorizationService.AuthorizeAsync(claimsPrincipal, "BlogEditPolicy");
+
+                    canEditPages = claimsPrincipal.CanEditPages(projectId);
+                    if (!canEditPages) canEditPages = await authorizationService.AuthorizeAsync(claimsPrincipal, "PageEditPolicy");
+                }
+                
+                displayName = claimsPrincipal.GetUserDisplayName();
             }
             
-            var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAuthenticated, canEdit);
+            var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAuthenticated, canEditPosts, canEditPages);
 
-            return Task.FromResult(blogSecurity);
+            return blogSecurity;
 
         }
 

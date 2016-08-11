@@ -2,18 +2,16 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-07-11
-// Last Modified:           2016-07-11
+// Last Modified:           2016-08-11
 // 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using cloudscribe.Core.Models;
 using cloudscribe.Core.Identity;
+using cloudscribe.Core.Models;
+using cloudscribe.SimpleContent.Common;
 using cloudscribe.SimpleContent.Models;
-using System.Threading;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace cloudscribe.Core.SimpleContent.Integration
 {
@@ -45,7 +43,8 @@ namespace cloudscribe.Core.SimpleContent.Integration
         {
             var displayName = string.Empty;
             var isAuthenticated = false;
-            var canEdit = false;
+            var canEditPosts = false;
+            var canEditPages = false;
 
             var authUser = await userManager.FindByNameAsync(userName);
 
@@ -67,14 +66,21 @@ namespace cloudscribe.Core.SimpleContent.Integration
                     var project = await projectResolver.GetCurrentProjectSettings(cancellationToken);
                     if (project != null) projectId = project.ProjectId;
                 }
+                if (!string.IsNullOrEmpty(projectId))
+                {
+                    canEditPosts = claimsPrincipal.CanEditBlog(projectId);
+                    if (!canEditPosts) canEditPosts = await authorizationService.AuthorizeAsync(claimsPrincipal, "BlogEditPolicy");
 
-                canEdit = claimsPrincipal.CanEditProject(projectId);
-                if(!canEdit) canEdit = await authorizationService.AuthorizeAsync(claimsPrincipal, "BlogEditPolicy");
+                    canEditPages = claimsPrincipal.CanEditPages(projectId);
+                    if (!canEditPages) canEditPages = await authorizationService.AuthorizeAsync(claimsPrincipal, "PageEditPolicy");
+                }
 
-                displayName = claimsPrincipal.GetDisplayName();
+                    
+
+                displayName = claimsPrincipal.GetUserDisplayName();
             }
 
-            var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAuthenticated, canEdit);
+            var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAuthenticated, canEditPosts, canEditPages);
 
             return blogSecurity;
 

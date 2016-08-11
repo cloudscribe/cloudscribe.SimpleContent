@@ -121,7 +121,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return; 
             }
@@ -193,7 +193,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return;
             }
@@ -364,7 +364,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return null;
             }
@@ -409,7 +409,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            if (!permission.CanEdit)
+            if (!permission.CanEditPosts)
             {
                 return new List<Page>(); // empty
             }
