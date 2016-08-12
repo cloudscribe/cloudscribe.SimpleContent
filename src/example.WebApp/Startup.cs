@@ -80,6 +80,7 @@ namespace example.WebApp
             services.AddCloudscribeLogging();
 
             services.AddScoped<cloudscribe.Web.Navigation.Caching.ITreeCache, cloudscribe.Web.Navigation.Caching.NotCachedTreeCache>();
+            services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.Web.Navigation.NavigationNodePermissionResolver>();
             services.AddCloudscribeCore(Configuration);
 
             services.AddCloudscribeIdentity();

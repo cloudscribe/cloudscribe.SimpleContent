@@ -37,8 +37,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         [StringLength(100, ErrorMessage = "Notification Email has a maximum length of 100 characters")]
         public string CommentNotificationEmail { get; set; } = string.Empty;
         
-        //public int GravatarSize { get; set; } = 50;
-
+        
         
         //public string DefaultPageSlug { get; set; } = "home";
         //public bool UseDefaultPageAsRootNode { get; set; } = true;

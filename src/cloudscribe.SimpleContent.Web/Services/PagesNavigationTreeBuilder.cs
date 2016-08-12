@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-08-05
+// Last Modified:           2016-08-12
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -154,10 +154,13 @@ namespace cloudscribe.SimpleContent.Services
                     node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
                 }
                 
-                if (!page.IsPublished) { node.ViewRoles = project.AllowedEditRoles; }
+                // for unpublished pages PagesNavigationNodePermissionResolver
+                // will look for projectid in CustomData and if it exists
+                // filter node from view unless user has edit permissions
+                if (!page.IsPublished) { node.CustomData = project.ProjectId; }
 
                 var treeNode = treeRoot.AddChild(node);
-                await AddChildNodes(treeNode, folderPrefix).ConfigureAwait(false);
+                await AddChildNodes(treeNode, project, folderPrefix).ConfigureAwait(false);
                 rootPosition += 1;
             }
 
@@ -166,6 +169,7 @@ namespace cloudscribe.SimpleContent.Services
 
         private async Task AddChildNodes(
             TreeNode<NavigationNode> treeNode,
+            ProjectSettings project,
             string folderPrefix
             )
         {
@@ -187,8 +191,13 @@ namespace cloudscribe.SimpleContent.Services
                     node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
                 }
 
+                // for unpublished pages PagesNavigationNodePermissionResolver
+                // will look for projectid in CustomData and if it exists
+                // filter node from view unless user has edit permissions
+                if (!page.IsPublished) { node.CustomData = project.ProjectId; }
+
                 var childNode = treeNode.AddChild(node);
-                await AddChildNodes(childNode, folderPrefix).ConfigureAwait(false); //recurse
+                await AddChildNodes(childNode, project, folderPrefix).ConfigureAwait(false); //recurse
             }
         }
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-06
+// Last Modified:           2016-08-12
 // 
 
 using cloudscribe.SimpleContent.Common;
@@ -59,9 +59,9 @@ namespace cloudscribe.SimpleContent.Services
         private HtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
 
-        private async Task<bool> EnsureBlogSettings()
+        private async Task EnsureBlogSettings()
         {
-            if(settings != null) { return true; }
+            if(settings != null) { return; }
             settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             if (settings != null)
             {
@@ -75,9 +75,9 @@ namespace cloudscribe.SimpleContent.Services
                     }
                 }
 
-                return true;
+                
             }
-            return false;
+            
         }
 
         //public async Task<ProjectSettings> GetCurrentBlogSettings()

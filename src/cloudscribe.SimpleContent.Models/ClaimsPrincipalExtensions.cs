@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-02-09
-// Last Modified:			2016-02-15
+// Last Modified:			2016-08-12
 // 
 
 using System;
@@ -40,7 +40,7 @@ namespace cloudscribe.SimpleContent.Common
             {
                 throw new ArgumentNullException(nameof(principal));
             }
-            var claim = principal.FindFirst("ProjectId");
+            var claim = principal.FindFirst("ContentEditor");
             return claim != null ? claim.Value : null;
         }
 
@@ -50,7 +50,7 @@ namespace cloudscribe.SimpleContent.Common
             {
                 throw new ArgumentNullException(nameof(principal));
             }
-            var claim = principal.FindFirst("ProjectId");
+            var claim = principal.FindFirst("ContentEditor");
             if(claim == null) { return false; }
             if(claim.Value == projectId) { return true; }
             return false;

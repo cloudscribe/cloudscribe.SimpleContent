@@ -3,7 +3,7 @@
 @addTagHelper "*, cloudscribe.Web.Common"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 <article data-id="@Model.TmpComment.Id" itemscope itemtype="http://schema.org/UserComments" itemprop="comment" class="@(Model.TmpComment.IsAdmin ? "self" : null)">
-    <img gravatar-email="@Model.TmpComment.Email" gravatar-size="@Model.ProjectSettings.GravatarSize" alt="Comment by @Model.TmpComment.Author" />
+    <img gravatar-email="@Model.TmpComment.Email" gravatar-size="50" alt="Comment by @Model.TmpComment.Author" />
     <div>
         <time datetime="@Model.FormatCommentDate(Model.TmpComment.PubDate)" itemprop="commentTime">@Model.FormatCommentDate(Model.TmpComment.PubDate)</time>
         <p itemprop="commentText">@Html.Raw(Model.FilterComment(Model.TmpComment))</p>
