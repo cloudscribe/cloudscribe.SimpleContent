@@ -5,7 +5,7 @@
 // Last Modified:           2016-08-12
 // 
 
-using cloudscribe.SimpleContent.Common;
+using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

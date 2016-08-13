@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "1.0.0-rc20160810",
     "description": "cloudscribe.SimpleContent.Models Class Library",
     "authors": [ "Joe Audette" ],
@@ -16,7 +16,6 @@
 
     "dependencies": {
         "NETStandard.Library": "1.6.0-*"
-        
     },
 
     "frameworks": {

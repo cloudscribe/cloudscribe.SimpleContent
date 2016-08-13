@@ -2,16 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-12
-// Last Modified:			2016-08-12
+// Last Modified:			2016-08-13
 // 
 
+using cloudscribe.SimpleContent.Web;
 using cloudscribe.Web.Navigation;
-using cloudscribe.Web.Navigation.Helpers;
-using cloudscribe.SimpleContent.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
@@ -41,14 +39,17 @@ namespace cloudscribe.SimpleContent.Web.Services
                 return false;
             }
 
+            bool canEdit = false;
+
             var projectId = menuNode.Value.CustomData;
             var user = httpContextAccessor.HttpContext.User;
-            if (user.CanEditPages(projectId))
+            try
             {
-                return true;
+                // http://stackoverflow.com/questions/22628087/calling-async-method-synchronously
+                canEdit = user.CanEditPages(projectId, authorizationService).Result;
             }
-            // http://stackoverflow.com/questions/22628087/calling-async-method-synchronously
-            bool canEdit = authorizationService.AuthorizeAsync(user, "PageEditPolicy").Result;
+            catch(InvalidOperationException)
+            { }
            
             return canEdit;
         }

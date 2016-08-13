@@ -2,12 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-07-11
-// Last Modified:           2016-08-11
+// Last Modified:           2016-08-13
 // 
 
 using cloudscribe.Core.Identity;
 using cloudscribe.Core.Models;
-using cloudscribe.SimpleContent.Common;
+using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading;
@@ -68,16 +68,11 @@ namespace cloudscribe.Core.SimpleContent.Integration
                 }
                 if (!string.IsNullOrEmpty(projectId))
                 {
-                    canEditPosts = claimsPrincipal.CanEditBlog(projectId);
-                    if (!canEditPosts) canEditPosts = await authorizationService.AuthorizeAsync(claimsPrincipal, "BlogEditPolicy");
-
-                    canEditPages = claimsPrincipal.CanEditPages(projectId);
-                    if (!canEditPages) canEditPages = await authorizationService.AuthorizeAsync(claimsPrincipal, "PageEditPolicy");
+                    canEditPosts = await claimsPrincipal.CanEditBlog(projectId, authorizationService);
+                    canEditPages = await claimsPrincipal.CanEditPages(projectId, authorizationService);     
                 }
 
-                    
-
-                displayName = claimsPrincipal.GetUserDisplayName();
+                displayName = claimsPrincipal.GetDisplayName();
             }
 
             var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAuthenticated, canEditPosts, canEditPages);

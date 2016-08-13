@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-07
+// Last Modified:           2016-08-13
 // 
 
-using cloudscribe.SimpleContent.Common;
+using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

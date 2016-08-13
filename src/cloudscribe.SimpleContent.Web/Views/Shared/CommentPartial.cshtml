@@ -1,5 +1,5 @@
 ﻿@using cloudscribe.SimpleContent.Models
-@using cloudscribe.SimpleContent.Common
+@using cloudscribe.SimpleContent.Web
 @addTagHelper "*, cloudscribe.Web.Common"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 <article data-id="@Model.TmpComment.Id" itemscope itemtype="http://schema.org/UserComments" itemprop="comment" class="@(Model.TmpComment.IsAdmin ? "self" : null)">
