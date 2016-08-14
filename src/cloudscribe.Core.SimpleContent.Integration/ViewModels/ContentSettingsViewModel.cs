@@ -5,6 +5,8 @@
 // Last Modified:			2016-08-07
 // 
 
+using cloudscribe.Core.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
@@ -12,6 +14,12 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
     public class ContentSettingsViewModel
     {
+        public ContentSettingsViewModel()
+        {
+            Editors = new List<ISiteUser>();
+        }
+
+        public List<ISiteUser> Editors { get; set; }
 
         public string Title { get; set; } = "Blog";
 

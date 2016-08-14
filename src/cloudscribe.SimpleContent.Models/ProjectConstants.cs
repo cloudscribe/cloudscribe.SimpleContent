@@ -23,5 +23,12 @@ namespace cloudscribe.SimpleContent.Models
         public const string FolderNewPostRouteName = "foldernewpost";
         public const string FolderPageIndexRouteName = "folderpageindex";
 
+        public const string ContentEditorClaimType = "ContentEditor";
+        public const string PageEditorClaimType = "PageEditor";
+        public const string BlogEditorClaimType = "BlogEditor";
+
+        public const string PageEditPolicy = "PageEditPolicy";
+        public const string BlogEditPolicy = "BlogEditPolicy";
+
     }
 }

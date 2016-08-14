@@ -2,13 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-02-09
-// Last Modified:			2016-08-13
+// Last Modified:			2016-08-14
 // 
 
 using System;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using cloudscribe.SimpleContent.Models;
 
 namespace cloudscribe.SimpleContent.Web
 {
@@ -41,7 +42,9 @@ namespace cloudscribe.SimpleContent.Web
             {
                 throw new ArgumentNullException(nameof(principal));
             }
-            var claim = principal.FindFirst("ContentEditor");
+            var claim = principal.FindFirst(ProjectConstants.ContentEditorClaimType);
+
+
             return claim != null ? claim.Value : null;
         }
 
@@ -51,7 +54,7 @@ namespace cloudscribe.SimpleContent.Web
             {
                 throw new ArgumentNullException(nameof(principal));
             }
-            var claim = principal.FindFirst("ContentEditor");
+            var claim = principal.FindFirst(ProjectConstants.ContentEditorClaimType);
             if(claim == null) { return false; }
             if(claim.Value == projectId) { return true; }
             return false;
@@ -69,14 +72,14 @@ namespace cloudscribe.SimpleContent.Web
             }
             if (principal.CanEditProject(projectId)) return true;
 
-            var claim = principal.FindFirst("PageEditor");
+            var claim = principal.FindFirst(ProjectConstants.PageEditorClaimType);
             if (claim != null && claim.Value == projectId) { return true; }
            
             if(authorizationService != null)
             {
                 try
                 {
-                    return await authorizationService.AuthorizeAsync(principal, "PageEditPolicy").ConfigureAwait(false);
+                    return await authorizationService.AuthorizeAsync(principal, ProjectConstants.PageEditPolicy).ConfigureAwait(false);
                 }
                 catch(InvalidOperationException) { }
                 
@@ -96,14 +99,14 @@ namespace cloudscribe.SimpleContent.Web
             }
             if (principal.CanEditProject(projectId)) return true;
 
-            var claim = principal.FindFirst("BlogEditor");
+            var claim = principal.FindFirst(ProjectConstants.BlogEditorClaimType);
             if (claim != null && claim.Value == projectId) { return true; }
 
             if (authorizationService != null)
             {
                 try
                 {
-                    return await authorizationService.AuthorizeAsync(principal, "BlogEditPolicy").ConfigureAwait(false);
+                    return await authorizationService.AuthorizeAsync(principal, ProjectConstants.BlogEditPolicy).ConfigureAwait(false);
                 }
                 catch (InvalidOperationException) { }
 

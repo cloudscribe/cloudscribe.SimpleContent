@@ -8,7 +8,6 @@
 
 ## Miscellaneous
 
-handle errors if expected auth policies don't exist?
 EF storage layer
 localization of views
 caching of post/page data
@@ -36,5 +35,5 @@ then still be able to add cms pages in the nav dynamically but the cms would not
 since the home index would be
 therefore I will use an url like /p/page-name
 
-once we can package views in nuget it will be easier to setup multiple sample web apps with different configurations
+
 

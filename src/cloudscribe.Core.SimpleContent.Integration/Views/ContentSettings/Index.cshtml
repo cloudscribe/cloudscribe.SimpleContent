@@ -60,7 +60,7 @@
             <div class="form-group">
                 <label asp-for="DaysToComment" class="col-md-2 control-label">@sr["Days To Comment"]</label>
                 <div class="col-md-10">
-                    <select  asp-for="DaysToComment" class="form-control">
+                    <select asp-for="DaysToComment" class="form-control">
                         <option value="-1">No Limit</option>
                         <option value="1">1</option>
                         <option value="7">7</option>
@@ -127,12 +127,32 @@
                     </div>
                 </div>
             </fieldset>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button name="submit" type="submit" class="btn btn-default">@sr["Save"]</button>
-                    </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button name="submit" type="submit" class="btn btn-default">@sr["Save"]</button>
                 </div>
-</form>
+            </div>
+        </form>
+        @if (Model.Editors.Count > 0)
+        {
+            <div class="col-md-10 col-md-offset-2">
+                <h3>@sr["Editors"]</h3>
+                <ul class="list-unstyled">
+                    @foreach (var user in Model.Editors)
+                    {
+                        <li>
+                            @user.DisplayName - @user.Email
+                            <a class="btn btn-xs btn-default" asp-action="UserEdit"
+                               asp-controller="UserAdmin"
+                               asp-route-siteId="@user.SiteId"
+                               asp-route-userId="@user.Id">@sr["Manage"]</a>
+                        </li>
+
+                    }
+                </ul>
+            </div>
+        }
+        
     </div>
     <div class="col-md-2 col-md-pull-10">
         @await Component.InvokeAsync("Navigation", new { viewName = "SideNavAlt1", filterName = NamedNavigationFilters.ParentTree, startingNodeKey = "SiteAdmin" })
