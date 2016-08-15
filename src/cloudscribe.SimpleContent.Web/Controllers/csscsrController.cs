@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-05-29
+// Last Modified:           2016-08-15
 // 
 
 using Microsoft.AspNetCore.Authorization;
@@ -158,6 +158,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.hotkeys.min.js",
+                "text/javascript");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ContentResult jqueryajax()
+        {
+            return GetContentResult(
+                "cloudscribe.SimpleContent.Web.js.jquery.unobtrusive-ajax.min.js",
                 "text/javascript");
         }
 

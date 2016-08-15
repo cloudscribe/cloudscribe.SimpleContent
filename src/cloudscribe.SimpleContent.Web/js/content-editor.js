@@ -264,18 +264,12 @@
         var isVisible = editorBar.is(':visible');
         if (!isVisible) {
             // editor was hidden, show it
-            //editorBar.removeClass("invisible");
-            //toolbarHeight = editorBar.height();
-            //editorBar.animate({ "top": mainNavHeight }, 500, "swing");
-            //addToolBarPadding();
             editorBar.show();
             btnOuterToggle.hide();
             if (!toolBarCookieExists()) { setToolbarCookie(); }  
         }
         else {
             //editor was visible toggle it to invisible
-            //editorBar.addClass("invisible");
-            //removeToolbarPadding();
             // show the button to get the toolbar back
             editorBar.hide();
             btnOuterToggle.show();
@@ -287,7 +281,6 @@
         if (toolBarCookieExists()) {
             // show the toolbar
             //alert('cookie exists');
-            //toggleToolbar(); // initial state hidden
             editorBar.show();
 
         }
@@ -298,9 +291,6 @@
     },
     addToolBarPadding = function () {
         toolbarHeight = editorBar.height();
-        //var mainDiv = $(".body-content").first();
-        //mainDiv.animate({ "padding-top": toolbarHeight + mainNavHeight }, 500, "swing");
-        //mainDiv.css("background-color", "pink");
     },
     removeToolbarPadding = function () {
         //$(".body-content").first().animate({ "padding-top": mainNavHeight }, 500, "swing");
@@ -344,14 +334,7 @@
     currentSlug = $("#editor-toolbar").data("current-slug");
     supportsCategories = ($("#editor-toolbar").data("supports-categories")) == 'True';
     editMode = $("#editor-toolbar").data("edit-mode");
-    /*
-    isNew = (location.search.indexOf("slug") == -1)
-        && (
-        (location.search.indexOf("new") != -1)
-        )
-    ;
-    */
-
+    
     //alert(contentId);
     var mainNavHeight = $(".navbar-fixed-top").first().height();
     var toolbarHeight = editorBar.height();
@@ -399,12 +382,7 @@
     });
 
     if (editMode == "new" || editMode == "edit") {
-        editContent();
-        //$("#ispublished").fadeIn();
-        //chkPublish[0].checked = true;
-   // } else if (location.search.indexOf("mode=edit") != -1)
-   // {
-   //     editContent();   
+        editContent(); 
     }
     else if(contentType == "Page") {
         if (currentSlug) { btnEdit.removeAttr("disabled"); }

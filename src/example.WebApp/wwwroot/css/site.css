@@ -83,5 +83,9 @@ article[data-id="0fe39377-57a9-4d42-a9f1-22fc0c5ba18c"] {
 }
 
     */
+.psetform {
+    min-width:340px;
+    padding: 4px 4px 4px 4px;
+}
 
 
