@@ -85,6 +85,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+              name: ProjectConstants.MostRecentPostRouteName,
+              template: "blog/mostrecent"
+              , defaults: new { controller = "Blog", action = "MostRecent" }
+              );
+
+            routes.MapRoute(
                name: ProjectConstants.PostWithoutDateRouteName,
                template: "blog/{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
@@ -131,6 +137,13 @@ namespace Microsoft.Extensions.DependencyInjection
                , defaults: new { controller = "Blog", action = "New" }
                , constraints: new { name = siteFolderConstraint }
                );
+
+            routes.MapRoute(
+              name: ProjectConstants.FolderMostRecentPostRouteName,
+              template: "{sitefolder}/blog/mostrecent"
+              , defaults: new { controller = "Blog", action = "MostRecent" }
+              , constraints: new { name = siteFolderConstraint }
+              );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPostWithoutDateRouteName,

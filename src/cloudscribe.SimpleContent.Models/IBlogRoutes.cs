@@ -6,5 +6,7 @@ namespace cloudscribe.SimpleContent.Models
         string PostWithDateRouteName { get; }
 
         string PostWithoutDateRouteName { get; }
+
+        string MostRecentPostRouteName { get; }
     }
 }

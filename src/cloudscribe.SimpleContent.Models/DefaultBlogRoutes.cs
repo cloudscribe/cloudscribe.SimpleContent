@@ -8,5 +8,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string PostWithoutDateRouteName { get; } = ProjectConstants.PostWithoutDateRouteName;
 
+        public string MostRecentPostRouteName { get; } = ProjectConstants.MostRecentPostRouteName;
+
     }
 }

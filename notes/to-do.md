@@ -13,12 +13,6 @@ localization of views
 caching of post/page data
 recent posts viewcomponent for homepage
 
-been thinking that there should be an option to redirect from blog index to newest post
-post list looks like you are on the post page but no comment section, just more posts
-since you can navigate forward and backward from post detail, the post list seems redundant and confusing to users
-ie when a user clicks the blog link in the menu they land on the post list but I think I would prefer if they land on the newest post detail
-still I guess the list should always work, so maybe we need a new action for newest post then the menu item can be changed to point to that
-
 
 
 

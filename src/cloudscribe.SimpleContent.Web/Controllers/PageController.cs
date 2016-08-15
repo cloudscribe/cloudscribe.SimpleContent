@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-10
+// Last Modified:           2016-08-15
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -103,6 +103,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             else
             {
+                // if the page is protected by view roles return 404 if user is not in an allowed role
+                if((!canEdit) && (!string.IsNullOrEmpty(page.ViewRoles)))
+                {
+                    if(!User.IsInRoles(page.ViewRoles))
+                    {
+                        Response.StatusCode = 404;
+                        return new EmptyResult();
+                    }
+                }
+
                 ViewData["Title"] = page.Title;
             }
 

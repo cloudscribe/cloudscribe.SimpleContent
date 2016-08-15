@@ -65,6 +65,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             model.Title = projectSettings.Title;
             model.UseMetaDescriptionInFeed = projectSettings.UseMetaDescriptionInFeed;
             model.WebmasterEmail = projectSettings.WebmasterEmail;
+            model.PostsPerPage = projectSettings.PostsPerPage;
+            model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
+            model.DefaultPageSlug = projectSettings.DefaultPageSlug;
 
             bool canManageUsers = false;
             try
@@ -143,8 +146,23 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             projectSettings.Title = model.Title;
             projectSettings.UseMetaDescriptionInFeed = model.UseMetaDescriptionInFeed;
             projectSettings.WebmasterEmail = model.WebmasterEmail;
+            bool needToClearMenuCache = false;
+            if(projectSettings.BlogMenuLinksToNewestPost != model.BlogMenuLinksToNewestPost)
+            {
+                needToClearMenuCache = true;
+            }
+            if(projectSettings.DefaultPageSlug != model.DefaultPageSlug)
+            {
+                needToClearMenuCache = true;
+            }
+            projectSettings.BlogMenuLinksToNewestPost = model.BlogMenuLinksToNewestPost;
+            projectSettings.DefaultPageSlug = model.DefaultPageSlug;
 
             await projectService.Update(projectSettings);
+            if(needToClearMenuCache)
+            {
+                projectService.ClearNavigationCache();
+            }
 
             this.AlertSuccess(sr["Content Settings were successfully updated."], true);
 

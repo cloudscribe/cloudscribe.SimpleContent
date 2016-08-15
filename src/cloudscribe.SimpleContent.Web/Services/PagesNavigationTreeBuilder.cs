@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-08-12
+// Last Modified:           2016-08-15
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -11,8 +11,6 @@ using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -115,7 +113,15 @@ namespace cloudscribe.SimpleContent.Services
                     node.Key = project.BlogPageText;
                     node.ParentKey = "RootNode";
                     node.Text = project.BlogPageText;
-                    node.Url = urlHelper.Action("Index", "Blog");
+                    if(project.BlogMenuLinksToNewestPost)
+                    {
+                        node.Url = urlHelper.Action("MostRecent", "Blog");
+                    }
+                    else
+                    {
+                        node.Url = urlHelper.Action("Index", "Blog");
+                    }
+                    
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
                     var blogNode = treeRoot.AddChild(node);
 
@@ -133,7 +139,14 @@ namespace cloudscribe.SimpleContent.Services
                     node.Key = project.BlogPageText;
                     node.ParentKey = "RootNode";
                     node.Text = project.BlogPageText;
-                    node.Url = urlHelper.Action("Index", "Blog");
+                    if (project.BlogMenuLinksToNewestPost)
+                    {
+                        node.Url = urlHelper.Action("MostRecent", "Blog");
+                    }
+                    else
+                    {
+                        node.Url = urlHelper.Action("Index", "Blog");
+                    }
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
                     var blogNode = treeRoot.AddChild(node);
 
@@ -145,6 +158,7 @@ namespace cloudscribe.SimpleContent.Services
                 node.Key = page.Id;
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
+                node.ViewRoles = page.ViewRoles;
                 if(string.IsNullOrEmpty(folderPrefix))
                 {
                     node.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName, new { slug = page.Slug });
@@ -181,6 +195,7 @@ namespace cloudscribe.SimpleContent.Services
                 node.Key = page.Id;
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
+                node.ViewRoles = page.ViewRoles;
 
                 if (string.IsNullOrEmpty(folderPrefix))
                 {

@@ -33,10 +33,26 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="BlogMenuLinksToNewestPost" /> @sr["Blog Menu Links To Newest Post"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label asp-for="PubDateFormat" class="col-md-2 control-label">@sr["Date Format"]</label>
                 <div class="col-md-10">
                     <input asp-for="PubDateFormat" class="form-control" />
                     <span asp-validation-for="PubDateFormat" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostsPerPage" class="col-md-2 control-label">@sr["Posts Per Page"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PostsPerPage" class="form-control" />
+                    <span asp-validation-for="PostsPerPage" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
@@ -78,6 +94,13 @@
                 <div class="col-md-10">
                     <input asp-for="CommentNotificationEmail" class="form-control" />
                     <span asp-validation-for="CommentNotificationEmail" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="DefaultPageSlug" class="col-md-2 control-label">@sr["Default Page"]</label>
+                <div class="col-md-10">
+                    <input asp-for="DefaultPageSlug" class="form-control" />
+                    <span asp-validation-for="DefaultPageSlug" class="text-danger"></span>
                 </div>
             </div>
             <fieldset>

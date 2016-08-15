@@ -23,6 +23,12 @@ namespace cloudscribe.SimpleContent.Models
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;
         public string CommentNotificationEmail { get; set; }
+
+        /// <summary>
+        /// by default the blog menu item links to the post list
+        /// if this is set to true, it should link/redirect to the newest post instead
+        /// </summary>
+        public bool BlogMenuLinksToNewestPost { get; set; } = false;
         public string LocalMediaVirtualPath { get; set; } = "/media/images/";
         public string LocalMediaAbsoluteBaseUrl { get; set; } = string.Empty;
         public string CdnUrl { get; set; } = string.Empty;

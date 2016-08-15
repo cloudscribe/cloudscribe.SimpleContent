@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-13
+// Last Modified:           2016-08-15
 // 
 
 
@@ -97,6 +97,32 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             return View("Index", model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> MostRecent()
+        {
+            var projectSettings = await projectService.GetCurrentProjectSettings();
+
+
+            if (projectSettings == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var result = await blogService.GetRecentPosts(1);
+            if ((result != null) && (result.Count > 0))
+            {
+                var post = result[0];
+                var url = await blogService.ResolvePostUrl(post);
+                return Redirect(url);
+
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
 
         [HttpGet]
         [AllowAnonymous]
