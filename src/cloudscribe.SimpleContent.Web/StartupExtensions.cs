@@ -184,6 +184,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
             services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
+            services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
 
             // registering an IOptions<IconCssClasses> that canbe injected into views
             if (configuration != null)

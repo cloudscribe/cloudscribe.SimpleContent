@@ -28,6 +28,7 @@
         "cloudscribe.Web.SiteMap.FromNavigation": "1.0.1-*",
         "Microsoft.AspNetCore.Authorization": "1.0.0",
         "Microsoft.AspNetCore.Mvc": "1.0.0-*",
+        "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.0",
         "Microsoft.AspNetCore.Mvc.Razor": "1.0.0-*",
         "Microsoft.AspNetCore.Routing": "1.0.0-*",
         "Microsoft.Extensions.Caching.Abstractions": "1.0.0",

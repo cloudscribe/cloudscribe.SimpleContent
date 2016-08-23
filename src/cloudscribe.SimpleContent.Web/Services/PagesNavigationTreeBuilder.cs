@@ -115,10 +115,14 @@ namespace cloudscribe.SimpleContent.Services
                     node.Text = project.BlogPageText;
                     if(project.BlogMenuLinksToNewestPost)
                     {
+                        node.Action = "MostRecent";
+                        node.Controller = "Blog";
                         node.Url = urlHelper.Action("MostRecent", "Blog");
                     }
                     else
                     {
+                        node.Action = "Index";
+                        node.Controller = "Blog";
                         node.Url = urlHelper.Action("Index", "Blog");
                     }
                     
@@ -141,10 +145,14 @@ namespace cloudscribe.SimpleContent.Services
                     node.Text = project.BlogPageText;
                     if (project.BlogMenuLinksToNewestPost)
                     {
+                        node.Action = "MostRecent";
+                        node.Controller = "Blog";
                         node.Url = urlHelper.Action("MostRecent", "Blog");
                     }
                     else
                     {
+                        node.Action = "Index";
+                        node.Controller = "Blog";
                         node.Url = urlHelper.Action("Index", "Blog");
                     }
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
