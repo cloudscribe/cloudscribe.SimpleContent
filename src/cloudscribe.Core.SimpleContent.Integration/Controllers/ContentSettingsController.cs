@@ -2,15 +2,17 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2016-08-07
+// Last Modified:			2016-08-14
 // 
 
+using cloudscribe.Core.Models;
 using cloudscribe.Core.SimpleContent.Integration.ViewModels;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Common.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Threading.Tasks;
 
 namespace cloudscribe.Core.SimpleContent.Integration.Controllers
@@ -20,14 +22,20 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
     {
         public ContentSettingsController(
             IProjectService projectService,
+            IAuthorizationService authorizationService,
+            IUserQueries userQueries,
             IStringLocalizer<SimpleContentIntegration> localizer
             )
         {
             this.projectService = projectService;
+            this.authorizationService = authorizationService;
+            this.userQueries = userQueries;
             sr = localizer;
         }
 
         private IProjectService projectService;
+        private IAuthorizationService authorizationService;
+        private IUserQueries userQueries;
         private IStringLocalizer sr;
 
         // GET: /ContentSettings
@@ -57,7 +65,52 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             model.Title = projectSettings.Title;
             model.UseMetaDescriptionInFeed = projectSettings.UseMetaDescriptionInFeed;
             model.WebmasterEmail = projectSettings.WebmasterEmail;
+            model.PostsPerPage = projectSettings.PostsPerPage;
+            model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
+            model.DefaultPageSlug = projectSettings.DefaultPageSlug;
 
+            bool canManageUsers = false;
+            try
+            {
+                canManageUsers = await authorizationService.AuthorizeAsync(User, "UserManagementPolicy");
+            }
+            catch (InvalidOperationException) { } // thrown if policy doesn't exist
+            
+
+            if(canManageUsers)
+            {
+                var contentEditors = await userQueries.GetUsersForClaim(
+                    new Guid(projectSettings.ProjectId),
+                    ProjectConstants.ContentEditorClaimType,
+                    projectSettings.ProjectId
+                    );
+                if(contentEditors != null)
+                {
+                    model.Editors.AddRange(contentEditors);
+                }
+                
+                var blogEditors = await userQueries.GetUsersForClaim(
+                    new Guid(projectSettings.ProjectId),
+                    ProjectConstants.BlogEditorClaimType,
+                    projectSettings.ProjectId
+                    );
+                if(blogEditors != null)
+                {
+                    model.Editors.AddRange(blogEditors);
+                }
+                
+                var pageEditors = await userQueries.GetUsersForClaim(
+                    new Guid(projectSettings.ProjectId),
+                    ProjectConstants.PageEditorClaimType,
+                    projectSettings.ProjectId
+                    );
+                if(pageEditors != null)
+                {
+                    model.Editors.AddRange(pageEditors);
+                }
+                
+
+            }
 
 
             return View(model);
@@ -93,8 +146,23 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             projectSettings.Title = model.Title;
             projectSettings.UseMetaDescriptionInFeed = model.UseMetaDescriptionInFeed;
             projectSettings.WebmasterEmail = model.WebmasterEmail;
+            bool needToClearMenuCache = false;
+            if(projectSettings.BlogMenuLinksToNewestPost != model.BlogMenuLinksToNewestPost)
+            {
+                needToClearMenuCache = true;
+            }
+            if(projectSettings.DefaultPageSlug != model.DefaultPageSlug)
+            {
+                needToClearMenuCache = true;
+            }
+            projectSettings.BlogMenuLinksToNewestPost = model.BlogMenuLinksToNewestPost;
+            projectSettings.DefaultPageSlug = model.DefaultPageSlug;
 
             await projectService.Update(projectSettings);
+            if(needToClearMenuCache)
+            {
+                projectService.ClearNavigationCache();
+            }
 
             this.AlertSuccess(sr["Content Settings were successfully updated."], true);
 

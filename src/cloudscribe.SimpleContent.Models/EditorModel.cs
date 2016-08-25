@@ -19,6 +19,10 @@ namespace cloudscribe.SimpleContent.Models
         public string EditMode { get; set; } = "";
 
         public string ContentType { get; set; } = "Post";
+
+        public string ParentSlug { get; set; } = string.Empty;
+
+        public string ViewRoles { get; set; } = string.Empty;
         public int SortOrder { get; set; } = 3;
     }
 }

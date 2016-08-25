@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-07
+// Last Modified:           2016-08-15
 // 
 
-using cloudscribe.SimpleContent.Common;
+using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -25,12 +26,14 @@ namespace cloudscribe.SimpleContent.Services
             IProjectSecurityResolver security,
             IProjectQueries projectQueries,
             IProjectCommands projectCommands,
+            IMemoryCache cache,
             IHttpContextAccessor contextAccessor = null)
         {
             this.security = security;
             this.projectQueries = projectQueries;
             this.projectCommands = projectCommands;
             this.settingsResolver = settingsResolver;
+            this.cache = cache;
             context = contextAccessor?.HttpContext;
         }
 
@@ -41,6 +44,17 @@ namespace cloudscribe.SimpleContent.Services
         private IProjectCommands projectCommands;
         private IProjectSettingsResolver settingsResolver;
         private ProjectSettings currentSettings = null;
+        private IMemoryCache cache;
+
+        public void ClearNavigationCache()
+        {
+            var cacheKey = "cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder";
+            cache.Remove(cacheKey);
+            cacheKey = "cloudscribe.Web.Navigation.XmlNavigationTreeBuilder";
+            cache.Remove(cacheKey);
+            cacheKey = "JsonNavigationTreeBuilder";
+            cache.Remove(cacheKey);
+        }
 
         private async Task<bool> EnsureSettings()
         {

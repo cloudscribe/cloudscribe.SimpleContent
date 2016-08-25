@@ -2,9 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2016-08-07
+// Last Modified:			2016-08-15
 // 
 
+using cloudscribe.Core.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
@@ -12,6 +14,12 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
     public class ContentSettingsViewModel
     {
+        public ContentSettingsViewModel()
+        {
+            Editors = new List<ISiteUser>();
+        }
+
+        public List<ISiteUser> Editors { get; set; }
 
         public string Title { get; set; } = "Blog";
 
@@ -24,11 +32,12 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string PubDateFormat { get; set; } = "MMMM d. yyyy";
         public bool IncludePubDateInPostUrls { get; set; } = true;
 
-       
+        public bool BlogMenuLinksToNewestPost { get; set; } = false;
+
 
         //public string LocalMediaVirtualPath { get; set; } = "/media/images/";
 
-       
+
 
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;
@@ -37,10 +46,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         [StringLength(100, ErrorMessage = "Notification Email has a maximum length of 100 characters")]
         public string CommentNotificationEmail { get; set; } = string.Empty;
         
-        //public int GravatarSize { get; set; } = 50;
-
-        
-        //public string DefaultPageSlug { get; set; } = "home";
+        public string DefaultPageSlug { get; set; } = "home";
         //public bool UseDefaultPageAsRootNode { get; set; } = true;
 
         

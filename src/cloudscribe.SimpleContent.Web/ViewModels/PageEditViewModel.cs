@@ -12,6 +12,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string ProjectId { get; set; } = string.Empty;
 
         public string ParentId { get; set; } = "0";
+        public string ParentSlug { get; set; } = string.Empty;
         
         public int PageOrder { get; set; } = 3;
 
@@ -24,6 +25,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string MetaDescription { get; set; } = string.Empty;
 
         public string Content { get; set; } = string.Empty;
+
+        public string ViewRoles { get; set; } = string.Empty;
 
         public string PubDate { get; set; } = string.Empty;
 

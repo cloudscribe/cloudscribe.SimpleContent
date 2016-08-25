@@ -1,6 +1,6 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @using cloudscribe.SimpleContent.Models
-@using cloudscribe.SimpleContent.Common
+@using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
 @inject IOptions<IconCssClasses> iconClassesAccessor
@@ -38,7 +38,7 @@
         </header>
     }
    
-    @if (string.IsNullOrEmpty(Model.CurrentPage.Id))
+    @if (!string.IsNullOrEmpty(Model.Mode))
     {
         <div id="excerpt" style="display:none;">
             <h4>meta description:</h4>

@@ -17,6 +17,7 @@
     "dependencies": {
         "NETStandard.Library": "1.6.0-*",
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
+        "cloudscribe.SimpleContent.Web": "1.0.0-*",
         "cloudscribe.Web.SimpleAuth": "1.0.2-*",
         "Microsoft.AspNetCore.Authorization": "1.0.0"
     },

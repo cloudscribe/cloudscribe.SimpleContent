@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-25
 // 
 
 
@@ -30,6 +30,7 @@ namespace cloudscribe.SimpleContent.Services
             IMediaProcessor mediaProcessor,
             IUrlHelperFactory urlHelperFactory,
             IMemoryCache cache,
+            IPageNavigationCacheKeys cacheKeys,
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
         {
@@ -44,6 +45,7 @@ namespace cloudscribe.SimpleContent.Services
             this.actionContextAccesor = actionContextAccesor;
             htmlProcessor = new HtmlProcessor();
             this.cache = cache;
+            this.cacheKeys = cacheKeys;
         }
 
         private readonly HttpContext context;
@@ -58,23 +60,21 @@ namespace cloudscribe.SimpleContent.Services
         private ProjectSettings settings = null;
         private HtmlProcessor htmlProcessor;
         private IMemoryCache cache;
+        private IPageNavigationCacheKeys cacheKeys;
 
-        private async Task<bool> EnsureProjectSettings()
+        private async Task EnsureProjectSettings()
         {
-            if (settings != null) { return true; }
+            if (settings != null) { return; }
             settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
-            if (settings != null) { return true; }
-            return false;
+            if (settings != null) { return; }
+            
         }
 
         public void ClearNavigationCache()
-        {
-            var cacheKey = "cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder";
-            cache.Remove(cacheKey);
-            cacheKey = "cloudscribe.Web.Navigation.XmlNavigationTreeBuilder";
-            cache.Remove(cacheKey);
-            cacheKey = "JsonNavigationTreeBuilder";
-            cache.Remove(cacheKey);
+        {  
+            cache.Remove(cacheKeys.PageTreeCacheKey);
+            cache.Remove(cacheKeys.XmlTreeCacheKey);
+            cache.Remove(cacheKeys.JsonTreeCacheKey);
         }
 
         public Task<string> ResolvePageUrl(Page page)

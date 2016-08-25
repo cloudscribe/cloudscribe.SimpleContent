@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-08-05
+// Last Modified:           2016-08-25
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -11,8 +11,6 @@ using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -115,7 +113,19 @@ namespace cloudscribe.SimpleContent.Services
                     node.Key = project.BlogPageText;
                     node.ParentKey = "RootNode";
                     node.Text = project.BlogPageText;
-                    node.Url = urlHelper.Action("Index", "Blog");
+                    if(project.BlogMenuLinksToNewestPost)
+                    {
+                        node.Action = "MostRecent";
+                        node.Controller = "Blog";
+                        node.Url = urlHelper.Action("MostRecent", "Blog");
+                    }
+                    else
+                    {
+                        node.Action = "Index";
+                        node.Controller = "Blog";
+                        node.Url = urlHelper.Action("Index", "Blog");
+                    }
+                    
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
                     var blogNode = treeRoot.AddChild(node);
 
@@ -133,18 +143,35 @@ namespace cloudscribe.SimpleContent.Services
                     node.Key = project.BlogPageText;
                     node.ParentKey = "RootNode";
                     node.Text = project.BlogPageText;
-                    node.Url = urlHelper.Action("Index", "Blog");
+                    if (project.BlogMenuLinksToNewestPost)
+                    {
+                        node.Action = "MostRecent";
+                        node.Controller = "Blog";
+                        node.Url = urlHelper.Action("MostRecent", "Blog");
+                    }
+                    else
+                    {
+                        node.Action = "Index";
+                        node.Controller = "Blog";
+                        node.Url = urlHelper.Action("Index", "Blog");
+                    }
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
                     var blogNode = treeRoot.AddChild(node);
 
                     node = new NavigationNode(); // new it up again for use below
                 }
 
-                if (homePage != null && homePage.Id == page.Id) { rootPosition += 1; continue; }
+                if (homePage != null && homePage.Id == page.Id)
+                {
+                    rootPosition += 1;
+                    await AddChildNodes(treeRoot, project, folderPrefix).ConfigureAwait(false);
+                    continue;
+                }
                 
                 node.Key = page.Id;
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
+                node.ViewRoles = page.ViewRoles;
                 if(string.IsNullOrEmpty(folderPrefix))
                 {
                     node.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName, new { slug = page.Slug });
@@ -154,10 +181,13 @@ namespace cloudscribe.SimpleContent.Services
                     node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
                 }
                 
-                if (!page.IsPublished) { node.ViewRoles = project.AllowedEditRoles; }
+                // for unpublished pages PagesNavigationNodePermissionResolver
+                // will look for projectid in CustomData and if it exists
+                // filter node from view unless user has edit permissions
+                if (!page.IsPublished) { node.CustomData = project.ProjectId; }
 
                 var treeNode = treeRoot.AddChild(node);
-                await AddChildNodes(treeNode, folderPrefix).ConfigureAwait(false);
+                await AddChildNodes(treeNode, project, folderPrefix).ConfigureAwait(false);
                 rootPosition += 1;
             }
 
@@ -166,6 +196,7 @@ namespace cloudscribe.SimpleContent.Services
 
         private async Task AddChildNodes(
             TreeNode<NavigationNode> treeNode,
+            ProjectSettings project,
             string folderPrefix
             )
         {
@@ -177,6 +208,7 @@ namespace cloudscribe.SimpleContent.Services
                 node.Key = page.Id;
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
+                node.ViewRoles = page.ViewRoles;
 
                 if (string.IsNullOrEmpty(folderPrefix))
                 {
@@ -187,8 +219,13 @@ namespace cloudscribe.SimpleContent.Services
                     node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
                 }
 
+                // for unpublished pages PagesNavigationNodePermissionResolver
+                // will look for projectid in CustomData and if it exists
+                // filter node from view unless user has edit permissions
+                if (!page.IsPublished) { node.CustomData = project.ProjectId; }
+
                 var childNode = treeNode.AddChild(node);
-                await AddChildNodes(childNode, folderPrefix).ConfigureAwait(false); //recurse
+                await AddChildNodes(childNode, project, folderPrefix).ConfigureAwait(false); //recurse
             }
         }
 

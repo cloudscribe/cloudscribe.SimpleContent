@@ -85,6 +85,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+              name: ProjectConstants.MostRecentPostRouteName,
+              template: "blog/mostrecent"
+              , defaults: new { controller = "Blog", action = "MostRecent" }
+              );
+
+            routes.MapRoute(
                name: ProjectConstants.PostWithoutDateRouteName,
                template: "blog/{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
@@ -133,6 +139,13 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+              name: ProjectConstants.FolderMostRecentPostRouteName,
+              template: "{sitefolder}/blog/mostrecent"
+              , defaults: new { controller = "Blog", action = "MostRecent" }
+              , constraints: new { name = siteFolderConstraint }
+              );
+
+            routes.MapRoute(
                name: ProjectConstants.FolderPostWithoutDateRouteName,
                template: "{sitefolder}/blog/{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
@@ -168,9 +181,11 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
 
             services.TryAddScoped<IPageRouteHelper, DefaultPageRouteHelper>();
+            services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
             services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
+            services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
 
             // registering an IOptions<IconCssClasses> that canbe injected into views
             if (configuration != null)

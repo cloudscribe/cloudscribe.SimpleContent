@@ -1,0 +1,27 @@
+﻿@using cloudscribe.Web.Navigation
+@using System.Text
+@model NavigationViewModel
+@addTagHelper *, cloudscribe.Web.Navigation
+@if (Model.HasVisibleChildren(Model.RootNode))
+{
+    <ul class="nav navbar-nav">
+        <li class='@Model.GetClass(Model.RootNode.Value)'><a href="@Url.Content(Model.AdjustUrl(Model.RootNode))">@Model.AdjustText(Model.RootNode)</a></li>
+
+        @foreach (var node in Model.RootNode.Children)
+        {
+            if (!Model.ShouldAllowView(node)) { continue; }
+            if (!Model.HasVisibleChildren(node))
+            {
+                <li class='@Model.GetClass(node.Value)' ><a href="@Url.Content(Model.AdjustUrl(node))">@Model.AdjustText(node)</a></li>
+            }
+            else
+            {
+
+                <li class='@Model.GetClass(node.Value, "dropdown")'>  
+                    <a href="@Url.Content(Model.AdjustUrl(node))">@Model.AdjustText(node) <span class="caret"></span></a>
+                    @Model.UpdateTempNode(node)@Html.Partial("NavigationNodeChildDropdownPartial", Model)
+                </li>
+            }
+        }
+    </ul>
+}

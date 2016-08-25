@@ -21,7 +21,8 @@
     // #endregion
 
     var contentId, editMode, currentSlug, supportsCategories, contentType,
-        txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder, chkPublish,
+        txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
+        txtParentPage, txtViewRoles, chkPublish,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
         indexPath, categoryPath, savePath, deletePath, cancelEditPath
 
@@ -148,7 +149,10 @@
 
         //alert(txtDateTime.val());
         var pageSort = 0;
-        if (contentType == "Page") { pageSort = txtPageOrder.val(); }
+        if (contentType == "Page")
+        {
+            pageSort = txtPageOrder.val();
+        }
 
         $.post(savePath, {
             id: contentId,
@@ -159,6 +163,8 @@
             metaDescription: txtExcerpt.text().trim(),
             content: parsedDOM,
             categories: getCategories(),
+            parentSlug: txtParentPage.val(),
+            viewRoles:txtViewRoles.val(),
             __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
         },null,"text")
           .success(function (data) {
@@ -264,18 +270,12 @@
         var isVisible = editorBar.is(':visible');
         if (!isVisible) {
             // editor was hidden, show it
-            //editorBar.removeClass("invisible");
-            //toolbarHeight = editorBar.height();
-            //editorBar.animate({ "top": mainNavHeight }, 500, "swing");
-            //addToolBarPadding();
             editorBar.show();
             btnOuterToggle.hide();
             if (!toolBarCookieExists()) { setToolbarCookie(); }  
         }
         else {
             //editor was visible toggle it to invisible
-            //editorBar.addClass("invisible");
-            //removeToolbarPadding();
             // show the button to get the toolbar back
             editorBar.hide();
             btnOuterToggle.show();
@@ -287,7 +287,6 @@
         if (toolBarCookieExists()) {
             // show the toolbar
             //alert('cookie exists');
-            //toggleToolbar(); // initial state hidden
             editorBar.show();
 
         }
@@ -298,9 +297,6 @@
     },
     addToolBarPadding = function () {
         toolbarHeight = editorBar.height();
-        //var mainDiv = $(".body-content").first();
-        //mainDiv.animate({ "padding-top": toolbarHeight + mainNavHeight }, 500, "swing");
-        //mainDiv.css("background-color", "pink");
     },
     removeToolbarPadding = function () {
         //$(".body-content").first().animate({ "padding-top": mainNavHeight }, 500, "swing");
@@ -313,7 +309,9 @@
     if (contentType == "Page") {
         contentId = $("article").first().attr("data-id");
         txtTitle = $("#article-title");
-        txtPageOrder = $("#PageOrder");
+        txtPageOrder = $("#txtPageOrder");
+        txtParentPage = $("#txtParentPage");
+        txtViewRoles = $("#txtViewRoles");
     }
     else
     {
@@ -344,14 +342,7 @@
     currentSlug = $("#editor-toolbar").data("current-slug");
     supportsCategories = ($("#editor-toolbar").data("supports-categories")) == 'True';
     editMode = $("#editor-toolbar").data("edit-mode");
-    /*
-    isNew = (location.search.indexOf("slug") == -1)
-        && (
-        (location.search.indexOf("new") != -1)
-        )
-    ;
-    */
-
+    
     //alert(contentId);
     var mainNavHeight = $(".navbar-fixed-top").first().height();
     var toolbarHeight = editorBar.height();
@@ -399,12 +390,7 @@
     });
 
     if (editMode == "new" || editMode == "edit") {
-        editContent();
-        //$("#ispublished").fadeIn();
-        //chkPublish[0].checked = true;
-   // } else if (location.search.indexOf("mode=edit") != -1)
-   // {
-   //     editContent();   
+        editContent(); 
     }
     else if(contentType == "Page") {
         if (currentSlug) { btnEdit.removeAttr("disabled"); }

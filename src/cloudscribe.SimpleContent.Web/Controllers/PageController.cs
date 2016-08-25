@@ -2,28 +2,18 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-10
+// Last Modified:           2016-08-25
 // 
 
-using cloudscribe.SimpleContent.Common;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.ViewModels;
-using Microsoft.AspNetCore.Http.Authentication;
-using Microsoft.AspNetCore.Http.Features.Authentication;
+using cloudscribe.Web.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.WebEncoders;
-using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using cloudscribe.SimpleContent.Services;
-using cloudscribe.Web.Common;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -65,11 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(slug == "none") { slug = string.Empty; }
             
-            var canEdit = User.CanEditPages(projectSettings.ProjectId);
-            if(!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
-            }
+            var canEdit = await User.CanEditPages(projectSettings.ProjectId, authorizationService);
             var isNew = canEdit && (mode == "new");
             var isEditing = canEdit && (mode == "edit");
             if(!isNew && string.IsNullOrEmpty(slug)) { slug = projectSettings.DefaultPageSlug; }
@@ -81,7 +67,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 
             }
             
-
             var model = new PageViewModel();
 
             if (page == null)
@@ -112,17 +97,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         {
                             Response.StatusCode = 404;
                             return View("NoPages", 404);
-                        }
-
-                        
-                    }
-
-                    
+                        }    
+                    } 
                 }
-
             }
             else
             {
+                // if the page is protected by view roles return 404 if user is not in an allowed role
+                if((!canEdit) && (!string.IsNullOrEmpty(page.ViewRoles)))
+                {
+                    if(!User.IsInRoles(page.ViewRoles))
+                    {
+                        Response.StatusCode = 404;
+                        return new EmptyResult();
+                    }
+                }
+
                 ViewData["Title"] = page.Title;
             }
 
@@ -145,6 +135,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
                     model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode="edit"});
                     model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
+                    model.EditorSettings.ParentSlug = model.CurrentPage.ParentTitle;
+                    model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
                 }
                 else
                 {
@@ -195,12 +187,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;
             }
 
-            var canEdit = User.CanEditPages(project.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
-            }
-
+            var canEdit = await User.CanEditPages(project.ProjectId, authorizationService);
+            
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
@@ -259,22 +247,39 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 };
             }
 
+            if(!string.IsNullOrEmpty(model.ParentSlug))
+            {
+                var parentPage = await pageService.GetPageBySlug(project.ProjectId, model.ParentSlug);
+                if (parentPage != null)
+                {
+                    if(parentPage.Id != page.ParentId)
+                    {
+                        page.ParentId = parentPage.Id;
+                        page.ParentTitle = parentPage.Slug;
+                        needToClearCache = true;
+                    }
+                    
+                }
+            }
+            else
+            {
+                // empty means root level
+                page.ParentTitle = string.Empty;
+                page.ParentId = "0";
+            }
+            if(page.ViewRoles != model.ViewRoles)
+            {
+                needToClearCache = true;
+            }
+            page.ViewRoles = model.ViewRoles;
+
             page.PageOrder = model.PageOrder;
             page.IsPublished = model.IsPublished;
             if (!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);
-                try
-                {
-                    //TODO: fix https://github.com/joeaudette/cloudscribe.SimpleContent/issues/1
-                    //var tz = TimeZoneInfo.FindSystemTimeZoneById(project.TimeZoneId);
-                    //page.PubDate = TimeZoneInfo.ConvertTime(localTime, TimeZoneInfo.Utc);
-                    page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
-                }
-                catch(Exception)
-                {
-                    page.PubDate = localTime;
-                } 
+                page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+                
             }
 
             if(isNew)
@@ -311,12 +316,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; // new EmptyResult();
             }
 
-            var canEdit = User.CanEditPages(project.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "PageEditPolicy");
-            }
-
+            var canEdit = await User.CanEditPages(project.ProjectId, authorizationService);
+            
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");

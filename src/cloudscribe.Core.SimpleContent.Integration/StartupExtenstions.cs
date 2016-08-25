@@ -22,6 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
             )
         {
             services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
+            services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
 
             return services;
         }

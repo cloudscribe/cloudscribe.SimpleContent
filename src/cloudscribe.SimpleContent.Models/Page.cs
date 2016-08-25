@@ -39,6 +39,8 @@ namespace cloudscribe.SimpleContent.Models
 
         public bool IsPublished { get; set; } = true;
 
+        public string ViewRoles { get; set; } = string.Empty;
+
         public List<string> Categories { get; set; }
         public List<Comment> Comments { get; set; }
 

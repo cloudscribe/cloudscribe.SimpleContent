@@ -1,11 +1,17 @@
 # A list of things I haven't done yet
 
+## Pages Features
+
+** Currently not possible to set the parent page from the UI
+** ViewRoles per page to enable protected content - this will require some kind of interface for available roles lookup provider
+http://www.codeproject.com/Questions/997523/Hot-to-get-value-from-bootstrap-popup-to-main-page
+
+## Miscellaneous
+
 EF storage layer
 localization of views
 caching of post/page data
 recent posts viewcomponent for homepage
-
-implement a way to add a claim for ProjectId in cloudscribe Core integration to easily grant a user edit permissions - maybe make 2 claims, one for blog and one for pages, both using prokjectid as the value
 
 
 
@@ -23,5 +29,5 @@ then still be able to add cms pages in the nav dynamically but the cms would not
 since the home index would be
 therefore I will use an url like /p/page-name
 
-once we can package views in nuget it will be easier to setup multiple sample web apps with different configurations
+
 

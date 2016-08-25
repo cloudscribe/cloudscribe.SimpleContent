@@ -33,10 +33,26 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="BlogMenuLinksToNewestPost" /> @sr["Blog Menu Links To Newest Post"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label asp-for="PubDateFormat" class="col-md-2 control-label">@sr["Date Format"]</label>
                 <div class="col-md-10">
                     <input asp-for="PubDateFormat" class="form-control" />
                     <span asp-validation-for="PubDateFormat" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostsPerPage" class="col-md-2 control-label">@sr["Posts Per Page"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PostsPerPage" class="form-control" />
+                    <span asp-validation-for="PostsPerPage" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
@@ -60,7 +76,7 @@
             <div class="form-group">
                 <label asp-for="DaysToComment" class="col-md-2 control-label">@sr["Days To Comment"]</label>
                 <div class="col-md-10">
-                    <select  asp-for="DaysToComment" class="form-control">
+                    <select asp-for="DaysToComment" class="form-control">
                         <option value="-1">No Limit</option>
                         <option value="1">1</option>
                         <option value="7">7</option>
@@ -78,6 +94,13 @@
                 <div class="col-md-10">
                     <input asp-for="CommentNotificationEmail" class="form-control" />
                     <span asp-validation-for="CommentNotificationEmail" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="DefaultPageSlug" class="col-md-2 control-label">@sr["Default Page"]</label>
+                <div class="col-md-10">
+                    <input asp-for="DefaultPageSlug" class="form-control" />
+                    <span asp-validation-for="DefaultPageSlug" class="text-danger"></span>
                 </div>
             </div>
             <fieldset>
@@ -127,12 +150,32 @@
                     </div>
                 </div>
             </fieldset>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button name="submit" type="submit" class="btn btn-default">@sr["Save"]</button>
-                    </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button name="submit" type="submit" class="btn btn-default">@sr["Save"]</button>
                 </div>
-</form>
+            </div>
+        </form>
+        @if (Model.Editors.Count > 0)
+        {
+            <div class="col-md-10 col-md-offset-2">
+                <h3>@sr["Editors"]</h3>
+                <ul class="list-unstyled">
+                    @foreach (var user in Model.Editors)
+                    {
+                        <li>
+                            @user.DisplayName - @user.Email
+                            <a class="btn btn-xs btn-default" asp-action="UserEdit"
+                               asp-controller="UserAdmin"
+                               asp-route-siteId="@user.SiteId"
+                               asp-route-userId="@user.Id">@sr["Manage"]</a>
+                        </li>
+
+                    }
+                </ul>
+            </div>
+        }
+        
     </div>
     <div class="col-md-2 col-md-pull-10">
         @await Component.InvokeAsync("Navigation", new { viewName = "SideNavAlt1", filterName = NamedNavigationFilters.ParentTree, startingNodeKey = "SiteAdmin" })

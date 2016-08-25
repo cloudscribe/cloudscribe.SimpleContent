@@ -2,12 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-10
+// Last Modified:           2016-08-15
 // 
 
-using cloudscribe.SimpleContent.Common;
+
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
+using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +18,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using cloudscribe.SimpleContent.Services;
-using cloudscribe.Web.Common;
-using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -81,13 +80,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             
-            // check if the user has the projectid claim
-            model.CanEdit = User.CanEditBlog(model.ProjectSettings.ProjectId);
-            if(!model.CanEdit)
-            {
-                model.CanEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
-
+            // check if the user has the BlogEditor claim or meets policy
+            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.ProjectId, authorizationService);
+            
             if(model.CanEdit)
             {
                 //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
@@ -102,6 +97,32 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             return View("Index", model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> MostRecent()
+        {
+            var projectSettings = await projectService.GetCurrentProjectSettings();
+
+
+            if (projectSettings == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var result = await blogService.GetRecentPosts(1);
+            if ((result != null) && (result.Count > 0))
+            {
+                var post = result[0];
+                var url = await blogService.ResolvePostUrl(post);
+                return Redirect(url);
+
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -132,23 +153,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = result.TotalItems;
-            //model.Paging.TotalItems = await blogService.GetCount(
-            //    model.ProjectSettings.ProjectId,
-            //    year,
-            //    month,
-            //    day);
-
+            
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             model.Year = year;
             model.Month = month;
             model.Day = day;
 
-            model.CanEdit = User.CanEditBlog(model.ProjectSettings.ProjectId);
-            if (!model.CanEdit)
-            {
-                model.CanEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
+            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.ProjectId, authorizationService);
+            
             if (model.CanEdit)
             {
                 //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
@@ -159,7 +172,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.CurrentSlug = string.Empty;
                 model.EditorSettings.SupportsCategories = true;
             }
-
 
             return View("Archive", model);
         }
@@ -208,11 +220,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
             }
 
-            var canEdit = User.CanEditBlog(projectSettings.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
+            var canEdit = await User.CanEditBlog(projectSettings.ProjectId, authorizationService);
+            
             var isNew = false;
             PostResult result = null;
             if(!string.IsNullOrEmpty(slug))
@@ -362,11 +371,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; 
             }
 
-            bool canEdit = User.CanEditBlog(project.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
+            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            
 
             if (!canEdit)
             {
@@ -424,25 +430,17 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if(!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);
-                try
+                var pubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+                // TODO: this logic probably needs to also be implemented in the metaweblog service in case the pubdate is changed from there
+                if (!isNew)
                 {
-                    
-                    var pubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
-                    // TODO: this logic probably needs to also be implemented in the metaweblog service in case the pubdate is changed from there
-                    if (!isNew)
+                    if (pubDate != post.PubDate)
                     {
-                        if (pubDate != post.PubDate)
-                        {
-                            await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
-                        }
+                        await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
                     }
-                    post.PubDate = pubDate;
                 }
-                catch(Exception)
-                {
-                    post.PubDate = localTime;
-                }
-                
+                post.PubDate = pubDate;
+               
             }
 
             if(isNew)
@@ -490,12 +488,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; // new EmptyResult();
             }
 
-            bool canEdit = User.CanEditBlog(project.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
-
+            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
@@ -599,11 +593,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            var canEdit = User.CanEditBlog(project.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
+            var canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            
             var isApproved = canEdit;
             if (!isApproved) isApproved = !project.ModerateComments;
 
@@ -693,12 +684,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            bool canEdit = User.CanEditBlog(project.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
-
+            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
@@ -761,12 +748,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            bool canEdit = User.CanEditBlog(project.ProjectId);
-            if (!canEdit)
-            {
-                canEdit = await authorizationService.AuthorizeAsync(User, "BlogEditPolicy");
-            }
-
+            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
@@ -812,8 +795,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             return string.Empty;
         }
-
-        
+  
 
     }
 }

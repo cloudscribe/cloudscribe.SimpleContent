@@ -26,6 +26,10 @@
                                 "ClaimType": "ProjectId",
                                 "ClaimValue": "project1"
                             },
+							{
+                                "ClaimType": "ContentEditor",
+                                "ClaimValue": "project1"
+                            },
                             {
                                 "ClaimType": "DisplayName",
                                 "ClaimValue": "Bilbo Baggins"
@@ -97,6 +101,10 @@
                             },
                             {
                                 "ClaimType": "ProjectId",
+                                "ClaimValue": "project2"
+                            },
+							{
+                                "ClaimType": "ContentEditor",
                                 "ClaimValue": "project2"
                             }
 

@@ -1,6 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Models.EditorModel
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
+@addTagHelper "*, cloudscribe.Web.Common"
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @{
     var icons = iconClassesAccessor.Value;
@@ -32,10 +33,33 @@
                 <li id="liSave"><a id="btnSave" disabled>Save</a></li>
                 <li id="liCancel"><a id="btnCancel" disabled>Cancel</a></li> 
                 <li id="liPageOrder" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Page Order <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings <span class="caret"></span></a>
+                    <ul class="dropdown-menu psetform">
                         <li>
-                            <input id="PageOrder" type="text" placeholder="10" value="@Model.SortOrder">
+                            <div class="form-group">
+                                <label class="control-label">Parent Page</label>
+                                <div>
+                                    <input id="txtParentPage" class="form-control" placeholder="root" value="@Model.ParentSlug" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label">View Roles</label>
+                                <div>
+                                    <input id="txtViewRoles" class="form-control" placeholder="Leave Blank for Public Pages" value="@Model.ViewRoles" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-group">
+                                <label class="control-label">Sort Order</label>
+                                <div>
+                                    <input id="txtPageOrder" class="form-control" type="text" placeholder="10" value="@Model.SortOrder">
+
+                                </div>
+                            </div>
+                            
                         </li>
                     </ul>
                 </li> 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-08-10
+// Last Modified:           2016-08-23
 // 
 
 using System;
@@ -166,10 +166,9 @@ namespace cloudscribe.SimpleContent.Syndication
                 }
                 
                 //rssItem.Enclosures
-                rssItem.Guid = new RssGuid(post.Id);
+               
                 var postUrl = await blogService.ResolvePostUrl(post);
                 
-
                 if(string.IsNullOrEmpty(postUrl))
                 {
                     //TODO: log 
@@ -187,6 +186,7 @@ namespace cloudscribe.SimpleContent.Syndication
                         postUrl);
                 }
 
+                rssItem.Guid = new RssGuid(postUrl,true);
                 rssItem.Link = new Uri(postUrl);
                 rssItem.PublicationDate = post.PubDate;
                 //rssItem.Source
