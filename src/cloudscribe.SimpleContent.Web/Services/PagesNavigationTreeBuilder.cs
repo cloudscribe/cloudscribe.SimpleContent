@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-08-15
+// Last Modified:           2016-08-25
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -161,7 +161,12 @@ namespace cloudscribe.SimpleContent.Services
                     node = new NavigationNode(); // new it up again for use below
                 }
 
-                if (homePage != null && homePage.Id == page.Id) { rootPosition += 1; continue; }
+                if (homePage != null && homePage.Id == page.Id)
+                {
+                    rootPosition += 1;
+                    await AddChildNodes(treeRoot, project, folderPrefix).ConfigureAwait(false);
+                    continue;
+                }
                 
                 node.Key = page.Id;
                 node.ParentKey = page.ParentId;

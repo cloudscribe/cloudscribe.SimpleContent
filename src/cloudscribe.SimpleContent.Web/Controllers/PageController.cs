@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-15
+// Last Modified:           2016-08-25
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -135,6 +135,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
                     model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode="edit"});
                     model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
+                    model.EditorSettings.ParentSlug = model.CurrentPage.ParentTitle;
+                    model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
                 }
                 else
                 {
@@ -244,6 +246,32 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     //,Categories = categories.ToList()
                 };
             }
+
+            if(!string.IsNullOrEmpty(model.ParentSlug))
+            {
+                var parentPage = await pageService.GetPageBySlug(project.ProjectId, model.ParentSlug);
+                if (parentPage != null)
+                {
+                    if(parentPage.Id != page.ParentId)
+                    {
+                        page.ParentId = parentPage.Id;
+                        page.ParentTitle = parentPage.Slug;
+                        needToClearCache = true;
+                    }
+                    
+                }
+            }
+            else
+            {
+                // empty means root level
+                page.ParentTitle = string.Empty;
+                page.ParentId = "0";
+            }
+            if(page.ViewRoles != model.ViewRoles)
+            {
+                needToClearCache = true;
+            }
+            page.ViewRoles = model.ViewRoles;
 
             page.PageOrder = model.PageOrder;
             page.IsPublished = model.IsPublished;

@@ -39,7 +39,7 @@
                             <div class="form-group">
                                 <label class="control-label">Parent Page</label>
                                 <div>
-                                    <input id="ParentPage" class="form-control" placeholder="root" />
+                                    <input id="txtParentPage" class="form-control" placeholder="root" value="@Model.ParentSlug" />
                                 </div>
                             </div>
                         </li>
@@ -47,7 +47,7 @@
                             <div class="form-group">
                                 <label class="control-label">View Roles</label>
                                 <div>
-                                    <input id="ViewRoles" class="form-control" placeholder="All Users" />
+                                    <input id="txtViewRoles" class="form-control" placeholder="Leave Blank for Public Pages" value="@Model.ViewRoles" />
                                 </div>
                             </div>
                         </li>
@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <label class="control-label">Sort Order</label>
                                 <div>
-                                    <input id="PageOrder" class="form-control" type="text" placeholder="10" value="@Model.SortOrder">
+                                    <input id="txtPageOrder" class="form-control" type="text" placeholder="10" value="@Model.SortOrder">
 
                                 </div>
                             </div>

@@ -38,7 +38,7 @@
         </header>
     }
    
-    @if (string.IsNullOrEmpty(Model.CurrentPage.Id))
+    @if (!string.IsNullOrEmpty(Model.Mode))
     {
         <div id="excerpt" style="display:none;">
             <h4>meta description:</h4>

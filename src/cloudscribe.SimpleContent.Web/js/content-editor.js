@@ -21,7 +21,8 @@
     // #endregion
 
     var contentId, editMode, currentSlug, supportsCategories, contentType,
-        txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder, chkPublish,
+        txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
+        txtParentPage, txtViewRoles, chkPublish,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
         indexPath, categoryPath, savePath, deletePath, cancelEditPath
 
@@ -148,7 +149,10 @@
 
         //alert(txtDateTime.val());
         var pageSort = 0;
-        if (contentType == "Page") { pageSort = txtPageOrder.val(); }
+        if (contentType == "Page")
+        {
+            pageSort = txtPageOrder.val();
+        }
 
         $.post(savePath, {
             id: contentId,
@@ -159,6 +163,8 @@
             metaDescription: txtExcerpt.text().trim(),
             content: parsedDOM,
             categories: getCategories(),
+            parentSlug: txtParentPage.val(),
+            viewRoles:txtViewRoles.val(),
             __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
         },null,"text")
           .success(function (data) {
@@ -303,7 +309,9 @@
     if (contentType == "Page") {
         contentId = $("article").first().attr("data-id");
         txtTitle = $("#article-title");
-        txtPageOrder = $("#PageOrder");
+        txtPageOrder = $("#txtPageOrder");
+        txtParentPage = $("#txtParentPage");
+        txtViewRoles = $("#txtViewRoles");
     }
     else
     {
