@@ -181,6 +181,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
 
             services.TryAddScoped<IPageRouteHelper, DefaultPageRouteHelper>();
+            services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
             services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
