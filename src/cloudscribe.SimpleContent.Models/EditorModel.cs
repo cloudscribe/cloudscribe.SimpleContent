@@ -23,6 +23,8 @@ namespace cloudscribe.SimpleContent.Models
         public string ParentSlug { get; set; } = string.Empty;
 
         public string ViewRoles { get; set; } = string.Empty;
+
+        public string ProjectId { get; set; } = string.Empty;
         public int SortOrder { get; set; } = 3;
     }
 }

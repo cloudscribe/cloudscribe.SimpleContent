@@ -1,8 +1,11 @@
 ﻿@model cloudscribe.SimpleContent.Models.EditorModel
 @using cloudscribe.SimpleContent.Web.Design
+@using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
 @addTagHelper "*, cloudscribe.Web.Common"
+@addTagHelper "*, cloudscribe.SimpleContent.Web"
 @inject IOptions<IconCssClasses> iconClassesAccessor
+@inject IRoleSelectorProperties roleSelector
 @{
     var icons = iconClassesAccessor.Value;
 }
@@ -37,17 +40,28 @@
                     <ul class="dropdown-menu psetform">
                         <li>
                             <div class="form-group">
-                                <label class="control-label">Parent Page</label>
+                                <label class="control-label">Parent Page Slug</label>
                                 <div>
-                                    <input id="txtParentPage" class="form-control" placeholder="root" value="@Model.ParentSlug" />
+                                    <input id="txtParentPage" class="form-control" placeholder="Leave blank for root level pages" value="@Model.ParentSlug" />
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="form-group">
                                 <label class="control-label">View Roles</label>
+                                <a csc-role-selector="@roleSelector" class="btn btn-xs btn-default">Test</a>
+
+                                <a id="mymodal" class="btn btn-xs btn-default" title="Select Roles"
+                                   asp-action="Modal" asp-controller="RoleAdmin"
+                                   asp-route-siteId="@Model.ProjectId"
+                                   data-ajax="true"
+                                   data-ajax-begin="roleSelector.prepareModal('txtViewRoles','selectedRolesDisplay')"
+                                   data-ajax-failure="roleSelector.clearModal()"
+                                   data-ajax-method="GET" data-ajax-mode="replace"
+                                   data-ajax-success="roleSelector.openModal()"
+                                   data-ajax-update="#roledialog">Select Roles</a>
                                 <div>
-                                    <input id="txtViewRoles" class="form-control" placeholder="Leave Blank for Public Pages" value="@Model.ViewRoles" />
+                                    <input id="txtViewRoles" class="form-control" placeholder="Leave blank for public pages" value="@Model.ViewRoles" />
                                 </div>
                             </div>
                         </li>

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using cloudscribe.SimpleContent.Web.Services;
 using Microsoft.Extensions.Configuration;
 using cloudscribe.SimpleContent.Web.Design;
+using cloudscribe.SimpleContent.Web.TagHelpers;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -186,6 +187,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
             services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
+
+            services.TryAddScoped<IRoleSelectorProperties, NotImplementedRoleSelectorProperties>();
 
             // registering an IOptions<IconCssClasses> that canbe injected into views
             if (configuration != null)
