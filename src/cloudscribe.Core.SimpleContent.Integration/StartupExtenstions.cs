@@ -1,6 +1,7 @@
 ﻿using cloudscribe.Core.SimpleContent.Integration;
 using cloudscribe.Core.SimpleContent.Integration.Controllers;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
@@ -23,6 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
             services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
+            services.AddScoped<IRoleSelectorProperties, SiteRoleSelectorProperties>();
 
             return services;
         }

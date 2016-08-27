@@ -153,6 +153,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
                 model.EditorSettings.ContentType = "Page";
                 model.EditorSettings.SupportsCategories = false;
+                model.EditorSettings.ProjectId = projectSettings.ProjectId;
 
             }
 

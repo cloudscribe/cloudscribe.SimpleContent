@@ -80,7 +80,7 @@ namespace cloudscribe.SimpleContent.Services
 
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var folderPrefix = prefixProvider.GetPrefix();
-            if (homePage != null)
+            if ((homePage != null) && project.UseDefaultPageAsRootNode)
             {
                 rootNav = new NavigationNode();
                 rootNav.IsRootNode = true;
@@ -161,7 +161,7 @@ namespace cloudscribe.SimpleContent.Services
                     node = new NavigationNode(); // new it up again for use below
                 }
 
-                if (homePage != null && homePage.Id == page.Id)
+                if (project.UseDefaultPageAsRootNode && (homePage != null && homePage.Id == page.Id))
                 {
                     rootPosition += 1;
                     await AddChildNodes(treeRoot, project, folderPrefix).ConfigureAwait(false);
