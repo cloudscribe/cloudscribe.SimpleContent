@@ -8,12 +8,12 @@ namespace cloudscribe.SimpleContent.Web.TagHelpers
 
         string Action { get; }
 
-        Dictionary<string, string> Attributes { get; }
+        Dictionary<string, string> GetAttributes(string csvTargetElementId, string displayTargetId = "");
 
-        Dictionary<string, string> RouteParams { get; }
+        Dictionary<string, string> GetRouteParams(string projectId);
 
         List<string> RequiredScriptPaths { get; }
 
-        string CsvTargetElementId { get; }
+        //string CsvTargetElementId { get; }
     }
 }

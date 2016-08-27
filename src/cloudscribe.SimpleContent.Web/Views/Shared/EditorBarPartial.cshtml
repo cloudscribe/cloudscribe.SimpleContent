@@ -49,17 +49,11 @@
                         <li>
                             <div class="form-group">
                                 <label class="control-label">View Roles</label>
-                                <a csc-role-selector="@roleSelector" class="btn btn-xs btn-default">Test</a>
-
-                                <a id="mymodal" class="btn btn-xs btn-default" title="Select Roles"
-                                   asp-action="Modal" asp-controller="RoleAdmin"
-                                   asp-route-siteId="@Model.ProjectId"
-                                   data-ajax="true"
-                                   data-ajax-begin="roleSelector.prepareModal('txtViewRoles','selectedRolesDisplay')"
-                                   data-ajax-failure="roleSelector.clearModal()"
-                                   data-ajax-method="GET" data-ajax-mode="replace"
-                                   data-ajax-success="roleSelector.openModal()"
-                                   data-ajax-update="#roledialog">Select Roles</a>
+                                <a class="btn btn-xs btn-default" 
+                                   csc-role-selector="@roleSelector" 
+                                   csc-projectId="@Model.ProjectId"
+                                   csc-target-id="txtViewRoles"
+                                   >Select Roles</a>
                                 <div>
                                     <input id="txtViewRoles" class="form-control" placeholder="Leave blank for public pages" value="@Model.ViewRoles" />
                                 </div>

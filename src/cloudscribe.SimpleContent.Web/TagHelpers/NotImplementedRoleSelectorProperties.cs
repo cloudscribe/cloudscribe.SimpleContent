@@ -14,14 +14,14 @@ namespace cloudscribe.SimpleContent.Web.TagHelpers
             get { return string.Empty; }
         }
 
-        public Dictionary<string, string> Attributes
+        public Dictionary<string, string> GetAttributes(string csvTargetElementId, string displayTargetId = "")
         {
-            get {  return null; }
+            return null; 
         }
         
-        public Dictionary<string, string> RouteParams
+        public Dictionary<string, string> GetRouteParams(string projectId)
         {
-            get { return null; }
+            return null; 
         }
 
         public List<string> RequiredScriptPaths
@@ -29,9 +29,6 @@ namespace cloudscribe.SimpleContent.Web.TagHelpers
             get { return null; }
         }
 
-        public string CsvTargetElementId
-        {
-            get { return string.Empty; }
-        }
+       
     }
 }
