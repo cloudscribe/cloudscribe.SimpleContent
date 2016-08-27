@@ -11,18 +11,22 @@ namespace WebApp
     {
         public SiteProjectSettingsResolver(
             SiteSettings currentTenant,
-            IProjectSettingsRepository projectSettingsRepository)
+            IProjectQueries projectQueries
+  
+            )
         {
             this.currentTenant = currentTenant;
-            projectRepo = projectSettingsRepository;
+            this.projectQueries = projectQueries;
+            
         }
 
         private SiteSettings currentTenant;
-        private IProjectSettingsRepository projectRepo;
+        private IProjectQueries projectQueries;
+        //private IProjectCommands projectCommands;
 
         public async Task<ProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {
-            var settings = await projectRepo.GetProjectSettings(currentTenant.ContentProjectId, cancellationToken).ConfigureAwait(false);
+            var settings = await projectQueries.GetProjectSettings(currentTenant.ContentProjectId, cancellationToken).ConfigureAwait(false);
             if ((settings != null) && (string.IsNullOrEmpty(settings.RecaptchaPublicKey)))
             {
                 settings.RecaptchaPublicKey = currentTenant.RecaptchaPublicKey;
