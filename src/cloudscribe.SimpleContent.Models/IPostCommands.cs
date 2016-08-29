@@ -24,6 +24,7 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken));
 
         Task HandlePubDateAboutToChange(
+            string projectId,
             Post post, 
             DateTime newPubDate, 
             CancellationToken cancellationToken = default(CancellationToken));

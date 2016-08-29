@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-08-01
+// Last Modified:           2016-08-29
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -34,15 +34,25 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         private ILogger log;
 
         public async Task HandlePubDateAboutToChange(
+            string projectId,
             Post post, 
             DateTime newPubDate,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            // because with the filesystem storage we are storing posts in a year folder
-            // if the year changes we need to delete the old file and save the updated post to the
-            // new year folder
-            //await filePersister.DeletePostFile(post.BlogId, post.Id, post.PubDate).ConfigureAwait(false);
-            await commands.DeleteAsync(post.BlogId, post.Id).ConfigureAwait(false);
+
+            if ((post.PubDate.Month == newPubDate.Month) && (post.PubDate.Year == newPubDate.Year))
+            {
+                // we store posts in /year/month folders, if that didn't change no need to do anything
+                return;
+            }
+
+            // because with the filesystem storage we are storing posts in a year/month folder
+            // if the year or month changes we need to delete the old file and save the updated post to the
+            // new year/month folder
+
+            await commands.DeleteAsync(projectId, post.Id).ConfigureAwait(false);
+            post.PubDate = newPubDate;
+            await commands.CreateAsync(projectId, post.Id, post).ConfigureAwait(false);
         }
 
         public async Task Create(

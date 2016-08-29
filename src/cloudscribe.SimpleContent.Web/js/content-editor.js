@@ -149,9 +149,13 @@
 
         //alert(txtDateTime.val());
         var pageSort = 0;
+        var parentPage = "";
+        var roles = "";
         if (contentType == "Page")
         {
             pageSort = txtPageOrder.val();
+            parentPage = txtParentPage.val();
+            roles = txtViewRoles.val();
         }
 
         $.post(savePath, {
@@ -163,8 +167,8 @@
             metaDescription: txtExcerpt.text().trim(),
             content: parsedDOM,
             categories: getCategories(),
-            parentSlug: txtParentPage.val(),
-            viewRoles:txtViewRoles.val(),
+            parentSlug: parentPage,
+            viewRoles:roles,
             __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
         },null,"text")
           .success(function (data) {
@@ -172,12 +176,13 @@
               return;
           })
           .fail(function (data) {
-              if (data.status === 409) {
+              if ((data) && (data.status === 409)) {
                   showMessage(false, "The title is already in use");
               } else {
-                  showMessage(false, "Something bad happened. Server reported " + data.status + " " + data.statusText);
+                  showMessage(false, "Something went wrong on the server ");
               }
           })
+        
         ;
     },
     deleteContent = function () {
@@ -203,6 +208,7 @@
                 txtMessage.removeClass(className);
             });
         }, 4000);
+        alert(message);
     },
     getCategories = function () {
         var categories = '';
