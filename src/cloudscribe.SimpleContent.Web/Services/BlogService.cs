@@ -369,7 +369,9 @@ namespace cloudscribe.SimpleContent.Services
 
         public async Task HandlePubDateAboutToChange(Post post, DateTime newPubDate)
         {
-            await postCommands.HandlePubDateAboutToChange(post, newPubDate);
+            await EnsureBlogSettings().ConfigureAwait(false);
+
+            await postCommands.HandlePubDateAboutToChange(settings.ProjectId, post, newPubDate);
         }
 
         private async Task InitializeNewPosts(string projectId, Post post, bool publish)

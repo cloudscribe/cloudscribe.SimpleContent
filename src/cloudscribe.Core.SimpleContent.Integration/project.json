@@ -21,6 +21,7 @@
         "cloudscribe.Web.Common": "1.0.0-*",
         "cloudscribe.Web.Navigation": "1.0.2-*",
         "Microsoft.AspNetCore.Authorization": "1.0.0",
+        "Microsoft.AspNetCore.Hosting.Abstractions": "1.0.0",
         "Microsoft.AspNetCore.Mvc": "1.0.0-*",
         "Microsoft.AspNetCore.Mvc.Razor": "1.0.0-*",
         "Microsoft.AspNetCore.Routing": "1.0.0-*",

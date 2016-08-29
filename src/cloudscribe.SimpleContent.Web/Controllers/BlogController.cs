@@ -436,6 +436,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     if (pubDate != post.PubDate)
                     {
+                        
                         await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
                     }
                 }
@@ -443,34 +444,43 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                
             }
 
-            if(isNew)
+            try
             {
-                await blogService.Create(post);
+                if (isNew)
+                {
+                    await blogService.Create(post);
+                }
+                else
+                {
+                    await blogService.Update(post);
+                }
+
+
+                string url;
+                if (project.IncludePubDateInPostUrls)
+                {
+                    url = Url.Link(blogRoutes.PostWithDateRouteName,
+                        new
+                        {
+                            year = post.PubDate.Year,
+                            month = post.PubDate.Month.ToString("00"),
+                            day = post.PubDate.Date.Day.ToString("00"),
+                            slug = post.Slug
+                        });
+                }
+                else
+                {
+                    url = Url.Link(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
+                }
+
+                await Response.WriteAsync(url);
             }
-            else
+            catch(Exception ex)
             {
-                await blogService.Update(post);
+                log.LogError("ajax post failed with exception", ex);
+                Response.StatusCode = 500;
             }
             
-            
-            string url;
-            if(project.IncludePubDateInPostUrls)
-            {
-                url = Url.Link(blogRoutes.PostWithDateRouteName, 
-                    new {
-                        year = post.PubDate.Year,
-                        month = post.PubDate.Month.ToString("00"),
-                        day = post.PubDate.Date.Day.ToString("00"),
-                        slug = post.Slug
-                    });
-            }
-            else
-            {
-                url = Url.Link(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
-            }
-            
-            
-            await Response.WriteAsync(url);
             
         }
 
