@@ -282,9 +282,7 @@ namespace example.WebApp
                 }
 
                 routes.AddBlogRoutesForSimpleContent();
-
-                //routes.AddStandardRoutesForSimpleContent();
-
+                
                 if (useFolders)
                 {
                     routes.MapRoute(
@@ -298,21 +296,17 @@ namespace example.WebApp
                 }
 
                 routes.MapRoute(
+                    name: "errorhandler",
+                    template: "{controller}/{action}/{statusCode}"
+                    );
+
+                routes.MapRoute(
                     name: "def",
                     template: "{controller}/{action}"
                     );
 
                 routes.AddDefaultPageRouteForSimpleContent();
-
                 
-
-               
-
-                //routes.MapRoute(
-                //    name: "default",
-                //    template: "{controller=Home}/{action=Index}/{id?}"
-                //    //,defaults: new { controller = "Home", action = "Index" }
-                //    );
             });
         }
 
