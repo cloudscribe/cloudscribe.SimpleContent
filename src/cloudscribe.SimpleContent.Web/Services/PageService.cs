@@ -92,7 +92,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureProjectSettings().ConfigureAwait(false);
 
             return await pageQueries.SlugIsAvailable(
-                settings.ProjectId,
+                settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -294,7 +294,7 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
-            await pageCommands.Create(settings.ProjectId, page).ConfigureAwait(false);
+            await pageCommands.Create(settings.Id, page).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -342,7 +342,7 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
-            await pageCommands.Update(settings.ProjectId, page).ConfigureAwait(false);
+            await pageCommands.Update(settings.Id, page).ConfigureAwait(false);
         }
 
         public async Task DeletePage(string projectId, string pageId)
@@ -382,7 +382,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureProjectSettings().ConfigureAwait(false);
 
             return await pageQueries.GetPage(
-                settings.ProjectId,
+                settings.Id,
                 pageId,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -424,7 +424,7 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings();
             return await pageQueries.GetRootPages(
-                settings.ProjectId,
+                settings.Id,
                 CancellationToken
                 ).ConfigureAwait(false);
         }
@@ -433,7 +433,7 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings();
             return await pageQueries.GetChildPages(
-                settings.ProjectId,
+                settings.Id,
                 pageId,
                 CancellationToken
                 ).ConfigureAwait(false);
@@ -446,7 +446,7 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings();
             return await pageQueries.SlugIsAvailable(
-                settings.ProjectId,
+                settings.Id,
                 slug,
                 CancellationToken
                 ).ConfigureAwait(false);

@@ -64,7 +64,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
                 if (string.IsNullOrEmpty(projectId))
                 {
                     var project = await projectResolver.GetCurrentProjectSettings(cancellationToken);
-                    if (project != null) projectId = project.ProjectId;
+                    if (project != null) projectId = project.Id;
                 }
                 if (!string.IsNullOrEmpty(projectId))
                 {

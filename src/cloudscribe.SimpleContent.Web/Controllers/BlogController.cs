@@ -82,7 +82,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             
             // check if the user has the BlogEditor claim or meets policy
-            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.ProjectId, authorizationService);
+            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
             
             if(model.CanEdit)
             {
@@ -141,7 +141,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             ViewData["Title"] = model.ProjectSettings.Title;
 
             var result = await blogService.GetPosts(
-                model.ProjectSettings.ProjectId,
+                model.ProjectSettings.Id,
                 year,
                 month,
                 day,
@@ -161,7 +161,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Month = month;
             model.Day = day;
 
-            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.ProjectId, authorizationService);
+            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
             
             if (model.CanEdit)
             {
@@ -221,7 +221,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
             }
 
-            var canEdit = await User.CanEditBlog(projectSettings.ProjectId, authorizationService);
+            var canEdit = await User.CanEditBlog(projectSettings.Id, authorizationService);
             
             var isNew = false;
             PostResult result = null;
@@ -239,7 +239,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     if (result == null) result = new PostResult();
                     if (result.Post == null) result.Post = new Post();
-                    result.Post.BlogId = projectSettings.ProjectId;
+                    result.Post.BlogId = projectSettings.Id;
                     isNew = true;
                 }
                 else
@@ -379,7 +379,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; 
             }
 
-            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
             
 
             if (!canEdit)
@@ -513,7 +513,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; // new EmptyResult();
             }
 
-            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
             
             if (!canEdit)
             {
@@ -624,7 +624,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
 
-            var canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            var canEdit = await User.CanEditBlog(project.Id, authorizationService);
             
             var isApproved = canEdit;
             if (!isApproved) isApproved = !project.ModerateComments;
@@ -637,7 +637,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 Website = GetUrl(model.WebSite),
                 Ip = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString(),
                 UserAgent = userAgent,
-                IsAdmin = User.CanEditProject(project.ProjectId),
+                IsAdmin = User.CanEditProject(project.Id),
                 Content = System.Text.Encodings.Web.HtmlEncoder.Default.Encode(
                     model.Content.Trim()).Replace("\n", "<br />"),
 
@@ -721,7 +721,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
             
             if (!canEdit)
             {
@@ -792,7 +792,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;// new EmptyResult();
             }
 
-            bool canEdit = await User.CanEditBlog(project.ProjectId, authorizationService);
+            bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
             
             if (!canEdit)
             {

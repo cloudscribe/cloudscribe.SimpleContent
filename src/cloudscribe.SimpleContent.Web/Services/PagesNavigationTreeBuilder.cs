@@ -74,7 +74,7 @@ namespace cloudscribe.SimpleContent.Services
                 )
             {
                 //make the home page the "root" which contains all the other pages
-                homePage = await pageService.GetPageBySlug(project.ProjectId, project.DefaultPageSlug);
+                homePage = await pageService.GetPageBySlug(project.Id, project.DefaultPageSlug);
 
             }
 
@@ -184,7 +184,7 @@ namespace cloudscribe.SimpleContent.Services
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
                 // filter node from view unless user has edit permissions
-                if (!page.IsPublished) { node.CustomData = project.ProjectId; }
+                if (!page.IsPublished) { node.CustomData = project.Id; }
 
                 var treeNode = treeRoot.AddChild(node);
                 await AddChildNodes(treeNode, project, folderPrefix).ConfigureAwait(false);
@@ -222,7 +222,7 @@ namespace cloudscribe.SimpleContent.Services
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
                 // filter node from view unless user has edit permissions
-                if (!page.IsPublished) { node.CustomData = project.ProjectId; }
+                if (!page.IsPublished) { node.CustomData = project.Id; }
 
                 var childNode = treeNode.AddChild(node);
                 await AddChildNodes(childNode, project, folderPrefix).ConfigureAwait(false); //recurse

@@ -64,7 +64,7 @@
             @foreach (var comment in Model.CurrentPage.Comments)
             {
                 Model.TmpComment = comment;
-                if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || User.CanEditProject(Model.ProjectSettings.ProjectId))
+                if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || Model.CanEdit)
                 {
                     await Html.RenderPartialAsync("CommentPartial", Model);
                 }
@@ -96,7 +96,7 @@
             @if (Model.CurrentPage.ShowCategories)
             {
                 <ul class="categories">
-                    <li><em class="@icons.Tags"></em> @sr["Posted in:"] </li>
+                    <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
                     @foreach (string cat in Model.CurrentPage.Categories)
                     {
                         <li itemprop="articleSection">

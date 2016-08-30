@@ -3,7 +3,6 @@
 ## Miscellaneous
 
 EF storage layer
-localization of views
 caching of post/page data
 recent posts viewcomponent for homepage
 

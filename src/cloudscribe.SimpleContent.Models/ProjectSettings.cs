@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-12
+// Last Modified:           2016-08-30
 // 
 
 namespace cloudscribe.SimpleContent.Models
@@ -14,7 +14,7 @@ namespace cloudscribe.SimpleContent.Models
         {
         }
 
-        public string ProjectId { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; } = "Blog";
         public string Description { get; set; } = string.Empty;
         public string CopyrightNotice { get; set; } = string.Empty;
@@ -30,7 +30,7 @@ namespace cloudscribe.SimpleContent.Models
         /// </summary>
         public bool BlogMenuLinksToNewestPost { get; set; } = false;
         public string LocalMediaVirtualPath { get; set; } = "/media/images/";
-        public string LocalMediaAbsoluteBaseUrl { get; set; } = string.Empty;
+        //public string LocalMediaAbsoluteBaseUrl { get; set; } = string.Empty;
         public string CdnUrl { get; set; } = string.Empty;
         
         public string PubDateFormat { get; set; } = "MMMM d. yyyy";

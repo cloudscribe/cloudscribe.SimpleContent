@@ -41,21 +41,21 @@ namespace cloudscribe.SimpleContent.Services
 
             if (smtpOptions == null)
             {
-                var logMessage = $"failed to send comment notification email because smtp settings are not populated for project {project.ProjectId}";
+                var logMessage = $"failed to send comment notification email because smtp settings are not populated for project {project.Id}";
                 log.LogError(logMessage);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(project.CommentNotificationEmail))
             {
-                var logMessage = $"failed to send comment notification email because CommentNotificationEmail is not populated for project {project.ProjectId}";
+                var logMessage = $"failed to send comment notification email because CommentNotificationEmail is not populated for project {project.Id}";
                 log.LogError(logMessage);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(project.EmailFromAddress))
             {
-                var logMessage = $"failed to send comment notification email because EmailFromAddress is not populated for project {project.ProjectId}";
+                var logMessage = $"failed to send comment notification email because EmailFromAddress is not populated for project {project.Id}";
                 log.LogError(logMessage);
                 return;
             }

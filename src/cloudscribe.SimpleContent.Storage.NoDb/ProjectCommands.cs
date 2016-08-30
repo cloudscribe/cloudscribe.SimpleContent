@@ -37,9 +37,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            if (string.IsNullOrEmpty(project.ProjectId)) { project.ProjectId = Guid.NewGuid().ToString(); }
+            if (string.IsNullOrEmpty(project.Id)) { project.Id = Guid.NewGuid().ToString(); }
             
-            await commands.CreateAsync(projectId, project.ProjectId, project).ConfigureAwait(false);
+            await commands.CreateAsync(projectId, project.Id, project).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -48,7 +48,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            await commands.UpdateAsync(projectId, project.ProjectId, project).ConfigureAwait(false);
+            await commands.UpdateAsync(projectId, project.Id, project).ConfigureAwait(false);
         }
 
         public async Task Delete(

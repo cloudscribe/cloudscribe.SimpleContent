@@ -80,9 +80,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             if(canManageUsers)
             {
                 var contentEditors = await userQueries.GetUsersForClaim(
-                    new Guid(projectSettings.ProjectId),
+                    new Guid(projectSettings.Id),
                     ProjectConstants.ContentEditorClaimType,
-                    projectSettings.ProjectId
+                    projectSettings.Id
                     );
                 if(contentEditors != null)
                 {
@@ -90,9 +90,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
                 }
                 
                 var blogEditors = await userQueries.GetUsersForClaim(
-                    new Guid(projectSettings.ProjectId),
+                    new Guid(projectSettings.Id),
                     ProjectConstants.BlogEditorClaimType,
-                    projectSettings.ProjectId
+                    projectSettings.Id
                     );
                 if(blogEditors != null)
                 {
@@ -100,9 +100,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
                 }
                 
                 var pageEditors = await userQueries.GetUsersForClaim(
-                    new Guid(projectSettings.ProjectId),
+                    new Guid(projectSettings.Id),
                     ProjectConstants.PageEditorClaimType,
-                    projectSettings.ProjectId
+                    projectSettings.Id
                     );
                 if(pageEditors != null)
                 {

@@ -21,7 +21,7 @@
     {
         await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
     }
-    <div itemscope itemtype="http://schema.org/Blog" class="@(User.Identity.IsAuthenticated ? "row blogroot admin": "row blogroot")"> 
+    <div itemscope itemtype="http://schema.org/Blog" class="@(Model.CanEdit ? "row blogroot admin": "row blogroot")"> 
         <main role="main" class="col-md-8">
             @{await Html.RenderPartialAsync("PostListPartial", Model); }  
             <nav>
