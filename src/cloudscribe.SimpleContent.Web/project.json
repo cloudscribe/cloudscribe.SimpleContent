@@ -36,6 +36,7 @@
         "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*",
         "Microsoft.Extensions.FileProviders.Embedded": "1.0.0-*",
+        "Microsoft.Extensions.Localization": "1.0.0-*",
         "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0-*",
         "NETStandard.Library": "1.6.0-*"
     },

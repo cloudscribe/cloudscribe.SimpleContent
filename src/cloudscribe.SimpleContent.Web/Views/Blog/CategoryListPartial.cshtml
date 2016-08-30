@@ -1,7 +1,10 @@
 ﻿@model Dictionary<string, int>
+@using Microsoft.Extensions.Localization
+@using cloudscribe.SimpleContent.Web
+@inject IStringLocalizer<SimpleContent> sr
 <section class="panel panel-default">
     <div class="panel-heading">
-        <h3>Categories</h3>
+        <h3>@sr["Categories"]</h3>
     </div>
     <div class="panel-body">
         <ul class="list-inline">
