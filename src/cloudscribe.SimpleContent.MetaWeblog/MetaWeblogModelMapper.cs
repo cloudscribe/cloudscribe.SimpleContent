@@ -73,7 +73,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         public BlogInfoStruct GetStructFromBlog(ProjectSettings blog, string blogUrl)
         {
             BlogInfoStruct b = new BlogInfoStruct();
-            b.blogId = blog.ProjectId;
+            b.blogId = blog.Id;
             b.blogName = blog.Title;
             b.url = blogUrl;
 

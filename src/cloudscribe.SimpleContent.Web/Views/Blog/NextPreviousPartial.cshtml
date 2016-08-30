@@ -2,6 +2,8 @@
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @addTagHelper "*, cloudscribe.Web.Common"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
@@ -24,11 +26,11 @@
     <div class="row ">
         @if (!string.IsNullOrEmpty(Model.PreviousPostUrl))
         {
-            <div class="@GetDivClass()"><a class="btn btn-link" title="Previous Post" href="@Model.PreviousPostUrl"><i class="@icons.Previous"></i></a></div>
+            <div class="@GetDivClass()"><a class="btn btn-link" title="@sr["Previous Post"]" href="@Model.PreviousPostUrl"><i class="@icons.Previous"></i></a></div>
         }
         @if (!string.IsNullOrEmpty(Model.NextPostUrl))
         {
-            <div class="@GetDivClass()"><a class="btn btn-link pull-right" title="Next Post" href="@Model.NextPostUrl"><i class="@icons.Next"></i></a></div>
+            <div class="@GetDivClass()"><a class="btn btn-link pull-right" title="@sr["Next Post"]" href="@Model.NextPostUrl"><i class="@icons.Next"></i></a></div>
         }
     </div>
 }

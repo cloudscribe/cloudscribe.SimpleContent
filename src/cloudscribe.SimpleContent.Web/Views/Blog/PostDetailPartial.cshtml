@@ -4,6 +4,8 @@
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @inject IHtmlGenerator generator
 @{
@@ -66,14 +68,14 @@
                    asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
                    asp-route-slug="@Model.CurrentPost.Slug"
                    asp-fragment="comments"
-                   itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
+                   itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() @sr["Comments"]</a>
             }
             else
             {
-                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() Comments</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() @sr["Comments"]</a>
             } 
             <ul class="categories">
-                <li><i class="@icons.Tags"></i>&nbsp; Posted in:&nbsp;</li>
+                <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
                 @foreach (string cat in Model.CurrentPost.Categories)
                 {
                     <li itemprop="articleSection">
@@ -86,7 +88,7 @@
     @if (Model.CanEdit && (Model.Mode.Length > 0))
     {
         <div id="excerpt" style="display:none;">
-            <h4>meta description:</h4>
+            <h4>@sr["meta description:"]</h4>
             <div itemprop="description">@Model.CurrentPost.MetaDescription</div>
         </div>
     }
@@ -107,7 +109,7 @@
         @if ((Model.CommentsAreOpen) || (Model.CanEdit && Model.CurrentPost.CommentCount() > 0) || (Model.CurrentPost.ApprovedCommentCount() > 0))
         {
             <section id="comments" aria-label="Comments">
-                <h2>Comments</h2>
+                <h2>@sr["Comments"]</h2>
                 @foreach (var comment in Model.CurrentPost.Comments)
                 {
                     Model.TmpComment = comment;

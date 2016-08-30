@@ -56,7 +56,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(slug == "none") { slug = string.Empty; }
             
-            var canEdit = await User.CanEditPages(projectSettings.ProjectId, authorizationService);
+            var canEdit = await User.CanEditPages(projectSettings.Id, authorizationService);
             var isNew = canEdit && (mode == "new");
             var isEditing = canEdit && (mode == "edit");
             if(!isNew && string.IsNullOrEmpty(slug)) { slug = projectSettings.DefaultPageSlug; }
@@ -64,7 +64,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             Page page = null;
             if(!string.IsNullOrEmpty(slug))
             {
-                page = await pageService.GetPageBySlug(projectSettings.ProjectId, slug);
+                page = await pageService.GetPageBySlug(projectSettings.Id, slug);
                 
             }
             
@@ -75,7 +75,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 if (isNew)
                 {
                     page = new Page();
-                    page.ProjectId = projectSettings.ProjectId;
+                    page.ProjectId = projectSettings.Id;
                 }
                 else
                 {
@@ -84,7 +84,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     if (canEdit && rootList.Count == 0)
                     {
                         page = new Page();
-                        page.ProjectId = projectSettings.ProjectId;
+                        page.ProjectId = projectSettings.Id;
                         mode = "new";
                     }
                     else
@@ -157,7 +157,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
                 model.EditorSettings.ContentType = "Page";
                 model.EditorSettings.SupportsCategories = false;
-                model.EditorSettings.ProjectId = projectSettings.ProjectId;
+                model.EditorSettings.ProjectId = projectSettings.Id;
 
             }
 
@@ -199,7 +199,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return;
             }
 
-            var canEdit = await User.CanEditPages(project.ProjectId, authorizationService);
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
             
             if (!canEdit)
             {
@@ -237,7 +237,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 isNew = true;
                 needToClearCache = true;
                 var slug = ContentUtils.CreateSlug(model.Title);
-                var available = await pageService.SlugIsAvailable(project.ProjectId, slug);
+                var available = await pageService.SlugIsAvailable(project.Id, slug);
                 if (!available)
                 {
                     log.LogInformation("returning 409 because slug already in use");
@@ -247,7 +247,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
                 page = new Page()
                 {
-                    ProjectId = project.ProjectId,
+                    ProjectId = project.Id,
                     Author = User.GetUserDisplayName(),
                     Title = model.Title,
                     MetaDescription = model.MetaDescription,
@@ -261,7 +261,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(!string.IsNullOrEmpty(model.ParentSlug))
             {
-                var parentPage = await pageService.GetPageBySlug(project.ProjectId, model.ParentSlug);
+                var parentPage = await pageService.GetPageBySlug(project.Id, model.ParentSlug);
                 if (parentPage != null)
                 {
                     if(parentPage.Id != page.ParentId)
@@ -335,7 +335,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; // new EmptyResult();
             }
 
-            var canEdit = await User.CanEditPages(project.ProjectId, authorizationService);
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
             
             if (!canEdit)
             {
@@ -360,7 +360,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; //new EmptyResult();
             }
 
-            await pageService.DeletePage(project.ProjectId, page.Id);
+            await pageService.DeletePage(project.Id, page.Id);
 
             // TODO: clear the page tree cache
 

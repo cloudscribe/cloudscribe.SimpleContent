@@ -37,7 +37,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             )
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var result = allProjects.Where(b => b.ProjectId == projectId).FirstOrDefault();
+            var result = allProjects.Where(b => b.Id == projectId).FirstOrDefault();
             return Task.FromResult(result);
         }
 

@@ -70,7 +70,7 @@ namespace cloudscribe.SimpleContent.Services
                     var userBlog = context.User.GetProjectId();
                     if(!string.IsNullOrEmpty(userBlog))
                     {
-                        if(settings.ProjectId == userBlog) { userIsBlogOwner = true; }
+                        if(settings.Id == userBlog) { userIsBlogOwner = true; }
 
                     }
                 }
@@ -112,7 +112,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetVisiblePosts(
-                settings.ProjectId,
+                settings.Id,
                 userIsBlogOwner,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -125,7 +125,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetVisiblePosts(
-                settings.ProjectId,
+                settings.Id,
                 category,
                 userIsBlogOwner,
                 pageNumber,
@@ -139,7 +139,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetCount(
-                settings.ProjectId,
+                settings.Id,
                 category,
                 userIsBlogOwner,
                 CancellationToken)
@@ -166,7 +166,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetRecentPosts(
-                settings.ProjectId,
+                settings.Id,
                 numberToGet,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -265,7 +265,7 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await postCommands.Create(settings.ProjectId, post).ConfigureAwait(false);
+            await postCommands.Create(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -322,7 +322,7 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await postCommands.Update(settings.ProjectId, post).ConfigureAwait(false);
+            await postCommands.Update(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Create(Post post)
@@ -343,7 +343,7 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await postCommands.Create(settings.ProjectId, post).ConfigureAwait(false);
+            await postCommands.Create(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Update(Post post)
@@ -364,14 +364,14 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await postCommands.Update(settings.ProjectId, post).ConfigureAwait(false);
+            await postCommands.Update(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task HandlePubDateAboutToChange(Post post, DateTime newPubDate)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            await postCommands.HandlePubDateAboutToChange(settings.ProjectId, post, newPubDate);
+            await postCommands.HandlePubDateAboutToChange(settings.Id, post, newPubDate);
         }
 
         private async Task InitializeNewPosts(string projectId, Post post, bool publish)
@@ -446,7 +446,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetPost(
-                settings.ProjectId,
+                settings.Id,
                 postId,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -487,7 +487,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetPostBySlug(
-                settings.ProjectId,
+                settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -504,7 +504,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.SlugIsAvailable(
-                settings.ProjectId,
+                settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -527,7 +527,7 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            await postCommands.Delete(settings.ProjectId, postId).ConfigureAwait(false);
+            await postCommands.Delete(settings.Id, postId).ConfigureAwait(false);
 
         }
 
@@ -560,7 +560,7 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetCategories(
-                settings.ProjectId,
+                settings.Id,
                 userIsBlogOwner,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -585,7 +585,7 @@ namespace cloudscribe.SimpleContent.Services
             var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
             return await postQueries.GetCategories(
-                settings.ProjectId,
+                settings.Id,
                 permission.CanEditPosts,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -597,7 +597,7 @@ namespace cloudscribe.SimpleContent.Services
             //var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
             return await postQueries.GetArchives(
-                settings.ProjectId,
+                settings.Id,
                 userIsBlogOwner,
                 CancellationToken)
                 .ConfigureAwait(false);

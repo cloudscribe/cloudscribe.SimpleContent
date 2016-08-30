@@ -1,19 +1,10 @@
 # A list of things I haven't done yet
 
-## Pages Features
-
-** Currently not possible to set the parent page from the UI
-** ViewRoles per page to enable protected content - this will require some kind of interface for available roles lookup provider
-http://www.codeproject.com/Questions/997523/Hot-to-get-value-from-bootstrap-popup-to-main-page
-
 ## Miscellaneous
 
 EF storage layer
-localization of views
 caching of post/page data
 recent posts viewcomponent for homepage
-
-
 
 
 ## example project stuff

@@ -40,7 +40,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
             if(settings == null)
             {
                 settings = new ProjectSettings();
-                settings.ProjectId = currentSite.Id.ToString();
+                settings.Id = currentSite.Id.ToString();
                 if(!string.IsNullOrEmpty(currentSite.AliasId))
                 {
                     settings.LocalMediaVirtualPath = "/" + currentSite.AliasId + "/media/images/";
@@ -49,7 +49,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
                     folderHelper.EnsureMediaFolderExists(segments);
                 }
                 
-                await projectCommands.Create(settings.ProjectId, settings, cancellationToken).ConfigureAwait(false);
+                await projectCommands.Create(settings.Id, settings, cancellationToken).ConfigureAwait(false);
             }
             
             if (string.IsNullOrEmpty(settings.RecaptchaPublicKey))

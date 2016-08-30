@@ -3,6 +3,8 @@
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @{
     var icons = iconClassesAccessor.Value;
@@ -37,11 +39,10 @@
             }
         </header>
     }
-   
     @if (!string.IsNullOrEmpty(Model.Mode))
     {
         <div id="excerpt" style="display:none;">
-            <h4>meta description:</h4>
+            <h4>@sr["meta description:"]</h4>
             <div itemprop="description">@Model.CurrentPage.MetaDescription</div>
         </div>
     }
@@ -58,12 +59,12 @@
         <section id="comments" aria-label="Comments">
             @if (Model.CurrentPage.ApprovedCommentCount() > 0)
                 {
-                <h2>Comments</h2>
+                <h2>@sr["Comments"]</h2>
             }
             @foreach (var comment in Model.CurrentPage.Comments)
             {
                 Model.TmpComment = comment;
-                if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || User.CanEditProject(Model.ProjectSettings.ProjectId))
+                if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || Model.CanEdit)
                 {
                     await Html.RenderPartialAsync("CommentPartial", Model);
                 }
@@ -89,13 +90,13 @@
             {
                 <a href="@Model.CurrentPage.Slug#comments">
                     <i class="@icons.Comments"></i>
-                    @Model.CurrentPage.ApprovedCommentCount()   Comments
+                    @Model.CurrentPage.ApprovedCommentCount() @sr["Comments"]
                 </a>
             }
             @if (Model.CurrentPage.ShowCategories)
             {
                 <ul class="categories">
-                    <li><em class="@icons.Tags"></em>&nbsp; Posted in:&nbsp;</li>
+                    <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
                     @foreach (string cat in Model.CurrentPage.Categories)
                     {
                         <li itemprop="articleSection">

@@ -79,12 +79,12 @@ namespace cloudscribe.SimpleContent.Services
 
         public async Task Create(ProjectSettings project)
         {
-            await projectCommands.Create(project.ProjectId, project, CancellationToken.None).ConfigureAwait(false);
+            await projectCommands.Create(project.Id, project, CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task Update(ProjectSettings project)
         {
-            await projectCommands.Update(project.ProjectId, project, CancellationToken.None).ConfigureAwait(false);
+            await projectCommands.Update(project.Id, project, CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task<ProjectSettings> GetCurrentProjectSettings()

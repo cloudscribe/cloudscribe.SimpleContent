@@ -41,6 +41,8 @@ namespace WebApp
         {
             // Add framework services.
 
+            services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
+
             ConfigureAuthPolicy(services);
 
             services.Configure<cloudscribe.Web.SimpleAuth.Models.SimpleAuthSettings>(Configuration.GetSection("SimpleAuthSettings"));
