@@ -51,7 +51,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (projectSettings == null)
             {
                 HttpContext.Response.StatusCode = 404;
-                return new EmptyResult();
+                return NotFound();
             }
 
             if(slug == "none") { slug = string.Empty; }
@@ -79,8 +79,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
                 else
                 {
+                    var rootList = await pageService.GetRootPages().ConfigureAwait(false);
                     // a site starts out with no pages 
-                    if (canEdit)
+                    if (canEdit && rootList.Count == 0)
                     {
                         page = new Page();
                         page.ProjectId = projectSettings.ProjectId;
@@ -88,11 +89,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
                     else
                     {
-                        var rootList = await pageService.GetRootPages().ConfigureAwait(false);
+                        
                         if(rootList.Count > 0)
                         {
                             Response.StatusCode = 404;
-                            return new EmptyResult();
+                            // return View("NotFound", 404);
+                            return NotFound();
                         }
                         else
                         {
@@ -110,7 +112,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     if(!User.IsInRoles(page.ViewRoles))
                     {
                         Response.StatusCode = 404;
-                        return new EmptyResult();
+                        //return View("NotFound", 404);
+                        return NotFound();
                     }
                 }
 
