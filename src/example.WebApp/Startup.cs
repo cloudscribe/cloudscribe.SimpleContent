@@ -204,12 +204,14 @@ namespace example.WebApp
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            
+            // custom 404 and error page - this preserves the status code (ie 404)
+            app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+
             app.UseForwardedHeaders();
             app.UseStaticFiles();
 
-            // we don't want this for ajax requests so need to fork and modify the middleware
-            // custom 404 and error page - this preserves the status code (ie 404)
-            //app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+            
 
             app.UseSession();
 

@@ -27,6 +27,7 @@
         "cloudscribe.Web.SiteMap": "1.0.1-*",
         "cloudscribe.Web.SiteMap.FromNavigation": "1.0.1-*",
         "Microsoft.AspNetCore.Authorization": "1.0.0",
+        "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.0",
         "Microsoft.AspNetCore.Mvc": "1.0.0-*",
         "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.0",
         "Microsoft.AspNetCore.Mvc.Razor": "1.0.0-*",
