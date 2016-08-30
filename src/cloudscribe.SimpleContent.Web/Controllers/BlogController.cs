@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-15
+// Last Modified:           2016-08-30
 // 
 
 
@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -355,6 +356,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task AjaxPost(PostViewModel model)
         {
+            // disable status code page for ajax requests
+            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+            if (statusCodePagesFeature != null)
+            {
+                statusCodePagesFeature.Enabled = false;
+            }
+
             if (string.IsNullOrEmpty(model.Title))
             {
                 log.LogInformation("returning 500 because no title was posted");
@@ -489,6 +497,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task AjaxDelete(string id)
         {
+            // disable status code page for ajax requests
+            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+            if (statusCodePagesFeature != null)
+            {
+                statusCodePagesFeature.Enabled = false;
+            }
+
             var project = await projectService.GetCurrentProjectSettings();
 
             if (project == null)
@@ -535,7 +550,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AjaxPostComment(CommentViewModel model)
         {
-            
+            // disable status code page for ajax requests
+            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+            if (statusCodePagesFeature != null)
+            {
+                statusCodePagesFeature.Enabled = false;
+            }
+
             // this should validate the [EmailAddress] on the model
             // failure here should indicate invalid email since it is the only attribute in use
             if (!ModelState.IsValid)
@@ -669,7 +690,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task AjaxApproveComment(string postId, string commentId)
         {
-            
+            // disable status code page for ajax requests
+            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+            if (statusCodePagesFeature != null)
+            {
+                statusCodePagesFeature.Enabled = false;
+            }
+
             if (string.IsNullOrEmpty(postId))
             {
                 log.LogDebug("returning 404 because no postid was posted");
@@ -734,6 +761,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task AjaxDeleteComment(string postId, string commentId)
         {
+            // disable status code page for ajax requests
+            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+            if (statusCodePagesFeature != null)
+            {
+                statusCodePagesFeature.Enabled = false;
+            }
+
             if (string.IsNullOrEmpty(postId))
             {
                 log.LogDebug("returning 404 because no postid was posted");

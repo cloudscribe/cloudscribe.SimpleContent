@@ -2,13 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-25
+// Last Modified:           2016-08-30
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -165,6 +166,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task AjaxPost(PageEditViewModel model)
         {
+            // disable status code page for ajax requests
+            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+            if (statusCodePagesFeature != null)
+            {
+                statusCodePagesFeature.Enabled = false;
+            }
+
             if (string.IsNullOrEmpty(model.Title))
             {
                 // if a page has been configured to not show the title
@@ -308,6 +316,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task AjaxDelete(string id)
         {
+            // disable status code page for ajax requests
+            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+            if (statusCodePagesFeature != null)
+            {
+                statusCodePagesFeature.Enabled = false;
+            }
+
             var project = await projectService.GetCurrentProjectSettings();
 
             if (project == null)
