@@ -9,6 +9,7 @@ namespace cloudscribe.SimpleContent.Models
     {
 
         public string Id { get; set; }
+        //public string ContentId { get; set; }
         public string Author { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }
@@ -21,4 +22,10 @@ namespace cloudscribe.SimpleContent.Models
         public string GravatarUrl { get; set; }
 
     }
+
+    //https://ef.readthedocs.io/en/latest/modeling/relational/inheritance.html
+    //public class PageComment : Comment
+    //{
+
+    //}
 }
