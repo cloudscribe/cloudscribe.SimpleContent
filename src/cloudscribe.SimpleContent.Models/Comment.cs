@@ -9,7 +9,9 @@ namespace cloudscribe.SimpleContent.Models
     {
 
         public string Id { get; set; }
-        //public string ContentId { get; set; }
+        public string ContentId { get; set; }
+
+        public string ProjectId { get; set; }
         public string Author { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }
@@ -19,7 +21,8 @@ namespace cloudscribe.SimpleContent.Models
         public string UserAgent { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsApproved { get; set; }
-        public string GravatarUrl { get; set; }
+
+        //public string GravatarUrl { get; set; }
 
     }
 

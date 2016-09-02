@@ -19,7 +19,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string ParentId { get; set; } = string.Empty;
 
-        public string ParentTitle { get; set; } = string.Empty;
+        public string ParentSlug { get; set; } = string.Empty;
 
         public int PageOrder { get; set; } = 3;
 
