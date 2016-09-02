@@ -139,7 +139,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
                     model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode="edit"});
                     model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
-                    model.EditorSettings.ParentSlug = model.CurrentPage.ParentTitle;
+                    model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
                     model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
                 }
                 else
@@ -267,7 +267,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     if(parentPage.Id != page.ParentId)
                     {
                         page.ParentId = parentPage.Id;
-                        page.ParentTitle = parentPage.Slug;
+                        page.ParentSlug = parentPage.Slug;
                         needToClearCache = true;
                     }
                     
@@ -276,7 +276,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             else
             {
                 // empty means root level
-                page.ParentTitle = string.Empty;
+                page.ParentSlug = string.Empty;
                 page.ParentId = "0";
             }
             if(page.ViewRoles != model.ViewRoles)

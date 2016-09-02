@@ -6,6 +6,9 @@ EF storage layer
 caching of post/page data
 recent posts viewcomponent for homepage
 
+Image Resizing and optimizing for uploaded images via:
+https://github.com/JimBobSquarePants/ImageProcessor
+
 
 ## example project stuff
 

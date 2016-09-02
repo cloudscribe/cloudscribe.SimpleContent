@@ -122,7 +122,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             p.pageOrder = page.PageOrder.ToString(CultureInfo.InvariantCulture);
             p.pageParentId = page.ParentId;
             p.title = page.Title;
-            p.parentTitle = page.ParentTitle;
+            p.parentTitle = page.ParentSlug;
 
 
             return p;

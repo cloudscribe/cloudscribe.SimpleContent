@@ -170,11 +170,16 @@
             parentSlug: parentPage,
             viewRoles:roles,
             __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
-        },null,"text")
-          .success(function (data) {
-              location.href = data;
-              return;
-          })
+        },
+        function (data) {
+            location.href = data;
+            return;
+        }
+        , "text")
+         // .success(function (data) {
+         //     location.href = data;
+        //      return;
+        //  })
           .fail(function (data) {
               if ((data) && (data.status === 409)) {
                   showMessage(false, "The title is already in use");

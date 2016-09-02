@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-08-31
+// Last Modified:			2016-09-02
 // 
 
 
@@ -20,6 +20,8 @@ namespace cloudscribe.SimpleContent.Storage.EF
         void Map(EntityTypeBuilder<Page> entity);
 
         void Map(EntityTypeBuilder<Comment> entity);
+
+        void Map(EntityTypeBuilder<Tag> entity);
 
     }
 }

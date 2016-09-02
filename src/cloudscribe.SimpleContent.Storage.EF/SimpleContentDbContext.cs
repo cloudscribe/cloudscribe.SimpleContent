@@ -26,6 +26,8 @@ namespace cloudscribe.SimpleContent.Storage.EF
 
         public DbSet<Comment> Comments { get; set; }
 
+        public DbSet<Tag> Tags { get; set; }
+
         //public DbSet<PageComment> PageComments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
