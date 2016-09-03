@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-16"?>
 <post>
   <title>try number dos</title>
   <slug>try-number-dos</slug>
   <author>Joe Audette</author>
   <pubDate>2014-05-15T02:59:00.0000000Z</pubDate>
-  <lastModified>2016-03-14T15:37:57.1722312Z</lastModified>
+  <lastModified>2016-09-03T13:26:15.8382134Z</lastModified>
   <excerpt>fiver</excerpt>
   <content>&lt;p&gt;thinking of food and fun down at quintana roo&lt;/p&gt;</content>
   <ispublished>true</ispublished>
   <categories>
-    <category>Food</category>
-    <category> Cooking</category>
-    <category> foo</category>
+    <category>food</category>
+    <category>cooking</category>
+    <category>foo</category>
   </categories>
   <comments></comments>
 </post>

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-30
+// Last Modified:           2016-09-03
 // 
 
 
@@ -19,6 +19,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
+using System.Collections.Generic;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -67,22 +68,28 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             var model = new BlogViewModel();
+            // check if the user has the BlogEditor claim or meets policy
+            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
             model.ProjectSettings = projectSettings;
             model.BlogRoutes = blogRoutes;
+            model.CurrentCategory = category;
+            if(!string.IsNullOrEmpty(model.CurrentCategory))
+            {
+                model.ListAction = "Category";
+            }
 
             ViewData["Title"] = model.ProjectSettings.Title;
-            var result = await blogService.GetVisiblePosts(category, page);
+            var result = await blogService.GetPosts(category, page, model.CanEdit);
             model.Posts = result.Data;
-            model.Categories = await blogService.GetCategories();
-            model.Archives = await blogService.GetArchives();
+            model.Categories = await blogService.GetCategories(model.CanEdit);
+            model.Archives = await blogService.GetArchives(model.CanEdit);
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = result.TotalItems; //await blogService.GetCount(category);
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             
-            // check if the user has the BlogEditor claim or meets policy
-            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
+           
             
             if(model.CanEdit)
             {
@@ -137,6 +144,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             var model = new BlogViewModel();
             model.ProjectSettings = await projectService.GetCurrentProjectSettings();
             model.BlogRoutes = blogRoutes;
+            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
 
             ViewData["Title"] = model.ProjectSettings.Title;
 
@@ -146,11 +154,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 month,
                 day,
                 page,
-                model.ProjectSettings.PostsPerPage
+                model.ProjectSettings.PostsPerPage,
+                model.CanEdit
                 );
+
             model.Posts = result.Data;
-            model.Categories = await blogService.GetCategories();
-            model.Archives = await blogService.GetArchives();
+            model.Categories = await blogService.GetCategories(model.CanEdit);
+            model.Archives = await blogService.GetArchives(model.CanEdit);
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = result.TotalItems;
@@ -161,7 +171,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Month = month;
             model.Day = day;
 
-            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
+            
             
             if (model.CanEdit)
             {
@@ -181,9 +191,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Category(
             string category = "",
-            int pageNumber = 1)
+            int page = 1)
         {
-            return await Index(category, pageNumber);
+            return await Index(category, page);
         }
 
         [HttpGet]
@@ -231,6 +241,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             
             var model = new BlogViewModel();
+            model.CanEdit = canEdit;
 
             if ((result == null)||(result.Post == null))
             {
@@ -281,9 +292,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             model.ProjectSettings = projectSettings;
             model.BlogRoutes = blogRoutes;
-            model.Categories = await blogService.GetCategories();
-            model.Archives = await blogService.GetArchives();
-            model.CanEdit = canEdit;
+            model.Categories = await blogService.GetCategories(model.CanEdit);
+            model.Archives = await blogService.GetArchives(model.CanEdit);
             model.ShowComments = mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = await blogService.CommentsAreOpen(result.Post, canEdit);
             //model.ApprovedCommentCount = post.Comments.Where(c => c.IsApproved == true).Count();
@@ -389,11 +399,14 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; 
             }
 
-            string[] categories = new string[0];
+            //string[] categories = new string[0];
+            var categories = new List<string>();
+
             if (!string.IsNullOrEmpty(model.Categories))
             {
-                categories = model.Categories.Split(new char[] { ',' },
-                StringSplitOptions.RemoveEmptyEntries);
+                categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower()).ToList();
+                //categories = model.Categories.Split(new char[] { ',' },
+                //StringSplitOptions.RemoveEmptyEntries);
             }
 
 
@@ -409,7 +422,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 post.Title = model.Title;
                 post.MetaDescription = model.MetaDescription;
                 post.Content = model.Content;
-                post.Categories = categories.ToList();
+                post.Categories = categories;
             }
             else
             {

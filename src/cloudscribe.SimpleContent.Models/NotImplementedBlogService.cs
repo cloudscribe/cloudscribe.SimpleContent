@@ -32,17 +32,17 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<Dictionary<string, int>> GetArchives()
+        public Task<Dictionary<string, int>> GetArchives(bool includeUnpublished)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Dictionary<string, int>> GetCategories()
+        public Task<Dictionary<string, int>> GetCategories(bool includeUnpublished)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Dictionary<string, int>> GetCategories(string blogId, bool userIsOwner)
+        public Task<Dictionary<string, int>> GetCategories(string blogId, bool includeUnpublished)
         {
             throw new NotImplementedException();
         }
@@ -52,12 +52,12 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<int> GetCount(string category)
+        public Task<int> GetCount(string category, bool includeUnpublished)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> GetCount(string projectId, int year, int month = 0, int day = 0)
+        public Task<int> GetCount(string projectId, int year, int month = 0, int day = 0, bool includeUnpublished = false)
         {
             throw new NotImplementedException();
         }
@@ -87,7 +87,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<PagedResult<Post>> GetPosts(string blogId, int year, int month = 0, int day = 0, int pageNumber = 1, int pageSize = 10)
+        public Task<PagedResult<Post>> GetPosts(string blogId, int year, int month = 0, int day = 0, int pageNumber = 1, int pageSize = 10, bool includeUnpublished = false)
         {
             throw new NotImplementedException();
         }
@@ -107,12 +107,12 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetVisiblePosts()
+        public Task<List<Post>> GetPosts(bool includeUnpublished)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PagedResult<Post>> GetVisiblePosts(string category, int pageNumber)
+        public Task<PagedResult<Post>> GetPosts(string category, int pageNumber, bool includeUnpublished)
         {
             throw new NotImplementedException();
         }

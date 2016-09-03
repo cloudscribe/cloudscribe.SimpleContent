@@ -35,8 +35,8 @@
                           cs-previous-page-text="< Older"
                           cs-next-page-text="Newer >"
                           asp-controller="Blog"
-                          asp-action="Index"
-                          asp-route-category=""></cs-pager>
+                          asp-action="@Model.ListAction"
+                          asp-route-category="@Model.CurrentCategory"></cs-pager>
             </nav>
         </main>
         <aside role="complementary" class="col-md-3 col-md-offset-1">

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-08-02
+// Last Modified:           2016-09-03
 // 
 
 using System;
@@ -22,13 +22,13 @@ namespace cloudscribe.SimpleContent.Models
 
         Task<Dictionary<string, int>> GetCategories(
             string blogId,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<Dictionary<string, int>> GetArchives(
             string blogId,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
@@ -56,16 +56,16 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<List<Post>> GetVisiblePosts(
+        Task<List<Post>> GetPosts(
             string blogId,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<PagedResult<Post>> GetVisiblePosts(
+        Task<PagedResult<Post>> GetPosts(
             string blogId,
             string category,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             int pageNumber,
             int pageSize,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -78,13 +78,14 @@ namespace cloudscribe.SimpleContent.Models
             int day = 0,
             int pageNumber = 1,
             int pageSize = 10,
+            bool includeUnpublished = false,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task<int> GetCount(
             string blogId,
             string category,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
@@ -93,6 +94,7 @@ namespace cloudscribe.SimpleContent.Models
             int year,
             int month = 0,
             int day = 0,
+            bool includeUnpublished = false,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 

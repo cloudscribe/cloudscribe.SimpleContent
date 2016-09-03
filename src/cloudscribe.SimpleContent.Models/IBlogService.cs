@@ -13,12 +13,14 @@ namespace cloudscribe.SimpleContent.Models
         Task<bool> SlugIsAvailable(string slug);
         
         
-        Task<int> GetCount(string category);
+        Task<int> GetCount(string category, bool includeUnpublished);
         Task<int> GetCount(
             string projectId,
             int year,
             int month = 0,
-            int day = 0);
+            int day = 0,
+            bool includeUnpublished = false
+            );
         Task<Post> GetPost(string postId);
 
         Task<Post> GetPost(
@@ -31,8 +33,8 @@ namespace cloudscribe.SimpleContent.Models
         Task<PostResult> GetPostBySlug(string slug);
         Task<List<Post>> GetRecentPosts(int numberToGet);
           
-        Task<List<Post>> GetVisiblePosts();
-        Task<PagedResult<Post>> GetVisiblePosts(string category, int pageNumber);
+        Task<List<Post>> GetPosts(bool includeUnpublished);
+        Task<PagedResult<Post>> GetPosts(string category, int pageNumber, bool includeUnpublished);
         Task<string> ResolveBlogUrl(ProjectSettings blog);
         Task<string> ResolveMediaUrl(string fileName);
         Task<string> ResolvePostUrl(Post post);
@@ -51,15 +53,17 @@ namespace cloudscribe.SimpleContent.Models
             int month = 0,
             int day = 0,
             int pageNumber = 1,
-            int pageSize = 10);
+            int pageSize = 10,
+            bool includeUnpublished = false
+            );
 
-        Task<Dictionary<string, int>> GetCategories();
+        Task<Dictionary<string, int>> GetCategories(bool includeUnpublished);
         Task<Dictionary<string, int>> GetCategories(
             string projectId,
             string userName,
             string password
             );
-        Task<Dictionary<string, int>> GetArchives();
+        Task<Dictionary<string, int>> GetArchives(bool includeUnpublished);
 
         Task<bool> SlugIsAvailable(string projectId, string slug);
 
