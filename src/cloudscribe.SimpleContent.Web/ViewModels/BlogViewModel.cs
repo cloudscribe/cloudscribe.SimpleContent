@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-06
+// Last Modified:           2016-09-03
 // 
 
 
@@ -35,6 +35,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         private CryptoHelper cryptoHelper;
         public ProjectSettings ProjectSettings { get; set; }
         public Post CurrentPost { get; set; } = null;
+
+        public string CurrentCategory { get; set; } = string.Empty;
+
+        public string ListAction { get; set; } = "Index";
         public EditorModel EditorSettings { get; set; } = null;
         public List<Post> Posts { get; set; }
         public Dictionary<string, int> Categories { get; set; }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-08-02
+// Last Modified:           2016-09-03
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -58,21 +58,16 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             //return new List<Post>();
         }
 
-        public async Task<List<Post>> GetVisiblePosts(
+        public async Task<List<Post>> GetPosts(
             string blogId,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             var list = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
             list = list.Where(p =>
-                      (
-                      (
-                      p.IsPublished
-                      && p.PubDate <= DateTime.UtcNow
-                      )
-                      || userIsBlogOwner)
+                      (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
                       ).ToList<Post>();
 
             if (list.Count > 0)
@@ -84,17 +79,18 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             return list;
         }
 
-        public async Task<PagedResult<Post>> GetVisiblePosts(
+        public async Task<PagedResult<Post>> GetPosts(
             string blogId,
             string category,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             int pageNumber,
             int pageSize,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var posts = await GetVisiblePosts(blogId, userIsBlogOwner, cancellationToken);
+            var posts = await GetPosts(blogId, includeUnpublished, cancellationToken);
             var totalPosts = posts.Count;
+
             if (!string.IsNullOrEmpty(category))
             {
                 //var i = posts as IEnumerable<Post>;
@@ -103,6 +99,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     p => p.Categories.Any(
                         c => string.Equals(c, category, StringComparison.OrdinalIgnoreCase))
                         ).ToList<Post>();
+
+                totalPosts = posts.Count;
 
             }
 
@@ -116,6 +114,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             }
 
+            
+
             var result = new PagedResult<Post>();
             result.Data = posts;
             result.TotalItems = totalPosts;
@@ -126,11 +126,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public async Task<int> GetCount(
             string blogId,
             string category,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var posts = await GetVisiblePosts(blogId, userIsBlogOwner, cancellationToken);
+            var posts = await GetPosts(blogId, includeUnpublished, cancellationToken);
             
             if (!string.IsNullOrEmpty(category))
             {
@@ -169,6 +169,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             int day = 0,
             int pageNumber = 1,
             int pageSize = 10,
+            bool includeUnpublished = false,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -182,6 +183,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && x.PubDate.Day == day
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
                 )
                 .ToList<Post>();
             }
@@ -190,6 +193,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 posts = posts.Where(
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
                 )
                 .ToList<Post>();
 
@@ -228,6 +233,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             int year,
             int month = 0,
             int day = 0,
+            bool includeUnpublished = false,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -240,6 +246,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && x.PubDate.Day == day
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
                 )
                 .Count();
             }
@@ -248,6 +256,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 return posts.Where(
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
                 )
                 .Count();
 
@@ -325,25 +335,26 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         public async Task<Dictionary<string, int>> GetCategories(
             string blogId,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             var result = new Dictionary<string, int>();
 
-            var visiblePosts = await GetVisiblePosts(
+            var visiblePosts = await GetPosts(
                 blogId,
-                userIsBlogOwner,
+                includeUnpublished,
                 cancellationToken).ConfigureAwait(false);
 
             foreach (var category in visiblePosts.SelectMany(post => post.Categories))
             {
-                if (!result.ContainsKey(category))
+                var c = category.Trim().ToLowerInvariant();
+                if (!result.ContainsKey(c))
                 {
-                    result.Add(category, 0);
+                    result.Add(c, 0);
                 }
 
-                result[category] = result[category] + 1;
+                result[c] = result[c] + 1;
             }
 
             // TODO: cache this 
@@ -354,7 +365,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         public async Task<Dictionary<string, int>> GetArchives(
             string blogId,
-            bool userIsBlogOwner,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -368,9 +379,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             // at any rate I think the way of retrieving posts needs more review and thought
             // about efficient strategies to use the minimum resources needed
 
-            var visiblePosts = await GetVisiblePosts(
+            var visiblePosts = await GetPosts(
                 blogId,
-                userIsBlogOwner,
+                includeUnpublished,
                 cancellationToken).ConfigureAwait(false);
 
             var grouped = from p in visiblePosts

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-21
-// Last Modified:           2016-07-23
+// Last Modified:           2016-09-03
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -65,7 +65,8 @@ namespace cloudscribe.SimpleContent.Services
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var mapNodes = new List<SiteMapNode>();
-            var posts = await blogService.GetVisiblePosts().ConfigureAwait(false);
+            var includeUnpublished = false;
+            var posts = await blogService.GetPosts(includeUnpublished).ConfigureAwait(false);
             if(posts == null)
             {
                 log.LogWarning("post list came back null so returning empty list of sitemapnodes");

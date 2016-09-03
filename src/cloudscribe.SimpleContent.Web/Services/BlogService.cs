@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-12
+// Last Modified:           2016-09-03
 // 
 
 using cloudscribe.SimpleContent.Web;
@@ -55,7 +55,7 @@ namespace cloudscribe.SimpleContent.Services
         private IPostCommands postCommands;
         private IMediaProcessor mediaProcessor;
         private ProjectSettings settings = null;
-        private bool userIsBlogOwner = false;
+        //private bool userCanEdit = false;
         private HtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
 
@@ -63,20 +63,20 @@ namespace cloudscribe.SimpleContent.Services
         {
             if(settings != null) { return; }
             settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
-            if (settings != null)
-            {
-                if(context.User.Identity.IsAuthenticated)
-                {
-                    var userBlog = context.User.GetProjectId();
-                    if(!string.IsNullOrEmpty(userBlog))
-                    {
-                        if(settings.Id == userBlog) { userIsBlogOwner = true; }
+            //if (settings != null)
+            //{
+            //    if(context.User.Identity.IsAuthenticated)
+            //    {
+            //        var userBlog = context.User.GetProjectId();
+            //        if(!string.IsNullOrEmpty(userBlog))
+            //        {
+            //            if(settings.Id == userBlog) { userCanEdit = true; }
 
-                    }
-                }
+            //        }
+            //    }
 
                 
-            }
+            //}
             
         }
 
@@ -107,41 +107,42 @@ namespace cloudscribe.SimpleContent.Services
         //    return await repo.GetAllPosts(settings.BlogId, CancellationToken).ConfigureAwait(false);
         //}
 
-        public async Task<List<Post>> GetVisiblePosts()
+        public async Task<List<Post>> GetPosts(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetVisiblePosts(
+            return await postQueries.GetPosts(
                 settings.Id,
-                userIsBlogOwner,
+                includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<PagedResult<Post>> GetVisiblePosts(
+        public async Task<PagedResult<Post>> GetPosts(
             string category,
-            int pageNumber)
+            int pageNumber,
+            bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetVisiblePosts(
+            return await postQueries.GetPosts(
                 settings.Id,
                 category,
-                userIsBlogOwner,
+                includeUnpublished,
                 pageNumber,
                 settings.PostsPerPage,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<int> GetCount(string category)
+        public async Task<int> GetCount(string category, bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetCount(
                 settings.Id,
                 category,
-                userIsBlogOwner,
+                includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
@@ -150,13 +151,16 @@ namespace cloudscribe.SimpleContent.Services
             string projectId,
             int year,
             int month = 0,
-            int day = 0)
+            int day = 0,
+            bool includeUnpublished = false
+            )
         {
             return await postQueries.GetCount(
                 projectId,
                 year,
                 month,
                 day,
+                includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
@@ -204,9 +208,10 @@ namespace cloudscribe.SimpleContent.Services
             int month = 0, 
             int day = 0, 
             int pageNumber = 1, 
-            int pageSize = 10)
+            int pageSize = 10,
+            bool includeUnpublished = false)
         {
-            return await postQueries.GetPosts(projectId, year, month, day, pageNumber, pageSize).ConfigureAwait(false);
+            return await postQueries.GetPosts(projectId, year, month, day, pageNumber, pageSize, includeUnpublished).ConfigureAwait(false);
         }
 
         public async Task Create(
@@ -555,13 +560,13 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<Dictionary<string, int>> GetCategories()
+        public async Task<Dictionary<string, int>> GetCategories(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetCategories(
                 settings.Id,
-                userIsBlogOwner,
+                includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
@@ -591,21 +596,20 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<Dictionary<string, int>> GetArchives()
+        public async Task<Dictionary<string, int>> GetArchives(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-            //var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-
+            
             return await postQueries.GetArchives(
                 settings.Id,
-                userIsBlogOwner,
+                includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<bool> CommentsAreOpen(Post post, bool userIsOwner)
+        public async Task<bool> CommentsAreOpen(Post post, bool userCanEdit)
         {
-            if(userIsBlogOwner) { return true; }
+            if(userCanEdit) { return true; }
             await EnsureBlogSettings().ConfigureAwait(false);
 
             if(settings.DaysToComment == -1) { return true; }
