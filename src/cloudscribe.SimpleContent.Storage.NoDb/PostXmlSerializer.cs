@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using NoDb;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -109,8 +110,22 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 MetaDescription = ReadValue(doc.Root, "excerpt"),
                 Content = ReadValue(doc.Root, "content"),
                 Slug = ReadValue(doc.Root, "slug").ToLowerInvariant(),
-                PubDate = DateTime.Parse(ReadValue(doc.Root, "pubDate")),
-                LastModified = DateTime.Parse(ReadValue(doc.Root, "lastModified", DateTime.UtcNow.ToString())),
+                PubDate = DateTime.ParseExact(
+                    ReadValue(doc.Root, "pubDate"),
+                    "O",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal |
+                    DateTimeStyles.AdjustToUniversal
+                ),
+
+                LastModified = DateTime.ParseExact(
+                    ReadValue(doc.Root, "lastModified", DateTime.UtcNow.ToString()),
+                    "O",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal |
+                    DateTimeStyles.AdjustToUniversal
+                    ),
+
                 IsPublished = bool.Parse(ReadValue(doc.Root, "ispublished", "true")),
             };
 
