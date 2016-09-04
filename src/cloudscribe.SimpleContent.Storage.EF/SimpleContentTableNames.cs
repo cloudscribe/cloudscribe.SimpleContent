@@ -20,5 +20,7 @@ namespace cloudscribe.SimpleContent.Storage.EF
 
         public string TagTableName { get; set; } = "Tag";
 
+        public string TagItemTableName { get; set; } = "TagItem";
+
     }
 }

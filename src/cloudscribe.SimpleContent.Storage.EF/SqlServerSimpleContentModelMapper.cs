@@ -2,16 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-08-31
+// Last Modified:			2016-09-04
 // 
 
 using cloudscribe.SimpleContent.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.EF
 {
@@ -241,6 +237,8 @@ namespace cloudscribe.SimpleContent.Storage.EF
 
             entity.Ignore(p => p.Comments);
 
+            // a shadow property to persist the categories/tags as a csv
+            entity.Property<string>("CategoryCsv");
 
         }
 
@@ -322,7 +320,8 @@ namespace cloudscribe.SimpleContent.Storage.EF
 
             entity.Ignore(p => p.Comments);
 
-
+            // a shadow property to persist the categories/tags as a csv
+            entity.Property<string>("CategoryCsv");
 
         }
 
@@ -373,18 +372,24 @@ namespace cloudscribe.SimpleContent.Storage.EF
 
         }
 
-        public void Map(EntityTypeBuilder<Tag> entity)
+        public void Map(EntityTypeBuilder<TagItem> entity)
         {
-            entity.HasKey(p => p.Id);
-            entity.Property(p => p.Id)
-            .HasMaxLength(36)
+            entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.TagItemTableName);
+
+            entity.HasKey(p => new { p.TagValue, p.ContentId });
+
+            entity.Property(p => p.TagValue)
+            .HasMaxLength(50)
+            .IsRequired()
             ;
 
-            //entity.Property(p => p.ContentId)
-            //.HasMaxLength(36)
-            //.IsRequired()
-            //;
-            //entity.HasIndex(p => p.ContentId);
+            entity.HasIndex(p => p.TagValue);
+
+            entity.Property(p => p.ContentId)
+            .HasMaxLength(36)
+            .IsRequired()
+            ;
+            entity.HasIndex(p => p.ContentId);
 
             entity.Property(p => p.ProjectId)
             .HasMaxLength(36)
@@ -396,13 +401,8 @@ namespace cloudscribe.SimpleContent.Storage.EF
             .HasMaxLength(20)
             .IsRequired()
             ;
-
-            entity.Property(p => p.Value)
-            .HasMaxLength(50)
-            .IsRequired()
-            ;
-
-            entity.HasIndex(p => p.Value);
+            
+            entity.HasIndex(p => p.ContentType);
 
         }
 

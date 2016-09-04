@@ -5,7 +5,6 @@
 // Last Modified:           2016-09-03
 // 
 
-using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,29 +53,13 @@ namespace cloudscribe.SimpleContent.Services
         private IPostCommands postCommands;
         private IMediaProcessor mediaProcessor;
         private ProjectSettings settings = null;
-        //private bool userCanEdit = false;
         private HtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
 
         private async Task EnsureBlogSettings()
         {
             if(settings != null) { return; }
-            settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
-            //if (settings != null)
-            //{
-            //    if(context.User.Identity.IsAuthenticated)
-            //    {
-            //        var userBlog = context.User.GetProjectId();
-            //        if(!string.IsNullOrEmpty(userBlog))
-            //        {
-            //            if(settings.Id == userBlog) { userCanEdit = true; }
-
-            //        }
-            //    }
-
-                
-            //}
-            
+            settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);    
         }
 
         //public async Task<ProjectSettings> GetCurrentBlogSettings()
@@ -236,8 +218,7 @@ namespace cloudscribe.SimpleContent.Services
             var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
             
             await InitializeNewPosts(projectId, post, publish);
-            
-            //contextAccessor
+
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
             if(context != null)
@@ -252,18 +233,7 @@ namespace cloudscribe.SimpleContent.Services
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 post.Content);
-
-            // here we need to process any base64 embedded images
-            // save them under wwwroot
-            // and update the src in the post with the new url
-            // since this overload of Save is only called from metaweblog
-            // and metaweblog does not base64 encode the images like the browser client
-            // this call may not be needed here
-            //await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    post
-            //    ).ConfigureAwait(false);
-
+            
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)
             {
@@ -294,7 +264,6 @@ namespace cloudscribe.SimpleContent.Services
 
             var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
             
-            //contextAccessor
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
             if (context != null)
@@ -309,18 +278,7 @@ namespace cloudscribe.SimpleContent.Services
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 post.Content);
-
-            // here we need to process any base64 embedded images
-            // save them under wwwroot
-            // and update the src in the post with the new url
-            // since this overload of Save is only called from metaweblog
-            // and metaweblog does not base64 encode the images like the browser client
-            // this call may not be needed here
-            //await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    post
-            //    ).ConfigureAwait(false);
-
+            
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)
             {
@@ -428,9 +386,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             return postUrl;
-            //var result = urlHelper.Action("Post", "Blog", new { slug = post.Slug });
-
-            //return result;
+            
         }
 
         
@@ -477,8 +433,7 @@ namespace cloudscribe.SimpleContent.Services
             {
                 return null;
             }
-            // await EnsureBlogSettings().ConfigureAwait(false);
-
+            
             return await postQueries.GetPost(
                 projectId,
                 postId,
@@ -518,7 +473,6 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<bool> SlugIsAvailable(string projectId, string slug)
         {
             
-
             return await postQueries.SlugIsAvailable(
                 projectId,
                 slug,
@@ -553,9 +507,7 @@ namespace cloudscribe.SimpleContent.Services
             {
                 return; //TODO: exception here?
             }
-            //await EnsureBlogSettings().ConfigureAwait(false);
-            //var settings = await settingsRepo.GetBlogSetings(projectId, CancellationToken).ConfigureAwait(false);
-
+            
             await postCommands.Delete(projectId, postId).ConfigureAwait(false);
 
         }

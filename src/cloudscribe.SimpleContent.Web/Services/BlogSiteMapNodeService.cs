@@ -8,9 +8,6 @@
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.SiteMap;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -23,29 +20,20 @@ namespace cloudscribe.SimpleContent.Services
     {
         public BlogSiteMapNodeService(
             IBlogService blogService,
-           // IUrlHelperFactory urlHelperFactory,
-            //IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor,
             ILogger<BlogSiteMapNodeService> logger)
         {
-
             this.blogService = blogService;
-            //this.urlHelperFactory = urlHelperFactory;
-            //this.actionContextAccesor = actionContextAccesor;
             this.contextAccessor = contextAccessor;
             log = logger;
-
         }
 
         private IBlogService blogService;
-        //private IUrlHelperFactory urlHelperFactory;
-        //private IActionContextAccessor actionContextAccesor;
         private ILogger log;
         private IHttpContextAccessor contextAccessor;
         private string baseUrl = string.Empty;
         private List<string> addedUrls = new List<string>();
 
-        // this should not be needed in rc2 because there will be urlhelper methods for absolute url
         public string BaseUrl
         {
             get
@@ -73,7 +61,6 @@ namespace cloudscribe.SimpleContent.Services
                 return mapNodes;
             }
 
-            
             foreach (var post in posts)
             {
                 if (!post.IsPublished) continue;
@@ -95,7 +82,6 @@ namespace cloudscribe.SimpleContent.Services
                             });
 
                 addedUrls.Add(url);
-
             }
 
             return mapNodes;
@@ -109,7 +95,6 @@ namespace cloudscribe.SimpleContent.Services
             if (url.StartsWith("http")) return url;
 
             return BaseUrl + url;
-
         }
 
     }

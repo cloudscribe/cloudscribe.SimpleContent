@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-08-31
+// Last Modified:			2016-09-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -26,7 +26,9 @@ namespace cloudscribe.SimpleContent.Storage.EF
 
         public DbSet<Comment> Comments { get; set; }
 
-        public DbSet<Tag> Tags { get; set; }
+       // public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<TagItem> TagItems { get; set; }
 
         //public DbSet<PageComment> PageComments { get; set; }
 
@@ -34,7 +36,6 @@ namespace cloudscribe.SimpleContent.Storage.EF
         {
 
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.Options.
 
         }
 
@@ -63,6 +64,11 @@ namespace cloudscribe.SimpleContent.Storage.EF
             });
 
             modelBuilder.Entity<Comment>(entity =>
+            {
+                mapper.Map(entity);
+            });
+
+            modelBuilder.Entity<TagItem>(entity =>
             {
                 mapper.Map(entity);
             });
