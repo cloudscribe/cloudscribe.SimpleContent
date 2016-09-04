@@ -85,7 +85,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Archives = await blogService.GetArchives(model.CanEdit);
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
-            model.Paging.TotalItems = result.TotalItems; //await blogService.GetCount(category);
+            model.Paging.TotalItems = result.TotalItems; 
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
             
@@ -93,7 +93,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             if(model.CanEdit)
             {
-                //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
                 model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
                 model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
                 model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
@@ -175,7 +174,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             if (model.CanEdit)
             {
-                //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
                 model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
                 model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
                 model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
@@ -348,10 +346,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.EditMode = mode;
                 model.EditorSettings.SupportsCategories = true;
                 model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
-                model.EditorSettings.CategoryPath = Url.Action("Category", "Blog"); // TODO: should we support categories on pages? this action doesn't exist right now
+                model.EditorSettings.CategoryPath = Url.Action("Category", "Blog"); 
                 model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Blog");
                 model.EditorSettings.SavePath = Url.Action("AjaxPost", "Blog");
-                //model.EditorSettings.NewItemPath = Url.Link(ProjectConstants.NewPostRouteName, null);
                 model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
 
             }
@@ -399,16 +396,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return; 
             }
 
-            //string[] categories = new string[0];
             var categories = new List<string>();
 
             if (!string.IsNullOrEmpty(model.Categories))
             {
                 categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower()).ToList();
-                //categories = model.Categories.Split(new char[] { ',' },
-                //StringSplitOptions.RemoveEmptyEntries);
             }
-
 
             Post post = null;
             if (!string.IsNullOrEmpty(model.Id))
@@ -762,7 +755,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             comment.IsApproved = true;
-            //blogPost.Comments.Add(comment);
             await blogService.Update(blogPost);
 
             Response.StatusCode = 200;
@@ -792,7 +784,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 log.LogDebug("returning 404 because no commentid was posted");
                 Response.StatusCode = 404;
-                // await Response.WriteAsync("Comm");
                 return;// new EmptyResult();
             }
 

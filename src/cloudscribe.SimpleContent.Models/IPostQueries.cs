@@ -15,11 +15,6 @@ namespace cloudscribe.SimpleContent.Models
     
     public interface IPostQueries
     {
-        
-        //Task<List<Post>> GetAllPosts(
-        //    string blogId,
-        //    CancellationToken cancellationToken);
-
         Task<Dictionary<string, int>> GetCategories(
             string blogId,
             bool includeUnpublished,
@@ -97,7 +92,6 @@ namespace cloudscribe.SimpleContent.Models
             bool includeUnpublished = false,
             CancellationToken cancellationToken = default(CancellationToken)
             );
-
-        
+     
     }
 }

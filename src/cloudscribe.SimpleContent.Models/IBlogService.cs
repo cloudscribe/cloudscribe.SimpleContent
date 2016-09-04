@@ -7,7 +7,6 @@ namespace cloudscribe.SimpleContent.Models
     public interface IBlogService
     {
         
-
         Task<bool> CommentsAreOpen(Post post, bool userIsOwner);
         string CreateSlug(string title);
         Task<bool> SlugIsAvailable(string slug);

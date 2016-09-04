@@ -42,9 +42,7 @@ namespace cloudscribe.SimpleContent.Storage.EF
                        .UseInternalServiceProvider(serviceProvider)
                        );
 
-            //services.AddDbContext<CoreDbContext>(options =>
-            //        options.UseSqlServer(Configuration["Data:EF7ConnectionOptions:ConnectionString"])
-            //        );
+           
         }
 
 

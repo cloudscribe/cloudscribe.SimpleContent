@@ -5,10 +5,8 @@
 // Last Modified:           2016-09-03
 // 
 
-
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
-using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Pagination;
 using System;
