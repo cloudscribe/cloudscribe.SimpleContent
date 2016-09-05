@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using cloudscribe.SimpleContent.Storage.EF;
+using cloudscribe.SimpleContent.Storage.EFCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

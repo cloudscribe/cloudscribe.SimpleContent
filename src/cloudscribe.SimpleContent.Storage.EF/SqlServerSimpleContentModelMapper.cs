@@ -9,7 +9,7 @@ using cloudscribe.SimpleContent.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace cloudscribe.SimpleContent.Storage.EF
+namespace cloudscribe.SimpleContent.Storage.EFCore
 {
     public class SqlServerSimpleContentModelMapper : ISimpleContentModelMapper
     {

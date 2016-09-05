@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 
-namespace cloudscribe.SimpleContent.Storage.EF
+namespace cloudscribe.SimpleContent.Storage.EFCore
 {
     public class Program
     {
