@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-05
+// Last Modified:			2016-09-06
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore
 {
-    public class PostQueries
+    public class PostQueries : IPostQueries
     {
         public PostQueries(SimpleContentDbContext dbContext)
         {
@@ -74,6 +74,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var result = new PagedResult<Post>();
 
             var query = dbContext.Posts
+                .Include(p => p.Comments)
                 .Where(x =>
                 x.BlogId == blogId
                 && (includeUnpublished || (x.IsPublished && x.PubDate <= currentTime))
@@ -82,6 +83,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .Select(x => new Post
                 {
                     // note that this will have to be updated if there are any new properties added to Post
+                    // maybe better perf to not do this and instead just select post
+                    // could iterate through the list before returning it to update the categores? or is the shado property only available in the query?
                     Id = x.Id,
                     Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' }, 
                         StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
@@ -93,7 +96,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     MetaDescription = x.MetaDescription,
                     PubDate = x.PubDate,
                     Slug = x.Slug,
-                    Title = x.Title
+                    Title = x.Title,
+                    Comments = x.Comments
                     //, Comments = is is possible to sub query here without navigation property
                 }
                  
@@ -110,18 +114,58 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .ConfigureAwait(false);
 
             int totalPosts = await GetCount(blogId, category, includeUnpublished, cancellationToken).ConfigureAwait(false);
-
             
-
-            // TODO: get list of post comments for the same range and update the posts?
-
-
-
             result.Data = posts;
             result.TotalItems = totalPosts;
 
             return result;
         }
+
+        //private async Task<List<Comment>> GetCommentsForPageOfPosts(
+        //    string blogId,
+        //    string category,
+        //    bool includeUnpublished,
+        //    DateTime currentTime,
+        //    int pageNumber,
+        //    int pageSize,
+        //    CancellationToken cancellationToken = default(CancellationToken)
+        //    )
+        //{
+        //    ThrowIfDisposed();
+        //    cancellationToken.ThrowIfCancellationRequested();
+
+        //    int offset = (pageSize * pageNumber) - pageSize;
+
+
+        //    var result = new List<Comment>();
+
+        //    var query = from c in dbContext.Comments
+        //            join x in dbContext.Posts
+        //            on c.ContentId equals x.Id
+        //            orderby x.PubDate
+        //                where (
+        //        x.BlogId == blogId
+        //        && (includeUnpublished || (x.IsPublished && x.PubDate <= currentTime))
+        //        && (string.IsNullOrEmpty(category) || (EF.Property<string>(x, "CategoryCsv").Contains(category))) // will this work?
+        //        )
+
+        //        select c
+                
+        //        ;
+
+
+        //    //List<Comment> posts = await query
+        //    //    .AsNoTracking()
+        //    //    .Skip(offset)
+        //    //    .Take(pageSize)
+        //    //    .ToListAsync<Post>(cancellationToken)
+        //    //    .ConfigureAwait(false);
+
+           
+           
+
+        //    return result;
+        //}
 
         public async Task<int> GetCount(
             string blogId,
@@ -130,6 +174,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
             var currentTime = DateTime.UtcNow;
 
             var count = await dbContext.Posts
@@ -142,9 +189,230 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             return count;
         }
 
+        public async Task<List<Post>> GetRecentPosts(
+            string blogId,
+            int numberToGet,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            var query = dbContext.Posts
+               // .Include(p => p.Comments) //think this is only used to populate a list in OLW so don't need the comments
+                .Where(p =>
+                p.IsPublished
+                && p.PubDate <= DateTime.UtcNow)
+                .OrderByDescending(p => p.PubDate)
+                ;
+
+            return await query
+                .Take(numberToGet)
+                .ToListAsync<Post>()
+                .ConfigureAwait(false);
+
+        }
+
+        public async Task<PagedResult<Post>> GetPosts(
+            string blogId,
+            int year,
+            int month = 0,
+            int day = 0,
+            int pageNumber = 1,
+            int pageSize = 10,
+            bool includeUnpublished = false,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            IQueryable<Post> query;
+            
+            if (day > 0 && month > 0)
+            {
+                query = dbContext.Posts
+                     .Include(p => p.Comments)
+                    .Where(
+                x => x.PubDate.Year == year
+                && x.PubDate.Month == month
+                && x.PubDate.Day == day
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
+                )
+                ;
+            }
+            else if (month > 0)
+            {
+                query = dbContext.Posts
+                     .Include(p => p.Comments)
+                    .Where(
+                x => x.PubDate.Year == year
+                && x.PubDate.Month == month
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
+                )
+                ;
+
+            }
+            else
+            {
+                query = dbContext.Posts
+                     .Include(p => p.Comments)
+                     .Where(
+                x => x.PubDate.Year == year
+                )
+                ;
+            }
+            
+            int offset = (pageSize * pageNumber) - pageSize;
+            var posts = await query.Skip(offset).Take(pageSize).ToListAsync<Post>();
+
+            var result = new PagedResult<Post>();
+            result.Data = posts;
+            result.TotalItems = await GetCount(blogId, year, month, day, includeUnpublished, cancellationToken).ConfigureAwait(false);
+
+            return result;
+            
+        }
+
+        public async Task<int> GetCount(
+            string blogId,
+            int year,
+            int month = 0,
+            int day = 0,
+            bool includeUnpublished = false,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            IQueryable<Post> query;
+
+            if (day > 0 && month > 0)
+            {
+                query =  dbContext.Posts.Where(
+                x => x.PubDate.Year == year
+                && x.PubDate.Month == month
+                && x.PubDate.Day == day
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
+                )
+                ;
+            }
+            else if (month > 0)
+            {
+                query = dbContext.Posts.Where(
+                x => x.PubDate.Year == year
+                && x.PubDate.Month == month
+                && (includeUnpublished || (x.IsPublished
+                && x.PubDate <= DateTime.UtcNow))
+                )
+                ;
+
+            }
+            else
+            {
+                query = dbContext.Posts.Where(
+                x => x.PubDate.Year == year
+                )
+                ;
+            }
+
+            return await query.CountAsync<Post>().ConfigureAwait(false);
+
+        }
 
 
+        public async Task<Post> GetPost(
+            string blogId,
+            string postId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
 
+            var query = dbContext.Posts
+                     .Include(p => p.Comments)
+                     .Where(p => p.Id == postId && p.BlogId == blogId);
+
+            var post = await query.AsNoTracking().SingleOrDefaultAsync<Post>().ConfigureAwait(false);
+
+            // will this work? I'm doubtfull
+            post.Categories = EF.Property<string>(post, "CategoryCsv").Split(new char[] { ',' },
+                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
+
+            return post;
+        }
+
+        public async Task<PostResult> GetPostBySlug(
+            string blogId,
+            string slug,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var result = new PostResult();
+
+            var query = dbContext.Posts
+                     .Include(p => p.Comments)
+                     .Where(p => p.Slug == slug && p.BlogId == blogId);
+
+            var post = await query.AsNoTracking().SingleOrDefaultAsync<Post>().ConfigureAwait(false);
+
+            // will this work? I'm doubtfull
+            post.Categories = EF.Property<string>(post, "CategoryCsv").Split(new char[] { ',' },
+                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
+
+            result.Post = await query.AsNoTracking().SingleOrDefaultAsync<Post>().ConfigureAwait(false);
+
+            if (result.Post != null)
+            {
+                var cutoff = result.Post.PubDate;
+
+                result.PreviousPost = await dbContext.Posts
+                    .Where(
+                    p => p.PubDate < cutoff
+                    && p.IsPublished == true
+                    )
+                    .OrderByDescending(p => p.PubDate)
+                    .Take(1)
+                    .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+
+                result.NextPost = await dbContext.Posts
+                    .Where(
+                    p => p.PubDate > cutoff
+                    && p.IsPublished == true
+                    )
+                    .OrderBy(p => p.PubDate)
+                    .Take(1)
+                    .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+
+            }
+
+            return result;
+        }
+
+        public async Task<bool> SlugIsAvailable(
+            string blogId,
+            string slug,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            var isInUse = await dbContext.Posts.AnyAsync(
+                p => p.Slug == slug && p.BlogId == blogId, 
+                cancellationToken
+                ).ConfigureAwait(false);
+
+            return !isInUse;
+        }
 
 
         public async Task<Dictionary<string, int>> GetCategories(
@@ -153,6 +421,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
             var result = new Dictionary<string, int>();
 
             var query = dbContext.TagItems
@@ -163,16 +434,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     ItemCount = t.ContentId.Count()
                 }).AsNoTracking()
                 ;
-
-            //var catQuery = (from x in dbContext.TagItems
-            //     where (x.ProjectId == blogId && x.ContentType == PostContentType)
-            //     group x by new { ProjectId = x.ProjectId, x.ContentType, x.TagValue } into hh
-            //     select new {
-
-            //     }
-
-            //    )
-            //    ;
 
             var list = await query
                .ToListAsync(cancellationToken)
@@ -190,10 +451,47 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 //result[c] = result[c] + 1;
             }
 
-            // TODO: cache this 
+
             var sorted = new SortedDictionary<string, int>(result);
 
             return sorted.OrderBy(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
+        }
+
+
+        public async Task<Dictionary<string, int>> GetArchives(
+            string blogId,
+            bool includeUnpublished,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var result = new Dictionary<string, int>();
+            
+            var query = from p in dbContext.Posts
+                          group p by new { month = p.PubDate.Month, year = p.PubDate.Year } into d
+                          select new
+                          {
+                              key = d.Key.year.ToString() + "/" + d.Key.month.ToString("00")
+                              ,
+                              count = d.Count()
+                          };
+
+            var grouped = await query.ToListAsync().ConfigureAwait(false);
+
+            foreach (var item in grouped)
+            {
+                result.Add(item.key, item.count);
+            }
+
+            var sorted = new SortedDictionary<string, int>(result);
+
+            return sorted.OrderByDescending(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
+
+            
+
+            
         }
 
 

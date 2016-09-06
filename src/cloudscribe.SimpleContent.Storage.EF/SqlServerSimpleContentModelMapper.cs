@@ -235,7 +235,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             entity.Ignore(p => p.Categories);
 
-            entity.Ignore(p => p.Comments);
+            //entity.Ignore(p => p.Comments);
+            // will this create a shadow foriegn key?
+            entity.HasMany(p => p.Comments)
+                .WithOne()
+               
+            ;
 
             // a shadow property to persist the categories/tags as a csv
             entity.Property<string>("CategoryCsv");
