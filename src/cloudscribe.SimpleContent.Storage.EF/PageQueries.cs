@@ -54,6 +54,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == pageId, cancellationToken)
                 .ConfigureAwait(false)
                 ;
@@ -68,12 +69,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            return await dbContext.Pages.Where(p => 
+            return await dbContext.Pages
+                .AsNoTracking()
+                .Where(p => 
                 p.ProjectId == projectId
                 && (p.ParentId == "0" || p.ParentId == null || p.ParentId == "")
                 )
                 .OrderBy(p => p.PageOrder)
                 .ToListAsync<Page>(cancellationToken)
+                
                 .ConfigureAwait(false)
                 ;
 
@@ -88,7 +92,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            return await dbContext.Pages.Where(p => 
+            return await dbContext.Pages
+                .AsNoTracking()
+                .Where(p => 
                 p.ParentId == pageId && p.ProjectId == projectId
                 )
                 .OrderBy(p => p.PageOrder)
@@ -107,7 +113,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            return await dbContext.Pages.Where(p => 
+            return await dbContext.Pages
+                .AsNoTracking()
+                .Where(p => 
                 p.Slug == slug && p.ProjectId == projectId)
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false)

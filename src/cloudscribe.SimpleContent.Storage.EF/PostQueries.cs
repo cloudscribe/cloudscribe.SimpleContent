@@ -207,6 +207,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 ;
 
             return await query
+                .AsNoTracking()
                 .Take(numberToGet)
                 .ToListAsync<Post>()
                 .ConfigureAwait(false);
@@ -266,7 +267,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
             
             int offset = (pageSize * pageNumber) - pageSize;
-            var posts = await query.Skip(offset).Take(pageSize).ToListAsync<Post>();
+            var posts = await query
+                .AsNoTracking()
+                .Skip(offset)
+                .Take(pageSize)
+                .ToListAsync<Post>();
 
             var result = new PagedResult<Post>();
             result.Data = posts;
@@ -375,6 +380,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 var cutoff = result.Post.PubDate;
 
                 result.PreviousPost = await dbContext.Posts
+                    .AsNoTracking()
                     .Where(
                     p => p.PubDate < cutoff
                     && p.IsPublished == true
@@ -384,6 +390,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
 
                 result.NextPost = await dbContext.Posts
+                    .AsNoTracking()
                     .Where(
                     p => p.PubDate > cutoff
                     && p.IsPublished == true
