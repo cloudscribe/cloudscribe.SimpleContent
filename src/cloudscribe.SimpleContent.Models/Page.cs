@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public class Page
+    public class Page : IPage
     {
         public Page()
         {
@@ -49,5 +47,33 @@ namespace cloudscribe.SimpleContent.Models
         public bool ShowLastModified { get; set; } = false;
         public bool ShowCategories { get; set; } = false;
         public bool ShowComments { get; set; } = false;
+
+        public static Page FromIPage(IPage page)
+        {
+            var p = new Page();
+            p.Author = page.Author;
+            p.Categories = page.Categories;
+            p.Comments = page.Comments;
+            p.Content = page.Content;
+            p.Id = page.Id;
+            p.IsPublished = page.IsPublished;
+            p.LastModified = page.LastModified;
+            p.MetaDescription = page.MetaDescription;
+            p.PageOrder = page.PageOrder;
+            p.ParentId = page.ParentId;
+            p.ParentSlug = page.ParentSlug;
+            p.ProjectId = page.ProjectId;
+            p.PubDate = page.PubDate;
+            p.ShowCategories = page.ShowCategories;
+            p.ShowComments = page.ShowComments;
+            p.ShowHeading = page.ShowHeading;
+            p.ShowLastModified = page.ShowLastModified;
+            p.ShowPubDate = page.ShowPubDate;
+            p.Slug = page.Slug;
+            p.Title = page.Title;
+            p.ViewRoles = page.ViewRoles;
+            
+            return p;
+        }
     }
 }

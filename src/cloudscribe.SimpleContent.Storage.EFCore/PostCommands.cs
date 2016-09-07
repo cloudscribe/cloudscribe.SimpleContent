@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-06
+// Last Modified:			2016-09-07
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -25,19 +25,21 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         public async Task Create(
             string projectId,
-            Post post,
+            IPost post,
             CancellationToken cancellationToken = default(CancellationToken)
            )
         {
             if (post == null) throw new ArgumentException("post must not be null");
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
 
-            if (string.IsNullOrEmpty(post.Id)) { post.Id = Guid.NewGuid().ToString(); }
+            var p = Post.FromIPost(post);
 
-            if (string.IsNullOrEmpty(post.BlogId)) post.BlogId = projectId;
+            if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
+
+            if (string.IsNullOrEmpty(p.BlogId)) p.BlogId = projectId;
             post.LastModified = DateTime.UtcNow;
             
-            dbContext.Posts.Add(post);
+            dbContext.Posts.Add(p);
 
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -46,7 +48,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         public async Task Update(
             string projectId,
-            Post post,
+            IPost post,
             CancellationToken cancellationToken = default(CancellationToken)
            )
         {
@@ -54,15 +56,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             if (string.IsNullOrEmpty(post.Id)) throw new ArgumentException("can only update an existing post with a populated Id");
 
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
+            var p = Post.FromIPost(post);
 
-            post.LastModified = DateTime.UtcNow;
-            bool tracking = dbContext.ChangeTracker.Entries<Post>().Any(x => x.Entity.Id == post.Id);
+            p.LastModified = DateTime.UtcNow;
+            bool tracking = dbContext.ChangeTracker.Entries<Post>().Any(x => x.Entity.Id == p.Id);
             if (!tracking)
             {
-                dbContext.Posts.Update(post);
+                dbContext.Posts.Update(p);
             }
 
-            dbContext.Entry(post).Property("CategoryCsv").CurrentValue = string.Join(",", post.Categories);
+            dbContext.Entry(p).Property("CategoryCsv").CurrentValue = string.Join(",", post.Categories);
 
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -90,7 +93,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         public Task HandlePubDateAboutToChange(
             string projectId,
-            Post post,
+            IPost post,
             DateTime newPubDate,
             CancellationToken cancellationToken = default(CancellationToken))
         {

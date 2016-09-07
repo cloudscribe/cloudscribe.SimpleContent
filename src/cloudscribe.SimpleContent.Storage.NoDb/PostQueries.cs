@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-09-03
+// Last Modified:           2016-09-07
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -43,6 +43,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var l = await query.GetAllAsync(blogId, cancellationToken).ConfigureAwait(false);
             var list = l.ToList();
+            
             //if (list.Count > 0)
             //{
             //    list.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
@@ -58,7 +59,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             //return new List<Post>();
         }
 
-        public async Task<List<Post>> GetPosts(
+        public async Task<List<IPost>> GetPosts(
             string blogId,
             bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -76,10 +77,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 //HttpRuntime.Cache.Insert("posts", list);
             }
 
-            return list;
+            var result = new List<IPost>();
+            result.AddRange(list);
+
+            return result;
         }
 
-        public async Task<PagedResult<Post>> GetPosts(
+        public async Task<PagedPostResult> GetPosts(
             string blogId,
             string category,
             bool includeUnpublished,
@@ -88,15 +92,19 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var posts = await GetPosts(blogId, includeUnpublished, cancellationToken);
+            //var posts = await GetPosts(blogId, includeUnpublished, cancellationToken);
+            var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
+
+
             var totalPosts = posts.Count;
 
             if (!string.IsNullOrEmpty(category))
             {
                 //var i = posts as IEnumerable<Post>;
 
-                posts = posts.Where(
-                    p => p.Categories.Any(
+                posts = posts.Where(p =>
+                    (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
+                     && p.Categories.Any(
                         c => string.Equals(c, category, StringComparison.OrdinalIgnoreCase))
                         ).ToList<Post>();
 
@@ -114,10 +122,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             }
 
-            
+            var data = new List<IPost>();
+            data.AddRange(posts);
 
-            var result = new PagedResult<Post>();
-            result.Data = posts;
+            var result = new PagedPostResult();
+            result.Data = data;
             result.TotalItems = totalPosts;
 
             return result;
@@ -130,20 +139,25 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var posts = await GetPosts(blogId, includeUnpublished, cancellationToken);
-            
+            //var posts = await GetPosts(blogId, includeUnpublished, cancellationToken);
+            var list = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
+
+            list = list.Where(p =>
+                      (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
+                      ).ToList<Post>();
+
             if (!string.IsNullOrEmpty(category))
             {
-                posts = posts.Where(
+                list = list.Where(
                     p => p.Categories.Any(
                         c => string.Equals(c, category, StringComparison.OrdinalIgnoreCase))
                         ).ToList<Post>();
             }
             
-            return posts.Count();
+            return list.Count();
         }
 
-        public async Task<List<Post>> GetRecentPosts(
+        public async Task<List<IPost>> GetRecentPosts(
             string blogId,
             int numberToGet,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -158,11 +172,14 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 .OrderByDescending(p => p.PubDate)
                 .Take(numberToGet).ToList<Post>();
 
-            return posts;
+            var result = new List<IPost>();
+            result.AddRange(posts);
+
+            return result;
 
         }
 
-        public async Task<PagedResult<Post>> GetPosts(
+        public async Task<PagedPostResult> GetPosts(
             string blogId,
             int year,
             int month = 0,
@@ -215,8 +232,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             }
 
-            var result = new PagedResult<Post>();
-            result.Data = posts;
+            var result = new PagedPostResult();
+
+            var data = new List<IPost>();
+            data.AddRange(posts);
+
+            result.Data = data;
             result.TotalItems = totalItems;
 
             return result;
@@ -270,7 +291,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         }
 
-        public async Task<Post> GetPost(
+        public async Task<IPost> GetPost(
             string blogId,
             string postId,
             CancellationToken cancellationToken = default(CancellationToken)

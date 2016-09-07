@@ -87,7 +87,7 @@ namespace cloudscribe.SimpleContent.Services
             return mapNodes;
         }
 
-        private async Task<string> ResolveUrl(Post post)
+        private async Task<string> ResolveUrl(IPost post)
         {
             if (string.IsNullOrWhiteSpace(post.Slug)) return string.Empty;
             var url = await blogService.ResolvePostUrl(post).ConfigureAwait(false);

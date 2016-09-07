@@ -1,0 +1,47 @@
+﻿namespace cloudscribe.SimpleContent.Models
+{
+    public interface IProjectSettings
+    {
+        bool AddBlogToPagesTree { get; set; }
+        bool BlogMenuLinksToNewestPost { get; set; }
+        string BlogPageNavComponentVisibility { get; set; }
+        int BlogPagePosition { get; set; }
+        string BlogPageText { get; set; }
+        string CdnUrl { get; set; }
+        string ChannelCategoriesCsv { get; set; }
+        string ChannelRating { get; set; }
+        int ChannelTimeToLive { get; set; }
+        string CommentNotificationEmail { get; set; }
+        string CopyrightNotice { get; set; }
+        int DaysToComment { get; set; }
+        string DefaultPageSlug { get; set; }
+        string Description { get; set; }
+        string EmailFromAddress { get; set; }
+        string Id { get; set; }
+        string Image { get; set; }
+        bool IncludePubDateInPostUrls { get; set; }
+        string LanguageCode { get; set; }
+        string LocalMediaVirtualPath { get; set; }
+        string ManagingEditorEmail { get; set; }
+        bool ModerateComments { get; set; }
+        int PostsPerPage { get; set; }
+        string PubDateFormat { get; set; }
+        string RecaptchaPrivateKey { get; set; }
+        string RecaptchaPublicKey { get; set; }
+        string RemoteFeedProcessorUseAgentFragment { get; set; }
+        string RemoteFeedUrl { get; set; }
+        bool ShowTitle { get; set; }
+        string SmtpPassword { get; set; }
+        int SmtpPort { get; set; }
+        string SmtpPreferredEncoding { get; set; }
+        bool SmtpRequiresAuth { get; set; }
+        string SmtpServer { get; set; }
+        string SmtpUser { get; set; }
+        bool SmtpUseSsl { get; set; }
+        string TimeZoneId { get; set; }
+        string Title { get; set; }
+        bool UseDefaultPageAsRootNode { get; set; }
+        bool UseMetaDescriptionInFeed { get; set; }
+        string WebmasterEmail { get; set; }
+    }
+}

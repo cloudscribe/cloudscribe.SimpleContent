@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-30
+// Last Modified:           2016-09-07
 // 
 
 namespace cloudscribe.SimpleContent.Models
 {
 
-    public class ProjectSettings
+    public class ProjectSettings : IProjectSettings
     {
         public ProjectSettings()
         {
@@ -91,6 +91,54 @@ namespace cloudscribe.SimpleContent.Models
         public bool SmtpRequiresAuth { get; set; } = false;
         public bool SmtpUseSsl { get; set; } = false;
 
+        public static ProjectSettings FromIProjectSettings(IProjectSettings project)
+        {
+            var p = new ProjectSettings();
+            p.AddBlogToPagesTree = project.AddBlogToPagesTree;
+            p.BlogMenuLinksToNewestPost = project.BlogMenuLinksToNewestPost;
+            p.BlogPageNavComponentVisibility = project.BlogPageNavComponentVisibility;
+            p.BlogPagePosition = project.BlogPagePosition;
+            p.BlogPageText = project.BlogPageText;
+            p.CdnUrl = project.CdnUrl;
+            p.ChannelCategoriesCsv = project.ChannelCategoriesCsv;
+            p.ChannelRating = project.ChannelRating;
+            p.ChannelTimeToLive = project.ChannelTimeToLive;
+            p.CommentNotificationEmail = project.CommentNotificationEmail;
+            p.CopyrightNotice = project.CopyrightNotice;
+            p.DaysToComment = project.DaysToComment;
+            p.DefaultPageSlug = project.DefaultPageSlug;
+            p.Description = project.Description;
+            p.EmailFromAddress = project.EmailFromAddress;
+            p.Id = project.Id;
+            p.Image = project.Image;
+            p.IncludePubDateInPostUrls = project.IncludePubDateInPostUrls;
+            p.LanguageCode = project.LanguageCode;
+            p.LocalMediaVirtualPath = project.LocalMediaVirtualPath;
+            p.ManagingEditorEmail = project.ManagingEditorEmail;
+            p.ModerateComments = project.ModerateComments;
+            p.PostsPerPage = project.PostsPerPage;
+            p.PubDateFormat = project.PubDateFormat;
+            p.RecaptchaPrivateKey = project.RecaptchaPrivateKey;
+            p.RecaptchaPublicKey = project.RecaptchaPublicKey;
+            p.RemoteFeedProcessorUseAgentFragment = project.RemoteFeedProcessorUseAgentFragment;
+            p.RemoteFeedUrl = project.RemoteFeedUrl;
+            p.ShowTitle = project.ShowTitle;
+            p.SmtpPassword = project.SmtpPassword;
+            p.SmtpPort = project.SmtpPort;
+            p.SmtpPreferredEncoding = project.SmtpPreferredEncoding;
+            p.SmtpRequiresAuth = project.SmtpRequiresAuth;
+            p.SmtpServer = project.SmtpServer;
+            p.SmtpUser = project.SmtpUser;
+            p.SmtpUseSsl = project.SmtpUseSsl;
+            p.TimeZoneId = project.TimeZoneId;
+            p.Title = project.Title;
+            p.UseDefaultPageAsRootNode = project.UseDefaultPageAsRootNode;
+            p.UseMetaDescriptionInFeed = project.UseMetaDescriptionInFeed;
+            p.WebmasterEmail = project.WebmasterEmail;
+            
+
+            return p;
+        }
 
     }
 }

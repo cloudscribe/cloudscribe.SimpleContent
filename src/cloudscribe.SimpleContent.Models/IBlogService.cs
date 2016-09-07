@@ -7,7 +7,7 @@ namespace cloudscribe.SimpleContent.Models
     public interface IBlogService
     {
         
-        Task<bool> CommentsAreOpen(Post post, bool userIsOwner);
+        Task<bool> CommentsAreOpen(IPost post, bool userIsOwner);
         string CreateSlug(string title);
         Task<bool> SlugIsAvailable(string slug);
         
@@ -20,9 +20,9 @@ namespace cloudscribe.SimpleContent.Models
             int day = 0,
             bool includeUnpublished = false
             );
-        Task<Post> GetPost(string postId);
+        Task<IPost> GetPost(string postId);
 
-        Task<Post> GetPost(
+        Task<IPost> GetPost(
             string projectId, 
             string postId,
             string userName,
@@ -30,23 +30,23 @@ namespace cloudscribe.SimpleContent.Models
             );
 
         Task<PostResult> GetPostBySlug(string slug);
-        Task<List<Post>> GetRecentPosts(int numberToGet);
+        Task<List<IPost>> GetRecentPosts(int numberToGet);
           
-        Task<List<Post>> GetPosts(bool includeUnpublished);
-        Task<PagedResult<Post>> GetPosts(string category, int pageNumber, bool includeUnpublished);
-        Task<string> ResolveBlogUrl(ProjectSettings blog);
+        Task<List<IPost>> GetPosts(bool includeUnpublished);
+        Task<PagedPostResult> GetPosts(string category, int pageNumber, bool includeUnpublished);
+        Task<string> ResolveBlogUrl(IProjectSettings blog);
         Task<string> ResolveMediaUrl(string fileName);
-        Task<string> ResolvePostUrl(Post post);
+        Task<string> ResolvePostUrl(IPost post);
         
         
-        Task<List<Post>> GetRecentPosts(
+        Task<List<IPost>> GetRecentPosts(
             string projectId,
             string userName,
             string password,
             int numberToGet
             );
 
-        Task<PagedResult<Post>> GetPosts(
+        Task<PagedPostResult> GetPosts(
             string projectId,
             int year,
             int month = 0,
@@ -74,14 +74,14 @@ namespace cloudscribe.SimpleContent.Models
             string userName,
             string password);
 
-        Task Create(Post post);
+        Task Create(IPost post);
 
-        Task Update(Post post);
+        Task Update(IPost post);
         Task Create(
             string projectId,
             string userName,
             string password,
-            Post post, 
+            IPost post, 
             bool publish
             );
 
@@ -89,7 +89,7 @@ namespace cloudscribe.SimpleContent.Models
             string projectId,
             string userName,
             string password,
-            Post post,
+            IPost post,
             bool publish
             );
 
@@ -100,6 +100,6 @@ namespace cloudscribe.SimpleContent.Models
             byte[] bytes, 
             string fileName);
 
-        Task HandlePubDateAboutToChange(Post post, DateTime newPubDate);
+        Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate);
     }
 }

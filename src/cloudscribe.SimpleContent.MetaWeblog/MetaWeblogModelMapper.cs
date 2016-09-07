@@ -47,7 +47,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         }
 
         public PostStruct GetStructFromPost(
-            Post post, 
+            IPost post, 
             string postUrl,
             bool commentsOpen
             )

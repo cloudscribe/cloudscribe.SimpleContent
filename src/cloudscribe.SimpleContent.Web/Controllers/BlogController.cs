@@ -403,7 +403,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower()).ToList();
             }
 
-            Post post = null;
+            IPost post = null;
             if (!string.IsNullOrEmpty(model.Id))
             {
                 post = await blogService.GetPost(model.Id);

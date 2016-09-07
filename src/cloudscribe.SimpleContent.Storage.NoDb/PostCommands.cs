@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-08-29
+// Last Modified:           2016-09-07
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -35,7 +35,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         public async Task HandlePubDateAboutToChange(
             string projectId,
-            Post post, 
+            IPost post, 
             DateTime newPubDate,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -49,37 +49,42 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             // because with the filesystem storage we are storing posts in a year/month folder
             // if the year or month changes we need to delete the old file and save the updated post to the
             // new year/month folder
+            var p = Post.FromIPost(post);
 
-            await commands.DeleteAsync(projectId, post.Id).ConfigureAwait(false);
+            await commands.DeleteAsync(projectId, p.Id).ConfigureAwait(false);
             post.PubDate = newPubDate;
-            await commands.CreateAsync(projectId, post.Id, post).ConfigureAwait(false);
+            await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
         }
 
         public async Task Create(
             string projectId,
-            Post post,
+            IPost post,
             CancellationToken cancellationToken = default(CancellationToken)
            )
         {
-            post.LastModified = DateTime.UtcNow;
+            var p = Post.FromIPost(post);
 
-            if (string.IsNullOrEmpty(post.Id)) { post.Id = Guid.NewGuid().ToString(); }
+            p.LastModified = DateTime.UtcNow;
+
+            if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
             
-            await commands.CreateAsync(projectId, post.Id, post).ConfigureAwait(false);
+            await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
             
         }
 
         public async Task Update(
             string projectId,
-            Post post,
+            IPost post,
             CancellationToken cancellationToken = default(CancellationToken)
            )
         {
-            post.LastModified = DateTime.UtcNow;
+            var p = Post.FromIPost(post);
+
+            p.LastModified = DateTime.UtcNow;
 
             //if (string.IsNullOrEmpty(post.Id)) { post.Id = Guid.NewGuid().ToString(); }
             
-            await commands.UpdateAsync(projectId, post.Id, post).ConfigureAwait(false);
+            await commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
             
         }
 

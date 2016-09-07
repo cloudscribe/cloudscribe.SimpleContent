@@ -36,7 +36,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         /// <param name="includeUnpublished"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<List<Post>> GetPosts(
+        public async Task<List<IPost>> GetPosts(
             string blogId,
             bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -51,12 +51,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var list = await query
                 .AsNoTracking()
-                .ToListAsync<Post>();
+                .ToListAsync<IPost>();
             
             return list;
         }
 
-        public async Task<PagedResult<Post>> GetPosts(
+        public async Task<PagedPostResult> GetPosts(
             string blogId,
             string category,
             bool includeUnpublished,
@@ -71,7 +71,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             int offset = (pageSize * pageNumber) - pageSize;
             var currentTime = DateTime.UtcNow;
 
-            var result = new PagedResult<Post>();
+            var result = new PagedPostResult();
 
             var query = dbContext.Posts
                 .Include(p => p.Comments)
@@ -106,11 +106,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 ;
 
             
-            List<Post> posts = await query
+            var posts = await query
                 .AsNoTracking()
                 .Skip(offset)
                 .Take(pageSize)
-                .ToListAsync<Post>(cancellationToken)
+                .ToListAsync<IPost>(cancellationToken)
                 .ConfigureAwait(false);
 
             int totalPosts = await GetCount(blogId, category, includeUnpublished, cancellationToken).ConfigureAwait(false);
@@ -189,7 +189,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             return count;
         }
 
-        public async Task<List<Post>> GetRecentPosts(
+        public async Task<List<IPost>> GetRecentPosts(
             string blogId,
             int numberToGet,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -209,12 +209,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             return await query
                 .AsNoTracking()
                 .Take(numberToGet)
-                .ToListAsync<Post>()
+                .ToListAsync<IPost>()
                 .ConfigureAwait(false);
 
         }
 
-        public async Task<PagedResult<Post>> GetPosts(
+        public async Task<PagedPostResult> GetPosts(
             string blogId,
             int year,
             int month = 0,
@@ -291,9 +291,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 })
                 .Skip(offset)
                 .Take(pageSize)
-                .ToListAsync<Post>();
+                .ToListAsync<IPost>();
 
-            var result = new PagedResult<Post>();
+            var result = new PagedPostResult();
             result.Data = posts;
             result.TotalItems = await GetCount(blogId, year, month, day, includeUnpublished, cancellationToken).ConfigureAwait(false);
 
@@ -350,7 +350,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         }
 
 
-        public async Task<Post> GetPost(
+        public async Task<IPost> GetPost(
             string blogId,
             string postId,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -368,8 +368,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                          // maybe better perf to not do this and instead just select post
                          // could iterate through the list before returning it to update the categores? or is the shado property only available in the query?
                          Id = x.Id,
-                         Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' },
-                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
+                         //Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' },
+                        //StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
                          Author = x.Author,
                          BlogId = x.BlogId,
                          Content = x.Content,
@@ -413,8 +413,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                          // maybe better perf to not do this and instead just select post
                          // could iterate through the list before returning it to update the categores? or is the shado property only available in the query?
                          Id = x.Id,
-                         Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' },
-                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
+                         //Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' },
+                        //StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
                          Author = x.Author,
                          BlogId = x.BlogId,
                          Content = x.Content,

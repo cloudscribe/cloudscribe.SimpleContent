@@ -10,7 +10,7 @@ namespace cloudscribe.SimpleContent.Services
     {
         public Task SendCommentNotificationEmailAsync(
             ProjectSettings project, 
-            Post post, 
+            IPost post, 
             Comment comment, 
             string postUrl, 
             string approveUrl, 
