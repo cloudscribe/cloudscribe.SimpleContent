@@ -345,7 +345,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             entity.Property(p => p.ContentId)
             .HasMaxLength(36)
-            .IsRequired()
+            //.IsRequired()
             ;
             entity.HasIndex(p => p.ContentId);
 

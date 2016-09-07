@@ -62,6 +62,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 dbContext.Posts.Update(post);
             }
 
+            dbContext.Entry(post).Property("CategoryCsv").CurrentValue = string.Join(",", post.Categories);
+
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
 
