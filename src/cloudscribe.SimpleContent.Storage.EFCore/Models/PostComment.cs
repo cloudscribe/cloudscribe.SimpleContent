@@ -1,9 +1,21 @@
-﻿using System;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Author:					Joe Audette
+// Created:					2016-09-08
+// Last Modified:			2016-09-08
+// 
 
-namespace cloudscribe.SimpleContent.Models
+using cloudscribe.SimpleContent.Models;
+using System;
+
+namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 {
-    public class Comment : IComment
+    public class PostComment : IComment
     {
+        public PostComment()
+        {
+
+        }
 
         public string Id { get; set; }
         public string ContentId { get; set; }
@@ -19,11 +31,9 @@ namespace cloudscribe.SimpleContent.Models
         public bool IsAdmin { get; set; }
         public bool IsApproved { get; set; }
 
-        //public string GravatarUrl { get; set; }
-
-        public static Comment FromIComment(IComment comment)
+        public static PostComment FromIComment(IComment comment)
         {
-            var c = new Comment();
+            var c = new PostComment();
             c.Author = comment.Author;
             c.Content = comment.Content;
             c.ContentId = comment.ContentId;
@@ -40,7 +50,6 @@ namespace cloudscribe.SimpleContent.Models
             return c;
         }
 
-    }
 
-    
+    }
 }
