@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-06
+// Last Modified:			2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,7 +24,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         private SimpleContentDbContext dbContext;
 
-        public async Task<List<Page>> GetAllPages(
+        public async Task<List<IPage>> GetAllPages(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             )
@@ -37,14 +37,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var items = await query
                 .AsNoTracking()
-                .ToListAsync<Page>(cancellationToken)
+                .ToListAsync<IPage>(cancellationToken)
                 .ConfigureAwait(false);
 
             return items;
 
         }
 
-        public async Task<Page> GetPage(
+        public async Task<IPage> GetPage(
             string projectId,
             string pageId,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -61,7 +61,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         }
 
-        public async Task<List<Page>> GetRootPages(
+        public async Task<List<IPage>> GetRootPages(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             )
@@ -76,14 +76,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 && (p.ParentId == "0" || p.ParentId == null || p.ParentId == "")
                 )
                 .OrderBy(p => p.PageOrder)
-                .ToListAsync<Page>(cancellationToken)
+                .ToListAsync<IPage>(cancellationToken)
                 
                 .ConfigureAwait(false)
                 ;
 
         }
 
-        public async Task<List<Page>> GetChildPages(
+        public async Task<List<IPage>> GetChildPages(
             string projectId,
             string pageId,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -98,13 +98,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 p.ParentId == pageId && p.ProjectId == projectId
                 )
                 .OrderBy(p => p.PageOrder)
-                .ToListAsync<Page>(cancellationToken)
+                .ToListAsync<IPage>(cancellationToken)
                 .ConfigureAwait(false)
                 ;
 
         }
 
-        public async Task<Page> GetPageBySlug(
+        public async Task<IPage> GetPageBySlug(
             string projectId,
             string slug,
             CancellationToken cancellationToken = default(CancellationToken)

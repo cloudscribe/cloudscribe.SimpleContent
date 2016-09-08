@@ -9,7 +9,7 @@ namespace cloudscribe.SimpleContent.Services
     public class ProjectEmailServiceFake : IProjectEmailService
     {
         public Task SendCommentNotificationEmailAsync(
-            ProjectSettings project, 
+            IProjectSettings project, 
             IPost post, 
             Comment comment, 
             string postUrl, 

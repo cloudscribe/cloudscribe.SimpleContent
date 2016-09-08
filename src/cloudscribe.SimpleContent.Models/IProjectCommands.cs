@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-08-04
-// Last Modified:           2016-08-04
+// Last Modified:           2016-09-08
 // 
 
 using System.Threading;
@@ -14,13 +14,13 @@ namespace cloudscribe.SimpleContent.Models
     {
         Task Create(
             string projectId,
-            ProjectSettings project,
+            IProjectSettings project,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
         Task Update(
             string projectId,
-            ProjectSettings project,
+            IProjectSettings project,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 

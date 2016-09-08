@@ -6,11 +6,11 @@ namespace cloudscribe.SimpleContent.Models
 {
     public interface IProjectService
     {
-        Task Create(ProjectSettings project);
-        Task Update(ProjectSettings project);
-        Task<ProjectSettings> GetCurrentProjectSettings();
-        Task<ProjectSettings> GetProjectSettings(string projectId);
-        Task<List<ProjectSettings>> GetUserProjects(string userName, string password);
+        Task Create(IProjectSettings project);
+        Task Update(IProjectSettings project);
+        Task<IProjectSettings> GetCurrentProjectSettings();
+        Task<IProjectSettings> GetProjectSettings(string projectId);
+        Task<List<IProjectSettings>> GetUserProjects(string userName, string password);
 
         void ClearNavigationCache();
     }

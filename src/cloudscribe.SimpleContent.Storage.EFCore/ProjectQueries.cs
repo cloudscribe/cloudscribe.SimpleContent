@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-06
+// Last Modified:			2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,7 +24,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         private SimpleContentDbContext dbContext;
 
-        public async Task<ProjectSettings> GetProjectSettings(
+        public async Task<IProjectSettings> GetProjectSettings(
             string projectId,
             CancellationToken cancellationToken
             )
@@ -38,7 +38,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .ConfigureAwait(false);
         }
 
-        public Task<List<ProjectSettings>> GetProjectSettingsByUser(
+        public Task<List<IProjectSettings>> GetProjectSettingsByUser(
             string userName,
             CancellationToken cancellationToken
             )
@@ -46,7 +46,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            var result = new List<ProjectSettings>();
+            var result = new List<IProjectSettings>();
 
             //TODO: not sure we can implement this need to see where it is used and try to rafactor to not need it
             // looks like this is called from ProjecTService but only as a secondary query

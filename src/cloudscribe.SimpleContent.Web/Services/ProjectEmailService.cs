@@ -29,7 +29,7 @@ namespace cloudscribe.SimpleContent.Services
         private ILogger log;
 
         public async Task SendCommentNotificationEmailAsync(
-            ProjectSettings project,
+            IProjectSettings project,
             IPost post,
             Comment comment,
             string postUrl,
@@ -97,7 +97,7 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        private SmtpOptions GetSmptOptions(ProjectSettings project)
+        private SmtpOptions GetSmptOptions(IProjectSettings project)
         {
             if (string.IsNullOrWhiteSpace(project.SmtpServer)) { return null; }
 

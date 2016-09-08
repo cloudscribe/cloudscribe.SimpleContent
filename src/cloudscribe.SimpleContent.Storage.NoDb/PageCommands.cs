@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-08-01
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -35,29 +35,32 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         public async Task Create(
             string projectId,
-            Page page,
+            IPage page,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
-            page.LastModified = DateTime.UtcNow;
+
+            var p = Page.FromIPage(page);
+            p.LastModified = DateTime.UtcNow;
             
-            page.PubDate = DateTime.UtcNow;
+            p.PubDate = DateTime.UtcNow;
   
-            await commands.CreateAsync(projectId, page.Id, page).ConfigureAwait(false);
+            await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
            
         }
 
         public async Task Update(
             string projectId,
-            Page page,
+            IPage page,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             //if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
-            page.LastModified = DateTime.UtcNow;
+            var p = Page.FromIPage(page);
+            p.LastModified = DateTime.UtcNow;
             
-            await commands.UpdateAsync(projectId, page.Id, page).ConfigureAwait(false);
+            await commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
             
         }
 

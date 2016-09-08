@@ -62,7 +62,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string NextPostUrl { get; set; } = string.Empty;
 
-        public string FilterHtml(Post p)
+        public string FilterHtml(IPost p)
         {
             return filter.FilterHtml(
                 p.Content, 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-30
+// Last Modified:           2016-09-07
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -61,7 +61,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             var isEditing = canEdit && (mode == "edit");
             if(!isNew && string.IsNullOrEmpty(slug)) { slug = projectSettings.DefaultPageSlug; }
 
-            Page page = null;
+            IPage page = null;
             if(!string.IsNullOrEmpty(slug))
             {
                 page = await pageService.GetPageBySlug(projectSettings.Id, slug);
@@ -216,7 +216,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             //}
 
 
-            Page page = null;
+            IPage page = null;
             if (!string.IsNullOrEmpty(model.Id))
             {
                 page = await pageService.GetPage(model.Id);

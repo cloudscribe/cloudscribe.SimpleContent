@@ -32,7 +32,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
         private IProjectQueries projectQueries;
         private IProjectCommands projectCommands;
 
-        public async Task<ProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
+        public async Task<IProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {
             var settings = await projectQueries.GetProjectSettings(currentSite.Id.ToString(), cancellationToken).ConfigureAwait(false);
 

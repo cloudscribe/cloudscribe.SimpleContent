@@ -52,7 +52,7 @@ namespace cloudscribe.SimpleContent.Services
         private IPostQueries postQueries;
         private IPostCommands postCommands;
         private IMediaProcessor mediaProcessor;
-        private ProjectSettings settings = null;
+        private IProjectSettings settings = null;
         private HtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
 

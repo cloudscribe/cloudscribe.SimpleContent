@@ -2,19 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-08-15
+// Last Modified:           2016-09-08
 // 
 
-using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -43,7 +39,7 @@ namespace cloudscribe.SimpleContent.Services
         private IProjectQueries projectQueries;
         private IProjectCommands projectCommands;
         private IProjectSettingsResolver settingsResolver;
-        private ProjectSettings currentSettings = null;
+        private IProjectSettings currentSettings = null;
         private IMemoryCache cache;
 
         public void ClearNavigationCache()
@@ -77,29 +73,29 @@ namespace cloudscribe.SimpleContent.Services
             return false;
         }
 
-        public async Task Create(ProjectSettings project)
+        public async Task Create(IProjectSettings project)
         {
             await projectCommands.Create(project.Id, project, CancellationToken.None).ConfigureAwait(false);
         }
 
-        public async Task Update(ProjectSettings project)
+        public async Task Update(IProjectSettings project)
         {
             await projectCommands.Update(project.Id, project, CancellationToken.None).ConfigureAwait(false);
         }
 
-        public async Task<ProjectSettings> GetCurrentProjectSettings()
+        public async Task<IProjectSettings> GetCurrentProjectSettings()
         {
             await EnsureSettings().ConfigureAwait(false);
             return currentSettings;
         }
 
-        public async Task<ProjectSettings> GetProjectSettings(string projectId)
+        public async Task<IProjectSettings> GetProjectSettings(string projectId)
         {
             
             return await projectQueries.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<ProjectSettings>> GetUserProjects(string userName, string password)
+        public async Task<List<IProjectSettings>> GetUserProjects(string userName, string password)
         {
             var permission = await security.ValidatePermissions(
                 string.Empty,
@@ -108,7 +104,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken
                 ).ConfigureAwait(false);
 
-            var result = new List<ProjectSettings>(); //empty
+            var result = new List<IProjectSettings>(); //empty
 
             if (!permission.CanEditPosts)
             {

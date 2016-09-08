@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-08-02
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -33,7 +33,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         private List<ProjectSettings> configProjects;
 
-        public async Task<ProjectSettings> GetProjectSettings(
+        public async Task<IProjectSettings> GetProjectSettings(
             string projectId,
             CancellationToken cancellationToken
             )
@@ -45,13 +45,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             return result;
         }
 
-        public async Task<List<ProjectSettings>> GetProjectSettingsByUser(
+        public async Task<List<IProjectSettings>> GetProjectSettingsByUser(
             string userName,
             CancellationToken cancellationToken
             )
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var result = new List<ProjectSettings>();
+            var result = new List<IProjectSettings>();
             var defaultProject = await GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
             if(defaultProject != null)
             {

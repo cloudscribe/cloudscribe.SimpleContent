@@ -17,37 +17,37 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<Page>> GetAllPages(string blogId)
+        public Task<List<IPage>> GetAllPages(string blogId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Page>> GetAllPages(string projectId, string userName, string password)
+        public Task<List<IPage>> GetAllPages(string projectId, string userName, string password)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Page>> GetChildPages(string pageId)
+        public Task<List<IPage>> GetChildPages(string pageId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Page> GetPage(string pageId)
+        public Task<IPage> GetPage(string pageId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Page> GetPage(string projectId, string pageId, string userName, string password)
+        public Task<IPage> GetPage(string projectId, string pageId, string userName, string password)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Page> GetPageBySlug(string blogId, string slug)
+        public Task<IPage> GetPageBySlug(string blogId, string slug)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Page>> GetRootPages()
+        public Task<List<IPage>> GetRootPages()
         {
             throw new NotImplementedException();
         }
@@ -62,27 +62,27 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<string> ResolvePageUrl(Page page)
+        public Task<string> ResolvePageUrl(IPage page)
         {
             throw new NotImplementedException();
         }
 
-        public Task Create(Page page, bool publish)
+        public Task Create(IPage page, bool publish)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(Page page, bool publish)
+        public Task Update(IPage page, bool publish)
         {
             throw new NotImplementedException();
         }
 
-        public Task Create(string projectId, string userName, string password, Page page, bool publish)
+        public Task Create(string projectId, string userName, string password, IPage page, bool publish)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(string projectId, string userName, string password, Page page, bool publish)
+        public Task Update(string projectId, string userName, string password, IPage page, bool publish)
         {
             throw new NotImplementedException();
         }

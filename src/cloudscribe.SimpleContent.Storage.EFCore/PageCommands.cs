@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-06
+// Last Modified:			2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -25,20 +25,22 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         public async Task Create(
             string projectId,
-            Page page,
+            IPage page,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             if (page == null) throw new ArgumentException("page must not be null");
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
 
-            if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
+            var p = Page.FromIPage(page);
 
-            if (string.IsNullOrEmpty(page.ProjectId)) page.ProjectId = projectId;
-            page.LastModified = DateTime.UtcNow;
-            page.PubDate = DateTime.UtcNow;
+            if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
+
+            if (string.IsNullOrEmpty(p.ProjectId)) p.ProjectId = projectId;
+            p.LastModified = DateTime.UtcNow;
+            p.PubDate = DateTime.UtcNow;
             
-            dbContext.Pages.Add(page);
+            dbContext.Pages.Add(p);
 
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -47,20 +49,21 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         public async Task Update(
             string projectId,
-            Page page,
+            IPage page,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             if (page == null) throw new ArgumentException("page must not be null");
             if (string.IsNullOrEmpty(page.Id)) throw new ArgumentException("can only update an existing page with a populated Id");
 
-                //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
+            //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
+            var p = Page.FromIPage(page);
 
-            page.LastModified = DateTime.UtcNow;
-            bool tracking = dbContext.ChangeTracker.Entries<Page>().Any(x => x.Entity.Id == page.Id);
+            p.LastModified = DateTime.UtcNow;
+            bool tracking = dbContext.ChangeTracker.Entries<Page>().Any(x => x.Entity.Id == p.Id);
             if (!tracking)
             {
-                dbContext.Pages.Update(page);
+                dbContext.Pages.Update(p);
             }
 
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)

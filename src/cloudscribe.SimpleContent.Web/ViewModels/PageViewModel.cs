@@ -2,17 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-06-07
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.Web.Pagination;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Common;
+using System;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -26,8 +22,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         private HtmlProcessor filter;
 
-        public ProjectSettings ProjectSettings { get; set; }
-        public Page CurrentPage { get; set; } = null;
+        public IProjectSettings ProjectSettings { get; set; }
+        public IPage CurrentPage { get; set; } = null;
         public EditorModel EditorSettings { get; set; } = null;
 
         public bool CanEdit { get; set; } = false;
@@ -54,7 +50,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return localTime.ToString();
         }
 
-        public string FilterHtml(Page p)
+        public string FilterHtml(IPage p)
         {
             return filter.FilterHtml(
                 p.Content,
