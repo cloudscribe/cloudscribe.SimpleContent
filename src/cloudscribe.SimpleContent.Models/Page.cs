@@ -8,7 +8,7 @@ namespace cloudscribe.SimpleContent.Models
         public Page()
         {
             Categories = new List<string>();
-            Comments = new List<Comment>();
+            Comments = new List<IComment>();
         }
 
         public string Id { get; set; } = string.Empty;
@@ -40,7 +40,7 @@ namespace cloudscribe.SimpleContent.Models
         public string ViewRoles { get; set; } = string.Empty;
 
         public List<string> Categories { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<IComment> Comments { get; set; }
 
         public bool ShowHeading { get; set; } = true;
         public bool ShowPubDate { get; set; } = false;

@@ -7,7 +7,7 @@ namespace cloudscribe.SimpleContent.Models
     {
         string Author { get; set; }
         List<string> Categories { get; set; }
-        List<Comment> Comments { get; set; }
+        List<IComment> Comments { get; set; }
         string Content { get; set; }
         string Id { get; set; }
         bool IsPublished { get; set; }

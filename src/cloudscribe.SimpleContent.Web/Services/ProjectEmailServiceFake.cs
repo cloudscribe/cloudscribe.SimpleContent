@@ -1,7 +1,4 @@
 ﻿using cloudscribe.SimpleContent.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Services
@@ -11,7 +8,7 @@ namespace cloudscribe.SimpleContent.Services
         public Task SendCommentNotificationEmailAsync(
             IProjectSettings project, 
             IPost post, 
-            Comment comment, 
+            IComment comment, 
             string postUrl, 
             string approveUrl, 
             string deleteUrl)

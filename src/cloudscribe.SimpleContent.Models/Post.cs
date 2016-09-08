@@ -8,7 +8,7 @@ namespace cloudscribe.SimpleContent.Models
         public Post()
         {
             Categories = new List<string>();
-            Comments = new List<Comment>();
+            Comments = new List<IComment>();
         }
 
         public string Id { get; set; } 
@@ -32,7 +32,7 @@ namespace cloudscribe.SimpleContent.Models
         public bool IsPublished { get; set; }
         
         public List<string> Categories { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<IComment> Comments { get; set; }
 
         public static Post FromIPost(IPost post)
         {

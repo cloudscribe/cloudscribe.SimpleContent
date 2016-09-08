@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public class Comment
+    public class Comment : IComment
     {
 
         public string Id { get; set; }

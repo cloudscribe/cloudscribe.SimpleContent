@@ -53,7 +53,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         //public int ApprovedCommentCount { get; set; } = 0;
         //public bool CommentsRequireApproval { get; set; } = true;
 
-        public Comment TmpComment { get; set; } = null;
+        public IComment TmpComment { get; set; } = null;
         public IPost TmpPost { get; set; } = null;
         public ITimeZoneHelper TimeZoneHelper { get; set; }
         public string TimeZoneId { get; set; } = "GMT";
@@ -70,7 +70,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
                 ProjectSettings.LocalMediaVirtualPath);
         }
 
-        public string FilterComment(Comment c)
+        public string FilterComment(IComment c)
         {
             return filter.FilterCommentLinks(c.Content);
         }
