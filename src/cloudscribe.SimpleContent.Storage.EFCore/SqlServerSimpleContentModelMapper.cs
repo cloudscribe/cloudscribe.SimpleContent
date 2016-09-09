@@ -6,6 +6,7 @@
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -192,7 +193,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         }
 
-        public void Map(EntityTypeBuilder<Post> entity)
+        public void Map(EntityTypeBuilder<PostEntity> entity)
         {
             entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PostTableName);
 
@@ -235,19 +236,100 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             entity.Ignore(p => p.Categories);
 
-            //entity.Ignore(p => p.Comments);
+            entity.Property(p => p.CategoriesCsv)
+            .HasMaxLength(500)
+            ;
+
+            entity.Ignore(p => p.Comments);
+
             // will this create a shadow foriegn key?
-            entity.HasMany(p => p.Comments)
+            entity.HasMany(p => p.PostComments)
                 .WithOne()
                
             ;
 
             // a shadow property to persist the categories/tags as a csv
-            entity.Property<string>("CategoryCsv");
+            //entity.Property<string>("CategoryCsv");
 
         }
 
-        public void Map(EntityTypeBuilder<Page> entity)
+        public void Map(EntityTypeBuilder<PostComment> entity)
+        {
+            entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
+
+            //entity.HasDiscriminator<string>("comment_type")
+            //    .HasValue<Comment>("comment_base")
+            //    .HasValue<PageComment>("comment_page");
+
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.Id)
+            .HasMaxLength(36)
+            ;
+
+            entity.Ignore(p => p.ContentId); //mapped from postid
+
+            entity.Property(p => p.PostEntityId)
+            .HasMaxLength(36)
+            //.IsRequired()
+            ;
+            entity.HasIndex(p => p.PostEntityId);
+
+            entity.Property(p => p.ProjectId)
+            .HasMaxLength(36)
+            .IsRequired()
+            ;
+            entity.HasIndex(p => p.ProjectId);
+
+            entity.Property(p => p.Author)
+           .HasMaxLength(255)
+           ;
+
+            entity.Property(p => p.Email)
+           .HasMaxLength(100)
+           ;
+
+            entity.Property(p => p.Website)
+           .HasMaxLength(255)
+           ;
+
+            entity.Property(p => p.Ip)
+           .HasMaxLength(100)
+           ;
+
+            entity.Property(p => p.UserAgent)
+           .HasMaxLength(255)
+           ;
+
+        }
+
+        public void Map(EntityTypeBuilder<PostCategory> entity)
+        {
+            entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PostCategoryTableName);
+
+            entity.HasKey(p => new { p.Value, p.PostEntityId });
+
+            entity.Property(p => p.Value)
+            .HasMaxLength(50)
+            .IsRequired()
+            ;
+
+            entity.HasIndex(p => p.Value);
+
+            entity.Property(p => p.PostEntityId)
+            .HasMaxLength(36)
+            .IsRequired()
+            ;
+            entity.HasIndex(p => p.PostEntityId);
+
+            entity.Property(p => p.ProjectId)
+            .HasMaxLength(36)
+            .IsRequired()
+            ;
+            entity.HasIndex(p => p.ProjectId);
+            
+        }
+
+        public void Map(EntityTypeBuilder<PageEntity> entity)
         {
             entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageTableName);
 
@@ -266,6 +348,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             .HasMaxLength(255)
             .IsRequired()
             ;
+
+            entity.Property(p => p.ParentId)
+            .HasMaxLength(36)
+            ;
+            entity.HasIndex(p => p.ParentId);
 
             entity.Property(p => p.ParentSlug)
             .HasMaxLength(255)
@@ -323,16 +410,23 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             entity.Ignore(p => p.Categories);
 
+            entity.Property(p => p.CategoriesCsv)
+            .HasMaxLength(500)
+            ;
+
             entity.Ignore(p => p.Comments);
 
+            entity.HasMany(p => p.PageComments)
+                .WithOne();
+
             // a shadow property to persist the categories/tags as a csv
-            entity.Property<string>("CategoryCsv");
+            //entity.Property<string>("CategoryCsv");
 
         }
 
-        public void Map(EntityTypeBuilder<Comment> entity)
+        public void Map(EntityTypeBuilder<PageComment> entity)
         {
-            entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.CommentTableName);
+            entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
 
             //entity.HasDiscriminator<string>("comment_type")
             //    .HasValue<Comment>("comment_base")
@@ -343,11 +437,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             .HasMaxLength(36)
             ;
 
-            entity.Property(p => p.ContentId)
+            entity.Ignore(p => p.ContentId); //mapped from postid
+
+            entity.Property(p => p.PageEntityId)
             .HasMaxLength(36)
             //.IsRequired()
             ;
-            entity.HasIndex(p => p.ContentId);
+            entity.HasIndex(p => p.PageEntityId);
 
             entity.Property(p => p.ProjectId)
             .HasMaxLength(36)
@@ -377,24 +473,24 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         }
 
-        public void Map(EntityTypeBuilder<TagItem> entity)
+        public void Map(EntityTypeBuilder<PageCategory> entity)
         {
-            entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.TagItemTableName);
+            entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageCategoryTableName);
 
-            entity.HasKey(p => new { p.TagValue, p.ContentId });
+            entity.HasKey(p => new { p.Value, p.PageEntityId });
 
-            entity.Property(p => p.TagValue)
+            entity.Property(p => p.Value)
             .HasMaxLength(50)
             .IsRequired()
             ;
 
-            entity.HasIndex(p => p.TagValue);
+            entity.HasIndex(p => p.Value);
 
-            entity.Property(p => p.ContentId)
+            entity.Property(p => p.PageEntityId)
             .HasMaxLength(36)
             .IsRequired()
             ;
-            entity.HasIndex(p => p.ContentId);
+            entity.HasIndex(p => p.PageEntityId);
 
             entity.Property(p => p.ProjectId)
             .HasMaxLength(36)
@@ -402,14 +498,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             ;
             entity.HasIndex(p => p.ProjectId);
 
-            entity.Property(p => p.ContentType)
-            .HasMaxLength(20)
-            .IsRequired()
-            ;
-            
-            entity.HasIndex(p => p.ContentType);
-
         }
+
 
     }
 }

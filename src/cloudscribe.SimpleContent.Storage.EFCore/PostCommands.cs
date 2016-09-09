@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-07
+// Last Modified:			2016-09-09
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             if (post == null) throw new ArgumentException("post must not be null");
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
 
-            var p = Post.FromIPost(post);
+            var p = PostEntity.FromIPost(post);
 
             if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
 
@@ -40,6 +41,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             post.LastModified = DateTime.UtcNow;
             
             dbContext.Posts.Add(p);
+
+            //TODO: need to add PostCategorys
 
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -56,16 +59,17 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             if (string.IsNullOrEmpty(post.Id)) throw new ArgumentException("can only update an existing post with a populated Id");
 
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
-            var p = Post.FromIPost(post);
+            var p = PostEntity.FromIPost(post);
 
             p.LastModified = DateTime.UtcNow;
-            bool tracking = dbContext.ChangeTracker.Entries<Post>().Any(x => x.Entity.Id == p.Id);
+            bool tracking = dbContext.ChangeTracker.Entries<PostEntity>().Any(x => x.Entity.Id == p.Id);
             if (!tracking)
             {
                 dbContext.Posts.Update(p);
             }
 
-            dbContext.Entry(p).Property("CategoryCsv").CurrentValue = string.Join(",", post.Categories);
+            //TODO: need to delete and re add PostCategorys
+
 
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);

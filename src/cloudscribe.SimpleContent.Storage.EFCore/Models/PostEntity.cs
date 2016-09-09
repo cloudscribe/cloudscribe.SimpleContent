@@ -9,6 +9,7 @@
 using cloudscribe.SimpleContent.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 {
@@ -16,7 +17,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
     {
         public PostEntity()
         {
+            categories = new List<string>();
+            postComments = new List<PostComment>();
 
+            comments = new List<IComment>();
         }
 
         public string Id { get; set; }
@@ -39,8 +43,58 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public bool IsPublished { get; set; }
 
-        public List<string> Categories { get; set; }
-        public List<IComment> Comments { get; set; }
+        private List<string> categories;
+        public List<string> Categories
+        {
+            get {
+                //if(categories.Count == 0)
+                var list = CategoriesCsv.Split(new char[] { ',' },
+                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
+
+                categories.AddRange(list.Where(p2 =>
+                  categories.All(p1 => p1 != p2)));
+
+                return categories;
+            }
+            set {
+                categories = value;
+                CategoriesCsv = string.Join(",", categories);
+            }
+        }
+
+        public string CategoriesCsv { get; set; } = string.Empty;
+
+        //public List<PostCategory> Cats { get; set; }
+
+        private List<IComment> comments;
+        public List<IComment> Comments
+        {
+            get {
+                if(comments.Count == 0)
+                {
+                    comments.AddRange(PostComments);
+                }
+                return comments;
+            }
+            set {
+                comments = value;
+                if(comments.Count > 0)
+                {
+                    postComments.Clear();
+                    foreach(var c in comments)
+                    {
+                        postComments.Add(PostComment.FromIComment(c));
+                    }
+                }
+            }
+        }
+
+        private List<PostComment> postComments;
+        public List<PostComment> PostComments
+        {
+            get { return postComments; }
+            set { postComments = value; }
+        }
 
         public static PostEntity FromIPost(IPost post)
         {

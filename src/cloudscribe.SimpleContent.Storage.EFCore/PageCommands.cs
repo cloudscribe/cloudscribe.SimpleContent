@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-08
+// Last Modified:			2016-09-09
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             if (page == null) throw new ArgumentException("page must not be null");
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
 
-            var p = Page.FromIPage(page);
+            var p = PageEntity.FromIPage(page);
 
             if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
 
@@ -57,10 +58,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             if (string.IsNullOrEmpty(page.Id)) throw new ArgumentException("can only update an existing page with a populated Id");
 
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
-            var p = Page.FromIPage(page);
+            var p = PageEntity.FromIPage(page);
 
             p.LastModified = DateTime.UtcNow;
-            bool tracking = dbContext.ChangeTracker.Entries<Page>().Any(x => x.Entity.Id == p.Id);
+            bool tracking = dbContext.ChangeTracker.Entries<PageEntity>().Any(x => x.Entity.Id == p.Id);
             if (!tracking)
             {
                 dbContext.Pages.Update(p);

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2016-09-08
+// Last Modified:			2016-09-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -18,7 +18,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         }
 
         public string Id { get; set; }
-        public string ContentId { get; set; }
+        public string ContentId
+        {
+            get { return postEntityId; }
+            set { postEntityId = value; }
+        }
+
+        // not part of IComment
+        private string postEntityId;
+        public string PostEntityId
+        {
+            get { return postEntityId; }
+            set { postEntityId = value; }
+        }
 
         public string ProjectId { get; set; }
         public string Author { get; set; }
