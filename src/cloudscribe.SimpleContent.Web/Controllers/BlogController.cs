@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-03
+// Last Modified:           2016-09-08
 // 
 
 
@@ -403,7 +403,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower()).ToList();
             }
 
-            Post post = null;
+            IPost post = null;
             if (!string.IsNullOrEmpty(model.Id))
             {
                 post = await blogService.GetPost(model.Id);
@@ -491,7 +491,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             catch(Exception ex)
             {
-                log.LogError("ajax post failed with exception", ex);
+                log.LogError("ajax post failed with exception " + ex.Message + " " + ex.StackTrace, ex);
                 Response.StatusCode = 500;
             }
             

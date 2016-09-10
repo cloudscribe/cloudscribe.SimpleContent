@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public class Post
+    public class Post : IPost
     {
         public Post()
         {
             Categories = new List<string>();
-            Comments = new List<Comment>();
+            Comments = new List<IComment>();
         }
 
         public string Id { get; set; } 
@@ -34,7 +32,26 @@ namespace cloudscribe.SimpleContent.Models
         public bool IsPublished { get; set; }
         
         public List<string> Categories { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<IComment> Comments { get; set; }
+
+        public static Post FromIPost(IPost post)
+        {
+            var p = new Post();
+            p.Author = post.Author;
+            p.BlogId = post.BlogId;
+            p.Categories = post.Categories;
+            p.Comments = post.Comments;
+            p.Content = post.Content;
+            p.Id = post.Id;
+            p.IsPublished = post.IsPublished;
+            p.LastModified = post.LastModified;
+            p.MetaDescription = post.MetaDescription;
+            p.PubDate = post.PubDate;
+            p.Slug = post.Slug;
+            p.Title = post.Title;
+            
+            return p;
+        }
 
     }
 }

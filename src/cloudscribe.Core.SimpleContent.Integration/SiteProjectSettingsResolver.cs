@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-07-11
-// Last Modified:           2016-08-29
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.Core.Models;
@@ -32,7 +32,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
         private IProjectQueries projectQueries;
         private IProjectCommands projectCommands;
 
-        public async Task<ProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
+        public async Task<IProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {
             var settings = await projectQueries.GetProjectSettings(currentSite.Id.ToString(), cancellationToken).ConfigureAwait(false);
 

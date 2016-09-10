@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-08-02
+// Last Modified:           2016-09-08
 // 
 
 
@@ -26,12 +26,12 @@ namespace cloudscribe.SimpleContent.Models
     /// </summary>
     public interface IProjectQueries
     {
-        Task<ProjectSettings> GetProjectSettings(
+        Task<IProjectSettings> GetProjectSettings(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<List<ProjectSettings>> GetProjectSettingsByUser(
+        Task<List<IProjectSettings>> GetProjectSettingsByUser(
             string userName,
             CancellationToken cancellationToken = default(CancellationToken)
             );

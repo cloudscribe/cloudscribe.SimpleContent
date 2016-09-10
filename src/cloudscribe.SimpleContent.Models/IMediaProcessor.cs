@@ -22,8 +22,8 @@ namespace cloudscribe.SimpleContent.Models
     /// </summary>
     public interface IMediaProcessor
     {
-        Task ConvertBase64EmbeddedImagesToFilesWithUrls(string mediaVirtualPath, Post post);
-        Task ConvertBase64EmbeddedImagesToFilesWithUrls(string mediaVirtualPath, Page page);
+        Task ConvertBase64EmbeddedImagesToFilesWithUrls(string mediaVirtualPath, IPost post);
+        Task ConvertBase64EmbeddedImagesToFilesWithUrls(string mediaVirtualPath, IPage page);
 
         Task SaveMedia(string mediaVirtualPath, string fileName, byte[] bytes);
     }

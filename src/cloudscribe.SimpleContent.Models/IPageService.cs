@@ -7,40 +7,40 @@ namespace cloudscribe.SimpleContent.Models
     public interface IPageService
     {
         Task DeletePage(string projectId, string pageId);
-        Task<List<Page>> GetAllPages(
+        Task<List<IPage>> GetAllPages(
             string projectId,
             string userName,
             string password);
-        Task<List<Page>> GetRootPages();
-        Task<List<Page>> GetChildPages(string pageId);
-        Task<Page> GetPage(string projectId, string pageId, string userName, string password);
-        Task<Page> GetPage(string pageId);
+        Task<List<IPage>> GetRootPages();
+        Task<List<IPage>> GetChildPages(string pageId);
+        Task<IPage> GetPage(string projectId, string pageId, string userName, string password);
+        Task<IPage> GetPage(string pageId);
 
-        Task<Page> GetPageBySlug(string projectId, string slug);
+        Task<IPage> GetPageBySlug(string projectId, string slug);
         Task<bool> PageSlugIsAvailable(string slug);
         Task<bool> PageSlugIsAvailable(string projectId, string slug);
-        Task<string> ResolvePageUrl(Page page);
+        Task<string> ResolvePageUrl(IPage page);
 
         Task Create(
-            Page page,
+            IPage page,
             bool publish);
 
         Task Update(
-            Page page,
+            IPage page,
             bool publish);
 
         Task Create(
             string projectId, 
             string userName,
             string password,
-            Page page, 
+            IPage page, 
             bool publish);
 
         Task Update(
             string projectId,
             string userName,
             string password,
-            Page page,
+            IPage page,
             bool publish);
 
         Task<bool> SlugIsAvailable(string projectId, string slug);

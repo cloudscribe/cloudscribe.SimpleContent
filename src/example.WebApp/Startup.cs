@@ -78,8 +78,11 @@ namespace example.WebApp
             ConfigureAuthPolicy(services);
 
             services.AddOptions();
-            services.AddCloudscribeCoreNoDbStorage();
-            services.AddCloudscribeLoggingNoDbStorage(Configuration);
+
+            ConfigureDataStorage(services);
+
+            //services.AddCloudscribeCoreNoDbStorage();
+            //services.AddCloudscribeLoggingNoDbStorage(Configuration);
             services.AddCloudscribeLogging();
 
             services.AddScoped<cloudscribe.Web.Navigation.Caching.ITreeCache, cloudscribe.Web.Navigation.Caching.NotCachedTreeCache>();
@@ -91,7 +94,7 @@ namespace example.WebApp
 
             services.AddCloudscribeIdentity();
 
-            services.AddNoDbStorageForSimpleContent();
+            //services.AddNoDbStorageForSimpleContent();
 
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
@@ -270,7 +273,27 @@ namespace example.WebApp
 
             UseMvc(app, multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName);
 
-            CoreNoDbStartup.InitializeDataAsync(app.ApplicationServices).Wait();
+            var storage = Configuration["DevOptions:DbPlatform"];
+            switch (storage)
+            {
+                case "NoDb":
+                    CoreNoDbStartup.InitializeDataAsync(app.ApplicationServices).Wait();
+                    break;
+
+                case "ef":
+                default:
+                    // this creates ensures the database is created and initial data
+                    CoreEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
+
+                    // this one is only needed if using cloudscribe Logging with EF as the logging storage
+                    LoggingEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
+
+                    SimpleContentEFStartupExtensions.InitializeDatabaseAsync(app.ApplicationServices).Wait();
+
+                    break;
+            }
+
+            
 
         }
 
@@ -312,6 +335,38 @@ namespace example.WebApp
                 routes.AddDefaultPageRouteForSimpleContent();
                 
             });
+        }
+
+        private void ConfigureDataStorage(IServiceCollection services)
+        {
+            services.AddScoped<cloudscribe.Core.Models.Setup.ISetupTask, cloudscribe.Core.Web.Components.EnsureInitialDataSetupTask>();
+
+            var storage = Configuration["DevOptions:DbPlatform"];
+
+            switch (storage)
+            {
+                case "NoDb":
+                    services.AddCloudscribeCoreNoDbStorage();
+                    // only needed if using cloudscribe logging with NoDb storage
+                    services.AddCloudscribeLoggingNoDbStorage(Configuration);
+                    services.AddNoDbStorageForSimpleContent();
+
+                    break;
+
+                case "ef":
+                default:
+                    var connectionString = Configuration.GetConnectionString("EntityFrameworkConnectionString");
+                    services.AddCloudscribeCoreEFStorage(connectionString);
+
+                    // only needed if using cloudscribe logging with EF storage
+                    services.AddCloudscribeLoggingEFStorage(connectionString);
+
+                    services.AddCloudscribeSimpleContentEFStorage(connectionString);
+
+
+
+                    break;
+            }
         }
 
         private void ConfigureAuthPolicy(IServiceCollection services)

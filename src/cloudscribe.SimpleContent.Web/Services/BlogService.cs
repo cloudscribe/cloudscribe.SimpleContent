@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-03
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -52,7 +52,7 @@ namespace cloudscribe.SimpleContent.Services
         private IPostQueries postQueries;
         private IPostCommands postCommands;
         private IMediaProcessor mediaProcessor;
-        private ProjectSettings settings = null;
+        private IProjectSettings settings = null;
         private HtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
 
@@ -89,7 +89,7 @@ namespace cloudscribe.SimpleContent.Services
         //    return await repo.GetAllPosts(settings.BlogId, CancellationToken).ConfigureAwait(false);
         //}
 
-        public async Task<List<Post>> GetPosts(bool includeUnpublished)
+        public async Task<List<IPost>> GetPosts(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -100,7 +100,7 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<PagedResult<Post>> GetPosts(
+        public async Task<PagedPostResult> GetPosts(
             string category,
             int pageNumber,
             bool includeUnpublished)
@@ -147,7 +147,7 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<Post>> GetRecentPosts(int numberToGet)
+        public async Task<List<IPost>> GetRecentPosts(int numberToGet)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -158,7 +158,7 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<Post>> GetRecentPosts(
+        public async Task<List<IPost>> GetRecentPosts(
             string projectId, 
             string userName,
             string password,
@@ -173,7 +173,7 @@ namespace cloudscribe.SimpleContent.Services
 
             if(!permission.CanEditPosts)
             {
-                return new List<Post>(); // empty
+                return new List<IPost>(); // empty
             }
 
             
@@ -184,7 +184,7 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<PagedResult<Post>> GetPosts(
+        public async Task<PagedPostResult> GetPosts(
             string projectId, 
             int year, 
             int month = 0, 
@@ -200,7 +200,7 @@ namespace cloudscribe.SimpleContent.Services
             string projectId, 
             string userName,
             string password,
-            Post post, 
+            IPost post, 
             bool publish)
         {
             var permission = await security.ValidatePermissions(
@@ -247,7 +247,7 @@ namespace cloudscribe.SimpleContent.Services
             string projectId,
             string userName,
             string password,
-            Post post,
+            IPost post,
             bool publish)
         {
             var permission = await security.ValidatePermissions(
@@ -288,7 +288,7 @@ namespace cloudscribe.SimpleContent.Services
             await postCommands.Update(settings.Id, post).ConfigureAwait(false);
         }
 
-        public async Task Create(Post post)
+        public async Task Create(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -309,7 +309,7 @@ namespace cloudscribe.SimpleContent.Services
             await postCommands.Create(settings.Id, post).ConfigureAwait(false);
         }
 
-        public async Task Update(Post post)
+        public async Task Update(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -330,14 +330,14 @@ namespace cloudscribe.SimpleContent.Services
             await postCommands.Update(settings.Id, post).ConfigureAwait(false);
         }
 
-        public async Task HandlePubDateAboutToChange(Post post, DateTime newPubDate)
+        public async Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             await postCommands.HandlePubDateAboutToChange(settings.Id, post, newPubDate);
         }
 
-        private async Task InitializeNewPosts(string projectId, Post post, bool publish)
+        private async Task InitializeNewPosts(string projectId, IPost post, bool publish)
         {
             if(publish)
             {
@@ -363,7 +363,7 @@ namespace cloudscribe.SimpleContent.Services
             return settings.LocalMediaVirtualPath + fileName;
         }
 
-        public async Task<string> ResolvePostUrl(Post post)
+        public async Task<string> ResolvePostUrl(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
@@ -391,7 +391,7 @@ namespace cloudscribe.SimpleContent.Services
 
         
 
-        public Task<string> ResolveBlogUrl(ProjectSettings blog)
+        public Task<string> ResolveBlogUrl(IProjectSettings blog)
         {
             //await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -402,7 +402,7 @@ namespace cloudscribe.SimpleContent.Services
         }
 
 
-        public async Task<Post> GetPost(string postId)
+        public async Task<IPost> GetPost(string postId)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -414,7 +414,7 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<Post> GetPost(
+        public async Task<IPost> GetPost(
             string projectId, 
             string postId,
             string userName,
@@ -559,7 +559,7 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<bool> CommentsAreOpen(Post post, bool userCanEdit)
+        public async Task<bool> CommentsAreOpen(IPost post, bool userCanEdit)
         {
             if(userCanEdit) { return true; }
             await EnsureBlogSettings().ConfigureAwait(false);

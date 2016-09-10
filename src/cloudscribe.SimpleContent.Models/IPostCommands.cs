@@ -15,17 +15,17 @@ namespace cloudscribe.SimpleContent.Models
 
         Task Create(
             string projectId,
-            Post post,
+            IPost post,
             CancellationToken cancellationToken = default(CancellationToken));
 
         Task Update(
             string projectId,
-            Post post,
+            IPost post,
             CancellationToken cancellationToken = default(CancellationToken));
 
         Task HandlePubDateAboutToChange(
             string projectId,
-            Post post, 
+            IPost post, 
             DateTime newPubDate, 
             CancellationToken cancellationToken = default(CancellationToken));
 

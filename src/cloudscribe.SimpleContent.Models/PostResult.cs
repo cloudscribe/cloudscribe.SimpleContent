@@ -2,11 +2,11 @@
 {
     public class PostResult
     {
-        public Post Post { get; set; } = null;
+        public IPost Post { get; set; } = null;
 
-        public Post PreviousPost { get; set; } = null;
+        public IPost PreviousPost { get; set; } = null;
 
-        public Post NextPost { get; set; } = null;
+        public IPost NextPost { get; set; } = null;
 
     }
 }

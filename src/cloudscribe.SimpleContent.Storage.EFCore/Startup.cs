@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace cloudscribe.SimpleContent.Storage.EF
+namespace cloudscribe.SimpleContent.Storage.EFCore
 {
     public class Startup
     {

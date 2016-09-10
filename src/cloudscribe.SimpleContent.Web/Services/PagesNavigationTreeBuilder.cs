@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-08-25
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -65,7 +65,7 @@ namespace cloudscribe.SimpleContent.Services
 
             var project = await projectService.GetCurrentProjectSettings();
 
-            Page homePage = null;
+            IPage homePage = null;
 
             if(
                 project != null 
@@ -196,7 +196,7 @@ namespace cloudscribe.SimpleContent.Services
 
         private async Task AddChildNodes(
             TreeNode<NavigationNode> treeNode,
-            ProjectSettings project,
+            IProjectSettings project,
             string folderPrefix
             )
         {

@@ -31,14 +31,14 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         private HtmlProcessor filter;
         private CryptoHelper cryptoHelper;
-        public ProjectSettings ProjectSettings { get; set; }
-        public Post CurrentPost { get; set; } = null;
+        public IProjectSettings ProjectSettings { get; set; }
+        public IPost CurrentPost { get; set; } = null;
 
         public string CurrentCategory { get; set; } = string.Empty;
 
         public string ListAction { get; set; } = "Index";
         public EditorModel EditorSettings { get; set; } = null;
-        public List<Post> Posts { get; set; }
+        public List<IPost> Posts { get; set; }
         public Dictionary<string, int> Categories { get; set; }
         public Dictionary<string, int> Archives { get; set; }
         public PaginationSettings Paging { get; private set; }
@@ -53,8 +53,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         //public int ApprovedCommentCount { get; set; } = 0;
         //public bool CommentsRequireApproval { get; set; } = true;
 
-        public Comment TmpComment { get; set; } = null;
-        public Post TmpPost { get; set; } = null;
+        public IComment TmpComment { get; set; } = null;
+        public IPost TmpPost { get; set; } = null;
         public ITimeZoneHelper TimeZoneHelper { get; set; }
         public string TimeZoneId { get; set; } = "GMT";
 
@@ -62,7 +62,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string NextPostUrl { get; set; } = string.Empty;
 
-        public string FilterHtml(Post p)
+        public string FilterHtml(IPost p)
         {
             return filter.FilterHtml(
                 p.Content, 
@@ -70,7 +70,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
                 ProjectSettings.LocalMediaVirtualPath);
         }
 
-        public string FilterComment(Comment c)
+        public string FilterComment(IComment c)
         {
             return filter.FilterCommentLinks(c.Content);
         }

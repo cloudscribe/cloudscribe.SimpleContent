@@ -6,9 +6,9 @@ namespace cloudscribe.SimpleContent.Models
     public interface IProjectEmailService
     {
         Task SendCommentNotificationEmailAsync(
-            ProjectSettings project, 
-            Post post, 
-            Comment comment, 
+            IProjectSettings project, 
+            IPost post, 
+            IComment comment, 
             string postUrl, 
             string approveUrl, 
             string deleteUrl);

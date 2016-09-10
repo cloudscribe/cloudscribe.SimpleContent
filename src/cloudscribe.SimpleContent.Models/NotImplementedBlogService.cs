@@ -7,7 +7,7 @@ namespace cloudscribe.SimpleContent.Models
 {
     public class NotImplementedBlogService : IBlogService
     {
-        public Task<bool> CommentsAreOpen(Post post, bool userIsOwner)
+        public Task<bool> CommentsAreOpen(IPost post, bool userIsOwner)
         {
             throw new NotImplementedException();
         }
@@ -62,17 +62,17 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetPost(string postId)
+        public Task<IPost> GetPost(string postId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetPost(string blogId, string postId)
+        public Task<IPost> GetPost(string blogId, string postId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetPost(string projectId, string postId, string userName, string password)
+        public Task<IPost> GetPost(string projectId, string postId, string userName, string password)
         {
             throw new NotImplementedException();
         }
@@ -82,47 +82,47 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetPosts(string blogId, int numberToGet, int year, int month = 0, int day = 0)
+        public Task<List<IPost>> GetPosts(string blogId, int numberToGet, int year, int month = 0, int day = 0)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PagedResult<Post>> GetPosts(string blogId, int year, int month = 0, int day = 0, int pageNumber = 1, int pageSize = 10, bool includeUnpublished = false)
+        public Task<PagedPostResult> GetPosts(string blogId, int year, int month = 0, int day = 0, int pageNumber = 1, int pageSize = 10, bool includeUnpublished = false)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetRecentPosts(int numberToGet)
+        public Task<List<IPost>> GetRecentPosts(int numberToGet)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetRecentPosts(string blogId, int numberToGet)
+        public Task<List<IPost>> GetRecentPosts(string blogId, int numberToGet)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetRecentPosts(string projectId, string userName, string password, int numberToGet)
+        public Task<List<IPost>> GetRecentPosts(string projectId, string userName, string password, int numberToGet)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Post>> GetPosts(bool includeUnpublished)
+        public Task<List<IPost>> GetPosts(bool includeUnpublished)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PagedResult<Post>> GetPosts(string category, int pageNumber, bool includeUnpublished)
+        public Task<PagedPostResult> GetPosts(string category, int pageNumber, bool includeUnpublished)
         {
             throw new NotImplementedException();
         }
 
-        public Task HandlePubDateAboutToChange(Post post, DateTime newPubDate)
+        public Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> ResolveBlogUrl(ProjectSettings blog)
+        public Task<string> ResolveBlogUrl(IProjectSettings blog)
         {
             throw new NotImplementedException();
         }
@@ -132,17 +132,17 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<string> ResolvePostUrl(Post post)
+        public Task<string> ResolvePostUrl(IPost post)
         {
             throw new NotImplementedException();
         }
 
-        public Task Create(Post post)
+        public Task Create(IPost post)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(Post post)
+        public Task Update(IPost post)
         {
             throw new NotImplementedException();
         }
@@ -157,12 +157,12 @@ namespace cloudscribe.SimpleContent.Models
         //    throw new NotImplementedException();
         //}
 
-        public Task Create(string projectId, string userName, string password, Post post, bool publish)
+        public Task Create(string projectId, string userName, string password, IPost post, bool publish)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(string projectId, string userName, string password, Post post, bool publish)
+        public Task Update(string projectId, string userName, string password, IPost post, bool publish)
         {
             throw new NotImplementedException();
         }

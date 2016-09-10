@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-21
-// Last Modified:           2016-07-29
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.Messaging.Email;
@@ -29,9 +29,9 @@ namespace cloudscribe.SimpleContent.Services
         private ILogger log;
 
         public async Task SendCommentNotificationEmailAsync(
-            ProjectSettings project,
-            Post post,
-            Comment comment,
+            IProjectSettings project,
+            IPost post,
+            IComment comment,
             string postUrl,
             string approveUrl,
             string deleteUrl
@@ -97,7 +97,7 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        private SmtpOptions GetSmptOptions(ProjectSettings project)
+        private SmtpOptions GetSmptOptions(IProjectSettings project)
         {
             if (string.IsNullOrWhiteSpace(project.SmtpServer)) { return null; }
 

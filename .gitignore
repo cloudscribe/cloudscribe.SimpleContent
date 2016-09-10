@@ -208,3 +208,4 @@ src/cloudscribe.MetaWeblog/README.md
 samples/simpleauthnodb/.vs/config/applicationhost.config
 samples/simpleauthnodb/.vs/restore.dg
 src/cloudscribe.SimpleContent.Storage.EF/appsettings.local.overrides.json
+src/cloudscribe.SimpleContent.Storage.EFCore/appsettings.local.overrides.json

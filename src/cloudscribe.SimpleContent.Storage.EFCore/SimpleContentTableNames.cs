@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Storage.EF
+namespace cloudscribe.SimpleContent.Storage.EFCore
 {
     public class SimpleContentTableNames
     {
@@ -16,11 +16,15 @@ namespace cloudscribe.SimpleContent.Storage.EF
         public string ProjectTableName { get; set; } = "ContentProject";
         public string PostTableName { get; set; } = "Post";
         public string PageTableName { get; set; } = "Page";
-        public string CommentTableName { get; set; } = "Comment";
+        public string PostCommentTableName { get; set; } = "PostComment";
 
-        public string TagTableName { get; set; } = "Tag";
+        //public string TagTableName { get; set; } = "Tag";
 
-        public string TagItemTableName { get; set; } = "TagItem";
+        public string PostCategoryTableName { get; set; } = "PostCategory";
+
+        public string PageCommentTableName { get; set; } = "PageComment";
+
+        public string PageCategoryTableName { get; set; } = "PageCategory";
 
     }
 }

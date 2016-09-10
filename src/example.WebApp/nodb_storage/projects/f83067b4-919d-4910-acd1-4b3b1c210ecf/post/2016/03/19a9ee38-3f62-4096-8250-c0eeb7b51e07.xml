@@ -4,7 +4,7 @@
   <slug>starsky-and-hutch</slug>
   <author></author>
   <pubDate>2016-03-13T22:23:00.0000000Z</pubDate>
-  <lastModified>2016-09-03T19:38:47.4864586Z</lastModified>
+  <lastModified>2016-09-08T15:52:24.2623452Z</lastModified>
   <excerpt>Starsky and Hutch</excerpt>
   <content>Starsky and Hutch&lt;br /&gt;&lt;img src="/s1/media/images/52f7b4e0-1c29-407f-acff-997bc278889a.jpeg" alt="" /&gt;&lt;br /&gt;cool dudes man!&lt;br /&gt;</content>
   <ispublished>true</ispublished>
@@ -12,5 +12,15 @@
     <category>vacation</category>
     <category>photography</category>
   </categories>
-  <comments></comments>
+  <comments>
+    <comment isAdmin="false" isApproved="true" id="f739c4e2-0bb5-461e-a92a-91c75f9ac804">
+      <author>foo</author>
+      <email>foo@foo.com</email>
+      <website></website>
+      <ip>127.0.0.1</ip>
+      <userAgent>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36</userAgent>
+      <date>2016-09-08T11:52:04.4968035-04:00</date>
+      <content>foo was here</content>
+    </comment>
+  </comments>
 </post>

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-12
-// Last Modified:           2016-05-21
+// Last Modified:           2016-09-08
 // 
 
 
@@ -32,7 +32,7 @@ namespace cloudscribe.SimpleContent.Services
 
         public Task ConvertBase64EmbeddedImagesToFilesWithUrls(
             string mediaVirtualPath,
-            Post post)
+            IPost post)
         {
             if (string.IsNullOrEmpty(post.Content)) { return Task.FromResult(0); }
             
@@ -89,7 +89,7 @@ namespace cloudscribe.SimpleContent.Services
 
         public Task ConvertBase64EmbeddedImagesToFilesWithUrls(
             string mediaVirtualPath,
-            Page page)
+            IPage page)
         {
             if (string.IsNullOrEmpty(page.Content)) { return Task.FromResult(0); }
 

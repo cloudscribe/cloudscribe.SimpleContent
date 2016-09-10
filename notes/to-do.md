@@ -8,6 +8,7 @@ recent posts viewcomponent for homepage
 
 Image Resizing and optimizing for uploaded images via:
 https://github.com/JimBobSquarePants/ImageProcessor
+http://jamessouth.me/archive/imageprocessor-core/
 
 
 ## example project stuff

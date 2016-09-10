@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-09-03
+// Last Modified:           2016-09-07
 // 
 
 using System;
@@ -27,7 +27,7 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<Post> GetPost(
+        Task<IPost> GetPost(
             string blogId,
             string postId,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -45,19 +45,19 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<List<Post>> GetRecentPosts(
+        Task<List<IPost>> GetRecentPosts(
             string blogId,
             int numberToGet,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<List<Post>> GetPosts(
+        Task<List<IPost>> GetPosts(
             string blogId,
             bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<PagedResult<Post>> GetPosts(
+        Task<PagedPostResult> GetPosts(
             string blogId,
             string category,
             bool includeUnpublished,
@@ -66,7 +66,7 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<PagedResult<Post>> GetPosts(
+        Task<PagedPostResult> GetPosts(
             string blogId,
             int year,
             int month = 0,

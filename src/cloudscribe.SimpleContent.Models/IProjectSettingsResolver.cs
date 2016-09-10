@@ -10,6 +10,6 @@ namespace cloudscribe.SimpleContent.Models
     public interface IProjectSettingsResolver
     {
 
-        Task<ProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken);
+        Task<IProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken);
     }
 }

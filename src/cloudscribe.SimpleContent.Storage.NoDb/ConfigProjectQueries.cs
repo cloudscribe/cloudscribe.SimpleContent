@@ -31,23 +31,23 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         private List<ProjectSettings> allProjects;
 
-        public Task<ProjectSettings> GetProjectSettings(
+        public Task<IProjectSettings> GetProjectSettings(
             string projectId,
             CancellationToken cancellationToken
             )
         {
             cancellationToken.ThrowIfCancellationRequested();
             var result = allProjects.Where(b => b.Id == projectId).FirstOrDefault();
-            return Task.FromResult(result);
+            return Task.FromResult((IProjectSettings)result);
         }
 
-        public async Task<List<ProjectSettings>> GetProjectSettingsByUser(
+        public async Task<List<IProjectSettings>> GetProjectSettingsByUser(
             string userName,
             CancellationToken cancellationToken
             )
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var result = new List<ProjectSettings>();
+            var result = new List<IProjectSettings>();
             var defaultProject = await GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
             if (defaultProject != null)
             {

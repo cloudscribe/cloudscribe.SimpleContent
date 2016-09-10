@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-08-04
-// Last Modified:           2016-08-04
+// Last Modified:           2016-09-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -33,22 +33,25 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         public async Task Create(
             string projectId,
-            ProjectSettings project,
+            IProjectSettings project,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             if (string.IsNullOrEmpty(project.Id)) { project.Id = Guid.NewGuid().ToString(); }
-            
-            await commands.CreateAsync(projectId, project.Id, project).ConfigureAwait(false);
+
+            var p = ProjectSettings.FromIProjectSettings(project);
+
+            await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
         }
 
         public async Task Update(
             string projectId,
-            ProjectSettings project,
+            IProjectSettings project,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            await commands.UpdateAsync(projectId, project.Id, project).ConfigureAwait(false);
+            var p = ProjectSettings.FromIProjectSettings(project);
+            await commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
         }
 
         public async Task Delete(
