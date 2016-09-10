@@ -497,25 +497,32 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var result = new Dictionary<string, int>();
 
             var query = dbContext.PostCategories
+                .AsNoTracking()
                 .Where(t => t.ProjectId == blogId)
-                .Select(t => new
+                .Select(x => new
                 {
-                    Cat = t,
-                    ItemCount = t.PostEntityId.Count()
-                }).AsNoTracking()
+                    cat = x.Value,
+                    count = dbContext.PostCategories.Count<PostCategory>(u => u.ProjectId == x.ProjectId && u.Value == x.Value )
+                })
                 ;
 
             var list = await query
                .ToListAsync(cancellationToken)
                .ConfigureAwait(false);
 
+            //var grouped = list
+            //            .GroupBy(p => new { p.Value, p.ProjectId }) 
+            //            .Select(p =>
+            //            new { cat = p., count = p.Count() }
+            //            )
+
 
             foreach (var category in list)
             {
                 //var c = category.Cat.TagValue;
-                if (!result.ContainsKey(category.Cat.Value))
+                if (!result.ContainsKey(category.cat))
                 {
-                    result.Add(category.Cat.Value, category.ItemCount);
+                    result.Add(category.cat, category.count);
                 }
 
                 //result[c] = result[c] + 1;

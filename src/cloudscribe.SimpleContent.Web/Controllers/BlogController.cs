@@ -491,7 +491,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             catch(Exception ex)
             {
-                log.LogError("ajax post failed with exception", ex);
+                log.LogError("ajax post failed with exception " + ex.Message + " " + ex.StackTrace, ex);
                 Response.StatusCode = 500;
             }
             

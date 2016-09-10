@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-09
+// Last Modified:			2016-09-10
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -42,7 +42,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             
             dbContext.Posts.Add(p);
 
-            //TODO: need to add PostCategorys
+            //need to add PostCategorys
+            foreach (var c in p.Categories)
+            {
+                dbContext.PostCategories.Add(new PostCategory
+                {
+                    ProjectId = projectId,
+                    PostEntityId = p.Id,
+                    Value = c
+                });
+            }
 
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -62,17 +71,55 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var p = PostEntity.FromIPost(post);
 
             p.LastModified = DateTime.UtcNow;
+
+            //need to delete and re add PostCategorys
+            await DeleteCategoriesByPost(projectId, p.Id, true, cancellationToken).ConfigureAwait(false);
+            foreach (var c in p.Categories)
+            {
+                dbContext.PostCategories.Add(new PostCategory
+                {
+                    ProjectId = projectId,
+                    PostEntityId = p.Id,
+                    Value = c
+                });
+            }
+
+
             bool tracking = dbContext.ChangeTracker.Entries<PostEntity>().Any(x => x.Entity.Id == p.Id);
             if (!tracking)
             {
                 dbContext.Posts.Update(p);
             }
-
-            //TODO: need to delete and re add PostCategorys
-
-
+            
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
+
+        }
+
+        private async Task DeleteCategoriesByPost(
+            string projectId,
+            string postId,
+            bool saveChanges,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            //ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var query = from l in dbContext.PostCategories
+                        where (
+                        l.ProjectId == projectId
+                        && l.PostEntityId == postId
+                        )
+                        select l;
+
+            dbContext.PostCategories.RemoveRange(query);
+            if (saveChanges)
+            {
+                int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
+                    .ConfigureAwait(false);
+
+            }
+
 
         }
 
