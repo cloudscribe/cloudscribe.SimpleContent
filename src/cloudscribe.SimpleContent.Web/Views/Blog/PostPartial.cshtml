@@ -9,6 +9,15 @@
 @{
     var icons = iconClassesAccessor.Value;
 }
+@functions{
+    
+    public string GetPubDateClass()
+    {
+        if (Model.TmpPost != null && Model.TmpPost.PubDate > DateTime.UtcNow) return "lead text-danger";
+
+        return null;
+    }
+}
 <article class="post" data-id="@Model.TmpPost.Id" itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
     <header class="jumbotron">
         <h1 itemprop="headline name">
@@ -27,7 +36,7 @@
             } 
         </h1>
         <div class="bh">
-            <time datetime="@Model.FormatDateForEdit(Model.TmpPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
+            <time class="@GetPubDateClass()" datetime="@Model.FormatDateForEdit(Model.TmpPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
              @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
                 <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"

@@ -2,20 +2,17 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-09
+// Last Modified:			2016-09-11
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using cloudscribe.SimpleContent.Storage.EFCore.Models;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore
 {
@@ -81,28 +78,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 && (includeUnpublished || (x.IsPublished && x.PubDate <= currentTime))
                 && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category)) // will this work?
                 )
-                //.Select(x => new Post
-                //{
-                //    // note that this will have to be updated if there are any new properties added to Post
-                //    // maybe better perf to not do this and instead just select post
-                //    // could iterate through the list before returning it to update the categores? or is the shado property only available in the query?
-                //    Id = x.Id,
-                //    //Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' }, 
-                //    //    StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
-                //    Author = x.Author,
-                //    BlogId = x.BlogId,
-                //    Content = x.Content,
-                //    IsPublished = x.IsPublished,
-                //    LastModified = x.LastModified,
-                //    MetaDescription = x.MetaDescription,
-                //    PubDate = x.PubDate,
-                //    Slug = x.Slug,
-                //    Title = x.Title,
-                //    Comments = x.Comments
-                //    //, Comments = is is possible to sub query here without navigation property
-                //}
-                 
-               // )
                 .OrderByDescending(x => x.PubDate)
                 ;
 
@@ -270,26 +245,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             int offset = (pageSize * pageNumber) - pageSize;
             var posts = await query
                 .AsNoTracking()
-                //.Select(x => new Post
-                //{
-                //    // note that this will have to be updated if there are any new properties added to Post
-                //    // maybe better perf to not do this and instead just select post
-                //    // could iterate through the list before returning it to update the categores? or is the shado property only available in the query?
-                //    Id = x.Id,
-                //    Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' },
-                //        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
-                //    Author = x.Author,
-                //    BlogId = x.BlogId,
-                //    Content = x.Content,
-                //    IsPublished = x.IsPublished,
-                //    LastModified = x.LastModified,
-                //    MetaDescription = x.MetaDescription,
-                //    PubDate = x.PubDate,
-                //    Slug = x.Slug,
-                //    Title = x.Title,
-                //    Comments = x.Comments
-                //    //, Comments = is is possible to sub query here without navigation property
-                //})
                 .Skip(offset)
                 .Take(pageSize)
                 .ToListAsync<IPost>();
@@ -363,34 +318,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var query = dbContext.Posts
                      .Include(p => p.PostComments)
                      .Where(p => p.Id == postId && p.BlogId == blogId)
-                     //.Select(x => new Post
-                     //{
-                     //    // note that this will have to be updated if there are any new properties added to Post
-                     //    // maybe better perf to not do this and instead just select post
-                     //    // could iterate through the list before returning it to update the categores? or is the shado property only available in the query?
-                     //    Id = x.Id,
-                     //    //Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' },
-                     //   //StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
-                     //    Author = x.Author,
-                     //    BlogId = x.BlogId,
-                     //    Content = x.Content,
-                     //    IsPublished = x.IsPublished,
-                     //    LastModified = x.LastModified,
-                     //    MetaDescription = x.MetaDescription,
-                     //    PubDate = x.PubDate,
-                     //    Slug = x.Slug,
-                     //    Title = x.Title,
-                     //    Comments = x.Comments
-                     //    //, Comments = is is possible to sub query here without navigation property
-                     //})
                      ;
 
             var post = await query.AsNoTracking().SingleOrDefaultAsync<PostEntity>().ConfigureAwait(false);
-
-            // will this work? I'm doubtfull
-            //post.Categories = EF.Property<string>(post, "CategoryCsv").Split(new char[] { ',' },
-            //            StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
-
+            
             return post;
         }
 
@@ -408,34 +339,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var query = dbContext.Posts
                      .Include(p => p.PostComments)
                      .Where(p => p.Slug == slug && p.BlogId == blogId)
-                     //.Select(x => new Post
-                     //{
-                     //    // note that this will have to be updated if there are any new properties added to Post
-                     //    // maybe better perf to not do this and instead just select post
-                     //    // could iterate through the list before returning it to update the categores? or is the shado property only available in the query?
-                     //    Id = x.Id,
-                     //    //Categories = EF.Property<string>(x, "CategoryCsv").Split(new char[] { ',' },
-                     //   //StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList(), // get from shadow property
-                     //    Author = x.Author,
-                     //    BlogId = x.BlogId,
-                     //    Content = x.Content,
-                     //    IsPublished = x.IsPublished,
-                     //    LastModified = x.LastModified,
-                     //    MetaDescription = x.MetaDescription,
-                     //    PubDate = x.PubDate,
-                     //    Slug = x.Slug,
-                     //    Title = x.Title,
-                     //    Comments = x.Comments
-                     //    //, Comments = is is possible to sub query here without navigation property
-                     //})
                      ;
 
             var post = await query.AsNoTracking().SingleOrDefaultAsync<PostEntity>().ConfigureAwait(false);
-
-            // will this work? I'm doubtfull
-            //post.Categories = EF.Property<string>(post, "CategoryCsv").Split(new char[] { ',' },
-            //            StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
-
+            
             result.Post = await query.AsNoTracking().SingleOrDefaultAsync<PostEntity>().ConfigureAwait(false);
 
             if (result.Post != null)
@@ -496,39 +403,52 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var result = new Dictionary<string, int>();
 
-            var query = dbContext.PostCategories
-                .AsNoTracking()
-                .Where(t => t.ProjectId == blogId)
-                .Select(x => new
-                {
-                    cat = x.Value,
-                    count = dbContext.PostCategories.Count<PostCategory>(u => u.ProjectId == x.ProjectId && u.Value == x.Value )
-                })
-                ;
+            //var query = dbContext.PostCategories
+            //    .AsNoTracking()
+            //    .Where(t => t.ProjectId == blogId)
+            //    .Select(x => new
+            //    {
+            //        cat = x.Value,
+            //        count = dbContext.PostCategories.Count<PostCategory>(u => u.ProjectId == x.ProjectId && u.Value == x.Value )
+            //    })
+            //    ;
+
+            var query = from x in dbContext.PostCategories
+                        join y in dbContext.Posts
+                        on x.PostEntityId equals y.Id
+                        where (
+                            (x.ProjectId.Equals(blogId))
+                            && (includeUnpublished || (y.IsPublished && y.PubDate <= DateTime.UtcNow))
+                            )
+                        //select new
+                        //{
+                        //    cat = x.Value,
+                        //    count = dbContext.PostCategories.Count<PostCategory>(u => u.ProjectId == x.ProjectId && u.Value == x.Value )
+                        //}
+                        select x
+                        ;
 
             var list = await query
+                .AsNoTracking()
                .ToListAsync(cancellationToken)
                .ConfigureAwait(false);
 
-            //var grouped = list
-            //            .GroupBy(p => new { p.Value, p.ProjectId }) 
-            //            .Select(p =>
-            //            new { cat = p., count = p.Count() }
-            //            )
-
-
-            foreach (var category in list)
+            
+            var grouped = from x in list
+                        group x by  x.Value
+                        into grp
+                        select 
+                          new { cat = grp.Key, count = grp.Count() }  
+                        ;
+            
+            foreach (var category in grouped)
             {
-                //var c = category.Cat.TagValue;
                 if (!result.ContainsKey(category.cat))
                 {
                     result.Add(category.cat, category.count);
                 }
-
-                //result[c] = result[c] + 1;
             }
-
-
+            
             var sorted = new SortedDictionary<string, int>(result);
 
             return sorted.OrderBy(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
@@ -565,10 +485,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var sorted = new SortedDictionary<string, int>(result);
 
             return sorted.OrderByDescending(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
-
-            
-
-            
+  
         }
 
 
