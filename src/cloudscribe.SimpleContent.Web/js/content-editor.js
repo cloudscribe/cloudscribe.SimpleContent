@@ -22,7 +22,7 @@
 
     var contentId, editMode, currentSlug, supportsCategories, contentType,
         txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
-        txtParentPage, txtViewRoles, chkPublish,
+        txtParentPage, txtViewRoles, chkPublish, chkShowHeading,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
         indexPath, categoryPath, savePath, deletePath, cancelEditPath
 
@@ -151,11 +151,13 @@
         var pageSort = 0;
         var parentPage = "";
         var roles = "";
+        var showTitle = true;
         if (contentType == "Page")
         {
             pageSort = txtPageOrder.val();
             parentPage = txtParentPage.val();
             roles = txtViewRoles.val();
+            showTitle = chkShowHeading.is(':checked');
         }
 
         $.post(savePath, {
@@ -168,7 +170,8 @@
             content: parsedDOM,
             categories: getCategories(),
             parentSlug: parentPage,
-            viewRoles:roles,
+            viewRoles: roles,
+            showHeading : showTitle,
             __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
         },
         function (data) {
@@ -323,6 +326,7 @@
         txtPageOrder = $("#txtPageOrder");
         txtParentPage = $("#txtParentPage");
         txtViewRoles = $("#txtViewRoles");
+        chkShowHeading = $("#chkShowHeading");
     }
     else
     {

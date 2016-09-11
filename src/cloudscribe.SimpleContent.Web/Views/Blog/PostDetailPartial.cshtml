@@ -19,8 +19,14 @@
     }
     public string GetHeaderClass()
     {
-        if (Model.Mode.Length > 0) return "jumbotron editor-jumbotron"; // we don't want jumbotron while editing because it has too much bottom padding
+        if (Model.Mode.Length > 0) return "jumbotron editor-jumbotron"; // we don't want jumbotron while editing because it has too much bottom padding 
         return "jumbotron";
+    }
+    public string GetPubDateClass()
+    {
+        if (Model.CurrentPost != null && Model.CurrentPost.PubDate > DateTime.UtcNow) return "lead text-danger";
+
+        return null;
     }
 }
 <article class="post" data-id="@Model.CurrentPost.Id"
@@ -54,11 +60,11 @@
         <div class="@GetHeaderDivClass()">
             @if (Model.Mode.Length > 0)
             {
-                <input type='text' itemprop="datePublished" id='datetimepicker' value="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" />
+                <input class="@GetPubDateClass()" type='text' itemprop="datePublished" id='datetimepicker' value="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" />
             }
             else
             {
-                <time datetime="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.CurrentPost.PubDate)</time>
+                <time class="@GetPubDateClass()" datetime="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.CurrentPost.PubDate)</time>
             }
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {

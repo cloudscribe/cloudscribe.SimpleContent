@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-09-08
+// Last Modified:           2016-09-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -141,6 +141,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
                     model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
                     model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
+                    model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
                 }
                 else
                 {
@@ -287,6 +288,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             page.PageOrder = model.PageOrder;
             page.IsPublished = model.IsPublished;
+            page.ShowHeading = model.ShowHeading;
             if (!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);
