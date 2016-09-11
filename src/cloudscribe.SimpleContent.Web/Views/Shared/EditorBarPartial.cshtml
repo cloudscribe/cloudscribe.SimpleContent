@@ -67,10 +67,17 @@
                                 <label class="control-label">@sr["Sort Order"]</label>
                                 <div>
                                     <input id="txtPageOrder" class="form-control" type="text" placeholder="10" value="@Model.SortOrder">
-
                                 </div>
                             </div>
-                            
+                        </li>
+                        <li>
+                            <div>
+                                <div class="checkbox">
+                                    <label class="control-label">
+                                        <input id="chkShowHeading" type="checkbox" checked="@Model.ShowHeading" /> @sr["Show Heading"]
+                                    </label>   
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </li> 

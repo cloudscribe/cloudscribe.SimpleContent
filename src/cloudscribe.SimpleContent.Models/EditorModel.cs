@@ -26,5 +26,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string ProjectId { get; set; } = string.Empty;
         public int SortOrder { get; set; } = 3;
+
+        public bool ShowHeading { get; set; } = true;
     }
 }

@@ -33,5 +33,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         
         public bool IsPublished { get; set; } = true;
 
+        public bool ShowHeading { get; set; } = true;
+
     }
 }

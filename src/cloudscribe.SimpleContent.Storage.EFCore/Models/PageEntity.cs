@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2016-09-09
+// Last Modified:			2016-09-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -17,7 +17,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
     {
         public PageEntity()
         {
-
+            categories = new List<string>();
+            comments = new List<IComment>();
+            pageComments = new List<PageComment>();
         }
 
         public string Id { get; set; } = string.Empty;
