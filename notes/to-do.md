@@ -2,7 +2,6 @@
 
 ## Miscellaneous
 
-EF storage layer
 caching of post/page data
 recent posts viewcomponent for homepage
 
@@ -10,10 +9,14 @@ Image Resizing and optimizing for uploaded images via:
 https://github.com/JimBobSquarePants/ImageProcessor
 http://jamessouth.me/archive/imageprocessor-core/
 
+ado sql storage
+
 
 ## example project stuff
 
-gulp/grunt work for production ie fontawesome copy to folder
+using cloudscribe Core with NoDb
+
+using cloudscribe Core with EF
 
 latest trend single page site but the blog would be a separate page
 

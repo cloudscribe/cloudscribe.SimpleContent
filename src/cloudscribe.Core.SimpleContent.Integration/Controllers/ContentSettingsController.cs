@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2016-08-14
+// Last Modified:			2016-09-12
 // 
 
 using cloudscribe.Core.Models;
@@ -68,6 +68,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             model.PostsPerPage = projectSettings.PostsPerPage;
             model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
             model.DefaultPageSlug = projectSettings.DefaultPageSlug;
+            model.BlogPagePosition = projectSettings.BlogPagePosition;
 
             bool canManageUsers = false;
             try
@@ -155,8 +156,13 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             {
                 needToClearMenuCache = true;
             }
+            if (projectSettings.BlogPagePosition != model.BlogPagePosition)
+            {
+                needToClearMenuCache = true;
+            }
             projectSettings.BlogMenuLinksToNewestPost = model.BlogMenuLinksToNewestPost;
             projectSettings.DefaultPageSlug = model.DefaultPageSlug;
+            projectSettings.BlogPagePosition = model.BlogPagePosition;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

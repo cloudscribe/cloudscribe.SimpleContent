@@ -81,7 +81,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .OrderByDescending(x => x.PubDate)
                 ;
 
-            
             var posts = await query
                 .AsNoTracking()
                 .Skip(offset)
@@ -96,52 +95,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             return result;
         }
-
-        //private async Task<List<Comment>> GetCommentsForPageOfPosts(
-        //    string blogId,
-        //    string category,
-        //    bool includeUnpublished,
-        //    DateTime currentTime,
-        //    int pageNumber,
-        //    int pageSize,
-        //    CancellationToken cancellationToken = default(CancellationToken)
-        //    )
-        //{
-        //    ThrowIfDisposed();
-        //    cancellationToken.ThrowIfCancellationRequested();
-
-        //    int offset = (pageSize * pageNumber) - pageSize;
-
-
-        //    var result = new List<Comment>();
-
-        //    var query = from c in dbContext.Comments
-        //            join x in dbContext.Posts
-        //            on c.ContentId equals x.Id
-        //            orderby x.PubDate
-        //                where (
-        //        x.BlogId == blogId
-        //        && (includeUnpublished || (x.IsPublished && x.PubDate <= currentTime))
-        //        && (string.IsNullOrEmpty(category) || (EF.Property<string>(x, "CategoryCsv").Contains(category))) // will this work?
-        //        )
-
-        //        select c
-                
-        //        ;
-
-
-        //    //List<Comment> posts = await query
-        //    //    .AsNoTracking()
-        //    //    .Skip(offset)
-        //    //    .Take(pageSize)
-        //    //    .ToListAsync<Post>(cancellationToken)
-        //    //    .ConfigureAwait(false);
-
-           
-           
-
-        //    return result;
-        //}
 
         public async Task<int> GetCount(
             string blogId,
@@ -403,16 +356,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var result = new Dictionary<string, int>();
 
-            //var query = dbContext.PostCategories
-            //    .AsNoTracking()
-            //    .Where(t => t.ProjectId == blogId)
-            //    .Select(x => new
-            //    {
-            //        cat = x.Value,
-            //        count = dbContext.PostCategories.Count<PostCategory>(u => u.ProjectId == x.ProjectId && u.Value == x.Value )
-            //    })
-            //    ;
-
             var query = from x in dbContext.PostCategories
                         join y in dbContext.Posts
                         on x.PostEntityId equals y.Id
@@ -420,11 +363,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                             (x.ProjectId.Equals(blogId))
                             && (includeUnpublished || (y.IsPublished && y.PubDate <= DateTime.UtcNow))
                             )
-                        //select new
-                        //{
-                        //    cat = x.Value,
-                        //    count = dbContext.PostCategories.Count<PostCategory>(u => u.ProjectId == x.ProjectId && u.Value == x.Value )
-                        //}
                         select x
                         ;
 
