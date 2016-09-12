@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2016-08-15
+// Last Modified:			2016-09-12
 // 
 
 using cloudscribe.Core.Models;
@@ -33,6 +33,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public bool IncludePubDateInPostUrls { get; set; } = true;
 
         public bool BlogMenuLinksToNewestPost { get; set; } = false;
+
+        public int BlogPagePosition { get; set; } = 2; // right after home page
 
 
         //public string LocalMediaVirtualPath { get; set; } = "/media/images/";

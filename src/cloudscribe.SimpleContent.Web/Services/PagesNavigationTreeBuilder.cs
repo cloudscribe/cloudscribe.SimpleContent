@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-09-08
+// Last Modified:           2016-09-12
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -104,8 +104,14 @@ namespace cloudscribe.SimpleContent.Services
             var treeRoot = new TreeNode<NavigationNode>(rootNav);
 
             var rootList = await pageService.GetRootPages().ConfigureAwait(false);
+            var rootListCount = rootList.Count();
+            var blogPosition = project.BlogPagePosition;
+            if (project.AddBlogToPagesTree)
+            {
+                if (blogPosition > rootListCount) blogPosition = rootListCount;
+            }
 
-            if(rootList.Count() <= 1)
+                if (rootListCount <= 1)
             {   // if there are no pages we won't hit the loop below so go ahead and add the blog page
                 if (project.AddBlogToPagesTree)
                 {
@@ -138,7 +144,7 @@ namespace cloudscribe.SimpleContent.Services
             foreach (var page in rootList)
             {
                 var node = new NavigationNode();
-                if (project.AddBlogToPagesTree && rootPosition == project.BlogPagePosition)
+                if (project.AddBlogToPagesTree && rootPosition == blogPosition)
                 {
                     node.Key = project.BlogPageText;
                     node.ParentKey = "RootNode";

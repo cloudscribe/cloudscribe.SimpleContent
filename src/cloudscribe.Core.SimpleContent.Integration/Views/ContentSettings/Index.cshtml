@@ -17,10 +17,17 @@
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="col-md-2 control-label">@sr["Blog Tagline"]</label>
+                <label asp-for="Description" class="col-md-2 control-label">@sr["Blog Menu Position"]</label>
                 <div class="col-md-10">
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <input asp-for="BlogPagePosition" class="form-control" />
+                    <span asp-validation-for="BlogPagePosition" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostsPerPage" class="col-md-2 control-label">@sr["Posts Per Page"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PostsPerPage" class="form-control" />
+                    <span asp-validation-for="PostsPerPage" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">

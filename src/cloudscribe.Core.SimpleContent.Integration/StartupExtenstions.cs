@@ -2,9 +2,14 @@
 using cloudscribe.Core.SimpleContent.Integration.Controllers;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.TagHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
+using cloudscribe.Core.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -41,7 +46,29 @@ namespace Microsoft.Extensions.DependencyInjection
             return options;
         }
 
-        
+        public static AuthorizationOptions AddCloudscribeCoreSimpleContentIntegrationDefaultPolicies(this AuthorizationOptions options)
+        {
+            options.AddPolicy(
+                    "BlogEditPolicy",
+                    authBuilder =>
+                    {
+                        //authBuilder.RequireClaim("blogId");
+                        authBuilder.RequireRole("Administrators");
+                    }
+                 );
+
+            options.AddPolicy(
+                "PageEditPolicy",
+                authBuilder =>
+                {
+                    authBuilder.RequireRole("Administrators");
+                });
+
+            return options;
+        }
+
+
+
 
     }
 }

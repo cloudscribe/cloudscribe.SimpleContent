@@ -61,7 +61,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         {
             get
             {
-                //if(categories.Count == 0)
                 var list = CategoriesCsv.Split(new char[] { ',' },
                         StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
 
@@ -110,7 +109,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             get { return pageComments; }
             set { pageComments = value; }
         }
-
 
         public static PageEntity FromIPage(IPage page)
         {

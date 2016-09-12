@@ -231,7 +231,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 page.MetaDescription = model.MetaDescription;
                 page.Content = model.Content;
                 if (page.PageOrder != model.PageOrder) needToClearCache = true;
-                //post.Categories = categories.ToList();
+               
             }
             else
             {
