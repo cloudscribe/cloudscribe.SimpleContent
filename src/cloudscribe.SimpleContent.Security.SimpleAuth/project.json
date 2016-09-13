@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-rc20160810",
+    "version": "1.0.0-rc20160912",
     "description": "cloudscribe.SimpleContent.Security.SimpleAuth Class Library",
     "authors": [ "Joe Audette" ],
     "packOptions": {
