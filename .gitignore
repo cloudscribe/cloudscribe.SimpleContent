@@ -205,7 +205,7 @@ src/cloudscribe.Core.Repositories.EF/appsettings.local.overrides.json
 src/cloudscribe.Logging.EF/appsettings.local.overrides.json
 **/dp_keys/**
 src/cloudscribe.MetaWeblog/README.md
-samples/simpleauthnodb/.vs/config/applicationhost.config
-samples/simpleauthnodb/.vs/restore.dg
+samples/simpleauthnodb/.vs/**
 src/cloudscribe.SimpleContent.Storage.EF/appsettings.local.overrides.json
 src/cloudscribe.SimpleContent.Storage.EFCore/appsettings.local.overrides.json
+samples/cloudscribecorenodb/.vs/**

@@ -54,7 +54,7 @@
         "cloudscribe.SimpleContent.Syndication": "1.0.0-*",
         "cloudscribe.Syndication.Web": "1.0.4-*",
         "cloudscribe.Core.SimpleContent.Integration": "1.0.0-*",
-        "SaasKit.Multitenancy": "1.1.3-*",
+        "SaasKit.Multitenancy": "1.1.4-*",
         "Microsoft.AspNetCore.DataProtection": "1.0.0",
         "Microsoft.AspNetCore.Session": "1.0.0",
         "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.0"

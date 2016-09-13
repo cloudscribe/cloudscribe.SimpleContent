@@ -1,0 +1,29 @@
+﻿{
+    "IconCssClasses": {
+        "Previous": "fa fa-backward",
+        "Next": "fa fa-forward",
+        "Comments": "fa fa-comment",
+        "Tags": "fa fa-tags",
+        "BadRequest": "fa fa-ban",
+        "UnAuthorized": "fa fa-ban",
+        "Forbidden": "fa fa-exclamation-circle",
+        "PageNotFound": "fa fa-exclamation-circle",
+        "Error": "fa fa-exclamation-circle",
+        "Home": "fa fa-home",
+        "HideEditToolbar": "fa fa-chevron-right",
+        "ShowEditToolbar": "fa fa-pencil",
+        "JustifyLeft": "fa fa-align-left",
+        "JustifyCenter": "fa fa-align-center",
+        "JustifyRight": "fa fa-align-right",
+        "JustifyFull": "fa fa-align-justify",
+        "UnorderedList": "fa fa-list-ul",
+        "OrderedList": "fa fa-list-ol",
+        "Outdent": "fa fa-outdent",
+        "Indent": "fa fa-indent",
+        "Hyperlink": "fa fa-link",
+        "RemoveHyperlink": "fa fa-unlink",
+        "InsertImage": "fa fa-file-image-o",
+        "ToggleSource": "fa fa-eye"
+
+    }
+}
