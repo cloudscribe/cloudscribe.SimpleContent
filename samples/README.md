@@ -1,5 +1,7 @@
 # cloudscribe SimpleContent Samples 
 
+[SimpleContent](https://github.com/joeaudette/cloudscribe.SimpleContent) is a simple, yet flexible content and blog engine for ASP.NET Core.
+
 All of these samples are intended as something you could copy and use to start your own ASP.NET Core project in Visual Studio 2015. The WebApp in each solution is yours to customize and add your own custom functionality. There is no "cloudscribe" source code in the samples they only have NuGet dependencies on cloudscribe libraries and the have been configured with example Startup.cs code to get things working.
 
 ## SimpleContent with SimpleAuth and NoDb
@@ -23,6 +25,8 @@ Be sure to update the credentials before deployment.
 
 This sample uses [cloudscribe Core](https://github.com/joeaudette/cloudscribe) for user authentication and [NoDb](https://github.com/joeaudette/NoDb) file system storage for content and data. 
 
+[cloudscribe Core]https://github.com/joeaudette/cloudscribe is a multi-tenant web application foundation. It provides multi-tenant identity management for sites, users, and roles.
+
 [NoDb](https://github.com/joeaudette/NoDb) is a "No Database" file system storage, it is also a "NoSql" storage system.
 
 This sample is pre-populated with sample data. There are 2 pre-configured sites, the root level site and another folder site at /two
@@ -37,6 +41,8 @@ Be sure to update the credentials before deployment.
 [available now](https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/samples/cloudscribecore-ef)
 
 This sample uses [cloudscribe Core](https://github.com/joeaudette/cloudscribe) for user authentication and Entity Framework/SqlServer storage for content and data.
+
+[cloudscribe Core]https://github.com/joeaudette/cloudscribe is a multi-tenant web application foundation. It provides multi-tenant identity management for sites, users, and roles.
 
 When you run it from Visual Studio it should initilaize a new localdb on the first run. 
 
