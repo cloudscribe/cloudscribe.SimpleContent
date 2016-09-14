@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-rc20160912",
+    "version": "1.0.0-rc20160914",
     "description": "cloudscribe.SimpleContent.Security.SimpleAuth Class Library",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -19,7 +19,7 @@
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
         "cloudscribe.SimpleContent.Web": "1.0.0-*",
         "cloudscribe.Web.SimpleAuth": "1.0.2-*",
-        "Microsoft.AspNetCore.Authorization": "1.0.0"
+        "Microsoft.AspNetCore.Authorization": "1.0.*"
     },
 
     "frameworks": {

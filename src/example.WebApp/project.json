@@ -6,29 +6,29 @@
             "version": "1.0.0-*",
             "type": "platform"
         },
-        "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0-*",
-        "Microsoft.AspNetCore.Diagnostics": "1.0.0-*",
-        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0-*",
-        "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0-*",
-        "Microsoft.AspNetCore.Mvc": "1.0.0-*",
+        "Microsoft.AspNetCore.Authentication.Cookies": "1.0.*",
+        "Microsoft.AspNetCore.Diagnostics": "1.0.*",
+        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.*",
+        "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.*",
+        "Microsoft.AspNetCore.Mvc": "1.0.*",
         "Microsoft.AspNetCore.Razor.Tools": {
             "version": "1.0.0-preview2-final",
             "type": "build"
         },
-        "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-*",
-        "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-*",
-        "Microsoft.AspNetCore.StaticFiles": "1.0.0-*",
-        "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0-*",
+        "Microsoft.AspNetCore.Server.IISIntegration": "1.0.*",
+        "Microsoft.AspNetCore.Server.Kestrel": "1.0-*",
+        "Microsoft.AspNetCore.StaticFiles": "1.0.*",
+        "Microsoft.EntityFrameworkCore.SqlServer": "1.0.*",
         "Microsoft.EntityFrameworkCore.Tools": {
             "version": "1.0.0-preview2-final",
             "type": "build"
         },
-        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-*",
-        "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
-        "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0-*",
-        "Microsoft.Extensions.Logging": "1.0.0-*",
-        "Microsoft.Extensions.Logging.Console": "1.0.0-*",
-        "Microsoft.Extensions.Logging.Debug": "1.0.0-*",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.*",
+        "Microsoft.Extensions.Configuration.Json": "1.0.*",
+        "Microsoft.Extensions.Configuration.UserSecrets": "1.0.*",
+        "Microsoft.Extensions.Logging": "1.0.*",
+        "Microsoft.Extensions.Logging.Console": "1.0.*",
+        "Microsoft.Extensions.Logging.Debug": "1.0.*",
         "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-*",
         "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
             "version": "1.0.0-preview2-final",
@@ -45,7 +45,7 @@
         "cloudscribe.Logging.EF": "1.0.2-*",
         "cloudscribe.Logging.Web": "1.0.2-*",
         "cloudscribe.Web.Navigation": "1.0.2-*",
-        "cloudscribe.Web.Pagination": "1.0.2-*",
+        "cloudscribe.Web.Pagination": "1.0.*",
         "cloudscribe.Web.SimpleAuth": "1.0.2-*",
         "cloudscribe.SimpleContent.Storage.NoDb": "1.0.0-*",
         "cloudscribe.SimpleContent.Storage.EFCore": "1.0.0-*",
@@ -54,10 +54,10 @@
         "cloudscribe.SimpleContent.Syndication": "1.0.0-*",
         "cloudscribe.Syndication.Web": "1.0.4-*",
         "cloudscribe.Core.SimpleContent.Integration": "1.0.0-*",
-        "SaasKit.Multitenancy": "1.1.4-*",
-        "Microsoft.AspNetCore.DataProtection": "1.0.0",
-        "Microsoft.AspNetCore.Session": "1.0.0",
-        "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.0"
+        "SaasKit.Multitenancy": "1.1.*",
+        "Microsoft.AspNetCore.DataProtection": "1.0.*",
+        "Microsoft.AspNetCore.Session": "1.0.*",
+        "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.*"
     },
 
     "tools": {

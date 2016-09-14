@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-rc20160912",
+    "version": "1.0.0-rc20160914",
     "description": "Entity Framework Core implementation of cloudscribe SimpleContent commands and queries",
     "authors": [ "Joe Audette" ],
     "buildOptions": {
@@ -20,15 +20,15 @@
 
     "dependencies": {
         "NETStandard.Library": "1.6.0-*",
-        "Microsoft.Extensions.Configuration.Json": "1.0.0-*",
-        "Microsoft.Extensions.Configuration": "1.0.0-*",
-        "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0-*",
+        "Microsoft.Extensions.Configuration.Json": "1.0.*",
+        "Microsoft.Extensions.Configuration": "1.0.*",
+        "Microsoft.EntityFrameworkCore.SqlServer": "1.0.*",
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
         "Microsoft.EntityFrameworkCore.Tools": {
             "version": "1.0.0-preview2-final",
             "type": "build"
         },
-        "Microsoft.AspNetCore.Hosting": "1.0.0",
+        "Microsoft.AspNetCore.Hosting": "1.0.*",
         "System.IO.FileSystem": "4.0.1"
     },
 
