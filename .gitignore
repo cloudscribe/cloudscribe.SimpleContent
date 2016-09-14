@@ -213,3 +213,4 @@ samples/simpleauthnodb/.vs/**
 src/cloudscribe.SimpleContent.Storage.EF/appsettings.local.overrides.json
 src/cloudscribe.SimpleContent.Storage.EFCore/appsettings.local.overrides.json
 **/.vs/**
+**/nodb_storage/projects/default/logitem/**

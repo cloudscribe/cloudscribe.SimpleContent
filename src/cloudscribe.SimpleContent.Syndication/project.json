@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-rc20160912",
+    "version": "1.0.0-rc20160914",
     "description": "cloudscribe.SimpleContent.Syndication Class Library",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -19,8 +19,8 @@
         "cloudscribe.SimpleContent.Models": "1.0.0-*",
         "cloudscribe.SimpleContent.Web": "1.0.0-*",
         "cloudscribe.Syndication": "1.0.4-*",
-        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-*",
-        "Microsoft.AspNetCore.Mvc.Core": "1.0.0"
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.*",
+        "Microsoft.AspNetCore.Mvc.Core": "1.0.*"
     },
 
     "frameworks": {
