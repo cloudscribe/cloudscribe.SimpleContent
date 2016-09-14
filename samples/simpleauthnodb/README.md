@@ -1,6 +1,13 @@
 # cloudscribe SimpleContent Samples - simpleauthnodb
 
-This sample uses cloudscribe SimpleAuth which is best suited for projects where only one or a few people need to be able to login. Users are pre-configured in the app-tenant-users.json file, and project settings are configured in the app-content-settings.json file. The sample uses NuGet packages for cloudscribe SimpleContent and cloudscribe SimpleAuth but has some integration code within the WebApp project to implement mutliple tenants. A good way to setup your own site is to use this sample. You can publish it from Visual Studio as it is or you can customize it by adding your own code and/or projects.
+This sample uses [cloudscribe SimpleAuth](https://github.com/joeaudette/cloudscribe.Web.SimpleAuth) which is best suited for projects where only one or a few people need to be able to login. Users are pre-configured in the app-tenant-users.json file, and project settings are configured in the app-content-settings.json file. The sample uses NuGet packages for cloudscribe SimpleContent and cloudscribe SimpleAuth but has some integration code within the WebApp project to implement mutliple tenants. A good way to setup your own site is to use this sample. You can publish it from Visual Studio as it is or you can customize it by adding your own code and/or projects.
+
+This sample uses [NoDb](https://github.com/joeaudette/NoDb) file system storage for content and data. NoDb is a "No Database" file system storage, it is also a "NoSql" storage system.
+
+You can login to the sample data with admin as the username and admin as the password
+
+Be sure to update the credentials before deployment.
+
 
 If you have questions or just want to be social, say hello in our gitter chat room. I try to monitor that room on a regular basis while I'm working, but if I'm not around you can leave  message.
 
