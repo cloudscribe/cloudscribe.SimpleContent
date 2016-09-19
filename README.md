@@ -10,21 +10,7 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 ## Sample Apps
 
-There is a [sample app available](https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/samples/simpleauthnodb) with NuGet dependencies on cloudscribe SimpleContent and SimpleAuth. If you launch it with IIS Express it will have a single tenant running at localhost:53941, change to port-tenants in the debugging dropdown (instead of IISExpress), you can debug with 2 tenants running. You can also run both configured tenants by opening a command window in the root of the example.WebApp project and execute the command:
-
-    dotnet run
-	
-that will get you both localhost:60000 and localhost:60002 which you can open in your web browser. Both sites are pre-configured with some content and you can login with admin/admin in either or both tenants.
-
-After you login a little pencil will appear in the upper right corner, it toggles the editor toolbar.
-
-You should also be able to [create and edit blog posts and pages using Open Live Writer](https://github.com/joeaudette/cloudscribe.SimpleContent/wiki/Using-Open-Live-Writer)
-
-[More Samples are planned](https://github.com/joeaudette/cloudscribe.SimpleContent/tree/master/samples/)
-
-## Main Solution
-
-The main solution in the src folder is where main development work is happening. Currently the work to integrate with [cloudscribe Core](https://github.com/joeaudette/cloudscribe) is in progress. To login to the example.WebApp use admin@admin.com and password admin
+To use SimpleContent for your own projects, we recommend start with one of our [StarterKits](https://github.com/joeaudette/cloudscribe.StarterKits)
 
 ## Start simple with no database and migrate to a database later if you need one
 
@@ -43,6 +29,8 @@ My plan is to usually build sites without a database (except for large projects)
 * Migrate your existing blog to SimpleContent using [MiniBlog Formatter](https://github.com/madskristensen/MiniBlogFormatter)
 * __Inline editing__ of blog posts and pages
 * Supports multiple tenants by host name even without a database
+* Support for using [cloudscribe.Core](https://github.com/joeaudette/cloudscribe) for user and site/tenant management
+* Support for using Entity Framework Core
 * Easy setting for serving static files from another domain. 
 *  __Open Live Writer__ (OLW) and __Windows Live Writer__ (WLW) support
 * You don't have to use OLW/WLW (but you should)
@@ -61,10 +49,6 @@ My plan is to usually build sites without a database (except for large projects)
 
 ### Planned Features - see also the to-do.md in the notes folder
 * Support for automatic image resizing and optimization - pending progress on [ImageProcessor project](https://github.com/JimBobSquarePants/ImageProcessor). This is needed for images added via the wysiwyg editor in the web browser. The best current solution is to use Open Live Writer which will resize the image before it posts to the server, or optimize the images yourself before adding them to content in the wysiwyg editor in the web browser.
-* Support for using Entity Framework Core
-* Support for using cloudscribe.Core for user and site/tenant management
 * Support for using MongoDb
 * A Utility for importing the json or xml content into Entity Framework Core or MongoDb for easy migration
-* Automatically __optimizes uploaded images__
-
 
