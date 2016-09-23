@@ -51,6 +51,9 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             post.Id = Guid.NewGuid().ToString();
             post.Author = authorDisplayName;
             post.IsPublished = publish;
+
+            //TODO: resolve timezone for pubdate?
+            //post.PubDate = post.PubDate.AddHours(-6);
             
             await blogService.Create(
                 blogId, 
@@ -138,7 +141,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             var commentsOpen = await blogService.CommentsAreOpen(existing, false);
             var postUrl = await blogService.ResolvePostUrl(existing);
-
+            
             var postStruct = mapper.GetStructFromPost(existing,postUrl, commentsOpen);
             // OLW/WLW need the image urls to be fully qualified - actually not sure this is true
             // I seem to remember that being the case with WLW
