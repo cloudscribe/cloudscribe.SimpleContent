@@ -16,6 +16,11 @@
         if (Model.Mode.Length > 0) return "";
         return "bh";
     }
+    public string GetEditTitle()
+    {
+        if (Model.CurrentPage != null) return Model.CurrentPage.Title;
+        return "";
+    }
 
 }
 <article class="page" data-id="@Model.CurrentPage.Id"
@@ -27,7 +32,7 @@
         <header class="">
             @if (Model.Mode == "new")
             {
-                <h1 id="article-title" itemprop="headline name"></h1>
+                <h1 id="article-title" itemprop="headline name">@GetEditTitle()</h1>
             }
             else
             {

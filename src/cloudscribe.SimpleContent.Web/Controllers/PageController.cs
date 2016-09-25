@@ -85,6 +85,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     {
                         page = new Page();
                         page.ProjectId = projectSettings.Id;
+                        page.Title = "Home";
                         mode = "new";
                     }
                     else
