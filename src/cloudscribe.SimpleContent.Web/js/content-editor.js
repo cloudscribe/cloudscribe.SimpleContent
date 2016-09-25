@@ -200,8 +200,13 @@
                 {
                     id: contentId,
                     __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
-                })
-                .success(function () { location.href = indexPath; })
+                }
+                ,
+                function () {
+                    location.href = indexPath;
+                }
+                )
+                //.success(function () { location.href = indexPath; })
                 .fail(function () { showMessage(false, "Something went wrong. Please try again"); });
         }
     },
