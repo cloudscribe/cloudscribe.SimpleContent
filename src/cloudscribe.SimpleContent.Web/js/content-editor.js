@@ -24,7 +24,7 @@
         txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
         txtParentPage, txtViewRoles, chkPublish, chkShowHeading,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
-        indexPath, categoryPath, savePath, deletePath, cancelEditPath
+        indexPath, categoryPath, savePath, deletePath, cancelEditPath, userLocale
 
     editContent = function () {
         txtTitle.attr('contentEditable', true);
@@ -48,7 +48,8 @@
             debug:false,
             widgetPositioning: { horizontal: 'left', vertical: 'bottom' },
             keepOpen: true,
-            allowInputToggle:true
+            allowInputToggle: true,
+            locale: userLocale
         });
         
         btnNew.attr("disabled", true);
@@ -362,6 +363,7 @@
     currentSlug = $("#editor-toolbar").data("current-slug");
     supportsCategories = ($("#editor-toolbar").data("supports-categories")) == 'True';
     editMode = $("#editor-toolbar").data("edit-mode");
+    userLocale = $("#editor-toolbar").data("locale");
     
     //alert(contentId);
     var mainNavHeight = $(".navbar-fixed-top").first().height();
