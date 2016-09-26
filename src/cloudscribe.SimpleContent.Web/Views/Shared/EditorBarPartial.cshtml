@@ -3,6 +3,7 @@
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
+@using System.Globalization
 @using cloudscribe.SimpleContent.Web
 @inject IStringLocalizer<SimpleContent> sr
 @addTagHelper "*, cloudscribe.Web.Common"
@@ -22,7 +23,8 @@
      data-category-path="@Model.CategoryPath"
      data-delete-path="@Model.DeletePath"
      data-save-path="@Model.SavePath"
-     data-cancel-edit-path="@Model.CancelEditPath">
+     data-cancel-edit-path="@Model.CancelEditPath"
+     data-locale="@CultureInfo.CurrentCulture.Name.ToLowerInvariant()">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#edit-tool-container" aria-expanded="false">
