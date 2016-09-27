@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2016-09-08
+// Last Modified:			2016-09-27
 // 
 
 
@@ -49,7 +49,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             get {
                 //if(categories.Count == 0)
                 var list = CategoriesCsv.Split(new char[] { ',' },
-                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
+                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower())
+                        .Distinct()
+                        .ToList();
 
                 categories.AddRange(list.Where(p2 =>
                   categories.All(p1 => p1 != p2)));
@@ -58,7 +60,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             }
             set {
                 categories = value;
-                CategoriesCsv = string.Join(",", categories);
+                CategoriesCsv = string.Join(",", categories.Distinct());
             }
         }
 

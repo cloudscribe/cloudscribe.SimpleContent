@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-08
+// Last Modified:           2016-09-27
 // 
 
 
@@ -400,7 +400,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (!string.IsNullOrEmpty(model.Categories))
             {
-                categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower()).ToList();
+                categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
+                    .Where(x => 
+                    !string.IsNullOrWhiteSpace(x)
+                    && x != ","
+                    )
+                    .Distinct()
+                    .ToList();
             }
 
             IPost post = null;

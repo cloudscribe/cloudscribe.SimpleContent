@@ -45,11 +45,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             //need to add PostCategorys
             foreach (var c in p.Categories)
             {
+                if (string.IsNullOrEmpty(c)) continue;
+                var t = c.Trim();
+                if (string.IsNullOrEmpty(t)) continue;
+
                 dbContext.PostCategories.Add(new PostCategory
                 {
                     ProjectId = projectId,
                     PostEntityId = p.Id,
-                    Value = c
+                    Value = t
                 });
             }
 
@@ -76,11 +80,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             await DeleteCategoriesByPost(projectId, p.Id, true, cancellationToken).ConfigureAwait(false);
             foreach (var c in p.Categories)
             {
+                if (string.IsNullOrEmpty(c)) continue;
+                var t = c.Trim();
+                if (string.IsNullOrEmpty(t)) continue;
+
                 dbContext.PostCategories.Add(new PostCategory
                 {
                     ProjectId = projectId,
                     PostEntityId = p.Id,
-                    Value = c
+                    Value = t
                 });
             }
 
