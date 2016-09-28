@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-27
+// Last Modified:           2016-09-28
 // 
 
 
@@ -68,8 +68,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             var model = new BlogViewModel();
+            model.ProjectSettings = projectSettings;
             // check if the user has the BlogEditor claim or meets policy
-            model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
+            model.CanEdit = await User.CanEditBlog(projectSettings.Id, authorizationService);
             model.ProjectSettings = projectSettings;
             model.BlogRoutes = blogRoutes;
             model.CurrentCategory = category;

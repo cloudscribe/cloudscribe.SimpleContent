@@ -27,10 +27,14 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services
             )
         {
+            services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
+            services.AddScoped<IProjectSecurityResolver, ProjectSecurityResolver>();
+
             services.AddScoped<MediaFolderHelper, MediaFolderHelper>();
             services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
             services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
             services.AddScoped<IRoleSelectorProperties, SiteRoleSelectorProperties>();
+
 
             return services;
         }

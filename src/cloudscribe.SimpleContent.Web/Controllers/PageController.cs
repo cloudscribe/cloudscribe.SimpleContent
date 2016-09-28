@@ -69,7 +69,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             
             var model = new PageViewModel();
-
+  
             if (page == null)
             {
                 if (isNew)
