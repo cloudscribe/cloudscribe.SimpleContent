@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-12
-// Last Modified:           2016-09-08
+// Last Modified:           2016-10-07
 // 
 
 
@@ -29,6 +29,11 @@ namespace cloudscribe.SimpleContent.Services
         private ILogger log;
 
         private IHostingEnvironment hosting;
+
+        public Task<string> ResolveMediaUrl(string mediaVirtualPath, string fileName)
+        {
+            return Task.FromResult(mediaVirtualPath + fileName);
+        }
 
         public Task ConvertBase64EmbeddedImagesToFilesWithUrls(
             string mediaVirtualPath,

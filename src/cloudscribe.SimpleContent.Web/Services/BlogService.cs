@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-08
+// Last Modified:           2016-10-07
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -356,12 +356,7 @@ namespace cloudscribe.SimpleContent.Services
             }
         }
 
-        public async Task<string> ResolveMediaUrl(string fileName)
-        {
-            await EnsureBlogSettings().ConfigureAwait(false);
-
-            return settings.LocalMediaVirtualPath + fileName;
-        }
+        
 
         public async Task<string> ResolvePostUrl(IPost post)
         {
@@ -568,6 +563,12 @@ namespace cloudscribe.SimpleContent.Services
 
             var result = post.PubDate > DateTime.UtcNow.AddDays(-settings.DaysToComment);
             return result;
+        }
+
+        public async Task<string> ResolveMediaUrl(string fileName)
+        {
+            await EnsureBlogSettings().ConfigureAwait(false);
+            return await mediaProcessor.ResolveMediaUrl(settings.LocalMediaVirtualPath, fileName).ConfigureAwait(false);
         }
 
         public async Task SaveMedia(
