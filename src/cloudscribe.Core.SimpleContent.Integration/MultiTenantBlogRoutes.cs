@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-08-06
-// Last Modified:           2016-08-15
+// Last Modified:           2016-10-08
 
 using cloudscribe.Core.Models;
 using cloudscribe.SimpleContent.Models;
@@ -13,7 +13,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
     public class MultiTenantBlogRoutes : IBlogRoutes
     {
         public MultiTenantBlogRoutes(
-            SiteSettings currentSite,
+            SiteContext currentSite,
             IOptions<MultiTenantOptions> multiTenantOptionsAccessor
             )
         {
@@ -21,7 +21,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
             multiTenantOptions = multiTenantOptionsAccessor.Value;
         }
 
-        private SiteSettings currentSite;
+        private SiteContext currentSite;
         private MultiTenantOptions multiTenantOptions;
 
         public string PostWithDateRouteName

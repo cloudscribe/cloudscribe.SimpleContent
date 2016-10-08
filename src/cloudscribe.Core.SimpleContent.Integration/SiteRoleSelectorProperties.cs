@@ -2,22 +2,19 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-26
-// Last Modified:			2016-08-27
+// Last Modified:			2016-10-08
 // 
 
 
 using cloudscribe.Core.Models;
 using cloudscribe.SimpleContent.Web.TagHelpers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.Core.SimpleContent.Integration
 {
     public class SiteRoleSelectorProperties : IRoleSelectorProperties
     {
-        public SiteRoleSelectorProperties(SiteSettings currentSite)
+        public SiteRoleSelectorProperties(SiteContext currentSite)
         {
             this.currentSite = currentSite;
             
@@ -27,7 +24,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
 
         }
 
-        private SiteSettings currentSite;
+        private SiteContext currentSite;
 
         public string Action
         {
