@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-07-11
-// Last Modified:           2016-09-08
+// Last Modified:           2016-10-08
 // 
 
 using cloudscribe.Core.Models;
@@ -15,7 +15,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
     public class SiteProjectSettingsResolver : IProjectSettingsResolver
     {
         public SiteProjectSettingsResolver(
-            SiteSettings currentSite,
+            SiteContext currentSite,
             MediaFolderHelper folderHelper,
             IProjectQueries projectQueries,
             IProjectCommands projectCommands
@@ -27,7 +27,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
             this.folderHelper = folderHelper;
         }
 
-        private SiteSettings currentSite;
+        private SiteContext currentSite;
         private MediaFolderHelper folderHelper;
         private IProjectQueries projectQueries;
         private IProjectCommands projectCommands;

@@ -5,12 +5,12 @@ namespace cloudscribe.Core.SimpleContent.Integration
 {
     public class SiteNavigationCacheKeys : IPageNavigationCacheKeys
     {
-        public SiteNavigationCacheKeys(SiteSettings currentSite)
+        public SiteNavigationCacheKeys(SiteContext currentSite)
         {
             this.currentSite = currentSite;
         }
 
-        private SiteSettings currentSite;
+        private SiteContext currentSite;
 
         public string PageTreeCacheKey
         {
