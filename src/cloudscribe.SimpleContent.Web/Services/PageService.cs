@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-08
+// Last Modified:           2016-10-10
 // 
 
 
@@ -264,9 +264,9 @@ namespace cloudscribe.SimpleContent.Services
                 imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
             }
             
-            await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
                 settings.LocalMediaVirtualPath,
-                page
+                page.Content
                 ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
@@ -291,9 +291,9 @@ namespace cloudscribe.SimpleContent.Services
                 imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
             }
             
-            await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
                 settings.LocalMediaVirtualPath,
-                page
+                page.Content
                 ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);

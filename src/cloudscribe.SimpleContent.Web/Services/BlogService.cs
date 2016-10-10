@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-10-07
+// Last Modified:           2016-10-10
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -295,9 +295,9 @@ namespace cloudscribe.SimpleContent.Services
             // here we need to process any base64 embedded images
             // save them under wwwroot
             // and update the src in the post with the new url
-            await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
                 settings.LocalMediaVirtualPath,
-                post
+                post.Content
                 ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
@@ -316,9 +316,9 @@ namespace cloudscribe.SimpleContent.Services
             // here we need to process any base64 embedded images
             // save them under wwwroot
             // and update the src in the post with the new url
-            await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
                 settings.LocalMediaVirtualPath,
-                post
+                post.Content
                 ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
