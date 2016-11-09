@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore
+namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 {
     public class Startup
     {
@@ -34,7 +34,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.TryAddScoped<ISimpleContentModelMapper, SqlServerSimpleContentModelMapper>();
+            
 
             services.AddEntityFrameworkSqlServer()
               .AddDbContext<SimpleContentDbContext>((serviceProvider, options) =>
