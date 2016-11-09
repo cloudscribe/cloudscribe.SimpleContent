@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore
 {
-    public class SimpleContentTableNames
+    public class SimpleContentTableNames : ISimpleContentTableNames
     {
         public SimpleContentTableNames()
         {

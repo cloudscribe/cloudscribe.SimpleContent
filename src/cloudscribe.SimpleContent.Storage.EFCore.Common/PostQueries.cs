@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-11
+// Last Modified:			2016-11-09
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,12 +19,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 {
     public class PostQueries : IPostQueries
     {
-        public PostQueries(SimpleContentDbContext dbContext)
+        public PostQueries(ISimpleContentDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        private SimpleContentDbContext dbContext;
+        private ISimpleContentDbContext dbContext;
 
         private const string PostContentType = "Post";
 

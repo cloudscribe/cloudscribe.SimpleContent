@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-09-08
+// Last Modified:			2016-11-09
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -16,12 +17,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 {
     public class ProjectCommands : IProjectCommands
     {
-        public ProjectCommands(SimpleContentDbContext dbContext)
+        public ProjectCommands(ISimpleContentDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        private SimpleContentDbContext dbContext;
+        private ISimpleContentDbContext dbContext;
 
         public async Task Create(
             string projectId,

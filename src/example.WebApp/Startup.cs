@@ -239,7 +239,7 @@ namespace example.WebApp
                     // this one is only needed if using cloudscribe Logging with EF as the logging storage
                     LoggingEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
 
-                    SimpleContentEFStartupExtensions.InitializeDatabaseAsync(app.ApplicationServices).Wait();
+                    SimpleContentEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
 
                     break;
             }
@@ -312,7 +312,7 @@ namespace example.WebApp
                     // only needed if using cloudscribe logging with EF storage
                     services.AddCloudscribeLoggingEFStorage(connectionString);
 
-                    services.AddCloudscribeSimpleContentEFStorage(connectionString);
+                    services.AddCloudscribeSimpleContentEFStorageMSSQL(connectionString);
 
 
 
