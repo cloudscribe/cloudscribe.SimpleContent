@@ -215,3 +215,5 @@ src/cloudscribe.SimpleContent.Storage.EFCore/appsettings.local.overrides.json
 **/.vs/**
 **/nodb_storage/projects/default/logitem/**
 src/cloudscribe.SimpleContent.Storage.EFCore.MSSQL/appsettings.local.overrides.json
+src/cloudscribe.SimpleContent.Storage.EFCore.MySQL/appsettings.local.overrides.json
+src/cloudscribe.SimpleContent.Storage.EFCore.pgsql/appsettings.local.overrides.json

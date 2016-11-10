@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
+namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 {
     public class Startup
     {
@@ -41,7 +41,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             //           .UseInternalServiceProvider(serviceProvider)
             //           );
-            services.AddCloudscribeSimpleContentEFStorageMSSQL(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddCloudscribeSimpleContentEFStorageMySQL(Configuration.GetConnectionString("DefaultConnection"));
 
            
         }
