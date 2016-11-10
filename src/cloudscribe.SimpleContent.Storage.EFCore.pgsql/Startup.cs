@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
+namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 {
     public class Startup
     {
@@ -34,14 +34,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-
             //services.AddEntityFrameworkSqlServer()
             //  .AddDbContext<SimpleContentDbContext>((serviceProvider, options) =>
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             //           .UseInternalServiceProvider(serviceProvider)
             //           );
-            services.AddCloudscribeSimpleContentEFStorageMSSQL(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddCloudscribeSimpleContentEFStoragePostgreSql(Configuration.GetConnectionString("DefaultConnection"));
 
            
         }
