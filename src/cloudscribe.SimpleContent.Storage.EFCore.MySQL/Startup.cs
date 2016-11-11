@@ -34,16 +34,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-
-            //services.AddEntityFrameworkSqlServer()
-            //  .AddDbContext<SimpleContentDbContext>((serviceProvider, options) =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            //           .UseInternalServiceProvider(serviceProvider)
-            //           );
-            services.AddCloudscribeSimpleContentEFStorageMySQL(Configuration.GetConnectionString("DefaultConnection"));
-
-           
+            services.AddCloudscribeSimpleContentEFStorageMySQL(Configuration.GetConnectionString("DefaultConnection"));   
         }
 
 
