@@ -27,10 +27,10 @@ My plan is to usually build sites without a database (except for large projects)
 * __No database required__ uses json for pages and can use json or xml for blog posts via [NoDb](https://github.com/joeaudette/NoDb)
 * For blog posts, supports the same XML format as MiniBlog and BlogEngine.NET, to convert from one of those, just drop in your files
 * Migrate your existing blog to SimpleContent using [MiniBlog Formatter](https://github.com/madskristensen/MiniBlogFormatter)
+* Support for using Entity Framework Core with either MSSQL, MySql, or PostgreSql
 * __Inline editing__ of blog posts and pages
 * Supports multiple tenants by host name even without a database
 * Support for using [cloudscribe.Core](https://github.com/joeaudette/cloudscribe) for user and site/tenant management
-* Support for using Entity Framework Core
 * Easy setting for serving static files from another domain. 
 *  __Open Live Writer__ (OLW) and __Windows Live Writer__ (WLW) support
 * You don't have to use OLW/WLW (but you should)
