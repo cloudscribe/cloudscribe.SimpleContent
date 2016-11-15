@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-09-25
+// Last Modified:           2016-11-15
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,6 +24,7 @@ namespace cloudscribe.SimpleContent.Services
             INodeUrlPrefixProvider prefixProvider,
             IUrlHelperFactory urlHelperFactory,
             IPageRouteHelper pageRouteHelper,
+            IBlogRoutes blogRoutes,
             IActionContextAccessor actionContextAccesor
             )
         {
@@ -33,6 +34,7 @@ namespace cloudscribe.SimpleContent.Services
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
             this.pageRouteHelper = pageRouteHelper;
+            this.blogRoutes = blogRoutes;
         }
 
         private IProjectService projectService;
@@ -40,6 +42,7 @@ namespace cloudscribe.SimpleContent.Services
         private INodeUrlPrefixProvider prefixProvider;
         private IUrlHelperFactory urlHelperFactory;
         private IPageRouteHelper pageRouteHelper;
+        private IBlogRoutes blogRoutes;
         private IActionContextAccessor actionContextAccesor;
         private TreeNode<NavigationNode> rootNode = null;
 
@@ -122,15 +125,18 @@ namespace cloudscribe.SimpleContent.Services
                     node.Text = project.BlogPageText;
                     if(project.BlogMenuLinksToNewestPost)
                     {
-                        node.Action = "MostRecent";
-                        node.Controller = "Blog";
-                        node.Url = urlHelper.Action("MostRecent", "Blog");
+                        //node.Action = "MostRecent";
+                        //node.Controller = "Blog";
+                        node.NamedRoute = blogRoutes.MostRecentPostRouteName;
+                        node.Url = urlHelper.RouteUrl(blogRoutes.MostRecentPostRouteName);
                     }
                     else
                     {
-                        node.Action = "Index";
-                        node.Controller = "Blog";
-                        node.Url = urlHelper.Action("Index", "Blog");
+                        //node.Action = "Index";
+                        //node.Controller = "Blog";
+                        //node.Url = urlHelper.Action("Index", "Blog");
+                        node.NamedRoute = blogRoutes.BlogIndexRouteName;
+                        node.Url = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
                     }
                     
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
@@ -152,15 +158,19 @@ namespace cloudscribe.SimpleContent.Services
                     node.Text = project.BlogPageText;
                     if (project.BlogMenuLinksToNewestPost)
                     {
-                        node.Action = "MostRecent";
-                        node.Controller = "Blog";
-                        node.Url = urlHelper.Action("MostRecent", "Blog");
+                        //node.Action = "MostRecent";
+                        //node.Controller = "Blog";
+                        //node.Url = urlHelper.Action("MostRecent", "Blog");
+                        node.NamedRoute = blogRoutes.MostRecentPostRouteName;
+                        node.Url = urlHelper.RouteUrl(blogRoutes.MostRecentPostRouteName);
                     }
                     else
                     {
-                        node.Action = "Index";
-                        node.Controller = "Blog";
-                        node.Url = urlHelper.Action("Index", "Blog");
+                        //node.Action = "Index";
+                        //node.Controller = "Blog";
+                        //node.Url = urlHelper.Action("Index", "Blog");
+                        node.NamedRoute = blogRoutes.BlogIndexRouteName;
+                        node.Url = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
                     }
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
                     var blogNode = treeRoot.AddChild(node);

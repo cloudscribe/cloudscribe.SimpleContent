@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Localization
 @using cloudscribe.SimpleContent.Web
 @inject IStringLocalizer<SimpleContent> sr
+@inject cloudscribe.SimpleContent.Models.IBlogRoutes blogRoutes
 <section class="panel panel-default">
     <div class="panel-heading">
         <h3>@sr["Categories"]</h3>
@@ -11,8 +12,7 @@
             @foreach (var cat in Model)
             {
                 <li>
-                    <a asp-controller="Blog"
-                       asp-action="Category"
+                    <a asp-route="@blogRoutes.BlogCategoryRouteName"
                        asp-route-category="@cat.Key.ToLowerInvariant()">@cat.Key.ToLowerInvariant() (@cat.Value)</a>
                 </li>
             }
