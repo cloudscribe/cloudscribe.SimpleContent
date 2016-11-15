@@ -8,5 +8,13 @@ namespace cloudscribe.SimpleContent.Models
         string PostWithoutDateRouteName { get; }
 
         string MostRecentPostRouteName { get; }
+
+        string BlogCategoryRouteName { get; }
+
+        string BlogArchiveRouteName { get; }
+
+        string NewPostRouteName { get; }
+        
+        string BlogIndexRouteName { get; }
     }
 }

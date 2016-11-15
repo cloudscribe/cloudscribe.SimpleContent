@@ -53,6 +53,8 @@ namespace cloudscribe.SimpleContent.Models
         public bool AddBlogToPagesTree { get; set; } = true;
         public int BlogPagePosition { get; set; } = 2; // right after home page
         public string BlogPageText { get; set; } = "Blog";
+
+        //public string HomePageText { get; set; } = "Home";
         public string BlogPageNavComponentVisibility { get; set; } = "topnav";
 
         // feed settings

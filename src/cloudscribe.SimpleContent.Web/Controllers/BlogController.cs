@@ -94,16 +94,27 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             if(model.CanEdit)
             {
-                model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
-                model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
-                model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
-                model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
-                model.EditorSettings.CurrentSlug = string.Empty;
-                model.EditorSettings.SupportsCategories = true;
+                SetupEditor(model.EditorSettings);
+                model.EditorSettings.CurrentSlug = string.Empty; 
             }
 
 
             return View("Index", model);
+        }
+
+        private void SetupEditor(EditorModel editor)
+        {
+            editor.NewItemPath = Url.RouteUrl(blogRoutes.NewPostRouteName);
+            editor.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
+            editor.CancelEditPath = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
+            editor.IndexUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
+
+            editor.CategoryPath = Url.RouteUrl(blogRoutes.BlogCategoryRouteName);
+            editor.DeletePath = Url.Action("AjaxDelete", "Blog");
+            editor.SavePath = Url.Action("AjaxPost", "Blog");
+
+
+            editor.SupportsCategories = true;
         }
 
         [HttpGet]
@@ -175,12 +186,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             if (model.CanEdit)
             {
-                model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
-                model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
-                model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
-                model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
+                SetupEditor(model.EditorSettings);
+                //model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
+                //model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
+                //model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
+                //model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
                 model.EditorSettings.CurrentSlug = string.Empty;
-                model.EditorSettings.SupportsCategories = true;
+                //model.EditorSettings.SupportsCategories = true;
             }
 
             return View("Archive", model);
@@ -301,9 +313,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (canEdit)
             {
+                SetupEditor(model.EditorSettings);
                 if (isNew)
                 {
-                    model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
+                    //model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
                     model.EditorSettings.CurrentSlug = string.Empty;
                     model.EditorSettings.IsPublished = true;
                     model.EditorSettings.EditMode = "new";
@@ -338,7 +351,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         model.EditorSettings.EditPath = Url.Link(blogRoutes.PostWithoutDateRouteName, 
                             new { slug = model.CurrentPost.Slug, mode = "edit" });
 
-                        model.EditorSettings.CancelEditPath = Url.Link(ProjectConstants.PostWithoutDateRouteName, 
+                        model.EditorSettings.CancelEditPath = Url.Link(blogRoutes.PostWithoutDateRouteName, 
                             new { slug = model.CurrentPost.Slug});
                     }
                     
@@ -346,11 +359,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
                 model.EditorSettings.EditMode = mode;
                 model.EditorSettings.SupportsCategories = true;
-                model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
-                model.EditorSettings.CategoryPath = Url.Action("Category", "Blog"); 
-                model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Blog");
-                model.EditorSettings.SavePath = Url.Action("AjaxPost", "Blog");
-                model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
+                //model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
+                //model.EditorSettings.CategoryPath = Url.Action("Category", "Blog"); 
+                //model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Blog");
+                //model.EditorSettings.SavePath = Url.Action("AjaxPost", "Blog");
+                //model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
 
             }
 

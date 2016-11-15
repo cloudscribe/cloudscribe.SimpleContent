@@ -72,5 +72,25 @@ namespace cloudscribe.Core.SimpleContent.Integration
             }
         }
 
+        public string BlogCategoryRouteName
+        {
+            get { return ProjectConstants.BlogCategoryRouteName; }
+        }
+
+        public string BlogArchiveRouteName
+        {
+            get { return ProjectConstants.BlogArchiveRouteName; }
+        }
+
+        public string NewPostRouteName
+        {
+            get { return ProjectConstants.NewPostRouteName; }
+        }
+
+        public string BlogIndexRouteName
+        {
+            get { return ProjectConstants.BlogIndexRouteName; }
+        }
+
     }
 }
