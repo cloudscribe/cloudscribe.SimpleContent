@@ -52,7 +52,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var p = Post.FromIPost(post);
 
             await commands.DeleteAsync(projectId, p.Id).ConfigureAwait(false);
-            post.PubDate = newPubDate;
+            p.PubDate = newPubDate;
             await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
         }
 
