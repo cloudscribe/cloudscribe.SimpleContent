@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-rc20160923",
+    "version": "1.0.0-rc20160924",
     "description": "cloudscribe.SimpleContent.Storage implemented with NoDb file system storage",
     "authors": [ "Joe Audette" ],
     "packOptions": {
