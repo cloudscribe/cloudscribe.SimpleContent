@@ -185,6 +185,7 @@ namespace example.WebApp
             cloudscribe.Logging.Web.ILogRepository logRepo
             )
         {
+            
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             ConfigureLogging(loggerFactory, serviceProvider, logRepo);

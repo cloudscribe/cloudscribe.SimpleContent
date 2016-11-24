@@ -40,6 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddNoDb<Post>();
             services.TryAddScoped<IPostQueries, PostQueries>();
             services.TryAddScoped<IPostCommands, PostCommands>();
+            services.TryAddScoped<PostCache, PostCache>();
 
             return services;
         }

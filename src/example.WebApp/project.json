@@ -58,7 +58,8 @@
         "SaasKit.Multitenancy": "1.1.*",
         "Microsoft.AspNetCore.DataProtection": "1.0.*",
         "Microsoft.AspNetCore.Session": "1.0.*",
-        "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.*"
+      "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.*"
+
     },
 
     "tools": {

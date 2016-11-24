@@ -489,6 +489,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     await blogService.Update(post);
                 }
 
+                // TODO: clear cache
+
 
                 string url;
                 if (project.IncludePubDateInPostUrls)
@@ -565,6 +567,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             await blogService.Delete(post.Id);
+
+            // TODO: clear cache
 
             Response.StatusCode = 200;
             return; //new EmptyResult();
@@ -673,7 +677,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             blogPost.Comments.Add(comment);
             await blogService.Update(blogPost);
-            
+
+            // TODO: clear cache
+
             //no need to send notification when project owner posts a comment, ie in response
             var shouldSendEmail = !canEdit;
        

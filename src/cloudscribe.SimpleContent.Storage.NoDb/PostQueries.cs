@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-09-23
+// Last Modified:           2016-11-24
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -19,44 +19,39 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     public class PostQueries : IPostQueries
     {
         public PostQueries(
+            PostCache cache,
             IBasicCommands<Post> postCommands,
             IBasicQueries<Post> postQueries,
             ILogger<PostQueries> logger)
         {
+            this.cache = cache;
             commands = postCommands;
             query = postQueries;
             log = logger;
         }
 
+        private PostCache cache;
         private IBasicCommands<Post> commands;
         private IBasicQueries<Post> query;
         private ILogger log;
         
         
         public async Task<List<Post>> GetAllPosts(
-            string blogId,
+            string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            //TODO: caching
-            //if (HttpRuntime.Cache["posts"] == null)
+           
+            var cacheKey = cache.GetListCacheKey(projectId);
+            var list = cache.GetAllPosts(cacheKey);
+            if (list != null) return list;
 
-            var l = await query.GetAllAsync(blogId, cancellationToken).ConfigureAwait(false);
-            var list = l.ToList();
+            var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
+            list = l.ToList();
+            cache.AddToCache(list, cacheKey);
             
-            //if (list.Count > 0)
-            //{
-            //    list.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
-            //    //HttpRuntime.Cache.Insert("posts", list);
-            //}
-
             return list;
 
-            //if (HttpRuntime.Cache["posts"] != null)
-            //{
-            //    return (List<Post>)HttpRuntime.Cache["posts"];
-            //}
-            //return new List<Post>();
         }
 
         public async Task<List<IPost>> GetPosts(

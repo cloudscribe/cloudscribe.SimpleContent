@@ -1,0 +1,48 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Web.TagHelpers
+@inject IRoleSelectorProperties roleSelector
+
+@section Meta {
+    @{await Html.RenderPartialAsync("MetaPartial", Model); }
+}
+@section Styles {
+    @{await Html.RenderPartialAsync("StylePartial", Model); }
+}
+@section Toolbar {
+    @if (Model.CanEdit)
+    {
+        await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+    }
+}
+@{await Html.RenderPartialAsync("PageDetailPartial", Model); }
+@if (Context.Request.Path == "/")
+{
+    @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
+}
+
+
+@section Bottom {
+   
+}
+@section Scripts {
+    @if (Model.CanEdit)
+    {
+        await Html.RenderPartialAsync("EditorScriptsPartial");
+        @if (!string.IsNullOrEmpty(Model.Mode))
+        {
+            if (roleSelector.RequiredScriptPaths != null)
+            {
+                foreach (var s in roleSelector.RequiredScriptPaths)
+                {
+                    <script src="@Url.Content(s)"></script>
+                }
+            }
+        }
+    }
+    @if (Model.CommentsAreOpen && Model.Mode.Length == 0)
+    {
+        await Html.RenderPartialAsync("CommentScriptsPartial");
+    }
+}
