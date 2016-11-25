@@ -1,5 +1,5 @@
-﻿{
-    "version": "1.0.0-rc20160924",
+{
+    "version": "1.0.0-rc20161120",
     "description": "cloudscribe.SimpleContent.Storage implemented with NoDb file system storage",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -14,12 +14,13 @@
     },
 
 
-    "dependencies": {
-        "NETStandard.Library": "1.6.0-*",
-        "cloudscribe.SimpleContent.Models": "1.0.0-*",
-        "NoDb": "1.0.*",
-        "Microsoft.Extensions.Options": "1.0.*"
-    },
+  "dependencies": {
+    "NETStandard.Library": "1.6.0-*",
+    "cloudscribe.SimpleContent.Models": "1.0.0-*",
+    "NoDb": "1.0.*",
+    "Microsoft.Extensions.Options": "1.0.*",
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0"
+  },
 
     "frameworks": {
         "net46": {

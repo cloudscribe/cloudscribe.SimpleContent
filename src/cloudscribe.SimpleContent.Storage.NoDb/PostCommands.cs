@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-09-07
+// Last Modified:           2016-11-25
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -19,16 +19,19 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     public class PostCommands : IPostCommands
     {
         public PostCommands(
+            PostCache cache,
             IBasicCommands<Post> postCommands,
             IBasicQueries<Post> postQueries,
             ILogger<PostCommands> logger
             )
         {
+            this.cache = cache;
             commands = postCommands;
             query = postQueries;
             log = logger;
         }
 
+        private PostCache cache;
         private IBasicCommands<Post> commands;
         private IBasicQueries<Post> query;
         private ILogger log;
@@ -69,7 +72,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
             
             await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
-            
+            cache.ClearListCache(projectId);
         }
 
         public async Task Update(
@@ -81,11 +84,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var p = Post.FromIPost(post);
 
             p.LastModified = DateTime.UtcNow;
-
-            //if (string.IsNullOrEmpty(post.Id)) { post.Id = Guid.NewGuid().ToString(); }
             
             await commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
-            
+            cache.ClearListCache(projectId);
+
         }
 
         public async Task Delete(
@@ -102,24 +104,24 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 allPosts.Remove(post);
 
             }
-
+            cache.ClearListCache(projectId);
         }
 
         private async Task<List<Post>> GetAllPosts(
-            string blogId,
+            string projectId,
             CancellationToken cancellationToken)
         {
-            
 
-            var l = await query.GetAllAsync(blogId, cancellationToken).ConfigureAwait(false);
-            var list = l.ToList();
-            
+            var list = cache.GetAllPosts(projectId);
+            if (list != null) return list;
+
+            var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
+            list = l.ToList();
+            cache.AddToCache(list, projectId);
+
             return list;
-
             
         }
-
-
-
+        
     }
 }
