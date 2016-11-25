@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-10-10
+// Last Modified:           2016-11-25
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -27,6 +28,7 @@ namespace cloudscribe.SimpleContent.Services
             IPostCommands postCommands,
             IMediaProcessor mediaProcessor,
             IBlogRoutes blogRoutes,
+            PostEvents eventHandlers,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
@@ -41,6 +43,7 @@ namespace cloudscribe.SimpleContent.Services
             this.projectService = projectService;
             htmlProcessor = new HtmlProcessor();
             this.blogRoutes = blogRoutes;
+            this.eventHandlers = eventHandlers;
         }
 
         private IProjectService projectService;
@@ -55,40 +58,14 @@ namespace cloudscribe.SimpleContent.Services
         private IProjectSettings settings = null;
         private HtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
+        private PostEvents eventHandlers;
 
         private async Task EnsureBlogSettings()
         {
             if(settings != null) { return; }
             settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);    
         }
-
-        //public async Task<ProjectSettings> GetCurrentBlogSettings()
-        //{
-        //    await EnsureBlogSettings().ConfigureAwait(false);
-        //    return settings;
-        //}
-
-        //public async Task<List<ProjectSettings>> GetUserProjects(string userName)
-        //{
-        //    //await EnsureBlogSettings().ConfigureAwait(false);
-        //    //return settings;
-        //    return await projectService.GetUserProjects(userName).ConfigureAwait(false);
-        //}
-
-        //public async Task<ProjectSettings> GetProjectSettings(string projectId)
-        //{
-        //    //await EnsureBlogSettings().ConfigureAwait(false);
-        //    //return settings;
-        //    return await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-        //}
-
-        //public async Task<List<Post>> GetAllPosts()
-        //{
-        //    await EnsureBlogSettings().ConfigureAwait(false);
-
-        //    return await repo.GetAllPosts(settings.BlogId, CancellationToken).ConfigureAwait(false);
-        //}
-
+        
         public async Task<List<IPost>> GetPosts(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
@@ -241,6 +218,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             await postCommands.Create(settings.Id, post).ConfigureAwait(false);
+            await eventHandlers.HandleCreated(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -285,7 +263,9 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
+            await eventHandlers.HandlePreUpdate(settings.Id, post.Id).ConfigureAwait(false);
             await postCommands.Update(settings.Id, post).ConfigureAwait(false);
+            await eventHandlers.HandleUpdated(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Create(IPost post)
@@ -307,6 +287,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             await postCommands.Create(settings.Id, post).ConfigureAwait(false);
+            await eventHandlers.HandleCreated(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Update(IPost post)
@@ -327,7 +308,9 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
+            await eventHandlers.HandlePreUpdate(settings.Id, post.Id).ConfigureAwait(false);
             await postCommands.Update(settings.Id, post).ConfigureAwait(false);
+            await eventHandlers.HandleUpdated(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
@@ -480,7 +463,7 @@ namespace cloudscribe.SimpleContent.Services
         public async Task Delete(string postId)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-
+            await eventHandlers.HandlePreDelete(settings.Id, postId).ConfigureAwait(false);
             await postCommands.Delete(settings.Id, postId).ConfigureAwait(false);
 
         }
@@ -502,7 +485,8 @@ namespace cloudscribe.SimpleContent.Services
             {
                 return; //TODO: exception here?
             }
-            
+
+            await eventHandlers.HandlePreDelete(projectId, postId).ConfigureAwait(false);
             await postCommands.Delete(projectId, postId).ConfigureAwait(false);
 
         }

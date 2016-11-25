@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
 // Last Modified:           2016-10-10
@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using cloudscribe.SimpleContent.Models.EventHandlers;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -27,6 +28,7 @@ namespace cloudscribe.SimpleContent.Services
             IProjectSecurityResolver security,
             IPageQueries pageQueries,
             IPageCommands pageCommands,
+            PageEvents eventHandlers,
             IMediaProcessor mediaProcessor,
             IUrlHelperFactory urlHelperFactory,
             IMemoryCache cache,
@@ -46,6 +48,7 @@ namespace cloudscribe.SimpleContent.Services
             htmlProcessor = new HtmlProcessor();
             this.cache = cache;
             this.cacheKeys = cacheKeys;
+            this.eventHandlers = eventHandlers;
         }
 
         private readonly HttpContext context;
@@ -61,6 +64,7 @@ namespace cloudscribe.SimpleContent.Services
         private HtmlProcessor htmlProcessor;
         private IMemoryCache cache;
         private IPageNavigationCacheKeys cacheKeys;
+        private PageEvents eventHandlers;
 
         private async Task EnsureProjectSettings()
         {
@@ -177,6 +181,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             await pageCommands.Create(projectId, page).ConfigureAwait(false);
+            await eventHandlers.HandleCreated(projectId, page).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -232,7 +237,9 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
+            await eventHandlers.HandlePreUpdate(projectId, page.Id).ConfigureAwait(false);
             await pageCommands.Update(projectId, page).ConfigureAwait(false);
+            await eventHandlers.HandleUpdated(projectId, page).ConfigureAwait(false);
         }
 
         public async Task Create(
@@ -276,6 +283,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             await pageCommands.Create(settings.Id, page).ConfigureAwait(false);
+            await eventHandlers.HandleCreated(settings.Id, page).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -302,11 +310,14 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
+            await eventHandlers.HandlePreUpdate(settings.Id, page.Id).ConfigureAwait(false);
             await pageCommands.Update(settings.Id, page).ConfigureAwait(false);
+            await eventHandlers.HandleUpdated(settings.Id, page).ConfigureAwait(false);
         }
 
         public async Task DeletePage(string projectId, string pageId)
         {
+            await eventHandlers.HandlePreDelete(projectId, pageId).ConfigureAwait(false);
             await pageCommands.Delete(projectId, pageId).ConfigureAwait(false);
 
         }

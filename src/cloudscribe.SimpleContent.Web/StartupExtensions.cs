@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 
+
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
@@ -172,6 +173,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<IBlogRoutes, DefaultBlogRoutes>();
             services.TryAddScoped<IBlogService, BlogService>();
+            services.TryAddScoped<PageEvents, PageEvents>();
+            services.TryAddScoped<PostEvents, PostEvents>();
+
             services.TryAddScoped<IPageService, PageService>();
             services.TryAddScoped<IProjectService, ProjectService>();
             services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();

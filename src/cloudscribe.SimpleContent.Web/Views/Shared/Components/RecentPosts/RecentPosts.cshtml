@@ -1,11 +1,14 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.RecentPostsViewModel
 @inject cloudscribe.SimpleContent.Models.IBlogRoutes blogRoutes
-
+@using cloudscribe.SimpleContent.Web
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContent> sr
 @{
 
 }
 @if (Model.Posts.Count > 0)
 {
+    <h2>@sr["Recent Posts"]</h2>
     <ul>
         @foreach (var post in Model.Posts)
         {
