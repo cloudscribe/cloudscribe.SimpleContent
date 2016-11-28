@@ -37,9 +37,7 @@
             else
             {
                 <h1 id="article-title" itemprop="headline">
-                    <a asp-controller="Page" asp-action="Index"
-                       asp-route-slug="@Model.CurrentPage.Slug"
-                       itemprop="url">@Model.CurrentPage.Title</a>
+                    @Model.CurrentPage.Title
                 </h1>
             }
         </header>

@@ -40,22 +40,7 @@
         }
         else
         {
-            <h1 itemprop="headline name">
-                @if (Model.ProjectSettings.IncludePubDateInPostUrls)
-                {
-                    <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
-                   asp-route-year="@Model.CurrentPost.PubDate.Year"
-                   asp-route-month="@Model.CurrentPost.PubDate.Month.ToString("00")"
-                   asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
-                   asp-route-slug="@Model.CurrentPost.Slug"
-                       itemprop="url">@Model.CurrentPost.Title</a>
-                }
-                else
-                {
-                    <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug"
-                       itemprop="url">@Model.CurrentPost.Title</a>
-                }    
-            </h1>
+            <h1 itemprop="headline name">@Model.CurrentPost.Title</h1>
         }
         <div class="@GetHeaderDivClass()">
             @if (Model.Mode.Length > 0)
