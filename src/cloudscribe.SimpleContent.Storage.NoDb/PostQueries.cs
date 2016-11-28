@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-11-25
+// Last Modified:           2016-11-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -102,7 +102,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
             else
             {
-                posts = posts.OrderByDescending(p => p.PubDate).ToList<Post>();
+                posts = posts.Where(p =>
+                    (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
+                        )
+                        .OrderByDescending(p => p.PubDate)
+                        .ToList<Post>();
+
+                //posts = posts.OrderByDescending(p => p.PubDate).ToList<Post>();
             }
 
             if (pageSize > 0)

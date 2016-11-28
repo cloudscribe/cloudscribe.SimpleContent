@@ -366,6 +366,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 //model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
 
             }
+            else // can't edit
+            {
+                if((!model.CurrentPost.IsPublished) || model.CurrentPost.PubDate > DateTime.UtcNow)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
 
             return View("Post", model);
 
