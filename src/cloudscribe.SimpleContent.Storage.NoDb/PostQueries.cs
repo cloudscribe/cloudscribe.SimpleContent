@@ -353,7 +353,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var list = cache.GetCategories(projectId);
+            var list = cache.GetCategories(projectId, includeUnpublished);
             if(list == null)
             {
                 var dict = new Dictionary<string, int>();
@@ -376,7 +376,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
                 var sorted = new SortedDictionary<string, int>(dict);
                 list = sorted.OrderBy(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
-                cache.AddCategoriesToCache(list, projectId);
+                cache.AddCategoriesToCache(list, projectId, includeUnpublished);
             
             }
             return list;
@@ -389,7 +389,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var list = cache.GetArchiveList(projectId);
+            var list = cache.GetArchiveList(projectId, includeUnpublished);
             if(list == null)
             {
                 var result = new Dictionary<string, int>();
@@ -422,7 +422,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 }
 
                 list = result;
-                cache.AddArchiveListToCache(list, projectId);
+                cache.AddArchiveListToCache(list, projectId, includeUnpublished);
 
             }
             return list;
