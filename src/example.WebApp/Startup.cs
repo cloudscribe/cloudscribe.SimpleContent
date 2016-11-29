@@ -308,10 +308,10 @@ namespace example.WebApp
                 case "ef":
                 default:
                     var connectionString = Configuration.GetConnectionString("EntityFrameworkConnectionString");
-                    services.AddCloudscribeCoreEFStorage(connectionString);
+                    services.AddCloudscribeCoreEFStorageMSSQL(connectionString);
 
                     // only needed if using cloudscribe logging with EF storage
-                    services.AddCloudscribeLoggingEFStorage(connectionString);
+                    services.AddCloudscribeLoggingEFStorageMSSQL(connectionString);
 
                     services.AddCloudscribeSimpleContentEFStorageMSSQL(connectionString);
 
