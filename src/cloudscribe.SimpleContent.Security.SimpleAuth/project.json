@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-rc20160914",
+    "version": "1.1.0-rc20161129",
     "description": "cloudscribe.SimpleContent.Security.SimpleAuth Class Library",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -15,11 +15,11 @@
 
 
     "dependencies": {
-        "NETStandard.Library": "1.6.0-*",
-        "cloudscribe.SimpleContent.Models": "1.0.0-*",
-        "cloudscribe.SimpleContent.Web": "1.0.0-*",
-        "cloudscribe.Web.SimpleAuth": "1.0.2-*",
-        "Microsoft.AspNetCore.Authorization": "1.0.*"
+        "NETStandard.Library": "1.6.*",
+        "cloudscribe.SimpleContent.Models": "1.1.0-*",
+        "cloudscribe.SimpleContent.Web": "1.1.0-*",
+        "cloudscribe.Web.SimpleAuth": "1.1.0-*",
+        "Microsoft.AspNetCore.Authorization": "1.1.*"
     },
 
     "frameworks": {

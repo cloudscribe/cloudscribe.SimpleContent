@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-rc20160914",
+    "version": "1.1.0-rc20161129",
     "description": "cloudscribe.SimpleContent.MetaWeblog Class Library",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -15,10 +15,10 @@
 
 
     "dependencies": {
-        "NETStandard.Library": "1.6.0-*",
-        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.*",
-        "cloudscribe.SimpleContent.Models": "1.0.0-*",
-        "cloudscribe.MetaWeblog": "1.0.1-*"
+        "NETStandard.Library": "1.6.*",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
+        "cloudscribe.SimpleContent.Models": "1.1.0-*",
+        "cloudscribe.MetaWeblog": "1.1.*"
     },
 
     "frameworks": {
