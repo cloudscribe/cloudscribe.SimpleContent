@@ -42,16 +42,16 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         }
 
-        public Dictionary<string, int> GetCategories(string projectId)
+        public Dictionary<string, int> GetCategories(string projectId, bool includeUnpublished)
         {
-            var cacheKey = GetCategoriesCacheKey(projectId);
+            var cacheKey = GetCategoriesCacheKey(projectId, includeUnpublished);
             Dictionary<string, int> result = (Dictionary<string, int>)cache.Get(cacheKey);
             return result;
         }
 
-        public Dictionary<string, int> GetArchiveList(string projectId)
+        public Dictionary<string, int> GetArchiveList(string projectId, bool includeUnpublished)
         {
-            var cacheKey = GetArchiveListCacheKey(projectId);
+            var cacheKey = GetArchiveListCacheKey(projectId, includeUnpublished);
             Dictionary<string, int> result = (Dictionary<string, int>)cache.Get(cacheKey);
             return result;
         }
@@ -67,9 +67,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                  );
         }
 
-        public void AddCategoriesToCache(Dictionary<string, int> categoryList, string projectId)
+        public void AddCategoriesToCache(Dictionary<string, int> categoryList, string projectId, bool includeUnpublished)
         {
-            var cacheKey = GetCategoriesCacheKey(projectId);
+            var cacheKey = GetCategoriesCacheKey(projectId, includeUnpublished);
             cache.Set(
                 cacheKey,
                 categoryList,
@@ -78,9 +78,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                  );
         }
 
-        public void AddArchiveListToCache(Dictionary<string, int> archiveList, string projectId)
+        public void AddArchiveListToCache(Dictionary<string, int> archiveList, string projectId, bool includeUnpublished)
         {
-            var cacheKey = GetArchiveListCacheKey(projectId);
+            var cacheKey = GetArchiveListCacheKey(projectId, includeUnpublished);
             cache.Set(
                 cacheKey,
                 archiveList,
@@ -94,10 +94,16 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var cacheKey = GetListCacheKey(projectId);
             cache.Remove(cacheKey);
 
-            cacheKey = GetCategoriesCacheKey(projectId);
+            cacheKey = GetCategoriesCacheKey(projectId, true);
             cache.Remove(cacheKey);
 
-            cacheKey = GetArchiveListCacheKey(projectId);
+            cacheKey = GetCategoriesCacheKey(projectId, false);
+            cache.Remove(cacheKey);
+
+            cacheKey = GetArchiveListCacheKey(projectId, true);
+            cache.Remove(cacheKey);
+
+            cacheKey = GetArchiveListCacheKey(projectId, false);
             cache.Remove(cacheKey);
         }
 
@@ -106,14 +112,30 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             return projectId + "-postlist";
         }
 
-        public string GetCategoriesCacheKey(string projectId)
+        public string GetCategoriesCacheKey(string projectId, bool includeUnpublished)
         {
-            return projectId + "-categorylist";
+            if(includeUnpublished)
+            {
+                return projectId + "-all-categorylist";
+            }
+            else
+            {
+                return projectId + "-categorylist";
+            }
+            
         }
 
-        public string GetArchiveListCacheKey(string projectId)
+        public string GetArchiveListCacheKey(string projectId, bool includeUnpublished)
         {
-            return projectId + "-archivelist";
+            if(includeUnpublished)
+            {
+                return projectId + "-all-archivelist";
+            }
+            else
+            {
+                return projectId + "-archivelist";
+            }
+            
         }
     }
 }
