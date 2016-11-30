@@ -15,7 +15,7 @@
 
 
     "dependencies": {
-        "NETStandard.Library": "1.6.*",
+        "NETStandard.Library": "1.6.1",
         "cloudscribe.SimpleContent.Models": "1.1.0-*",
         "cloudscribe.SimpleContent.Web": "1.1.0-*",
         "cloudscribe.Web.SimpleAuth": "1.1.0-*",

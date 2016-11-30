@@ -22,8 +22,7 @@
     "Microsoft.Extensions.Logging.Console": "1.1.*",
     "Microsoft.Extensions.Logging.Debug": "1.1.*",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0-*",
-    "Microsoft.VisualStudio.Web.CodeGeneration.Tools": "1.1.0-preview4-final",
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "1.1.0-preview4-final",
+    
     "cloudscribe.Core.Web": "1.1.0-*",
     "cloudscribe.Core.Storage.NoDb": "1.1.0-*",
     "cloudscribe.Core.Storage.EFCore.MSSQL": "1.1.0-*",
@@ -44,14 +43,19 @@
     "SaasKit.Multitenancy": "1.1.*",
     "Microsoft.AspNetCore.DataProtection": "1.1.*",
     "Microsoft.AspNetCore.Session": "1.1.*",
-    "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.1.*",
-    "BundlerMinifier.Core": "2.2.306"
+    "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.1.*"
+    
 
   },
 
-    "tools": {
-        "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.1.0-preview4-final"
-    },
+  "tools": {
+    "BundlerMinifier.Core": "2.2.306",
+    "Microsoft.Extensions.SecretManager.Tools": { "version": "1.1.0-preview4-final" },
+    "Microsoft.AspNetCore.Razor.Tools": { "version": "1.1.0-preview4-final" },
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": { "version": "1.1.0-preview4-final" },
+    "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": { "version": "1.1.0-preview4-final" },
+    "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.1.0-preview4-final"
+  },
 
     "frameworks": {
         "netcoreapp1.1": {
