@@ -204,7 +204,7 @@ namespace example.WebApp
             app.UseStaticFiles();
 
             // custom 404 and error page - this preserves the status code (ie 404)
-            app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+            //app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
             app.UseSession();
 

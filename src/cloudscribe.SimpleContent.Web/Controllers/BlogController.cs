@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-28
+// Last Modified:           2016-11-30
 // 
 
 
@@ -382,7 +382,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task AjaxPost(PostViewModel model)
+        public async Task<IActionResult> AjaxPost(PostViewModel model)
         {
             // disable status code page for ajax requests
             var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
@@ -394,8 +394,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (string.IsNullOrEmpty(model.Title))
             {
                 log.LogInformation("returning 500 because no title was posted");
-                Response.StatusCode = 500;
-                return;
+                return StatusCode(500);
             }
             
             var project = await projectService.GetCurrentProjectSettings();
@@ -403,8 +402,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (project == null)
             {
                 log.LogInformation("returning 500 blog not found");
-                Response.StatusCode = 500;
-                return; 
+                return StatusCode(500);
             }
 
             bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
@@ -413,8 +411,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
-                Response.StatusCode = 403;
-                return; 
+                return StatusCode(403);
             }
 
             var categories = new List<string>();
@@ -452,8 +449,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 if (!available)
                 {
                     log.LogInformation("returning 409 because slug already in use");
-                    Response.StatusCode = 409;
-                    return;
+                    
+                    return StatusCode(409);
                 }
 
                 post = new Post()
@@ -472,7 +469,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 var localTime = DateTime.Parse(model.PubDate);
                 var pubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
-                // TODO: this logic probably needs to also be implemented in the metaweblog service in case the pubdate is changed from there
+
                 if (!isNew)
                 {
                     if (pubDate != post.PubDate)
@@ -496,9 +493,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     await blogService.Update(post);
                 }
 
-                // TODO: clear cache
-
-
+                
                 string url;
                 if (project.IncludePubDateInPostUrls)
                 {
@@ -516,12 +511,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     url = Url.Link(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
                 }
 
-                await Response.WriteAsync(url);
+                //Response.StatusCode = 200;
+                //await Response.WriteAsync(url);
+                return Content(url);
+                
             }
             catch(Exception ex)
             {
                 log.LogError("ajax post failed with exception " + ex.Message + " " + ex.StackTrace, ex);
-                Response.StatusCode = 500;
+                
+                return StatusCode(500);
             }
             
             
@@ -530,7 +529,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task AjaxDelete(string id)
+        public async Task<IActionResult> AjaxDelete(string id)
         {
             // disable status code page for ajax requests
             var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
@@ -544,8 +543,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (project == null)
             {
                 log.LogInformation("returning 500 blog not found");
-                Response.StatusCode = 500;
-                return; // new EmptyResult();
+                return StatusCode(500);
             }
 
             bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
@@ -553,15 +551,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
-                Response.StatusCode = 403;
-                return; //new EmptyResult();
+                
+                return StatusCode(403);
             }
 
             if (string.IsNullOrEmpty(id))
             {
                 log.LogInformation("returning 404 postid not provided");
                 Response.StatusCode = 404;
-                return; //new EmptyResult();
+                return StatusCode(404);
             }
 
             var post = await blogService.GetPost(id);
@@ -569,16 +567,17 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (post == null)
             {
                 log.LogInformation("returning 404 not found");
-                Response.StatusCode = 404;
-                return; //new EmptyResult();
+                
+                return StatusCode(404);
             }
 
             await blogService.Delete(post.Id);
 
             // TODO: clear cache
 
-            Response.StatusCode = 200;
-            return; //new EmptyResult();
+            //Response.StatusCode = 200;
+            //return; //new EmptyResult();
+            return StatusCode(200);
 
         }
 
@@ -599,8 +598,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (!ModelState.IsValid)
             {  
                 Response.StatusCode = 403;
-                await Response.WriteAsync("Please enter a valid e-mail address");
-                return new EmptyResult();
+                //await Response.WriteAsync("Please enter a valid e-mail address");
+                return Content("Please enter a valid e-mail address");
             }
             
             var project = await projectService.GetCurrentProjectSettings();
@@ -608,31 +607,29 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (project == null)
             {
                 log.LogDebug("returning 500 blog not found");
-                Response.StatusCode = 500;
-                return new EmptyResult();
+                return StatusCode(500);
             }
 
             if (string.IsNullOrEmpty(model.PostId))
             {
                 log.LogDebug("returning 500 because no postid was posted");
-                Response.StatusCode = 500;
-                return new EmptyResult();
+                return StatusCode(500);
             }
 
             if (string.IsNullOrEmpty(model.Name))
             {
                 log.LogDebug("returning 403 because no name was posted");
                 Response.StatusCode = 403;
-                await Response.WriteAsync("Please enter a valid name");
-                return new EmptyResult();
+                //await Response.WriteAsync("Please enter a valid name");
+                return Content("Please enter a valid name");
             }
 
             if (string.IsNullOrEmpty(model.Content))
             {
                 log.LogDebug("returning 403 because no content was posted");
                 Response.StatusCode = 403;
-                await Response.WriteAsync("Please enter a valid content");
-                return new EmptyResult();
+                //await Response.WriteAsync("Please enter a valid content");
+                return Content("Please enter a valid content");
             }
 
             var blogPost = await blogService.GetPost(model.PostId);
@@ -640,8 +637,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (blogPost == null)
             {
                 log.LogDebug("returning 500 blog post not found");
-                Response.StatusCode = 500;
-                return new EmptyResult();
+                return StatusCode(500);
             }
 
             if(!HttpContext.User.Identity.IsAuthenticated)
@@ -653,8 +649,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     {
                         log.LogDebug("returning 403 captcha validation failed");
                         Response.StatusCode = 403;
-                        await Response.WriteAsync("captcha validation failed");
-                        return new EmptyResult();
+                        //await Response.WriteAsync("captcha validation failed");
+                        return Content("captcha validation failed");
                     }
                 }
             }
@@ -727,7 +723,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task AjaxApproveComment(string postId, string commentId)
+        public async Task<IActionResult> AjaxApproveComment(string postId, string commentId)
         {
             // disable status code page for ajax requests
             var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
@@ -739,16 +735,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (string.IsNullOrEmpty(postId))
             {
                 log.LogDebug("returning 404 because no postid was posted");
-                Response.StatusCode = 404;
-                return;// new EmptyResult();
+               
+                return StatusCode(404);
             }
 
             if (string.IsNullOrEmpty(commentId))
             {
                 log.LogDebug("returning 404 because no commentid was posted");
-                Response.StatusCode = 404;
-               // await Response.WriteAsync("Comm");
-                return;// new EmptyResult();
+                //Response.StatusCode = 404;
+                // await Response.WriteAsync("Comm");
+                return StatusCode(404);
             }
 
             var project = await projectService.GetCurrentProjectSettings();
@@ -756,8 +752,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (project == null)
             {
                 log.LogDebug("returning 500 blog not found");
-                Response.StatusCode = 500;
-                return;// new EmptyResult();
+                //Response.StatusCode = 500;
+                return StatusCode(500);
             }
 
             bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
@@ -765,8 +761,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
-                Response.StatusCode = 403;
-                return;// new EmptyResult();
+                return StatusCode(403);
             }
 
             var blogPost = await blogService.GetPost(postId);
@@ -774,8 +769,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (blogPost == null)
             {
                 log.LogDebug("returning 404 blog post not found");
-                Response.StatusCode = 404;
-                return;// new EmptyResult();
+                return StatusCode(404);
             }
 
             var comment = blogPost.Comments.FirstOrDefault(c => c.Id == commentId);
@@ -783,21 +777,20 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (comment == null)
             {
                 log.LogDebug("returning 404 comment not found");
-                Response.StatusCode = 404;
-                return;// new EmptyResult();
+                return StatusCode(404);
             }
 
             comment.IsApproved = true;
             await blogService.Update(blogPost);
 
-            Response.StatusCode = 200;
+            return StatusCode(200);
 
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task AjaxDeleteComment(string postId, string commentId)
+        public async Task<IActionResult> AjaxDeleteComment(string postId, string commentId)
         {
             // disable status code page for ajax requests
             var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
@@ -809,24 +802,21 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (string.IsNullOrEmpty(postId))
             {
                 log.LogDebug("returning 404 because no postid was posted");
-                Response.StatusCode = 404;
-                return;// new EmptyResult();
+                return StatusCode(404);
             }
 
             if (string.IsNullOrEmpty(commentId))
             {
                 log.LogDebug("returning 404 because no commentid was posted");
-                Response.StatusCode = 404;
-                return;// new EmptyResult();
+                return StatusCode(404);
             }
 
             var project = await projectService.GetCurrentProjectSettings();
 
             if (project == null)
             {
-                log.LogDebug("returning 500 blog not found");
-                Response.StatusCode = 500;
-                return;// new EmptyResult();
+                log.LogDebug("returning 404 blog not found");
+                return StatusCode(404);
             }
 
             bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
@@ -834,8 +824,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (!canEdit)
             {
                 log.LogInformation("returning 403 user is not allowed to edit");
-                Response.StatusCode = 403;
-                return;// new EmptyResult();
+                return StatusCode(403);
             }
 
             var blogPost = await blogService.GetPost(postId);
@@ -843,8 +832,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (blogPost == null)
             {
                 log.LogDebug("returning 404 blog post not found");
-                Response.StatusCode = 404;
-                return;// new EmptyResult();
+                return StatusCode(404);
             }
 
             var comment = blogPost.Comments.FirstOrDefault(c => c.Id == commentId);
@@ -852,15 +840,14 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (comment == null)
             {
                 log.LogDebug("returning 404 comment not found");
-                Response.StatusCode = 404;
-                return;// new EmptyResult();
+                return StatusCode(404);
             }
 
             //comment.IsApproved = true;
             blogPost.Comments.Remove(comment);
             await blogService.Update(blogPost);
 
-            Response.StatusCode = 200;
+            return StatusCode(200);
         }
 
         private string GetUrl(string website)
