@@ -225,6 +225,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             var isNew = false;
             if (page != null)
             {
+                if(page.Title != model.Title)
+                {
+                    needToClearCache = true;
+                }
                 page.Title = model.Title;
                 page.MetaDescription = model.MetaDescription;
                 page.Content = model.Content;
@@ -354,6 +358,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 log.LogInformation("returning 404 not found");
                 return StatusCode(404);
             }
+
+            log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
 
             await pageService.DeletePage(project.Id, page.Id);
 

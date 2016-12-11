@@ -24,7 +24,8 @@
         txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
         txtParentPage, txtViewRoles, chkPublish, chkShowHeading,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
-        indexPath, categoryPath, savePath, deletePath, cancelEditPath, userLocale
+        indexPath, categoryPath, savePath, deletePath, cancelEditPath, userLocale,
+        btnClearFormat
 
     editContent = function () {
         txtTitle.attr('contentEditable', true);
@@ -353,6 +354,7 @@
     btnDelete = $("#btnDelete").bind("click", deleteContent);
     btnSave = $("#btnSave").bind("click", saveContent);
     btnCancel = $("#btnCancel").bind("click", cancelEdit);
+    btnClearFormat = $("#clearallformat");
     btnOuterToggle = $('#editor-outer-toggle');
     chkPublish = $("#published");
     indexPath = $("#editor-toolbar").data("index-path");
@@ -387,15 +389,14 @@
         event.preventDefault();
         toggleToolbar();
     });
+    btnClearFormat.click(function (event) {
+        event.preventDefault();
+        //alert('clear format');
+        txtContent.html(txtContent.text());
+    });
 
     setInitialToggleState();
     
-    
-    if (currentSlug.length == 0) {
-        
-    }
-    
-
     $(document).keyup(function (e) {
         if (!document.activeElement.isContentEditable) {
             if (e.keyCode === 46) { // Delete key
