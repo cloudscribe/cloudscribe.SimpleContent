@@ -244,5 +244,8 @@ footer {
 }
 .post .jumbotron {margin-bottom:0;}
 
+img, video, iframe {
+    max-width: 100%;
+}
 
 

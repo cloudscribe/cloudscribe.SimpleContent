@@ -570,6 +570,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 
                 return StatusCode(404);
             }
+            log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
 
             await blogService.Delete(post.Id);
 
