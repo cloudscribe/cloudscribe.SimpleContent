@@ -56,6 +56,35 @@ namespace Microsoft.Extensions.DependencyInjection
             return routes;
         }
 
+        public static IRouteBuilder AddCustomPageRouteForSimpleContent(this IRouteBuilder routes, string prefix)
+        {
+
+            routes.MapRoute(
+               name: ProjectConstants.PageIndexRouteName,
+               template: prefix +"/{slug=none}"
+               , defaults: new { controller = "Page", action = "Index" }
+               );
+
+            return routes;
+        }
+
+        public static IRouteBuilder AddCustomPageRouteForSimpleContent(
+            this IRouteBuilder routes,
+            string prefix,
+            IRouteConstraint siteFolderConstraint
+            )
+        {
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageIndexRouteName,
+               template: prefix + "/{sitefolder}/{slug=none}"
+               , defaults: new { controller = "Page", action = "Index" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            return routes;
+        }
+
         public static IRouteBuilder AddBlogRoutesForSimpleContent(this IRouteBuilder routes)
         {
             routes.MapRoute(
