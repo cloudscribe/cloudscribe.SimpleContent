@@ -272,7 +272,10 @@ namespace example.WebApp
                         );
 
                     routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                    //routes.AddCustomPageRouteForSimpleContent("p",new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
                 }
+
+                //routes.AddCustomPageRouteForSimpleContent("p");
 
                 routes.MapRoute(
                     name: "errorhandler",
@@ -280,12 +283,15 @@ namespace example.WebApp
                     );
 
                 routes.MapRoute(
-                    name: "def",
-                    template: "{controller}/{action}"
+                    name: "default",
+                    template: "{controller}/{action}",
+                     defaults: new { controller = "Home", action = "Index" }
                     );
+                
 
                 routes.AddDefaultPageRouteForSimpleContent();
-                
+
+
             });
         }
 
