@@ -74,22 +74,62 @@ namespace cloudscribe.Core.SimpleContent.Integration
 
         public string BlogCategoryRouteName
         {
-            get { return ProjectConstants.BlogCategoryRouteName; }
+            get
+            {
+                if (multiTenantOptions.Mode == MultiTenantMode.FolderName)
+                {
+                    if (!string.IsNullOrEmpty(currentSite.SiteFolderName))
+                    {
+                        return ProjectConstants.FolderBlogCategoryRouteName;
+                    }
+                }
+                return ProjectConstants.BlogCategoryRouteName;
+            }
         }
 
         public string BlogArchiveRouteName
         {
-            get { return ProjectConstants.BlogArchiveRouteName; }
+            get
+            {
+                if (multiTenantOptions.Mode == MultiTenantMode.FolderName)
+                {
+                    if (!string.IsNullOrEmpty(currentSite.SiteFolderName))
+                    {
+                        return ProjectConstants.FolderBlogArchiveRouteName;
+                    }
+                }
+                return ProjectConstants.BlogArchiveRouteName;
+            }
         }
 
         public string NewPostRouteName
         {
-            get { return ProjectConstants.NewPostRouteName; }
+            get
+            {
+                if (multiTenantOptions.Mode == MultiTenantMode.FolderName)
+                {
+                    if (!string.IsNullOrEmpty(currentSite.SiteFolderName))
+                    {
+                        return ProjectConstants.FolderNewPostRouteName;
+                    }
+                }
+                return ProjectConstants.NewPostRouteName;
+            }
         }
 
         public string BlogIndexRouteName
         {
-            get { return ProjectConstants.BlogIndexRouteName; }
+            get
+            {
+                if (multiTenantOptions.Mode == MultiTenantMode.FolderName)
+                {
+                    if (!string.IsNullOrEmpty(currentSite.SiteFolderName))
+                    {
+                        return ProjectConstants.FolderBlogIndexRouteName;
+                    }
+                }
+                return ProjectConstants.BlogIndexRouteName;
+            }
         }
 
     }

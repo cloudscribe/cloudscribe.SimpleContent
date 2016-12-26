@@ -83,7 +83,7 @@ namespace example.WebApp
             
             services.AddCloudscribeLogging();
             
-            //services.AddScoped<cloudscribe.Web.Navigation.Caching.ITreeCache, cloudscribe.Web.Navigation.Caching.NotCachedTreeCache>();
+            services.AddScoped<cloudscribe.Web.Navigation.Caching.ITreeCache, cloudscribe.Web.Navigation.Caching.NotCachedTreeCache>();
             
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.Web.Navigation.NavigationNodePermissionResolver>();
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.SimpleContent.Web.Services.PagesNavigationNodePermissionResolver>();
@@ -162,7 +162,7 @@ namespace example.WebApp
                     options.AddCloudscribeViewLocationFormats();
 
                     options.AddEmbeddedViewsForNavigation();
-                    options.AddEmbeddedViewsForCloudscribeCore();
+                    options.AddEmbeddedBootstrap3ViewsForCloudscribeCore();
                     options.AddEmbeddedViewsForCloudscribeLogging();
                     options.AddEmbeddedViewsForSimpleContent();
                     options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();

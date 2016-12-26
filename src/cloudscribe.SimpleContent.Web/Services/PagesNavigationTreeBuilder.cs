@@ -103,8 +103,16 @@ namespace cloudscribe.SimpleContent.Services
                 rootNav.Key = "pagesRoot";
                 rootNav.Title = "Home";
                 rootNav.Text = "Home";
+                if(string.IsNullOrEmpty(folderPrefix))
+                {
+                    rootNav.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName);
+                }
+                else
+                {
+                    rootNav.Url = urlHelper.Content("~/" + folderPrefix);
+                }
                 
-                // rootNav.Url = urlHelper.Content("~/" + folderPrefix);
+                // 
 
                 
                 //if (rootListCount > 0)
@@ -117,7 +125,7 @@ namespace cloudscribe.SimpleContent.Services
                 //{
                 //    rootNav.Url = pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix);
                 //}
-                rootNav.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName);
+                
 
 
             }
