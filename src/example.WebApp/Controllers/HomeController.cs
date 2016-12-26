@@ -16,10 +16,10 @@ namespace example.WebApp.Controllers
         }
 
         private ILogger log;
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         //public IActionResult About()
         //{
