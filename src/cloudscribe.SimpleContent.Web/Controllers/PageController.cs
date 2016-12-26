@@ -93,6 +93,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         
                         if(rootList.Count > 0)
                         {
+                            if(slug == projectSettings.DefaultPageSlug)
+                            {
+                                // slug was empty and no matching page found for default slug
+                                // but since there exist root level pages we should
+                                // show an index menu. 
+                                // esp useful if not using pages as the default route
+                                // /p or /docs
+                                return View("IndexMenu");
+                            }
+
                             Response.StatusCode = 404;
                             // return View("NotFound", 404);
                             return NotFound();

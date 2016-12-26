@@ -77,7 +77,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.FolderPageIndexRouteName,
-               template: prefix + "/{sitefolder}/{slug=none}"
+               template: "{sitefolder}/" + prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { name = siteFolderConstraint }
                );

@@ -81,6 +81,9 @@ namespace cloudscribe.SimpleContent.Services
 
             }
 
+            var rootList = await pageService.GetRootPages().ConfigureAwait(false);
+            var rootListCount = rootList.Count();
+
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
             var folderPrefix = prefixProvider.GetPrefix();
             if ((homePage != null) && project.UseDefaultPageAsRootNode)
@@ -93,21 +96,37 @@ namespace cloudscribe.SimpleContent.Services
             }
             else
             {
+                
+               
                 rootNav = new NavigationNode();
                 rootNav.IsRootNode = true;
                 rootNav.Key = "pagesRoot";
                 rootNav.Title = "Home";
                 rootNav.Text = "Home";
-                rootNav.Url = pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix);  // rootNav.Url = urlHelper.Content("~/" + folderPrefix);
-                //rootNav.ChildContainerOnly = true;
+                
+                // rootNav.Url = urlHelper.Content("~/" + folderPrefix);
+
+                
+                //if (rootListCount > 0)
+                //{
+                //    rootNav.ChildContainerOnly = true;
+                //    rootNav.ComponentVisibility = "childtree";
+                    
+                //}
+                //else
+                //{
+                //    rootNav.Url = pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix);
+                //}
+                rootNav.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName);
+
+
             }
 
             
 
             var treeRoot = new TreeNode<NavigationNode>(rootNav);
 
-            var rootList = await pageService.GetRootPages().ConfigureAwait(false);
-            var rootListCount = rootList.Count();
+            
             var blogPosition = project.BlogPagePosition;
             if (project.AddBlogToPagesTree)
             {
