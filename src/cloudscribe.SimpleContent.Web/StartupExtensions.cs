@@ -14,7 +14,7 @@ using cloudscribe.SimpleContent.Web.Services;
 using Microsoft.Extensions.Configuration;
 using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.TagHelpers;
-
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -247,12 +247,14 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="options"></param>
         /// <returns>RazorViewEngineOptions</returns>
+        [Obsolete("AddEmbeddedViewsForSimpleContent is deprecated, please use AddBootstrap3EmbeddedViewsForSimpleContent instead.")]
         public static RazorViewEngineOptions AddEmbeddedViewsForSimpleContent(this RazorViewEngineOptions options)
         {
-            options.FileProviders.Add(new EmbeddedFileProvider(
-                    typeof(BlogController).GetTypeInfo().Assembly,
-                    "cloudscribe.SimpleContent.Web"
-                ));
+            options.AddBootstrap3EmbeddedViewsForSimpleContent();
+            //options.FileProviders.Add(new EmbeddedFileProvider(
+            //        typeof(BlogController).GetTypeInfo().Assembly,
+            //        "cloudscribe.SimpleContent.Web"
+            //    ));
 
             return options;
         }
