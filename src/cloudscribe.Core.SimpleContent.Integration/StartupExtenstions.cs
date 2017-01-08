@@ -6,10 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Logging;
-using cloudscribe.Core.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -32,6 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<MediaFolderHelper, MediaFolderHelper>();
             services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
+            services.AddScoped<IPageRoutes, MultiTenantPageRoutes>();
             services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
             services.AddScoped<IRoleSelectorProperties, SiteRoleSelectorProperties>();
 

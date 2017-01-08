@@ -199,7 +199,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfigurationRoot configuration = null
             )
         {
-
+            services.TryAddScoped<IPageRoutes, DefaultPageRoutes>();
             services.TryAddScoped<IBlogRoutes, DefaultBlogRoutes>();
             services.TryAddScoped<IBlogService, BlogService>();
             services.TryAddScoped<PageEvents, PageEvents>();

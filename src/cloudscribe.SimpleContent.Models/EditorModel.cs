@@ -28,5 +28,7 @@ namespace cloudscribe.SimpleContent.Models
         public int SortOrder { get; set; } = 3;
 
         public bool ShowHeading { get; set; } = true;
+
+        public bool MenuOnly { get; set; } = false;
     }
 }

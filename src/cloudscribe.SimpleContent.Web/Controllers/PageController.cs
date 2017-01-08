@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-11-30
+// Last Modified:           2017-01-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -23,6 +23,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public PageController(
             IProjectService projectService,
             IPageService blogService,
+            IPageRoutes pageRoutes,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
             ILogger<PageController> logger)
@@ -31,6 +32,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.pageService = blogService;
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
+            this.pageRoutes = pageRoutes;
             log = logger;
         }
 
@@ -39,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private IAuthorizationService authorizationService;
         private ITimeZoneHelper timeZoneHelper;
         private ILogger log;
+        private IPageRoutes pageRoutes;
 
         [HttpGet]
         [AllowAnonymous]
@@ -129,6 +132,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
 
                 ViewData["Title"] = page.Title;
+                
             }
 
             model.Mode = mode;
@@ -145,7 +149,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 if(model.CurrentPage != null)
                 {
-                    model.EditorSettings.CancelEditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug });
+                    model.EditorSettings.CancelEditPath = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = model.CurrentPage.Slug });
                     model.EditorSettings.CurrentSlug = model.CurrentPage.Slug;
                     model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
                     model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode="edit"});
@@ -153,6 +157,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
                     model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
                     model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
+                    model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
                 }
                 else
                 {
@@ -171,6 +176,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.SupportsCategories = false;
                 model.EditorSettings.ProjectId = projectSettings.Id;
 
+            }
+
+            if (page != null && page.MenuOnly && !isEditing)
+            {
+                return View("ChildMenu", model);
             }
 
             return View(model);
@@ -300,6 +310,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             page.PageOrder = model.PageOrder;
             page.IsPublished = model.IsPublished;
             page.ShowHeading = model.ShowHeading;
+            page.MenuOnly = model.MenuOnly;
             if (!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);
@@ -322,7 +333,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 pageService.ClearNavigationCache();
             }
 
-            var url = Url.Action("Index", "Page", new { slug = page.Slug });
+            var url = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
             return Content(url);
 
         }

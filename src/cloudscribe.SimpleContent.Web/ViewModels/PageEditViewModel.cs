@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace cloudscribe.SimpleContent.Web.ViewModels
+﻿namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class PageEditViewModel
     {
@@ -34,6 +29,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool IsPublished { get; set; } = true;
 
         public bool ShowHeading { get; set; } = true;
+
+        public bool MenuOnly { get; set; } = false;
 
     }
 }

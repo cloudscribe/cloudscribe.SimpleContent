@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2016-11-11
+// Last Modified:			2017-01-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -382,6 +382,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 //.ForMySQLHasDefaultValueSql(true)
                 ;
 
+                entity.Property(p => p.MenuOnly)
+                .IsRequired()
+                .HasDefaultValue(false)
+                ;
 
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
