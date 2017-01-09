@@ -4,7 +4,7 @@
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
 @section Meta {
-<meta name="robots" content="noindex" />
+<meta name="robots" content="noindex, follow" />
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
 }
 @section Styles {
