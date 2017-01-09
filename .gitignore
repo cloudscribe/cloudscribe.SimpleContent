@@ -217,3 +217,4 @@ src/cloudscribe.SimpleContent.Storage.EFCore/appsettings.local.overrides.json
 src/cloudscribe.SimpleContent.Storage.EFCore.MSSQL/appsettings.local.overrides.json
 src/cloudscribe.SimpleContent.Storage.EFCore.MySQL/appsettings.local.overrides.json
 src/cloudscribe.SimpleContent.Storage.EFCore.pgsql/appsettings.local.overrides.json
+src/example.WebApp/navigation.f83067b4-919d-4910-acd1-4b3b1c210ecf.xml

@@ -4,6 +4,9 @@
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @inject IRoleSelectorProperties roleSelector
+@section Meta {
+    <meta name="robots" content="noindex, follow" />
+}
 @section Styles {
     @{await Html.RenderPartialAsync("StylePartial", Model); }
 }

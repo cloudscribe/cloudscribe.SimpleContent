@@ -253,6 +253,7 @@ namespace example.WebApp
 
         private void UseMvc(IApplicationBuilder app, bool useFolders)
         {
+            var useCustomRoutes = Configuration.GetValue<bool>("DevOptions:UseCustomRoutes");
             app.UseMvc(routes =>
             {
                 if (useFolders)
@@ -270,12 +271,23 @@ namespace example.WebApp
                         defaults: new { controller = "Home", action = "Index" },
                         constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
                         );
-
-                    routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
-                    //routes.AddCustomPageRouteForSimpleContent("p",new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                    if(useCustomRoutes)
+                    {
+                        routes.AddCustomPageRouteForSimpleContent("docs", new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                    }
+                    else
+                    {
+                        routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                    }
+                    
+                    
                 }
 
-                //routes.AddCustomPageRouteForSimpleContent("p");
+                if(useCustomRoutes)
+                {
+                    routes.AddCustomPageRouteForSimpleContent("docs");
+                }
+                
 
                 routes.MapRoute(
                     name: "errorhandler",
@@ -287,9 +299,11 @@ namespace example.WebApp
                     template: "{controller}/{action}",
                      defaults: new { controller = "Home", action = "Index" }
                     );
-                
 
-                routes.AddDefaultPageRouteForSimpleContent();
+                if (!useCustomRoutes)
+                {
+                    routes.AddDefaultPageRouteForSimpleContent();
+                }
 
 
             });

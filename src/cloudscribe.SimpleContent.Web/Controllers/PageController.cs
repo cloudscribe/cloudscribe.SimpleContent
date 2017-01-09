@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPageRoutes pageRoutes,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
+            IStringLocalizer<SimpleContent> localizer,
             ILogger<PageController> logger)
         {
             this.projectService = projectService;
@@ -33,6 +35,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
             this.pageRoutes = pageRoutes;
+            sr = localizer;
             log = logger;
         }
 
@@ -42,6 +45,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private ITimeZoneHelper timeZoneHelper;
         private ILogger log;
         private IPageRoutes pageRoutes;
+        private IStringLocalizer<SimpleContent> sr;
 
         [HttpGet]
         [AllowAnonymous]
@@ -72,13 +76,55 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             
             var model = new PageViewModel();
-  
+            model.Mode = mode;
+            model.CurrentPage = page;
+            model.ProjectSettings = projectSettings;
+            model.CanEdit = canEdit;
+            model.ShowComments = mode.Length == 0; // do we need this for a global disable
+            model.CommentsAreOpen = false;
+            model.TimeZoneHelper = timeZoneHelper;
+            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+            if (canEdit)
+            {
+                if (model.CurrentPage != null)
+                {
+                    model.EditorSettings.CancelEditPath = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = model.CurrentPage.Slug });
+                    model.EditorSettings.CurrentSlug = model.CurrentPage.Slug;
+                    model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
+                    model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode = "edit" });
+                    model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
+                    model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
+                    model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
+                    model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
+                    model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
+                }
+                else
+                {
+                    model.EditorSettings.CancelEditPath = Url.Content("~/");
+                    model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                }
+
+                model.EditorSettings.EditMode = mode;
+                model.EditorSettings.NewItemButtonText = "New Page";
+                model.EditorSettings.IndexUrl = Url.Content("~/");
+                model.EditorSettings.CategoryPath = Url.Action("Category", "Page"); // TODO: should we support categories on pages? this action doesn't exist right now
+                model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Page");
+                model.EditorSettings.SavePath = Url.Action("AjaxPost", "Page");
+                model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                model.EditorSettings.ContentType = "Page";
+                model.EditorSettings.SupportsCategories = false;
+                model.EditorSettings.ProjectId = projectSettings.Id;
+
+            }
+
             if (page == null)
             {
                 if (isNew)
                 {
                     page = new Page();
                     page.ProjectId = projectSettings.Id;
+                    model.CurrentPage = page;
+                    ViewData["Title"] = sr["New Page"];
                 }
                 else
                 {
@@ -90,6 +136,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         page.ProjectId = projectSettings.Id;
                         page.Title = "Home";
                         mode = "new";
+                        model.CurrentPage = page;
+                        ViewData["Title"] = sr["New Page"];
                     }
                     else
                     {
@@ -103,7 +151,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                                 // show an index menu. 
                                 // esp useful if not using pages as the default route
                                 // /p or /docs
-                                return View("IndexMenu");
+                                ViewData["Title"] = sr["Content Index"];
+                                return View("IndexMenu", model);
                             }
 
                             Response.StatusCode = 404;
@@ -135,48 +184,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 
             }
 
-            model.Mode = mode;
-            model.CurrentPage = page;
-            model.ProjectSettings = projectSettings;
-            model.CanEdit = canEdit;
-            model.ShowComments = mode.Length == 0; // do we need this for a global disable
-            //model.CommentsAreOpen = await blogService.CommentsAreOpen(post, canEdit);
-            model.CommentsAreOpen = false;
-            model.TimeZoneHelper = timeZoneHelper;
-            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+           
+            
 
-            if (canEdit)
-            {
-                if(model.CurrentPage != null)
-                {
-                    model.EditorSettings.CancelEditPath = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = model.CurrentPage.Slug });
-                    model.EditorSettings.CurrentSlug = model.CurrentPage.Slug;
-                    model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
-                    model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode="edit"});
-                    model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
-                    model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
-                    model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
-                    model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
-                    model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
-                }
-                else
-                {
-                    model.EditorSettings.CancelEditPath = Url.Content("~/");
-                    model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug="",  mode = "new" });
-                }
-
-                model.EditorSettings.EditMode = mode;
-                model.EditorSettings.NewItemButtonText = "New Page";
-                model.EditorSettings.IndexUrl = Url.Content("~/");
-                model.EditorSettings.CategoryPath = Url.Action("Category", "Page"); // TODO: should we support categories on pages? this action doesn't exist right now
-                model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Page");
-                model.EditorSettings.SavePath = Url.Action("AjaxPost", "Page");
-                model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
-                model.EditorSettings.ContentType = "Page";
-                model.EditorSettings.SupportsCategories = false;
-                model.EditorSettings.ProjectId = projectSettings.Id;
-
-            }
+            
 
             if (page != null && page.MenuOnly && !isEditing)
             {
