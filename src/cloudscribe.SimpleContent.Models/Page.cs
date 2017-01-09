@@ -37,6 +37,8 @@ namespace cloudscribe.SimpleContent.Models
 
         public bool IsPublished { get; set; } = true;
 
+        public bool MenuOnly { get; set; } = false;
+
         public string ViewRoles { get; set; } = string.Empty;
 
         public List<string> Categories { get; set; }
@@ -67,6 +69,7 @@ namespace cloudscribe.SimpleContent.Models
             p.ShowCategories = page.ShowCategories;
             p.ShowComments = page.ShowComments;
             p.ShowHeading = page.ShowHeading;
+            p.MenuOnly = page.MenuOnly;
             p.ShowLastModified = page.ShowLastModified;
             p.ShowPubDate = page.ShowPubDate;
             p.Slug = page.Slug;

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-11-09
+// Last Modified:			2017-01-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -379,6 +379,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 .ForSqlServerHasColumnType("bit")
                 .ForSqlServerHasDefaultValue(true)
                 ;
+
+                entity.Property(p => p.MenuOnly)
+                .IsRequired()
+                .ForSqlServerHasColumnType("bit")
+                .ForSqlServerHasDefaultValue(false)
+                ;
+
 
 
                 entity.Property(p => p.ShowHeading)

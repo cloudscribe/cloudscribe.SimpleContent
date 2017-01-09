@@ -47,6 +47,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public bool IsPublished { get; set; } = true;
 
+        public bool MenuOnly { get; set; } = false;
+
         public string ViewRoles { get; set; } = string.Empty;
         
         public bool ShowHeading { get; set; } = true;
@@ -134,6 +136,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Slug = page.Slug;
             p.Title = page.Title;
             p.ViewRoles = page.ViewRoles;
+            p.MenuOnly = page.MenuOnly;
 
             return p;
         }

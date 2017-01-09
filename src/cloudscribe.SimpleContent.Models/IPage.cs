@@ -26,5 +26,10 @@ namespace cloudscribe.SimpleContent.Models
         string Slug { get; set; }
         string Title { get; set; }
         string ViewRoles { get; set; }
+        /// <summary>
+        /// If true then the page is just a parent for other pages in the menu
+        /// the content will not be rendered, only a child page menu will be shown
+        /// </summary>
+        bool MenuOnly { get; set; }
     }
 }

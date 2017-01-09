@@ -22,7 +22,7 @@
 
     var contentId, editMode, currentSlug, supportsCategories, contentType,
         txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
-        txtParentPage, txtViewRoles, chkPublish, chkShowHeading,
+        txtParentPage, txtViewRoles, chkPublish, chkShowHeading, chkMenuOnly,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
         indexPath, categoryPath, savePath, deletePath, cancelEditPath, userLocale,
         btnClearFormat
@@ -154,14 +154,16 @@
         var parentPage = "";
         var roles = "";
         var showTitle = true;
+        var isMenuOnly = false;
         if (contentType == "Page")
         {
             pageSort = txtPageOrder.val();
             parentPage = txtParentPage.val();
             roles = txtViewRoles.val();
             showTitle = chkShowHeading.is(':checked');
+            isMenuOnly = chkMenuOnly.is(':checked');
         }
-
+       
         $.post(savePath, {
             id: contentId,
             isPublished: chkPublish.prop("checked"),
@@ -173,7 +175,8 @@
             categories: getCategories(),
             parentSlug: parentPage,
             viewRoles: roles,
-            showHeading : showTitle,
+            showHeading: showTitle,
+            menuOnly: isMenuOnly,
             __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
         },
         function (data) {
@@ -334,6 +337,7 @@
         txtParentPage = $("#txtParentPage");
         txtViewRoles = $("#txtViewRoles");
         chkShowHeading = $("#chkShowHeading");
+        chkMenuOnly = $("#chkMenuOnly");
     }
     else
     {
