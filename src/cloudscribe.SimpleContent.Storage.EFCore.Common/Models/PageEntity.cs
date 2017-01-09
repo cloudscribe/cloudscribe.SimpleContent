@@ -136,6 +136,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Slug = page.Slug;
             p.Title = page.Title;
             p.ViewRoles = page.ViewRoles;
+            p.MenuOnly = page.MenuOnly;
 
             return p;
         }
