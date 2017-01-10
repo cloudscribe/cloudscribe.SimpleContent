@@ -377,7 +377,7 @@
     var tbOriginalHeight = editorBar.height();
     
     // different no slug initial state for blog vs page
-    if (contentType == "Post") {
+    if (contentType == "Post" || editMode === "none") {
         //alert('hey');
         if (currentSlug.length == 0) {
             $('#liEdit').hide();

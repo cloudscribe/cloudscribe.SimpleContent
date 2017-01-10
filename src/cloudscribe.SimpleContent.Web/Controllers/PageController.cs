@@ -51,7 +51,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(
             string slug = "", 
-            string mode = "")
+            string parentSlug = "",
+            string mode = ""
+            )
         {
             var projectSettings = await projectService.GetCurrentProjectSettings();
 
@@ -97,11 +99,21 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
                     model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
                     model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
+                    if(model.CurrentPage.Slug == projectSettings.DefaultPageSlug)
+                    {
+                        model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                    }
+                    else
+                    {
+                        model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", parentSlug = model.CurrentPage.Slug, mode = "new" });
+                    }
+                    
                 }
                 else
                 {
                     model.EditorSettings.CancelEditPath = Url.Content("~/");
                     model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                    model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
                 }
 
                 model.EditorSettings.EditMode = mode;
@@ -110,7 +122,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.EditorSettings.CategoryPath = Url.Action("Category", "Page"); // TODO: should we support categories on pages? this action doesn't exist right now
                 model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Page");
                 model.EditorSettings.SavePath = Url.Action("AjaxPost", "Page");
-                model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                
                 model.EditorSettings.ContentType = "Page";
                 model.EditorSettings.SupportsCategories = false;
                 model.EditorSettings.ProjectId = projectSettings.Id;
@@ -123,6 +135,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     page = new Page();
                     page.ProjectId = projectSettings.Id;
+                    //if(parentSlug != projectSettings.DefaultPageSlug)
+                   // {
+                        model.EditorSettings.ParentSlug = parentSlug;
+                    //}
+                    
+                   
                     model.CurrentPage = page;
                     ViewData["Title"] = sr["New Page"];
                 }
@@ -135,7 +153,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         page = new Page();
                         page.ProjectId = projectSettings.Id;
                         page.Title = "Home";
-                        mode = "new";
+                        //mode = "new";
                         model.CurrentPage = page;
                         ViewData["Title"] = sr["New Page"];
                     }
@@ -152,6 +170,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                                 // esp useful if not using pages as the default route
                                 // /p or /docs
                                 ViewData["Title"] = sr["Content Index"];
+                                model.EditorSettings.EditMode = "none";
                                 return View("IndexMenu", model);
                             }
 
