@@ -1,0 +1,101 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
+@using Microsoft.Extensions.Localization
+@using cloudscribe.SimpleContent.Web
+@inject IStringLocalizer<SimpleContent> sr
+
+        <h2>@ViewBag.Title</h2>
+        <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
+            <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
+            <input type="hidden" id="id" name="id" value="@Model.Id" />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
+                <div class="col-md-10">
+                    <input asp-for="MetaDescription" class="form-control" />
+                    <span asp-validation-for="MetaDescription" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Content" class="form-control" />
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="ShowHeading" /> @sr["Show Heading"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="MenuOnly" /> @sr["Show Menu"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="IsPublished" /> @sr["Is Published"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PubDate" class="col-md-2 control-label">@sr["Publication Date"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PubDate" class="form-control" />
+                    <span asp-validation-for="PubDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PageOrder" class="col-md-2 control-label">@sr["Page Order"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PageOrder" class="form-control" />
+                    <span asp-validation-for="PageOrder" class="text-danger"></span>
+                </div>
+            </div>
+            
+            
+            <div class="form-group">
+                <label asp-for="ParentSlug" class="col-md-2 control-label">@sr["Parent Slug"]</label>
+                <div class="col-md-10">
+                    <input asp-for="ParentSlug" class="form-control" />
+                    <span asp-validation-for="ParentSlug" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
+                <div class="col-md-10">
+                    <input asp-for="ViewRoles" class="form-control" />
+                    <span asp-validation-for="ViewRoles" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button name="submit" type="submit" class="btn btn-default">@sr["Save"]</button>
+                </div>
+            </div>
+        </form>
+       
+
+@section Scripts {
+    
+}
+

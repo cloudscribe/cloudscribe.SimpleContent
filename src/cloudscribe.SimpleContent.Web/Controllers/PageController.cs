@@ -216,6 +216,73 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Edit(
+            string slug = "",
+            string parentSlug = ""
+            )
+        {
+            var projectSettings = await projectService.GetCurrentProjectSettings();
+
+            if (projectSettings == null)
+            {
+                HttpContext.Response.StatusCode = 404;
+                return NotFound();
+            }
+
+            var canEdit = await User.CanEditPages(projectSettings.Id, authorizationService);
+            if(!canEdit)
+            {
+                HttpContext.Response.StatusCode = 404;
+                return NotFound();
+            }
+
+            if (slug == "none") { slug = string.Empty; }
+
+            var model = new PageEditViewModel();
+            model.ProjectId = projectSettings.Id;
+
+            IPage page = null;
+            if (!string.IsNullOrEmpty(slug))
+            {
+                page = await pageService.GetPageBySlug(projectSettings.Id, slug);
+            }
+            if(page == null)
+            {
+                ViewData["Title"] = "New Page";
+            }
+            else
+            {
+                ViewData["Title"] = "Edit -" + page.Title;
+                model.Author = page.Author;
+                model.Content = page.Content;
+                model.Id = page.Id;
+                model.IsPublished = page.IsPublished;
+                model.MenuOnly = page.MenuOnly;
+                model.MetaDescription = page.MetaDescription;
+                model.PageOrder = page.PageOrder;
+                model.ParentId = page.ParentId;
+                model.ParentSlug = page.ParentSlug;
+                model.PubDate = timeZoneHelper.ConvertToLocalTime(page.PubDate, projectSettings.TimeZoneId).ToString();
+                model.ShowHeading = page.ShowHeading;
+                model.Slug = page.Slug;
+                model.Title = page.Title;
+                model.ViewRoles = page.ViewRoles;
+                
+                
+            }
+
+            
+            
+            
+            
+
+           
+
+            return View(model);
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

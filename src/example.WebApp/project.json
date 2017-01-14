@@ -54,7 +54,14 @@
     "Microsoft.AspNetCore.Razor.Tools": { "version": "1.1.0-preview4-final" },
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": { "version": "1.1.0-preview4-final" },
     "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": { "version": "1.1.0-preview4-final" },
-    "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.1.0-preview4-final"
+    "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.1.0-preview4-final",
+    "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
+      "version": "1.1.0-preview4-final",
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
   },
 
     "frameworks": {

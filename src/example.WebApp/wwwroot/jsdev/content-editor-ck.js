@@ -21,7 +21,9 @@
             '/',
 		['Blockquote'],['NumberedList','BulletedList'],
 		['Link','Unlink','Anchor'],
-		['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar'] ]
+		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
+            extraPlugins: 'maximize,oembed,simplecontentfiledrop',
+            removePlugins:'scayt,wsc'
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);
