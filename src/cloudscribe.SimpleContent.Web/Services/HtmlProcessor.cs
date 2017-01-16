@@ -208,7 +208,10 @@ namespace cloudscribe.SimpleContent.Services
             {
                 if(img.Attributes["src"] != null)
                 {
-                    img.Attributes["src"].Value = new Uri(new Uri(absoluteBaseMediaUrl), img.Attributes["src"].Value).AbsoluteUri;
+                    var src = img.Attributes["src"].Value;
+                    if (src.StartsWith("data")) continue; //base64
+                    if (src.StartsWith("http")) continue;
+                    img.Attributes["src"].Value = new Uri(new Uri(absoluteBaseMediaUrl), src).AbsoluteUri;
                 }
                 
             }
@@ -217,7 +220,9 @@ namespace cloudscribe.SimpleContent.Services
             {
                 if(a.Attributes["href"] != null)
                 {
-                    a.Attributes["href"].Value = new Uri(new Uri(absoluteBaseMediaUrl), a.Attributes["href"].Value).AbsoluteUri;
+                    var href = a.Attributes["href"].Value;
+                    if (href.StartsWith("http")) continue;
+                    a.Attributes["href"].Value = new Uri(new Uri(absoluteBaseMediaUrl), href).AbsoluteUri;
                 }
                 
             }
