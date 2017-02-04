@@ -82,6 +82,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                     Content = table.Column<string>(nullable: true),
                     IsPublished = table.Column<bool>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: false),
+                    MenuOnly = table.Column<bool>(nullable: false, defaultValue: false),
                     MetaDescription = table.Column<string>(maxLength: 500, nullable: true),
                     PageOrder = table.Column<int>(nullable: false),
                     ParentId = table.Column<string>(maxLength: 36, nullable: true),

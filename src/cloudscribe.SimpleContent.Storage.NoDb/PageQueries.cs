@@ -20,19 +20,19 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     public class PageQueries : IPageQueries
     {
         public PageQueries(
-            IBasicCommands<Page> pageCommands,
-            IBasicQueries<Page> pageQueries,
-            ILogger<PageQueries> logger
+           // IBasicCommands<Page> pageCommands,
+            IBasicQueries<Page> pageQueries
+            //,ILogger<PageQueries> logger
             )
         {
-            commands = pageCommands;
+            //commands = pageCommands;
             query = pageQueries;
-            log = logger;
+            //log = logger;
         }
 
-        private IBasicCommands<Page> commands;
+        //private IBasicCommands<Page> commands;
         private IBasicQueries<Page> query;
-        private ILogger log;
+        //private ILogger log;
 
         
 
