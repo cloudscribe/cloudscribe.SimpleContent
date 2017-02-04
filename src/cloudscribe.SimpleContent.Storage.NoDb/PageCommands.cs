@@ -20,18 +20,18 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     {
         public PageCommands(
             IBasicCommands<Page> pageCommands,
-            IBasicQueries<Page> pageQueries,
-            ILogger<PageCommands> logger
+            IBasicQueries<Page> pageQueries
+            //,ILogger<PageCommands> logger
             )
         {
             commands = pageCommands;
             query = pageQueries;
-            log = logger;
+            //log = logger;
         }
 
         private IBasicCommands<Page> commands;
         private IBasicQueries<Page> query;
-        private ILogger log;
+        //private ILogger log;
 
         public async Task Create(
             string projectId,

@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.1.0-rc20170107",
+  "version": "1.1.0-rc20170203",
   "description": "PostgreSql Entity Framework Core implementation of cloudscribe SimpleContent commands and queries",
   "authors": [ "Joe Audette" ],
   "buildOptions": {
@@ -28,8 +28,11 @@
     "cloudscribe.SimpleContent.Storage.EFCore.Common": "1.1.0-*",
     "Microsoft.AspNetCore.Hosting": "1.1.*",
     "System.IO.FileSystem": "4.*",
-    "Npgsql.EntityFrameworkCore.PostgreSQL": "1.0.2",
-    "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.0.2"
+    "Npgsql.EntityFrameworkCore.PostgreSQL": "1.1.*",
+    "Npgsql.EntityFrameworkCore.PostgreSQL.Design": {
+      "version": "1.1.*",
+      "type": "build"
+    }
   },
 
   "tools": {

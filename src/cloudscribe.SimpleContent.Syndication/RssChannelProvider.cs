@@ -25,6 +25,7 @@ namespace cloudscribe.SimpleContent.Syndication
         public RssChannelProvider(
             IProjectService projectService,
             IBlogService blogService,
+            IBlogRoutes blogRoutes,
             IHttpContextAccessor contextAccessor,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor,
@@ -36,6 +37,7 @@ namespace cloudscribe.SimpleContent.Syndication
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
             this.htmlProcessor = htmlProcessor;
+            this.blogRoutes = blogRoutes;
         }
 
         private IUrlHelperFactory urlHelperFactory;
@@ -43,6 +45,7 @@ namespace cloudscribe.SimpleContent.Syndication
         private IHttpContextAccessor contextAccessor;
         private IProjectService projectService;
         private IBlogService blogService;
+        private IBlogRoutes blogRoutes;
         private HtmlProcessor htmlProcessor;
         private int maxFeedItems = 20;
 
@@ -84,11 +87,11 @@ namespace cloudscribe.SimpleContent.Syndication
 
             var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
 
-            if (project.Image.Length > 0)
+            if (!string.IsNullOrEmpty(project.Image))
             {
                 channel.Image.Url = new Uri(urlHelper.Content(project.Image));
             }
-            if(project.LanguageCode.Length > 0)
+            if(!string.IsNullOrEmpty(project.LanguageCode))
             {
                 channel.Language = new CultureInfo(project.LanguageCode);
             }
@@ -104,19 +107,20 @@ namespace cloudscribe.SimpleContent.Syndication
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/UrlHelperExtensions.cs
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/Routing/UrlHelper.cs
 
-            var indexUrl = urlHelper.RouteUrl(ProjectConstants.BlogIndexRouteName);
+            var indexUrl = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
+            
             
             if (indexUrl.StartsWith("/"))
             {
                 indexUrl = string.Concat(baseUrl, indexUrl);
             }
             channel.Link = new Uri(indexUrl);
-            if(project.ManagingEditorEmail.Length > 0)
+            if(!string.IsNullOrEmpty(project.ManagingEditorEmail))
             {
                 channel.ManagingEditor = project.ManagingEditorEmail;
             }
 
-            if(project.ChannelRating.Length > 0)
+            if(!string.IsNullOrEmpty(project.ChannelRating))
             {
                 channel.Rating = project.ChannelRating;
             }
@@ -132,7 +136,7 @@ namespace cloudscribe.SimpleContent.Syndication
             channel.SelfLink = new Uri(feedUrl);
             //channel.TextInput = 
             channel.TimeToLive = project.ChannelTimeToLive;
-            if(project.WebmasterEmail.Length > 0)
+            if(!string.IsNullOrEmpty(project.WebmasterEmail))
             {
                 channel.Webmaster = project.WebmasterEmail;
             }
