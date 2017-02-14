@@ -22,8 +22,9 @@
 		['Blockquote'],['NumberedList','BulletedList'],
 		['Link','Unlink','Anchor'],
 		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
-            extraPlugins: 'maximize,oembed,simplecontentfiledrop',
-            removePlugins:'scayt,wsc'
+            extraPlugins: 'oembed,simplecontentfiledrop',
+            removePlugins: 'scayt,wsc',
+            dropFileUploadUrl: "/media/automaticupload"
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);

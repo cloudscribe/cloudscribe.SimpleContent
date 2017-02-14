@@ -17,6 +17,7 @@ using cloudscribe.Core.SimpleContent.Integration;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using cloudscribe.SimpleContent.Web.Controllers;
 
 namespace example.WebApp
 {
@@ -169,6 +170,7 @@ namespace example.WebApp
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
                 })
+                .AddApplicationPart(typeof(MediaController).Assembly)
                     ;
 
 
@@ -319,7 +321,9 @@ namespace example.WebApp
                 }
 
 
-            });
+            })
+            
+            ;
         }
 
         private void ConfigureDataStorage(IServiceCollection services)

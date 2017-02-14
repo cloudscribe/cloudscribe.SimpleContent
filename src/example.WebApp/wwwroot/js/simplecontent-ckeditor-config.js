@@ -6,8 +6,9 @@
 	config.disableNativeSpellChecker = false;
 	config.justifyClasses = [ 'AlignLeft', 'AlignCenter', 'AlignRight', 'AlignJustify' ];
 	config.indentClasses = ['Indent1', 'Indent2', 'Indent3'];
-	//config.extraPlugins = 'oembed,templates,cloudscribefiledrop';
-	//config.extraPlugins = 'oembed,templates,onchange,imagepaste';
+    //config.extraPlugins = 'oembed,templates,simplecontentfiledrop';
+    //config.extraPlugins = 'oembed,templates,onchange,imagepaste';
+	config.extraPlugins = 'oembed,templates,imagepaste';
 	// magicline causes false isdirty onchange (2014-05-30 removed onchange plugin since editor now has on change event, magic line seems ok)
 	//config.removePlugins = 'magicline';
 	config.oembed_maxWidth = '560';
