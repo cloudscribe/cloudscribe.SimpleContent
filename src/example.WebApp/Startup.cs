@@ -170,7 +170,7 @@ namespace example.WebApp
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
                 })
-                .AddApplicationPart(typeof(MediaController).Assembly)
+                //.AddApplicationPart(typeof(FsMediaController).Assembly)
                     ;
 
 

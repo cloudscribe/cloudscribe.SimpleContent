@@ -14,12 +14,12 @@ using Microsoft.Extensions.Logging;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
-    public class MediaController : Controller
+    public class FsMediaController : Controller
     {
-        public MediaController(
+        public FsMediaController(
             IHostingEnvironment environment,
             IProjectService projectService,
-            ILogger<MediaController> logger
+            ILogger<FsMediaController> logger
             )
         {
             this.hosting = environment;
@@ -41,17 +41,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AutomaticUpload(List<IFormFile> files)
+        public async Task<IActionResult> AutomaticUpload(
+            //List<IFormFile> files
+            )
         {
+            var files = HttpContext.Request.Form.Files;
+
             await EnsureProjectSettings().ConfigureAwait(false);
 
             var imageList = new List<ImageUploadResult>();
-
-            //long size = files.Sum(f => f.Length);
-
-            // full path to file in temp location
-            //var filePath = Path.GetTempFileName();
-
+            
             foreach (var formFile in files)
             {
                 try
@@ -80,16 +79,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
                 catch(Exception ex)
                 {
-                    log.LogError(MediaLoggingEvents.FILE_DROP_UPLOAD, ex, ex.StackTrace);
+                    log.LogError(MediaLoggingEvents.AUTOMATIC_UPLOAD, ex, ex.StackTrace);
                 }
                 
             }
-
-            // process uploaded files
-            // Don't rely on or trust the FileName property without validation.
-
-            //return Ok(new { count = files.Count, size, filePath });
-
+            
             return Json(imageList);
         }
     }

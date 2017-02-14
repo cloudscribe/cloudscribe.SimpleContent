@@ -5,7 +5,7 @@
         txtParentPage, txtViewRoles, chkPublish, chkShowHeading, chkMenuOnly,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
         indexPath, categoryPath, savePath, deletePath, cancelEditPath, userLocale,
-        btnClearFormat
+        btnClearFormat;
 
     editContent = function () {
         CKEDITOR.disableAutoInline = true;
@@ -24,7 +24,7 @@
 		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
             extraPlugins: 'oembed,simplecontentfiledrop',
             removePlugins: 'scayt,wsc',
-            dropFileUploadUrl: "/media/automaticupload"
+            dropFileUploadUrl: "/fsmedia/automaticupload"
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);
@@ -34,7 +34,7 @@
             editor.setReadOnly(false);
         });
         txtContent.css({ minHeight: "400px" });
-        if (editMode == "new") {
+        if (editMode === "new") {
             // TODO: localize
             txtTitle.attr('placeholder', 'type your title here');
             txtExcerpt.attr('placeholder', 'type your meta description here');
@@ -72,7 +72,7 @@
         $("#liCancel").show();
         $("#liPublished").show();
 
-        if (contentType == "Page") {
+        if (contentType === "Page") {
             $("#liPageOrder").show();
         }
         else
@@ -302,7 +302,7 @@
     editorBar = $("#editor-toolbar");
     contentType = $("#editor-toolbar").data("content-type");
 
-    if (contentType == "Page") {
+    if (contentType === "Page") {
         contentId = $("article").first().attr("data-id");
         txtTitle = $("#article-title");
         txtPageOrder = $("#txtPageOrder");
@@ -349,9 +349,9 @@
     var tbOriginalHeight = editorBar.height();
     
     // different no slug initial state for blog vs page
-    if (contentType == "Post" || editMode === "none") {
+    if (contentType === "Post" || editMode === "none") {
         //alert('hey');
-        if (currentSlug.length == 0) {
+        if (currentSlug.length === 0) {
             $('#liEdit').hide();
         }
        
@@ -391,7 +391,7 @@
     if (editMode == "new" || editMode == "edit") {
         editContent(); 
     }
-    else if(contentType == "Page") {
+    else if(contentType === "Page") {
         if (currentSlug) { btnEdit.removeAttr("disabled"); }
     }
      

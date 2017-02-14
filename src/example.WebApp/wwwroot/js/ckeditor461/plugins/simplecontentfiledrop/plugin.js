@@ -75,11 +75,11 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 		function uploadSuccess( data, textStatus, jqXHR ) {
 			
 			try {
-				if(data.files[0].WebSizeUrl) {
-					theEditor.insertHtml( "<a href='" + data.files[0].WebSizeUrl +"'><img src='" + data.files[0].WebSizeUrl + "' alt=' ' /></a>" );
+				if(data[0].webSizeUrl) {
+					theEditor.insertHtml( "<a href='" + data[0].webSizeUrl +"'><img src='" + data[0].webSizeUrl + "' alt=' ' /></a>" );
 				}
 				else {
-					theEditor.insertHtml( "<img src='" + data.files[0].OriginalSizeUrl + "' alt=' ' />" );
+					theEditor.insertHtml( "<img src='" + data[0].originalSizeUrl + "' alt=' ' />" );
 				}
 			} catch(err) {
 				//console.log(err);
@@ -87,11 +87,11 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 					theEditor.focus();
 					theEditor.unlockSelection(true);
 					isLocked = false;
-					if(data.files[0].WebSizeUrl) {
-						theEditor.insertHtml( "<a href='" + data.files[0].WebSizeUrl +"'><img src='" + data.files[0].WebSizeUrl + "' alt=' ' /></a>" );
+					if(data.files[0].webSizeUrl) {
+						theEditor.insertHtml( "<a href='" + data[0].webSizeUrl +"'><img src='" + data[0].webSizeUrl + "' alt=' ' /></a>" );
 					}
 					else {
-						theEditor.insertHtml( "<img src='" + data.files[0].OriginalSizeUrl + "' alt=' ' />" );
+						theEditor.insertHtml( "<img src='" + data[0].originalSizeUrl + "' alt=' ' />" );
 					}
 				} catch(err2) {
 					//console.log(err2);
