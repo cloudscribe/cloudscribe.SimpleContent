@@ -24,7 +24,7 @@
 		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
             extraPlugins: 'oembed,simplecontentfiledrop',
             removePlugins: 'scayt,wsc',
-            dropFileUploadUrl: "/fsmedia/automaticupload"
+            dropFileUploadUrl: "/filemanager/automaticupload"
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);
@@ -59,7 +59,7 @@
         btnCancel.removeAttr("disabled");
         
 
-        if (editMode == "new")
+        if (editMode === "new")
         {
             $("#liDelete").hide();
         }
@@ -127,7 +127,7 @@
         var roles = "";
         var showTitle = true;
         var isMenuOnly = false;
-        if (contentType == "Page")
+        if (contentType === "Page")
         {
             pageSort = txtPageOrder.val();
             parentPage = txtParentPage.val();
@@ -339,7 +339,7 @@
     deletePath = $("#editor-toolbar").data("delete-path");
     cancelEditPath = $("#editor-toolbar").data("cancel-edit-path");
     currentSlug = $("#editor-toolbar").data("current-slug");
-    supportsCategories = ($("#editor-toolbar").data("supports-categories")) == 'True';
+    supportsCategories = ($("#editor-toolbar").data("supports-categories")) === 'True';
     editMode = $("#editor-toolbar").data("edit-mode");
     userLocale = $("#editor-toolbar").data("locale");
     
@@ -388,7 +388,7 @@
         $('#txtImage').click();
     });
 
-    if (editMode == "new" || editMode == "edit") {
+    if (editMode === "new" || editMode === "edit") {
         editContent(); 
     }
     else if(contentType === "Page") {

@@ -1,4 +1,4 @@
-﻿namespace cloudscribe.SimpleContent.Models.Media
+﻿namespace cloudscribe.FileManager.Web.Models
 {
     public class ImageItem
     {

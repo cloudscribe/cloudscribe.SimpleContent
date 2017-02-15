@@ -99,6 +99,8 @@ namespace example.WebApp
 
             services.AddSimpleContentRssSyndiction();
 
+            services.AddCloudscribeFileManagerIntegration(Configuration);
+
             services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
 
             services.Configure<RequestLocalizationOptions>(options =>

@@ -75,6 +75,8 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 		function uploadSuccess( data, textStatus, jqXHR ) {
 			
 			try {
+			    if(data[0].errorMessage) { alert(data[0].errorMessage); return; }
+				
 				if(data[0].webSizeUrl) {
 					theEditor.insertHtml( "<a href='" + data[0].webSizeUrl +"'><img src='" + data[0].webSizeUrl + "' alt=' ' /></a>" );
 				}
