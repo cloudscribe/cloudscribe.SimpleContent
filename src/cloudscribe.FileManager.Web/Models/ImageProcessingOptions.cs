@@ -2,18 +2,22 @@
 {
     public class ImageProcessingOptions
     {
-        public string ImageOriginalSizeVirtualSubPath { get; set; } = "/media/images/origsize/";
+        public string ImageOriginalSizeVirtualSubPath { get; set; } = "/media/images/origsize";
 
-        public string ImageWebSizeVirtualSubPath { get; set; } = "/media/images/websize/";
+        public string ImageWebSizeVirtualSubPath { get; set; } = "/media/images/websize";
 
-        public string ImageThumbnailVirtualSubPath { get; set; } = "/media/images/thumbnails/";
+        public string ImageThumbnailVirtualSubPath { get; set; } = "/media/images/thumbnails";
 
         public bool AutoResize { get; set; } = true;
 
         public bool KeepOriginalImages { get; set; } = true;
 
-        public int ResizeImageMaxWidth { get; set; } = 550;
+        public int WebSizeImageMaxWidth { get; set; } = 550;
 
-        public int ResizeImageMaxHeight { get; set; } = 550;
+        public int WebSizeImageMaxHeight { get; set; } = 550;
+
+        public int ThumbnailImageMaxWidth { get; set; } = 75;
+
+        public int ThumbnailImageMaxHeight { get; set; } = 75;
     }
 }

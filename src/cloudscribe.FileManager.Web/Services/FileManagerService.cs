@@ -39,14 +39,29 @@ namespace cloudscribe.FileManager.Web.Services
             if (rootPath != null) { return; }
         }
 
+        private void EnsureSubFolders(string basePath, string[] segments)
+        {
+            var p = basePath;
+            for (int i=0; i< segments.Length; i++)
+            {
+                p = Path.Combine(p, segments[i]);
+                if(!Directory.Exists(p))
+                {
+                    Directory.CreateDirectory(p);
+                }
+            }
+        }
+
         public async Task<ImageUploadResult> ProcessFile(IFormFile formFile, ImageProcessingOptions options, int eventCode)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
             var origSizeVirtualPath = rootPath.RootVirtualPath + options.ImageOriginalSizeVirtualSubPath;
-            var origSizeFsPath = Path.Combine(rootPath.RootFileSystemPath, options.ImageOriginalSizeVirtualSubPath.Replace('/', Path.DirectorySeparatorChar));
+            var origSegments = options.ImageOriginalSizeVirtualSubPath.Split('/');
+            EnsureSubFolders(rootPath.RootFileSystemPath, origSegments);
+            var origSizeFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(origSegments));
             var newName = formFile.FileName.ToCleanFileName();
-            var newUrl = origSizeVirtualPath + newName;
+            var newUrl = origSizeVirtualPath + "/" + newName;
             var fsPath = Path.Combine(origSizeFsPath, newName);
 
             try
@@ -83,5 +98,6 @@ namespace cloudscribe.FileManager.Web.Services
 
            
         }
+
     }
 }
