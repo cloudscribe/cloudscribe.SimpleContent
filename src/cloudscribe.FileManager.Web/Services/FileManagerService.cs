@@ -21,13 +21,16 @@ namespace cloudscribe.FileManager.Web.Services
     {
         public FileManagerService(
             IMediaRootPathResolver mediaPathResolver,
+            IImageResizer imageResizer,
             ILogger<FileManagerService> logger
             )
         {
             this.mediaPathResolver = mediaPathResolver;
+            this.imageResizer = imageResizer;
             log = logger;
         }
 
+        private IImageResizer imageResizer;
         private IMediaRootPathResolver mediaPathResolver;
         private MediaRootPathInfo rootPath;
         private ILogger log;
@@ -71,7 +74,7 @@ namespace cloudscribe.FileManager.Web.Services
                     await formFile.CopyToAsync(stream);
                 }
 
-                // TODO: create websize, thumbnail
+                // TODO: create websize
                 // return websize
 
                 return new ImageUploadResult

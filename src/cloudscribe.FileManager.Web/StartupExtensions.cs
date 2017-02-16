@@ -1,4 +1,5 @@
-﻿using cloudscribe.FileManager.Web.Services;
+﻿using cloudscribe.FileManager.Web.Models;
+using cloudscribe.FileManager.Web.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -15,6 +16,7 @@ namespace cloudscribe.FileManager.Web
             )
         {
             services.TryAddScoped<FileManagerService>();
+            services.TryAddScoped<IImageResizer, ImageResizerService>();
 
             return services;
         }
