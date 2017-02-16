@@ -24,7 +24,8 @@
 		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
             extraPlugins: 'oembed,simplecontentfiledrop',
             removePlugins: 'scayt,wsc',
-            dropFileUploadUrl: "/filemanager/automaticupload"
+            dropFileUploadUrl: "/filemanager/automaticupload",
+            filebrowserBrowseUrl: '/filemanager/filedialog'
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);

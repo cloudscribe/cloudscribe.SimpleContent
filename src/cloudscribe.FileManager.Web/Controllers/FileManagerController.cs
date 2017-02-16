@@ -33,7 +33,12 @@ namespace cloudscribe.FileManager.Web.Controllers
         private AutomaticUploadOptions autoUploadOptions;
         private ILogger log;
 
-       
+        [HttpGet]
+        public IActionResult FileDialog()
+        {
+            return View();
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AutomaticUpload(

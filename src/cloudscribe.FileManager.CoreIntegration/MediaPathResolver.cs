@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.FileManager.CoreIntegration
 {
-    public class MediaRootPathResolver : IMediaRootPathResolver
+    public class MediaPathResolver : IMediaPathResolver
     {
-        public MediaRootPathResolver(
+        public MediaPathResolver(
             IHostingEnvironment environment,
             SiteContext currentSite
             )

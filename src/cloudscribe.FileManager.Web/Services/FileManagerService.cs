@@ -20,7 +20,7 @@ namespace cloudscribe.FileManager.Web.Services
     public class FileManagerService
     {
         public FileManagerService(
-            IMediaRootPathResolver mediaPathResolver,
+            IMediaPathResolver mediaPathResolver,
             IImageResizer imageResizer,
             ILogger<FileManagerService> logger
             )
@@ -31,7 +31,7 @@ namespace cloudscribe.FileManager.Web.Services
         }
 
         private IImageResizer imageResizer;
-        private IMediaRootPathResolver mediaPathResolver;
+        private IMediaPathResolver mediaPathResolver;
         private MediaRootPathInfo rootPath;
         private ILogger log;
 
@@ -59,8 +59,8 @@ namespace cloudscribe.FileManager.Web.Services
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
-            var origSizeVirtualPath = rootPath.RootVirtualPath + options.ImageOriginalSizeVirtualSubPath;
-            var origSegments = options.ImageOriginalSizeVirtualSubPath.Split('/');
+            var origSizeVirtualPath = rootPath.RootVirtualPath + options.ImageDefaultVirtualSubPath;
+            var origSegments = options.ImageDefaultVirtualSubPath.Split('/');
             EnsureSubFolders(rootPath.RootFileSystemPath, origSegments);
             var origSizeFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(origSegments));
             var newName = formFile.FileName.ToCleanFileName();
@@ -76,6 +76,12 @@ namespace cloudscribe.FileManager.Web.Services
 
                 // TODO: create websize
                 // return websize
+                if(options.AutoResize)
+                {
+                   
+
+                }
+                
 
                 return new ImageUploadResult
                 {

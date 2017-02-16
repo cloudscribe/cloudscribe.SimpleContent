@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.FileManager.Web.Models
 {
-    public interface IMediaRootPathResolver
+    public interface IMediaPathResolver
     {
         Task<MediaRootPathInfo> Resolve(CancellationToken cancellationToken = default(CancellationToken));
     }
