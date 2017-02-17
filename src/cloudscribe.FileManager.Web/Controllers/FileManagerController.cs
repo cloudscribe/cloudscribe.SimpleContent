@@ -7,6 +7,7 @@
 
 using cloudscribe.FileManager.Web.Models;
 using cloudscribe.FileManager.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -34,6 +35,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         private ILogger log;
 
         [HttpGet]
+        [Authorize(Policy = "FileManagerPolicy")]
         public IActionResult FileDialog()
         {
             return View();
@@ -41,6 +43,7 @@ namespace cloudscribe.FileManager.Web.Controllers
 
 
         [HttpPost]
+        [Authorize(Policy = "FileManagerPolicy")]
         public async Task<IActionResult> AutomaticUpload(
             //List<IFormFile> files
             )

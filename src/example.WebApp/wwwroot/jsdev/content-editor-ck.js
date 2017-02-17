@@ -25,7 +25,9 @@
             extraPlugins: 'oembed,simplecontentfiledrop',
             removePlugins: 'scayt,wsc',
             dropFileUploadUrl: "/filemanager/automaticupload",
-            filebrowserBrowseUrl: '/filemanager/filedialog'
+            linkWebSizeToOriginal:true,
+            filebrowserBrowseUrl: '/filemanager/filedialog?ed=ck&type=file',
+            filebrowserImageBrowseUrl: '/filemanager/filedialog?ed=ck&type=image'
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);

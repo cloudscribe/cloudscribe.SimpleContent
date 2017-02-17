@@ -15,6 +15,7 @@
     <div class="row">
         <div class="col-md-4">
             Tree goes here
+            <div id="tree"></div>
         </div>
         <div class="col-md-8">
             Preview/Selector here
@@ -22,5 +23,65 @@
     </div>
 </div>
 @section scripts {
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+       
+    </environment>
+    <environment names="Staging,Production">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery">
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+    </script>
+    </environment>
     <script src="~/js/bootstrap-treeview.min.js"></script>
+    <script type="text/javascript">
+        var treeData = [];
+        (function() {
+            var dataApi = "/jsdev/treejsontest.json";
+            $('#tree').treeview({
+                dataUrl: {
+                    method:'GET',
+                    dataType: 'json',
+                    url: dataApi,
+                    cache:false
+                },
+                nodeIcon: 'glyphicon glyphicon-stop',
+                partiallyCheckedIcon: 'glyphicon glyphicon-expand',
+                checkedIcon: 'glyphicon glyphicon-check',
+                uncheckedIcon: 'glyphicon glyphicon-unchecked',
+                selectedIcon: 'glyphicon glyphicon-stop',
+                collapseIcon: 'glyphicon glyphicon-minus',
+                emptyIcon: 'glyphicon',
+                expandIcon: 'glyphicon glyphicon-plus',
+                loadingIcon: 'glyphicon glyphicon-hourglas',
+                levels: 2,
+                onhoverColor: '#F5F5F5',
+                showBorder: true,
+                showCheckbox: false,
+                showIcon: true,
+                wrapNodeText: false,
+                lazyLoad: function (node, dataFunc) {
+                    alert(node.text);
+
+                },
+                onNodeSelected: function (event, data) {
+                    alert(data.text);
+                },
+                onNodeExpanded: function (event, data) {
+                    alert(data.text + ' expanded');
+                }
+            });
+            
+            
+        })();
+        
+        
+        
+    </script>
 }

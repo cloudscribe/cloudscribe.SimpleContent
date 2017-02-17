@@ -372,6 +372,13 @@ namespace example.WebApp
 
                 options.AddCloudscribeCoreSimpleContentIntegrationDefaultPolicies();
 
+                options.AddPolicy(
+                    "FileManagerPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Administrators");
+                    });
+
                 // this is what the above extension adds
                 //options.AddPolicy(
                 //    "BlogEditPolicy",
@@ -381,6 +388,8 @@ namespace example.WebApp
                 //        authBuilder.RequireRole("Administrators");
                 //    }
                 // );
+
+                
 
                 //options.AddPolicy(
                 //    "PageEditPolicy",

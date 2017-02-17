@@ -15,6 +15,7 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 		var theEditor = editor;
 		var uploadUrl = editor.config.dropFileUploadUrl;
 		var isLocked = false;
+		var linkToOrig = editor.config.linkWebSizeToOriginal;
 		
 		function onDragStart(event) {                 
                 //console.log("onDragStart");
@@ -78,7 +79,13 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 			    if(data[0].errorMessage) { alert(data[0].errorMessage); return; }
 				
 				if(data[0].webSizeUrl) {
-					theEditor.insertHtml( "<a href='" + data[0].webSizeUrl +"'><img src='" + data[0].webSizeUrl + "' alt=' ' /></a>" );
+				    if(linkToOrig)
+					{
+					    theEditor.insertHtml( "<a href='" + data[0].originalSizeUrl +"'><img src='" + data[0].webSizeUrl + "' alt=' ' /></a>" );
+					}
+					else {
+					theEditor.insertHtml( "<img src='" + data[0].webSizeUrl + "' alt=' ' />" );
+					}
 				}
 				else {
 					theEditor.insertHtml( "<img src='" + data[0].originalSizeUrl + "' alt=' ' />" );
@@ -90,7 +97,7 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 					theEditor.unlockSelection(true);
 					isLocked = false;
 					if(data.files[0].webSizeUrl) {
-						theEditor.insertHtml( "<a href='" + data[0].webSizeUrl +"'><img src='" + data[0].webSizeUrl + "' alt=' ' /></a>" );
+						theEditor.insertHtml( "<a href='" + data[0].originalSizeUrl +"'><img src='" + data[0].webSizeUrl + "' alt=' ' /></a>" );
 					}
 					else {
 						theEditor.insertHtml( "<img src='" + data[0].originalSizeUrl + "' alt=' ' />" );
