@@ -13,13 +13,22 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-8 ">
+            <input class="form-control" type="text" id="fileSelection" name="fileSelection" placeholder="Selected File" />
+        </div>
         <div class="col-md-4">
+            <button class="col-md-4 btn btn-default" id="btnSelector">Select</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
             Tree goes here
             <div id="tree"></div>
         </div>
-        <div class="col-md-8">
-            Preview/Selector here
+        <div class="col-md-6">
+            <img style="max-width:450px;overflow:scroll" id="filePreview" src="~/images/1x1.gif" alt="Preview selected image" />
         </div>
+        
     </div>
 </div>
 @section scripts {
@@ -43,7 +52,9 @@
     <script type="text/javascript">
         var treeData = [];
         (function() {
-            var dataApi = "/jsdev/treejsontest.json";
+            var dataApi = "/filemanager/getfiletreejson";
+            var selector = $("#fileSelection");
+            var preview = $("#filePreview");
             $('#tree').treeview({
                 dataUrl: {
                     method:'GET',
@@ -62,19 +73,34 @@
                 loadingIcon: 'glyphicon glyphicon-hourglas',
                 levels: 2,
                 onhoverColor: '#F5F5F5',
+                highlightSelected:true,
                 showBorder: true,
                 showCheckbox: false,
                 showIcon: true,
                 wrapNodeText: false,
                 lazyLoad: function (node, dataFunc) {
-                    alert(node.text);
+                    //alert(node.text + ' lazyload');
+                    $.ajax({
+                        dataType: "json",
+                        url: dataApi + '?virtualStartPath=' + node.virtualPath
+                       
+                    })
+                      .done(function (data) {
+                          dataFunc(data); 
+                      })
+                    ;
 
                 },
                 onNodeSelected: function (event, data) {
-                    alert(data.text);
+                    //alert(data.virtualPath + ' selected');
+                    if (data.canPreview) {
+                        selector.val(data.virtualPath);
+                        preview.attr("src", data.virtualPath);
+
+                    }
                 },
                 onNodeExpanded: function (event, data) {
-                    alert(data.text + ' expanded');
+                    //alert(data.text + ' expanded');
                 }
             });
             

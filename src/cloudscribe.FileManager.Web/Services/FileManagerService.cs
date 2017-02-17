@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-15
-// Last Modified:           2017-02-15
+// Last Modified:           2017-02-17
 // 
 
 using cloudscribe.FileManager.Web.Models;
+using cloudscribe.FileManager.Web.Models.TreeView;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -45,10 +46,10 @@ namespace cloudscribe.FileManager.Web.Services
         private void EnsureSubFolders(string basePath, string[] segments)
         {
             var p = basePath;
-            for (int i=0; i< segments.Length; i++)
+            for (int i = 0; i < segments.Length; i++)
             {
                 p = Path.Combine(p, segments[i]);
-                if(!Directory.Exists(p))
+                if (!Directory.Exists(p))
                 {
                     Directory.CreateDirectory(p);
                 }
@@ -78,8 +79,8 @@ namespace cloudscribe.FileManager.Web.Services
                 {
                     await formFile.CopyToAsync(stream);
                 }
-                
-                if(options.AutoResize)
+
+                if (options.AutoResize)
                 {
                     var mimeType = GetMimeType(ext);
                     imageResizer.ResizeImage(
@@ -91,7 +92,7 @@ namespace cloudscribe.FileManager.Web.Services
                         options.WebSizeImageMaxHeight
                         );
                 }
-                
+
                 return new ImageUploadResult
                 {
                     OriginalSizeUrl = newUrl,
@@ -113,10 +114,93 @@ namespace cloudscribe.FileManager.Web.Services
                 };
             }
 
-            
 
-           
+
+
         }
+
+
+        public async Task<List<Node>> GetFileTree(string virtualStartPath)
+        {
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            var list = new List<Node>();
+
+            if(!Directory.Exists(rootPath.RootFileSystemPath)) 
+            {
+                log.LogError("directory not found for RootFileSystemPath " + rootPath.RootFileSystemPath);
+                return list;
+            }
+
+            DirectoryInfo currentDirectory;
+            IEnumerable<DirectoryInfo> folders;
+            bool isRoot = false;
+            string currentFsPath = rootPath.RootFileSystemPath;
+            string currentVirtualPath = rootPath.RootVirtualPath;
+
+            if (!string.IsNullOrEmpty(virtualStartPath))
+            {
+                if(!virtualStartPath.StartsWith(rootPath.RootVirtualPath))
+                {
+                    log.LogError("virtualStartPath did not start with RootFileSystemPath " + virtualStartPath);
+                    return list;
+                }
+                var virtualSubPath = virtualStartPath.Substring(rootPath.RootVirtualPath.Length);
+                var segments = virtualSubPath.Split('/');
+                currentFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments)); 
+                if(!Directory.Exists(currentFsPath))
+                {
+                    log.LogError("directory not found for currentPath " + currentFsPath);
+                    return list;
+                }
+                currentDirectory = new DirectoryInfo(currentFsPath);
+                currentVirtualPath = virtualStartPath;
+            }
+            else
+            {
+                isRoot = true;
+                currentDirectory = new DirectoryInfo(rootPath.RootFileSystemPath);
+            }
+            
+            folders = from folder in currentDirectory.GetDirectories("*", SearchOption.TopDirectoryOnly)
+                      select folder;
+
+
+            foreach (var folder in folders)
+            {
+                var node = new Node();
+                node.Text = folder.Name;
+                node.Type = "d";
+                node.VirtualPath = currentVirtualPath + "/" + folder.Name;
+                node.Created = folder.CreationTimeUtc;
+                node.Modified = folder.LastWriteTimeUtc;
+                node.LazyLoad = true;
+                list.Add(node);
+            }
+            var rootFiles = Directory.GetFiles(currentFsPath);
+            foreach (var filePath in rootFiles)
+            {
+                var file = new FileInfo(filePath);
+                var node = new Node();
+                node.Text = file.Name;
+                node.Type = "f";
+                node.VirtualPath = currentVirtualPath + "/" + file.Name;
+                node.Size = file.Length;
+                // TODO: timezome adjustment
+                node.Created = file.CreationTimeUtc;
+                node.Modified = file.LastWriteTimeUtc;
+                node.CanPreview = file.IsWebImageFile();
+                //file.
+                list.Add(node);
+            }
+
+            return list;
+
+        }
+
+
+        
+
 
         public string GetMimeType(string fileExtension)
         {

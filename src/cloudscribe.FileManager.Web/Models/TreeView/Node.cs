@@ -56,5 +56,19 @@ namespace cloudscribe.FileManager.Web.Models.TreeView
         public string Tooltip { get; set; }
 
         public bool LazyLoad { get; set; }
+
+        public string Type { get; set; }
+
+        public bool CanPreview { get; set; }
+
+        public string VirtualPath { get; set; }
+
+        public DateTime Created { get; set; } = DateTime.UtcNow;
+
+        public DateTime Modified { get; set; } = DateTime.UtcNow;
+
+        public long Size { get; set; }
+
+
     }
 }

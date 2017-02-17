@@ -77,5 +77,14 @@ namespace cloudscribe.FileManager.Web.Controllers
             return Json(imageList);
         }
 
+        [HttpGet]
+        [Authorize(Policy = "FileManagerPolicy")]
+        public async Task<IActionResult> GetFileTreeJson(string virtualStartPath = "")
+        {
+            var list = await fileManagerService.GetFileTree(virtualStartPath).ConfigureAwait(false);
+
+            return Json(list);
+        }
+
     }
 }

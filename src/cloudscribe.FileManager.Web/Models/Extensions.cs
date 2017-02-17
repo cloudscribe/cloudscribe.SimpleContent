@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace cloudscribe.FileManager.Web.Models
@@ -58,6 +59,16 @@ namespace cloudscribe.FileManager.Web.Models
             if (string.IsNullOrEmpty(s)) { return s; }
 
             return s.Replace("\r\n", string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty);
+        }
+
+        public static bool IsWebImageFile(this FileInfo fileInfo)
+        {
+            if (string.Equals(fileInfo.Extension, ".gif", StringComparison.OrdinalIgnoreCase)) { return true; }
+            if (string.Equals(fileInfo.Extension, ".jpeg", StringComparison.OrdinalIgnoreCase)) { return true; }
+            if (string.Equals(fileInfo.Extension, ".jpg", StringComparison.OrdinalIgnoreCase)) { return true; }
+            if (string.Equals(fileInfo.Extension, ".png", StringComparison.OrdinalIgnoreCase)) { return true; }
+
+            return false;
         }
     }
 }
