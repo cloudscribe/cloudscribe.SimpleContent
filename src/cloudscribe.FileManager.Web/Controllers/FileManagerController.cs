@@ -36,9 +36,9 @@ namespace cloudscribe.FileManager.Web.Controllers
 
         [HttpGet]
         [Authorize(Policy = "FileManagerPolicy")]
-        public IActionResult FileDialog()
+        public IActionResult CkFileDialog(CkBrowseModel model)
         {
-            return View();
+            return View(model);
         }
 
 

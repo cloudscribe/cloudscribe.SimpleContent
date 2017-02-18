@@ -26,8 +26,8 @@
             removePlugins: 'scayt,wsc',
             dropFileUploadUrl: "/filemanager/automaticupload",
             linkWebSizeToOriginal:true,
-            filebrowserBrowseUrl: '/filemanager/filedialog?ed=ck&type=file',
-            filebrowserImageBrowseUrl: '/filemanager/filedialog?ed=ck&type=image'
+            filebrowserBrowseUrl: '/filemanager/ckfiledialog?type=file',
+            filebrowserImageBrowseUrl: '/filemanager/ckfiledialog?type=image'
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);

@@ -1,17 +1,13 @@
-﻿
+﻿@using cloudscribe.FileManager.Web.Models
+@using Microsoft.Extensions.Localization
+@model CkBrowseModel
+@inject IStringLocalizer<FileManagerStringResources> sr
 @{
     Layout = "_LayoutDialog";
 }
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6">
-            Create Folder
-        </div>
-        <div class="col-md-6">
-            Upload File
-        </div>
-    </div>
+    
     <div class="row">
         <div class="col-md-8 ">
             <input class="form-control" type="text" id="fileSelection" name="fileSelection" placeholder="Selected File" />
@@ -21,12 +17,40 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            Tree goes here
+        <div class="col-md-5" style="height: 500px;overflow: scroll;">
             <div id="tree"></div>
         </div>
-        <div class="col-md-6">
-            <img style="max-width:450px;overflow:scroll" id="filePreview" src="~/images/1x1.gif" alt="Preview selected image" />
+        <div class="col-md-7">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li id="tab1" role="tab">
+                    <a href="#tabList" data-toggle="tab" class="active"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;@sr["Preview"]</a>
+                </li>
+                <li id="tab2" role="tab">
+                    <a href="#tabMap" data-toggle="tab"><i class="fa fa-map-o" aria-hidden="true"></i>&nbsp;@sr["Tools"]</a>
+                </li>
+            </ul>
+            <div class="tab-content ">
+                <div class="tab-pane active" id="tabList" role="tabpanel" aria-labelledby="tab1">
+                    <div style="max-width:570px; height:470px;overflow:auto">
+                        <img  id="filePreview" src="~/images/1x1.gif" alt="Preview selected image" />
+                    </div>
+                </div>
+                <div class="tab-pane" id="tabMap" role="tabpanel" aria-labelledby="tab2">
+                    
+                        <div class="createfolder">
+                            Create Folder
+                        </div>
+                        <div class="fileupload">
+                            Upload File
+                        </div>
+                    
+                </div>
+
+                
+            </div>
+
+            
         </div>
         
     </div>
@@ -51,10 +75,21 @@
     <script src="~/js/bootstrap-treeview.min.js"></script>
     <script type="text/javascript">
         var treeData = [];
+        
         (function() {
             var dataApi = "/filemanager/getfiletreejson";
             var selector = $("#fileSelection");
             var preview = $("#filePreview");
+
+            var returnFunc = function returnFileUrl() {
+                var funcNum = '@Model.CKEditorFuncNum';
+                var fileUrl = selector.val();
+                window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+                window.close();
+            };
+            var btn = $("#btnSelector");
+            btn.click(returnFunc);
+
             $('#tree').treeview({
                 dataUrl: {
                     method:'GET',

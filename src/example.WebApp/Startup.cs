@@ -41,11 +41,7 @@ namespace example.WebApp
             // remember last config source added wins if it has the same settings
             builder.AddJsonFile("appsettings.local.overrides.json", optional: true, reloadOnChange: true);
 
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
+            
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();

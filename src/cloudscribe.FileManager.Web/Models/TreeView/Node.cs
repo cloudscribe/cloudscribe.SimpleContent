@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.FileManager.Web.Models.TreeView
 {
+    /// <summary>
+    /// a model for this: https://github.com/patternfly/patternfly-bootstrap-treeview
+    /// we probably don't need all these properties and should remove the ones we ar enot using to reduce the json payload
+    /// </summary>
     public class Node
     {
         public Node()
