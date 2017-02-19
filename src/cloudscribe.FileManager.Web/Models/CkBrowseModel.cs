@@ -20,5 +20,9 @@ namespace cloudscribe.FileManager.Web.Models
         public string CKEditorFuncNum { get; set; }
 
         public string LangCode { get; set; } = "en";
+
+        public bool ResizeImages { get; set; } = true;
+
+        
     }
 }

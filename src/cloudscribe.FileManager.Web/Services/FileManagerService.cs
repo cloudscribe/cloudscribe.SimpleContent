@@ -56,22 +56,49 @@ namespace cloudscribe.FileManager.Web.Services
             }
         }
 
-        public async Task<ImageUploadResult> ProcessFile(IFormFile formFile, ImageProcessingOptions options, int eventCode)
+        public async Task<ImageUploadResult> ProcessFile(
+            IFormFile formFile, 
+            string currentDir,
+            ImageProcessingOptions options, 
+            int eventCode)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
-            var origSizeVirtualPath = rootPath.RootVirtualPath + options.ImageDefaultVirtualSubPath;
-            var origSegments = options.ImageDefaultVirtualSubPath.Split('/');
-            EnsureSubFolders(rootPath.RootFileSystemPath, origSegments);
-            var origSizeFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(origSegments));
+            string currentFsPath = rootPath.RootFileSystemPath;
+            string currentVirtualPath = rootPath.RootVirtualPath;
+
+            //if ((!string.IsNullOrEmpty(currentDir))&& (currentDir.StartsWith(rootPath.RootVirtualPath)))
+            //{
+                
+            //    var virtualSubPath = currentDir.Substring(rootPath.RootVirtualPath.Length);
+            //    var segments = virtualSubPath.Split('/');
+            //    currentFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+            //    if (!Directory.Exists(currentFsPath))
+            //    {
+            //        log.LogError("directory not found for currentPath " + currentFsPath);
+                    
+            //    }
+            //    //currentDirectory = new DirectoryInfo(currentFsPath);
+            //    currentVirtualPath = currentDir;
+            //}
+            //else
+            //{
+            //    //isRoot = true;
+            //    //currentDirectory = new DirectoryInfo(rootPath.RootFileSystemPath);
+            //}
+
+            var virtualFolderPath = rootPath.RootVirtualPath + options.ImageDefaultVirtualSubPath;
+            var virtualSegments = options.ImageDefaultVirtualSubPath.Split('/');
+            EnsureSubFolders(rootPath.RootFileSystemPath, virtualSegments);
+            var origSizeFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(virtualSegments));
             var newName = formFile.FileName.ToCleanFileName();
-            var newUrl = origSizeVirtualPath + "/" + newName;
+            var newUrl = virtualFolderPath + "/" + newName;
             var fsPath = Path.Combine(origSizeFsPath, newName);
 
             var ext = Path.GetExtension(newName);
             var webSizeName = Path.GetFileNameWithoutExtension(newName) + "-ws" + ext;
             var webFsPath = Path.Combine(origSizeFsPath, webSizeName);
-            var webUrl = origSizeVirtualPath + "/" + webSizeName;
+            var webUrl = virtualFolderPath + "/" + webSizeName;
 
             try
             {
@@ -134,7 +161,7 @@ namespace cloudscribe.FileManager.Web.Services
 
             DirectoryInfo currentDirectory;
             IEnumerable<DirectoryInfo> folders;
-            bool isRoot = false;
+            //bool isRoot = false;
             string currentFsPath = rootPath.RootFileSystemPath;
             string currentVirtualPath = rootPath.RootVirtualPath;
 
@@ -158,7 +185,7 @@ namespace cloudscribe.FileManager.Web.Services
             }
             else
             {
-                isRoot = true;
+                //isRoot = true;
                 currentDirectory = new DirectoryInfo(rootPath.RootFileSystemPath);
             }
             

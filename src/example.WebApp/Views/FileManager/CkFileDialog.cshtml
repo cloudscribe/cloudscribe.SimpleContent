@@ -1,65 +1,135 @@
 ﻿@using cloudscribe.FileManager.Web.Models
 @using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
 @model CkBrowseModel
+@inject IOptions<AutomaticUploadOptions> autoUploadOptionsAccessor
 @inject IStringLocalizer<FileManagerStringResources> sr
 @{
     Layout = "_LayoutDialog";
+    var upoadOptions = autoUploadOptionsAccessor.Value;
+}
+@section style {
+<link rel="stylesheet" href="~/css/jquery.fileupload.css" />
+<link rel="stylesheet" href="~/css/cropper.min.css" />
 }
 
 <div class="container-fluid">
-    
     <div class="row">
         <div class="col-md-8 ">
-            <input class="form-control" type="text" id="fileSelection" name="fileSelection" placeholder="Selected File" />
+            <input class="form-control" disabled type="text" id="fileSelection" name="fileSelection" placeholder="Selected File" />
         </div>
         <div class="col-md-4">
             <button class="col-md-4 btn btn-default" id="btnSelector">Select</button>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-5" style="height: 500px;overflow: scroll;">
-            <div id="tree"></div>
-        </div>
-        <div class="col-md-7">
-
-            <ul class="nav nav-tabs" role="tablist">
-                <li id="tab1" role="tab">
-                    <a href="#tabList" data-toggle="tab" class="active"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;@sr["Preview"]</a>
-                </li>
-                <li id="tab2" role="tab">
-                    <a href="#tabMap" data-toggle="tab"><i class="fa fa-map-o" aria-hidden="true"></i>&nbsp;@sr["Tools"]</a>
-                </li>
-            </ul>
-            <div class="tab-content ">
-                <div class="tab-pane active" id="tabList" role="tabpanel" aria-labelledby="tab1">
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="tab1" role="tab">
+            <a href="#tabBrowse" data-toggle="tab" class="active"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;@sr["Browse"]</a>
+        </li>
+        <li id="tab2" role="tab">
+            <a href="#tabUpload" data-toggle="tab"><i class="fa fa-map-o" aria-hidden="true"></i>&nbsp;@sr["Upload"]</a>
+        </li>
+        <li id="tab3" role="tab">
+            <a href="#tabCrop" data-toggle="tab"><i class="fa fa-map-o" aria-hidden="true"></i>&nbsp;@sr["Crop"]</a>
+        </li>
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="tabBrowse" role="tabpanel" aria-labelledby="tab1">
+            <div class="row">
+                <div class="col-md-5" style="height: 500px;overflow: scroll;">
+                    <div id="tree"></div>
+                </div>
+                <div class="col-md-7">
                     <div style="max-width:570px; height:470px;overflow:auto">
-                        <img  id="filePreview" src="~/images/1x1.gif" alt="Preview selected image" />
+                        <img id="filePreview" src="~/images/1x1.gif" alt="Preview selected image" />
                     </div>
-                </div>
-                <div class="tab-pane" id="tabMap" role="tabpanel" aria-labelledby="tab2">
-                    
-                        <div class="createfolder">
-                            Create Folder
-                        </div>
-                        <div class="fileupload">
-                            Upload File
-                        </div>
-                    
-                </div>
 
-                
+                </div>
+            </div>
+  
+        </div>
+        <div class="tab-pane" id="tabUpload" role="tabpanel" aria-labelledby="tab2">
+            <div class="col-md-6 fileupload">
+                <h2>Upload File</h2>
+                <form id="frmUpload" method="post" enctype="multipart/form-data" asp-controller="FileManager" asp-action="AutomaticUpload">
+                    <input type="hidden" id="uploadCurrentDir" name="currentDir" />
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input asp-for="ResizeImages" /> @sr["Reduce Image Size For Web"]
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="maxWidth">@sr["Max Width"]</label>
+                            <input type="text" class="form-control" id="maxWidth" name="maxWidth" value="@upoadOptions.WebSizeImageMaxWidth">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxHeight">@sr["Max Height"]</label>
+                            <input type="text" class="form-control" id="maxHeight" name="maxHeight" value="@upoadOptions.WebSizeImageMaxHeight">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="">
+                            <p>Upload one or more files using this form:</p>
+
+                            <span class="btn btn-success fileinput-button">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>Select files...</span>
+                                <!-- The file input field used as target for the file upload widget
+                                   
+                         -->
+                                <input id="fileupload" type="file" name="fileupload" multiple>
+                            </span>
+                        </div>
+                        <div id="progress" class="progress">
+                            <div class="progress-bar progress-bar-success"></div>
+                        </div>
+                        <div id="files" class="files"></div>
+                        <div id="dropzone"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="">
+                            <input class="btn btn-default" type="submit" value="Upload" />
+                        </div>
+                    </div>
+                </form>
             </div>
 
+            <div class="col-md-6 createfolder">
+                <h2> Create Folder</h2>
+               <form class="form-inline">
+                   <input type="hidden" id="newFolderCurrentDir" name="currentDir" />
+                   <div class="form-group">
+                       <input type="text" class="form-control" id="newFolderName" name="newFolderName">
+                   </div>
+                   <button type="submit" class="btn btn-default">Create Folder</button>
+              </form>
+            </div>
             
+
         </div>
-        
+        <div class="tab-pane" id="tabCrop" role="tabpanel" aria-labelledby="tab3">
+            Cropper goes here
+        </div>
+
     </div>
+
+    
+    
 </div>
 @section scripts {
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/bootstrap-treeview.min.js"></script>
+        <script src="~/jsdev/jquery.ui.widget.js"></script>
+        <script src="~/jsdev/jquery.iframe-transport.js"></script>
+        <script src="~/jsdev/jquery.fileupload.js"></script>
        
     </environment>
     <environment names="Staging,Production">
@@ -71,8 +141,12 @@
             asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
             asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
     </script>
+        <script src="~/js/bootstrap-treeview.min.js"></script>
+        <script src="~/jsdev/jquery.ui.widget.js"></script>
+        <script src="~/jsdev/jquery.iframe-transport.js"></script>
+        <script src="~/jsdev/jquery.fileupload.js"></script>
     </environment>
-    <script src="~/js/bootstrap-treeview.min.js"></script>
+   
     <script type="text/javascript">
         var treeData = [];
         
@@ -80,6 +154,8 @@
             var dataApi = "/filemanager/getfiletreejson";
             var selector = $("#fileSelection");
             var preview = $("#filePreview");
+            var newFolderCurrentDir = $("#newFolderCurrentDir");
+            var uploadCurrentDir = $("#uploadCurrentDir");
 
             var returnFunc = function returnFileUrl() {
                 var funcNum = '@Model.CKEditorFuncNum';
@@ -133,14 +209,45 @@
                         preview.attr("src", data.virtualPath);
 
                     }
+                    if (data.type === "d") {
+                        newFolderCurrentDir.val(data.virtualPath);
+                        uploadCurrentDir.val(data.virtualPath);
+                       // alert(uploadCurrentDir.val());
+
+                    }
                 },
                 onNodeExpanded: function (event, data) {
                     //alert(data.text + ' expanded');
                 }
             });
-            
-            
+
+            $('#fileupload').fileupload({
+                url: "/filemanager/automaticupload",
+                dataType: 'json',
+                done: function (e, data) {
+                    $.each(data, function (index, file) {
+                        $('<p/>').text(file.name).appendTo('#files');
+                    });
+                },
+                progressall: function (e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                }
+            }).prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+            $('#fileupload').bind('fileuploadsubmit', function (e, data) {
+                data.formData = $('#frmUpload').serializeArray();
+                //alert(data.formData);
+                return true;
+            });
+
         })();
+
+        
         
         
         

@@ -12,6 +12,7 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/bootstrap-treeview.min.css" asp-append-version="true" />
     </environment>
+    @RenderSection("style", required: false)
 </head>
 <body>
  @RenderBody()
