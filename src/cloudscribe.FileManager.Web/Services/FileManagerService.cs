@@ -56,50 +56,85 @@ namespace cloudscribe.FileManager.Web.Services
             }
         }
 
+        private int GetMaxWidth(int? maxWidth, ImageProcessingOptions options)
+        {
+            if(maxWidth.HasValue)
+            {
+                if(maxWidth.Value >= options.ResizeMinAllowedWidth && maxWidth.Value <= options.ResizeMaxAllowedWidth)
+                {
+                    return maxWidth.Value;
+                }
+            }
+
+            return options.WebSizeImageMaxWidth;
+        }
+
+        private int GetMaxHeight(int? maxHeight, ImageProcessingOptions options)
+        {
+            if (maxHeight.HasValue)
+            {
+                if (maxHeight.Value >= options.ResizeMinAllowedHeight && maxHeight.Value <= options.ResizeMaxAllowedHeight)
+                {
+                    return maxHeight.Value;
+                }
+            }
+
+            return options.WebSizeImageMaxWidth;
+        }
+
         public async Task<UploadResult> ProcessFile(
             IFormFile formFile,
             ImageProcessingOptions options,
-            string currentDir = "",
-            bool? resizeImages = null,
-            int? maxWidth = null,
-            int? maxHeight = null)
+            bool? resizeImages,
+            int? maxWidth,
+            int? maxHeight,
+            string requestedVirtualPath = "")
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
             string currentFsPath = rootPath.RootFileSystemPath;
             string currentVirtualPath = rootPath.RootVirtualPath;
+            string[] virtualSegments = options.ImageDefaultVirtualSubPath.Split('/');
 
-            //if ((!string.IsNullOrEmpty(currentDir))&& (currentDir.StartsWith(rootPath.RootVirtualPath)))
-            //{
+            if ((!string.IsNullOrEmpty(requestedVirtualPath)) && (requestedVirtualPath.StartsWith(rootPath.RootVirtualPath)))
+            {
+
+                var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
+                var segments = virtualSubPath.Split('/');
+                if(segments.Length > 0)
+                {
+                    var requestedFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+                    if (!Directory.Exists(requestedFsPath))
+                    {
+                        log.LogError("directory not found for currentPath " + requestedFsPath);
+                    }
+                    else
+                    {
+                        currentVirtualPath = requestedVirtualPath;
+                        virtualSegments = segments;
+                        currentFsPath = Path.Combine(currentFsPath, Path.Combine(virtualSegments));
+                    }
+                }    
                 
-            //    var virtualSubPath = currentDir.Substring(rootPath.RootVirtualPath.Length);
-            //    var segments = virtualSubPath.Split('/');
-            //    currentFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
-            //    if (!Directory.Exists(currentFsPath))
-            //    {
-            //        log.LogError("directory not found for currentPath " + currentFsPath);
-                    
-            //    }
-            //    //currentDirectory = new DirectoryInfo(currentFsPath);
-            //    currentVirtualPath = currentDir;
-            //}
-            //else
-            //{
-            //    //isRoot = true;
-            //    //currentDirectory = new DirectoryInfo(rootPath.RootFileSystemPath);
-            //}
+            }
+            else
+            {
 
-            var virtualFolderPath = rootPath.RootVirtualPath + options.ImageDefaultVirtualSubPath;
-            var virtualSegments = options.ImageDefaultVirtualSubPath.Split('/');
-            EnsureSubFolders(rootPath.RootFileSystemPath, virtualSegments);
-            var origSizeFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(virtualSegments));
+                // only ensure the folders if no currentDir provided,
+                // if it is provided it must be an existing path
+                // options.ImageDefaultVirtualSubPath might not exist on first upload so need to ensure it
+                currentVirtualPath = currentVirtualPath + options.ImageDefaultVirtualSubPath;
+                currentFsPath = Path.Combine(currentFsPath, Path.Combine(virtualSegments));
+                EnsureSubFolders(rootPath.RootFileSystemPath, virtualSegments);
+            }
+
             var newName = formFile.FileName.ToCleanFileName();
-            var newUrl = virtualFolderPath + "/" + newName;
-            var fsPath = Path.Combine(origSizeFsPath, newName);
+            var newUrl = currentVirtualPath + "/" + newName;
+            var fsPath = Path.Combine(currentFsPath, newName);
 
             var ext = Path.GetExtension(newName);
             var webSizeName = Path.GetFileNameWithoutExtension(newName) + "-ws" + ext;
-            var webFsPath = Path.Combine(origSizeFsPath, webSizeName);
+            var webFsPath = Path.Combine(currentFsPath, webSizeName);
             string webUrl = string.Empty;
 
             try
@@ -112,15 +147,17 @@ namespace cloudscribe.FileManager.Web.Services
                 if ((options.AutoResize)&& IsWebImageFile(ext))
                 {
                     var mimeType = GetMimeType(ext);
-                    webUrl = virtualFolderPath + "/" + webSizeName;
+                    webUrl = currentVirtualPath + "/" + webSizeName;
+                    int resizeWidth = GetMaxWidth(maxWidth, options);
+                    int resizeHeight = GetMaxWidth(maxHeight, options);
 
                     imageResizer.ResizeImage(
                         fsPath,
-                        origSizeFsPath,
+                        currentFsPath,
                         webSizeName,
                         mimeType,
-                        options.WebSizeImageMaxWidth,
-                        options.WebSizeImageMaxHeight
+                        resizeWidth,
+                        resizeHeight
                         );
                 }
 
@@ -144,10 +181,6 @@ namespace cloudscribe.FileManager.Web.Services
 
                 };
             }
-
-
-
-
         }
 
 

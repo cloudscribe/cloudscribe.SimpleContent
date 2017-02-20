@@ -68,12 +68,12 @@ namespace cloudscribe.FileManager.Web.Controllers
         [HttpPost]
         [Authorize(Policy = "FileManagerPolicy")]
         [ValidateAntiForgeryToken] // TODO: how to get the token in the editor
-        public async Task<IActionResult> AutomaticUpload(
+        public async Task<IActionResult> Upload(
             //List<IFormFile> files
-            string currentDir = "",
-            bool? resizeImages = null,
-            int? maxWidth = null,
-            int? maxHeight = null
+            bool? resizeImages,
+            int? maxWidth,
+            int? maxHeight,
+            string currentDir = "" 
             )
         {
             var theFiles = HttpContext.Request.Form.Files;
@@ -88,10 +88,10 @@ namespace cloudscribe.FileManager.Web.Controllers
                         var uploadResult = await fileManagerService.ProcessFile(
                             formFile,
                             autoUploadOptions,
-                            currentDir,
                             resizeImages,
                             maxWidth,
-                            maxHeight
+                            maxHeight,
+                            currentDir
                             ).ConfigureAwait(false);
                         
                         imageList.Add(uploadResult);

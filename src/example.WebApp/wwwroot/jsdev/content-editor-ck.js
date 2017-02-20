@@ -24,7 +24,7 @@
 		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
             extraPlugins: 'oembed,cloudscribe-filedrop',
             removePlugins: 'scayt,wsc',
-            dropFileUploadUrl: "/filemanager/automaticupload",
+            dropFileUploadUrl: "/filemanager/upload",
             dropFileXsrfToken: xsrfToken,
             linkWebSizeToOriginal:true,
             filebrowserBrowseUrl: '/filemanager/ckfiledialog?type=file',

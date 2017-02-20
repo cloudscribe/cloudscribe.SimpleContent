@@ -83,7 +83,7 @@ CKEDITOR.plugins.add( 'cloudscribe-filedrop',
 				if(data[0].resizedUrl) {
 				    if(linkToOrig)
 					{
-					    theEditor.insertHtml( "<a href='" + data[0].originalUrl +"'><img src='" + data[0].reizedUrl + "' alt=' ' /></a>" );
+					    theEditor.insertHtml( "<a href='" + data[0].originalUrl +"'><img src='" + data[0].resizedUrl + "' alt=' ' /></a>" );
 					}
 					else {
 					theEditor.insertHtml( "<img src='" + data[0].resizedUrl + "' alt=' ' />" );

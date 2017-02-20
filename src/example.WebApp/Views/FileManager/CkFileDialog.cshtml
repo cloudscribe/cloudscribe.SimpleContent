@@ -222,7 +222,7 @@
             });
 
             $('#fileupload').fileupload({
-                url: "/filemanager/automaticupload",
+                url: "/filemanager/upload",
                 dataType: 'json',
                 done: function (e, data) {
                     $.each(data, function (index, file) {
@@ -236,7 +236,7 @@
                         progress + '%'
                     );
                 },
-                autoUpload:false
+                autoUpload:true
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
