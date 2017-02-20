@@ -1,6 +1,6 @@
 ﻿(function ($) {
 
-    var ck, contentId, editMode, currentSlug, supportsCategories, contentType,
+    var xsrfToken, ck, contentId, editMode, currentSlug, supportsCategories, contentType,
         txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
         txtParentPage, txtViewRoles, chkPublish, chkShowHeading, chkMenuOnly,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
@@ -22,9 +22,10 @@
 		['Blockquote'],['NumberedList','BulletedList'],
 		['Link','Unlink','Anchor'],
 		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
-            extraPlugins: 'oembed,simplecontentfiledrop',
+            extraPlugins: 'oembed,cloudscribe-filedrop',
             removePlugins: 'scayt,wsc',
             dropFileUploadUrl: "/filemanager/automaticupload",
+            dropFileXsrfToken: xsrfToken,
             linkWebSizeToOriginal:true,
             filebrowserBrowseUrl: '/filemanager/ckfiledialog?type=file',
             filebrowserImageBrowseUrl: '/filemanager/ckfiledialog?type=image'
@@ -152,7 +153,8 @@
             viewRoles: roles,
             showHeading: showTitle,
             menuOnly: isMenuOnly,
-            __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
+            //__RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
+            __RequestVerificationToken: xsrfToken
         },
         function (data) {
             location.href = data;
@@ -345,6 +347,7 @@
     supportsCategories = ($("#editor-toolbar").data("supports-categories")) === 'True';
     editMode = $("#editor-toolbar").data("edit-mode");
     userLocale = $("#editor-toolbar").data("locale");
+    xsrfToken = $("#editor-toolbar").data("xsrf-token");
     
     //alert(contentId);
     var mainNavHeight = $(".navbar-fixed-top").first().height();

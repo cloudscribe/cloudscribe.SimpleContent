@@ -49,7 +49,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         private ILogger log;
 
         [HttpGet]
-        [GenerateAntiforgeryTokenCookieForAjax]
+        //[GenerateAntiforgeryTokenCookieForAjax]
         [Authorize(Policy = "FileManagerPolicy")]
         public IActionResult CkFileDialog(CkBrowseModel model)
         {
@@ -67,7 +67,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = "FileManagerPolicy")]
-        //[ValidateAntiForgeryToken] // TODO: how to get the token in the editor
+        [ValidateAntiForgeryToken] // TODO: how to get the token in the editor
         public async Task<IActionResult> AutomaticUpload(
             //List<IFormFile> files
             string currentDir = "",
@@ -77,7 +77,7 @@ namespace cloudscribe.FileManager.Web.Controllers
             )
         {
             var theFiles = HttpContext.Request.Form.Files;
-            var imageList = new List<ImageUploadResult>();
+            var imageList = new List<UploadResult>();
             
             foreach (var formFile in theFiles)
             {
@@ -87,9 +87,11 @@ namespace cloudscribe.FileManager.Web.Controllers
                     {
                         var uploadResult = await fileManagerService.ProcessFile(
                             formFile,
-                            currentDir,
                             autoUploadOptions,
-                            MediaLoggingEvents.AUTOMATIC_UPLOAD
+                            currentDir,
+                            resizeImages,
+                            maxWidth,
+                            maxHeight
                             ).ConfigureAwait(false);
                         
                         imageList.Add(uploadResult);
@@ -98,7 +100,7 @@ namespace cloudscribe.FileManager.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(MediaLoggingEvents.AUTOMATIC_UPLOAD, ex, ex.StackTrace);
+                    log.LogError(MediaLoggingEvents.FILE_PROCCESSING, ex, ex.StackTrace);
                 }
 
             }

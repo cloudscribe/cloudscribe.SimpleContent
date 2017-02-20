@@ -56,11 +56,13 @@ namespace cloudscribe.FileManager.Web.Services
             }
         }
 
-        public async Task<ImageUploadResult> ProcessFile(
-            IFormFile formFile, 
-            string currentDir,
-            ImageProcessingOptions options, 
-            int eventCode)
+        public async Task<UploadResult> ProcessFile(
+            IFormFile formFile,
+            ImageProcessingOptions options,
+            string currentDir = "",
+            bool? resizeImages = null,
+            int? maxWidth = null,
+            int? maxHeight = null)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
@@ -98,7 +100,7 @@ namespace cloudscribe.FileManager.Web.Services
             var ext = Path.GetExtension(newName);
             var webSizeName = Path.GetFileNameWithoutExtension(newName) + "-ws" + ext;
             var webFsPath = Path.Combine(origSizeFsPath, webSizeName);
-            var webUrl = virtualFolderPath + "/" + webSizeName;
+            string webUrl = string.Empty;
 
             try
             {
@@ -107,9 +109,11 @@ namespace cloudscribe.FileManager.Web.Services
                     await formFile.CopyToAsync(stream);
                 }
 
-                if (options.AutoResize)
+                if ((options.AutoResize)&& IsWebImageFile(ext))
                 {
                     var mimeType = GetMimeType(ext);
+                    webUrl = virtualFolderPath + "/" + webSizeName;
+
                     imageResizer.ResizeImage(
                         fsPath,
                         origSizeFsPath,
@@ -120,10 +124,10 @@ namespace cloudscribe.FileManager.Web.Services
                         );
                 }
 
-                return new ImageUploadResult
+                return new UploadResult
                 {
-                    OriginalSizeUrl = newUrl,
-                    WebSizeUrl = webUrl,
+                    OriginalUrl = newUrl,
+                    ResizedUrl = webUrl,
                     Name = newName,
                     Length = formFile.Length,
                     Type = formFile.ContentType
@@ -132,9 +136,9 @@ namespace cloudscribe.FileManager.Web.Services
             }
             catch (Exception ex)
             {
-                log.LogError(eventCode, ex, ex.StackTrace);
+                log.LogError(MediaLoggingEvents.FILE_PROCCESSING, ex, ex.StackTrace);
 
-                return new ImageUploadResult
+                return new UploadResult
                 {
                     ErrorMessage = "There was an error logged during file processing"
 
@@ -216,7 +220,7 @@ namespace cloudscribe.FileManager.Web.Services
                 // TODO: timezome adjustment
                 node.Created = file.CreationTimeUtc;
                 node.Modified = file.LastWriteTimeUtc;
-                node.CanPreview = file.IsWebImageFile();
+                node.CanPreview = IsWebImageFile(file.Extension);
                 //file.
                 list.Add(node);
             }
@@ -226,8 +230,16 @@ namespace cloudscribe.FileManager.Web.Services
         }
 
 
-        
 
+        public static bool IsWebImageFile(string fileExtension)
+        {
+            if (string.Equals(fileExtension, ".gif", StringComparison.OrdinalIgnoreCase)) { return true; }
+            if (string.Equals(fileExtension, ".jpeg", StringComparison.OrdinalIgnoreCase)) { return true; }
+            if (string.Equals(fileExtension, ".jpg", StringComparison.OrdinalIgnoreCase)) { return true; }
+            if (string.Equals(fileExtension, ".png", StringComparison.OrdinalIgnoreCase)) { return true; }
+
+            return false;
+        }
 
         public string GetMimeType(string fileExtension)
         {

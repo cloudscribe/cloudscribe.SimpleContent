@@ -235,7 +235,8 @@
                         'width',
                         progress + '%'
                     );
-                }
+                },
+                autoUpload:false
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
