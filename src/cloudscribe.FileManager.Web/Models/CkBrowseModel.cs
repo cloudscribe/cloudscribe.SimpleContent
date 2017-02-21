@@ -23,6 +23,8 @@ namespace cloudscribe.FileManager.Web.Models
 
         public bool ResizeImages { get; set; } = true;
 
+        public string InitialVirtualPath { get; set; }
+
         
     }
 }

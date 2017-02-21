@@ -9,8 +9,29 @@
     var upoadOptions = autoUploadOptionsAccessor.Value;
 }
 @section style {
-<link rel="stylesheet" href="~/css/jquery.fileupload.css" />
-<link rel="stylesheet" href="~/css/cropper.min.css" />
+    <link rel="stylesheet" href="~/css/jquery.fileupload.css" />
+    <link rel="stylesheet" href="~/css/cropper.min.css" />
+    <style>
+        .fileupload-dropzone {
+    border-radius: 0;
+    -webkit-box-shadow: none;
+
+
+    min-height: 40px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+    </style>
 }
 
 <div class="container-fluid">
@@ -40,28 +61,35 @@
                     <div id="tree"></div>
                 </div>
                 <div class="col-md-7">
-                    <div style="max-width:570px; height:470px;overflow:auto">
+                    <div style="border:solid thin black; max-width:570px; height:390px;overflow:auto;margin-bottom:5px;">
                         <img id="filePreview" src="~/images/1x1.gif" alt="Preview selected image" />
                     </div>
-
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control" disabled id="newFolderCurrentDir" name="currentDir" value="@Model.InitialVirtualPath" />
+                            <input type="text" class="form-control" id="newFolderName" name="newFolderName">
+                        </div>
+                        <button id="btnCreateFolder" type="submit" class="btn btn-default">Create Folder</button>
+                    </form>
+                    <div id="alert_placeholder"></div>
                 </div>
             </div>
-  
+
         </div>
         <div class="tab-pane" id="tabUpload" role="tabpanel" aria-labelledby="tab2">
-            <div class="col-md-6 fileupload">
-                <h2>Upload File</h2>
+            <div class="col-md-12">
+               Current Folder: <span class="form-control" id="currentFolder" name="fileSelection">@Model.InitialVirtualPath</span>
+            </div>
+            <div class="col-md-12 fileupload">
+                <h2>Upload Files</h2>
+                <span class="operationinstructions">
+                    First use the browse tab to select the folder where you would like the new files to be placed.
+                    Then browse to select the files on your computer and press &quot;Upload&quot; to upload the selected files.
+                </span>
+                
                 <form id="frmUpload" method="post" enctype="multipart/form-data" asp-controller="FileManager" asp-action="AutomaticUpload">
                     <input type="hidden" id="uploadCurrentDir" name="currentDir" />
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <div class="checkbox">
-                                <label>
-                                    <input asp-for="ResizeImages" /> @sr["Reduce Image Size For Web"]
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="form-inline">
                         <div class="form-group">
                             <label for="maxWidth">@sr["Max Width"]</label>
@@ -71,55 +99,52 @@
                             <label for="maxHeight">@sr["Max Height"]</label>
                             <input type="text" class="form-control" id="maxHeight" name="maxHeight" value="@upoadOptions.WebSizeImageMaxHeight">
                         </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input asp-for="ResizeImages" /> @sr["Reduce Image Size For Web"]
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <div class="">
+                        <div id="divFileUpload" class="fileupload">
                             <p>Upload one or more files using this form:</p>
-
-                            <span class="btn btn-success fileinput-button">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                <span>Select files...</span>
-                                <!-- The file input field used as target for the file upload widget
-                                   
-                         -->
-                                <input id="fileupload" type="file" name="fileupload" multiple>
-                            </span>
+                            <div id="dropZone" class="fileupload-dropzone">
+                                <span>Drag and drop files here</span>
+                            </div>
+                            <div id="pnlFiles" class="uploadcontainer">
+                                <div id="browseButton" class="btn btn-success fileinput-button">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <span>Choose Files</span>
+                                    <input id="fileupload" type="file" name="fileupload" multiple>
+                                </div>
+                            </div>
                         </div>
                         <div id="progress" class="progress">
                             <div class="progress-bar progress-bar-success"></div>
                         </div>
-                        <div id="files" class="files"></div>
-                        <div id="dropzone"></div>
+                        <div id="fileList" class='uploadfilelist'></div>
+                        <div id="ui" class='uploadfilesui'></div>
+
                     </div>
-                    <div class="form-group">
-                        <div class="">
-                            <input class="btn btn-default" type="submit" value="Upload" />
-                        </div>
-                    </div>
+
                 </form>
             </div>
 
-            <div class="col-md-6 createfolder">
-                <h2> Create Folder</h2>
-               <form class="form-inline">
-                   <input type="hidden" id="newFolderCurrentDir" name="currentDir" />
-                   <div class="form-group">
-                       <input type="text" class="form-control" id="newFolderName" name="newFolderName">
-                   </div>
-                   <button type="submit" class="btn btn-default">Create Folder</button>
-              </form>
-            </div>
             
+
 
         </div>
         <div class="tab-pane" id="tabCrop" role="tabpanel" aria-labelledby="tab3">
             Cropper goes here
+            <img id="fileCropPreview" src="~/images/1x1.gif" alt="Preview selected image" />
         </div>
 
     </div>
 
-    
-    
+
+
 </div>
 @section scripts {
 
@@ -130,32 +155,66 @@
         <script src="~/jsdev/jquery.ui.widget.js"></script>
         <script src="~/jsdev/jquery.iframe-transport.js"></script>
         <script src="~/jsdev/jquery.fileupload.js"></script>
-       
+
     </environment>
     <environment names="Staging,Production">
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-            asp-fallback-test="window.jQuery">
-    </script>
-    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
-            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-    </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
         <script src="~/js/bootstrap-treeview.min.js"></script>
         <script src="~/jsdev/jquery.ui.widget.js"></script>
         <script src="~/jsdev/jquery.iframe-transport.js"></script>
         <script src="~/jsdev/jquery.fileupload.js"></script>
     </environment>
-   
+
     <script type="text/javascript">
+
+        var notify = function () { }
+        notify.show = function (message, cssClass) {
+            $('#alert_placeholder').html('<div class="alert ' + cssClass + '"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+        };
+       
+
+        $('#btnCreateFolder').on('click', function () {
+            notify.show('Your text goes here', 'alert-success');
+
+            return false;
+        });
         var treeData = [];
-        
-        (function() {
+
+        function addFileToList(data, fileList, index, file) {
+            var d = $("<span class='glyphicon glyphicon-trash' title='Remove'></span>").click(function () {
+                data.files.splice(index, 1);
+                fileList = data.files;
+                $('#fileList li').eq(index).remove();
+                if (fileList.length === 0) {
+                    $('#fileList').html('');
+                }
+            });
+            var item = $("<li>", { text: file.name }).append(d);
+            $('#fileList ul').append(item);
+        }
+        function addErrorToList(index, file) {
+            var item = $("<li>", { text: file.ErrorMessage });
+            $('#fileList ul').append(item);
+        }
+
+        (function () {
+
+            var cropTab = $('#tab3');
+            cropTab.hide();
             var dataApi = "/filemanager/getfiletreejson";
             var selector = $("#fileSelection");
             var preview = $("#filePreview");
+            var cropPreview = $("#fileCropPreview");
             var newFolderCurrentDir = $("#newFolderCurrentDir");
             var uploadCurrentDir = $("#uploadCurrentDir");
+            var currentFolderDisplay = $("#currentFolder");
 
             var returnFunc = function returnFileUrl() {
                 var funcNum = '@Model.CKEditorFuncNum';
@@ -166,12 +225,26 @@
             var btn = $("#btnSelector");
             btn.click(returnFunc);
 
+            var reloader = {};
+            reloader.load = function () {
+                var nodeToReload = $('#tree').treeview('findNodes', uploadCurrentDir.val(), 'virtualPath');
+                if (nodeToReload) {
+                    alert(nodeToReload.length);
+                    //$('#tree').treeview('updateNode', [node, newNode, { silent: true }]);
+                }
+               else {
+                alert('node not found');
+               }
+                
+            
+            };
+
             $('#tree').treeview({
                 dataUrl: {
-                    method:'GET',
+                    method: 'GET',
                     dataType: 'json',
                     url: dataApi,
-                    cache:false
+                    cache: false
                 },
                 nodeIcon: 'glyphicon glyphicon-stop',
                 partiallyCheckedIcon: 'glyphicon glyphicon-expand',
@@ -184,7 +257,7 @@
                 loadingIcon: 'glyphicon glyphicon-hourglas',
                 levels: 2,
                 onhoverColor: '#F5F5F5',
-                highlightSelected:true,
+                highlightSelected: true,
                 showBorder: true,
                 showCheckbox: false,
                 showIcon: true,
@@ -194,10 +267,10 @@
                     $.ajax({
                         dataType: "json",
                         url: dataApi + '?virtualStartPath=' + node.virtualPath
-                       
+
                     })
                       .done(function (data) {
-                          dataFunc(data); 
+                          dataFunc(data);
                       })
                     ;
 
@@ -205,14 +278,20 @@
                 onNodeSelected: function (event, data) {
                     //alert(data.virtualPath + ' selected');
                     if (data.canPreview) {
+                        cropTab.show();
                         selector.val(data.virtualPath);
                         preview.attr("src", data.virtualPath);
-
+                        cropPreview.attr("src", data.virtualPath);
+                    }
+                    else
+                    {
+                        cropTab.hide();
                     }
                     if (data.type === "d") {
                         newFolderCurrentDir.val(data.virtualPath);
                         uploadCurrentDir.val(data.virtualPath);
-                       // alert(uploadCurrentDir.val());
+                        currentFolderDisplay.html(data.virtualPath);
+                        // alert(uploadCurrentDir.val());
 
                     }
                 },
@@ -221,22 +300,79 @@
                 }
             });
 
-            $('#fileupload').fileupload({
+
+            $(document).bind('drop dragover', function (e) { e.preventDefault(); });
+            $('#progress').hide();
+            var fileList = [];
+
+            $('#pnlFiles').fileupload({
+                fileInput: $('#fileupload'),
                 url: "/filemanager/upload",
                 dataType: 'json',
+                autoUpload: false,
+                singleFileUploads: false,
+                limitMultiFileUploads: 10,
+                limitConcurrentUploads: 10,
+                dropZone: $('#dropZone'),
+                pasteZone: $('#dropZone'),
+                add: function (e, data) {
+                    
+                    $('#fileList').html('');
+                    $('#fileList').append($("<ul class='filelist'></ul>"));
+                    var regx = /(\.|\/)(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|flv|FLV|swf|SWF|wmv|WMV|mp3|MP3|mp4|MP4|m4a|M4A|m4v|M4V|oga|OGA|ogv|OGV|webma|WEBMA|webmv|WEBMV|webm|WEBM|wav|WAV|fla|FLA|tif|TIF|asf|ASF|asx|ASX|avi|AVI|mov|MOV|mpeg|MPEG|mpg|MPG|zip|ZIP|pdf|PDF|doc|DOC|docx|DOCX|xls|XLS|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|csv|CSV|txt|TXT|htm|HTM|html|HTML|css|CSS)$/i; 
+                    var j = 0; 
+                    var k = data.files.length;
+                    //alert(k);
+                    while (j < k) {
+                        if ((regx.test(data.files[j].name)) === false) {
+                            //alert('false');
+                            data.files.splice(j, 1);
+                            k = data.files.length;
+                            j = -1;
+                        }
+                        j++;
+                    }
+                    fileList = fileList.concat(data.files); 
+                    var maxAllowed = 10; 
+                    while(fileList.length > maxAllowed) {
+                        fileList.pop(); 
+                    } 
+                    data.files = fileList; 
+                    if(data.files.length > 0) {
+                        var btnSend = $("<button id='btnSend' class='btn btn-success'>Upload</button>"); 
+                        btnSend.appendTo($('#fileList')); } 
+                    $.each(data.files, function (index, file) {addFileToList (data, fileList, index, file); }); 
+                    $('#btnSend').click(function () {
+                        data.context = $('<p/>').text('Uploading...').replaceAll($(this));
+                        data.submit(); 
+                    }); 
+                },
                 done: function (e, data) {
-                    $.each(data, function (index, file) {
-                        $('<p/>').text(file.name).appendTo('#files');
-                    });
+                    $('#progress').hide();
+                    $('#fileList').html('');
+                    fileListuploader = [];
+                    $('#fileList').append($("<ul class='filelist file-errors'></ul>"));
+                    var j = 0;
+                    var errorsOccurred = false;
+                    while (j < data.length) {
+                        if (data[j].errorMessage) {
+                            errorsOccurred = true;
+                            addErrorToList(j, data[j]);
+                        }
+                        j++;
+                    }
+                    
+                    reloader.load();
                 },
                 progressall: function (e, data) {
                     var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#progress').show();
                     $('#progress .progress-bar').css(
                         'width',
                         progress + '%'
                     );
-                },
-                autoUpload:true
+                }
+                
             }).prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
@@ -248,9 +384,9 @@
 
         })();
 
-        
-        
-        
-        
+
+
+
+
     </script>
 }

@@ -51,8 +51,9 @@ namespace cloudscribe.FileManager.Web.Controllers
         [HttpGet]
         //[GenerateAntiforgeryTokenCookieForAjax]
         [Authorize(Policy = "FileManagerPolicy")]
-        public IActionResult CkFileDialog(CkBrowseModel model)
+        public async Task<IActionResult> CkFileDialog(CkBrowseModel model)
         {
+            model.InitialVirtualPath = await fileManagerService.GetRootVirtualPath().ConfigureAwait(false);
             return View(model);
         }
 

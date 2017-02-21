@@ -82,6 +82,12 @@ namespace cloudscribe.FileManager.Web.Services
             return options.WebSizeImageMaxWidth;
         }
 
+        public async Task<string> GetRootVirtualPath()
+        {
+            await EnsureProjectSettings().ConfigureAwait(false);
+            return rootPath.RootVirtualPath;
+        }
+
         public async Task<UploadResult> ProcessFile(
             IFormFile formFile,
             ImageProcessingOptions options,
@@ -236,6 +242,7 @@ namespace cloudscribe.FileManager.Web.Services
                 node.Text = folder.Name;
                 node.Type = "d";
                 node.VirtualPath = currentVirtualPath + "/" + folder.Name;
+                node.Id = node.VirtualPath; // TODO: maybe just use id
                 node.Created = folder.CreationTimeUtc;
                 node.Modified = folder.LastWriteTimeUtc;
                 node.LazyLoad = true;
@@ -249,6 +256,7 @@ namespace cloudscribe.FileManager.Web.Services
                 node.Text = file.Name;
                 node.Type = "f";
                 node.VirtualPath = currentVirtualPath + "/" + file.Name;
+                node.Id = node.VirtualPath;  // TODO: maybe just use id
                 node.Size = file.Length;
                 // TODO: timezome adjustment
                 node.Created = file.CreationTimeUtc;
