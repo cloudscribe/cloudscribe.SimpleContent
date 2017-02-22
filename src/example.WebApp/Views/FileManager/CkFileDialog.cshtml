@@ -151,7 +151,7 @@
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/bootstrap-treeview.min.js"></script>
+        <script src="~/js/bootstrap-treeview.js" asp-append-version="true"></script>
         <script src="~/jsdev/jquery.ui.widget.js"></script>
         <script src="~/jsdev/jquery.iframe-transport.js"></script>
         <script src="~/jsdev/jquery.fileupload.js"></script>
@@ -227,9 +227,22 @@
 
             var reloader = {};
             reloader.load = function () {
-                var nodeToReload = $('#tree').treeview('findNodes', uploadCurrentDir.val(), 'virtualPath');
-                if (nodeToReload) {
-                    alert(nodeToReload.length);
+                var tree = $('#tree').treeview(true);
+                //var nodeToReload = tree.getNode(uploadCurrentDir.val());
+                var currentFolderId = uploadCurrentDir.val();
+                //alert(currentFolderId);
+                var matchingNodes = tree.findNodes(currentFolderId, 'id');
+                if (matchingNodes.length > 0) {
+                    var theNode = matchingNodes[0];
+                    alert(JSON.stringify(theNode));
+                    //alert(theNode.id)
+                    if (theNode.nodes.length > 0) {
+                        tree.removeNode(theNode.nodes, { silent: true });
+                    }
+                    tree.collapseNode(matchingNodes, { silent: true, ignoreChildren: false });
+                    
+                    theNode.lazyLoad = true;
+                    tree.expandNode(matchingNodes, { silent: true, ignoreChildren: false });
                     //$('#tree').treeview('updateNode', [node, newNode, { silent: true }]);
                 }
                else {
