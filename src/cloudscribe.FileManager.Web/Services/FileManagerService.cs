@@ -23,17 +23,20 @@ namespace cloudscribe.FileManager.Web.Services
         public FileManagerService(
             IMediaPathResolver mediaPathResolver,
             IImageResizer imageResizer,
+            IOptions<FileManagerIcons> iconsAccessor,
             ILogger<FileManagerService> logger
             )
         {
             this.mediaPathResolver = mediaPathResolver;
             this.imageResizer = imageResizer;
+            icons = iconsAccessor.Value;
             log = logger;
         }
 
         private IImageResizer imageResizer;
         private IMediaPathResolver mediaPathResolver;
         private MediaRootPathInfo rootPath;
+        private FileManagerIcons icons;
         private ILogger log;
 
         private async Task EnsureProjectSettings()
@@ -87,6 +90,11 @@ namespace cloudscribe.FileManager.Web.Services
             await EnsureProjectSettings().ConfigureAwait(false);
             return rootPath.RootVirtualPath;
         }
+
+        //public async Task<List<Node>> CreateFolder(string virtualStartPath)
+        //{
+
+        //}
 
         public async Task<UploadResult> ProcessFile(
             IFormFile formFile,
@@ -245,6 +253,8 @@ namespace cloudscribe.FileManager.Web.Services
                 node.Id = node.VirtualPath; // TODO: maybe just use id
                 node.Created = folder.CreationTimeUtc;
                 node.Modified = folder.LastWriteTimeUtc;
+                node.Icon = icons.Folder;
+                node.SelectedIcon = node.Icon;
                 node.LazyLoad = true;
                 list.Add(node);
             }
@@ -262,6 +272,8 @@ namespace cloudscribe.FileManager.Web.Services
                 node.Created = file.CreationTimeUtc;
                 node.Modified = file.LastWriteTimeUtc;
                 node.CanPreview = IsWebImageFile(file.Extension);
+                node.Icon = GetIconCssClass(file.Extension);
+                node.SelectedIcon = node.Icon;
                 //file.
                 list.Add(node);
             }
@@ -280,6 +292,78 @@ namespace cloudscribe.FileManager.Web.Services
             if (string.Equals(fileExtension, ".png", StringComparison.OrdinalIgnoreCase)) { return true; }
 
             return false;
+        }
+
+        public string GetIconCssClass(string fileExtension)
+        {
+            if (string.IsNullOrEmpty(fileExtension)) { return string.Empty; }
+
+            string fileType = fileExtension.ToLower().Replace(".", string.Empty);
+
+            switch (fileType)
+            {
+                case "doc":
+                case "docx":
+                    return icons.FileWord;
+
+                case "xls":
+                case "xlsx":
+                    return icons.FileExcel;
+
+                
+                case "ppt":
+                case "pptx":
+                    return icons.FilePowerpoint;
+
+                case "jpg":
+                case "jpeg":
+                case "gif":
+                case "png":
+                case "ico":
+                    return icons.FileImage;
+
+                case "wmv":
+                case "mpg":
+                case "mpeg":
+                case "mp4":
+                case "m4v":
+                case "oog":
+                case "ogv":
+                case "webm":
+                case "mov":
+                case "flv":
+                    return icons.FileVideo;
+
+
+                case "mp3":
+                case "m4a":
+                case "oga":
+                case "spx":
+                    return icons.FileAudio;
+
+               
+                case "htm":
+                case "html":
+                case "css":
+                case "js":
+                    return icons.FileCode;
+
+                case "zip":
+                case "tar":
+                    return icons.FileArchive;
+
+                case "pdf":
+                    return icons.FilePdf;
+
+
+                default:
+                    return icons.File;
+
+            }
+
+            
+
+
         }
 
         public string GetMimeType(string fileExtension)
@@ -372,6 +456,8 @@ namespace cloudscribe.FileManager.Web.Services
 
 
         }
+
+
 
         public bool IsNonAttacmentFileType(string fileExtension)
         {

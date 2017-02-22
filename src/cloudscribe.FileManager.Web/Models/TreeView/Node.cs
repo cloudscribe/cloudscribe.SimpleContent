@@ -10,7 +10,7 @@ namespace cloudscribe.FileManager.Web.Models.TreeView
     {
         public Node()
         {
-            State = new NodeState();
+            //State = new NodeState();
         }
         public string Text { get; set; }
 
@@ -26,20 +26,20 @@ namespace cloudscribe.FileManager.Web.Models.TreeView
 
         public string SelectedIcon { get; set; }
 
-        public string Color { get; set; } //"#000000"
+        //public string Color { get; set; } //"#000000"
 
-        public string BackColor { get; set; }
+        //public string BackColor { get; set; }
 
         public bool Selectable { get; set; } = true;
 
-        public bool Checkable { get; set; } = true;
+        //public bool Checkable { get; set; } = true;
 
         /// <summary>
         /// Used to hide the checkbox of the given node when showCheckbox is set to true.
         /// </summary>
-        public bool HideCheckbox { get; set; } = true;
+        //public bool HideCheckbox { get; set; } = true;
 
-        public NodeState State { get; set; }
+        //public NodeState State { get; set; }
 
         //tags: ['available'],
 

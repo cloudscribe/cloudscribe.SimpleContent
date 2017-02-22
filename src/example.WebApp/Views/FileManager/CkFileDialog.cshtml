@@ -11,6 +11,7 @@
 @section style {
     <link rel="stylesheet" href="~/css/jquery.fileupload.css" />
     <link rel="stylesheet" href="~/css/cropper.min.css" />
+    <link rel="stylesheet" href="~/css/font-awesome.css" />
     <style>
         .fileupload-dropzone {
     border-radius: 0;
@@ -64,7 +65,7 @@
                     <div style="border:solid thin black; max-width:570px; height:390px;overflow:auto;margin-bottom:5px;">
                         <img id="filePreview" src="~/images/1x1.gif" alt="Preview selected image" />
                     </div>
-                    <form class="form-inline">
+                    <form id="frmNewFolder" class="form-inline">
                         <div class="form-group">
                             <input type="text" class="form-control" disabled id="newFolderCurrentDir" name="currentDir" value="@Model.InitialVirtualPath" />
                             <input type="text" class="form-control" id="newFolderName" name="newFolderName">
@@ -181,6 +182,10 @@
        
 
         $('#btnCreateFolder').on('click', function () {
+
+            var formData = $('#frmUpload').serializeArray();
+
+
             notify.show('Your text goes here', 'alert-success');
 
             return false;
@@ -228,22 +233,22 @@
             var reloader = {};
             reloader.load = function () {
                 var tree = $('#tree').treeview(true);
-                //var nodeToReload = tree.getNode(uploadCurrentDir.val());
                 var currentFolderId = uploadCurrentDir.val();
                 //alert(currentFolderId);
                 var matchingNodes = tree.findNodes(currentFolderId, 'id');
                 if (matchingNodes.length > 0) {
                     var theNode = matchingNodes[0];
-                    alert(JSON.stringify(theNode));
+                    //alert(JSON.stringify(theNode));
                     //alert(theNode.id)
-                    if (theNode.nodes.length > 0) {
+                    // the code below triggers reloading the child nodes
+                    // to pick up new folders or uploaded files
+                    if (theNode.nodes && theNode.nodes.length > 0) {
                         tree.removeNode(theNode.nodes, { silent: true });
                     }
                     tree.collapseNode(matchingNodes, { silent: true, ignoreChildren: false });
-                    
                     theNode.lazyLoad = true;
                     tree.expandNode(matchingNodes, { silent: true, ignoreChildren: false });
-                    //$('#tree').treeview('updateNode', [node, newNode, { silent: true }]);
+                   
                 }
                else {
                 alert('node not found');
@@ -308,8 +313,19 @@
 
                     }
                 },
-                onNodeExpanded: function (event, data) {
-                    //alert(data.text + ' expanded');
+                onNodeExpanded: function (event, node) {
+                    if (node.type === "d") {
+                        node.icon = "fa fa-folder-open-o";
+                        node.selectedIcon = "fa fa-folder-open-o";
+                        alert('expanded');
+                    }
+                },
+                onNodeCollapsed: function (event, node) {
+                    if (node.type === "d") {
+                        node.icon = "fa fa-folder-o";
+                        node.selectedIcon = "fa fa-folder-o";
+                    }
+
                 }
             });
 

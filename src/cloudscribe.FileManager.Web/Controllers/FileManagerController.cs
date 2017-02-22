@@ -109,6 +109,14 @@ namespace cloudscribe.FileManager.Web.Controllers
             return Json(imageList);
         }
 
+        //[HttpPost]
+        //[Authorize(Policy = "FileManagerPolicy")]
+        //[ValidateAntiForgeryToken] // TODO: how to get the token in the editor
+        //public async Task<IActionResult> CreateFolder(string currentVirtualPath, string newFolderName)
+        //{
+
+        //}
+
         // 1. Disable the form value model binding here to take control of handling 
         //    potentially large files.
         // 2. Typically antiforgery tokens are sent in request body, but since we 
