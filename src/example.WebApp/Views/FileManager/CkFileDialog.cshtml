@@ -34,7 +34,12 @@
 }
     </style>
 }
-
+<span id="config" 
+      data-filetree-url="@Model.FileTreeServiceUrl"
+      data-upload-url="@Model.UploadServiceUrl"
+      data-create-folder-url="@Model.CreateFolderServiceUrl"
+      ></span>
+<div id="alert_placeholder"></div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 ">
@@ -73,13 +78,12 @@
                         </div>
                         <button id="btnCreateFolder" type="submit" class="btn btn-default"><i class="fa fa-folder-o" aria-hidden="true"></i> Create Folder</button>
                     </form>
-                    <div id="alert_placeholder"></div>
+                    
                 </div>
             </div>
 
         </div>
         <div class="tab-pane" id="tabUpload" role="tabpanel" aria-labelledby="tab2">
-            
             <div class="col-md-12 fileupload">
                 <h2>Upload Files</h2>
                 <span class="operationinstructions">
@@ -176,270 +180,7 @@
     </environment>
 
     <script type="text/javascript">
-
-       
-        (function () {
-
-            var selector = $("#fileSelection");
-            var preview = $("#filePreview");
-            var cropPreview = $("#fileCropPreview");
-            var newFolderCurrentDir = $("#newFolderCurrentDir");
-            var hdnCurrentVirtualPath = $("#hdnCurrentVirtualPath");
-            var uploadCurrentDir = $("#uploadCurrentDir");
-            var currentFolderDisplay = $("#currentFolder");
-
-            var cropTab = $('#tab3');
-            cropTab.hide();
-            var dataApi = "/filemanager/getfiletreejson";
-
-            var fileManager = {
-                treeData : [],
-                selectedFileList : [],
-                notify : function (message, cssClass) {
-                    $('#alert_placeholder').html('<div class="alert ' + cssClass + '"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
-                },
-                addFileToList : function (data, fileList, index, file) {
-                    var d = $("<span class='fa fa-trash-o' aria-role='button' title='Remove'></span>").click(function () {
-                        data.files.splice(index, 1);
-                        fileList = data.files;
-                        $('#fileList li').eq(index).remove();
-                        if (fileList.length === 0) {
-                            $('#fileList').html('');
-                        }
-                    });
-                    var item = $("<li>", { text: file.name }).append("&nbsp;").append(d);
-                    $('#fileList ul').append(item);
-                },
-                addErrorToList : function (index, file) {
-                    var item = $("<li>", { text: file.ErrorMessage });
-                    $('#fileList ul').append(item);
-                },
-                
-                createFolder: function () {
-                    var formData = $('#frmNewFolder').serializeArray();
-                    //alert(JSON.stringify(formData));
-                    $.ajax({
-                        method: "POST",
-                        url: "/filemanager/createfolder",
-                        data: formData
-                    }).done(function (data) {
-                          // alert(JSON.stringify(data));
-                          if (data.succeeded) {
-                              fileManager.reloadSubTree();
-                              fileManager.notify('Folder created', 'alert-success');
-                          }
-                          else {
-                              fileManager.notify(data.message, 'alert-danger');
-
-                          }
-
-                      })
-                    .fail(function () {
-                        fileManager.notify('An error occured', 'alert-danger');
-                    });
-
-                    return false; //cancel form submit
-                },
-                ckReturnFile : function () {
-                    var funcNum = '@Model.CKEditorFuncNum';
-                    var fileUrl = selector.val();
-                    window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
-                    window.close();
-                },
-                reloadSubTree : function () {
-                    var tree = $('#tree').treeview(true);
-                    var currentFolderId = uploadCurrentDir.val();
-                    //alert(currentFolderId);
-                    var matchingNodes = tree.findNodes(currentFolderId, 'id');
-                    if (matchingNodes.length > 0) {
-                        var theNode = matchingNodes[0];
-                        //alert(JSON.stringify(theNode));
-                        //alert(theNode.id)
-                        // the code below triggers reloading the child nodes
-                        // to pick up new folders or uploaded files
-                        if (theNode.nodes && theNode.nodes.length > 0) {
-                            tree.removeNode(theNode.nodes, { silent: true });
-                        }
-                        tree.collapseNode(matchingNodes, { silent: true, ignoreChildren: false });
-                        theNode.lazyLoad = true;
-                        tree.expandNode(matchingNodes, { silent: true, ignoreChildren: false });
-
-                    }
-                    else {
-                        alert('node not found');
-                    }
-                },
-                loadTree : function() {
-                    $('#tree').treeview({
-                        dataUrl: {
-                            method: 'GET',
-                            dataType: 'json',
-                            url: dataApi,
-                            cache: false
-                        },
-                        nodeIcon: 'fa fa-folder',
-                        //selectedIcon: null,
-                        collapseIcon: 'fa fa-minus',
-                        emptyIcon: 'fa',
-                        expandIcon: 'fa fa-plus',
-                        loadingIcon: 'fa fa-hourglass-o',
-                        levels: 2,
-                        onhoverColor: '#F5F5F5',
-                        highlightSelected: true,
-                        showBorder: true,
-                        showCheckbox: false,
-                        showIcon: true,
-                        wrapNodeText: false,
-                        lazyLoad: function (node, dataFunc) {
-                            //alert(node.text + ' lazyload');
-                            $.ajax({
-                                dataType: "json",
-                                url: dataApi + '?virtualStartPath=' + node.virtualPath
-
-                            })
-                              .done(function (data) {
-                                  dataFunc(data);
-                              })
-                            ;
-
-                        },
-                        onNodeSelected: function (event, data) {
-                            //alert(data.virtualPath + ' selected');
-                            if (data.canPreview) {
-                                cropTab.show();
-                                selector.val(data.virtualPath);
-                                preview.attr("src", data.virtualPath);
-                                cropPreview.attr("src", data.virtualPath);
-                            }
-                            else
-                            {
-                                cropTab.hide();
-                            }
-                            if (data.type === "d") {
-                                newFolderCurrentDir.val(data.virtualPath);
-                                hdnCurrentVirtualPath.val(data.virtualPath);
-                                uploadCurrentDir.val(data.virtualPath);
-                                currentFolderDisplay.html(data.virtualPath);
-                                // alert(uploadCurrentDir.val());
-
-                            }
-                        },
-                        onNodeExpanded: function (event, node) {
-                            //if (node.type === "d") {
-                            //    node.icon = "fa fa-folder-open-o";
-                            //    node.selectedIcon = "fa fa-folder-open-o";
-                            //   // alert('expanded');
-                            //}
-                        },
-                        onNodeCollapsed: function (event, node) {
-                            //if (node.type === "d") {
-                            //    node.icon = "fa fa-folder-o";
-                            //    node.selectedIcon = "fa fa-folder-o";
-                            //}
-
-                        }
-                    });
-                
-                },
-                setupFileLoader : function () {
-                    $('#pnlFiles').fileupload({
-                        fileInput: $('#fileupload'),
-                        url: "/filemanager/upload",
-                        dataType: 'json',
-                        autoUpload: false,
-                        singleFileUploads: false,
-                        limitMultiFileUploads: 10,
-                        limitConcurrentUploads: 10,
-                        dropZone: $('#dropZone'),
-                        pasteZone: $('#dropZone'),
-                        add: function (e, data) {  
-                            $('#fileList').html('');
-                            $('#fileList').append($("<ul class='filelist'></ul>"));
-                            var regx = /(\.|\/)(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|flv|FLV|swf|SWF|wmv|WMV|mp3|MP3|mp4|MP4|m4a|M4A|m4v|M4V|oga|OGA|ogv|OGV|webma|WEBMA|webmv|WEBMV|webm|WEBM|wav|WAV|fla|FLA|tif|TIF|asf|ASF|asx|ASX|avi|AVI|mov|MOV|mpeg|MPEG|mpg|MPG|zip|ZIP|pdf|PDF|doc|DOC|docx|DOCX|xls|XLS|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|csv|CSV|txt|TXT|htm|HTM|html|HTML|css|CSS)$/i; 
-                            var j = 0; 
-                            var k = data.files.length;
-                            //alert(k);
-                            while (j < k) {
-                                if ((regx.test(data.files[j].name)) === false) {
-                                    //alert('false');
-                                    data.files.splice(j, 1);
-                                    k = data.files.length;
-                                    j = -1;
-                                }
-                                j++;
-                            }
-                            fileManager.selectedFileList = fileManager.selectedFileList.concat(data.files); 
-                            var maxAllowed = 10; 
-                            while(fileManager.selectedFileList.length > maxAllowed) {
-                                fileManager.selectedFileList.pop(); 
-                            } 
-                            data.files = fileManager.selectedFileList; 
-                            if(data.files.length > 0) {
-                                var btnSend = $("<button id='btnSend' class='btn btn-success'><i class='fa fa-cloud-upload' aria-hidden='true'></i> Upload</button>"); 
-                                btnSend.appendTo($('#fileList'));
-                            }
-                            $.each(data.files, function (index, file) {fileManager.addFileToList (data, fileManager.selectedFileList, index, file); }); 
-                            $('#btnSend').click(function () {
-                                data.context = $('<p/>').text('Uploading...').replaceAll($(this));
-                                data.submit(); 
-                            }); 
-                        },
-                        done: function (e, data) {
-                            $('#progress').hide();
-                            $('#fileList').html('');
-                            fileListuploader = [];
-                            $('#fileList').append($("<ul class='filelist file-errors'></ul>"));
-                            var j = 0;
-                            var errorsOccurred = false;
-                            while (j < data.length) {
-                                if (data[j].errorMessage) {
-                                    errorsOccurred = true;
-                                    addErrorToList(j, data[j]);
-                                }
-                                j++;
-                            }
-                    
-                            fileManager.reloadSubTree();
-                        },
-                        progressall: function (e, data) {
-                            var progress = parseInt(data.loaded / data.total * 100, 10);
-                            $('#progress').show();
-                            $('#progress .progress-bar').css(
-                                'width',
-                                progress + '%'
-                            );
-                        }
-                
-                    }).prop('disabled', !$.support.fileInput)
-                      .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-                    $('#fileupload').bind('fileuploadsubmit', function (e, data) {
-                        data.formData = $('#frmUpload').serializeArray();
-                        //alert(data.formData);
-                        return true;
-                    });
-                
-                },
-                init : function () {
-                    this.loadTree();
-                    this.setupFileLoader();
-                
-                }
-
-
-            };
-
-          
-        $('#btnCreateFolder').on('click', fileManager.createFolder);
-        $('#btnSelector').on('click', fileManager.ckReturnFile);
-
-           
-        fileManager.init(); 
-        $(document).bind('drop dragover', function (e) { e.preventDefault(); });
-        $('#progress').hide();
-          
-
-        })();
-
+        var allowedFilesRegex = @Html.Raw(Model.AllowedFileExtensionsRegex);
     </script>
+    <script src="~/jsdev/cloudscribe-filemanager.js" asp-append-version="true"></script>
 }

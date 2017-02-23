@@ -25,6 +25,14 @@ namespace cloudscribe.FileManager.Web.Models
 
         public string InitialVirtualPath { get; set; }
 
-        
+        public string FileTreeServiceUrl { get; set; }
+
+        public string UploadServiceUrl { get; set; }
+
+        public string CreateFolderServiceUrl { get; set; }
+
+        public string AllowedFileExtensionsRegex { get; set; }
+
+
     }
 }

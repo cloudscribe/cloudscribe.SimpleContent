@@ -54,6 +54,10 @@ namespace cloudscribe.FileManager.Web.Controllers
         public async Task<IActionResult> CkFileDialog(CkBrowseModel model)
         {
             model.InitialVirtualPath = await fileManagerService.GetRootVirtualPath().ConfigureAwait(false);
+            model.FileTreeServiceUrl = Url.Action("GetFileTreeJson","FileManager");
+            model.UploadServiceUrl = Url.Action("Upload", "FileManager");
+            model.CreateFolderServiceUrl = Url.Action("CreateFolder", "FileManager");
+            model.AllowedFileExtensionsRegex = @"/(\.|\/)(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|flv|FLV|swf|SWF|wmv|WMV|mp3|MP3|mp4|MP4|m4a|M4A|m4v|M4V|oga|OGA|ogv|OGV|webma|WEBMA|webmv|WEBMV|webm|WEBM|wav|WAV|fla|FLA|tif|TIF|asf|ASF|asx|ASX|avi|AVI|mov|MOV|mpeg|MPEG|mpg|MPG|zip|ZIP|pdf|PDF|doc|DOC|docx|DOCX|xls|XLS|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|csv|CSV|txt|TXT|htm|HTM|html|HTML|css|CSS)$/i";
             return View(model);
         }
 
