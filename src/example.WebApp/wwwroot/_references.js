@@ -1,4 +1,5 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="js/bootstrap-treeview.js" />
 /// <reference path="js/ckeditor461/adapters/jquery.js" />
 /// <reference path="js/ckeditor461/ckeditor.js" />
 /// <reference path="js/ckeditor461/config.js" />

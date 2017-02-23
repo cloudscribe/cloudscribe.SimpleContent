@@ -68,7 +68,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Policy = "FileManagerPolicy")]
-        [ValidateAntiForgeryToken] // TODO: how to get the token in the editor
+        [ValidateAntiForgeryToken] 
         public async Task<IActionResult> Upload(
             //List<IFormFile> files
             bool? resizeImages,
@@ -109,13 +109,15 @@ namespace cloudscribe.FileManager.Web.Controllers
             return Json(imageList);
         }
 
-        //[HttpPost]
-        //[Authorize(Policy = "FileManagerPolicy")]
-        //[ValidateAntiForgeryToken] // TODO: how to get the token in the editor
-        //public async Task<IActionResult> CreateFolder(string currentVirtualPath, string newFolderName)
-        //{
+        [HttpPost]
+        [Authorize(Policy = "FileManagerPolicy")]
+        [ValidateAntiForgeryToken] 
+        public async Task<IActionResult> CreateFolder(string currentVirtualPath, string newFolderName)
+        {
+            var result = await fileManagerService.CreateFolder(currentVirtualPath, newFolderName).ConfigureAwait(false);
+            return Json(result);
 
-        //}
+        }
 
         // 1. Disable the form value model binding here to take control of handling 
         //    potentially large files.

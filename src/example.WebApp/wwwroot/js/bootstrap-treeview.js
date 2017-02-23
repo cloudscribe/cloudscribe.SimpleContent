@@ -566,6 +566,12 @@
 					.addClass(this._options.collapseIcon);
 			}
 
+			if (node.expandedIcon) {
+			    node.$el.children('span.node-icon')
+                    .removeClass(node.icon || this._options.nodeIcon)
+                    .addClass(node.expandedIcon);
+			}
+
 			// Expand children
 			if (node.nodes && options) {
 				$.each(node.nodes, $.proxy(function (index, node) {
@@ -586,6 +592,12 @@
 				node.$el.children('span.expand-icon')
 					.removeClass(this._options.collapseIcon)
 					.addClass(this._options.expandIcon);
+			}
+
+			if (node.expandedIcon) {
+			    node.$el.children('span.node-icon')
+                    .removeClass(node.expandedIcon || this._options.nodeIcon)
+                    .addClass(node.icon);
 			}
 
 			// Collapse children
@@ -655,7 +667,12 @@
 			if (node.$el) {
 				node.$el.addClass('node-selected');
 
-				if (node.selectedIcon || this._options.selectedIcon) {
+                // added node.expandedIcon - Joe Audette 2017-02-22
+				if (node.state.expanded && node.expandedIcon) {
+				    node.$el.children('span.node-icon')
+						.removeClass(node.icon || this._options.nodeIcon)
+						.addClass(node.expandedIcon);
+				} else if (node.selectedIcon || this._options.selectedIcon) {
 					node.$el.children('span.node-icon')
 						.removeClass(node.icon || this._options.nodeIcon)
 						.addClass(node.selectedIcon || this._options.selectedIcon);

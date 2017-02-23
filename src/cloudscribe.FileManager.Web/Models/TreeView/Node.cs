@@ -19,12 +19,14 @@ namespace cloudscribe.FileManager.Web.Models.TreeView
         /// </summary>
         public string Icon { get; set; }
 
+        public string ExpandedIcon { get; set; }
+
         /// <summary>
         /// something.png
         /// </summary>
         public string Image { get; set; }
 
-        public string SelectedIcon { get; set; }
+        
 
         //public string Color { get; set; } //"#000000"
 

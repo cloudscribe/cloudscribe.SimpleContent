@@ -91,10 +91,75 @@ namespace cloudscribe.FileManager.Web.Services
             return rootPath.RootVirtualPath;
         }
 
-        //public async Task<List<Node>> CreateFolder(string virtualStartPath)
-        //{
+        public async Task<OperationResult> CreateFolder(string requestedVirtualPath, string folderName)
+        {
+            OperationResult result;
+            if (string.IsNullOrEmpty(requestedVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = "path not provided";
+                return result;
+            }
 
-        //}
+            if (string.IsNullOrEmpty(folderName))
+            {
+                result = new OperationResult(false);
+                result.Message = "folder name not provided";
+                return result;
+            }
+
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = "invalid path";
+                return result;
+            }
+
+
+            string requestedFsPath;
+            var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
+            var segments = virtualSubPath.Split('/');
+            if (segments.Length > 0)
+            {
+                requestedFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+                if (!Directory.Exists(requestedFsPath))
+                {
+                    result = new OperationResult(false);
+                    result.Message = "invalid path";
+                    return result;
+                }
+                
+            }
+            else
+            {
+                requestedFsPath = rootPath.RootFileSystemPath;
+            }
+
+            var newFolderFsPath = Path.Combine(requestedFsPath, folderName.ToCleanFolderName());
+            if (Directory.Exists(newFolderFsPath))
+            {
+                result = new OperationResult(false);
+                result.Message = "folder already exists";
+                return result;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(newFolderFsPath);
+                result = new OperationResult(true);
+                return result;
+            }
+            catch(IOException ex)
+            {
+                log.LogError(MediaLoggingEvents.FOLDER_CREATION, ex, ex.Message + " " + ex.StackTrace);
+                result = new OperationResult(false);
+                result.Message = "server error";
+                return result;
+            }
+
+        }
 
         public async Task<UploadResult> ProcessFile(
             IFormFile formFile,
@@ -254,7 +319,7 @@ namespace cloudscribe.FileManager.Web.Services
                 node.Created = folder.CreationTimeUtc;
                 node.Modified = folder.LastWriteTimeUtc;
                 node.Icon = icons.Folder;
-                node.SelectedIcon = node.Icon;
+                node.ExpandedIcon = icons.FolderOpen;
                 node.LazyLoad = true;
                 list.Add(node);
             }
@@ -273,7 +338,7 @@ namespace cloudscribe.FileManager.Web.Services
                 node.Modified = file.LastWriteTimeUtc;
                 node.CanPreview = IsWebImageFile(file.Extension);
                 node.Icon = GetIconCssClass(file.Extension);
-                node.SelectedIcon = node.Icon;
+                //node.ExpandedIcon = node.Icon;
                 //file.
                 list.Add(node);
             }
