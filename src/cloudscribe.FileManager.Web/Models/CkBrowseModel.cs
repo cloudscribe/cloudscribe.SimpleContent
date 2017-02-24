@@ -31,7 +31,13 @@ namespace cloudscribe.FileManager.Web.Models
 
         public string CreateFolderServiceUrl { get; set; }
 
+        public string DeleteFolderServiceUrl { get; set; }
+
+        public string RenameFolderServiceUrl { get; set; }
+
         public string AllowedFileExtensionsRegex { get; set; }
+
+        public bool CanDelete { get; set; }
 
 
     }

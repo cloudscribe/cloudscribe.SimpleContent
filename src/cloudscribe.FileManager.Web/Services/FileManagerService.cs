@@ -2,12 +2,13 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-15
-// Last Modified:           2017-02-17
+// Last Modified:           2017-02-24
 // 
 
 using cloudscribe.FileManager.Web.Models;
 using cloudscribe.FileManager.Web.Models.TreeView;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -23,13 +24,17 @@ namespace cloudscribe.FileManager.Web.Services
         public FileManagerService(
             IMediaPathResolver mediaPathResolver,
             IImageResizer imageResizer,
+            IFileManagerNameRules fileManagerNameRules,
+            IStringLocalizer<FileManagerStringResources> stringLocalizer,
             IOptions<FileManagerIcons> iconsAccessor,
             ILogger<FileManagerService> logger
             )
         {
             this.mediaPathResolver = mediaPathResolver;
             this.imageResizer = imageResizer;
+            nameRules = fileManagerNameRules;
             icons = iconsAccessor.Value;
+            sr = stringLocalizer;
             log = logger;
         }
 
@@ -37,6 +42,8 @@ namespace cloudscribe.FileManager.Web.Services
         private IMediaPathResolver mediaPathResolver;
         private MediaRootPathInfo rootPath;
         private FileManagerIcons icons;
+        private IFileManagerNameRules nameRules;
+        private IStringLocalizer<FileManagerStringResources> sr;
         private ILogger log;
 
         private async Task EnsureProjectSettings()
@@ -97,14 +104,14 @@ namespace cloudscribe.FileManager.Web.Services
             if (string.IsNullOrEmpty(requestedVirtualPath))
             {
                 result = new OperationResult(false);
-                result.Message = "path not provided";
+                result.Message = sr["Path not provided"];
                 return result;
             }
 
             if (string.IsNullOrEmpty(folderName))
             {
                 result = new OperationResult(false);
-                result.Message = "folder name not provided";
+                result.Message = sr["Folder name not provided"];
                 return result;
             }
 
@@ -113,7 +120,7 @@ namespace cloudscribe.FileManager.Web.Services
             if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
             {
                 result = new OperationResult(false);
-                result.Message = "invalid path";
+                result.Message = sr["Invalid path"];
                 return result;
             }
 
@@ -127,7 +134,7 @@ namespace cloudscribe.FileManager.Web.Services
                 if (!Directory.Exists(requestedFsPath))
                 {
                     result = new OperationResult(false);
-                    result.Message = "invalid path";
+                    result.Message = sr["Invalid path"];
                     return result;
                 }
                 
@@ -137,11 +144,11 @@ namespace cloudscribe.FileManager.Web.Services
                 requestedFsPath = rootPath.RootFileSystemPath;
             }
 
-            var newFolderFsPath = Path.Combine(requestedFsPath, folderName.ToCleanFolderName());
+            var newFolderFsPath = Path.Combine(requestedFsPath, nameRules.GetCleanFolderName(folderName));
             if (Directory.Exists(newFolderFsPath))
             {
                 result = new OperationResult(false);
-                result.Message = "folder already exists";
+                result.Message = sr["Folder already exists"];
                 return result;
             }
 
@@ -155,9 +162,204 @@ namespace cloudscribe.FileManager.Web.Services
             {
                 log.LogError(MediaLoggingEvents.FOLDER_CREATION, ex, ex.Message + " " + ex.StackTrace);
                 result = new OperationResult(false);
-                result.Message = "server error";
+                result.Message = sr["Server error"];
                 return result;
             }
+
+        }
+
+        public async Task<OperationResult> DeleteFolder(string requestedVirtualPath)
+        {
+            OperationResult result;
+            if (string.IsNullOrEmpty(requestedVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Path not provided"];
+                return result;
+            }
+
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
+            var segments = virtualSubPath.Split('/');
+
+            if (segments.Length == 0)
+            { 
+                // don't allow delete the root folder
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var requestedFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+            if (!Directory.Exists(requestedFsPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            try
+            {
+                Directory.Delete(requestedFsPath, true);
+                result = new OperationResult(true);
+                return result;
+            }
+            catch (IOException ex)
+            {
+                log.LogError(MediaLoggingEvents.FOLDER_DELETE, ex, ex.Message + " " + ex.StackTrace);
+                result = new OperationResult(false);
+                result.Message = sr["Server error"];
+                return result;
+            }
+
+            
+
+        }
+
+        public async Task<OperationResult> RenameFolder(string requestedVirtualPath, string newNameSegment)
+        {
+            OperationResult result;
+            if (string.IsNullOrEmpty(requestedVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Path not provided"];
+                return result;
+            }
+
+            if (string.IsNullOrEmpty(newNameSegment))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["New name not provided"];
+                return result;
+            }
+
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
+            var segments = virtualSubPath.Split('/');
+
+            if (segments.Length == 0)
+            {
+                // don't allow delete the root folder
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var currentFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+            if (!Directory.Exists(currentFsPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+            segments = segments.Take(segments.Count() - 1).ToArray();
+            var cleanFolderName = nameRules.GetCleanFolderName(newNameSegment);
+            string newFsPath;
+            if (segments.Length > 0)
+            {
+                newFsPath = Path.Combine(Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments)), cleanFolderName);
+            }
+            else
+            {
+                newFsPath = Path.Combine(rootPath.RootFileSystemPath, cleanFolderName);
+            }
+            
+
+            if (Directory.Exists(newFsPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Directory already exists"];
+                return result;
+            }
+
+            try
+            {
+                
+                Directory.Move(currentFsPath, newFsPath);
+                result = new OperationResult(true);
+                return result;
+            }
+            catch (IOException ex)
+            {
+                log.LogError(MediaLoggingEvents.FOLDER_RENAME, ex, ex.Message + " " + ex.StackTrace);
+                result = new OperationResult(false);
+                result.Message = sr["A error occured processing the request"];
+                return result;
+            }
+
+
+
+        }
+
+        public async Task<OperationResult> DeleteFile(string requestedVirtualPath)
+        {
+            OperationResult result;
+            if (string.IsNullOrEmpty(requestedVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Path not provided"];
+                return result;
+            }
+
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
+            var segments = virtualSubPath.Split('/');
+
+            if (segments.Length == 0)
+            {
+                // no file just root folder url
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var requestedFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+            if (!File.Exists(requestedFsPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            try
+            {
+                File.Delete(requestedFsPath);
+                result = new OperationResult(true);
+                return result;
+            }
+            catch (IOException ex)
+            {
+                log.LogError(MediaLoggingEvents.FILE_DELETE, ex, ex.Message + " " + ex.StackTrace);
+                result = new OperationResult(false);
+                result.Message = sr["A error occured processing the request"];
+                return result;
+            }
+
+
 
         }
 
@@ -207,7 +409,7 @@ namespace cloudscribe.FileManager.Web.Services
                 EnsureSubFolders(rootPath.RootFileSystemPath, virtualSegments);
             }
 
-            var newName = formFile.FileName.ToCleanFileName();
+            var newName = nameRules.GetCleanFileName(formFile.FileName);
             var newUrl = currentVirtualPath + "/" + newName;
             var fsPath = Path.Combine(currentFsPath, newName);
 
@@ -256,7 +458,7 @@ namespace cloudscribe.FileManager.Web.Services
 
                 return new UploadResult
                 {
-                    ErrorMessage = "There was an error logged during file processing"
+                    ErrorMessage = sr["There was an error logged during file processing"]
 
                 };
             }

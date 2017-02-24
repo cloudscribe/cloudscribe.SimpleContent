@@ -277,6 +277,7 @@
 /// <reference path="js/simplecontent-ckeditor-config.js" />
 /// <reference path="js/site.js" />
 /// <reference path="js/site.min.js" />
+/// <reference path="jsdev/cloudscribe-filemanager.js" />
 /// <reference path="jsdev/content-editor-ck.js" />
 /// <reference path="jsdev/cropper.min.js" />
 /// <reference path="jsdev/jquery.fileupload.js" />

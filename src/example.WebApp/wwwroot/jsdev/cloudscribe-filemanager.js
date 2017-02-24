@@ -3,7 +3,13 @@
         treeDataApiUrl: $("#config").data("filetree-url"),
         uploadApiUrl: $("#config").data("upload-url"),
         createFolderApiUrl: $("#config").data("create-folder-url"),
+        deleteFolderApiUrl: $("#config").data("delete-folder-url"),
+        renameFolderApiUrl: $("#config").data("rename-folder-url"),
+        canDelete: $("#config").data("can-delete"),
+        rootVirtualPath: $("#config").data("root-virtual-path"),
         fileSelectorButton: $('#btnSelector'),
+        deleteFolderButton: $('#btnDeleteFolder'),
+        renameFolderButton: $('#btnRenameFolder'),
         selectedFileInput: $("#fileSelection"),
         newFolderButton: $('#btnCreateFolder'),
         progressUI: $('#progress'),
@@ -20,6 +26,23 @@
             $("#hdnCurrentVirtualPath").val(virtualPath);
             $("#uploadCurrentDir").val(virtualPath);
             $("#currentFolder").html(virtualPath);
+            $("#folderToDelete").val(virtualPath);
+            $("#folderToRename").val(virtualPath);
+            if (fileManager.canDelete) {
+                $('#frmDeleteFolder').show();
+                $("#frmRenameFolder").show();
+            }
+
+        },
+        clearCurrentDirectory: function () {
+            $("#newFolderCurrentDir").val(fileManager.rootVirtualPath);
+            $("#hdnCurrentVirtualPath").val(fileManager.rootVirtualPath);
+            $("#uploadCurrentDir").val(fileManager.rootVirtualPath);
+            $("#currentFolder").html(fileManager.rootVirtualPath);
+            $("#folderToDelete").val('');
+            $("#folderToRename").val('');
+            $('#frmDeleteFolder').hide();
+            $("#frmRenameFolder").hide();
 
         },
         notify: function (message, cssClass) {
@@ -52,7 +75,14 @@
             }).done(function (data) {
                 // alert(JSON.stringify(data));
                 if (data.succeeded) {
-                    fileManager.reloadSubTree();
+                    var currentPath = $("#newFolderCurrentDir").val();
+                    if (currentPath === fileManager.rootVirtualPath) {
+                        fileManager.loadTree();
+                    }
+                    else {
+                        fileManager.reloadSubTree();
+                    }
+                    
                     $("#newFolderName").val('');
                     //fileManager.notify('Folder created', 'alert-success');
                 }
@@ -68,6 +98,77 @@
 
             return false; //cancel form submit
         },
+        deleteFolder: function () {
+            var currentPath = $("#folderToDelete").val();
+            if (currentPath === fileManager.rootVirtualPath) {
+                return false;
+            }
+            if (confirm("Are you sure you want to permanently delete the folder " + currentPath + " and any files or folders below it?")) {
+                var formData = $('#frmDeleteFolder').serializeArray();
+                //alert(JSON.stringify(formData));
+                $.ajax({
+                    method: "POST",
+                    url: fileManager.deleteFolderApiUrl,
+                    data: formData
+                }).done(function (data) {
+                    if (data.succeeded) {
+                        fileManager.removeNode(currentPath);
+                        fileManager.clearCurrentDirectory();
+                        
+                    }
+                    else {
+                        fileManager.notify(data.message, 'alert-danger');
+
+                    }
+
+                })
+                .fail(function () {
+                    fileManager.notify('An error occured', 'alert-danger');
+                });
+            }
+
+            return false; //cancel form submit
+        },
+        renameFolder: function () {
+            var currentPath = $("#folderToRename").val();
+            if (currentPath === fileManager.rootVirtualPath) {
+                return false;
+            }
+            if (confirm("Are you sure you want to rename the folder " + currentPath + "?")) {
+                var formData = $('#frmRenameFolder').serializeArray();
+                //alert(JSON.stringify(formData));
+                $.ajax({
+                    method: "POST",
+                    url: fileManager.renameFolderApiUrl,
+                    data: formData
+                }).done(function (data) {
+                    if (data.succeeded) {
+                        var tree = $('#tree').treeview(true);
+                        var matchingNodes = tree.findNodes(currentPath, 'id');
+                        if (matchingNodes) {
+                            var parents = tree.getParents(matchingNodes);
+                            if (parents && parents.length > 0) {
+                                fileManager.reloadSubTree(parents[0].id);
+                            }
+
+                        }
+
+                        fileManager.clearCurrentDirectory();
+
+                    }
+                    else {
+                        fileManager.notify(data.message, 'alert-danger');
+
+                    }
+
+                })
+                .fail(function () {
+                    fileManager.notify('An error occured', 'alert-danger');
+                });
+            }
+
+            return false; //cancel form submit
+        },
         ckReturnFile: function () {
             var funcNum = '@Model.CKEditorFuncNum';
             var fileUrl = fileManager.selectedFileInput.val();
@@ -79,9 +180,14 @@
                 window.close();
             }
         },
-        reloadSubTree: function () {
+        removeNode: function (id) {
             var tree = $('#tree').treeview(true);
-            var currentFolderId = $("#uploadCurrentDir").val();
+            var matchingNodes = tree.findNodes(id, 'id');
+            tree.removeNode(matchingNodes, { silent: true });
+        },
+        reloadSubTree: function (folderIdToReload) {
+            var tree = $('#tree').treeview(true);
+            var currentFolderId = folderIdToReload || $("#uploadCurrentDir").val();
             //alert(currentFolderId);
             var matchingNodes = tree.findNodes(currentFolderId, 'id');
             if (matchingNodes.length > 0) {
@@ -142,25 +248,27 @@
                     ;
 
                 },
-                onNodeSelected: function (event, data) {
+                onNodeSelected: function (event, node) {
                     //alert(data.virtualPath + ' selected');
-                    if (data.canPreview) {
-                        fileManager.setPreview(data.virtualPath);
+                    if (node.canPreview) {
+                        fileManager.setPreview(node.virtualPath);
                         fileManager.cropTab.show();
 
                     }
                     else {
                         fileManager.cropTab.hide();
                     }
-                    if (data.type === "d") {
-                        fileManager.setCurrentDirectory(data.virtualPath);
-
-                        // alert(uploadCurrentDir.val());
-
+                    if (node.type === "d") {
+                        fileManager.setCurrentDirectory(node.virtualPath);
                     }
                     else {
-                        fileManager.selectedFileInput.val(data.virtualPath);
+                        fileManager.clearCurrentDirectory();
+                        fileManager.selectedFileInput.val(node.virtualPath);
                     }
+                },
+                onNodeUnselected: function (event, node) {
+                    //alert(node.virtualPath + ' unselected');
+                    fileManager.clearCurrentDirectory();
                 },
                 onNodeExpanded: function (event, node) {
                     //if (node.type === "d") {
@@ -266,6 +374,8 @@
             this.setupFileLoader();
             this.newFolderButton.on('click', fileManager.createFolder);
             this.fileSelectorButton.on('click', fileManager.ckReturnFile);
+            this.deleteFolderButton.on('click', fileManager.deleteFolder);
+            this.renameFolderButton.on('click', fileManager.renameFolder);
 
 
         }

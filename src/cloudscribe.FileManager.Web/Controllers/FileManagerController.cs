@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-14
-// Last Modified:           2017-02-15
+// Last Modified:           2017-02-24
 // 
 
 using cloudscribe.FileManager.Web.Filters;
@@ -29,18 +29,21 @@ namespace cloudscribe.FileManager.Web.Controllers
     {
         public FileManagerController(
             FileManagerService fileManagerService,
+            IAuthorizationService authorizationService,
             IOptions<AutomaticUploadOptions> autoUploadOptionsAccessor,
             IAntiforgery antiforgery,
             ILogger<FileManagerController> logger
             )
         {
             this.fileManagerService = fileManagerService;
+            this.authorizationService = authorizationService;
             autoUploadOptions = autoUploadOptionsAccessor.Value;
             this.antiforgery = antiforgery;
             log = logger;
         }
 
         private FileManagerService fileManagerService;
+        private IAuthorizationService authorizationService;
         private AutomaticUploadOptions autoUploadOptions;
         private readonly IAntiforgery antiforgery;
         // Get the default form options so that we can use them to set the default limits for
@@ -57,7 +60,13 @@ namespace cloudscribe.FileManager.Web.Controllers
             model.FileTreeServiceUrl = Url.Action("GetFileTreeJson","FileManager");
             model.UploadServiceUrl = Url.Action("Upload", "FileManager");
             model.CreateFolderServiceUrl = Url.Action("CreateFolder", "FileManager");
+            model.DeleteFolderServiceUrl = Url.Action("DeleteFolder", "FileManager");
+            model.RenameFolderServiceUrl = Url.Action("RenameFolder", "FileManager");
+            model.CanDelete = await authorizationService.AuthorizeAsync(User, "FileManagerDeletePolicy");
+
             model.AllowedFileExtensionsRegex = @"/(\.|\/)(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|flv|FLV|swf|SWF|wmv|WMV|mp3|MP3|mp4|MP4|m4a|M4A|m4v|M4V|oga|OGA|ogv|OGV|webma|WEBMA|webmv|WEBMV|webm|WEBM|wav|WAV|fla|FLA|tif|TIF|asf|ASF|asx|ASX|avi|AVI|mov|MOV|mpeg|MPEG|mpg|MPG|zip|ZIP|pdf|PDF|doc|DOC|docx|DOCX|xls|XLS|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|csv|CSV|txt|TXT|htm|HTM|html|HTML|css|CSS)$/i";
+
+
             return View(model);
         }
 
@@ -119,6 +128,26 @@ namespace cloudscribe.FileManager.Web.Controllers
         public async Task<IActionResult> CreateFolder(string currentVirtualPath, string newFolderName)
         {
             var result = await fileManagerService.CreateFolder(currentVirtualPath, newFolderName).ConfigureAwait(false);
+            return Json(result);
+
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "FileManagerDeletePolicy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteFolder(string folderToDelete)
+        {
+            var result = await fileManagerService.DeleteFolder(folderToDelete).ConfigureAwait(false);
+            return Json(result);
+
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "FileManagerDeletePolicy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RenameFolder(string folderToRename, string newNameSegment)
+        {
+            var result = await fileManagerService.RenameFolder(folderToRename, newNameSegment).ConfigureAwait(false);
             return Json(result);
 
         }

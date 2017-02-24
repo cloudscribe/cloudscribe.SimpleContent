@@ -375,6 +375,13 @@ namespace example.WebApp
                         authBuilder.RequireRole("Administrators");
                     });
 
+                options.AddPolicy(
+                    "FileManagerDeletePolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Administrators");
+                    });
+
                 // this is what the above extension adds
                 //options.AddPolicy(
                 //    "BlogEditPolicy",
@@ -385,7 +392,7 @@ namespace example.WebApp
                 //    }
                 // );
 
-                
+
 
                 //options.AddPolicy(
                 //    "PageEditPolicy",
