@@ -555,7 +555,9 @@
 
 		if (state && node.nodes) {
 
-			// Set node state
+		    // Set node state
+		    alert('about to expand ' + node.id);
+		    alert(node.state.selected);
 			node.state.expanded = true;
 
 			// Set element

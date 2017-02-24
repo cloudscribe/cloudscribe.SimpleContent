@@ -299,7 +299,7 @@ namespace cloudscribe.FileManager.Web.Services
             {
                 log.LogError(MediaLoggingEvents.FOLDER_RENAME, ex, ex.Message + " " + ex.StackTrace);
                 result = new OperationResult(false);
-                result.Message = sr["A error occured processing the request"];
+                result.Message = sr["A error was logged while processing the request"];
                 return result;
             }
 
@@ -355,7 +355,103 @@ namespace cloudscribe.FileManager.Web.Services
             {
                 log.LogError(MediaLoggingEvents.FILE_DELETE, ex, ex.Message + " " + ex.StackTrace);
                 result = new OperationResult(false);
-                result.Message = sr["A error occured processing the request"];
+                result.Message = sr["A error was logged while processing the request"];
+                return result;
+            }
+
+
+        }
+
+        public async Task<OperationResult> RenameFile(string requestedVirtualPath, string newNameSegment)
+        {
+            OperationResult result;
+            if (string.IsNullOrEmpty(requestedVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Path not provided"];
+                return result;
+            }
+
+            if (string.IsNullOrEmpty(newNameSegment))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["New name not provided"];
+                return result;
+            }
+
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
+            var segments = virtualSubPath.Split('/');
+
+            if (segments.Length == 0)
+            {
+                // don't allow delete the root folder
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            var currentFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+            var ext = Path.GetExtension(currentFsPath);
+
+            if (!File.Exists(currentFsPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Invalid path"];
+                return result;
+            }
+
+            // pop the last segment
+            segments = segments.Take(segments.Count() - 1).ToArray();
+
+            if (Path.HasExtension(newNameSegment) && Path.GetExtension(newNameSegment) == ext)
+            {
+                // all good
+            }
+            else
+            {
+                newNameSegment = Path.GetFileNameWithoutExtension(newNameSegment) + ext;
+            }
+            var cleanFileName = nameRules.GetCleanFileName(newNameSegment);
+            
+            string newFsPath;
+            if (segments.Length > 0)
+            {
+                newFsPath = Path.Combine(Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments)), cleanFileName);
+            }
+            else
+            {
+                newFsPath = Path.Combine(rootPath.RootFileSystemPath, cleanFileName);
+            }
+
+
+            if (File.Exists(newFsPath))
+            {
+                result = new OperationResult(false);
+                result.Message = sr["Directory already exists"];
+                return result;
+            }
+
+            try
+            {
+
+                File.Move(currentFsPath, newFsPath);
+                result = new OperationResult(true);
+                return result;
+            }
+            catch (IOException ex)
+            {
+                log.LogError(MediaLoggingEvents.FOLDER_RENAME, ex, ex.Message + " " + ex.StackTrace);
+                result = new OperationResult(false);
+                result.Message = sr["A error was logged while processing the request"];
                 return result;
             }
 

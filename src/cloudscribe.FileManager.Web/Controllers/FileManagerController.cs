@@ -62,6 +62,8 @@ namespace cloudscribe.FileManager.Web.Controllers
             model.CreateFolderServiceUrl = Url.Action("CreateFolder", "FileManager");
             model.DeleteFolderServiceUrl = Url.Action("DeleteFolder", "FileManager");
             model.RenameFolderServiceUrl = Url.Action("RenameFolder", "FileManager");
+            model.DeleteFileServiceUrl = Url.Action("DeleteFile", "FileManager");
+            model.RenameFileServiceUrl = Url.Action("RenameFile", "FileManager");
             model.CanDelete = await authorizationService.AuthorizeAsync(User, "FileManagerDeletePolicy");
 
             model.AllowedFileExtensionsRegex = @"/(\.|\/)(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|flv|FLV|swf|SWF|wmv|WMV|mp3|MP3|mp4|MP4|m4a|M4A|m4v|M4V|oga|OGA|ogv|OGV|webma|WEBMA|webmv|WEBMV|webm|WEBM|wav|WAV|fla|FLA|tif|TIF|asf|ASF|asx|ASX|avi|AVI|mov|MOV|mpeg|MPEG|mpg|MPG|zip|ZIP|pdf|PDF|doc|DOC|docx|DOCX|xls|XLS|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|csv|CSV|txt|TXT|htm|HTM|html|HTML|css|CSS)$/i";
@@ -148,6 +150,26 @@ namespace cloudscribe.FileManager.Web.Controllers
         public async Task<IActionResult> RenameFolder(string folderToRename, string newNameSegment)
         {
             var result = await fileManagerService.RenameFolder(folderToRename, newNameSegment).ConfigureAwait(false);
+            return Json(result);
+
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "FileManagerDeletePolicy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteFile(string fileToDelete)
+        {
+            var result = await fileManagerService.DeleteFile(fileToDelete).ConfigureAwait(false);
+            return Json(result);
+
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "FileManagerDeletePolicy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RenameFile(string fileToRename, string newNameSegment)
+        {
+            var result = await fileManagerService.RenameFile(fileToRename, newNameSegment).ConfigureAwait(false);
             return Json(result);
 
         }
