@@ -18,18 +18,22 @@
         selectedFileInput: $("#fileSelection"),
         newFolderButton: $('#btnCreateFolder'),
         progressUI: $('#progress'),
+        uploadTab: $('#tab2'),
         cropTab: $('#tab3'),
         treeData: [],
         selectedFileList: [],
         setPreview: function (url) {
             $("#filePreview").attr("src", url);
             $("#fileCropPreview").attr("src", url);
+            fileManager.uploadTab.hide();
             fileManager.cropTab.show();
+            
 
         },
         clearPreview: function () {
             $("#filePreview").attr("src", fileManager.emptyPreviewUrl);
             $("#fileCropPreview").attr("src", fileManager.emptyPreviewUrl);
+            fileManager.uploadTab.show();
             fileManager.cropTab.hide();
         },
         setCurrentDirectory: function (virtualPath) {

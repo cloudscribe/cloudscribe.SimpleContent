@@ -15,27 +15,26 @@
     <link rel="stylesheet" href="~/css/font-awesome.css" />
     <style>
         .fileupload-dropzone {
-    border-radius: 0;
-    -webkit-box-shadow: none;
+            border-radius: 0;
+            -webkit-box-shadow: none;
+            min-height: 40px;
+            padding: 19px;
+            margin-bottom: 20px;
+            background-color: #f5f5f5;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+        }
 
-
-    min-height: 40px;
-    padding: 19px;
-    margin-bottom: 20px;
-    background-color: #f5f5f5;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
-}
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
     </style>
 }
-<span id="config" 
+<span id="config"
       data-filetree-url="@Model.FileTreeServiceUrl"
       data-upload-url="@Model.UploadServiceUrl"
       data-create-folder-url="@Model.CreateFolderServiceUrl"
@@ -45,8 +44,7 @@
       data-delete-file-url="@Model.DeleteFileServiceUrl"
       data-rename-file-url="@Model.RenameFileServiceUrl"
       data-root-virtual-path="@Model.InitialVirtualPath"
-      data-empty-preview-url='@Url.Content("~/images/1x1.gif")'
-      ></span>
+      data-empty-preview-url='@Url.Content("~/images/1x1.gif")'></span>
 <div id="alert_placeholder"></div>
 <div class="container-fluid">
     <div class="row">
@@ -70,112 +68,16 @@
     </ul>
     <div class="tab-content ">
         <div class="tab-pane active" id="tabBrowse" role="tabpanel" aria-labelledby="tab1">
-            <div class="row">
-                <div class="col-md-5" style="height: 500px;overflow: scroll;">
-                    <div id="tree"></div>
-                </div>
-                <div class="col-md-7">
-                    <div style="border:solid thin black; max-width:570px; height:390px;overflow:auto;margin-bottom:5px;">
-                        <img id="filePreview" src="~/images/1x1.gif" alt='@sr["Preview selected image"]' />
-                    </div>
-                    <form id="frmNewFolder" asp-action="CreateFolder" asp-controller="FileManager" class="form-inline">
-                        <div class="form-group">
-                            <input type="text" class="form-control" disabled id="newFolderCurrentDir" name="newFolderCurrentDir" value="@Model.InitialVirtualPath" />
-                            <input type="hidden" id="hdnCurrentVirtualPath" name="currentVirtualPath" value="@Model.InitialVirtualPath" />
-                            <input type="text" class="form-control" id="newFolderName" name="newFolderName">
-                        </div>
-                        <button id="btnCreateFolder" type="submit" class="btn btn-default"><i class="fa fa-folder-o" aria-hidden="true"></i> @sr["Create Folder"]</button>
-                    </form>
-                    <form id="frmRenameFolder" asp-action="RenameFolder" asp-controller="FileManager" class="form-inline collapse">
-                        <input type="hidden" id="folderToRename" name="folderToRename" />
-                        <input type="text" class="form-control" id="newNameSegment" name="newNameSegment">
-                        <button id="btnRenameFolder" type="submit" class="btn btn-default">@sr["Rename Folder"]</button>
-                    </form>
-                    <form id="frmDeleteFolder" asp-action="DeleteFolder" asp-controller="FileManager" class="form-inline collapse">
-                        <input type="hidden" id="folderToDelete" name="folderToDelete"  />
-                        <button id="btnDeleteFolder" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> @sr["Delete Folder"]</button>
-                    </form>
-                    <form id="frmRenameFile" asp-action="RenameFile" asp-controller="FileManager" class="form-inline collapse">
-                        <input type="hidden" id="fileToRename" name="fileToRename" />
-                        <input type="text" class="form-control" id="newFileNameSegment" name="newNameSegment">
-                        <button id="btnRenameFile" type="submit" class="btn btn-default">@sr["Rename File"]</button>
-                    </form>
-                    <form id="frmDeleteFile" asp-action="DeleteFile" asp-controller="FileManager" class="form-inline collapse">
-                        <input type="hidden" id="fileToDelete" name="fileToDelete" />
-                        <button id="btnDeleteFile" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> @sr["Delete File"]</button>
-                    </form>
-                    
-                </div>
-            </div>
-
+           @{await Html.RenderPartialAsync("BrowsePartial", Model); }
         </div>
         <div class="tab-pane" id="tabUpload" role="tabpanel" aria-labelledby="tab2">
-            <div class="col-md-12 fileupload">
-                <h2>Upload Files</h2>
-                <span class="operationinstructions">
-                    @sr["First use the browse tab to select the folder where you would like the new files to be placed. Then drag and drop files onto the dropzone or browse to select the files on your computer, once files are selected an Upload button will appear.  Files will be uploaded to the current folder:"]"
-                </span>
-                <div>
-                     <span class="form-control" id="currentFolder" name="fileSelection">@Model.InitialVirtualPath</span>
-                </div>
-                <form id="frmUpload" method="post" enctype="multipart/form-data" asp-controller="FileManager" asp-action="AutomaticUpload">
-                    <input type="hidden" id="uploadCurrentDir" name="currentDir" />
-                    
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <label for="maxWidth">@sr["Max Width"]</label>
-                            <input type="text" class="form-control" id="maxWidth" name="maxWidth" value="@upoadOptions.WebSizeImageMaxWidth">
-                        </div>
-                        <div class="form-group">
-                            <label for="maxHeight">@sr["Max Height"]</label>
-                            <input type="text" class="form-control" id="maxHeight" name="maxHeight" value="@upoadOptions.WebSizeImageMaxHeight">
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label>
-                                    <input asp-for="ResizeImages" /> @sr["Reduce Image Size For Web"]
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div id="divFileUpload" class="fileupload">
-                            <p>@sr["Upload one or more files using this form:"]</p>
-                            <div id="dropZone" class="fileupload-dropzone">
-                                <span>@sr["Drag and drop files here"]</span>
-                            </div>
-                            <div id="pnlFiles" class="uploadcontainer">
-                                <div id="browseButton" class="btn btn-success fileinput-button">
-                                    <i class="fa fa-plus"></i>
-                                    <span>@sr["Choose Files"]</span>
-                                    <input id="fileupload" type="file" name="fileupload" multiple>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="progress" class="progress">
-                            <div class="progress-bar progress-bar-success"></div>
-                        </div>
-                        <div id="fileList" class='uploadfilelist'></div>
-                        <div id="ui" class='uploadfilesui'></div>
-
-                    </div>
-
-                </form>
-            </div>
-
-            
-
-
+            @{await Html.RenderPartialAsync("UploadPartial", Model); }
         </div>
         <div class="tab-pane" id="tabCrop" role="tabpanel" aria-labelledby="tab3">
             Cropper goes here
-            <img id="fileCropPreview" src="~/images/1x1.gif" alt="Preview selected image" />
+            @{await Html.RenderPartialAsync("CropPartial", Model); }
         </div>
-
     </div>
-
-
-
 </div>
 @section scripts {
 
