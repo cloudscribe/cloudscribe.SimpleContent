@@ -12,6 +12,7 @@
 @section style {
     <link rel="stylesheet" href="~/css/jquery.fileupload.css" />
     <link rel="stylesheet" href="~/css/cropper.min.css" />
+    <link rel="stylesheet" href="~/css/filemanager.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/font-awesome.css" />
     <style>
         .fileupload-dropzone {
@@ -74,7 +75,6 @@
             @{await Html.RenderPartialAsync("UploadPartial", Model); }
         </div>
         <div class="tab-pane" id="tabCrop" role="tabpanel" aria-labelledby="tab3">
-            Cropper goes here
             @{await Html.RenderPartialAsync("CropPartial", Model); }
         </div>
     </div>
@@ -83,11 +83,13 @@
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/js/tether.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/bootstrap-treeview.js" asp-append-version="true"></script>
         <script src="~/jsdev/jquery.ui.widget.js"></script>
         <script src="~/jsdev/jquery.iframe-transport.js"></script>
         <script src="~/jsdev/jquery.fileupload.js"></script>
+        <script src="~/jsdev/cropper.js"></script>
 
     </environment>
     <environment names="Staging,Production">
@@ -95,6 +97,7 @@
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
         </script>
+        <script src="~/js/tether.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
@@ -103,6 +106,7 @@
         <script src="~/jsdev/jquery.ui.widget.js"></script>
         <script src="~/jsdev/jquery.iframe-transport.js"></script>
         <script src="~/jsdev/jquery.fileupload.js"></script>
+        <script src="~/jsdev/cropper.js"></script>
     </environment>
 
     <script type="text/javascript">

@@ -4,7 +4,6 @@
   "dependencies": {
     "bootstrap": "3.3.6",
     "patternfly-bootstrap-treeview": "~2.1.1",
-    "cropperjs": "~0.8.1",
     "jquery": "2.2.0",
     "jquery-validation": "1.14.0",
     "jquery-validation-unobtrusive": "3.2.6",
@@ -13,6 +12,8 @@
     "moment": "^2.11.2",
     "moment-timezone": "~0.5.0",
     "eonasdan-bootstrap-datetimepicker": "~4.17.37",
-    "fontawesome": "~4.5.0"
+    "fontawesome": "~4.5.0",
+    "tether": "~1.4.0",
+    "cropper": "~2.3.4"
   }
 }
