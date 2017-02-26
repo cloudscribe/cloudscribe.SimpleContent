@@ -346,7 +346,7 @@
                 showIcon: true,
                 wrapNodeText: false,
                 lazyLoad: function (node, dataFunc) {
-                    alert(node.text + ' lazyload');
+                    //alert(node.text + ' lazyload');
                     $.ajax({
                         dataType: "json",
                         url: fileManager.treeDataApiUrl + '?virtualStartPath=' + node.virtualPath
@@ -357,10 +357,11 @@
                           
                       })
                     ;
+                    node.lazyLoaded = true;
 
                 },
                 onNodeSelected: function (event, node) {
-                    alert(node.virtualPath + ' selected');
+                    //alert(node.virtualPath + ' selected');
                     if (node.canPreview) {
                         fileManager.setPreview(node.virtualPath);   
                     }
@@ -377,12 +378,20 @@
                     }
                 },
                 onNodeUnselected: function (event, node) {
-                    alert(node.virtualPath + ' unselected');
-                    alert(node.state.selected);
-                    //fileManager.clearCurrentDirectory();
+                    //alert(node.virtualPath + ' unselected');
+                    //alert(node.state.selected);
+                    // a hack because for some reason lazy load expand leads to unselected event
+                    //alert(JSON.stringify(node));
+                    if (node.lazyLoaded) {
+                        node.lazyLoaded = false;
+                    }
+                    else {
+                        fileManager.clearCurrentDirectory();
+                    }
+                    //
                 },
                 onNodeExpanded: function (event, node) {
-                    alert(node.virtualPath + ' expanded');
+                    //alert(node.virtualPath + ' expanded');
                     //if (node.type === "d") {
                     //    node.icon = "fa fa-folder-open-o";
                     //    node.selectedIcon = "fa fa-folder-open-o";

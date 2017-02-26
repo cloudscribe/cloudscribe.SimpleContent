@@ -556,8 +556,8 @@
 		if (state && node.nodes) {
 
 		    // Set node state
-		    alert('about to expand ' + node.id);
-		    alert(node.state.selected);
+		    //alert('about to expand ' + node.id);
+		    //alert(node.state.selected);
 			node.state.expanded = true;
 
 			// Set element
@@ -583,6 +583,9 @@
 
 			// Optionally trigger event
 			this._triggerEvent('nodeExpanded', node, options);
+			//if (node.state.selected) {
+			//    this._triggerEvent('nodeSelected', node, options);
+			//}
 		}
 		else if (!state) {
 
@@ -696,6 +699,8 @@
 				}
 				return this;
 			}
+			//alert('about to unselect');
+			//alert(JSON.stringify(node));
 
 			// Set node state
 			node.state.selected = false;

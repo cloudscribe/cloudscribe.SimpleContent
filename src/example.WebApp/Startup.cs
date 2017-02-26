@@ -138,7 +138,7 @@ namespace example.WebApp
             {
                 //  if(environment.IsProduction())
                 //  {
-                options.Filters.Add(new RequireHttpsAttribute());
+                //options.Filters.Add(new RequireHttpsAttribute());
                 //   }
 
 
