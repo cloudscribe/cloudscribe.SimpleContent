@@ -27,7 +27,7 @@
             $("#image").attr("src", url);
             fileManager.uploadTab.hide();
             fileManager.cropTab.show();
-            fileManager.setupCropper();
+            //fileManager.setupCropper();
 
         },
         clearPreview: function () {
@@ -493,8 +493,30 @@
             });
 
         },
-        setupCropper: function () {
+        
+        init: function () {
+            $(document).bind('drop dragover', function (e) { e.preventDefault(); });
+            this.progressUI.hide();
+            this.cropTab.hide();
+            this.loadTree();
+            this.setupFileLoader();
+            this.newFolderButton.on('click', fileManager.createFolder);
+            this.fileSelectorButton.on('click', fileManager.ckReturnFile);
+            this.deleteFolderButton.on('click', fileManager.deleteFolder);
+            this.renameFolderButton.on('click', fileManager.renameFolder);
+            this.deleteFileButton.on('click', fileManager.deleteFile);
+            this.renameFileButton.on('click', fileManager.renameFile);
 
+
+        }
+
+
+    };
+
+    fileManager.init();
+
+    var cropManager = {
+        setup: function () {
             var console = window.console || { log: function () { } };
             var URL = window.URL || window.webkitURL;
             var $image = $('#image');
@@ -736,28 +758,15 @@
             } else {
                 $inputImage.prop('disabled', true).parent().addClass('disabled');
             }
-
-        },
-
-        init: function () {
-            $(document).bind('drop dragover', function (e) { e.preventDefault(); });
-            this.progressUI.hide();
-            this.cropTab.hide();
-            this.loadTree();
-            this.setupFileLoader();
-            this.newFolderButton.on('click', fileManager.createFolder);
-            this.fileSelectorButton.on('click', fileManager.ckReturnFile);
-            this.deleteFolderButton.on('click', fileManager.deleteFolder);
-            this.renameFolderButton.on('click', fileManager.renameFolder);
-            this.deleteFileButton.on('click', fileManager.deleteFile);
-            this.renameFileButton.on('click', fileManager.renameFile);
-
-
         }
-
-
     };
 
-    fileManager.init();
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href") // activated tab
+
+        if (target === "#tabCrop") {
+            cropManager.setup();
+        }
+    });
 
 })();

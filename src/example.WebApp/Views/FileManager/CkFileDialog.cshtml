@@ -48,14 +48,6 @@
       data-empty-preview-url='@Url.Content("~/images/1x1.gif")'></span>
 <div id="alert_placeholder"></div>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8 ">
-            <input class="form-control" disabled type="text" id="fileSelection" name="fileSelection" placeholder='@sr["Selected File"]' />
-        </div>
-        <div class="col-md-4">
-            <button class="col-md-4 btn btn-default" id="btnSelector">@sr["Select"]</button>
-        </div>
-    </div>
     <ul class="nav nav-tabs" role="tablist">
         <li id="tab1" role="tab">
             <a href="#tabBrowse" data-toggle="tab" class="active"><i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;@sr["Browse"]</a>
@@ -89,7 +81,7 @@
         <script src="~/jsdev/jquery.ui.widget.js"></script>
         <script src="~/jsdev/jquery.iframe-transport.js"></script>
         <script src="~/jsdev/jquery.fileupload.js"></script>
-        <script src="~/jsdev/cropper.js"></script>
+        <script src="~/jsdev/cropper3.js"></script>
 
     </environment>
     <environment names="Staging,Production">
@@ -106,11 +98,16 @@
         <script src="~/jsdev/jquery.ui.widget.js"></script>
         <script src="~/jsdev/jquery.iframe-transport.js"></script>
         <script src="~/jsdev/jquery.fileupload.js"></script>
-        <script src="~/jsdev/cropper.js"></script>
+        <script src="~/jsdev/cropper3.js"></script>
     </environment>
 
     <script type="text/javascript">
         var allowedFilesRegex = @Html.Raw(Model.AllowedFileExtensionsRegex);
     </script>
     <script src="~/jsdev/cloudscribe-filemanager.js" asp-append-version="true"></script>
+<script type="text/javascript">
+        
+        
+        
+</script>
 }
