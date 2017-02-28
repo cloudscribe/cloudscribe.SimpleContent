@@ -465,13 +465,16 @@ namespace cloudscribe.FileManager.Web.Services
             bool? resizeImages,
             int? maxWidth,
             int? maxHeight,
-            string requestedVirtualPath = "")
+            string requestedVirtualPath = "",
+            string newFileName = ""
+            )
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
             string currentFsPath = rootPath.RootFileSystemPath;
             string currentVirtualPath = rootPath.RootVirtualPath;
             string[] virtualSegments = options.ImageDefaultVirtualSubPath.Split('/');
+            bool doResize = resizeImages.HasValue ? resizeImages.Value : options.AutoResize;
 
             if ((!string.IsNullOrEmpty(requestedVirtualPath)) && (requestedVirtualPath.StartsWith(rootPath.RootVirtualPath)))
             {
@@ -504,8 +507,16 @@ namespace cloudscribe.FileManager.Web.Services
                 currentFsPath = Path.Combine(currentFsPath, Path.Combine(virtualSegments));
                 EnsureSubFolders(rootPath.RootFileSystemPath, virtualSegments);
             }
-
-            var newName = nameRules.GetCleanFileName(formFile.FileName);
+            string newName;
+            if (!string.IsNullOrEmpty(newFileName))
+            {
+                newName = nameRules.GetCleanFileName(newFileName);
+            }
+            else
+            {
+                newName = nameRules.GetCleanFileName(formFile.FileName);
+            }
+            
             var newUrl = currentVirtualPath + "/" + newName;
             var fsPath = Path.Combine(currentFsPath, newName);
 
@@ -521,7 +532,7 @@ namespace cloudscribe.FileManager.Web.Services
                     await formFile.CopyToAsync(stream);
                 }
 
-                if ((options.AutoResize)&& IsWebImageFile(ext))
+                if ((doResize) && IsWebImageFile(ext))
                 {
                     var mimeType = GetMimeType(ext);
                     webUrl = currentVirtualPath + "/" + webSizeName;

@@ -101,9 +101,14 @@ namespace cloudscribe.FileManager.Web.Controllers
                 {
                     if(Path.HasExtension(currentDir)) //this will be true for cropped
                     {
-                        currentDir = currentDir.Substring(currentDir.LastIndexOf("/"));
+                        currentDir = currentDir.Substring(0, currentDir.LastIndexOf("/"));
                     }
                 }
+            }
+            string newFileName = string.Empty; ;
+            if(theFiles.Count == 1 && !string.IsNullOrEmpty(croppedFileName))
+            {
+                newFileName = croppedFileName;
             }
             
             foreach (var formFile in theFiles)
@@ -118,7 +123,8 @@ namespace cloudscribe.FileManager.Web.Controllers
                             resizeImages,
                             maxWidth,
                             maxHeight,
-                            currentDir
+                            currentDir,
+                            newFileName
                             ).ConfigureAwait(false);
                         
                         imageList.Add(uploadResult);
@@ -134,6 +140,60 @@ namespace cloudscribe.FileManager.Web.Controllers
 
             return Json(imageList);
         }
+
+        //[HttpPost]
+        //[Authorize(Policy = "FileManagerPolicy")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> UploadBase64(
+        //    //List<IFormFile> files
+        //    bool? resizeImages,
+        //    int? maxWidth,
+        //    int? maxHeight,
+        //    string currentDir = "",
+        //    string croppedFileName = ""
+        //    )
+        //{
+        //    var theFiles = HttpContext.Request.Form.Files;
+        //    var imageList = new List<UploadResult>();
+        //    if (resizeImages.HasValue)
+        //    {
+        //        if (resizeImages.Value == false)
+        //        {
+        //            if (Path.HasExtension(currentDir)) //this will be true for cropped
+        //            {
+        //                currentDir = currentDir.Substring(currentDir.LastIndexOf("/"));
+        //            }
+        //        }
+        //    }
+
+        //    foreach (var formFile in theFiles)
+        //    {
+        //        try
+        //        {
+        //            if (formFile.Length > 0)
+        //            {
+        //                var uploadResult = await fileManagerService.ProcessFile(
+        //                    formFile,
+        //                    autoUploadOptions,
+        //                    resizeImages,
+        //                    maxWidth,
+        //                    maxHeight,
+        //                    currentDir
+        //                    ).ConfigureAwait(false);
+
+        //                imageList.Add(uploadResult);
+
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            log.LogError(MediaLoggingEvents.FILE_PROCCESSING, ex, ex.StackTrace);
+        //        }
+
+        //    }
+
+        //    return Json(imageList);
+        //}
 
         [HttpPost]
         [Authorize(Policy = "FileManagerPolicy")]

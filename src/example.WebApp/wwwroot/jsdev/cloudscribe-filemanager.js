@@ -776,9 +776,14 @@
 
             $('#image').cropper('getCroppedCanvas').toBlob(function (blob) {
 
-                var formData = new FormData($('#frmUploadCropped'));
+                var formData = new FormData();
                 formData.append($("#croppedFileName").val(), blob);
-                //alert(JSON.stringify(formData));
+
+                var otherData = $('#frmUploadCropped').serializeArray();
+                $.each(otherData, function (key, input) {
+                    formData.append(input.name, input.value);
+                })
+                
                 $.ajax({
                     method: "POST",
                     url: fileManager.uploadApiUrl,
