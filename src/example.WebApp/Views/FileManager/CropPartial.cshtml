@@ -9,17 +9,21 @@
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <!-- <h3>Demo:</h3> -->
+
             <div class="img-container">
                 <img id="image" src="~/images/1x1.gif" alt="Picture" class="cropper-hidden">
-                <div class="cropper-container cropper-bg" style="width: 825px; height: 469px;">
+                <div class="cropper-container cropper-bgx" style="width: 825px; height: 469px;">
+
+                    
+
                     <div class="cropper-wrap-box">
                         <div class="cropper-canvas" style="width: 825px; height: 464.063px; transform: translateY(2.46875px);">
                             <img src="~/images/1x1.gif" style="width: 825px; height: 464.063px; transform: none;">
                         </div>
                     </div>
+                    <!--
                     <div class="cropper-drag-box cropper-modal cropper-crop"></div>
-                    <div class="cropper-crop-box" style="width: 660px; height: 371.25px; transform: translateX(82.5px) translateY(48.875px);">
+                         <div class="cropper-crop-box" style="width: 660px; height: 371.25px; transform: translateX(82.5px) translateY(48.875px);">
                         <span class="cropper-view-box">
                             <img src="~/images/1x1.gif" style="width: 825px; height: 464.063px; transform: translateX(-82.5px) translateY(-46.4063px);">
                         </span>
@@ -33,18 +37,25 @@
                         <span class="cropper-line line-s" data-action="s"></span>
                         <span class="cropper-point point-e" data-action="e"></span><span class="cropper-point point-n" data-action="n"></span><span class="cropper-point point-w" data-action="w"></span><span class="cropper-point point-s" data-action="s"></span><span class="cropper-point point-ne" data-action="ne"></span><span class="cropper-point point-nw" data-action="nw"></span><span class="cropper-point point-sw" data-action="sw"></span><span class="cropper-point point-se" data-action="se"></span>
                     </div>
+
+                        -->
+
+
+
+
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <!-- <h3>Preview:</h3> -->
+
             <div class="docs-preview clearfix">
                 <div class="img-preview preview-lg" style="width: 256px; height: 144px;"><img src="~/images/1x1.gif" style="display: block; width: 320px; height: 180px; min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; transform: translateX(-32px) translateY(-18px);"></div>
                 <div class="img-preview preview-md" style="width: 128px; height: 72px;"><img src="~/images/1x1.gif" style="display: block; width: 160px; height: 90px; min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; transform: translateX(-16px) translateY(-9px);"></div>
                 <div class="img-preview preview-sm" style="width: 64px; height: 36px;"><img src="~/images/1x1.gif" style="display: block; width: 80px; height: 45px; min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; transform: translateX(-8px) translateY(-4.5px);"></div>
                 <div class="img-preview preview-xs" style="width: 32px; height: 18px;"><img src="~/images/1x1.gif" style="display: block; width: 40px; height: 22.5px; min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; transform: translateX(-4px) translateY(-2.25px);"></div>
             </div>
-            <!-- <h3>Data:</h3> -->
+
+
             <div class="docs-data">
                 <div class="input-group input-group-sm">
                     <label class="input-group-addon" for="dataX">X</label>
@@ -80,11 +91,14 @@
                     <input type="text" class="form-control" id="dataScaleY" placeholder="scaleY">
                 </div>
             </div>
+
+
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-9 docs-buttons">
-            <!-- <h3>Toolbar:</h3> -->
+            
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="move" title="Move">
                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
@@ -191,11 +205,7 @@
                         <span class="fa fa-upload"></span>
                     </span>
                 </label>
-                <button type="button" class="btn btn-primary" data-method="destroy" title="Destroy">
-                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;destroy&quot;)">
-                        <span class="fa fa-power-off"></span>
-                    </span>
-                </button>
+                
             </div>
             <div class="btn-group btn-group-crop">
                 <button type="button" class="btn btn-primary" data-method="getCroppedCanvas">
@@ -214,7 +224,7 @@
                     </span>
                 </button>
             </div>
-            <!-- Show the cropped image in modal -->
+
             <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -226,12 +236,22 @@
                         </div>
                         <div class="modal-body"></div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">Download</a>
+                            <form id="frmUploadCropped" class="form-inline" asp-controller="FileManager" asp-action="Upload">
+                                <input type="hidden" id="cropResizeImages" name="resizeImages" value="false" />
+                                <input type="hidden" id="cropCurrentDir" name="currentDir" value="" />
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="croppedFileName" name="croppedFileName" />
+                                </div>
+                                <button id="btnUploadCropped" type="submit" class="btn btn-primary"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;@sr["Upload"]</button>
+                                <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">Save Locally</a>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </form>
+                            
+                            
                         </div>
                     </div>
                 </div>
-            </div><!-- /.modal -->
+            </div>
             <button type="button" class="btn btn-primary" data-method="getData" data-option="" data-target="#putData">
                 <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getData&quot;)">
                     Get Data
@@ -288,9 +308,12 @@
                 </span>
             </button>
             <input type="text" class="form-control" id="putData" placeholder="Get data to here or set data with this value">
-        </div><!-- /.docs-buttons -->
+
+               
+        
+        </div>
         <div class="col-md-3 docs-toggles">
-            <!-- <h3>Toggles:</h3> -->
+
             <div class="btn-group d-flex flex-nowrap" data-toggle="buttons">
                 <label class="btn btn-primary active">
                     <input type="radio" class="sr-only" id="aspectRatio0" name="aspectRatio" value="1.7777777777777777">
@@ -470,8 +493,10 @@
                         </label>
                     </li>
                 </ul>
-            </div><!-- /.dropdown -->
-            
-        </div><!-- /.docs-toggles -->
+            </div>
+
+        </div>
     </div>
+
+
 </div>

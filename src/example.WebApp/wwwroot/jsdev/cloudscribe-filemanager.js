@@ -22,9 +22,11 @@
         cropTab: $('#tab3'),
         treeData: [],
         selectedFileList: [],
-        setPreview: function (url) {
+        setPreview: function (url, name) {
             $("#filePreview").attr("src", url);
             $("#image").attr("src", url);
+            $("#cropCurrentDir").val(url);
+            $("#croppedFileName").val("crop-" + name);
             fileManager.uploadTab.hide();
             fileManager.cropTab.show();
             //fileManager.setupCropper();
@@ -33,6 +35,8 @@
         clearPreview: function () {
             $("#filePreview").attr("src", fileManager.emptyPreviewUrl);
             $("#fileCropPreview").attr("src", fileManager.emptyPreviewUrl);
+            $("#cropCurrentDir").val('');
+            $("#croppedFileName").val('');
             fileManager.uploadTab.show();
             fileManager.cropTab.hide();
         },
@@ -367,7 +371,7 @@
                 onNodeSelected: function (event, node) {
                     //alert(node.virtualPath + ' selected');
                     if (node.canPreview) {
-                        fileManager.setPreview(node.virtualPath);   
+                        fileManager.setPreview(node.virtualPath, node.text);   
                     }
                     else {
                         fileManager.clearPreview();    
@@ -619,6 +623,9 @@
 
 
             // Methods
+            //uploadCroppedImage
+            $("#btnUploadCropped").on('click', cropManager.uploadCroppedImage);
+
             $('.docs-buttons').on('click', '[data-method]', function () {
                 var $this = $(this);
                 var data = $this.data();
@@ -692,6 +699,7 @@
                     }
 
                 }
+
             });
 
 
@@ -758,6 +766,54 @@
             } else {
                 $inputImage.prop('disabled', true).parent().addClass('disabled');
             }
+        },
+        tearDown: function () {
+            if (($('#image').data('cropper'))) {
+                $('#image').cropper('destroy');
+            }
+        },
+        uploadCroppedImage: function () {
+
+            $('#image').cropper('getCroppedCanvas').toBlob(function (blob) {
+
+                var formData = new FormData($('#frmUploadCropped'));
+                formData.append($("#croppedFileName").val(), blob);
+                //alert(JSON.stringify(formData));
+                $.ajax({
+                    method: "POST",
+                    url: fileManager.uploadApiUrl,
+                    data: formData,
+                    processData: false,
+                    contentType:false
+                }).done(function (data) {
+                    // alert(JSON.stringify(data));
+                    if (data.succeeded) {
+                        var currentPath = $("#newFolderCurrentDir").val();
+                        if (currentPath === fileManager.rootVirtualPath) {
+                            fileManager.loadTree();
+                        }
+                        else {
+                            fileManager.reloadSubTree();
+                        }
+
+                        $("#newFolderName").val('');
+                        //fileManager.notify('Folder created', 'alert-success');
+                    }
+                    else {
+                        fileManager.notify(data.message, 'alert-danger');
+
+                    }
+
+                })
+                .fail(function () {
+                    fileManager.notify('An error occured', 'alert-danger');
+                });
+
+            });
+
+            
+
+            return false; //cancel form submit
         }
     };
 
@@ -766,6 +822,14 @@
 
         if (target === "#tabCrop") {
             cropManager.setup();
+        }
+        else {
+            var related = $(e.relatedTarget).attr("href"); //previous tab
+            var hash = related.replace(/^.*?(#|$)/, '');
+            //alert(hash);
+            if (hash === "tabCrop") {
+                cropManager.tearDown();
+            }
         }
     });
 

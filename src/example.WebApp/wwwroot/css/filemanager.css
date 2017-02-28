@@ -1,4 +1,26 @@
-﻿/* Cropper app */
+﻿
+
+.browserupgrade {
+  margin: 0;
+  padding: .5rem 1rem;
+  background-color: #fcfcfc;
+  text-align: center;
+}
+
+.btn {
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
+label.btn {
+  margin-bottom: 0;
+}
+
+.d-flex > .btn {
+  flex-grow: 1;
+}
+
+/* Cropper app */
 
 .img-container,
 .img-preview {

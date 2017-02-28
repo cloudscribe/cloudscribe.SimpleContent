@@ -89,11 +89,22 @@ namespace cloudscribe.FileManager.Web.Controllers
             bool? resizeImages,
             int? maxWidth,
             int? maxHeight,
-            string currentDir = "" 
+            string currentDir = "",
+            string croppedFileName = ""
             )
         {
             var theFiles = HttpContext.Request.Form.Files;
             var imageList = new List<UploadResult>();
+            if(resizeImages.HasValue)
+            {
+                if(resizeImages.Value == false)
+                {
+                    if(Path.HasExtension(currentDir)) //this will be true for cropped
+                    {
+                        currentDir = currentDir.Substring(currentDir.LastIndexOf("/"));
+                    }
+                }
+            }
             
             foreach (var formFile in theFiles)
             {
