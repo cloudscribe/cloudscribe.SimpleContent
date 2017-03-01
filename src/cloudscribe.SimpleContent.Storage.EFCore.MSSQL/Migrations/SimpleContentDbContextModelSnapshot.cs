@@ -94,6 +94,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("PubDateFormat")
                         .HasMaxLength(75);
 
+                    b.Property<string>("Publisher")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("PublisherLogoUrl")
+                        .HasMaxLength(255);
+
                     b.Property<string>("RecaptchaPrivateKey")
                         .HasMaxLength(255);
 
@@ -246,6 +252,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<string>("CorrelationKey")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ExternalUrl")
+                        .HasMaxLength(255);
+
                     b.Property<bool>("IsPublished")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ColumnType", "bit")
@@ -295,6 +307,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasAnnotation("SqlServer:ColumnType", "bit")
                         .HasAnnotation("SqlServer:DefaultValue", false);
 
+                    b.Property<bool>("ShowMenu")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ColumnType", "bit")
+                        .HasAnnotation("SqlServer:DefaultValue", false);
+
                     b.Property<bool>("ShowPubDate")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ColumnType", "bit")
@@ -311,6 +328,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("ViewRoles");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CorrelationKey");
 
                     b.HasIndex("ParentId");
 

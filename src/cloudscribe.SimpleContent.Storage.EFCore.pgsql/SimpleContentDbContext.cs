@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-01-08
+// Last Modified:			2017-03-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -40,6 +40,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 ;
 
                 entity.Property(p => p.Title)
+                .HasMaxLength(255)
+                ;
+
+                entity.Property(p => p.Publisher)
+                .HasMaxLength(255)
+                ;
+
+                entity.Property(p => p.PublisherLogoUrl)
                 .HasMaxLength(255)
                 ;
 
@@ -353,6 +361,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 .IsRequired()
                 ;
 
+                entity.Property(p => p.CorrelationKey)
+                .HasMaxLength(255)
+                ;
+
+                entity.HasIndex(p => p.CorrelationKey);
+
                 entity.Property(p => p.ParentId)
                 .HasMaxLength(36)
                 ;
@@ -371,12 +385,17 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 .IsRequired()
                 ;
 
+                entity.Property(p => p.ExternalUrl)
+                .HasMaxLength(255)
+                ;
+
                 entity.Property(p => p.MetaDescription)
                 .HasMaxLength(500)
                 ;
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
+                .HasDefaultValue(true)
                 //.ForSqlServerHasColumnType("bit")
                 //.ForSqlServerHasDefaultValue(true)
                 ;
@@ -386,33 +405,43 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 .HasDefaultValue(false)
                 ;
 
+                entity.Property(p => p.ShowMenu)
+               .IsRequired()
+               .HasDefaultValue(false)
+               ;
+
 
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
+                .HasDefaultValue(true)
                 //.ForSqlServerHasColumnType("bit")
                 //.ForSqlServerHasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowPubDate)
                 .IsRequired()
+                .HasDefaultValue(false)
                 //.ForSqlServerHasColumnType("bit")
                 //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowLastModified)
                 .IsRequired()
+                .HasDefaultValue(false)
                 //.ForSqlServerHasColumnType("bit")
                 //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowCategories)
                 .IsRequired()
+                .HasDefaultValue(false)
                 //.ForSqlServerHasColumnType("bit")
                 //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowComments)
                 .IsRequired()
+                .HasDefaultValue(false)
                 //.ForSqlServerHasColumnType("bit")
                 //.ForSqlServerHasDefaultValue(false)
                 ;

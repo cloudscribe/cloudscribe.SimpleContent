@@ -30,12 +30,25 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IRouteBuilder AddDefaultPageRouteForSimpleContent(this IRouteBuilder routes)
         {
-           
+            routes.MapRoute(
+               name: ProjectConstants.PageEditRouteName,
+               template: "/edit/{slug?}"
+               , defaults: new { controller = "Page", action = "Edit" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageDeleteRouteName,
+               template: "/delete/{slug}"
+               , defaults: new { controller = "Page", action = "Delete" }
+               );
+
             routes.MapRoute(
                name: ProjectConstants.PageIndexRouteName,
                template: "{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                );
+
+            
 
             return routes;
         }
@@ -45,6 +58,19 @@ namespace Microsoft.Extensions.DependencyInjection
             IRouteConstraint siteFolderConstraint
             )
         {
+            routes.MapRoute(
+              name: ProjectConstants.FolderPageEditRouteName,
+              template: "{sitefolder}/edit/{slug?}"
+              , defaults: new { controller = "Page", action = "Edit" }
+              , constraints: new { name = siteFolderConstraint }
+              );
+
+            routes.MapRoute(
+              name: ProjectConstants.FolderPageDeleteRouteName,
+              template: "{sitefolder}/delete/{slug}"
+              , defaults: new { controller = "Page", action = "Delete" }
+              , constraints: new { name = siteFolderConstraint }
+              );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPageIndexRouteName,
@@ -53,17 +79,32 @@ namespace Microsoft.Extensions.DependencyInjection
                , constraints: new { name = siteFolderConstraint }
                );
 
+           
+
             return routes;
         }
 
         public static IRouteBuilder AddCustomPageRouteForSimpleContent(this IRouteBuilder routes, string prefix)
         {
+            routes.MapRoute(
+               name: ProjectConstants.PageEditRouteName,
+               template: prefix + "/edit/{slug?}"
+               , defaults: new { controller = "Page", action = "Edit" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageDeleteRouteName,
+               template: prefix + "/delete/{slug}"
+               , defaults: new { controller = "Page", action = "Delete" }
+               );
 
             routes.MapRoute(
                name: ProjectConstants.PageIndexRouteName,
                template: prefix +"/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                );
+
+            
 
             return routes;
         }
@@ -74,6 +115,19 @@ namespace Microsoft.Extensions.DependencyInjection
             IRouteConstraint siteFolderConstraint
             )
         {
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageEditRouteName,
+               template: "{sitefolder}/" + prefix + "/edit/{slug?}"
+               , defaults: new { controller = "Page", action = "Edit" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageDeleteRouteName,
+               template: "{sitefolder}/" + prefix + "/delete/{slug}"
+               , defaults: new { controller = "Page", action = "Delete" }
+               , constraints: new { name = siteFolderConstraint }
+               );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPageIndexRouteName,
@@ -81,6 +135,8 @@ namespace Microsoft.Extensions.DependencyInjection
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { name = siteFolderConstraint }
                );
+
+            
 
             return routes;
         }

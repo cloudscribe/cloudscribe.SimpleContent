@@ -8,6 +8,7 @@
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
+using cloudscribe.Web.Common.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
@@ -90,30 +92,44 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 if (model.CurrentPage != null)
                 {
+                    model.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
+
+                    if (model.CurrentPage.Slug == projectSettings.DefaultPageSlug)
+                    {
+                        model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
+                        model.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
+                    }
+                    else
+                    {
+                        //model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", parentSlug = model.CurrentPage.Slug, mode = "new" });
+                        model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
+                        model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
+
+                    }
+
                     model.EditorSettings.CancelEditPath = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = model.CurrentPage.Slug });
                     model.EditorSettings.CurrentSlug = model.CurrentPage.Slug;
                     model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
-                    model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode = "edit" });
+                    //model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode = "edit" });
+                    model.EditorSettings.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
+
                     model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
                     model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
                     model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
                     model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
                     model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
-                    if(model.CurrentPage.Slug == projectSettings.DefaultPageSlug)
-                    {
-                        model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
-                    }
-                    else
-                    {
-                        model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", parentSlug = model.CurrentPage.Slug, mode = "new" });
-                    }
+                    
                     
                 }
                 else
                 {
+                    model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
+
                     model.EditorSettings.CancelEditPath = Url.Content("~/");
                     model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
-                    model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                    //model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                    model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
+
                 }
 
                 model.EditorSettings.EditMode = mode;
@@ -250,15 +266,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             if(page == null)
             {
-                ViewData["Title"] = "New Page";
+                ViewData["Title"] = sr["New Page"];
+                model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
             }
             else
             {
-                ViewData["Title"] = "Edit -" + page.Title;
+                ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], page.Title);
                 model.Author = page.Author;
                 model.Content = page.Content;
                 model.Id = page.Id;
+                model.CorrelationKey = page.CorrelationKey;
                 model.IsPublished = page.IsPublished;
+                model.ShowMenu = page.ShowMenu;
                 model.MenuOnly = page.MenuOnly;
                 model.MetaDescription = page.MetaDescription;
                 model.PageOrder = page.PageOrder;
@@ -267,6 +286,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(page.PubDate, projectSettings.TimeZoneId).ToString();
                 model.ShowHeading = page.ShowHeading;
                 model.Slug = page.Slug;
+                model.ExternalUrl = page.ExternalUrl;
                 model.Title = page.Title;
                 model.ViewRoles = page.ViewRoles;
                 
@@ -274,13 +294,215 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             
-            
-            
-            
-
-           
-
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(PageEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                if(string.IsNullOrEmpty(model.Id))
+                {
+                    ViewData["Title"] = sr["New Page"];
+                }
+                else
+                {
+                    ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], model.Title);
+                }
+                return View(model);
+            }
+
+            //if (string.IsNullOrEmpty(model.Title))
+            //{
+            //    // if a page has been configured to not show the title
+            //    // this may be null on edit, if it is a new page then it should be required
+            //    // because it is used for generating the slug
+            //    //if (string.IsNullOrEmpty(model.Slug))
+            //    //{
+            //    log.LogInformation("returning 500 because no title was posted");
+            //    return StatusCode(500);
+            //    //}
+
+            //}
+
+            var project = await projectService.GetCurrentProjectSettings();
+            
+            if (project == null)
+            {
+                this.AlertDanger(sr["oops something went wrong, project seettings not found."], true);
+
+                return RedirectToAction("Index");
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            //string[] categories = new string[0];
+            //if (!string.IsNullOrEmpty(model.Categories))
+            //{
+            //    categories = model.Categories.Split(new char[] { ',' },
+            //    StringSplitOptions.RemoveEmptyEntries);
+            //}
+
+
+            IPage page = null;
+            if (!string.IsNullOrEmpty(model.Id))
+            {
+                page = await pageService.GetPage(model.Id);
+            }
+
+            var needToClearCache = false;
+            var isNew = false;
+            if (page != null)
+            {
+                if (page.Title != model.Title)
+                {
+                    needToClearCache = true;
+                }
+                page.Title = model.Title;
+                page.MetaDescription = model.MetaDescription;
+                page.Content = model.Content;
+                if (page.PageOrder != model.PageOrder) needToClearCache = true;
+
+            }
+            else
+            {
+                isNew = true;
+                needToClearCache = true;
+                var slug = ContentUtils.CreateSlug(model.Title);
+                var available = await pageService.SlugIsAvailable(project.Id, slug);
+                if (!available)
+                {
+                    //log.LogInformation("returning 409 because slug already in use");
+                    ModelState.AddModelError("pageediterror", sr["slug is already in use."]);
+
+                    return View(model);
+                }
+
+                page = new Page()
+                {
+                    ProjectId = project.Id,
+                    Author = User.GetUserDisplayName(),
+                    Title = model.Title,
+                    MetaDescription = model.MetaDescription,
+                    Content = model.Content,
+                    Slug = slug,
+                    ParentId = "0"
+
+                    //,Categories = categories.ToList()
+                };
+            }
+
+            if (!string.IsNullOrEmpty(model.ParentSlug))
+            {
+                var parentPage = await pageService.GetPageBySlug(project.Id, model.ParentSlug);
+                if (parentPage != null)
+                {
+                    if (parentPage.Id != page.ParentId)
+                    {
+                        page.ParentId = parentPage.Id;
+                        page.ParentSlug = parentPage.Slug;
+                        needToClearCache = true;
+                    }
+
+                }
+            }
+            else
+            {
+                // empty means root level
+                page.ParentSlug = string.Empty;
+                page.ParentId = "0";
+            }
+            if (page.ViewRoles != model.ViewRoles)
+            {
+                needToClearCache = true;
+            }
+            page.ViewRoles = model.ViewRoles;
+            page.CorrelationKey = model.CorrelationKey;
+
+            page.PageOrder = model.PageOrder;
+            page.IsPublished = model.IsPublished;
+            page.ShowHeading = model.ShowHeading;
+            page.ShowMenu = model.ShowMenu;
+            page.MenuOnly = model.MenuOnly;
+            if (!string.IsNullOrEmpty(model.PubDate))
+            {
+                var localTime = DateTime.Parse(model.PubDate);
+                page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+
+            }
+
+            if (isNew)
+            {
+                await pageService.Create(page, model.IsPublished);
+            }
+            else
+            {
+                await pageService.Update(page, model.IsPublished);
+            }
+
+
+            if (needToClearCache)
+            {
+                pageService.ClearNavigationCache();
+            }
+
+            //var url = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
+            return RedirectToRoute(pageRoutes.PageRouteName, new { slug = page.Slug });
+            //return Content(url);
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug="" });
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+                log.LogInformation("postid not provided, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+
+            }
+
+            var page = await pageService.GetPage(id);
+
+            if (page == null)
+            {
+                log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
+
+            await pageService.DeletePage(project.Id, page.Id);
+
+            return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+
         }
 
         [HttpPost]
@@ -434,6 +656,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             return Content(url);
 
         }
+
+        
 
         [HttpPost]
         [AllowAnonymous]

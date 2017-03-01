@@ -1,13 +1,33 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
 @using Microsoft.Extensions.Localization
 @using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Models
+@using System.Globalization
+@using cloudscribe.SimpleContent.Web.TagHelpers
+@inject IPageRoutes pageRoutes
+@inject IRoleSelectorProperties roleSelector
 @inject IStringLocalizer<SimpleContent> sr
+@addTagHelper "*, cloudscribe.Web.Common"
+@addTagHelper "*, cloudscribe.SimpleContent.Web"
 
-        <h2>@ViewBag.Title</h2>
+        <h2>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
         <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
-            <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
-            <input type="hidden" id="id" name="id" value="@Model.Id" />
-            <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
+    <input type="hidden" id="correlationKey" name="correlationKey" value="@Model.CorrelationKey" />
+    <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="tab1" role="tab" class="active">
+            <a href="#tabContent" data-toggle="tab">@sr["Content"]</a>
+        </li>
+        <li id="tab2" role="tab">
+            <a href="#tabSettings" data-toggle="tab">@sr["Settings"]</a>
+        </li>
+
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="tabContent" role="tabpanel" aria-labelledby="tab1">
             <div class="form-group">
                 <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
                 <div class="col-md-10">
@@ -25,26 +45,8 @@
             <div class="form-group">
                 <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
                 <div class="col-md-10">
-                    <input asp-for="Content" class="form-control" />
+                    <textarea asp-for="Content" class="form-control"></textarea>
                     <span asp-validation-for="Content" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="ShowHeading" /> @sr["Show Heading"]
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="MenuOnly" /> @sr["Show Menu"]
-                        </label>
-                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -59,8 +61,40 @@
             <div class="form-group">
                 <label asp-for="PubDate" class="col-md-2 control-label">@sr["Publication Date"]</label>
                 <div class="col-md-10">
-                    <input asp-for="PubDate" class="form-control" />
+                    <input asp-for="PubDate" class="form-control" data-locale="@CultureInfo.CurrentCulture.Name.ToLowerInvariant()" />
                     <span asp-validation-for="PubDate" class="text-danger"></span>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
+
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="ShowHeading" /> @sr["Show Heading"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="ShowMenu" /> @sr["Show Child Menu"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="MenuOnly" /> @sr["No Content Only Show Child Menu"]
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -70,8 +104,8 @@
                     <span asp-validation-for="PageOrder" class="text-danger"></span>
                 </div>
             </div>
-            
-            
+
+
             <div class="form-group">
                 <label asp-for="ParentSlug" class="col-md-2 control-label">@sr["Parent Slug"]</label>
                 <div class="col-md-10">
@@ -81,21 +115,66 @@
             </div>
             <div class="form-group">
                 <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
-                <div class="col-md-10">
-                    <input asp-for="ViewRoles" class="form-control" />
+                <div class="form-inline col-md-10">
+                    <input asp-for="ViewRoles" class="form-control" style="width:80%;" />
+                    <a class="btn btn-default"
+                       csc-role-selector="@roleSelector"
+                       csc-projectId="@Model.ProjectId"
+                       csc-target-id="ViewRoles">@sr["Select Roles"]</a>
                     <span asp-validation-for="ViewRoles" class="text-danger"></span>
                 </div>
             </div>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
+            @if (!string.IsNullOrEmpty(Model.Id))
+            {
+                <button name="button" type="button" class="btn btn-danger"
+                        onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
+                    @sr["Delete"]
+                </button>
+            }
             
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button name="submit" type="submit" class="btn btn-default">@sr["Save"]</button>
-                </div>
-            </div>
-        </form>
+        </div>
+    </div>
+</form>
+@if (!string.IsNullOrEmpty(Model.Id))
+{
+    <form id="deleteform" class="form-inline" asp-route="@pageRoutes.PageDeleteRouteName">
+        <input asp-for="Id" type="hidden" />
+    </form>
+}
+     
        
 
 @section Scripts {
-    
-}
-
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+<environment names="Development">
+    <script src="~/csscsr/jqueryhotkeys"></script>
+    <script src="~/csscsr/momentwithlocalesjs"></script>
+    <script src="~/csscsr/bootstrapdatetimepickerjs"></script>
+    <script src="~/csscsr/jquerycookie"></script>
+    <script src="~/js/ckeditor461/ckeditor.js"></script>
+    <script src="~/jsdev/editpage-ck.js" asp-append-version="true"></script>
+</environment>
+<environment names="Staging,Production">
+    <script src="~/csscsr/jqueryhotkeysmin"></script>
+    <script src="~/csscsr/momentwithlocalesjsmin"></script>
+    <script src="~/csscsr/bootstrapdatetimepickerjsmin"></script>
+    <script src="~/csscsr/jquerycookiemin"></script>
+    <script src="~/js/ckeditor461/ckeditor.js"></script>
+    <script src="~/jsdev/editpage-ck.js" asp-append-version="true"></script>
+</environment>
+    @*await Html.RenderPartialAsync("EditorScriptsPartial"); *@
+    @if (roleSelector.RequiredScriptPaths != null)
+    {
+        foreach (var s in roleSelector.RequiredScriptPaths)
+        {
+            <script src="@Url.Content(s)"></script>
+            }
+        }
+    }
