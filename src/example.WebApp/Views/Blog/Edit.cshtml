@@ -16,6 +16,7 @@
     <input type="hidden" id="slug" name="slug" value="@Model.Slug" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
     <div asp-validation-summary="All" class="text-danger"></div>
+    @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
     <div class="form-group">
         <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
         <div class="col-md-10">

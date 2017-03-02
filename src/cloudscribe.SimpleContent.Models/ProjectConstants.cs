@@ -9,6 +9,9 @@
         public const string BlogIndexRouteName = "blogindex";
         public const string NewPostRouteName = "newpost";
         public const string MostRecentPostRouteName = "mostrecentpost";
+        public const string PostEditRouteName = "postedit";
+        public const string PostDeleteRouteName = "postdelete";
+
         public const string PageIndexRouteName = "pageindex";
         public const string PageEditRouteName = "pageedit";
         public const string PageDeleteRouteName = "pagedelete";
@@ -20,6 +23,10 @@
         public const string FolderBlogIndexRouteName = "folderblogindex";
         public const string FolderNewPostRouteName = "foldernewpost";
         public const string FolderMostRecentPostRouteName = "foldermostrecentpost";
+
+        public const string FolderPostEditRouteName = "folderpostedit";
+        public const string FolderPostDeleteRouteName = "folderpostdelete";
+
         public const string FolderPageIndexRouteName = "folderpageindex";
         public const string FolderPageEditRouteName = "folderpageedit";
         public const string FolderPageDeleteRouteName = "folderpagedelete";

@@ -243,15 +243,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (projectSettings == null)
             {
-                HttpContext.Response.StatusCode = 404;
-                return NotFound();
+                log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(pageRoutes.PageRouteName);
             }
 
             var canEdit = await User.CanEditPages(projectSettings.Id, authorizationService);
             if(!canEdit)
             {
-                HttpContext.Response.StatusCode = 404;
-                return NotFound();
+                log.LogInformation("redirecting to index because user cannot edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
             }
 
             if (slug == "none") { slug = string.Empty; }
@@ -332,9 +332,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             
             if (project == null)
             {
-                this.AlertDanger(sr["oops something went wrong, project seettings not found."], true);
+                log.LogInformation("redirecting to index because project settings not found");
 
-                return RedirectToAction("Index");
+                return RedirectToRoute(pageRoutes.PageRouteName);
             }
 
             var canEdit = await User.CanEditPages(project.Id, authorizationService);

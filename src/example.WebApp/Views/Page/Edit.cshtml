@@ -16,7 +16,7 @@
     <input type="hidden" id="correlationKey" name="correlationKey" value="@Model.CorrelationKey" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
     <div asp-validation-summary="All" class="text-danger"></div>
-
+     @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
     <ul class="nav nav-tabs" role="tablist">
         <li id="tab1" role="tab" class="active">
             <a href="#tabContent" data-toggle="tab">@sr["Content"]</a>

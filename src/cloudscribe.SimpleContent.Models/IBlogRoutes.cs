@@ -16,5 +16,9 @@ namespace cloudscribe.SimpleContent.Models
         string NewPostRouteName { get; }
         
         string BlogIndexRouteName { get; }
+
+        string PostEditRouteName { get; }
+
+        string PostDeleteRouteName { get; }
     }
 }

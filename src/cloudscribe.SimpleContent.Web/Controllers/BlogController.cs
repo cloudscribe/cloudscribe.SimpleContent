@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-11-30
+// Last Modified:           2017-03-02
 // 
 
 
@@ -20,6 +20,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Collections.Generic;
+using System.Globalization;
+using Microsoft.Extensions.Localization;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -33,6 +35,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IProjectEmailService emailService,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
+            IStringLocalizer<SimpleContent> localizer,
             ILogger<BlogController> logger
             )
         {
@@ -42,6 +45,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.emailService = emailService;
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
+            sr = localizer;
             log = logger;
         }
 
@@ -52,6 +56,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private ILogger log;
         private ITimeZoneHelper timeZoneHelper;
         private IAuthorizationService authorizationService;
+        private IStringLocalizer<SimpleContent> sr;
 
         [HttpGet]
         [AllowAnonymous]
@@ -138,7 +143,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             }
 
-            return RedirectToAction("Index");
+            return RedirectToRoute(blogRoutes.BlogIndexRouteName);
         }
 
 
@@ -379,6 +384,247 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Edit(string slug = "")
+        {
+            var projectSettings = await projectService.GetCurrentProjectSettings();
+
+            if (projectSettings == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(projectSettings.Id, authorizationService);
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user cannot edit");
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+
+            if (slug == "none") { slug = string.Empty; }
+
+            var model = new PostEditViewModel();
+            model.ProjectId = projectSettings.Id;
+
+            PostResult postResult = null;
+            if (!string.IsNullOrEmpty(slug))
+            {
+                postResult = await blogService.GetPostBySlug(slug);
+            }
+            if (postResult.Post == null)
+            {
+                ViewData["Title"] = sr["New Page"];
+                model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
+            }
+            else
+            {
+                ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], postResult.Post.Title);
+                model.Author = postResult.Post.Author;
+                model.Content = postResult.Post.Content;
+                model.Id = postResult.Post.Id;
+                model.IsPublished = postResult.Post.IsPublished;
+                model.MetaDescription = postResult.Post.MetaDescription;
+                model.PubDate = timeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate, projectSettings.TimeZoneId).ToString();
+                model.Slug = postResult.Post.Slug;
+                model.Title = postResult.Post.Title;
+                model.CurrentPostUrl = await blogService.ResolvePostUrl(postResult.Post).ConfigureAwait(false);
+
+
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(PostEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(model.Id))
+                {
+                    ViewData["Title"] = sr["New Post"];
+                }
+                else
+                {
+                    ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], model.Title);
+                }
+                return View(model);
+            }
+
+           
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+
+            var categories = new List<string>();
+
+            if (!string.IsNullOrEmpty(model.Categories))
+            {
+                categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
+                    .Where(x =>
+                    !string.IsNullOrWhiteSpace(x)
+                    && x != ","
+                    )
+                    .Distinct()
+                    .ToList();
+            }
+
+
+            IPost post = null;
+            if (!string.IsNullOrEmpty(model.Id))
+            {
+                post = await blogService.GetPost(model.Id);
+            }
+
+            
+            var isNew = false;
+            bool slugAvailable;
+            string slug;
+            if (post != null)
+            {
+                post.Title = model.Title;
+                post.MetaDescription = model.MetaDescription;
+                post.Content = model.Content;
+                post.Categories = categories;
+                if(model.Slug != post.Slug)
+                {
+                    slugAvailable = await blogService.SlugIsAvailable(project.Id, model.Slug);
+                    if(slugAvailable)
+                    {
+                        post.Slug = model.Slug;
+                    }
+                    else
+                    {
+                        log.LogWarning($"slug {model.Slug} was requested but not changed because it is already in use");
+                    }
+                }
+
+            }
+            else
+            {
+                isNew = true;
+                slug = ContentUtils.CreateSlug(model.Title);
+                slugAvailable = await blogService.SlugIsAvailable(project.Id, slug);
+                if (!slugAvailable)
+                {
+                    //log.LogInformation("returning 409 because slug already in use");
+                    ModelState.AddModelError("postediterror", sr["slug is already in use."]);
+
+                    return View(model);
+                }
+
+                post = new Post()
+                {
+                    BlogId = project.Id,
+                    Author = User.GetUserDisplayName(),
+                    Title = model.Title,
+                    MetaDescription = model.MetaDescription,
+                    Content = model.Content,
+                    Slug = slug
+                    ,Categories = categories.ToList()
+                };
+            }
+            
+            post.IsPublished = model.IsPublished;
+      
+           
+            if (!string.IsNullOrEmpty(model.PubDate))
+            {
+                var localTime = DateTime.Parse(model.PubDate);
+                post.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+
+            }
+
+            if (isNew)
+            {
+                await blogService.Create(post);
+            }
+            else
+            {
+                await blogService.Update(post);
+            }
+
+            if (project.IncludePubDateInPostUrls)
+            {
+                return RedirectToRoute(blogRoutes.PostWithDateRouteName,
+                    new
+                    {
+                        year = post.PubDate.Year,
+                        month = post.PubDate.Month.ToString("00"),
+                        day = post.PubDate.Day.ToString("00"),
+                        slug = post.Slug
+                    }); 
+            }
+            else
+            {
+                return RedirectToRoute(blogRoutes.PostWithoutDateRouteName,
+                    new { slug = post.Slug });  
+            }
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project settings not found, redirecting");
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+
+            bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit, redicrecting");
+
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+                log.LogInformation("postid not provided, redirecting");
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+
+            var post = await blogService.GetPost(id);
+
+            if (post == null)
+            {
+                log.LogInformation("post not found, redirecting");
+
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+            }
+            log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
+
+            await blogService.Delete(post.Id);
+            
+            return RedirectToRoute(blogRoutes.BlogIndexRouteName);
+
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -455,6 +701,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
                 post = new Post()
                 {
+                    BlogId = project.Id,
                     Author = User.GetUserDisplayName(),
                     Title = model.Title,
                     MetaDescription = model.MetaDescription,

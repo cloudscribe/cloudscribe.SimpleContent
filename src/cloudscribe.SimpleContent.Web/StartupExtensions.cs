@@ -1,19 +1,16 @@
 ﻿using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Web.Controllers;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.Extensions.FileProviders;
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using cloudscribe.SimpleContent.Services;
+using cloudscribe.SimpleContent.Web.Design;
+using cloudscribe.SimpleContent.Web.Services;
+using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.Web.Common.Razor;
 using cloudscribe.Web.Navigation;
 using cloudscribe.Web.SiteMap;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
-using cloudscribe.SimpleContent.Web.Services;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
-using cloudscribe.SimpleContent.Web.Design;
-using cloudscribe.SimpleContent.Web.TagHelpers;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -38,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.PageDeleteRouteName,
-               template: "/delete/{slug}"
+               template: "/delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                );
 
@@ -67,7 +64,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
               name: ProjectConstants.FolderPageDeleteRouteName,
-              template: "{sitefolder}/delete/{slug}"
+              template: "{sitefolder}/delete/{id}"
               , defaults: new { controller = "Page", action = "Delete" }
               , constraints: new { name = siteFolderConstraint }
               );
@@ -94,7 +91,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.PageDeleteRouteName,
-               template: prefix + "/delete/{slug}"
+               template: prefix + "/delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                );
 
@@ -124,7 +121,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.FolderPageDeleteRouteName,
-               template: "{sitefolder}/" + prefix + "/delete/{slug}"
+               template: "{sitefolder}/" + prefix + "/delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                , constraints: new { name = siteFolderConstraint }
                );
@@ -164,6 +161,18 @@ namespace Microsoft.Extensions.DependencyInjection
                   new { controller = "Blog", action = "PostWithDate" },
                   new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
+
+            routes.MapRoute(
+               name: ProjectConstants.PostEditRouteName,
+               template: "blog/edit/{slug?}"
+               , defaults: new { controller = "Blog", action = "Edit" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PostDeleteRouteName,
+               template: "blog/delete/{id?}"
+               , defaults: new { controller = "Blog", action = "Delete" }
+               );
 
             routes.MapRoute(
                name: ProjectConstants.NewPostRouteName,
@@ -217,6 +226,20 @@ namespace Microsoft.Extensions.DependencyInjection
                   new { controller = "Blog", action = "PostWithDate" },
                   new { name = siteFolderConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPostEditRouteName,
+               template: "{sitefolder}/blog/edit/{slug?}"
+               , defaults: new { controller = "Blog", action = "Edit" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPostDeleteRouteName,
+               template: "{sitefolder}/blog/delete/{id?}"
+               , defaults: new { controller = "Blog", action = "Delete" }
+               , constraints: new { name = siteFolderConstraint }
+               );
 
             routes.MapRoute(
                name: ProjectConstants.FolderNewPostRouteName,
