@@ -11,7 +11,7 @@
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
 
         <h2>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
-        <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
+        <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="correlationKey" name="correlationKey" value="@Model.CorrelationKey" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
