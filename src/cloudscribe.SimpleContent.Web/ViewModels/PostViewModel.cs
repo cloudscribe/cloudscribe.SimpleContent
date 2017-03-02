@@ -5,12 +5,6 @@
 // Last Modified:           2016-02-23
 // 
 
-using cloudscribe.SimpleContent.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {

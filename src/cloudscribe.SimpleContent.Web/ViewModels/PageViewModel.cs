@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-09-08
+// Last Modified:           2017-03-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -17,14 +17,17 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public PageViewModel()
         {
             filter = new HtmlProcessor();
-            EditorSettings = new EditorModel();
+            //EditorSettings = new EditorModel();
         }
 
         private HtmlProcessor filter;
 
         public IProjectSettings ProjectSettings { get; set; }
         public IPage CurrentPage { get; set; } = null;
-        public EditorModel EditorSettings { get; set; } = null;
+
+        public string EditPath { get; set; } = string.Empty;
+        public string NewItemPath { get; set; } = string.Empty;
+        //public EditorModel EditorSettings { get; set; } = null;
 
         public bool CanEdit { get; set; } = false;
         public bool IsNew { get; set; } = false;

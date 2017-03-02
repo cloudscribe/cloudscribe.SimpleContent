@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.1.0-rc20170203",
+  "version": "1.1.1-rc20170305",
   "description": "MySQL Entity Framework Core implementation of cloudscribe SimpleContent commands and queries",
   "authors": [ "Joe Audette" ],
   "buildOptions": {
@@ -24,8 +24,8 @@
     "Microsoft.Extensions.Configuration": "1.1.*",
     "Microsoft.EntityFrameworkCore": "1.1.*",
     "Microsoft.EntityFrameworkCore.Design": "1.1.*",
-    "cloudscribe.SimpleContent.Models": "1.1.0-*",
-    "cloudscribe.SimpleContent.Storage.EFCore.Common": "1.1.0-*",
+    "cloudscribe.SimpleContent.Models": "1.1.1-*",
+    "cloudscribe.SimpleContent.Storage.EFCore.Common": "1.1.1-*",
     "Microsoft.AspNetCore.Hosting": "1.1.*",
     "System.IO.FileSystem": "4.*",
     "Pomelo.EntityFrameworkCore.MySql": "1.1-*"

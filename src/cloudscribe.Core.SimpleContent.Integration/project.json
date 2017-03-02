@@ -1,5 +1,5 @@
 {
-    "version": "1.1.0-rc20170107",
+    "version": "1.1.1-rc20170305",
     "description": "integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -17,8 +17,8 @@
         "cloudscribe.Core.Identity": "1.1.0-*",
         "cloudscribe.Core.Models": "1.1.0-*",
         "cloudscribe.Core.Web": "1.1.0-*",
-        "cloudscribe.SimpleContent.Models": "1.1.0-*",
-        "cloudscribe.SimpleContent.Web": "1.1.0-*",
+        "cloudscribe.SimpleContent.Models": "1.1.1-*",
+        "cloudscribe.SimpleContent.Web": "1.1.1-*",
         "cloudscribe.Web.Common": "1.1.*",
         "cloudscribe.Web.Navigation": "1.1.0-*",
         "Microsoft.AspNetCore.Authorization": "1.1.*",

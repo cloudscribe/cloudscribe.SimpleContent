@@ -1,0 +1,51 @@
+﻿@using cloudscribe.FileManager.Web.Models
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
+@model CkBrowseModel
+@inject IStringLocalizer<FileManagerStringResources> sr
+@{
+}
+<div class="row">
+    <div class="col-md-8 ">
+        <input class="form-control" disabled type="text" id="fileSelection" name="fileSelection" placeholder='@sr["Selected File"]' />
+    </div>
+    <div class="col-md-4">
+        <button class="col-md-4 btn btn-default" id="btnSelector">@sr["Select"]</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5" style="height: 500px;overflow: scroll;">
+        <div id="tree"></div>
+    </div>
+    <div class="col-md-7">
+        <div style="border:solid thin black; max-width:570px; height:390px;overflow:auto;margin-bottom:5px;">
+            <img id="filePreview" src="~/images/1x1.gif" alt='@sr["Preview selected image"]' />
+        </div>
+        <form id="frmNewFolder" asp-action="CreateFolder" asp-controller="FileManager" class="form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control" disabled id="newFolderCurrentDir" name="newFolderCurrentDir" value="@Model.InitialVirtualPath" />
+                <input type="hidden" id="hdnCurrentVirtualPath" name="currentVirtualPath" value="@Model.InitialVirtualPath" />
+                <input type="text" class="form-control" id="newFolderName" name="newFolderName">
+            </div>
+            <button id="btnCreateFolder" type="submit" class="btn btn-default"><i class="fa fa-folder-o" aria-hidden="true"></i> @sr["Create Folder"]</button>
+        </form>
+        <form id="frmRenameFolder" asp-action="RenameFolder" asp-controller="FileManager" class="form-inline collapse">
+            <input type="hidden" id="folderToRename" name="folderToRename" />
+            <input type="text" class="form-control" id="newNameSegment" name="newNameSegment">
+            <button id="btnRenameFolder" type="submit" class="btn btn-default">@sr["Rename Folder"]</button>
+        </form>
+        <form id="frmDeleteFolder" asp-action="DeleteFolder" asp-controller="FileManager" class="form-inline collapse">
+            <input type="hidden" id="folderToDelete" name="folderToDelete" />
+            <button id="btnDeleteFolder" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> @sr["Delete Folder"]</button>
+        </form>
+        <form id="frmRenameFile" asp-action="RenameFile" asp-controller="FileManager" class="form-inline collapse">
+            <input type="hidden" id="fileToRename" name="fileToRename" />
+            <input type="text" class="form-control" id="newFileNameSegment" name="newNameSegment">
+            <button id="btnRenameFile" type="submit" class="btn btn-default">@sr["Rename File"]</button>
+        </form>
+        <form id="frmDeleteFile" asp-action="DeleteFile" asp-controller="FileManager" class="form-inline collapse">
+            <input type="hidden" id="fileToDelete" name="fileToDelete" />
+            <button id="btnDeleteFile" type="submit" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> @sr["Delete File"]</button>
+        </form>
+    </div>
+</div>

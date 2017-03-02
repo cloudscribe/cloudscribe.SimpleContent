@@ -17,6 +17,7 @@ using cloudscribe.Core.SimpleContent.Integration;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using cloudscribe.SimpleContent.Web.Controllers;
 
 namespace example.WebApp
 {
@@ -40,11 +41,7 @@ namespace example.WebApp
             // remember last config source added wins if it has the same settings
             builder.AddJsonFile("appsettings.local.overrides.json", optional: true, reloadOnChange: true);
 
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
+            
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -98,6 +95,8 @@ namespace example.WebApp
 
             services.AddSimpleContentRssSyndiction();
 
+            services.AddCloudscribeFileManagerIntegration(Configuration);
+
             services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
 
             services.Configure<RequestLocalizationOptions>(options =>
@@ -139,7 +138,7 @@ namespace example.WebApp
             {
                 //  if(environment.IsProduction())
                 //  {
-                options.Filters.Add(new RequireHttpsAttribute());
+                //options.Filters.Add(new RequireHttpsAttribute());
                 //   }
 
 
@@ -169,6 +168,7 @@ namespace example.WebApp
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
                 })
+                //.AddApplicationPart(typeof(FsMediaController).Assembly)
                     ;
 
 
@@ -319,7 +319,9 @@ namespace example.WebApp
                 }
 
 
-            });
+            })
+            
+            ;
         }
 
         private void ConfigureDataStorage(IServiceCollection services)
@@ -366,6 +368,20 @@ namespace example.WebApp
 
                 options.AddCloudscribeCoreSimpleContentIntegrationDefaultPolicies();
 
+                options.AddPolicy(
+                    "FileManagerPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Administrators");
+                    });
+
+                options.AddPolicy(
+                    "FileManagerDeletePolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Administrators");
+                    });
+
                 // this is what the above extension adds
                 //options.AddPolicy(
                 //    "BlogEditPolicy",
@@ -375,6 +391,8 @@ namespace example.WebApp
                 //        authBuilder.RequireRole("Administrators");
                 //    }
                 // );
+
+
 
                 //options.AddPolicy(
                 //    "PageEditPolicy",

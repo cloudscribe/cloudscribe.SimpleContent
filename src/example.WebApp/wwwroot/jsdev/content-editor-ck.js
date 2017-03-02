@@ -1,11 +1,11 @@
 ﻿(function ($) {
 
-    var ck, contentId, editMode, currentSlug, supportsCategories, contentType,
+    var xsrfToken, ck, contentId, editMode, currentSlug, supportsCategories, contentType,
         txtTitle, txtDateTime, txtExcerpt, txtContent, txtMessage, txtImage, txtPageOrder,
         txtParentPage, txtViewRoles, chkPublish, chkShowHeading, chkMenuOnly,
         editorBar, btnNew, btnEdit, btnDelete, btnSave, btnCancel, btnOuterToggle,
         indexPath, categoryPath, savePath, deletePath, cancelEditPath, userLocale,
-        btnClearFormat
+        btnClearFormat;
 
     editContent = function () {
         CKEDITOR.disableAutoInline = true;
@@ -22,8 +22,13 @@
 		['Blockquote'],['NumberedList','BulletedList'],
 		['Link','Unlink','Anchor'],
 		['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar']],
-            extraPlugins: 'maximize,oembed,simplecontentfiledrop',
-            removePlugins:'scayt,wsc'
+            extraPlugins: 'oembed,cloudscribe-filedrop',
+            removePlugins: 'scayt,wsc',
+            dropFileUploadUrl: "/filemanager/upload",
+            dropFileXsrfToken: xsrfToken,
+            linkWebSizeToOriginal:true,
+            filebrowserBrowseUrl: '/filemanager/ckfiledialog?type=file',
+            filebrowserImageBrowseUrl: '/filemanager/ckfiledialog?type=image'
         };
 
         ck = CKEDITOR.inline(txtContent[0], editorConfig);
@@ -33,7 +38,7 @@
             editor.setReadOnly(false);
         });
         txtContent.css({ minHeight: "400px" });
-        if (editMode == "new") {
+        if (editMode === "new") {
             // TODO: localize
             txtTitle.attr('placeholder', 'type your title here');
             txtExcerpt.attr('placeholder', 'type your meta description here');
@@ -58,7 +63,7 @@
         btnCancel.removeAttr("disabled");
         
 
-        if (editMode == "new")
+        if (editMode === "new")
         {
             $("#liDelete").hide();
         }
@@ -71,7 +76,7 @@
         $("#liCancel").show();
         $("#liPublished").show();
 
-        if (contentType == "Page") {
+        if (contentType === "Page") {
             $("#liPageOrder").show();
         }
         else
@@ -126,7 +131,7 @@
         var roles = "";
         var showTitle = true;
         var isMenuOnly = false;
-        if (contentType == "Page")
+        if (contentType === "Page")
         {
             pageSort = txtPageOrder.val();
             parentPage = txtParentPage.val();
@@ -148,7 +153,8 @@
             viewRoles: roles,
             showHeading: showTitle,
             menuOnly: isMenuOnly,
-            __RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
+            //__RequestVerificationToken: document.querySelector("input[name=__RequestVerificationToken]").getAttribute("value")
+            __RequestVerificationToken: xsrfToken
         },
         function (data) {
             location.href = data;
@@ -301,7 +307,7 @@
     editorBar = $("#editor-toolbar");
     contentType = $("#editor-toolbar").data("content-type");
 
-    if (contentType == "Page") {
+    if (contentType === "Page") {
         contentId = $("article").first().attr("data-id");
         txtTitle = $("#article-title");
         txtPageOrder = $("#txtPageOrder");
@@ -338,9 +344,10 @@
     deletePath = $("#editor-toolbar").data("delete-path");
     cancelEditPath = $("#editor-toolbar").data("cancel-edit-path");
     currentSlug = $("#editor-toolbar").data("current-slug");
-    supportsCategories = ($("#editor-toolbar").data("supports-categories")) == 'True';
+    supportsCategories = ($("#editor-toolbar").data("supports-categories")) === 'True';
     editMode = $("#editor-toolbar").data("edit-mode");
     userLocale = $("#editor-toolbar").data("locale");
+    xsrfToken = $("#editor-toolbar").data("xsrf-token");
     
     //alert(contentId);
     var mainNavHeight = $(".navbar-fixed-top").first().height();
@@ -348,9 +355,9 @@
     var tbOriginalHeight = editorBar.height();
     
     // different no slug initial state for blog vs page
-    if (contentType == "Post" || editMode === "none") {
+    if (contentType === "Post" || editMode === "none") {
         //alert('hey');
-        if (currentSlug.length == 0) {
+        if (currentSlug.length === 0) {
             $('#liEdit').hide();
         }
        
@@ -387,10 +394,10 @@
         $('#txtImage').click();
     });
 
-    if (editMode == "new" || editMode == "edit") {
+    if (editMode === "new" || editMode === "edit") {
         editContent(); 
     }
-    else if(contentType == "Page") {
+    else if(contentType === "Page") {
         if (currentSlug) { btnEdit.removeAttr("disabled"); }
     }
      

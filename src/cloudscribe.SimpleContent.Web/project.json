@@ -1,5 +1,5 @@
 {
-    "version": "1.1.0-rc20170114",
+    "version": "1.1.1-rc20170305",
     "description": "A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -20,7 +20,7 @@
   "dependencies": {
     "cloudscribe.HtmlAgilityPack": "1.0.0-*",
     "cloudscribe.Messaging.Email": "1.1.0-*",
-    "cloudscribe.SimpleContent.Models": "1.1.0-*",
+    "cloudscribe.SimpleContent.Models": "1.1.1-*",
     "cloudscribe.SimpleContent.Web.Views.Bootstrap3": "1.1.0-*",
     "cloudscribe.Web.Common": "1.1.*",
     "cloudscribe.Web.Navigation": "1.1.0-*",

@@ -3,5 +3,7 @@
     public interface IPageRoutes
     {
         string PageRouteName { get; }
+        string PageEditRouteName { get; }
+        string PageDeleteRouteName { get; }
     }
 }

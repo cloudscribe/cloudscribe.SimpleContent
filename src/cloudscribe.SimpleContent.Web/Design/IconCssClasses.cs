@@ -53,5 +53,7 @@ namespace cloudscribe.SimpleContent.Web.Design
         public string ToggleSource { get; set; } = "glyphicon glyphicon-eye-open";
 
         public string ClearAllFormatting { get; set; } = "glyphicon glyphicon-fire";
+
+        public string NewItem { get; set; } = "glyphicon glyphicon-plus";
     }
 }

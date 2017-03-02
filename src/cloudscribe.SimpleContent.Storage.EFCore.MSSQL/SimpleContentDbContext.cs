@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-01-08
+// Last Modified:			2017-03-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -39,6 +39,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 ;
 
                 entity.Property(p => p.Title)
+                .HasMaxLength(255)
+                ;
+
+                entity.Property(p => p.Publisher)
+                .HasMaxLength(255)
+                ;
+
+                entity.Property(p => p.PublisherLogoUrl)
                 .HasMaxLength(255)
                 ;
 
@@ -341,6 +349,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 .HasMaxLength(36)
                 ;
 
+                entity.Property(p => p.CorrelationKey)
+                .HasMaxLength(255)
+                ;
+
+                entity.HasIndex(p => p.CorrelationKey);
+
                 entity.Property(p => p.ProjectId)
                 .HasMaxLength(36)
                 .IsRequired()
@@ -370,6 +384,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 .IsRequired()
                 ;
 
+                entity.Property(p => p.ExternalUrl)
+                .HasMaxLength(255)
+                ;
+
                 entity.Property(p => p.MetaDescription)
                 .HasMaxLength(500)
                 ;
@@ -381,6 +399,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 ;
 
                 entity.Property(p => p.MenuOnly)
+                .IsRequired()
+                .ForSqlServerHasColumnType("bit")
+                .ForSqlServerHasDefaultValue(false)
+                ;
+
+                entity.Property(p => p.ShowMenu)
                 .IsRequired()
                 .ForSqlServerHasColumnType("bit")
                 .ForSqlServerHasDefaultValue(false)

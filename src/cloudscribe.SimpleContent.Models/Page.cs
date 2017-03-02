@@ -27,6 +27,20 @@ namespace cloudscribe.SimpleContent.Models
 
         public string Slug { get; set; } = string.Empty;
 
+        /// <summary>
+        /// this is to facilitate adding menu items that link to external sites or urls
+        /// </summary>
+        public string ExternalUrl { get; set; } = string.Empty;
+
+        /// <summary>
+        /// This field is a place to store a surrogate key if needed.
+        /// For example in a multi-tenant multi-lanaguage setup, it could be used
+        /// to correlate pages between the different language sites
+        /// to implement a language switcher. ie the corresponding page in the other
+        /// site could be found by looking it up by the correlationkey
+        /// </summary>
+        public string CorrelationKey { get; set; } = string.Empty;
+
         public string MetaDescription { get; set; } = string.Empty;
 
         public string Content { get; set; } = string.Empty;
@@ -38,6 +52,8 @@ namespace cloudscribe.SimpleContent.Models
         public bool IsPublished { get; set; } = true;
 
         public bool MenuOnly { get; set; } = false;
+
+        public bool ShowMenu { get; set; } = false;
 
         public string ViewRoles { get; set; } = string.Empty;
 

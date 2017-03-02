@@ -1,0 +1,114 @@
+﻿@using cloudscribe.FileManager.Web.Models
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
+@model CkBrowseModel
+@inject IOptions<AutomaticUploadOptions> autoUploadOptionsAccessor
+@inject IStringLocalizer<FileManagerStringResources> sr
+@{
+    Layout = "_LayoutDialog";
+    var upoadOptions = autoUploadOptionsAccessor.Value;
+    //https://github.com/patternfly/patternfly-bootstrap-treeview
+}
+@section style {
+    <link rel="stylesheet" href="~/css/jquery.fileupload.css" />
+    <link rel="stylesheet" href="~/css/cropper.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/filemanager.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/font-awesome.css" />
+    <style>
+        .fileupload-dropzone {
+            border-radius: 0;
+            -webkit-box-shadow: none;
+            min-height: 40px;
+            padding: 19px;
+            margin-bottom: 20px;
+            background-color: #f5f5f5;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+        }
+
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+}
+<span id="config"
+      data-filetree-url="@Model.FileTreeServiceUrl"
+      data-upload-url="@Model.UploadServiceUrl"
+      data-ckfunc="@Model.CKEditorFuncNum"
+      data-create-folder-url="@Model.CreateFolderServiceUrl"
+      data-can-delete="@Model.CanDelete"
+      data-delete-folder-url="@Model.DeleteFolderServiceUrl"
+      data-rename-folder-url="@Model.RenameFolderServiceUrl"
+      data-delete-file-url="@Model.DeleteFileServiceUrl"
+      data-rename-file-url="@Model.RenameFileServiceUrl"
+      data-root-virtual-path="@Model.InitialVirtualPath"
+      data-empty-preview-url='@Url.Content("~/images/1x1.gif")'></span>
+<div id="alert_placeholder"></div>
+<div class="container-fluid">
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="tab1" role="tab">
+            <a href="#tabBrowse" data-toggle="tab" class="active"><i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;@sr["Browse"]</a>
+        </li>
+        <li id="tab2" role="tab">
+            <a href="#tabUpload" data-toggle="tab"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;@sr["Upload"]</a>
+        </li>
+        <li id="tab3" role="tab">
+            <a href="#tabCrop" data-toggle="tab"><i class="fa fa-scissors" aria-hidden="true"></i>&nbsp;@sr["Crop"]</a>
+        </li>
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="tabBrowse" role="tabpanel" aria-labelledby="tab1">
+           @{await Html.RenderPartialAsync("BrowsePartial", Model); }
+        </div>
+        <div class="tab-pane" id="tabUpload" role="tabpanel" aria-labelledby="tab2">
+            @{await Html.RenderPartialAsync("UploadPartial", Model); }
+        </div>
+        <div class="tab-pane" id="tabCrop" role="tabpanel" aria-labelledby="tab3">
+            @{await Html.RenderPartialAsync("CropPartial", Model); }
+        </div>
+    </div>
+</div>
+@section scripts {
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/js/tether.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/bootstrap-treeview.js" asp-append-version="true"></script>
+        <script src="~/jsdev/jquery.ui.widget.js"></script>
+        <script src="~/jsdev/jquery.iframe-transport.js"></script>
+        <script src="~/jsdev/jquery.fileupload.js"></script>
+        <script src="~/jsdev/cropper3.js"></script>
+
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="~/js/tether.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="~/js/bootstrap-treeview.js" asp-append-version="true"></script>
+        <script src="~/jsdev/jquery.ui.widget.js"></script>
+        <script src="~/jsdev/jquery.iframe-transport.js"></script>
+        <script src="~/jsdev/jquery.fileupload.js"></script>
+        <script src="~/jsdev/cropper3.js"></script>
+    </environment>
+
+    <script type="text/javascript">
+        var allowedFilesRegex = @Html.Raw(Model.AllowedFileExtensionsRegex);
+    </script>
+    <script src="~/jsdev/cloudscribe-filemanager.js" asp-append-version="true"></script>
+<script type="text/javascript">
+        
+        
+        
+</script>
+}

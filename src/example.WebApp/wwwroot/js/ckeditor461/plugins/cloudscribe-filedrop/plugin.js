@@ -1,12 +1,12 @@
 ﻿/*
- * mojofiledrop plugin for CKEditor
+ * cloudscribe-filedrop plugin for CKEditor
  * Copyright (C) 2013 Joe Audette, Source Tree Solutions LLC
  * Created 2013-11-28
- * Last Modified 2013-12-12
+ * Last Modified 2017-02-20
  *
  */
 
-CKEDITOR.plugins.add( 'simplecontentfiledrop',
+CKEDITOR.plugins.add( 'cloudscribe-filedrop',
 {
 	init : function( editor )
 	{
@@ -14,7 +14,9 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 	
 		var theEditor = editor;
 		var uploadUrl = editor.config.dropFileUploadUrl;
+		var xsrfToken = editor.config.dropFileXsrfToken;
 		var isLocked = false;
+		var linkToOrig = editor.config.linkWebSizeToOriginal;
 		
 		function onDragStart(event) {                 
                 //console.log("onDragStart");
@@ -43,10 +45,12 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 		
 			switch(file.type){
 				case "image/jpeg":
+				case "image/jpg":
 				case "image/gif":
 				case "image/png":
 
 				var formData = new FormData();
+				formData.append("__RequestVerificationToken", xsrfToken);
 				formData.append(file.name, file);
 					
 				$.ajax({
@@ -74,11 +78,19 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 		function uploadSuccess( data, textStatus, jqXHR ) {
 			
 			try {
-				if(data.files[0].FullSizeUrl) {
-					theEditor.insertHtml( "<a href='" + data.files[0].FullSizeUrl +"'><img src='" + data.files[0].FileUrl + "' alt=' ' /></a>" );
+			    if(data[0].errorMessage) { alert(data[0].errorMessage); return; }
+				
+				if(data[0].resizedUrl) {
+				    if(linkToOrig)
+					{
+					    theEditor.insertHtml( "<a href='" + data[0].originalUrl +"'><img src='" + data[0].resizedUrl + "' alt=' ' /></a>" );
+					}
+					else {
+					theEditor.insertHtml( "<img src='" + data[0].resizedUrl + "' alt=' ' />" );
+					}
 				}
 				else {
-					theEditor.insertHtml( "<img src='" + data.files[0].FileUrl + "' alt=' ' />" );
+					theEditor.insertHtml( "<img src='" + data[0].originalUrl + "' alt=' ' />" );
 				}
 			} catch(err) {
 				//console.log(err);
@@ -86,11 +98,11 @@ CKEDITOR.plugins.add( 'simplecontentfiledrop',
 					theEditor.focus();
 					theEditor.unlockSelection(true);
 					isLocked = false;
-					if(data.files[0].FullSizeUrl) {
-						theEditor.insertHtml( "<a href='" + data.files[0].FullSizeUrl +"'><img src='" + data.files[0].FileUrl + "' alt=' ' /></a>" );
+					if(data.files[0].resizedUrl) {
+						theEditor.insertHtml( "<a href='" + data[0].originalUrl +"'><img src='" + data[0].resizedUrl + "' alt=' ' /></a>" );
 					}
 					else {
-						theEditor.insertHtml( "<img src='" + data.files[0].FileUrl + "' alt=' ' />" );
+						theEditor.insertHtml( "<img src='" + data[0].originalUrl + "' alt=' ' />" );
 					}
 				} catch(err2) {
 					//console.log(err2);

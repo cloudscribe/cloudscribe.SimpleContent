@@ -25,7 +25,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
             filter = new HtmlProcessor();
             cryptoHelper = new CryptoHelper();
-            EditorSettings = new EditorModel();
+            //EditorSettings = new EditorModel();
             BlogRoutes = new DefaultBlogRoutes();
         }
 
@@ -37,7 +37,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string CurrentCategory { get; set; } = string.Empty;
 
         public string ListAction { get; set; } = "Index";
-        public EditorModel EditorSettings { get; set; } = null;
+
+        public string EditPath { get; set; } = string.Empty;
+        public string NewItemPath { get; set; } = string.Empty;
+
+        //public EditorModel EditorSettings { get; set; } = null;
         public List<IPost> Posts { get; set; }
         public Dictionary<string, int> Categories { get; set; }
         public Dictionary<string, int> Archives { get; set; }

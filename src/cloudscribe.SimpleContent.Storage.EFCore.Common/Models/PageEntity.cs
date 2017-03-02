@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2016-09-11
+// Last Modified:			2017-03-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -37,6 +37,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public string Slug { get; set; } = string.Empty;
 
+        public string ExternalUrl { get; set; } = string.Empty;
+
+        public string CorrelationKey { get; set; } = string.Empty;
+
         public string MetaDescription { get; set; } = string.Empty;
 
         public string Content { get; set; } = string.Empty;
@@ -48,6 +52,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         public bool IsPublished { get; set; } = true;
 
         public bool MenuOnly { get; set; } = false;
+
+        public bool ShowMenu { get; set; } = false;
 
         public string ViewRoles { get; set; } = string.Empty;
         

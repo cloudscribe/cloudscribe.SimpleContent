@@ -24,6 +24,8 @@ namespace cloudscribe.SimpleContent.Models
         bool ShowLastModified { get; set; }
         bool ShowPubDate { get; set; }
         string Slug { get; set; }
+        string ExternalUrl { get; set; }
+        string CorrelationKey { get; set; } 
         string Title { get; set; }
         string ViewRoles { get; set; }
         /// <summary>
@@ -31,5 +33,7 @@ namespace cloudscribe.SimpleContent.Models
         /// the content will not be rendered, only a child page menu will be shown
         /// </summary>
         bool MenuOnly { get; set; }
+
+        bool ShowMenu { get; set; }
     }
 }

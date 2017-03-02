@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-07
+// Last Modified:           2017-03-01
 // 
 
 namespace cloudscribe.SimpleContent.Models
@@ -18,7 +18,11 @@ namespace cloudscribe.SimpleContent.Models
         public string Title { get; set; } = "Blog";
         public string Description { get; set; } = string.Empty;
         public string CopyrightNotice { get; set; } = string.Empty;
-        
+
+        public string Publisher { get; set; } = string.Empty;
+
+        public string PublisherLogoUrl { get; set; } = string.Empty;
+
         public int PostsPerPage { get; set; } = 5;
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;

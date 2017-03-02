@@ -81,6 +81,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("PubDateFormat")
                         .HasMaxLength(75);
 
+                    b.Property<string>("Publisher")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("PublisherLogoUrl")
+                        .HasMaxLength(255);
+
                     b.Property<string>("RecaptchaPrivateKey")
                         .HasMaxLength(255);
 
@@ -212,7 +218,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("Content");
 
-                    b.Property<bool>("IsPublished");
+                    b.Property<string>("CorrelationKey")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ExternalUrl")
+                        .HasMaxLength(255);
+
+                    b.Property<bool>("IsPublished")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime>("LastModified");
 
@@ -237,15 +251,29 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<DateTime>("PubDate");
 
-                    b.Property<bool>("ShowCategories");
+                    b.Property<bool>("ShowCategories")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("ShowComments");
+                    b.Property<bool>("ShowComments")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("ShowHeading");
+                    b.Property<bool>("ShowHeading")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(true);
 
-                    b.Property<bool>("ShowLastModified");
+                    b.Property<bool>("ShowLastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("ShowPubDate");
+                    b.Property<bool>("ShowMenu")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("ShowPubDate")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -258,6 +286,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("ViewRoles");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CorrelationKey");
 
                     b.HasIndex("ParentId");
 

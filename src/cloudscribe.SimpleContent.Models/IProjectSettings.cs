@@ -25,6 +25,8 @@
         string ManagingEditorEmail { get; set; }
         bool ModerateComments { get; set; }
         int PostsPerPage { get; set; }
+        string Publisher { get; set; }
+        string PublisherLogoUrl { get; set; }
         string PubDateFormat { get; set; }
         string RecaptchaPrivateKey { get; set; }
         string RecaptchaPublicKey { get; set; }

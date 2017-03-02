@@ -1,9 +1,16 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Web.Design
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Web.TagHelpers
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
 @inject IRoleSelectorProperties roleSelector
-
+@inject IOptions<IconCssClasses> iconClassesAccessor
+@inject IStringLocalizer<SimpleContent> sr
+@{ 
+    var icons = iconClassesAccessor.Value;
+}
 @section Meta {
     @{await Html.RenderPartialAsync("MetaPartial", Model); }
 }
@@ -13,7 +20,7 @@
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+        await Html.RenderPartialAsync("ToolsPartial", Model);  
     }
 }
 @{await Html.RenderPartialAsync("PageDetailPartial", Model); }
@@ -29,7 +36,7 @@
 @section Scripts {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("EditorScriptsPartial");
+        @*await Html.RenderPartialAsync("EditorScriptsPartial"); *@
         @if (!string.IsNullOrEmpty(Model.Mode))
         {
             if (roleSelector.RequiredScriptPaths != null)
