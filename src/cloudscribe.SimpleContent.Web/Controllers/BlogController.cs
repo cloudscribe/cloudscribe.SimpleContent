@@ -94,10 +94,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.Paging.TotalItems = result.TotalItems; 
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
-            
-           
-            
-            if(model.CanEdit)
+            model.NewItemPath = Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = "" });
+
+
+
+            if (model.CanEdit)
             {
                 SetupEditor(model.EditorSettings);
                 model.EditorSettings.CurrentSlug = string.Empty; 
@@ -161,6 +162,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.ProjectSettings = await projectService.GetCurrentProjectSettings();
             model.BlogRoutes = blogRoutes;
             model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
+            model.NewItemPath = Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = "" });
 
             ViewData["Title"] = model.ProjectSettings.Title;
 
@@ -305,7 +307,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 model.NextPostUrl = await blogService.ResolvePostUrl(result.NextPost);
             }
-            
+
+            model.NewItemPath = Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = "" });
+            model.EditPath = Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = result.Post.Slug });
+
             model.ProjectSettings = projectSettings;
             model.BlogRoutes = blogRoutes;
             model.Categories = await blogService.GetCategories(model.CanEdit);
@@ -413,10 +418,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 postResult = await blogService.GetPostBySlug(slug);
             }
-            if (postResult.Post == null)
+            if (postResult== null || postResult.Post == null)
             {
-                ViewData["Title"] = sr["New Page"];
+                ViewData["Title"] = sr["New Post"];
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
+                model.CurrentPostUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
             }
             else
             {
@@ -430,7 +436,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.Slug = postResult.Post.Slug;
                 model.Title = postResult.Post.Title;
                 model.CurrentPostUrl = await blogService.ResolvePostUrl(postResult.Post).ConfigureAwait(false);
-
+                model.DeletePostRouteName = blogRoutes.PostDeleteRouteName;
+                model.Categories = string.Join(",", postResult.Post.Categories);
 
             }
 

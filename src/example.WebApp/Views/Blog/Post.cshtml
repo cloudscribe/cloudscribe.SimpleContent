@@ -9,7 +9,8 @@
 @section Toolbar {
    @if (Model.CanEdit)
    {
-       await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+       @*await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings); *@
+       await Html.RenderPartialAsync("ToolsPartial", Model);
    }
 }
 <div class="blog-container">
@@ -32,10 +33,10 @@
     
 }
 @section Scripts {
-    @if (Model.CanEdit)
+    @*@if (Model.CanEdit)
     {
         await Html.RenderPartialAsync("EditorScriptsPartial");
-    }
+    }*@
     @if (Model.CommentsAreOpen && Model.Mode.Length == 0)
     {
         await Html.RenderPartialAsync("CommentScriptsPartial");

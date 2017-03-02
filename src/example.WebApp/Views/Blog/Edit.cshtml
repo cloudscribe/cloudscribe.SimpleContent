@@ -18,7 +18,7 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
     <div class="form-group">
-        <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
+        <label asp-for="Title" class="col-md-2 control-label">@sr["Title"]</label>
         <div class="col-md-10">
             <input asp-for="Title" class="form-control" />
             <span asp-validation-for="Title" class="text-danger"></span>
@@ -68,7 +68,7 @@
             @if (!string.IsNullOrEmpty(Model.Id))
             {
                 <button name="button" type="button" class="btn btn-danger"
-                        onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
+                        onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the post {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
                     @sr["Delete"]
                 </button>
             }
