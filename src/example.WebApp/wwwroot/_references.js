@@ -282,6 +282,7 @@
 /// <reference path="jsdev/content-editor-ck.js" />
 /// <reference path="jsdev/cropper.min.js" />
 /// <reference path="jsdev/cropper3.js" />
+/// <reference path="jsdev/editpage-ck.js" />
 /// <reference path="jsdev/jquery.fileupload.js" />
 /// <reference path="jsdev/jquery.fileupload-audio.js" />
 /// <reference path="jsdev/jquery.fileupload-image.js" />

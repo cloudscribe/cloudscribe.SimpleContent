@@ -17,7 +17,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public PageViewModel()
         {
             filter = new HtmlProcessor();
-            EditorSettings = new EditorModel();
+            //EditorSettings = new EditorModel();
         }
 
         private HtmlProcessor filter;
@@ -27,7 +27,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string EditPath { get; set; } = string.Empty;
         public string NewItemPath { get; set; } = string.Empty;
-        public EditorModel EditorSettings { get; set; } = null;
+        //public EditorModel EditorSettings { get; set; } = null;
 
         public bool CanEdit { get; set; } = false;
         public bool IsNew { get; set; } = false;

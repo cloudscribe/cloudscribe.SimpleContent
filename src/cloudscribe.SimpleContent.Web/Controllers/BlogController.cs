@@ -98,30 +98,30 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
 
 
-            if (model.CanEdit)
-            {
-                SetupEditor(model.EditorSettings);
-                model.EditorSettings.CurrentSlug = string.Empty; 
-            }
+            //if (model.CanEdit)
+            //{
+            //    SetupEditor(model.EditorSettings);
+            //    model.EditorSettings.CurrentSlug = string.Empty; 
+            //}
 
 
             return View("Index", model);
         }
 
-        private void SetupEditor(EditorModel editor)
-        {
-            editor.NewItemPath = Url.RouteUrl(blogRoutes.NewPostRouteName);
-            editor.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
-            editor.CancelEditPath = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
-            editor.IndexUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
+        //private void SetupEditor(EditorModel editor)
+        //{
+        //    editor.NewItemPath = Url.RouteUrl(blogRoutes.NewPostRouteName);
+        //    editor.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
+        //    editor.CancelEditPath = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
+        //    editor.IndexUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
 
-            editor.CategoryPath = Url.RouteUrl(blogRoutes.BlogCategoryRouteName);
-            editor.DeletePath = Url.Action("AjaxDelete", "Blog");
-            editor.SavePath = Url.Action("AjaxPost", "Blog");
+        //    editor.CategoryPath = Url.RouteUrl(blogRoutes.BlogCategoryRouteName);
+        //    editor.DeletePath = Url.Action("AjaxDelete", "Blog");
+        //    editor.SavePath = Url.Action("AjaxPost", "Blog");
 
 
-            editor.SupportsCategories = true;
-        }
+        //    editor.SupportsCategories = true;
+        //}
 
         [HttpGet]
         [AllowAnonymous]
@@ -191,16 +191,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             
             
-            if (model.CanEdit)
-            {
-                SetupEditor(model.EditorSettings);
-                //model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
-                //model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = "", mode = "new" });
-                //model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
-                //model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
-                model.EditorSettings.CurrentSlug = string.Empty;
-                //model.EditorSettings.SupportsCategories = true;
-            }
+            //if (model.CanEdit)
+            //{
+            //    SetupEditor(model.EditorSettings);
+            //    model.EditorSettings.CurrentSlug = string.Empty;  
+            //}
 
             return View("Archive", model);
         }
@@ -237,7 +232,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (projectSettings == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
             }
 
             if(!projectSettings.IncludePubDateInPostUrls)
@@ -251,7 +246,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var canEdit = await User.CanEditBlog(projectSettings.Id, authorizationService);
             
-            var isNew = false;
+            //var isNew = false;
             PostResult result = null;
             if(!string.IsNullOrEmpty(slug))
             {
@@ -269,11 +264,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     if (result == null) result = new PostResult();
                     if (result.Post == null) result.Post = new Post();
                     result.Post.BlogId = projectSettings.Id;
-                    isNew = true;
+                    //isNew = true;
                 }
                 else
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToRoute(blogRoutes.BlogIndexRouteName);
                 }
 
             }
@@ -323,64 +318,59 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (canEdit)
             {
-                SetupEditor(model.EditorSettings);
-                if (isNew)
-                {
-                    //model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
-                    model.EditorSettings.CurrentSlug = string.Empty;
-                    model.EditorSettings.IsPublished = true;
-                    model.EditorSettings.EditMode = "new";
-                    //model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = model.CurrentPost.Slug, mode = "edit" });
-                }
-                else
-                {
-                    model.EditorSettings.EditMode = "edit";
-                    model.EditorSettings.CurrentSlug = model.CurrentPost.Slug;
-                    model.EditorSettings.IsPublished = model.CurrentPost.IsPublished;
-                    if(model.ProjectSettings.IncludePubDateInPostUrls)
-                    {
-                        model.EditorSettings.EditPath = Url.Link(blogRoutes.PostWithDateRouteName,  
-                            new {
-                            year = model.CurrentPost.PubDate.Year,
-                            month = model.CurrentPost.PubDate.Month.ToString("00"),
-                            day = model.CurrentPost.PubDate.Day.ToString("00"),
-                            slug = model.CurrentPost.Slug,
-                            mode = "edit" });
+                //SetupEditor(model.EditorSettings);
+                //if (isNew)
+                //{
+                //    //model.EditorSettings.CancelEditPath = Url.Action("Index", "Blog");
+                //    model.EditorSettings.CurrentSlug = string.Empty;
+                //    model.EditorSettings.IsPublished = true;
+                //    model.EditorSettings.EditMode = "new";
+                //    //model.EditorSettings.EditPath = Url.Action("Post", "Blog", new { slug = model.CurrentPost.Slug, mode = "edit" });
+                //}
+                //else
+                //{
+                //    model.EditorSettings.EditMode = "edit";
+                //    model.EditorSettings.CurrentSlug = model.CurrentPost.Slug;
+                //    model.EditorSettings.IsPublished = model.CurrentPost.IsPublished;
+                //    if(model.ProjectSettings.IncludePubDateInPostUrls)
+                //    {
+                //        model.EditorSettings.EditPath = Url.Link(blogRoutes.PostWithDateRouteName,  
+                //            new {
+                //            year = model.CurrentPost.PubDate.Year,
+                //            month = model.CurrentPost.PubDate.Month.ToString("00"),
+                //            day = model.CurrentPost.PubDate.Day.ToString("00"),
+                //            slug = model.CurrentPost.Slug,
+                //            mode = "edit" });
 
-                        model.EditorSettings.CancelEditPath = Url.Link(blogRoutes.PostWithDateRouteName,
-                            new
-                            {
-                                year = model.CurrentPost.PubDate.Year,
-                                month = model.CurrentPost.PubDate.Month.ToString("00"),
-                                day = model.CurrentPost.PubDate.Day.ToString("00"),
-                                slug = model.CurrentPost.Slug
-                            });
-                    }
-                    else
-                    {
-                        model.EditorSettings.EditPath = Url.Link(blogRoutes.PostWithoutDateRouteName, 
-                            new { slug = model.CurrentPost.Slug, mode = "edit" });
+                //        model.EditorSettings.CancelEditPath = Url.Link(blogRoutes.PostWithDateRouteName,
+                //            new
+                //            {
+                //                year = model.CurrentPost.PubDate.Year,
+                //                month = model.CurrentPost.PubDate.Month.ToString("00"),
+                //                day = model.CurrentPost.PubDate.Day.ToString("00"),
+                //                slug = model.CurrentPost.Slug
+                //            });
+                //    }
+                //    else
+                //    {
+                //        model.EditorSettings.EditPath = Url.Link(blogRoutes.PostWithoutDateRouteName,
+                //            new { slug = model.CurrentPost.Slug, mode = "edit" });
 
-                        model.EditorSettings.CancelEditPath = Url.Link(blogRoutes.PostWithoutDateRouteName, 
-                            new { slug = model.CurrentPost.Slug});
-                    }
+                //        model.EditorSettings.CancelEditPath = Url.Link(blogRoutes.PostWithoutDateRouteName,
+                //            new { slug = model.CurrentPost.Slug });
+                //    }
                     
-                }
+                //}
 
-                model.EditorSettings.EditMode = mode;
-                model.EditorSettings.SupportsCategories = true;
-                //model.EditorSettings.IndexUrl = Url.Action("Index", "Blog");
-                //model.EditorSettings.CategoryPath = Url.Action("Category", "Blog"); 
-                //model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Blog");
-                //model.EditorSettings.SavePath = Url.Action("AjaxPost", "Blog");
-                //model.EditorSettings.NewItemPath = Url.Action("New", "Blog");
+                
+                
 
             }
             else // can't edit
             {
                 if((!model.CurrentPost.IsPublished) || model.CurrentPost.PubDate > DateTime.UtcNow)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToRoute(blogRoutes.BlogIndexRouteName);
                 }
             }
 

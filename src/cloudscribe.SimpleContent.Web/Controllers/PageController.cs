@@ -96,52 +96,48 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
                     if (model.CurrentPage.Slug == projectSettings.DefaultPageSlug)
                     {
-                        model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
+                       // model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
                         model.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
                     }
                     else
                     {
-                        //model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", parentSlug = model.CurrentPage.Slug, mode = "new" });
-                        model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
+                       
+                        //model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
                         model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
 
                     }
 
-                    model.EditorSettings.CancelEditPath = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = model.CurrentPage.Slug });
-                    model.EditorSettings.CurrentSlug = model.CurrentPage.Slug;
-                    model.EditorSettings.IsPublished = model.CurrentPage.IsPublished;
-                    //model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = model.CurrentPage.Slug, mode = "edit" });
-                    model.EditorSettings.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
-
-                    model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
-                    model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
-                    model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
-                    model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
-                    model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
+                    //model.EditorSettings.CancelEditPath = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = model.CurrentPage.Slug });
+                    //model.EditorSettings.CurrentSlug = model.CurrentPage.Slug;
+                    //model.EditorSettings.IsPublished = model.CurrentPage.IsPublished; 
+                    //model.EditorSettings.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
+                    //model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
+                    //model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
+                    //model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
+                    //model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
+                    //model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
                     
                     
                 }
                 else
                 {
                     model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
-
-                    model.EditorSettings.CancelEditPath = Url.Content("~/");
-                    model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
-                    //model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
-                    model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
+                    //model.EditorSettings.CancelEditPath = Url.Content("~/");
+                    //model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
+                    //model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
 
                 }
 
-                model.EditorSettings.EditMode = mode;
-                model.EditorSettings.NewItemButtonText = "New Page";
-                model.EditorSettings.IndexUrl = Url.Content("~/");
-                model.EditorSettings.CategoryPath = Url.Action("Category", "Page"); // TODO: should we support categories on pages? this action doesn't exist right now
-                model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Page");
-                model.EditorSettings.SavePath = Url.Action("AjaxPost", "Page");
+                //model.EditorSettings.EditMode = mode;
+                //model.EditorSettings.NewItemButtonText = "New Page";
+                //model.EditorSettings.IndexUrl = Url.Content("~/");
+                //model.EditorSettings.CategoryPath = Url.Action("Category", "Page"); // TODO: should we support categories on pages? this action doesn't exist right now
+                //model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Page");
+                //model.EditorSettings.SavePath = Url.Action("AjaxPost", "Page");
                 
-                model.EditorSettings.ContentType = "Page";
-                model.EditorSettings.SupportsCategories = false;
-                model.EditorSettings.ProjectId = projectSettings.Id;
+                //model.EditorSettings.ContentType = "Page";
+                //model.EditorSettings.SupportsCategories = false;
+                //model.EditorSettings.ProjectId = projectSettings.Id;
 
             }
 
@@ -151,10 +147,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     page = new Page();
                     page.ProjectId = projectSettings.Id;
-                    //if(parentSlug != projectSettings.DefaultPageSlug)
-                   // {
-                        model.EditorSettings.ParentSlug = parentSlug;
-                    //}
+                    
+                    //model.EditorSettings.ParentSlug = parentSlug;
+                    
                     
                    
                     model.CurrentPage = page;
@@ -186,7 +181,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                                 // esp useful if not using pages as the default route
                                 // /p or /docs
                                 ViewData["Title"] = sr["Content Index"];
-                                model.EditorSettings.EditMode = "none";
+                                //model.EditorSettings.EditMode = "none";
                                 return View("IndexMenu", model);
                             }
 

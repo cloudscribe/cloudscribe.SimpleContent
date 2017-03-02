@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.1.0-rc20170114",
+    "version": "1.1.1-rc20170305",
     "description": "cloudscribe.SimpleContent.Syndication Class Library",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -16,8 +16,8 @@
 
     "dependencies": {
         "NETStandard.Library": "1.6.1",
-        "cloudscribe.SimpleContent.Models": "1.1.0-*",
-        "cloudscribe.SimpleContent.Web": "1.1.0-*",
+        "cloudscribe.SimpleContent.Models": "1.1.1-*",
+        "cloudscribe.SimpleContent.Web": "1.1.1-*",
         "cloudscribe.Syndication": "1.1.0-*",
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.*",
         "Microsoft.AspNetCore.Mvc.Core": "1.1.*"

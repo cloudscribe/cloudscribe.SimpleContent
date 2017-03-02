@@ -49,7 +49,7 @@
     <div class="form-group">
         <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
         <div class="col-md-10">
-            <textarea asp-for="Content" class="form-control"></textarea>
+            <textarea asp-for="Content" class="form-control" rows="10" cols="70"></textarea>
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
     </div>
@@ -84,8 +84,6 @@
     </form>
 }
 
-
-
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <environment names="Development">
@@ -93,7 +91,8 @@
         <script src="~/csscsr/momentwithlocalesjs"></script>
         <script src="~/csscsr/bootstrapdatetimepickerjs"></script>
         <script src="~/csscsr/jquerycookie"></script>
-        <script src="~/js/ckeditor461/ckeditor.js"></script>
+       @* <script src="~/js/ckeditor461/ckeditor.js"></script>*@
+        <script src="//cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
         <script src="~/jsdev/editpage-ck.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
@@ -101,7 +100,8 @@
         <script src="~/csscsr/momentwithlocalesjsmin"></script>
         <script src="~/csscsr/bootstrapdatetimepickerjsmin"></script>
         <script src="~/csscsr/jquerycookiemin"></script>
-        <script src="~/js/ckeditor461/ckeditor.js"></script>
+        @* <script src="~/js/ckeditor461/ckeditor.js"></script>*@
+        <script src="//cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
         <script src="~/jsdev/editpage-ck.js" asp-append-version="true"></script>
     </environment>
     @*await Html.RenderPartialAsync("EditorScriptsPartial"); *@

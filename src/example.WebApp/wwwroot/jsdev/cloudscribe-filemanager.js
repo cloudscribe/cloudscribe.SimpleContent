@@ -288,8 +288,9 @@
             return false; //cancel form submit
         },
         ckReturnFile: function () {
-            var funcNum = '@Model.CKEditorFuncNum';
+            var funcNum = $("#config").data("ckfunc");
             var fileUrl = fileManager.selectedFileInput.val();
+            //alert(funcNum);
             if (fileUrl.length === 0) {
                 fileManager.notify('Please select a file in the browse tab', 'alert-danger');
             }
