@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "1.0.0-rc20170305",
   "description": "media file management",
   "authors": [ "Joe Audette" ],
   "packOptions": {
@@ -20,16 +20,37 @@
     "Microsoft.Extensions.Caching.Abstractions": "1.1.*",
     "Microsoft.Extensions.Configuration.Abstractions": "1.1.*",
     "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.*",
-    "Microsoft.Extensions.Localization": "1.1.*",
-    "CoreCompat.System.Drawing": "1.0.0-*",
-    "runtime.osx.10.10-x64.CoreCompat.System.Drawing": "1.0.1-*",
-    "runtime.linux-x64.CoreCompat.System.Drawing": "1.0.0-*"
+    "Microsoft.Extensions.Localization": "1.1.*"
+    
 
   },
 
   "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Drawing": "4.0.0.0"
+        
+      }
+    },
+    "net452": {
+      "frameworkAssemblies": {
+        "System.Drawing": "4.0.0.0"
+
+      }
+    },
+    "net46": {
+      "frameworkAssemblies": {
+        "System.Drawing": "4.0.0.0"
+
+      }
+    },
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "CoreCompat.System.Drawing": "1.0.0-*",
+        "runtime.osx.10.10-x64.CoreCompat.System.Drawing": "1.0.1-*",
+        "runtime.linux-x64.CoreCompat.System.Drawing": "1.0.0-*"
+      }
     }
   }
 }

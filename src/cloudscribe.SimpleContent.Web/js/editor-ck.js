@@ -33,7 +33,6 @@
         CKEDITOR.plugins.addExternal('widget', '/ckjs/plugins/widget/', 'plugin.js');
         CKEDITOR.plugins.addExternal('widgetselection', '/ckjs/plugins/widgetselection/', 'plugin.js');
         CKEDITOR.plugins.addExternal('lineutils', '/ckjs/plugins/lineutils/', 'plugin.js');
-
         CKEDITOR.plugins.addExternal('oembed', '/ckjs/plugins/oembed/', 'plugin.js');
         CKEDITOR.plugins.addExternal('cloudscribe-filedrop', '/ckjs/plugins/cloudscribe-filedrop/', 'plugin.js');
 

@@ -1,15 +1,15 @@
 ﻿(function () {
     var fileManager = {
-        treeDataApiUrl: $("#config").data("filetree-url"),
-        uploadApiUrl: $("#config").data("upload-url"),
-        createFolderApiUrl: $("#config").data("create-folder-url"),
-        deleteFolderApiUrl: $("#config").data("delete-folder-url"),
-        renameFolderApiUrl: $("#config").data("rename-folder-url"),
-        deleteFileApiUrl: $("#config").data("delete-file-url"),
-        renameFileApiUrl: $("#config").data("rename-file-url"),
-        canDelete: $("#config").data("can-delete"),
-        emptyPreviewUrl:$("#config").data("empty-preview-url"),
-        rootVirtualPath: $("#config").data("root-virtual-path"),
+        treeDataApiUrl: $("#fmconfig").data("filetree-url"),
+        uploadApiUrl: $("#fmconfig").data("upload-url"),
+        createFolderApiUrl: $("#fmconfig").data("create-folder-url"),
+        deleteFolderApiUrl: $("#fmconfig").data("delete-folder-url"),
+        renameFolderApiUrl: $("#fmconfig").data("rename-folder-url"),
+        deleteFileApiUrl: $("#fmconfig").data("delete-file-url"),
+        renameFileApiUrl: $("#fmconfig").data("rename-file-url"),
+        canDelete: $("#fmconfig").data("can-delete"),
+        emptyPreviewUrl:$("#fmconfig").data("empty-preview-url"),
+        rootVirtualPath: $("#fmconfig").data("root-virtual-path"),
         fileSelectorButton: $('#btnSelector'),
         deleteFolderButton: $('#btnDeleteFolder'),
         renameFolderButton: $('#btnRenameFolder'),
@@ -288,7 +288,7 @@
             return false; //cancel form submit
         },
         ckReturnFile: function () {
-            var funcNum = $("#config").data("ckfunc");
+            var funcNum = $("#fmconfig").data("ckfunc");
             var fileUrl = fileManager.selectedFileInput.val();
             //alert(funcNum);
             if (fileUrl.length === 0) {

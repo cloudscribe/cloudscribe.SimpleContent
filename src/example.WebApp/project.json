@@ -39,7 +39,6 @@
     "cloudscribe.SimpleContent.Syndication": "1.1.1-*",
     "cloudscribe.Syndication.Web": "1.1.*",
     "cloudscribe.Core.SimpleContent.Integration": "1.1.1-*",
-    "cloudscribe.FileManager.Web": "1.0.0-*",
     "cloudscribe.FileManager.CoreIntegration": "1.0.0-*",
     "SaasKit.Multitenancy": "1.1.*",
     "Microsoft.AspNetCore.DataProtection": "1.1.*",
