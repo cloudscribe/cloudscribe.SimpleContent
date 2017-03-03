@@ -59,14 +59,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         // seems like for embedded we could set long cache in production since it cannot change
         //https://docs.asp.net/en/latest/performance/caching/response.html
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult editorjs()
-        {
-            return GetResult(
-                "cloudscribe.SimpleContent.Web.js.content-editor.js",
-                "text/javascript");
-        }
+        
 
         [HttpGet]
         [AllowAnonymous]
@@ -106,6 +99,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     return "text/javascript";
 
             }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult editorjs()
+        {
+            return GetResult(
+                "cloudscribe.SimpleContent.Web.js.editor-ck.js",
+                "text/javascript");
         }
 
         [HttpGet]

@@ -1,6 +1,7 @@
 ﻿(function ($) {
 
-    var xsrfToken = $("#__RequestVerificationToken").val();
+    var xsrfToken = $('[name="__RequestVerificationToken"]:first').val();
+    alert(xsrfToken);
     var dfUrl = $("#editorconfig").data("dropfileuploadurl") || '/filemanager/upload';
     var fbUrl = $("#editorconfig").data("filebrowserurl") || '/filemanager/ckfiledialog?type=file';
     var ibUrl = $("#editorconfig").data("imagebrowseurl") || '/filemanager/ckfiledialog?type=image';
