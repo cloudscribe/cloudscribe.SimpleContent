@@ -13,6 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -21,21 +22,30 @@ namespace cloudscribe.SimpleContent.Web.Controllers
     /// </summary>
     public class csscsrController : Controller
     {
-        public csscsrController()
+        public csscsrController(
+            //IContentTypeProvider contentTypeProvider
+            )
         {
-
+            //this.contentTypeProvider = contentTypeProvider;
         }
 
-        private ContentResult GetContentResult(string resourceName, string contentType)
+        //private IContentTypeProvider contentTypeProvider;
+
+        private IActionResult GetContentResult(string resourceName, string contentType)
         {
             var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
+            if (contentType.StartsWith("image"))
+            {
+                return new FileStreamResult(resourceStream, contentType);
+            }
+
             string payload;
             using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
             {
                 payload = reader.ReadToEnd();
             }
-
+            
             return new ContentResult
             {
                 ContentType = contentType,
@@ -50,7 +60,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult editorjs()
+        public IActionResult editorjs()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.content-editor.js",
@@ -59,7 +69,47 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult editorjsmin()
+        public IActionResult ckjs()
+        {
+            var baseSegment = "cloudscribe.SimpleContent.Web.js.ckeditor461.";
+            // /ckjs/ckeditor.js
+            var requestPath = HttpContext.Request.Path.Value;
+            var seg = requestPath.Substring(6).Replace("/", ".").Replace("-","_");
+            var ext = Path.GetExtension(requestPath);
+            var mimeType = GetMimeType(ext);
+
+            return GetContentResult(
+                baseSegment + seg,
+                mimeType);
+        }
+
+        private string GetMimeType(string extension)
+        {
+            switch(extension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+
+                case ".gif":
+                    return "image/gif";
+
+                case ".png":
+                    return "image/png";
+
+                case ".css":
+                    return "text/css";
+
+                case ".js":
+                default:
+                    return "text/javascript";
+
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult editorjsmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.content-editor.min.js",
@@ -69,7 +119,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult commentjs()
+        public IActionResult commentjs()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.blog-comments.js",
@@ -78,7 +128,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult commentjsmin()
+        public IActionResult commentjsmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.blog-comments.min.js",
@@ -89,7 +139,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapwysiwygjs()
+        public IActionResult bootstrapwysiwygjs()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.js",
@@ -98,7 +148,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapwysiwygjsmin()
+        public IActionResult bootstrapwysiwygjsmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.min.js",
@@ -107,7 +157,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickerjs()
+        public IActionResult bootstrapdatetimepickerjs()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-datetimepicker.js",
@@ -116,7 +166,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickerjsmin()
+        public IActionResult bootstrapdatetimepickerjsmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-datetimepicker.min.js",
@@ -127,7 +177,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jquerycookie()
+        public IActionResult jquerycookie()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.cookie.js",
@@ -136,7 +186,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jquerycookiemin()
+        public IActionResult jquerycookiemin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.cookie.min.js",
@@ -145,7 +195,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jqueryhotkeys()
+        public IActionResult jqueryhotkeys()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.hotkeys.js",
@@ -154,7 +204,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jqueryhotkeysmin()
+        public IActionResult jqueryhotkeysmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.hotkeys.min.js",
@@ -163,7 +213,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jqueryajax()
+        public IActionResult jqueryajax()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.unobtrusive-ajax.min.js",
@@ -172,7 +222,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult momentwithlocalesjs()
+        public IActionResult momentwithlocalesjs()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.moment-with-locales.js",
@@ -181,7 +231,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult momentwithlocalesjsmin()
+        public IActionResult momentwithlocalesjsmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.js.moment-with-locales.min.js",
@@ -190,7 +240,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult blogcommoncss()
+        public IActionResult blogcommoncss()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.css.blog-common.css",
@@ -199,7 +249,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult blogcommoncssmin()
+        public IActionResult blogcommoncssmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.css.blog-common.min.css",
@@ -208,7 +258,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult contentadmincss()
+        public IActionResult contentadmincss()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.css.content-admin.css",
@@ -217,7 +267,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult contentadmincssmin()
+        public IActionResult contentadmincssmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.css.content-admin.min.css",
@@ -226,7 +276,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickercss()
+        public IActionResult bootstrapdatetimepickercss()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.css.bootstrap-datetimepicker.css",
@@ -235,7 +285,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickercssmin()
+        public IActionResult bootstrapdatetimepickercssmin()
         {
             return GetContentResult(
                 "cloudscribe.SimpleContent.Web.css.bootstrap-datetimepicker.min.css",

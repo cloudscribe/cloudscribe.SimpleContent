@@ -21,12 +21,12 @@
         filebrowserImageBrowseUrl:'/filemanager/ckfiledialog?type=image'
     };
 
-    CKEDITOR.plugins.addExternal('widget', '/js/ckeditor461/plugins/widget/', 'plugin.js');
-    CKEDITOR.plugins.addExternal('widgetselection', '/js/ckeditor461/plugins/widgetselection/', 'plugin.js');
-    CKEDITOR.plugins.addExternal('lineutils', '/js/ckeditor461/plugins/lineutils/', 'plugin.js');
+    //CKEDITOR.plugins.addExternal('widget', '/js/ckeditor461/plugins/widget/', 'plugin.js');
+    //CKEDITOR.plugins.addExternal('widgetselection', '/js/ckeditor461/plugins/widgetselection/', 'plugin.js');
+    //CKEDITOR.plugins.addExternal('lineutils', '/js/ckeditor461/plugins/lineutils/', 'plugin.js');
 
-    CKEDITOR.plugins.addExternal('oembed', '/js/ckeditor461/plugins/oembed/', 'plugin.js');
-    CKEDITOR.plugins.addExternal('cloudscribe-filedrop', '/js/ckeditor461/plugins/cloudscribe-filedrop/', 'plugin.js');
+    //CKEDITOR.plugins.addExternal('oembed', '/js/ckeditor461/plugins/oembed/', 'plugin.js');
+    //CKEDITOR.plugins.addExternal('cloudscribe-filedrop', '/js/ckeditor461/plugins/cloudscribe-filedrop/', 'plugin.js');
 
     var ck = CKEDITOR.replace('Content', editorConfig);
 

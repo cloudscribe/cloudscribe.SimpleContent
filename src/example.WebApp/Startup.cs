@@ -262,7 +262,9 @@ namespace example.WebApp
                 }
 
                 routes.AddBlogRoutesForSimpleContent();
-                
+                routes.AddCkEditorRoutesForSimpleContent();
+
+
                 if (useFolders)
                 {
                     routes.MapRoute(

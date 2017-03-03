@@ -25,17 +25,28 @@ namespace Microsoft.Extensions.DependencyInjection
             return routes;
         }
 
+        public static IRouteBuilder AddCkEditorRoutesForSimpleContent(this IRouteBuilder routes)
+        {
+            routes.MapRoute(
+               name: "ckjs",
+               template: "ckjs/{*slug}"
+               , defaults: new { controller = "csscsr", action = "ckjs" }
+               );
+
+            return routes;
+        }
+
         public static IRouteBuilder AddDefaultPageRouteForSimpleContent(this IRouteBuilder routes)
         {
             routes.MapRoute(
                name: ProjectConstants.PageEditRouteName,
-               template: "/edit/{slug?}"
+               template: "edit/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                );
 
             routes.MapRoute(
                name: ProjectConstants.PageDeleteRouteName,
-               template: "/delete/{id}"
+               template: "delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                );
 
