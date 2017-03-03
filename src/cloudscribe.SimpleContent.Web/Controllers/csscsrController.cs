@@ -8,6 +8,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -20,11 +21,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
     public class csscsrController : Controller
     {
         public csscsrController(
+            ILogger<csscsrController> logger
             //IContentTypeProvider contentTypeProvider
             )
         {
             //this.contentTypeProvider = contentTypeProvider;
+            log = logger;
         }
+
+        private ILogger log;
 
         //private IContentTypeProvider contentTypeProvider;
 
@@ -32,6 +37,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
+            if(resourceStream == null)
+            {
+                log.LogError("resource not found for " + resourceName);
+                return NotFound();
+            }
             if (contentType.StartsWith("text"))
             {
                 string payload;
