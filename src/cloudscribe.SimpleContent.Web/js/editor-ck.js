@@ -1,6 +1,7 @@
 ﻿(function ($) {
 
-    var xsrfToken = $("#__RequestVerificationToken").val();
+    var xsrfToken = $('[name="__RequestVerificationToken"]:first').val();
+    alert(xsrfToken);
     var dfUrl = $("#editorconfig").data("dropfileuploadurl") || '/filemanager/upload';
     var fbUrl = $("#editorconfig").data("filebrowserurl") || '/filemanager/ckfiledialog?type=file';
     var ibUrl = $("#editorconfig").data("imagebrowseurl") || '/filemanager/ckfiledialog?type=image';
@@ -33,7 +34,6 @@
         CKEDITOR.plugins.addExternal('widget', '/ckjs/plugins/widget/', 'plugin.js');
         CKEDITOR.plugins.addExternal('widgetselection', '/ckjs/plugins/widgetselection/', 'plugin.js');
         CKEDITOR.plugins.addExternal('lineutils', '/ckjs/plugins/lineutils/', 'plugin.js');
-
         CKEDITOR.plugins.addExternal('oembed', '/ckjs/plugins/oembed/', 'plugin.js');
         CKEDITOR.plugins.addExternal('cloudscribe-filedrop', '/ckjs/plugins/cloudscribe-filedrop/', 'plugin.js');
 

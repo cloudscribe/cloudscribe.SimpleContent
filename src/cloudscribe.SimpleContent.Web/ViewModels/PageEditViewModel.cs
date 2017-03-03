@@ -44,7 +44,13 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public bool MenuOnly { get; set; } = false;
 
-        
+        public string DropFileUrl { get; set; } = "/filemanager/upload";
+
+        public string FileBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=file";
+
+        public string ImageBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=image";
+
+
 
     }
 }

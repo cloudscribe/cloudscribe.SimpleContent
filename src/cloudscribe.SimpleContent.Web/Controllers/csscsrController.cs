@@ -2,17 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-08-15
+// Last Modified:           2017-03-03
 // 
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
@@ -21,66 +19,121 @@ namespace cloudscribe.SimpleContent.Web.Controllers
     /// </summary>
     public class csscsrController : Controller
     {
-        public csscsrController()
+        public csscsrController(
+            //IContentTypeProvider contentTypeProvider
+            )
         {
-
+            //this.contentTypeProvider = contentTypeProvider;
         }
 
-        private ContentResult GetContentResult(string resourceName, string contentType)
+        //private IContentTypeProvider contentTypeProvider;
+
+        private IActionResult GetResult(string resourceName, string contentType)
         {
             var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
-            string payload;
-            using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
+            if (contentType.StartsWith("text"))
             {
-                payload = reader.ReadToEnd();
-            }
+                string payload;
+                using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
+                {
+                    payload = reader.ReadToEnd();
+                }
 
-            return new ContentResult
-            {
-                ContentType = contentType,
-                Content = payload,
-                StatusCode = 200
-            };
+                return new ContentResult
+                {
+                    ContentType = contentType,
+                    Content = payload,
+                    StatusCode = 200
+                };
+
+            }
+            
+            return new FileStreamResult(resourceStream, contentType);
+            
+
+            
         }
 
         //TODO: caching, what are best practices for caching static resources ?
         // seems like for embedded we could set long cache in production since it cannot change
         //https://docs.asp.net/en/latest/performance/caching/response.html
 
+        
+
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult editorjs()
+        public IActionResult ckjs()
         {
-            return GetContentResult(
-                "cloudscribe.SimpleContent.Web.js.content-editor.js",
+            var baseSegment = "cloudscribe.SimpleContent.Web.js.ckeditor461.";
+            // /ckjs/ckeditor.js
+            var requestPath = HttpContext.Request.Path.Value;
+            var seg = requestPath.Substring(6).Replace("/", ".").Replace("-","_");
+            var ext = Path.GetExtension(requestPath);
+            var mimeType = GetMimeType(ext);
+
+            return GetResult(
+                baseSegment + seg,
+                mimeType);
+        }
+
+        private string GetMimeType(string extension)
+        {
+            switch(extension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+
+                case ".gif":
+                    return "image/gif";
+
+                case ".png":
+                    return "image/png";
+
+                case ".css":
+                    return "text/css";
+
+                case ".js":
+                default:
+                    return "text/javascript";
+
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult editorjs()
+        {
+            return GetResult(
+                "cloudscribe.SimpleContent.Web.js.editor-ck.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult editorjsmin()
+        public IActionResult editorjsmin()
         {
-            return GetContentResult(
-                "cloudscribe.SimpleContent.Web.js.content-editor.min.js",
+            return GetResult(
+                "cloudscribe.SimpleContent.Web.js.editor-ck.min.js",
                 "text/javascript");
             
         }
         
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult commentjs()
+        public IActionResult commentjs()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.blog-comments.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult commentjsmin()
+        public IActionResult commentjsmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.blog-comments.min.js",
                 "text/javascript");
  
@@ -89,36 +142,36 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapwysiwygjs()
+        public IActionResult bootstrapwysiwygjs()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapwysiwygjsmin()
+        public IActionResult bootstrapwysiwygjsmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.min.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickerjs()
+        public IActionResult bootstrapdatetimepickerjs()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-datetimepicker.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickerjsmin()
+        public IActionResult bootstrapdatetimepickerjsmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.bootstrap-datetimepicker.min.js",
                 "text/javascript");  
         }
@@ -127,117 +180,117 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jquerycookie()
+        public IActionResult jquerycookie()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.cookie.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jquerycookiemin()
+        public IActionResult jquerycookiemin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.cookie.min.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jqueryhotkeys()
+        public IActionResult jqueryhotkeys()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.hotkeys.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jqueryhotkeysmin()
+        public IActionResult jqueryhotkeysmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.hotkeys.min.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult jqueryajax()
+        public IActionResult jqueryajax()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.jquery.unobtrusive-ajax.min.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult momentwithlocalesjs()
+        public IActionResult momentwithlocalesjs()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.moment-with-locales.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult momentwithlocalesjsmin()
+        public IActionResult momentwithlocalesjsmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.js.moment-with-locales.min.js",
                 "text/javascript");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult blogcommoncss()
+        public IActionResult blogcommoncss()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.css.blog-common.css",
                 "text/css");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult blogcommoncssmin()
+        public IActionResult blogcommoncssmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.css.blog-common.min.css",
                 "text/css");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult contentadmincss()
+        public IActionResult contentadmincss()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.css.content-admin.css",
                 "text/css");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult contentadmincssmin()
+        public IActionResult contentadmincssmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.css.content-admin.min.css",
                 "text/css");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickercss()
+        public IActionResult bootstrapdatetimepickercss()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.css.bootstrap-datetimepicker.css",
                 "text/css");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ContentResult bootstrapdatetimepickercssmin()
+        public IActionResult bootstrapdatetimepickercssmin()
         {
-            return GetContentResult(
+            return GetResult(
                 "cloudscribe.SimpleContent.Web.css.bootstrap-datetimepicker.min.css",
                 "text/css");
         }

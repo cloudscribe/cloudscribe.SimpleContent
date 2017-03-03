@@ -42,5 +42,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string CurrentPostUrl { get; set; }
 
         public string DeletePostRouteName { get; set; }
+
+        public string DropFileUrl { get; set; } = "/filemanager/upload";
+
+        public string FileBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=file";
+
+        public string ImageBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=image";
     }
 }

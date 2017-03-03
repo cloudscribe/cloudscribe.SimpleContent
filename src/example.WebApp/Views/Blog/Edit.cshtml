@@ -7,9 +7,6 @@
 @inject IStringLocalizer<SimpleContent> sr
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
-@{
-}
-
 <h2>@ViewBag.Title <small><a href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
@@ -45,7 +42,6 @@
             <span asp-validation-for="MetaDescription" class="text-danger"></span>
         </div>
     </div>
-    
     <div class="form-group">
         <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
         <div class="col-md-10">
@@ -72,10 +68,8 @@
                     @sr["Delete"]
                 </button>
             }
-
         </div>
     </div>
-
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
@@ -83,27 +77,8 @@
         <input asp-for="Id" type="hidden" />
     </form>
 }
-
+@{ await Html.RenderPartialAsync("EditorConfigPartial", Model); }   
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    <environment names="Development">
-        <script src="~/csscsr/jqueryhotkeys"></script>
-        <script src="~/csscsr/momentwithlocalesjs"></script>
-        <script src="~/csscsr/bootstrapdatetimepickerjs"></script>
-        <script src="~/csscsr/jquerycookie"></script>
-       @* <script src="~/js/ckeditor461/ckeditor.js"></script>*@
-        <script src="//cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
-        <script src="~/jsdev/editpage-ck.js" asp-append-version="true"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/csscsr/jqueryhotkeysmin"></script>
-        <script src="~/csscsr/momentwithlocalesjsmin"></script>
-        <script src="~/csscsr/bootstrapdatetimepickerjsmin"></script>
-        <script src="~/csscsr/jquerycookiemin"></script>
-        @* <script src="~/js/ckeditor461/ckeditor.js"></script>*@
-        <script src="//cdn.ckeditor.com/4.6.1/standard/ckeditor.js"></script>
-        <script src="~/jsdev/editpage-ck.js" asp-append-version="true"></script>
-    </environment>
-    @*await Html.RenderPartialAsync("EditorScriptsPartial"); *@
-    
+    @{ await Html.RenderPartialAsync("EditorScriptsPartial"); }  
 }

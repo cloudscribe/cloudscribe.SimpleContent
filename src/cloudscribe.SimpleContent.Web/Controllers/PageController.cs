@@ -116,7 +116,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     //model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
                     //model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
                     //model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
-                    
+                   
                     
                 }
                 else
@@ -139,6 +139,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 //model.EditorSettings.SupportsCategories = false;
                 //model.EditorSettings.ProjectId = projectSettings.Id;
 
+           
             }
 
             if (page == null)
@@ -253,6 +254,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var model = new PageEditViewModel();
             model.ProjectId = projectSettings.Id;
+            model.FileBrowseUrl = Url.Action("CkFileDialog", "FileManager", new { type = "file" });
+            model.ImageBrowseUrl = Url.Action("CkFileDialog", "FileManager", new { type = "image" });
+            model.DropFileUrl = Url.Action("Upload", "FileManager");
 
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
