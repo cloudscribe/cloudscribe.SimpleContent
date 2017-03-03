@@ -1,0 +1,119 @@
+﻿@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Models
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContent> sr
+@inject IOptions<IconCssClasses> iconClassesAccessor
+@inject IHtmlGenerator generator
+@{
+    var icons = iconClassesAccessor.Value;
+}
+@functions{
+    public string GetHeaderDivClass()
+    {
+        if (Model.Mode.Length > 0) return "";
+        return "bh";
+    }
+    public string GetHeaderClass()
+    {
+        if (Model.Mode.Length > 0) return "jumbotron editor-jumbotron"; // we don't want jumbotron while editing because it has too much bottom padding 
+        return "jumbotron";
+    }
+    public string GetPubDateClass()
+    {
+        if (Model.CurrentPost != null && Model.CurrentPost.PubDate > DateTime.UtcNow) return "lead text-danger";
+
+        return null;
+    }
+}
+<article class="post" data-id="@Model.CurrentPost.Id"
+         data-approve-comment-url="@Url.Action("AjaxApproveComment", "Blog")"
+         data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Blog")"
+         itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+    <header class="@GetHeaderClass()">
+        @if (Model.Mode == "new")
+        {
+            <h1 itemprop="headline name"></h1>
+        }
+        else
+        {
+            <h1 itemprop="headline name">@Model.CurrentPost.Title</h1>
+        }
+        <div class="@GetHeaderDivClass()">
+            @if (Model.Mode.Length > 0)
+            {
+                <input class="@GetPubDateClass()" type='text' itemprop="datePublished" id='datetimepicker' value="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" />
+            }
+            else
+            {
+                <time class="@GetPubDateClass()" datetime="@Model.FormatDateForEdit(Model.CurrentPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.CurrentPost.PubDate)</time>
+            }
+            @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+            {
+                <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
+                   asp-route-year="@Model.CurrentPost.PubDate.Year"
+                   asp-route-month="@Model.CurrentPost.PubDate.Month.ToString("00")"
+                   asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
+                   asp-route-slug="@Model.CurrentPost.Slug"
+                   asp-fragment="comments"
+                   itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() @sr["Comments"]</a>
+            }
+            else
+            {
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() @sr["Comments"]</a>
+            } 
+            <ul class="categories">
+                <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
+                @foreach (string cat in Model.CurrentPost.Categories)
+                {
+                    <li itemprop="articleSection">
+                        <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </header>
+    @if (Model.CanEdit && (Model.Mode.Length > 0))
+    {
+        <div id="excerpt" style="display:none;">
+            <h4>@sr["meta description:"]</h4>
+            <div itemprop="description">@Model.CurrentPost.MetaDescription</div>
+        </div>
+    }
+    else
+    {
+        await Html.RenderPartialAsync("NextPreviousPartial", Model);
+    }
+    @if (string.IsNullOrEmpty(Model.Mode))
+    {
+        <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPost))</div>
+    }
+    else
+    {
+        <div itemprop="articleBody">@Html.Raw(Model.CurrentPost.Content)</div>
+    }
+    @if ((Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)) && (Model.ShowComments))
+    {
+        @if ((Model.CommentsAreOpen) || (Model.CanEdit && Model.CurrentPost.CommentCount() > 0) || (Model.CurrentPost.ApprovedCommentCount() > 0))
+        {
+            <section id="comments" aria-label="Comments">
+                <h2>@sr["Comments"]</h2>
+                @foreach (var comment in Model.CurrentPost.Comments)
+                {
+                    Model.TmpComment = comment;
+                    if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || Model.CanEdit)
+                    {
+                        await Html.RenderPartialAsync("CommentPartial", Model);
+                    }
+                }
+            </section>
+        }
+        @if (Model.CommentsAreOpen)
+        {
+            await Html.RenderPartialAsync("CommentFormPartial", Model);
+        }
+    }
+</article>
