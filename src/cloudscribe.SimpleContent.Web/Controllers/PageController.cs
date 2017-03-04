@@ -167,7 +167,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         page.Title = "Home";
                         //mode = "new";
                         model.CurrentPage = page;
-                        ViewData["Title"] = sr["New Page"];
+                        model.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "home" });
+                        ViewData["Title"] = "Home";
                     }
                     else
                     {
@@ -266,6 +267,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if(page == null)
             {
                 ViewData["Title"] = sr["New Page"];
+                model.Slug = slug;
+                var rootList = await pageService.GetRootPages().ConfigureAwait(false);
+                if(rootList.Count == 0)
+                {
+                    // expected if home page doesn't exist yet
+                    if(slug == "home")
+                    {
+                        model.Title = "Home";
+                    }
+
+                }
+                
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
             }
             else
