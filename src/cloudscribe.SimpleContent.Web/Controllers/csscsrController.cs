@@ -45,10 +45,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     log.LogError("resource not found for " + resourceName);
                     return NotFound();
-
                 }
-                log.LogDebug("resource found for " + resourceName);
-                
+                log.LogDebug("resource found for " + resourceName);  
             }
             else
             {
