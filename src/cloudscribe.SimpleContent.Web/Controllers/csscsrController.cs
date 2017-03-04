@@ -39,8 +39,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
             if(resourceStream == null)
             {
-                log.LogError("resource not found for " + resourceName);
-                return NotFound();
+                resourceStream 
+                = assembly.GetManifestResourceStream(resourceName.Replace("_","-"));
+                if(resourceStream == null)
+                {
+                    log.LogError("resource not found for " + resourceName);
+                    return NotFound();
+
+                }
+                log.LogDebug("resource found for " + resourceName);
+                
+            }
+            else
+            {
+                
+                log.LogDebug("resource found for " + resourceName);
+
             }
             if (contentType.StartsWith("text"))
             {
@@ -78,6 +92,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             var baseSegment = "cloudscribe.SimpleContent.Web.js.ckeditor461.";
             // /ckjs/ckeditor.js
             var requestPath = HttpContext.Request.Path.Value;
+            log.LogDebug(requestPath + " requested");
             var seg = requestPath.Substring(6).Replace("/", ".").Replace("-","_");
             var ext = Path.GetExtension(requestPath);
             var mimeType = GetMimeType(ext);
