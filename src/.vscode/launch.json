@@ -14,13 +14,13 @@
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core Launch (example.WebApp)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/example.WebApp/bin/Debug/netcoreapp1.1/example.WebApp.dll",
+            "program": "${workspaceRoot}\\example.WebApp\\bin\\Debug\\netcoreapp1.1\\example.WebApp.dll",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}\\example.WebApp",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
@@ -39,6 +39,9 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceRoot}/example.WebApp/Views"
             }
         },
         {
