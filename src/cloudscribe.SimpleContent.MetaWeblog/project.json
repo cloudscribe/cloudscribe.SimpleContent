@@ -20,6 +20,9 @@
         "cloudscribe.SimpleContent.Models": "1.1.1-*",
         "cloudscribe.MetaWeblog": "1.1.*"
     },
+    "buildOptions": {
+        "debugType": "portable"
+    },
 
     "frameworks": {
         "net46": {},

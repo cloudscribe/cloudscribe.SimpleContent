@@ -19,6 +19,9 @@
     "cloudscribe.Core.Models": "1.1.0-*"
     
   },
+  "buildOptions": {
+    "debugType": "portable"
+  },
 
   "frameworks": {
     "net451": {},

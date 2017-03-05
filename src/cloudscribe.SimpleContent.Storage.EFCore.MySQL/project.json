@@ -3,7 +3,8 @@
   "description": "MySQL Entity Framework Core implementation of cloudscribe SimpleContent commands and queries",
   "authors": [ "Joe Audette" ],
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "debugType": "portable"
   },
 
   "packOptions": {

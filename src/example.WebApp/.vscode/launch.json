@@ -2,23 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceRoot}\\cloudscribe.SimpleContent.Storage.EFCore.MSSQL\\bin\\Debug\\netcoreapp1.1\\cloudscribe.SimpleContent.Storage.EFCore.MSSQL.dll",
-            "args": [],
-            "cwd": "${workspaceRoot}",
-            "externalConsole": false,
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/example.WebApp/bin/Debug/netcoreapp1.1/example.WebApp.dll",
+            "program": "${workspaceRoot}\\bin\\Debug\\netcoreapp1.1\\example.WebApp.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
@@ -39,6 +27,9 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceRoot}/Views"
             }
         },
         {

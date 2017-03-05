@@ -24,6 +24,9 @@
     
 
   },
+  "buildOptions": {
+    "debugType": "portable"
+  },
 
   "frameworks": {
     "net451": {

@@ -13,6 +13,9 @@
         "requireLicenseAcceptance": false,
         "releaseNotes": ""
     },
+    "buildOptions": {
+        "debugType": "portable"
+    },
 
 
     "dependencies": {
