@@ -514,7 +514,7 @@ namespace cloudscribe.FileManager.Web.Services
             }
             else
             {
-                newName = nameRules.GetCleanFileName(formFile.FileName);
+                newName = nameRules.GetCleanFileName(Path.GetFileName(formFile.FileName));
             }
             
             var newUrl = currentVirtualPath + "/" + newName;
