@@ -36,7 +36,8 @@
     },
 
     "buildOptions": {
-        "embed": [ "Views/**" ]
+        "embed": [ "Views/**" ],
+        "debugType": "portable"
     },
 
     "frameworks": {

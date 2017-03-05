@@ -21,6 +21,9 @@
         "cloudscribe.Web.SimpleAuth": "1.1.0-*",
         "Microsoft.AspNetCore.Authorization": "1.1.*"
     },
+    "buildOptions": {
+        "debugType": "portable"
+    },
 
     "frameworks": {
         "net46": {},

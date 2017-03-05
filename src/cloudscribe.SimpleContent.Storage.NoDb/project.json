@@ -22,6 +22,9 @@
     "Microsoft.Extensions.Caching.Abstractions": "1.1.*"
   },
 
+"buildOptions": {
+    "debugType": "portable"
+},
     "frameworks": {
         "net46": {
             "frameworkAssemblies": {

@@ -14,7 +14,8 @@
     },
 
     "buildOptions": {
-        "embed": [ "Views/**", "js/**", "css/**" ]
+        "embed": [ "Views/**", "js/**", "css/**" ],
+        "debugType": "portable"
     },
 
   "dependencies": {

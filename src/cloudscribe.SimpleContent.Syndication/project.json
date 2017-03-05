@@ -22,6 +22,9 @@
         "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.*",
         "Microsoft.AspNetCore.Mvc.Core": "1.1.*"
     },
+    "buildOptions": {
+        "debugType": "portable"
+    },
 
     "frameworks": {
         "net46": {},
