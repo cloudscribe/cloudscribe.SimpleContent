@@ -1,9 +1,11 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @using cloudscribe.SimpleContent.Models
 @using cloudscribe.SimpleContent.Web.Design
+@using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
 @using cloudscribe.SimpleContent.Web
+@addTagHelper "*, cloudscribe.SimpleContent.Web"
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @{
@@ -19,6 +21,7 @@
     }
 }
 <article class="post" data-id="@Model.TmpPost.Id" itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+<schema-org-blog-post blogmodel="@Model"></schema-org-blog-post>
     <header class="jumbotron">
         <h1 itemprop="headline name">
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)

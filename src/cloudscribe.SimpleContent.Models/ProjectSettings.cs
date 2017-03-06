@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-01
+// Last Modified:           2017-03-06
 // 
 
 namespace cloudscribe.SimpleContent.Models
@@ -141,6 +141,8 @@ namespace cloudscribe.SimpleContent.Models
             p.UseDefaultPageAsRootNode = project.UseDefaultPageAsRootNode;
             p.UseMetaDescriptionInFeed = project.UseMetaDescriptionInFeed;
             p.WebmasterEmail = project.WebmasterEmail;
+            p.Publisher = project.Publisher;
+            p.PublisherLogoUrl = project.PublisherLogoUrl;
             
 
             return p;

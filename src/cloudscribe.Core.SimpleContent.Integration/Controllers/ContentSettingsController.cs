@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2016-09-12
+// Last Modified:			2017-03-06
 // 
 
 using cloudscribe.Core.Models;
@@ -65,6 +65,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             model.Title = projectSettings.Title;
             model.UseMetaDescriptionInFeed = projectSettings.UseMetaDescriptionInFeed;
             model.WebmasterEmail = projectSettings.WebmasterEmail;
+            model.Publisher = projectSettings.Publisher;
+            model.PublisherLogoUrl = projectSettings.PublisherLogoUrl;
             model.PostsPerPage = projectSettings.PostsPerPage;
             model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
             model.DefaultPageSlug = projectSettings.DefaultPageSlug;
@@ -147,6 +149,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             projectSettings.Title = model.Title;
             projectSettings.UseMetaDescriptionInFeed = model.UseMetaDescriptionInFeed;
             projectSettings.WebmasterEmail = model.WebmasterEmail;
+            projectSettings.Publisher = model.Publisher;
+            projectSettings.PublisherLogoUrl = model.PublisherLogoUrl;
             bool needToClearMenuCache = false;
             if(projectSettings.BlogMenuLinksToNewestPost != model.BlogMenuLinksToNewestPost)
             {
@@ -173,6 +177,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             this.AlertSuccess(sr["Content Settings were successfully updated."], true);
 
             return RedirectToAction("Index");
+            
 
         }
 

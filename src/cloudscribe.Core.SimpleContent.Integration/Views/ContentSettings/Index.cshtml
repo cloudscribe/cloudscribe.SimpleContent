@@ -156,6 +156,20 @@
                         <span asp-validation-for="WebmasterEmail" class="text-danger"></span>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label asp-for="Publisher" class="col-md-2 control-label">@sr["Publisher"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="Publisher" class="form-control" />
+                        <span asp-validation-for="Publisher" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PublisherLogoUrl" class="col-md-2 control-label">@sr["Publisher Logo Url"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="PublisherLogoUrl" class="form-control" />
+                        <span asp-validation-for="PublisherLogoUrl" class="text-danger"></span>
+                    </div>
+                </div>
             </fieldset>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
