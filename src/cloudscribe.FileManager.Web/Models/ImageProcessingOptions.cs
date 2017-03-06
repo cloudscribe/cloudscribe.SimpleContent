@@ -7,6 +7,8 @@
        
         public bool AutoResize { get; set; } = true;
 
+        public bool AllowEnlargement { get; set; } = false;
+
         public bool KeepOriginalImages { get; set; } = true;
 
         public int WebSizeImageMaxWidth { get; set; } = 550;

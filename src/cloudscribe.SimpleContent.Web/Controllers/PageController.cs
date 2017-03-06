@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-01-08
+// Last Modified:           2017-03-06
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -61,23 +61,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (projectSettings == null)
             {
-                HttpContext.Response.StatusCode = 404;
+                log.LogError("project settings not found returning 404");
                 return NotFound();
             }
 
-            if(slug == "none") { slug = string.Empty; }
-            
             var canEdit = await User.CanEditPages(projectSettings.Id, authorizationService);
-            var isNew = canEdit && (mode == "new");
-            var isEditing = canEdit && (mode == "edit");
-            if(!isNew && string.IsNullOrEmpty(slug)) { slug = projectSettings.DefaultPageSlug; }
 
-            IPage page = null;
-            if(!string.IsNullOrEmpty(slug))
-            {
-                page = await pageService.GetPageBySlug(projectSettings.Id, slug);
-                
-            }
+            if(string.IsNullOrEmpty(slug) || slug == "none") { slug = projectSettings.DefaultPageSlug; }
+
+            IPage page = await pageService.GetPageBySlug(projectSettings.Id, slug);
             
             var model = new PageViewModel();
             model.Mode = mode;
@@ -97,106 +89,66 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     if (model.CurrentPage.Slug == projectSettings.DefaultPageSlug)
                     {
                        // model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
-                        model.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
+                       // not setting the parent slug if the current page is home page
+                       // otherwise it would be awkward to create more root level pages
+                        model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
                     }
                     else
                     {
-                       
-                        //model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
+                        // for non home pages if the use clicks the new link
+                        // make it use the current page slug as the parent slug for the new item
                         model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
 
                     }
 
-                    //model.EditorSettings.CancelEditPath = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = model.CurrentPage.Slug });
-                    //model.EditorSettings.CurrentSlug = model.CurrentPage.Slug;
-                    //model.EditorSettings.IsPublished = model.CurrentPage.IsPublished; 
-                    //model.EditorSettings.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
-                    //model.EditorSettings.SortOrder = model.CurrentPage.PageOrder;
-                    //model.EditorSettings.ParentSlug = model.CurrentPage.ParentSlug;
-                    //model.EditorSettings.ViewRoles = model.CurrentPage.ViewRoles;
-                    //model.EditorSettings.ShowHeading = model.CurrentPage.ShowHeading;
-                    //model.EditorSettings.MenuOnly = model.CurrentPage.MenuOnly;
-                   
-                    
                 }
                 else
                 {
                     model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
-                    //model.EditorSettings.CancelEditPath = Url.Content("~/");
-                    //model.EditorSettings.EditPath = Url.Action("Index", "Page", new { slug = "", mode = "new" });
-                    //model.EditorSettings.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
-
+                   
                 }
 
-                //model.EditorSettings.EditMode = mode;
-                //model.EditorSettings.NewItemButtonText = "New Page";
-                //model.EditorSettings.IndexUrl = Url.Content("~/");
-                //model.EditorSettings.CategoryPath = Url.Action("Category", "Page"); // TODO: should we support categories on pages? this action doesn't exist right now
-                //model.EditorSettings.DeletePath = Url.Action("AjaxDelete", "Page");
-                //model.EditorSettings.SavePath = Url.Action("AjaxPost", "Page");
-                
-                //model.EditorSettings.ContentType = "Page";
-                //model.EditorSettings.SupportsCategories = false;
-                //model.EditorSettings.ProjectId = projectSettings.Id;
-
-           
             }
 
             if (page == null)
-            {
-                if (isNew)
+            { 
+                var rootList = await pageService.GetRootPages().ConfigureAwait(false);
+                // a site starts out with no pages 
+                if (canEdit && rootList.Count == 0)
                 {
                     page = new Page();
                     page.ProjectId = projectSettings.Id;
-                    
-                    //model.EditorSettings.ParentSlug = parentSlug;
-                    
-                    
-                   
+                    page.Title = "Home";
                     model.CurrentPage = page;
-                    ViewData["Title"] = sr["New Page"];
+                    model.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "home" });
+                    ViewData["Title"] = "Home";
                 }
                 else
                 {
-                    var rootList = await pageService.GetRootPages().ConfigureAwait(false);
-                    // a site starts out with no pages 
-                    if (canEdit && rootList.Count == 0)
+                    
+                    if(rootList.Count > 0)
                     {
-                        page = new Page();
-                        page.ProjectId = projectSettings.Id;
-                        page.Title = "Home";
-                        //mode = "new";
-                        model.CurrentPage = page;
-                        model.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "home" });
-                        ViewData["Title"] = "Home";
+                        if(slug == projectSettings.DefaultPageSlug)
+                        {
+                            // slug was empty and no matching page found for default slug
+                            // but since there exist root level pages we should
+                            // show an index menu. 
+                            // esp useful if not using pages as the default route
+                            // /p or /docs
+                            ViewData["Title"] = sr["Content Index"];
+                            //model.EditorSettings.EditMode = "none";
+                            return View("IndexMenu", model);
+                        }
+
+                        
+                        return NotFound();
                     }
                     else
                     {
-                        
-                        if(rootList.Count > 0)
-                        {
-                            if(slug == projectSettings.DefaultPageSlug)
-                            {
-                                // slug was empty and no matching page found for default slug
-                                // but since there exist root level pages we should
-                                // show an index menu. 
-                                // esp useful if not using pages as the default route
-                                // /p or /docs
-                                ViewData["Title"] = sr["Content Index"];
-                                //model.EditorSettings.EditMode = "none";
-                                return View("IndexMenu", model);
-                            }
-
-                            Response.StatusCode = 404;
-                            // return View("NotFound", 404);
-                            return NotFound();
-                        }
-                        else
-                        {
-                            Response.StatusCode = 404;
-                            return View("NoPages", 404);
-                        }    
-                    } 
+                        Response.StatusCode = 404;
+                        return View("NoPages", 404);
+                    }    
+                    
                 }
             }
             else
@@ -206,8 +158,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     if(!User.IsInRoles(page.ViewRoles))
                     {
-                        Response.StatusCode = 404;
-                        //return View("NotFound", 404);
+                        log.LogWarning("page is protected by roles that user is not in so returning 404");
                         return NotFound();
                     }
                 }
@@ -216,12 +167,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 
             }
 
-           
-            
-
-            
-
-            if (page != null && page.MenuOnly && !isEditing)
+            if (page != null && page.MenuOnly)
             {
                 return View("ChildMenu", model);
             }
