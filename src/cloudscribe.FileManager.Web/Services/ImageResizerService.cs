@@ -31,8 +31,8 @@ namespace cloudscribe.FileManager.Web.Services
             string mimeType,
             int maxWidth,
             int maxHeight,
+            bool allowEnlargement = false,
             long quality = 90,
-            bool allowEnlargement = true,
             Color backgroundColor = default(Color)
             )
         {

@@ -11,8 +11,8 @@ namespace cloudscribe.FileManager.Web.Models
             string mimeType,
             int maxWidth,
             int maxHeight,
-            long quality = 90,
-            bool allowEnlargement = true,
+            bool allowEnlargement = false,
+            long quality = 90, 
             Color backgroundColor = default(Color)
             );
     }

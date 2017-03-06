@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-15
-// Last Modified:           2017-02-24
+// Last Modified:           2017-03-06
 // 
 
 using cloudscribe.FileManager.Web.Models;
@@ -545,7 +545,8 @@ namespace cloudscribe.FileManager.Web.Services
                         webSizeName,
                         mimeType,
                         resizeWidth,
-                        resizeHeight
+                        resizeHeight,
+                        options.AllowEnlargement
                         );
                 }
 
