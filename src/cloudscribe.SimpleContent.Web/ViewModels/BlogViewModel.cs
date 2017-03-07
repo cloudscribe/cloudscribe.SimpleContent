@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-03
+// Last Modified:           2017-03-06
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -11,6 +11,8 @@ using cloudscribe.Web.Common;
 using cloudscribe.Web.Pagination;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -99,6 +101,23 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public IBlogRoutes BlogRoutes { get; set; }
         
+        public string ExtractFirstImargeUrl(IPost post, IUrlHelper urlHelper)
+        {
+            var result = filter.ExtractFirstImageUrl(post.Content);
+
+            if(result.StartsWith("http")) return result;
+
+            var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
+                        "://",
+                        urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+
+            return baseUrl + result;
+        }
+
+        public Tuple<string, string> ExtractFirstImageDimensions(IPost post)
+        {
+            return filter.ExtractFirstImageDimensions(post.Content);
+        }
 
 
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2016-09-12
+// Last Modified:			2017-03-06
 // 
 
 using cloudscribe.Core.Models;
@@ -83,6 +83,10 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         [EmailAddress(ErrorMessage = "The Webmaster Email field is not a valid e-mail address.")]
         [StringLength(100, ErrorMessage = "Webmaster Email has a maximum length of 100 characters")]
         public string WebmasterEmail { get; set; } = string.Empty;
+
+        public string Publisher { get; set; } = string.Empty;
+
+        public string PublisherLogoUrl { get; set; } = string.Empty;
 
         
     }

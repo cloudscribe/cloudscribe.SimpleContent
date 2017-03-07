@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -232,6 +233,70 @@ namespace cloudscribe.SimpleContent.Services
             var newHtml = writer.ToString();
 
             return newHtml;
+
+        }
+
+        public string ExtractFirstImageUrl(string htmlInput)
+        { 
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlInput);
+
+            foreach (var img in doc.DocumentNode.Descendants("img"))
+            {
+                if(img.Attributes["src"] != null)
+                {
+                    var src = img.Attributes["src"].Value;
+                    return src;
+                }
+                
+            }
+
+            return null;
+
+        }
+
+
+        public Tuple<string, string> ExtractFirstImageDimensions(string htmlInput)
+        { 
+            var doc = new HtmlDocument();
+            doc.LoadHtml(htmlInput);
+
+            foreach (var img in doc.DocumentNode.Descendants("img"))
+            {
+                if(img.Attributes["style"] != null)
+                {
+                    var style = img.Attributes["style"].Value;
+                    var styleItems = style.Split(';')
+                    .Select(s => s.Trim()).ToArray();
+                    return ExtractDims(styleItems as string[]);  
+                }
+                
+            }
+
+            return new Tuple<string,string>("550px","550px");
+
+        }
+
+        private Tuple<string, string> ExtractDims(string[] atts)
+        {
+            string h = "550px";
+            string w = "550px";
+            foreach(var item in atts)
+            {
+                
+                if(item.StartsWith("height") && item.Contains(":"))
+                {
+                    h = item.Substring(item.LastIndexOf(":") + 1);
+
+                }
+                if(item.StartsWith("width")  && item.Contains(":"))
+                {
+                    w = item.Substring(item.LastIndexOf(":") + 1);
+
+                }
+            }
+
+            return new Tuple<string,string>(w,h);
 
         }
 
