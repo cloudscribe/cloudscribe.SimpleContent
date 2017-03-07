@@ -1,0 +1,76 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <DebugType>portable</DebugType>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>example.WebApp</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>example.WebApp</PackageId>
+    <UserSecretsId>aspnet-example.WebApp-df9a79b9-e4c7-4c72-a64f-62835002c42f</UserSecretsId>
+    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views;navigation.xml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.NoDb\cloudscribe.SimpleContent.Storage.NoDb.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.Common\cloudscribe.SimpleContent.Storage.EFCore.Common.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.MSSQL\cloudscribe.SimpleContent.Storage.EFCore.MSSQL.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.MetaWeblog\cloudscribe.SimpleContent.MetaWeblog.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Syndication\cloudscribe.SimpleContent.Syndication.csproj" />
+    <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Integration\cloudscribe.Core.SimpleContent.Integration.csproj" />
+    <ProjectReference Include="..\cloudscribe.FileManager.CoreIntegration\cloudscribe.FileManager.CoreIntegration.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Logging.NoDb" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Logging.EFCore.MSSQL" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Logging.Web" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="1.1.2" />
+    <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="1.1.0" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="1.1.*" />
+    <PackageReference Include="SaasKit.Multitenancy" Version="1.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="1.1.1" />
+  </ItemGroup>
+
+  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
+    <Exec Command="bower install" />
+    <Exec Command="dotnet bundle" />
+  </Target>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.2.301" />
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
