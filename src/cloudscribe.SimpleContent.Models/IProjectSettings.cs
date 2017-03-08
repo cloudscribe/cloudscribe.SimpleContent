@@ -45,5 +45,8 @@
         bool UseDefaultPageAsRootNode { get; set; }
         bool UseMetaDescriptionInFeed { get; set; }
         string WebmasterEmail { get; set; }
+        string PublisherLogoWidth { get; set; } 
+        string PublisherLogoHeight { get; set; } 
+        string DisqusShortName { get; set; } 
     }
 }

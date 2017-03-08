@@ -23,6 +23,11 @@ namespace cloudscribe.SimpleContent.Models
 
         public string PublisherLogoUrl { get; set; } = string.Empty;
 
+        public string PublisherLogoWidth { get; set; } = "500px";
+        public string PublisherLogoHeight { get; set; } = "500px";
+
+        public string DisqusShortName { get; set; } = string.Empty;
+
         public int PostsPerPage { get; set; } = 5;
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;
@@ -143,6 +148,9 @@ namespace cloudscribe.SimpleContent.Models
             p.WebmasterEmail = project.WebmasterEmail;
             p.Publisher = project.Publisher;
             p.PublisherLogoUrl = project.PublisherLogoUrl;
+            p.PublisherLogoWidth = project.PublisherLogoWidth;
+            p.PublisherLogoHeight = project.PublisherLogoHeight;
+            p.DisqusShortName = project.DisqusShortName;
             
 
             return p;
