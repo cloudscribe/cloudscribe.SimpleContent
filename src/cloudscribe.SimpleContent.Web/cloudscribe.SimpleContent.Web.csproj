@@ -49,6 +49,7 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="1.1.*" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">

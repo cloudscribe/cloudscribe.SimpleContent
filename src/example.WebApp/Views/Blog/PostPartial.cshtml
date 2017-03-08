@@ -11,6 +11,7 @@
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @{
     var icons = iconClassesAccessor.Value;
+    
 }
 @functions{
     
@@ -64,24 +65,34 @@
         </div>
     </header>
     <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.TmpPost))</div>
-    <div class="collapse" aria-hidden="true" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
-    <schema-org-meta itemprop="url" content="@Model.ExtractFirstImargeUrl(Model.TmpPost, Url)"></schema-org-meta>
     @{
-        var dims = Model.ExtractFirstImageDimensions(Model.TmpPost);
+        var imageUrl = Model.ExtractFirstImargeUrl(Model.TmpPost, Url);
+        var imageSize = Model.ExtractFirstImageDimensions(Model.TmpPost);
     }
-    <schema-org-meta itemprop="width" content="@dims.Item1"></schema-org-meta>
-    <schema-org-meta itemprop="height" content="@dims.Item2"></schema-org-meta>
-    </div>
-    <div class="collapse" aria-hidden="true" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <schema-org-meta itemprop="name" content="@Model.TmpPost.Author"></schema-org-meta>
-    </div>
-    <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
-    <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-        <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
-        <schema-org-meta itemprop="width" content="550px"></schema-org-meta>
-        <schema-org-meta itemprop="height" content="550px"></schema-org-meta>
-    </div>
-    </div>
+    @if (!string.IsNullOrEmpty(imageUrl))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+            <schema-org-meta itemprop="url" content="@imageUrl"></schema-org-meta>
+            <schema-org-meta itemprop="width" content="@imageSize.Width"></schema-org-meta>
+            <schema-org-meta itemprop="height" content="@imageSize.Height"></schema-org-meta>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.TmpPost.Author))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <schema-org-meta itemprop="name" content="@Model.TmpPost.Author"></schema-org-meta>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ProjectSettings.Publisher))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+            <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
+            <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
+                <schema-org-meta itemprop="width" content="550px"></schema-org-meta>
+                <schema-org-meta itemprop="height" content="550px"></schema-org-meta>
+            </div>
+        </div>
+    }
     <schema-org-meta itemprop="dateModified" content="@Model.TmpPost.PubDate.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
 </article>

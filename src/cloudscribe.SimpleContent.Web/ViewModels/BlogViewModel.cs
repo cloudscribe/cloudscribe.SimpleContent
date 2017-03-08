@@ -103,7 +103,12 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         
         public string ExtractFirstImargeUrl(IPost post, IUrlHelper urlHelper)
         {
+            if (post == null) return string.Empty;
+            if (urlHelper == null) return string.Empty;
+
             var result = filter.ExtractFirstImageUrl(post.Content);
+
+            if (result == null) return string.Empty;
 
             if(result.StartsWith("http")) return result;
 
@@ -114,7 +119,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return baseUrl + result;
         }
 
-        public Tuple<string, string> ExtractFirstImageDimensions(IPost post)
+        public ImageSizeResult ExtractFirstImageDimensions(IPost post)
         {
             return filter.ExtractFirstImageDimensions(post.Content);
         }

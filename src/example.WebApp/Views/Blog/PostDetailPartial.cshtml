@@ -5,6 +5,7 @@
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
+@using System.Globalization
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @inject IHtmlGenerator generator
@@ -95,6 +96,36 @@
     {
         <div itemprop="articleBody">@Html.Raw(Model.CurrentPost.Content)</div>
     }
+    @{
+        var imageUrl = Model.ExtractFirstImargeUrl(Model.CurrentPost, Url);
+        var imageSize = Model.ExtractFirstImageDimensions(Model.CurrentPost);
+    }
+    @if (!string.IsNullOrEmpty(imageUrl))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+            <schema-org-meta itemprop="url" content="@imageUrl"></schema-org-meta>
+            <schema-org-meta itemprop="width" content="@imageSize.Width"></schema-org-meta>
+            <schema-org-meta itemprop="height" content="@imageSize.Height"></schema-org-meta>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.CurrentPost.Author))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <schema-org-meta itemprop="name" content="@Model.CurrentPost.Author"></schema-org-meta>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ProjectSettings.Publisher))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+            <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
+            <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
+                <schema-org-meta itemprop="width" content="550px"></schema-org-meta>
+                <schema-org-meta itemprop="height" content="550px"></schema-org-meta>
+            </div>
+        </div>
+    }
+    <schema-org-meta itemprop="dateModified" content="@Model.CurrentPost.PubDate.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
     @if ((Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)) && (Model.ShowComments))
     {
         @if ((Model.CommentsAreOpen) || (Model.CanEdit && Model.CurrentPost.CommentCount() > 0) || (Model.CurrentPost.ApprovedCommentCount() > 0))
