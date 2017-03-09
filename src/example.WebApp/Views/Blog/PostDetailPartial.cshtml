@@ -8,7 +8,6 @@
 @using System.Globalization
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
-@inject IHtmlGenerator generator
 @{
     var icons = iconClassesAccessor.Value;
 }
@@ -28,6 +27,24 @@
         if (Model.CurrentPost != null && Model.CurrentPost.PubDate > DateTime.UtcNow) return "lead text-danger";
 
         return null;
+    }
+    public string GetCommentString()
+    {
+        if(string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
+            return Model.CurrentPost.ApprovedCommentCount() + " " + sr["Comments"];
+
+        }
+        return "<span class='disqus-comment-count' data-disqus-identifier='" + Model.CurrentPost.Id + "'></span>";
+    }
+    public string GetCommentFragment()
+    {
+        if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
+            return "comments";
+
+        }
+        return "disqus_thread";
     }
 }
 <article class="post" data-id="@Model.CurrentPost.Id"
@@ -59,22 +76,25 @@
                    asp-route-month="@Model.CurrentPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.CurrentPost.PubDate.Day.ToString("00")"
                    asp-route-slug="@Model.CurrentPost.Slug"
-                   asp-fragment="comments"
-                   itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() @sr["Comments"]</a>
+                   asp-fragment="@GetCommentFragment()"
+                   itemprop="url"><i class="@icons.Comments"></i> @Html.Raw(GetCommentString())</a>
             }
             else
             {
-                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="comments" itemprop="url"><i class="@icons.Comments"></i> @Model.CurrentPost.ApprovedCommentCount() @sr["Comments"]</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="@GetCommentFragment()" itemprop="url"><i class="@icons.Comments"></i> @Html.Raw(GetCommentString())</a>
             } 
-            <ul class="categories">
-                <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
-                @foreach (string cat in Model.CurrentPost.Categories)
-                {
-                    <li itemprop="articleSection">
-                        <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a>
-                    </li>
-                }
-            </ul>
+            @if (Model.CurrentPost.Categories.Count > 0)
+            {
+                <ul class="categories">
+                    <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
+                    @foreach (string cat in Model.CurrentPost.Categories)
+                    {
+                        <li itemprop="articleSection">
+                            <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a>
+                        </li>
+                    }
+                </ul>
+            }   
         </div>
     </header>
     @if (Model.CanEdit && (Model.Mode.Length > 0))
@@ -116,35 +136,22 @@
     }
     @if (!string.IsNullOrEmpty(Model.ProjectSettings.Publisher))
     {
-        <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/@Model.ProjectSettings.PublisherEntityType">
             <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
             <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
                 <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
-                <schema-org-meta itemprop="width" content="550px"></schema-org-meta>
-                <schema-org-meta itemprop="height" content="550px"></schema-org-meta>
+                <schema-org-meta itemprop="width" content="@Model.ProjectSettings.PublisherLogoWidth"></schema-org-meta>
+                <schema-org-meta itemprop="height" content="@Model.ProjectSettings.PublisherLogoHeight"></schema-org-meta>
             </div>
         </div>
     }
     <schema-org-meta itemprop="dateModified" content="@Model.CurrentPost.PubDate.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
-    @if ((Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)) && (Model.ShowComments))
+    @if(string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
     {
-        @if ((Model.CommentsAreOpen) || (Model.CanEdit && Model.CurrentPost.CommentCount() > 0) || (Model.CurrentPost.ApprovedCommentCount() > 0))
-        {
-            <section id="comments" aria-label="Comments">
-                <h2>@sr["Comments"]</h2>
-                @foreach (var comment in Model.CurrentPost.Comments)
-                {
-                    Model.TmpComment = comment;
-                    if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || Model.CanEdit)
-                    {
-                        await Html.RenderPartialAsync("CommentPartial", Model);
-                    }
-                }
-            </section>
-        }
-        @if (Model.CommentsAreOpen)
-        {
-            await Html.RenderPartialAsync("CommentFormPartial", Model);
-        }
+        await Html.RenderPartialAsync("CommentWrapperPartial", Model);
+    }
+    else
+    {
+        await Html.RenderPartialAsync("DisqusCommentsPartial", Model);
     }
 </article>

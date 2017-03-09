@@ -1,5 +1,8 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @using cloudscribe.SimpleContent.Models
+@{
+    var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
+}
 @section Meta {
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
 }
@@ -33,12 +36,14 @@
     
 }
 @section Scripts {
-    @*@if (Model.CanEdit)
+    @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
     {
-        await Html.RenderPartialAsync("EditorScriptsPartial");
-    }*@
-    @if (Model.CommentsAreOpen && Model.Mode.Length == 0)
+        <script id="dsq-count-scr" src="@disqusCommentCountScriptPath" async></script>
+    }
+    else if (Model.CommentsAreOpen && Model.Mode.Length == 0)
     {
         await Html.RenderPartialAsync("CommentScriptsPartial");
     }
+    
+    
 }
