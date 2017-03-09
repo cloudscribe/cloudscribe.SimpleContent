@@ -17,8 +17,10 @@ namespace cloudscribe.SimpleContent.Models
         Task<IPage> GetPage(string pageId);
 
         Task<IPage> GetPageBySlug(string projectId, string slug);
-        Task<bool> PageSlugIsAvailable(string slug);
-        Task<bool> PageSlugIsAvailable(string projectId, string slug);
+        //Task<bool> PageSlugIsAvailable(string slug);
+        //Task<bool> PageSlugIsAvailable(string projectId, string slug);
+
+        Task<bool> SlugIsAvailable(string projectId, string slug);
         Task<string> ResolvePageUrl(IPage page);
 
         Task Create(
@@ -43,7 +45,7 @@ namespace cloudscribe.SimpleContent.Models
             IPage page,
             bool publish);
 
-        Task<bool> SlugIsAvailable(string projectId, string slug);
+       
 
         void ClearNavigationCache();
     }

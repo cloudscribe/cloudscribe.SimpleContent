@@ -87,6 +87,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("Publisher")
                         .HasMaxLength(255);
 
+                    b.Property<string>("PublisherEntityType")
+                        .HasMaxLength(50);
+
                     b.Property<string>("PublisherLogoHeight")
                         .HasMaxLength(20);
 

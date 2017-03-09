@@ -91,24 +91,34 @@ namespace cloudscribe.SimpleContent.Services
             return Task.FromResult(result);
         }
 
-        public async Task<bool> PageSlugIsAvailable(string slug)
-        {
-            await EnsureProjectSettings().ConfigureAwait(false);
+        //public async Task<bool> PageSlugIsAvailable(string slug)
+        //{
+        //    await EnsureProjectSettings().ConfigureAwait(false);
 
+        //    return await pageQueries.SlugIsAvailable(
+        //        settings.Id,
+        //        slug,
+        //        CancellationToken)
+        //        .ConfigureAwait(false);
+        //}
+
+        //public async Task<bool> PageSlugIsAvailable(string projectId, string slug)
+        //{
+        //    return await pageQueries.SlugIsAvailable(
+        //        projectId,
+        //        slug,
+        //        CancellationToken)
+        //        .ConfigureAwait(false);
+        //}
+
+        public async Task<bool> SlugIsAvailable(string projectId,string slug)
+        {
+            await EnsureProjectSettings();
             return await pageQueries.SlugIsAvailable(
                 settings.Id,
                 slug,
-                CancellationToken)
-                .ConfigureAwait(false);
-        }
-
-        public async Task<bool> PageSlugIsAvailable(string projectId, string slug)
-        {
-            return await pageQueries.SlugIsAvailable(
-                projectId,
-                slug,
-                CancellationToken)
-                .ConfigureAwait(false);
+                CancellationToken
+                ).ConfigureAwait(false);
         }
 
         public async Task Create(
@@ -140,7 +150,7 @@ namespace cloudscribe.SimpleContent.Services
             if (string.IsNullOrEmpty(page.Slug))
             {
                 var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await PageSlugIsAvailable(slug);
+                var available = await SlugIsAvailable(projectId, slug);
                 if (available)
                 {
                     page.Slug = slug;
@@ -256,7 +266,7 @@ namespace cloudscribe.SimpleContent.Services
             if (string.IsNullOrEmpty(page.Slug))
             {
                 var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await PageSlugIsAvailable(slug);
+                var available = await SlugIsAvailable(this.settings.Id, slug);
                 if (available)
                 {
                     page.Slug = slug;
@@ -410,18 +420,7 @@ namespace cloudscribe.SimpleContent.Services
                 ).ConfigureAwait(false);
         }
 
-        public async Task<bool> SlugIsAvailable(
-            string projectId,
-            string slug
-            )
-        {
-            await EnsureProjectSettings();
-            return await pageQueries.SlugIsAvailable(
-                settings.Id,
-                slug,
-                CancellationToken
-                ).ConfigureAwait(false);
-        }
+        
 
     }
 }

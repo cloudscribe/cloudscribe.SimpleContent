@@ -70,6 +70,20 @@
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
             <div class="form-group">
+                <label asp-for="Slug" class="col-md-2 control-label">@sr["Slug"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Slug" class="form-control" />
+                    <span asp-validation-for="Slug" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentSlug" class="col-md-2 control-label">@sr["Parent Slug"]</label>
+                <div class="col-md-10">
+                    <input asp-for="ParentSlug" class="form-control" />
+                    <span asp-validation-for="ParentSlug" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
                     <div class="checkbox">
                         <label>
@@ -103,13 +117,7 @@
                     <span asp-validation-for="PageOrder" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ParentSlug" class="col-md-2 control-label">@sr["Parent Slug"]</label>
-                <div class="col-md-10">
-                    <input asp-for="ParentSlug" class="form-control" />
-                    <span asp-validation-for="ParentSlug" class="text-danger"></span>
-                </div>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
                 <div class="form-inline col-md-10">

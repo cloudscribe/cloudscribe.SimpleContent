@@ -218,6 +218,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 .HasMaxLength(100)
                 ;
 
+                entity.Property(p => p.PublisherEntityType)
+                .HasMaxLength(50)
+                ;
+
             });
 
             modelBuilder.Entity<PostEntity>(entity =>

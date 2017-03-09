@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2017-03-06
+// Last Modified:			2017-03-09
 // 
 
 using cloudscribe.Core.Models;
@@ -63,7 +63,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         //public string BlogPageNavComponentVisibility { get; set; } = "topnav";
 
 
-        
+        [DataType(DataType.Url)]
         public string RemoteFeedUrl { get; set; } = string.Empty;
 
         /// <summary>
@@ -86,8 +86,16 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
         public string Publisher { get; set; } = string.Empty;
 
+        [DataType(DataType.ImageUrl)]
         public string PublisherLogoUrl { get; set; } = string.Empty;
 
-        
+        public string PublisherLogoWidth { get; set; } = "500px";
+        public string PublisherLogoHeight { get; set; } = "500px";
+
+        public string PublisherEntityType { get; set; } = "Organization";
+
+        public string DisqusShortName { get; set; } = string.Empty;
+
+
     }
 }

@@ -216,6 +216,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 .HasMaxLength(20)
                 ;
 
+                entity.Property(p => p.PublisherEntityType)
+                .HasMaxLength(50)
+                ;
+
                 entity.Property(p => p.DisqusShortName)
                 .HasMaxLength(100)
                 ;

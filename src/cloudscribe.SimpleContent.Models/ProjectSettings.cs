@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-06
+// Last Modified:           2017-03-09
 // 
 
 namespace cloudscribe.SimpleContent.Models
@@ -25,6 +25,8 @@ namespace cloudscribe.SimpleContent.Models
 
         public string PublisherLogoWidth { get; set; } = "500px";
         public string PublisherLogoHeight { get; set; } = "500px";
+
+        public string PublisherEntityType { get; set; } = "Organization";
 
         public string DisqusShortName { get; set; } = string.Empty;
 
@@ -150,6 +152,7 @@ namespace cloudscribe.SimpleContent.Models
             p.PublisherLogoUrl = project.PublisherLogoUrl;
             p.PublisherLogoWidth = project.PublisherLogoWidth;
             p.PublisherLogoHeight = project.PublisherLogoHeight;
+            p.PublisherEntityType = project.PublisherEntityType;
             p.DisqusShortName = project.DisqusShortName;
             
 

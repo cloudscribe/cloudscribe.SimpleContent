@@ -104,10 +104,55 @@
                 </div>
             </div>
             <div class="form-group">
+                <label asp-for="DisqusShortName" class="col-md-2 control-label">@sr["Disqus Short Name"]</label>
+                <div class="col-md-10">
+                    <input asp-for="DisqusShortName" class="form-control" />
+                    <span asp-validation-for="DisqusShortName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
                 <label asp-for="DefaultPageSlug" class="col-md-2 control-label">@sr["Default Page"]</label>
                 <div class="col-md-10">
                     <input asp-for="DefaultPageSlug" class="form-control" />
                     <span asp-validation-for="DefaultPageSlug" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Publisher" class="col-md-2 control-label">@sr["Publisher"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Publisher" class="form-control" />
+                    <span asp-validation-for="Publisher" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublisherLogoUrl" class="col-md-2 control-label">@sr["Publisher Logo Url"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PublisherLogoUrl" class="form-control" />
+                    <span asp-validation-for="PublisherLogoUrl" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublisherLogoWidth" class="col-md-2 control-label">@sr["Publisher Logo Width"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PublisherLogoWidth" class="form-control" />
+                    <span asp-validation-for="PublisherLogoWidth" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublisherLogoHeight" class="col-md-2 control-label">@sr["Publisher Logo Height"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PublisherLogoHeight" class="form-control" />
+                    <span asp-validation-for="PublisherLogoHeight" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublisherEntityType" class="col-md-2 control-label">@sr["Publisher Logo Height"]</label>
+                <div class="col-md-10">
+                    <select asp-for="PublisherEntityType" class="form-control">
+                        <option value="Organization">@sr["Organization"]</option>
+                        <option value="Person">@sr["Person"]</option>
+                    </select>
+                    <span asp-validation-for="PublisherEntityType" class="text-danger"></span>
                 </div>
             </div>
             <fieldset>
@@ -156,20 +201,7 @@
                         <span asp-validation-for="WebmasterEmail" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Publisher" class="col-md-2 control-label">@sr["Publisher"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="Publisher" class="form-control" />
-                        <span asp-validation-for="Publisher" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PublisherLogoUrl" class="col-md-2 control-label">@sr["Publisher Logo Url"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="PublisherLogoUrl" class="form-control" />
-                        <span asp-validation-for="PublisherLogoUrl" class="text-danger"></span>
-                    </div>
-                </div>
+                
             </fieldset>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
