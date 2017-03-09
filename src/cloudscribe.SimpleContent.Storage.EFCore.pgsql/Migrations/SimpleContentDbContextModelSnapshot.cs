@@ -14,7 +14,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
+                .HasAnnotation("ProductVersion", "1.1.1");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
                 {
@@ -58,6 +58,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("DisqusShortName")
+                        .HasMaxLength(100);
+
                     b.Property<string>("EmailFromAddress")
                         .HasMaxLength(100);
 
@@ -85,8 +88,17 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                     b.Property<string>("Publisher")
                         .HasMaxLength(255);
 
+                    b.Property<string>("PublisherEntityType")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("PublisherLogoHeight")
+                        .HasMaxLength(20);
+
                     b.Property<string>("PublisherLogoUrl")
                         .HasMaxLength(255);
+
+                    b.Property<string>("PublisherLogoWidth")
+                        .HasMaxLength(20);
 
                     b.Property<string>("RecaptchaPrivateKey")
                         .HasMaxLength(255);

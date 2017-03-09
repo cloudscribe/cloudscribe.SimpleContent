@@ -331,6 +331,7 @@ namespace example.WebApp
             services.AddScoped<cloudscribe.Core.Models.Setup.ISetupTask, cloudscribe.Core.Web.Components.EnsureInitialDataSetupTask>();
 
             var storage = Configuration["DevOptions:DbPlatform"];
+            var efProvider = Configuration["DevOptions:EFProvider"];
 
             switch (storage)
             {
@@ -344,13 +345,39 @@ namespace example.WebApp
 
                 case "ef":
                 default:
-                    var connectionString = Configuration.GetConnectionString("EntityFrameworkConnectionString");
-                    services.AddCloudscribeCoreEFStorageMSSQL(connectionString);
 
-                    // only needed if using cloudscribe logging with EF storage
-                    services.AddCloudscribeLoggingEFStorageMSSQL(connectionString);
+                    switch(efProvider)
+                    {
+                        case "pqsql":
+                            var pgConnection = Configuration.GetConnectionString("PostgreSqlEntityFrameworkConnectionString");
+                            services.AddCloudscribeCoreEFStoragePostgreSql(pgConnection);
+                            services.AddCloudscribeLoggingEFStoragePostgreSql(pgConnection);
+                            services.AddCloudscribeSimpleContentEFStoragePostgreSql(pgConnection);
 
-                    services.AddCloudscribeSimpleContentEFStorageMSSQL(connectionString);
+                            break;
+
+                        case "MySql":
+                            var mysqlConnection = Configuration.GetConnectionString("MySqlEntityFrameworkConnectionString");
+                            services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
+                            services.AddCloudscribeLoggingEFStorageMySQL(mysqlConnection);
+                            services.AddCloudscribeSimpleContentEFStorageMySQL(mysqlConnection);
+
+                            break;
+
+                        case "MSSQL":
+                        default:
+                            var connectionString = Configuration.GetConnectionString("EntityFrameworkConnectionString");
+                            services.AddCloudscribeCoreEFStorageMSSQL(connectionString);
+
+                            // only needed if using cloudscribe logging with EF storage
+                            services.AddCloudscribeLoggingEFStorageMSSQL(connectionString);
+
+                            services.AddCloudscribeSimpleContentEFStorageMSSQL(connectionString);
+
+
+                            break;
+                    }
+                    
 
 
 

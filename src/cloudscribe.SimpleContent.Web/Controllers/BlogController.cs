@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-03
+// Last Modified:           2017-03-09
 // 
 
 
@@ -333,6 +333,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (postResult== null || postResult.Post == null)
             {
                 ViewData["Title"] = sr["New Post"];
+                model.Author = User.GetUserDisplayName();
+                model.IsPublished = true;
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
                 model.CurrentPostUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
             }
@@ -425,6 +427,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 post.Categories = categories;
                 if(model.Slug != post.Slug)
                 {
+                    // remove any bad chars
+                    model.Slug = ContentUtils.CreateSlug(model.Slug);
                     slugAvailable = await blogService.SlugIsAvailable(project.Id, model.Slug);
                     if(slugAvailable)
                     {
@@ -432,7 +436,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
                     else
                     {
-                        log.LogWarning($"slug {model.Slug} was requested but not changed because it is already in use");
+                        //log.LogWarning($"slug {model.Slug} was requested but not changed because it is already in use");
+                        this.AlertDanger(sr["The post slug was not changed because the requested slug is already in use."], true);
                     }
                 }
 
@@ -440,7 +445,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             else
             {
                 isNew = true;
-                slug = ContentUtils.CreateSlug(model.Title);
+                if(!string.IsNullOrEmpty(model.Slug))
+                {
+                    // remove any bad chars
+                    model.Slug = ContentUtils.CreateSlug(model.Slug);
+                    slug = model.Slug;
+                    slugAvailable = await blogService.SlugIsAvailable(project.Id, slug);
+                    if(!slugAvailable)
+                    {
+                        slug = ContentUtils.CreateSlug(model.Title);
+                    }
+                }
+                else
+                {
+                    slug = ContentUtils.CreateSlug(model.Title);
+                }
+                
                 slugAvailable = await blogService.SlugIsAvailable(project.Id, slug);
                 if (!slugAvailable)
                 {
@@ -460,6 +480,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     Slug = slug
                     ,Categories = categories.ToList()
                 };
+            }
+            if(!string.IsNullOrEmpty(model.Author))
+            {
+                post.Author = model.Author;
             }
             
             post.IsPublished = model.IsPublished;

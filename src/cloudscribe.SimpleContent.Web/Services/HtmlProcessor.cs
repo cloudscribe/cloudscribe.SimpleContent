@@ -256,7 +256,7 @@ namespace cloudscribe.SimpleContent.Services
         }
 
 
-        public Tuple<string, string> ExtractFirstImageDimensions(string htmlInput)
+        public ImageSizeResult ExtractFirstImageDimensions(string htmlInput)
         { 
             var doc = new HtmlDocument();
             doc.LoadHtml(htmlInput);
@@ -273,11 +273,11 @@ namespace cloudscribe.SimpleContent.Services
                 
             }
 
-            return new Tuple<string,string>("550px","550px");
+            return new ImageSizeResult { Width = "550px", Height = "550px" };
 
         }
 
-        private Tuple<string, string> ExtractDims(string[] atts)
+        private ImageSizeResult ExtractDims(string[] atts)
         {
             string h = "550px";
             string w = "550px";
@@ -296,7 +296,7 @@ namespace cloudscribe.SimpleContent.Services
                 }
             }
 
-            return new Tuple<string,string>(w,h);
+            return new ImageSizeResult { Width=w, Height=h };
 
         }
 

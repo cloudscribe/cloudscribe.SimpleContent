@@ -224,7 +224,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
 
                 }
-                
+                model.Author = User.GetUserDisplayName();
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
             }
             else
@@ -272,20 +272,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
                 return View(model);
             }
-
-            //if (string.IsNullOrEmpty(model.Title))
-            //{
-            //    // if a page has been configured to not show the title
-            //    // this may be null on edit, if it is a new page then it should be required
-            //    // because it is used for generating the slug
-            //    //if (string.IsNullOrEmpty(model.Slug))
-            //    //{
-            //    log.LogInformation("returning 500 because no title was posted");
-            //    return StatusCode(500);
-            //    //}
-
-            //}
-
+            
             var project = await projectService.GetCurrentProjectSettings();
             
             if (project == null)
@@ -303,14 +290,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return RedirectToRoute(pageRoutes.PageRouteName);
             }
 
-            //string[] categories = new string[0];
-            //if (!string.IsNullOrEmpty(model.Categories))
-            //{
-            //    categories = model.Categories.Split(new char[] { ',' },
-            //    StringSplitOptions.RemoveEmptyEntries);
-            //}
-
-
             IPage page = null;
             if (!string.IsNullOrEmpty(model.Id))
             {
@@ -319,6 +298,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var needToClearCache = false;
             var isNew = false;
+            string slug = string.Empty; ;
+            bool slugIsAvailable = false;
             if (page != null)
             {
                 if (page.Title != model.Title)
@@ -329,15 +310,50 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 page.MetaDescription = model.MetaDescription;
                 page.Content = model.Content;
                 if (page.PageOrder != model.PageOrder) needToClearCache = true;
+                if(!string.IsNullOrEmpty(model.Slug))
+                {
+                    // remove any bad characters
+                    model.Slug = ContentUtils.CreateSlug(model.Slug);
+                    if(model.Slug != page.Slug)
+                    {
+                        slugIsAvailable = await pageService.SlugIsAvailable(project.Id, model.Slug);
+                        if(slugIsAvailable)
+                        {
+                            page.Slug = model.Slug;
+                            needToClearCache = true;
+                        }
+                        else
+                        {
+                            this.AlertDanger(sr["The page slug was not changed because the requested slug is already in use."], true);
+
+                        }
+                    }
+
+                }
 
             }
             else
             {
                 isNew = true;
                 needToClearCache = true;
-                var slug = ContentUtils.CreateSlug(model.Title);
-                var available = await pageService.SlugIsAvailable(project.Id, slug);
-                if (!available)
+                if(!string.IsNullOrEmpty(model.Slug))
+                {
+                    // remove any bad chars
+                    model.Slug = ContentUtils.CreateSlug(model.Slug);
+                    slugIsAvailable = await pageService.SlugIsAvailable(project.Id, model.Slug);
+                    if(slugIsAvailable)
+                    {
+                        slug = model.Slug;
+                    }
+                }
+
+                if(string.IsNullOrEmpty(slug))
+                {
+                    slug = ContentUtils.CreateSlug(model.Title);
+                }
+
+                slugIsAvailable = await pageService.SlugIsAvailable(project.Id, slug);
+                if (!slugIsAvailable)
                 {
                     //log.LogInformation("returning 409 because slug already in use");
                     ModelState.AddModelError("pageediterror", sr["slug is already in use."]);
@@ -358,6 +374,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     //,Categories = categories.ToList()
                 };
             }
+
 
             if (!string.IsNullOrEmpty(model.ParentSlug))
             {
@@ -391,6 +408,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             page.ShowHeading = model.ShowHeading;
             page.ShowMenu = model.ShowMenu;
             page.MenuOnly = model.MenuOnly;
+
+            if(!string.IsNullOrEmpty(model.Author))
+            {
+                page.Author = model.Author;
+            }
+
             if (!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);

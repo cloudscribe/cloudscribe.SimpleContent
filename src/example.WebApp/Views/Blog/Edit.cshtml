@@ -10,7 +10,6 @@
 <h2>@ViewBag.Title <small><a href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
-    <input type="hidden" id="slug" name="slug" value="@Model.Slug" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
@@ -21,20 +20,16 @@
             <span asp-validation-for="Title" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group">
-        <label asp-for="PubDate" class="col-md-2 control-label">@sr["Publication Date"]</label>
+    @* comment this and uncomment the below if you want editable slug*@
+    <input type="hidden"  asp-for="@Model.Slug" /> 
+    @*<div class="form-group">
+        <label asp-for="Slug" class="col-md-2 control-label">@sr["Slug"]</label>
         <div class="col-md-10">
-            <input asp-for="PubDate" class="form-control" data-locale="@CultureInfo.CurrentCulture.Name.ToLowerInvariant()" />
-            <span asp-validation-for="PubDate" class="text-danger"></span>
+            <input asp-for="Slug" class="form-control" />
+            <span asp-validation-for="Slug" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Categories" class="col-md-2 control-label">@sr["Categories"]</label>
-        <div class="col-md-10">
-            <input asp-for="Categories" class="form-control" />
-            <span asp-validation-for="Categories" class="text-danger"></span>
-        </div>
-    </div>
+    *@ 
     <div class="form-group">
         <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
         <div class="col-md-10">
@@ -50,12 +45,33 @@
         </div>
     </div>
     <div class="form-group">
+        <label asp-for="Categories" class="col-md-2 control-label">@sr["Categories"]</label>
+        <div class="col-md-10">
+            <input asp-for="Categories" class="form-control" />
+            <span asp-validation-for="Categories" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
+        <div class="col-md-10">
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
                     <input asp-for="IsPublished" /> @sr["Is Published"]
                 </label>
             </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="PubDate" class="col-md-2 control-label">@sr["Publication Date"]</label>
+        <div class="col-md-10">
+            <input asp-for="PubDate" class="form-control" data-locale="@CultureInfo.CurrentCulture.Name.ToLowerInvariant()" />
+            <span asp-validation-for="PubDate" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">

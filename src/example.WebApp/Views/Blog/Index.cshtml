@@ -3,6 +3,9 @@
 @addTagHelper "*, cloudscribe.Web.Pagination"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
+@{
+    var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
+}
 @section Meta {
 <meta name="robots" content="noindex, follow" />
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
@@ -50,8 +53,8 @@
 @section Bottom {
 }
 @section Scripts {
-@*@if (Model.CanEdit)
+@if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
 {
-    await Html.RenderPartialAsync("EditorScriptsPartial");
-}*@
+    <script id="dsq-count-scr" src="@disqusCommentCountScriptPath" async></script>
+}
 }
