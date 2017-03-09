@@ -224,7 +224,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
 
                 }
-                
+                model.Author = User.GetUserDisplayName();
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
             }
             else
@@ -375,6 +375,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 };
             }
 
+
             if (!string.IsNullOrEmpty(model.ParentSlug))
             {
                 var parentPage = await pageService.GetPageBySlug(project.Id, model.ParentSlug);
@@ -407,6 +408,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             page.ShowHeading = model.ShowHeading;
             page.ShowMenu = model.ShowMenu;
             page.MenuOnly = model.MenuOnly;
+
+            if(!string.IsNullOrEmpty(model.Author))
+            {
+                page.Author = model.Author;
+            }
+
             if (!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);

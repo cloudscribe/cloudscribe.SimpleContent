@@ -52,6 +52,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Author" class="form-control" />
+                    <span asp-validation-for="Author" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
                     <div class="checkbox">
                         <label>

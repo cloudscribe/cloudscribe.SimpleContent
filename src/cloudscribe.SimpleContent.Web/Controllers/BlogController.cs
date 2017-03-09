@@ -333,6 +333,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (postResult== null || postResult.Post == null)
             {
                 ViewData["Title"] = sr["New Post"];
+                model.Author = User.GetUserDisplayName();
+                model.IsPublished = true;
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
                 model.CurrentPostUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
             }
@@ -434,7 +436,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
                     else
                     {
-                        log.LogWarning($"slug {model.Slug} was requested but not changed because it is already in use");
+                        //log.LogWarning($"slug {model.Slug} was requested but not changed because it is already in use");
+                        this.AlertDanger(sr["The post slug was not changed because the requested slug is already in use."], true);
                     }
                 }
 
@@ -477,6 +480,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     Slug = slug
                     ,Categories = categories.ToList()
                 };
+            }
+            if(!string.IsNullOrEmpty(model.Author))
+            {
+                post.Author = model.Author;
             }
             
             post.IsPublished = model.IsPublished;
