@@ -12,7 +12,6 @@
 @section Toolbar {
    @if (Model.CanEdit)
    {
-       @*await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings); *@
        await Html.RenderPartialAsync("ToolsPartial", Model);
    }
 }
