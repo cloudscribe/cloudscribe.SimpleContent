@@ -7,6 +7,10 @@
 @inject IStringLocalizer<SimpleContent> sr
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
+@section Styles {
+    <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
+    <link rel="stylesheet" href="~/csscsr/contentadmincssmin" />
+}
 <h2>@ViewBag.Title <small><a href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />

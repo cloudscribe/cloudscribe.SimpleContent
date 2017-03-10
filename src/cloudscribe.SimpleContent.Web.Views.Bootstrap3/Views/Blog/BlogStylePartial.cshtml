@@ -1,18 +1,8 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 <environment names="Development">
     <link rel="stylesheet" href="~/csscsr/blogcommoncss" />
-    @if (Model.CanEdit)
-    {
-        <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercss" />
-        <link rel="stylesheet" href="~/csscsr/contentadmincss" />
-    }
 </environment>
 <environment names="Staging,Production">
     <link rel="stylesheet" href="~/csscsr/blogcommoncssmin" />
-    @if (Model.CanEdit)
-    {
-        <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
-        <link rel="stylesheet" href="~/csscsr/contentadmincssmin" />
-    }
 </environment>
 <link rel="dns-prefetch" href="//gravatar.com/" />
