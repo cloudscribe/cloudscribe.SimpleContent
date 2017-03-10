@@ -26,6 +26,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public PageController(
             IProjectService projectService,
             IPageService blogService,
+            IHtmlProcessor htmlProcessor,
             IPageRoutes pageRoutes,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
@@ -34,6 +35,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             this.projectService = projectService;
             this.pageService = blogService;
+            this.htmlProcessor = htmlProcessor;
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
             this.pageRoutes = pageRoutes;
@@ -43,6 +45,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         private IProjectService projectService;
         private IPageService pageService;
+        private IHtmlProcessor htmlProcessor;
         private IAuthorizationService authorizationService;
         private ITimeZoneHelper timeZoneHelper;
         private ILogger log;
@@ -53,8 +56,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(
             string slug = "", 
-            string parentSlug = "",
-            string mode = ""
+            string parentSlug = ""
+           // ,string mode = ""
             )
         {
             var projectSettings = await projectService.GetCurrentProjectSettings();
@@ -71,12 +74,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             IPage page = await pageService.GetPageBySlug(projectSettings.Id, slug);
             
-            var model = new PageViewModel();
-            model.Mode = mode;
+            var model = new PageViewModel(htmlProcessor);
+            //model.Mode = mode;
             model.CurrentPage = page;
             model.ProjectSettings = projectSettings;
             model.CanEdit = canEdit;
-            model.ShowComments = mode.Length == 0; // do we need this for a global disable
+            //model.ShowComments = mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = false;
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
@@ -486,209 +489,209 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AjaxPost(PageEditViewModel model)
-        {
-            // disable status code page for ajax requests
-            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
-            if (statusCodePagesFeature != null)
-            {
-                statusCodePagesFeature.Enabled = false;
-            }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> AjaxPost(PageEditViewModel model)
+        //{
+        //    // disable status code page for ajax requests
+        //    var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+        //    if (statusCodePagesFeature != null)
+        //    {
+        //        statusCodePagesFeature.Enabled = false;
+        //    }
 
-            if (string.IsNullOrEmpty(model.Title))
-            {
-                // if a page has been configured to not show the title
-                // this may be null on edit, if it is a new page then it should be required
-                // because it is used for generating the slug
-                //if (string.IsNullOrEmpty(model.Slug))
-                //{
-                log.LogInformation("returning 500 because no title was posted");
-                return StatusCode(500);
-                //}
+        //    if (string.IsNullOrEmpty(model.Title))
+        //    {
+        //        // if a page has been configured to not show the title
+        //        // this may be null on edit, if it is a new page then it should be required
+        //        // because it is used for generating the slug
+        //        //if (string.IsNullOrEmpty(model.Slug))
+        //        //{
+        //        log.LogInformation("returning 500 because no title was posted");
+        //        return StatusCode(500);
+        //        //}
 
-            }
+        //    }
 
-            var project = await projectService.GetCurrentProjectSettings();
+        //    var project = await projectService.GetCurrentProjectSettings();
 
-            if (project == null)
-            {
-                log.LogInformation("returning 500 blog not found");
-                return StatusCode(500);
-            }
+        //    if (project == null)
+        //    {
+        //        log.LogInformation("returning 500 blog not found");
+        //        return StatusCode(500);
+        //    }
 
-            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+        //    var canEdit = await User.CanEditPages(project.Id, authorizationService);
             
-            if (!canEdit)
-            {
-                log.LogInformation("returning 403 user is not allowed to edit");
-                return StatusCode(403);
-            }
+        //    if (!canEdit)
+        //    {
+        //        log.LogInformation("returning 403 user is not allowed to edit");
+        //        return StatusCode(403);
+        //    }
 
-            //string[] categories = new string[0];
-            //if (!string.IsNullOrEmpty(model.Categories))
-            //{
-            //    categories = model.Categories.Split(new char[] { ',' },
-            //    StringSplitOptions.RemoveEmptyEntries);
-            //}
+        //    //string[] categories = new string[0];
+        //    //if (!string.IsNullOrEmpty(model.Categories))
+        //    //{
+        //    //    categories = model.Categories.Split(new char[] { ',' },
+        //    //    StringSplitOptions.RemoveEmptyEntries);
+        //    //}
 
 
-            IPage page = null;
-            if (!string.IsNullOrEmpty(model.Id))
-            {
-                page = await pageService.GetPage(model.Id);
-            }
+        //    IPage page = null;
+        //    if (!string.IsNullOrEmpty(model.Id))
+        //    {
+        //        page = await pageService.GetPage(model.Id);
+        //    }
 
-            var needToClearCache = false;
-            var isNew = false;
-            if (page != null)
-            {
-                if(page.Title != model.Title)
-                {
-                    needToClearCache = true;
-                }
-                page.Title = model.Title;
-                page.MetaDescription = model.MetaDescription;
-                page.Content = model.Content;
-                if (page.PageOrder != model.PageOrder) needToClearCache = true;
+        //    var needToClearCache = false;
+        //    var isNew = false;
+        //    if (page != null)
+        //    {
+        //        if(page.Title != model.Title)
+        //        {
+        //            needToClearCache = true;
+        //        }
+        //        page.Title = model.Title;
+        //        page.MetaDescription = model.MetaDescription;
+        //        page.Content = model.Content;
+        //        if (page.PageOrder != model.PageOrder) needToClearCache = true;
                
-            }
-            else
-            {
-                isNew = true;
-                needToClearCache = true;
-                var slug = ContentUtils.CreateSlug(model.Title);
-                var available = await pageService.SlugIsAvailable(project.Id, slug);
-                if (!available)
-                {
-                    log.LogInformation("returning 409 because slug already in use");
-                    return StatusCode(409);
-                }
+        //    }
+        //    else
+        //    {
+        //        isNew = true;
+        //        needToClearCache = true;
+        //        var slug = ContentUtils.CreateSlug(model.Title);
+        //        var available = await pageService.SlugIsAvailable(project.Id, slug);
+        //        if (!available)
+        //        {
+        //            log.LogInformation("returning 409 because slug already in use");
+        //            return StatusCode(409);
+        //        }
 
-                page = new Page()
-                {
-                    ProjectId = project.Id,
-                    Author = User.GetUserDisplayName(),
-                    Title = model.Title,
-                    MetaDescription = model.MetaDescription,
-                    Content = model.Content,
-                    Slug = slug,
-                    ParentId = "0"
+        //        page = new Page()
+        //        {
+        //            ProjectId = project.Id,
+        //            Author = User.GetUserDisplayName(),
+        //            Title = model.Title,
+        //            MetaDescription = model.MetaDescription,
+        //            Content = model.Content,
+        //            Slug = slug,
+        //            ParentId = "0"
                     
-                    //,Categories = categories.ToList()
-                };
-            }
+        //            //,Categories = categories.ToList()
+        //        };
+        //    }
 
-            if(!string.IsNullOrEmpty(model.ParentSlug))
-            {
-                var parentPage = await pageService.GetPageBySlug(project.Id, model.ParentSlug);
-                if (parentPage != null)
-                {
-                    if(parentPage.Id != page.ParentId)
-                    {
-                        page.ParentId = parentPage.Id;
-                        page.ParentSlug = parentPage.Slug;
-                        needToClearCache = true;
-                    }
+        //    if(!string.IsNullOrEmpty(model.ParentSlug))
+        //    {
+        //        var parentPage = await pageService.GetPageBySlug(project.Id, model.ParentSlug);
+        //        if (parentPage != null)
+        //        {
+        //            if(parentPage.Id != page.ParentId)
+        //            {
+        //                page.ParentId = parentPage.Id;
+        //                page.ParentSlug = parentPage.Slug;
+        //                needToClearCache = true;
+        //            }
                     
-                }
-            }
-            else
-            {
-                // empty means root level
-                page.ParentSlug = string.Empty;
-                page.ParentId = "0";
-            }
-            if(page.ViewRoles != model.ViewRoles)
-            {
-                needToClearCache = true;
-            }
-            page.ViewRoles = model.ViewRoles;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // empty means root level
+        //        page.ParentSlug = string.Empty;
+        //        page.ParentId = "0";
+        //    }
+        //    if(page.ViewRoles != model.ViewRoles)
+        //    {
+        //        needToClearCache = true;
+        //    }
+        //    page.ViewRoles = model.ViewRoles;
 
-            page.PageOrder = model.PageOrder;
-            page.IsPublished = model.IsPublished;
-            page.ShowHeading = model.ShowHeading;
-            page.MenuOnly = model.MenuOnly;
-            if (!string.IsNullOrEmpty(model.PubDate))
-            {
-                var localTime = DateTime.Parse(model.PubDate);
-                page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+        //    page.PageOrder = model.PageOrder;
+        //    page.IsPublished = model.IsPublished;
+        //    page.ShowHeading = model.ShowHeading;
+        //    page.MenuOnly = model.MenuOnly;
+        //    if (!string.IsNullOrEmpty(model.PubDate))
+        //    {
+        //        var localTime = DateTime.Parse(model.PubDate);
+        //        page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
                 
-            }
+        //    }
 
-            if(isNew)
-            {
-                await pageService.Create(page, model.IsPublished);
-            }
-            else
-            {
-                await pageService.Update(page, model.IsPublished);
-            }
+        //    if(isNew)
+        //    {
+        //        await pageService.Create(page, model.IsPublished);
+        //    }
+        //    else
+        //    {
+        //        await pageService.Update(page, model.IsPublished);
+        //    }
 
             
-            if(needToClearCache)
-            {
-                pageService.ClearNavigationCache();
-            }
+        //    if(needToClearCache)
+        //    {
+        //        pageService.ClearNavigationCache();
+        //    }
 
-            var url = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
-            return Content(url);
+        //    var url = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
+        //    return Content(url);
 
-        }
+        //}
 
         
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AjaxDelete(string id)
-        {
-            // disable status code page for ajax requests
-            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
-            if (statusCodePagesFeature != null)
-            {
-                statusCodePagesFeature.Enabled = false;
-            }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> AjaxDelete(string id)
+        //{
+        //    // disable status code page for ajax requests
+        //    var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+        //    if (statusCodePagesFeature != null)
+        //    {
+        //        statusCodePagesFeature.Enabled = false;
+        //    }
 
-            var project = await projectService.GetCurrentProjectSettings();
+        //    var project = await projectService.GetCurrentProjectSettings();
 
-            if (project == null)
-            {
-                log.LogInformation("returning 500 blog not found");
-                return StatusCode(500);
-            }
+        //    if (project == null)
+        //    {
+        //        log.LogInformation("returning 500 blog not found");
+        //        return StatusCode(500);
+        //    }
 
-            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+        //    var canEdit = await User.CanEditPages(project.Id, authorizationService);
             
-            if (!canEdit)
-            {
-                log.LogInformation("returning 403 user is not allowed to edit");
-                return StatusCode(403);
-            }
+        //    if (!canEdit)
+        //    {
+        //        log.LogInformation("returning 403 user is not allowed to edit");
+        //        return StatusCode(403);
+        //    }
 
-            if (string.IsNullOrEmpty(id))
-            {
-                log.LogInformation("returning 404 postid not provided");
-                return StatusCode(404);
-            }
+        //    if (string.IsNullOrEmpty(id))
+        //    {
+        //        log.LogInformation("returning 404 postid not provided");
+        //        return StatusCode(404);
+        //    }
 
-            var page = await pageService.GetPage(id);
+        //    var page = await pageService.GetPage(id);
 
-            if (page == null)
-            {
-                log.LogInformation("returning 404 not found");
-                return StatusCode(404);
-            }
+        //    if (page == null)
+        //    {
+        //        log.LogInformation("returning 404 not found");
+        //        return StatusCode(404);
+        //    }
 
-            log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
+        //    log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
 
-            await pageService.DeletePage(project.Id, page.Id);
+        //    await pageService.DeletePage(project.Id, page.Id);
 
-            return StatusCode(200);
+        //    return StatusCode(200);
 
-        }
+        //}
 
 
     }

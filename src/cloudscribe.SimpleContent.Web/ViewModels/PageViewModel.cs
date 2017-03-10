@@ -2,36 +2,36 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-03-01
+// Last Modified:           2017-03-10
 // 
 
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Common;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class PageViewModel
     {
-        public PageViewModel()
+        public PageViewModel(IHtmlProcessor htmlProcessor)
         {
-            filter = new HtmlProcessor();
-            //EditorSettings = new EditorModel();
+            filter = htmlProcessor;
+           
         }
 
-        private HtmlProcessor filter;
+        private IHtmlProcessor filter;
 
         public IProjectSettings ProjectSettings { get; set; }
         public IPage CurrentPage { get; set; } = null;
 
         public string EditPath { get; set; } = string.Empty;
         public string NewItemPath { get; set; } = string.Empty;
-        //public EditorModel EditorSettings { get; set; } = null;
+      
 
         public bool CanEdit { get; set; } = false;
         public bool IsNew { get; set; } = false;
-        public string Mode { get; set; } = string.Empty;
+        //public string Mode { get; set; } = string.Empty;
         public bool ShowComments { get; set; } = true;
         public bool CommentsAreOpen { get; set; } = false;
         //public int ApprovedCommentCount { get; set; } = 0;
@@ -64,6 +64,29 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string FilterComment(IComment c)
         {
             return filter.FilterCommentLinks(c.Content);
+        }
+
+        public string ExtractFirstImargeUrl(IPage page, IUrlHelper urlHelper)
+        {
+            if (page == null) return string.Empty;
+            if (urlHelper == null) return string.Empty;
+
+            var result = filter.ExtractFirstImageUrl(page.Content);
+
+            if (result == null) return string.Empty;
+
+            if (result.StartsWith("http")) return result;
+
+            var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
+                        "://",
+                        urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+
+            return baseUrl + result;
+        }
+
+        public ImageSizeResult ExtractFirstImageDimensions(IPage page)
+        {
+            return filter.ExtractFirstImageDimensions(page.Content);
         }
     }
 }

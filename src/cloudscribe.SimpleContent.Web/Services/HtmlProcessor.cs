@@ -1,18 +1,16 @@
 ﻿
-using cloudscribe.SimpleContent.Models;
-using System.Text.RegularExpressions;
-using System.Globalization;
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using cloudscribe.HtmlAgilityPack;
+using cloudscribe.SimpleContent.Models;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Services
 {
-    public class HtmlProcessor
+    public class HtmlProcessor : IHtmlProcessor
     {
         public HtmlProcessor()
         { }

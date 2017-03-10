@@ -27,6 +27,7 @@ namespace cloudscribe.SimpleContent.Services
             IPostQueries postQueries,
             IPostCommands postCommands,
             IMediaProcessor mediaProcessor,
+            IHtmlProcessor htmlProcessor,
             IBlogRoutes blogRoutes,
             PostEvents eventHandlers,
             IUrlHelperFactory urlHelperFactory,
@@ -41,7 +42,7 @@ namespace cloudscribe.SimpleContent.Services
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
             this.projectService = projectService;
-            htmlProcessor = new HtmlProcessor();
+            this.htmlProcessor = htmlProcessor;
             this.blogRoutes = blogRoutes;
             this.eventHandlers = eventHandlers;
         }
@@ -56,7 +57,7 @@ namespace cloudscribe.SimpleContent.Services
         private IPostCommands postCommands;
         private IMediaProcessor mediaProcessor;
         private IProjectSettings settings = null;
-        private HtmlProcessor htmlProcessor;
+        private IHtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
         private PostEvents eventHandlers;
 
