@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2016-08-23
+// Last Modified:           2017-03-10
 // 
 
 using System;
@@ -29,7 +29,7 @@ namespace cloudscribe.SimpleContent.Syndication
             IHttpContextAccessor contextAccessor,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor,
-            HtmlProcessor htmlProcessor)
+            IHtmlProcessor htmlProcessor)
         {
             this.projectService = projectService;
             this.blogService = blogService;
@@ -46,7 +46,7 @@ namespace cloudscribe.SimpleContent.Syndication
         private IProjectService projectService;
         private IBlogService blogService;
         private IBlogRoutes blogRoutes;
-        private HtmlProcessor htmlProcessor;
+        private IHtmlProcessor htmlProcessor;
         private int maxFeedItems = 20;
 
         public string Name { get; } = "cloudscribe.SimpleContent.Syndication.RssChannelProvider";

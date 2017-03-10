@@ -300,7 +300,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
             services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
 
-            services.TryAddScoped<HtmlProcessor, HtmlProcessor>();
+            services.TryAddScoped<IHtmlProcessor, HtmlProcessor>();
             services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
 

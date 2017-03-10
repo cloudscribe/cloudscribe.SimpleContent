@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-06
+// Last Modified:           2017-03-10
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -18,21 +18,17 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class BlogViewModel
     {
-        public BlogViewModel()
+        public BlogViewModel(IHtmlProcessor htmlProcessor)
         {
             ProjectSettings = new ProjectSettings();
             Paging = new PaginationSettings();
             Categories = new Dictionary<string, int>();
             Archives = new Dictionary<string, int>();
-
-            filter = new HtmlProcessor();
-            cryptoHelper = new CryptoHelper();
-            //EditorSettings = new EditorModel();
+            filter = htmlProcessor;
             BlogRoutes = new DefaultBlogRoutes();
         }
 
-        private HtmlProcessor filter;
-        private CryptoHelper cryptoHelper;
+        private IHtmlProcessor filter;
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
 
@@ -43,7 +39,6 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string EditPath { get; set; } = string.Empty;
         public string NewItemPath { get; set; } = string.Empty;
 
-        //public EditorModel EditorSettings { get; set; } = null;
         public List<IPost> Posts { get; set; }
         public Dictionary<string, int> Categories { get; set; }
         public Dictionary<string, int> Archives { get; set; }

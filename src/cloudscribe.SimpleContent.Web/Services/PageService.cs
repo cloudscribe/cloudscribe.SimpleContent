@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-10-10
+// Last Modified:           2017-03-10
 // 
 
 
@@ -30,6 +30,7 @@ namespace cloudscribe.SimpleContent.Services
             IPageCommands pageCommands,
             PageEvents eventHandlers,
             IMediaProcessor mediaProcessor,
+            IHtmlProcessor htmlProcessor,
             IUrlHelperFactory urlHelperFactory,
             IMemoryCache cache,
             IPageNavigationCacheKeys cacheKeys,
@@ -45,7 +46,7 @@ namespace cloudscribe.SimpleContent.Services
             this.mediaProcessor = mediaProcessor;
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
-            htmlProcessor = new HtmlProcessor();
+            this.htmlProcessor = htmlProcessor;
             this.cache = cache;
             this.cacheKeys = cacheKeys;
             this.eventHandlers = eventHandlers;
@@ -61,7 +62,7 @@ namespace cloudscribe.SimpleContent.Services
         private IMediaProcessor mediaProcessor;
         private IProjectService projectService;
         private IProjectSettings settings = null;
-        private HtmlProcessor htmlProcessor;
+        private IHtmlProcessor htmlProcessor;
         private IMemoryCache cache;
         private IPageNavigationCacheKeys cacheKeys;
         private PageEvents eventHandlers;

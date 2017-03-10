@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-09
+// Last Modified:           2017-03-10
 // 
 
 
@@ -32,6 +32,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IProjectService projectService,
             IBlogService blogService,
             IBlogRoutes blogRoutes,
+            IHtmlProcessor htmlProcessor,
             IProjectEmailService emailService,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
@@ -41,6 +42,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         {
             this.projectService = projectService;
             this.blogService = blogService;
+            this.htmlProcessor = htmlProcessor;
             this.blogRoutes = blogRoutes;
             this.emailService = emailService;
             this.authorizationService = authorizationService;
@@ -53,6 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private IBlogService blogService;
         private IBlogRoutes blogRoutes;
         private IProjectEmailService emailService;
+        private IHtmlProcessor htmlProcessor;
         private ILogger log;
         private ITimeZoneHelper timeZoneHelper;
         private IAuthorizationService authorizationService;
@@ -72,7 +75,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return new EmptyResult();
             }
 
-            var model = new BlogViewModel();
+            var model = new BlogViewModel(htmlProcessor);
             model.ProjectSettings = projectSettings;
             // check if the user has the BlogEditor claim or meets policy
             model.CanEdit = await User.CanEditBlog(projectSettings.Id, authorizationService);
@@ -135,7 +138,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             int page = 1)
         {
 
-            var model = new BlogViewModel();
+            var model = new BlogViewModel(htmlProcessor);
             model.ProjectSettings = await projectService.GetCurrentProjectSettings();
             model.BlogRoutes = blogRoutes;
             model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
@@ -222,7 +225,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 result = await blogService.GetPostBySlug(slug);
             }
             
-            var model = new BlogViewModel();
+            var model = new BlogViewModel(htmlProcessor);
             model.CanEdit = canEdit;
 
             if ((result == null)||(result.Post == null))
@@ -568,209 +571,209 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AjaxPost(PostViewModel model)
-        {
-            // disable status code page for ajax requests
-            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
-            if (statusCodePagesFeature != null)
-            {
-                statusCodePagesFeature.Enabled = false;
-            }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> AjaxPost(PostViewModel model)
+        //{
+        //    // disable status code page for ajax requests
+        //    var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+        //    if (statusCodePagesFeature != null)
+        //    {
+        //        statusCodePagesFeature.Enabled = false;
+        //    }
 
-            if (string.IsNullOrEmpty(model.Title))
-            {
-                log.LogInformation("returning 500 because no title was posted");
-                return StatusCode(500);
-            }
+        //    if (string.IsNullOrEmpty(model.Title))
+        //    {
+        //        log.LogInformation("returning 500 because no title was posted");
+        //        return StatusCode(500);
+        //    }
             
-            var project = await projectService.GetCurrentProjectSettings();
+        //    var project = await projectService.GetCurrentProjectSettings();
 
-            if (project == null)
-            {
-                log.LogInformation("returning 500 blog not found");
-                return StatusCode(500);
-            }
+        //    if (project == null)
+        //    {
+        //        log.LogInformation("returning 500 blog not found");
+        //        return StatusCode(500);
+        //    }
 
-            bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
+        //    bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
             
 
-            if (!canEdit)
-            {
-                log.LogInformation("returning 403 user is not allowed to edit");
-                return StatusCode(403);
-            }
+        //    if (!canEdit)
+        //    {
+        //        log.LogInformation("returning 403 user is not allowed to edit");
+        //        return StatusCode(403);
+        //    }
 
-            var categories = new List<string>();
+        //    var categories = new List<string>();
 
-            if (!string.IsNullOrEmpty(model.Categories))
-            {
-                categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
-                    .Where(x => 
-                    !string.IsNullOrWhiteSpace(x)
-                    && x != ","
-                    )
-                    .Distinct()
-                    .ToList();
-            }
+        //    if (!string.IsNullOrEmpty(model.Categories))
+        //    {
+        //        categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
+        //            .Where(x => 
+        //            !string.IsNullOrWhiteSpace(x)
+        //            && x != ","
+        //            )
+        //            .Distinct()
+        //            .ToList();
+        //    }
 
-            IPost post = null;
-            if (!string.IsNullOrEmpty(model.Id))
-            {
-                post = await blogService.GetPost(model.Id);
-            }
+        //    IPost post = null;
+        //    if (!string.IsNullOrEmpty(model.Id))
+        //    {
+        //        post = await blogService.GetPost(model.Id);
+        //    }
 
-            var isNew = false;
-            if (post != null)
-            {
-                post.Title = model.Title;
-                post.MetaDescription = model.MetaDescription;
-                post.Content = model.Content;
-                post.Categories = categories;
-            }
-            else
-            {
-                isNew = true;
-                var slug = blogService.CreateSlug(model.Title);
-                var available = await blogService.SlugIsAvailable(slug);
-                if (!available)
-                {
-                    log.LogInformation("returning 409 because slug already in use");
+        //    var isNew = false;
+        //    if (post != null)
+        //    {
+        //        post.Title = model.Title;
+        //        post.MetaDescription = model.MetaDescription;
+        //        post.Content = model.Content;
+        //        post.Categories = categories;
+        //    }
+        //    else
+        //    {
+        //        isNew = true;
+        //        var slug = blogService.CreateSlug(model.Title);
+        //        var available = await blogService.SlugIsAvailable(slug);
+        //        if (!available)
+        //        {
+        //            log.LogInformation("returning 409 because slug already in use");
                     
-                    return StatusCode(409);
-                }
+        //            return StatusCode(409);
+        //        }
 
-                post = new Post()
-                {
-                    BlogId = project.Id,
-                    Author = User.GetUserDisplayName(),
-                    Title = model.Title,
-                    MetaDescription = model.MetaDescription,
-                    Content = model.Content,
-                    Slug = slug,
-                    Categories = categories.ToList()
-                };
-            }
+        //        post = new Post()
+        //        {
+        //            BlogId = project.Id,
+        //            Author = User.GetUserDisplayName(),
+        //            Title = model.Title,
+        //            MetaDescription = model.MetaDescription,
+        //            Content = model.Content,
+        //            Slug = slug,
+        //            Categories = categories.ToList()
+        //        };
+        //    }
 
-            post.IsPublished = model.IsPublished;
-            if(!string.IsNullOrEmpty(model.PubDate))
-            {
-                var localTime = DateTime.Parse(model.PubDate);
-                var pubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+        //    post.IsPublished = model.IsPublished;
+        //    if(!string.IsNullOrEmpty(model.PubDate))
+        //    {
+        //        var localTime = DateTime.Parse(model.PubDate);
+        //        var pubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
 
-                if (!isNew)
-                {
-                    if (pubDate != post.PubDate)
-                    {
+        //        if (!isNew)
+        //        {
+        //            if (pubDate != post.PubDate)
+        //            {
                         
-                        await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
-                    }
-                }
-                post.PubDate = pubDate;
+        //                await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
+        //            }
+        //        }
+        //        post.PubDate = pubDate;
                
-            }
+        //    }
 
-            try
-            {
-                if (isNew)
-                {
-                    await blogService.Create(post);
-                }
-                else
-                {
-                    await blogService.Update(post);
-                }
+        //    try
+        //    {
+        //        if (isNew)
+        //        {
+        //            await blogService.Create(post);
+        //        }
+        //        else
+        //        {
+        //            await blogService.Update(post);
+        //        }
 
                 
-                string url;
-                if (project.IncludePubDateInPostUrls)
-                {
-                    url = Url.Link(blogRoutes.PostWithDateRouteName,
-                        new
-                        {
-                            year = post.PubDate.Year,
-                            month = post.PubDate.Month.ToString("00"),
-                            day = post.PubDate.Date.Day.ToString("00"),
-                            slug = post.Slug
-                        });
-                }
-                else
-                {
-                    url = Url.Link(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
-                }
+        //        string url;
+        //        if (project.IncludePubDateInPostUrls)
+        //        {
+        //            url = Url.Link(blogRoutes.PostWithDateRouteName,
+        //                new
+        //                {
+        //                    year = post.PubDate.Year,
+        //                    month = post.PubDate.Month.ToString("00"),
+        //                    day = post.PubDate.Date.Day.ToString("00"),
+        //                    slug = post.Slug
+        //                });
+        //        }
+        //        else
+        //        {
+        //            url = Url.Link(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
+        //        }
 
-                //Response.StatusCode = 200;
-                //await Response.WriteAsync(url);
-                return Content(url);
+        //        //Response.StatusCode = 200;
+        //        //await Response.WriteAsync(url);
+        //        return Content(url);
                 
-            }
-            catch(Exception ex)
-            {
-                log.LogError("ajax post failed with exception " + ex.Message + " " + ex.StackTrace, ex);
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        log.LogError("ajax post failed with exception " + ex.Message + " " + ex.StackTrace, ex);
                 
-                return StatusCode(500);
-            }
+        //        return StatusCode(500);
+        //    }
             
             
-        }
+        //}
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AjaxDelete(string id)
-        {
-            // disable status code page for ajax requests
-            var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
-            if (statusCodePagesFeature != null)
-            {
-                statusCodePagesFeature.Enabled = false;
-            }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> AjaxDelete(string id)
+        //{
+        //    // disable status code page for ajax requests
+        //    var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
+        //    if (statusCodePagesFeature != null)
+        //    {
+        //        statusCodePagesFeature.Enabled = false;
+        //    }
 
-            var project = await projectService.GetCurrentProjectSettings();
+        //    var project = await projectService.GetCurrentProjectSettings();
 
-            if (project == null)
-            {
-                log.LogInformation("returning 500 blog not found");
-                return StatusCode(500);
-            }
+        //    if (project == null)
+        //    {
+        //        log.LogInformation("returning 500 blog not found");
+        //        return StatusCode(500);
+        //    }
 
-            bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
+        //    bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
             
-            if (!canEdit)
-            {
-                log.LogInformation("returning 403 user is not allowed to edit");
+        //    if (!canEdit)
+        //    {
+        //        log.LogInformation("returning 403 user is not allowed to edit");
                 
-                return StatusCode(403);
-            }
+        //        return StatusCode(403);
+        //    }
 
-            if (string.IsNullOrEmpty(id))
-            {
-                log.LogInformation("returning 404 postid not provided");
-                Response.StatusCode = 404;
-                return StatusCode(404);
-            }
+        //    if (string.IsNullOrEmpty(id))
+        //    {
+        //        log.LogInformation("returning 404 postid not provided");
+        //        Response.StatusCode = 404;
+        //        return StatusCode(404);
+        //    }
 
-            var post = await blogService.GetPost(id);
+        //    var post = await blogService.GetPost(id);
 
-            if (post == null)
-            {
-                log.LogInformation("returning 404 not found");
+        //    if (post == null)
+        //    {
+        //        log.LogInformation("returning 404 not found");
                 
-                return StatusCode(404);
-            }
-            log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
+        //        return StatusCode(404);
+        //    }
+        //    log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
 
-            await blogService.Delete(post.Id);
+        //    await blogService.Delete(post.Id);
 
-            // TODO: clear cache
+        //    // TODO: clear cache
 
-            //Response.StatusCode = 200;
-            //return; //new EmptyResult();
-            return StatusCode(200);
+        //    //Response.StatusCode = 200;
+        //    //return; //new EmptyResult();
+        //    return StatusCode(200);
 
-        }
+        //}
 
         [HttpPost]
         [AllowAnonymous]
@@ -896,7 +899,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     ).Forget(); //async but don't want to wait
             }
             
-            var viewModel = new BlogViewModel();
+            var viewModel = new BlogViewModel(htmlProcessor);
             viewModel.ProjectSettings = project;
             viewModel.BlogRoutes = blogRoutes;
             viewModel.CurrentPost = blogPost;
