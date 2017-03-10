@@ -1,9 +1,11 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Web.Design
 @using cloudscribe.SimpleContent.Web
+@using cloudscribe.Web.Navigation;
 @using cloudscribe.SimpleContent.Web.TagHelpers
-@inject IRoleSelectorProperties roleSelector
-
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
 @section Meta {
     @{await Html.RenderPartialAsync("MetaPartial", Model); }
 }
@@ -13,30 +15,18 @@
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+        await Html.RenderPartialAsync("ToolsPartial", Model);  
     }
 }
 @{await Html.RenderPartialAsync("PageDetailPartial", Model); }
-@section Bottom {
-   
+@if (Model.CurrentPage != null && Model.CurrentPage.ShowMenu)
+{
+    @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
+}
+@if (Model.ProjectSettings.ShowRecentPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
+{
+    @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
 }
 @section Scripts {
-    @if (Model.CanEdit)
-    {
-        await Html.RenderPartialAsync("EditorScriptsPartial");
-        @if (!string.IsNullOrEmpty(Model.Mode))
-        {
-            if (roleSelector.RequiredScriptPaths != null)
-            {
-                foreach (var s in roleSelector.RequiredScriptPaths)
-                {
-                    <script src="@Url.Content(s)"></script>
-                }
-            }
-        }
-    }
-    @if (Model.CommentsAreOpen && Model.Mode.Length == 0)
-    {
-        await Html.RenderPartialAsync("CommentScriptsPartial");
-    }
+   
 }

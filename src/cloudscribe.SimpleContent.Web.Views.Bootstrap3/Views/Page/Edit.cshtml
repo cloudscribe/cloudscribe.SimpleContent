@@ -9,6 +9,10 @@
 @inject IStringLocalizer<SimpleContent> sr
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
+@section Styles {
+<link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
+<link rel="stylesheet" href="~/csscsr/contentadmincssmin" />
+}
     <h2>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
     <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
@@ -76,6 +80,9 @@
             </div>
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
+            <div class="col-md-12">
+                &nbsp;
+            </div>
             <div class="form-group">
                 <label asp-for="Slug" class="col-md-2 control-label">@sr["Slug"]</label>
                 <div class="col-md-10">
@@ -117,6 +124,22 @@
                     </div>
                 </div>
             </div>
+            @if (string.IsNullOrEmpty(Model.DisqusShortname))
+            {
+                <input asp-for="ShowComments" type="hidden" />
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <div class="checkbox">
+                            <label>
+                                <input asp-for="ShowComments" /> @sr["Enable Comments"]
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="PageOrder" class="col-md-2 control-label">@sr["Page Order"]</label>
                 <div class="col-md-10">
@@ -124,7 +147,6 @@
                     <span asp-validation-for="PageOrder" class="text-danger"></span>
                 </div>
             </div>
-            
             <div class="form-group">
                 <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
                 <div class="form-inline col-md-10">
@@ -136,7 +158,6 @@
                     <span asp-validation-for="ViewRoles" class="text-danger"></span>
                 </div>
             </div>
-
         </div>
     </div>
     <div class="form-group">

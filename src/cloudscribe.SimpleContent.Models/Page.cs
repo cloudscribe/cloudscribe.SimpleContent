@@ -72,6 +72,7 @@ namespace cloudscribe.SimpleContent.Models
             p.Author = page.Author;
             p.Categories = page.Categories;
             p.Comments = page.Comments;
+            p.CorrelationKey = page.CorrelationKey;
             p.Content = page.Content;
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;
@@ -85,6 +86,7 @@ namespace cloudscribe.SimpleContent.Models
             p.ShowCategories = page.ShowCategories;
             p.ShowComments = page.ShowComments;
             p.ShowHeading = page.ShowHeading;
+            p.ShowMenu = page.ShowMenu;
             p.MenuOnly = page.MenuOnly;
             p.ShowLastModified = page.ShowLastModified;
             p.ShowPubDate = page.ShowPubDate;

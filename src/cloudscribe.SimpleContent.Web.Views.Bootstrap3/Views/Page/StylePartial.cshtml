@@ -1,16 +1,2 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
-<environment names="Development">
-    @if (Model.CanEdit)
-    {
-        <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercss" />
-        <link rel="stylesheet" href="~/csscsr/contentadmincss" />
-    }
-</environment>
-<environment names="Staging,Production">
-    @if (Model.CanEdit)
-    {
-        <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
-        <link rel="stylesheet" href="~/csscsr/contentadmincssmin" />
-    }
-</environment>
 <link rel="dns-prefetch" href="//gravatar.com/" />

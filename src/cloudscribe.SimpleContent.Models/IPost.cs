@@ -17,5 +17,6 @@ namespace cloudscribe.SimpleContent.Models
         DateTime PubDate { get; set; }
         string Slug { get; set; }
         string Title { get; set; }
+        string CorrelationKey { get; set; }
     }
 }

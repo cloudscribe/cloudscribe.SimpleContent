@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-03-08
+// Last Modified:			2017-03-10
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -223,6 +223,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.DisqusShortName)
                 .HasMaxLength(100)
                 ;
+
+                entity.Property(p => p.ShowRecentPostsOnDefaultPage)
+                .IsRequired()
+                .HasDefaultValue(false)
+                ;
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
@@ -234,6 +239,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.Id)
                 .HasMaxLength(36)
                 ;
+
+                entity.Property(p => p.CorrelationKey)
+                .HasMaxLength(255)
+                ;
+
+                entity.HasIndex(p => p.CorrelationKey);
 
                 entity.Property(p => p.BlogId)
                 .HasMaxLength(36)

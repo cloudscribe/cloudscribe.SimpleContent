@@ -48,6 +48,8 @@
         string PublisherLogoWidth { get; set; } 
         string PublisherLogoHeight { get; set; }
         string PublisherEntityType { get; set; }
-        string DisqusShortName { get; set; } 
+        string DisqusShortName { get; set; }
+        bool ShowRecentPostsOnDefaultPage { get; set; }
+
     }
 }

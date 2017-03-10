@@ -95,6 +95,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string PublisherEntityType { get; set; } = "Organization";
 
         public string DisqusShortName { get; set; } = string.Empty;
+        public bool ShowRecentPostsOnDefaultPage { get; set; }
 
 
     }

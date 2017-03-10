@@ -3,6 +3,7 @@
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
+@using System.Globalization
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
@@ -13,7 +14,7 @@
 
     public string GetFooterClass()
     {
-        if (Model.Mode.Length > 0) return "";
+       
         return "bh";
     }
     public string GetEditTitle()
@@ -27,87 +28,52 @@
          data-approve-comment-url="@Url.Action("AjaxApproveComment", "Page")"
          data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Page")"
          itemscope itemtype="http://schema.org/Article">
-    @if ((Model.CurrentPage.ShowHeading) || (Model.Mode == "new") || (Model.Mode == "edit"))
+    @if (Model.CurrentPage.ShowHeading)
     {
         <header class="">
-            @if (Model.Mode == "new")
-            {
-                <h1 id="article-title" itemprop="headline name">@GetEditTitle()</h1>
-            }
-            else
-            {
-                <h1 id="article-title" itemprop="headline">
+                <h1 id="article-title" itemprop="headline name">
                     @Model.CurrentPage.Title
                 </h1>
-            }
         </header>
     }
-    @if (!string.IsNullOrEmpty(Model.Mode))
+    <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
+    @if (!Model.CurrentPage.ShowHeading)
     {
-        <div id="excerpt" style="display:none;">
-            <h4>@sr["meta description:"]</h4>
-            <div itemprop="description">@Model.CurrentPage.MetaDescription</div>
+        <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta>
+    }
+    @{
+        var imageUrl = Model.ExtractFirstImargeUrl(Model.CurrentPage, Url);
+        var imageSize = Model.ExtractFirstImageDimensions(Model.CurrentPage);
+    }
+    @if (!string.IsNullOrEmpty(imageUrl))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+            <schema-org-meta itemprop="url" content="@imageUrl"></schema-org-meta>
+            <schema-org-meta itemprop="width" content="@imageSize.Width"></schema-org-meta>
+            <schema-org-meta itemprop="height" content="@imageSize.Height"></schema-org-meta>
         </div>
     }
-    @if (string.IsNullOrEmpty(Model.Mode))
+    @if (!string.IsNullOrEmpty(Model.CurrentPage.Author))
     {
-        <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
-    }
-    else
-    {
-        <div itemprop="articleBody">@Html.Raw(Model.CurrentPage.Content)</div>
-    }
-    @if ((Model.CurrentPage != null) && (!string.IsNullOrEmpty(Model.CurrentPage.Id)) && (Model.CurrentPage.ShowComments))
-    {
-        <section id="comments" aria-label="Comments">
-            @if (Model.CurrentPage.ApprovedCommentCount() > 0)
-                {
-                <h2>@sr["Comments"]</h2>
-            }
-            @foreach (var comment in Model.CurrentPage.Comments)
-            {
-                Model.TmpComment = comment;
-                if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || Model.CanEdit)
-                {
-                    await Html.RenderPartialAsync("CommentPartial", Model);
-                }
-            }
-        </section>
-        @if (Model.CommentsAreOpen)
-        {
-            await Html.RenderPartialAsync("CommentFormPartial", Model);
-        }
-    }
-    @if ((Model.Mode.Length > 10) || (Model.CurrentPage.ShowComments) || (Model.CurrentPage.ShowCategories))
-    {
-        <div class="@GetFooterClass()">
-            @if (Model.Mode.Length > 10)
-            {
-                <input type='text' itemprop="datePublished" id='datetimepicker' value="@Model.FormatDateForEdit(Model.CurrentPage.PubDate)" />
-            }
-            else if (Model.CurrentPage.ShowPubDate)
-            {
-                <time datetime="@Model.FormatDateForEdit(Model.CurrentPage.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.CurrentPage.PubDate)</time>
-            }
-            @if (Model.CurrentPage.ShowComments)
-            {
-                <a href="@Model.CurrentPage.Slug#comments">
-                    <i class="@icons.Comments"></i>
-                    @Model.CurrentPage.ApprovedCommentCount() @sr["Comments"]
-                </a>
-            }
-            @if (Model.CurrentPage.ShowCategories)
-            {
-                <ul class="categories">
-                    <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
-                    @foreach (string cat in Model.CurrentPage.Categories)
-                    {
-                        <li itemprop="articleSection">
-                            <a asp-controller="Blog" asp-action="Categoty" asp-route-category="@cat">@cat</a>
-                        </li>
-                    }
-                </ul>
-            }
+        <div class="collapse" aria-hidden="true" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <schema-org-meta itemprop="name" content="@Model.CurrentPage.Author"></schema-org-meta>
         </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ProjectSettings.Publisher))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/@Model.ProjectSettings.PublisherEntityType">
+            <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
+            <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
+                <schema-org-meta itemprop="width" content="@Model.ProjectSettings.PublisherLogoWidth"></schema-org-meta>
+                <schema-org-meta itemprop="height" content="@Model.ProjectSettings.PublisherLogoHeight"></schema-org-meta>
+            </div>
+        </div>
+    }
+    <schema-org-meta itemprop="datePublished" content="@Model.CurrentPage.PubDate.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    <schema-org-meta itemprop="dateModified" content="@Model.CurrentPage.LastModified.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    @if ((Model.CurrentPage.ShowComments) && (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName)))
+    {
+        await Html.RenderPartialAsync("DisqusCommentsPartial", Model);
     }
 </article>
