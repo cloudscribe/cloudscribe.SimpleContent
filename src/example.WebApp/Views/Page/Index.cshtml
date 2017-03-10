@@ -2,6 +2,7 @@
 @using cloudscribe.SimpleContent.Models
 @using cloudscribe.SimpleContent.Web.Design
 @using cloudscribe.SimpleContent.Web
+@using cloudscribe.Web.Navigation;
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
@@ -18,14 +19,14 @@
     }
 }
 @{await Html.RenderPartialAsync("PageDetailPartial", Model); }
+@if (Model.CurrentPage != null && Model.CurrentPage.ShowMenu)
+{
+    @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
+}
 @if (Context.Request.Path == "/")
 {
     @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
 }
 @section Scripts {
-    
-    @if (Model.CommentsAreOpen)
-    {
-        await Html.RenderPartialAsync("CommentScriptsPartial");
-    }
+   
 }

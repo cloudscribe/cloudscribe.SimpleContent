@@ -76,6 +76,9 @@
             </div>
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
+            <div class="col-md-12">
+                &nbsp;
+            </div>
             <div class="form-group">
                 <label asp-for="Slug" class="col-md-2 control-label">@sr["Slug"]</label>
                 <div class="col-md-10">
@@ -117,26 +120,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PageOrder" class="col-md-2 control-label">@sr["Page Order"]</label>
-                <div class="col-md-10">
-                    <input asp-for="PageOrder" class="form-control" />
-                    <span asp-validation-for="PageOrder" class="text-danger"></span>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
-                <div class="form-inline col-md-10">
-                    <input asp-for="ViewRoles" class="form-control" style="width:80%;" />
-                    <a class="btn btn-default"
-                       csc-role-selector="@roleSelector"
-                       csc-projectId="@Model.ProjectId"
-                       csc-target-id="ViewRoles">@sr["Select Roles"]</a>
-                    <span asp-validation-for="ViewRoles" class="text-danger"></span>
-                </div>
-            </div>
-            @if(string.IsNullOrEmpty(Model.DisqusShortname))
+            @if (string.IsNullOrEmpty(Model.DisqusShortname))
             {
                 <input asp-for="ShowComments" type="hidden" />
             }
@@ -151,9 +135,25 @@
                         </div>
                     </div>
                 </div>
-
             }
-
+            <div class="form-group">
+                <label asp-for="PageOrder" class="col-md-2 control-label">@sr["Page Order"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PageOrder" class="form-control" />
+                    <span asp-validation-for="PageOrder" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
+                <div class="form-inline col-md-10">
+                    <input asp-for="ViewRoles" class="form-control" style="width:80%;" />
+                    <a class="btn btn-default"
+                       csc-role-selector="@roleSelector"
+                       csc-projectId="@Model.ProjectId"
+                       csc-target-id="ViewRoles">@sr["Select Roles"]</a>
+                    <span asp-validation-for="ViewRoles" class="text-danger"></span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="form-group">

@@ -85,6 +85,7 @@ namespace cloudscribe.SimpleContent.Models
             p.ShowCategories = page.ShowCategories;
             p.ShowComments = page.ShowComments;
             p.ShowHeading = page.ShowHeading;
+            p.ShowMenu = page.ShowMenu;
             p.MenuOnly = page.MenuOnly;
             p.ShowLastModified = page.ShowLastModified;
             p.ShowPubDate = page.ShowPubDate;

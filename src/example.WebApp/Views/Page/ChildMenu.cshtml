@@ -16,8 +16,8 @@
         await Html.RenderPartialAsync("ToolsPartial", Model);
     }
 }
-@await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "RootNode" })
-@section Scripts {
-    
-    
+@if (Model.CurrentPage.ShowHeading)
+{
+    <h2>@ViewData["Title"]</h2>
 }
+@await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
