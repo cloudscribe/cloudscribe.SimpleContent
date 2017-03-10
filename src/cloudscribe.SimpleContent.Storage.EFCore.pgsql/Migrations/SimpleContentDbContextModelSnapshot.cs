@@ -112,6 +112,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                     b.Property<string>("RemoteFeedUrl")
                         .HasMaxLength(255);
 
+                    b.Property<bool>("ShowRecentPostsOnDefaultPage")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:DefaultValue", false);
+
                     b.Property<bool>("ShowTitle");
 
                     b.Property<string>("SmtpPassword");
@@ -407,6 +411,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<string>("CorrelationKey")
+                        .HasMaxLength(255);
+
                     b.Property<bool>("IsPublished");
 
                     b.Property<DateTime>("LastModified");
@@ -427,6 +434,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BlogId");
+
+                    b.HasIndex("CorrelationKey");
 
                     b.HasIndex("Slug");
 

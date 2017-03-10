@@ -72,6 +72,7 @@ namespace cloudscribe.SimpleContent.Models
             p.Author = page.Author;
             p.Categories = page.Categories;
             p.Comments = page.Comments;
+            p.CorrelationKey = page.CorrelationKey;
             p.Content = page.Content;
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;

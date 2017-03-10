@@ -8,9 +8,10 @@ using cloudscribe.SimpleContent.Storage.EFCore.MySQL;
 namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170310190111_changes20170310")]
+    partial class changes20170310
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1");

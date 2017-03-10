@@ -16,7 +16,16 @@ namespace cloudscribe.SimpleContent.Models
         public string BlogId { get; set; } 
 
         public string Title { get; set; }
-        
+
+        /// <summary>
+        /// This field is a place to store a surrogate key if needed.
+        /// For example in a multi-tenant multi-lanaguage setup, it could be used
+        /// to correlate posts between the different language sites
+        /// to implement a language switcher. ie the corresponding post in the other
+        /// site could be found by looking it up by the correlationkey
+        /// </summary>
+        public string CorrelationKey { get; set; } = string.Empty;
+
         public string Author { get; set; }
         
         public string Slug { get; set; }
@@ -49,6 +58,7 @@ namespace cloudscribe.SimpleContent.Models
             p.PubDate = post.PubDate;
             p.Slug = post.Slug;
             p.Title = post.Title;
+            p.CorrelationKey = post.CorrelationKey;
             
             return p;
         }

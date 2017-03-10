@@ -124,6 +124,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("RemoteFeedUrl")
                         .HasMaxLength(255);
 
+                    b.Property<bool>("ShowRecentPostsOnDefaultPage")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ColumnType", "bit")
+                        .HasAnnotation("SqlServer:DefaultValue", false);
+
                     b.Property<bool>("ShowTitle")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ColumnType", "bit")
@@ -442,6 +447,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<string>("CorrelationKey")
+                        .HasMaxLength(255);
+
                     b.Property<bool>("IsPublished")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ColumnType", "bit")
@@ -465,6 +473,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BlogId");
+
+                    b.HasIndex("CorrelationKey");
 
                     b.HasIndex("Slug");
 

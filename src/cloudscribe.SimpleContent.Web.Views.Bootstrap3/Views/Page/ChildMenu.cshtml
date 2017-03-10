@@ -13,7 +13,7 @@
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("EditorBarPartial", Model.EditorSettings);
+        await Html.RenderPartialAsync("ToolsPartial", Model);
     }
 }
 @if (Model.CurrentPage.ShowHeading)
@@ -21,23 +21,3 @@
     <h2>@ViewData["Title"]</h2>
 }
 @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
-@section Scripts {
-    @if (Model.CanEdit)
-    {
-        await Html.RenderPartialAsync("EditorScriptsPartial");
-        @if (!string.IsNullOrEmpty(Model.Mode))
-        {
-            if (roleSelector.RequiredScriptPaths != null)
-            {
-                foreach (var s in roleSelector.RequiredScriptPaths)
-                {
-                    <script src="@Url.Content(s)"></script>
-                }
-            }
-        }
-    }
-    @if (Model.CommentsAreOpen && Model.Mode.Length == 0)
-    {
-        await Html.RenderPartialAsync("CommentScriptsPartial");
-    }
-}
