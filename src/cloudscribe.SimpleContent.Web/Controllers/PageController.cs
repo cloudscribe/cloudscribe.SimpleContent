@@ -204,6 +204,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var model = new PageEditViewModel();
             model.ProjectId = projectSettings.Id;
+            model.DisqusShortname = projectSettings.DisqusShortName;
             model.FileBrowseUrl = Url.Action("CkFileDialog", "FileManager", new { type = "file" });
             model.ImageBrowseUrl = Url.Action("CkFileDialog", "FileManager", new { type = "image" });
             model.DropFileUrl = Url.Action("Upload", "FileManager");
@@ -250,7 +251,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.ExternalUrl = page.ExternalUrl;
                 model.Title = page.Title;
                 model.ViewRoles = page.ViewRoles;
-                
+                model.ShowComments = page.ShowComments;
                 
             }
 
@@ -358,6 +359,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 slugIsAvailable = await pageService.SlugIsAvailable(project.Id, slug);
                 if (!slugIsAvailable)
                 {
+                    model.DisqusShortname = project.DisqusShortName;
                     //log.LogInformation("returning 409 because slug already in use");
                     ModelState.AddModelError("pageediterror", sr["slug is already in use."]);
 
@@ -411,6 +413,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             page.ShowHeading = model.ShowHeading;
             page.ShowMenu = model.ShowMenu;
             page.MenuOnly = model.MenuOnly;
+            page.ShowComments = model.ShowComments;
 
             if(!string.IsNullOrEmpty(model.Author))
             {

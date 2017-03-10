@@ -1,7 +1,7 @@
 ﻿@using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Models
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
-@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @using cloudscribe.SimpleContent.Web.Design
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
@@ -10,14 +10,14 @@
 @{
     var disqusScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/embed.js";
 }
-@if ((Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)))
+@if ((Model.CurrentPage != null) && (!string.IsNullOrEmpty(Model.CurrentPage.Id)))
 {
     @sr["Comments"]
     <div id="disqus_thread"></div>
         <script>
         var disqus_config = function () {
             this.page.url = "@Context.Request.GetCurrentFullUrl()";
-            this.page.identifier = "@Model.CurrentPost.Id";
+            this.page.identifier = "@Model.CurrentPage.Id";
         };
 
         (function () {

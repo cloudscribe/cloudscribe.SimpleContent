@@ -38,6 +38,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public bool ShowHeading { get; set; } = true;
 
+        public string DisqusShortname { get; set; }
+
+        public bool ShowComments { get; set; } = false;
+
         public string ExternalUrl { get; set; } = string.Empty;
 
         public bool ShowMenu { get; set; } = false;

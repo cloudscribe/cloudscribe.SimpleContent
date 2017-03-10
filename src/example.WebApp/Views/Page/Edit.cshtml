@@ -136,6 +136,23 @@
                     <span asp-validation-for="ViewRoles" class="text-danger"></span>
                 </div>
             </div>
+            @if(string.IsNullOrEmpty(Model.DisqusShortname))
+            {
+                <input asp-for="ShowComments" type="hidden" />
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <div class="checkbox">
+                            <label>
+                                <input asp-for="ShowComments" /> @sr["Enable Comments"]
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            }
 
         </div>
     </div>
