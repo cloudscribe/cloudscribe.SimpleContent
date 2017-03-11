@@ -2,14 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2017-03-02
-// Last Modified:           2017-03-02
+// Last Modified:           2017-03-11
 // 
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -19,6 +15,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         [Required(ErrorMessage = "ProjectId is required")]
         public string ProjectId { get; set; } = string.Empty;
+
+        public string CorrelationKey { get; set; } = string.Empty;
 
 
         [Required(ErrorMessage = "Title is required")]

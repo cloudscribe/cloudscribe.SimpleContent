@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-10
+// Last Modified:           2017-03-11
 // 
 
 
@@ -347,6 +347,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.Author = postResult.Post.Author;
                 model.Content = postResult.Post.Content;
                 model.Id = postResult.Post.Id;
+                model.CorrelationKey = postResult.Post.CorrelationKey;
                 model.IsPublished = postResult.Post.IsPublished;
                 model.MetaDescription = postResult.Post.MetaDescription;
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate, projectSettings.TimeZoneId).ToString();
@@ -490,6 +491,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
             
             post.IsPublished = model.IsPublished;
+            post.CorrelationKey = model.CorrelationKey;
       
            
             if (!string.IsNullOrEmpty(model.PubDate))

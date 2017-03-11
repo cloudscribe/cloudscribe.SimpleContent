@@ -15,6 +15,7 @@
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <input asp-for="CorrelationKey" type="hidden" />
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
     <div class="form-group">

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-11-28
+// Last Modified:           2017-03-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -331,6 +331,17 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
 
             return result;
+        }
+
+        public async Task<IPost> GetPostByCorrelationKey(
+            string blogId,
+            string correlationKey,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
+            return allPosts.FirstOrDefault(p => p.CorrelationKey == correlationKey);
+
         }
 
         public async Task<bool> SlugIsAvailable(

@@ -2,12 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-09-08
+// Last Modified:           2017-03-11
 // 
 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.Logging;
 using NoDb;
 using System;
 using System.Collections.Generic;
@@ -94,6 +93,17 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
             return allPages.FirstOrDefault(p => p.Slug == slug);
+        }
+
+        public async Task<IPage> GetPageByCorrelationKey(
+            string projectId,
+            string correlationKey,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+
+            var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
+            return allPages.FirstOrDefault(p => p.CorrelationKey == correlationKey);
         }
 
         public async Task<bool> SlugIsAvailable(

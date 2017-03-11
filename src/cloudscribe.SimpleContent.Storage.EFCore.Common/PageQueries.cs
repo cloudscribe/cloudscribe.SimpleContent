@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-11-09
+// Last Modified:			2017-03-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -118,6 +118,24 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .AsNoTracking()
                 .Where(p => 
                 p.Slug == slug && p.ProjectId == projectId)
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false)
+                ;
+        }
+
+        public async Task<IPage> GetPageByCorrelationKey(
+            string projectId,
+            string correlationKey,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return await dbContext.Pages
+                .AsNoTracking()
+                .Where(p =>
+                p.CorrelationKey == correlationKey && p.ProjectId == projectId)
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false)
                 ;
