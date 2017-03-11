@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-11-09
+// Last Modified:			2017-03-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -326,6 +326,25 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
 
             return result;
+        }
+
+        public async Task<IPost> GetPostByCorrelationKey(
+            string blogId,
+            string correlationKey,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var query = dbContext.Posts
+                     .Include(p => p.PostComments)
+                     .Where(p => p.CorrelationKey == correlationKey && p.BlogId == blogId)
+                     ;
+
+            var post = await query.AsNoTracking().FirstOrDefaultAsync<PostEntity>().ConfigureAwait(false);
+
+            return post;
         }
 
         public async Task<bool> SlugIsAvailable(

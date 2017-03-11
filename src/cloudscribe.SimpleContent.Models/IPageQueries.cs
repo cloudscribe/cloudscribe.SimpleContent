@@ -2,12 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-11-26
+// Last Modified:           2017-03-11
 // 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,6 +28,12 @@ namespace cloudscribe.SimpleContent.Models
         Task<IPage> GetPageBySlug(
             string projectId,
             string slug,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
+        Task<IPage> GetPageByCorrelationKey(
+            string projectId,
+            string correlationKey,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
