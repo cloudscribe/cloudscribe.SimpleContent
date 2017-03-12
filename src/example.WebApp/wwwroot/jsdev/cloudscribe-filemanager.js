@@ -38,7 +38,7 @@
             $("#cropCurrentDir").val('');
             $("#croppedFileName").val('');
             fileManager.uploadTab.show();
-            fileManager.cropTab.hide();
+            //fileManager.cropTab.hide();
         },
         setCurrentDirectory: function (virtualPath) {
             $("#newFolderCurrentDir").val(virtualPath);
@@ -502,7 +502,7 @@
         init: function () {
             $(document).bind('drop dragover', function (e) { e.preventDefault(); });
             this.progressUI.hide();
-            this.cropTab.hide();
+            //this.cropTab.hide();
             this.loadTree();
             this.setupFileLoader();
             this.newFolderButton.on('click', fileManager.createFolder);
@@ -533,6 +533,9 @@
             var $dataRotate = $('#dataRotate');
             var $dataScaleX = $('#dataScaleX');
             var $dataScaleY = $('#dataScaleY');
+            //var $coppedSizeLabelDiv = $('#modalSizeLabel');
+            var $outputHeight = $('#dataNewHeight');
+            var $outputWidth = $('#dataNewWidth');
             var options = {
                 aspectRatio: 16 / 9,
                 preview: '.img-preview',
@@ -544,6 +547,11 @@
                     $dataRotate.val(e.rotate);
                     $dataScaleX.val(e.scaleX);
                     $dataScaleY.val(e.scaleY);
+                    $outputHeight.val(Math.round(e.height));
+                    $outputWidth.val(Math.round(e.width));
+                    //$coppedSizeLabelDiv.html($dataWidth.val() + 'x' + $dataHeight.val());
+                    cropManager.setCroppedFileName(Math.round(e.width), Math.round(e.height))
+
                 }
             };
             var originalImageURL = $image.attr('src');
@@ -626,6 +634,24 @@
             // Methods
             //uploadCroppedImage
             $("#btnUploadCropped").on('click', cropManager.uploadCroppedImage);
+            $outputWidth.on('blur', function () {
+                var aspect = cropManager.getCropAspectRatio();
+                //alert(aspect);
+                var newWidth = parseInt($outputWidth.val())
+                var newHeight = parseInt(newWidth / aspect);
+                //alert(newHeight);
+                $outputHeight.val(newHeight);
+
+                cropManager.setCroppedFileName(newWidth, newHeight)
+            });
+
+            $outputHeight.on('blur', function () {
+                var aspect = cropManager.getCropAspectRatio();
+                var newHeight = parseInt($outputHeight.val());
+                var newWidth = parseInt(newHeight * aspect);
+                $outputWidth.val(newWidth);
+                cropManager.setCroppedFileName(newWidth, newHeight)
+            });
 
             $('.docs-buttons').on('click', '[data-method]', function () {
                 var $this = $(this);
@@ -655,6 +681,11 @@
                     if (data.method === 'rotate') {
                         $image.cropper('clear');
                     }
+                    if ((typeof data.option === 'undefined') && (data.method === 'getCroppedCanvas')) {
+                        //alert('need size');
+                        data.option = { width: $outputWidth.val(), height: $outputHeight.val()};
+                    }
+                    
 
                     result = $image.cropper(data.method, data.option, data.secondOption);
 
@@ -757,6 +788,9 @@
                             }
 
                             uploadedImageURL = URL.createObjectURL(file);
+                            $('#origFileName').val(file.name.toLowerCase());
+                            $('#croppedFileName').val(file.name.toLowerCase());
+                            //alert(file.name);
                             $image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
                             $inputImage.val('');
                         } else {
@@ -772,6 +806,20 @@
             if (($('#image').data('cropper'))) {
                 $('#image').cropper('destroy');
             }
+        },
+        setCroppedFileName: function (width, height) {
+            var origName = $('#origFileName').val();
+            var nameWithoutExtension = origName.substring(0, origName.lastIndexOf('.'));
+            var ext = origName.substring(origName.lastIndexOf('.'));
+            //alert(nameWithoutExtension);
+            //alert(ext);
+            $('#croppedFileName').val(nameWithoutExtension + "-" + width + "x" + height + ext);
+        },
+        getCropAspectRatio: function ()
+        {
+            var cropbox = $('#image').cropper('getCropBoxData');
+            return cropbox.width / cropbox.height;
+
         },
         uploadCroppedImage: function () {
 

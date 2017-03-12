@@ -181,49 +181,71 @@
                     </span>
                 </button>
             </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary" data-method="disable" title="Disable">
-                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;disable&quot;)">
-                        <span class="fa fa-lock"></span>
-                    </span>
-                </button>
-                <button type="button" class="btn btn-primary" data-method="enable" title="Enable">
-                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;enable&quot;)">
-                        <span class="fa fa-unlock"></span>
-                    </span>
-                </button>
-            </div>
+            @*
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" data-method="disable" title="Disable">
+            <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;disable&quot;)">
+                <span class="fa fa-lock"></span>
+            </span>
+        </button>
+        <button type="button" class="btn btn-primary" data-method="enable" title="Enable">
+            <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;enable&quot;)">
+                <span class="fa fa-unlock"></span>
+            </span>
+        </button>
+    </div>
+            *@
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" data-method="reset" title="Reset">
                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;reset&quot;)">
                         <span class="fa fa-refresh"></span>
                     </span>
                 </button>
+                
+                
+            </div>
+            <div class="btn-group">
                 <label class="btn btn-primary btn-upload" for="inputImage" title="Upload image file">
                     <input type="file" class="sr-only" id="inputImage" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff">
                     <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="Import image with Blob URLs">
-                        <span class="fa fa-upload"></span>
+                        <span class="fa fa-upload"></span> Choose an image from your device
                     </span>
                 </label>
-                
             </div>
-            <div class="btn-group btn-group-crop">
-                <button type="button" class="btn btn-primary" data-method="getCroppedCanvas">
-                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCroppedCanvas&quot;)">
-                        Get Cropped Canvas
-                    </span>
-                </button>
-                <button type="button" class="btn btn-primary" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 160, &quot;height&quot;: 90 }">
-                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 160, height: 90 })">
-                        160×90
-                    </span>
-                </button>
-                <button type="button" class="btn btn-primary" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 320, &quot;height&quot;: 180 }">
-                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 320, height: 180 })">
-                        320×180
-                    </span>
-                </button>
+            <div class="form-inline">
+                <div class="input-group input-group-sm">
+                    <label class="input-group-addon" for="dataWidth">W</label>
+                    <input type="text" class="form-control" id="dataNewWidth" placeholder="output width">
+                    <span class="input-group-addon">px</span>
+                </div>
+                <div class="input-group input-group-sm">
+                    <label class="input-group-addon" for="dataHeight">H</label>
+                    <input type="text" class="form-control" id="dataNewHeight" placeholder="output height">
+                    <span class="input-group-addon">px</span>
+                </div>
+                <div class="btn-group btn-group-crop form-group">
+                    
+                    <button type="button" class="btn btn-primary" data-method="getCroppedCanvas">
+                        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCroppedCanvas&quot;)">
+                            Upload/Save
+                        </span>
+                    </button>
+                    @*
+            <button type="button" class="btn btn-primary" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 160, &quot;height&quot;: 90 }">
+                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 160, height: 90 })">
+                    160×90
+                </span>
+            </button>
+            <button type="button" class="btn btn-primary" data-method="getCroppedCanvas" data-option="{ &quot;width&quot;: 320, &quot;height&quot;: 180 }">
+                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 320, height: 180 })">
+                    320×180
+                </span>
+            </button>
+                    *@
+                   
+                </div>
             </div>
+            
 
             <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
                 <div class="modal-dialog">
@@ -236,11 +258,13 @@
                         </div>
                         <div class="modal-body"></div>
                         <div class="modal-footer">
+                            
                             <form id="frmUploadCropped" class="form-inline" asp-controller="FileManager" asp-action="Upload">
                                 <input type="hidden" id="cropResizeImages" name="resizeImages" value="false" />
                                 <input type="hidden" id="cropCurrentDir" name="currentDir" value="" />
                                 <div class="form-group">
                                     <input type="text" class="form-control" id="croppedFileName" name="croppedFileName" />
+                                    <input type="hidden" class="form-control" id="origFileName" />
                                 </div>
                                 <button id="btnUploadCropped" type="submit" class="btn btn-primary"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;@sr["Upload"]</button>
                                 <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">Save Locally</a>
@@ -252,46 +276,49 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" data-method="getData" data-option="" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getData&quot;)">
-                    Get Data
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary" data-method="setData" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;setData&quot;, data)">
-                    Set Data
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary" data-method="getContainerData" data-option="" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getContainerData&quot;)">
-                    Get Container Data
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary" data-method="getImageData" data-option="" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getImageData&quot;)">
-                    Get Image Data
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary" data-method="getCanvasData" data-option="" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCanvasData&quot;)">
-                    Get Canvas Data
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary" data-method="setCanvasData" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;setCanvasData&quot;, data)">
-                    Set Canvas Data
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary" data-method="getCropBoxData" data-option="" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCropBoxData&quot;)">
-                    Get Crop Box Data
-                </span>
-            </button>
-            <button type="button" class="btn btn-primary" data-method="setCropBoxData" data-target="#putData">
-                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;setCropBoxData&quot;, data)">
-                    Set Crop Box Data
-                </span>
-            </button>
+
+           
+    <button type="button" class="btn btn-primary" data-method="getData" data-option="" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getData&quot;)">
+            Get Data
+        </span>
+    </button>
+    <button type="button" class="btn btn-primary" data-method="setData" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;setData&quot;, data)">
+            Set Data
+        </span>
+    </button>
+    <button type="button" class="btn btn-primary" data-method="getContainerData" data-option="" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getContainerData&quot;)">
+            Get Container Data
+        </span>
+    </button>
+    <button type="button" class="btn btn-primary" data-method="getImageData" data-option="" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getImageData&quot;)">
+            Get Image Data
+        </span>
+    </button>
+    <button type="button" class="btn btn-primary" data-method="getCanvasData" data-option="" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCanvasData&quot;)">
+            Get Canvas Data
+        </span>
+    </button>
+    <button type="button" class="btn btn-primary" data-method="setCanvasData" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;setCanvasData&quot;, data)">
+            Set Canvas Data
+        </span>
+    </button>
+    <button type="button" class="btn btn-primary" data-method="getCropBoxData" data-option="" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;getCropBoxData&quot;)">
+            Get Crop Box Data
+        </span>
+    </button>
+    <button type="button" class="btn btn-primary" data-method="setCropBoxData" data-target="#putData">
+        <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="$().cropper(&quot;setCropBoxData&quot;, data)">
+            Set Crop Box Data
+        </span>
+    </button>
+            
             <button type="button" class="btn btn-primary" data-method="moveTo" data-option="0">
                 <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="" data-original-title="cropper.moveTo(0)">
                     Move to [0,0]
@@ -307,8 +334,9 @@
                     Rotate 180°
                 </span>
             </button>
-            <input type="text" class="form-control" id="putData" placeholder="Get data to here or set data with this value">
-
+            
+    <input type="text" class="form-control" id="putData" placeholder="Get data to here or set data with this value">
+            
                
         
         </div>
