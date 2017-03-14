@@ -25,9 +25,10 @@
         setPreview: function (url, name) {
             $("#filePreview").attr("src", url);
             $("#image").attr("src", url);
-            $("#cropCurrentDir").val(url);
-            $("#cropCurrentDirLabel").html(url);
+            $("#cropCurrentDirLabel").html(url.substring(0, url.lastIndexOf("/") -1));
+            $("#cropCurrentDir").val(url.substring(0, url.lastIndexOf("/")));
             $("#croppedFileName").val("crop-" + name);
+            $('#origFileName').val(name);
             fileManager.uploadTab.hide();
             fileManager.cropTab.show();
             //fileManager.setupCropper();
@@ -38,6 +39,7 @@
             $("#fileCropPreview").attr("src", fileManager.emptyPreviewUrl);
             //$("#cropCurrentDir").val('');
             $("#croppedFileName").val('');
+            //$('#origFileName').val('');
             fileManager.uploadTab.show();
             //fileManager.cropTab.hide();
         },
@@ -46,7 +48,7 @@
             $("#hdnCurrentVirtualPath").val(virtualPath);
             $("#uploadCurrentDir").val(virtualPath);
             $("#cropCurrentDir").val(virtualPath);
-            $("#cropCurrentDirLabel").html(virtualPath);
+            $("#cropCurrentDirLabel").html(virtualPath + "/");
             $("#currentFolder").html(virtualPath);
             $("#folderToDelete").val(virtualPath);
             $("#folderToRename").val(virtualPath);
@@ -70,6 +72,7 @@
         },
         setCurrentFile: function (virtualPath, fileName) {
             fileManager.selectedFileInput.val(virtualPath);
+            $("#newFolderCurrentDir").val(virtualPath.substring(0,virtualPath.lastIndexOf("/")));
             $("#fileToRename").val(virtualPath);
             $("#fileToDelete").val(virtualPath);
             if (fileName) {
@@ -386,7 +389,7 @@
                         fileManager.clearCurrentFile();
                     }
                     else {
-                        fileManager.clearCurrentDirectory();
+                        //fileManager.clearCurrentDirectory();
                         fileManager.setCurrentFile(node.virtualPath, node.text);
                     }
                 },
@@ -399,7 +402,7 @@
                         node.lazyLoaded = false;
                     }
                     else {
-                        fileManager.clearCurrentDirectory();
+                        //fileManager.clearCurrentDirectory();
                     }
                     //
                 },
@@ -515,6 +518,7 @@
             this.renameFolderButton.on('click', fileManager.renameFolder);
             this.deleteFileButton.on('click', fileManager.deleteFile);
             this.renameFileButton.on('click', fileManager.renameFile);
+            this.setCurrentDirectory(this.rootVirtualPath);
 
 
         }
@@ -530,6 +534,7 @@
         console: window.console || { log: function () { } },
         image: $('#image'),
         saveLocalButton: $('#btnSaveLocal'),
+        croppedFileName: $('#croppedFileName'),
         dataX: $('#dataX'),
         dataY: $('#dataY'),
         dataHeight: $('#dataHeight'),
@@ -818,7 +823,7 @@
 
                             uploadedImageURL = cropManager.URL.createObjectURL(file);
                             $('#origFileName').val(file.name.toLowerCase());
-                            $('#croppedFileName').val(file.name.toLowerCase());
+                            cropManager.croppedFileName.val(file.name.toLowerCase());
                             //alert(file.name);
                             cropManager.image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
                             $inputImage.val('');
@@ -842,7 +847,8 @@
             var ext = origName.substring(origName.lastIndexOf('.'));
             //alert(nameWithoutExtension);
             //alert(ext);
-            $('#croppedFileName').val(nameWithoutExtension + "-" + width + "x" + height + ext);
+            cropManager.croppedFileName.val(nameWithoutExtension + "-" + width + "x" + height + ext);
+            cropManager.saveLocalButton.attr("download", cropManager.croppedFileName.val());
         },
         getCropAspectRatio: function ()
         {
@@ -856,7 +862,7 @@
             $('#image').cropper('getCroppedCanvas', opts).toBlob(function (blob) {
 
                 var formData = new FormData();
-                formData.append($("#croppedFileName").val(), blob);
+                formData.append(cropManager.croppedFileName.val(), blob);
 
                 var otherData = $('#frmUploadCropped').serializeArray();
                 $.each(otherData, function (key, input) {

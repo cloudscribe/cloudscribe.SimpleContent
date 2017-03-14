@@ -260,16 +260,19 @@
                         <div class="modal-body"></div>
                         <div class="modal-footer">
                             
-                            <form id="frmUploadCropped" class="form-horizontal"  asp-controller="FileManager" asp-action="Upload">
+                            <form id="frmUploadCropped" class="form-inline"  asp-controller="FileManager" asp-action="Upload">
                                 <input type="hidden" id="cropResizeImages" name="resizeImages" value="false" />
                                 <input type="hidden" id="cropCurrentDir" name="currentDir" value="" />
                                 <input type="hidden" class="form-control" id="origFileName" />
-                                    <span class="form-control " id="cropCurrentDirLabel" style="float:left;width:70%;margin-bottom:7px;"></span>
-                                    <input type="text" class="form-control " id="croppedFileName" name="croppedFileName" style="float:right;width:30%;margin-bottom:7px;" />
-                                <button id="btnUploadCropped" type="submit" class="btn btn-primary"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;@sr["Upload"]</button>
-                                <a class="btn btn-primary" id="btnSaveLocal" href="javascript:void(0);" download="cropped.jpg">@sr["Save Locally"]</a>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">@sr["Close"]</button>
-                            </form>
+                                    <span class="form-control " id="cropCurrentDirLabel" style="float:left;width:100%;margin-bottom:7px;text-align:left;"></span>
+                                <div class="form-group">
+                                    <input type="text" class="form-control " id="croppedFileName" name="croppedFileName" />
+                                </div>
+                                    
+                                    <button id="btnUploadCropped" type="submit" class="btn btn-primary"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;@sr["Upload"]</button>
+                                    <a class="btn btn-primary" id="btnSaveLocal" href="javascript:void(0);" download="cropped.jpg">@sr["Save Locally"]</a>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@sr["Close"]</button>
+</form>
                             
                             
                         </div>
