@@ -529,7 +529,7 @@
         URL: window.URL || window.webkitURL,
         console: window.console || { log: function () { } },
         image: $('#image'),
-        download: $('#download'),
+        saveLocalButton: $('#btnSaveLocal'),
         dataX: $('#dataX'),
         dataY: $('#dataY'),
         dataHeight: $('#dataHeight'),
@@ -616,8 +616,8 @@
 
 
             // Download
-            if (typeof cropManager.download[0].download === 'undefined') {
-                cropManager.download.addClass('disabled');
+            if (typeof cropManager.saveLocalButton[0].download === 'undefined') {
+                cropManager.saveLocalButton.addClass('disabled');
             }
 
 
@@ -653,23 +653,33 @@
             // Methods
             //uploadCroppedImage
             $("#btnUploadCropped").on('click', cropManager.uploadCroppedImage);
+
             cropManager.outputWidth.on('blur', function () {
                 var aspect = cropManager.getCropAspectRatio();
                 //alert(aspect);
                 var newWidth = parseInt(cropManager.outputWidth.val())
+                var currentHeight = parseInt(cropManager.outputHeight.val());
                 var newHeight = parseInt(newWidth / aspect);
                 //alert(newHeight);
-                cropManager.outputHeight.val(newHeight);
-
-                cropManager.setCroppedFileName(newWidth, newHeight)
+                var dif = Math.abs(newHeight - currentHeight);
+                if (dif > 1) {
+                    cropManager.outputHeight.val(newHeight);
+                    cropManager.setCroppedFileName(newWidth, newHeight)
+                }
+                
             });
 
             cropManager.outputHeight.on('blur', function () {
                 var aspect = cropManager.getCropAspectRatio();
                 var newHeight = parseInt(cropManager.outputHeight.val());
+                var currentWidth = parseInt(cropManager.outputWidth.val());
                 var newWidth = parseInt(newHeight * aspect);
-                cropManager.outputWidth.val(newWidth);
-                cropManager.setCroppedFileName(newWidth, newHeight)
+                var dif = Math.abs(newWidth - currentWidth);
+                if (dif > 1) {
+                    cropManager.outputWidth.val(newWidth);
+                    cropManager.setCroppedFileName(newWidth, newHeight)
+                }
+                
             });
 
             $('.docs-buttons').on('click', '[data-method]', function () {
@@ -724,8 +734,8 @@
                                 // Bootstrap's Modal
                                 $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
 
-                                if (!cropManager.download.hasClass('disabled')) {
-                                    cropManager.download.attr('href', result.toDataURL('image/jpeg'));
+                                if (!cropManager.saveLocalButton.hasClass('disabled')) {
+                                    cropManager.saveLocalButton.attr('href', result.toDataURL('image/jpeg'));
                                 }
                             }
 
