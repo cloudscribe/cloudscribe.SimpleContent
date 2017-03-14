@@ -25,8 +25,10 @@
         setPreview: function (url, name) {
             $("#filePreview").attr("src", url);
             $("#image").attr("src", url);
-            $("#cropCurrentDir").val(url);
+            $("#cropCurrentDirLabel").html(url.substring(0, url.lastIndexOf("/") -1));
+            $("#cropCurrentDir").val(url.substring(0, url.lastIndexOf("/")));
             $("#croppedFileName").val("crop-" + name);
+            $('#origFileName').val(name);
             fileManager.uploadTab.hide();
             fileManager.cropTab.show();
             //fileManager.setupCropper();
@@ -35,15 +37,18 @@
         clearPreview: function () {
             $("#filePreview").attr("src", fileManager.emptyPreviewUrl);
             $("#fileCropPreview").attr("src", fileManager.emptyPreviewUrl);
-            $("#cropCurrentDir").val('');
+            //$("#cropCurrentDir").val('');
             $("#croppedFileName").val('');
+            //$('#origFileName').val('');
             fileManager.uploadTab.show();
-            fileManager.cropTab.hide();
+            //fileManager.cropTab.hide();
         },
         setCurrentDirectory: function (virtualPath) {
             $("#newFolderCurrentDir").val(virtualPath);
             $("#hdnCurrentVirtualPath").val(virtualPath);
             $("#uploadCurrentDir").val(virtualPath);
+            $("#cropCurrentDir").val(virtualPath);
+            $("#cropCurrentDirLabel").html(virtualPath + "/");
             $("#currentFolder").html(virtualPath);
             $("#folderToDelete").val(virtualPath);
             $("#folderToRename").val(virtualPath);
@@ -58,6 +63,7 @@
             $("#hdnCurrentVirtualPath").val(fileManager.rootVirtualPath);
             $("#uploadCurrentDir").val(fileManager.rootVirtualPath);
             $("#currentFolder").html(fileManager.rootVirtualPath);
+            //$("#cropCurrentDir").val('');
             $("#folderToDelete").val('');
             $("#folderToRename").val('');
             $('#frmDeleteFolder').hide();
@@ -66,6 +72,7 @@
         },
         setCurrentFile: function (virtualPath, fileName) {
             fileManager.selectedFileInput.val(virtualPath);
+            $("#newFolderCurrentDir").val(virtualPath.substring(0,virtualPath.lastIndexOf("/")));
             $("#fileToRename").val(virtualPath);
             $("#fileToDelete").val(virtualPath);
             if (fileName) {
@@ -382,7 +389,7 @@
                         fileManager.clearCurrentFile();
                     }
                     else {
-                        fileManager.clearCurrentDirectory();
+                        //fileManager.clearCurrentDirectory();
                         fileManager.setCurrentFile(node.virtualPath, node.text);
                     }
                 },
@@ -395,7 +402,7 @@
                         node.lazyLoaded = false;
                     }
                     else {
-                        fileManager.clearCurrentDirectory();
+                        //fileManager.clearCurrentDirectory();
                     }
                     //
                 },
@@ -502,7 +509,7 @@
         init: function () {
             $(document).bind('drop dragover', function (e) { e.preventDefault(); });
             this.progressUI.hide();
-            this.cropTab.hide();
+            //this.cropTab.hide();
             this.loadTree();
             this.setupFileLoader();
             this.newFolderButton.on('click', fileManager.createFolder);
@@ -511,6 +518,7 @@
             this.renameFolderButton.on('click', fileManager.renameFolder);
             this.deleteFileButton.on('click', fileManager.deleteFile);
             this.renameFileButton.on('click', fileManager.renameFile);
+            this.setCurrentDirectory(this.rootVirtualPath);
 
 
         }
@@ -521,32 +529,56 @@
     fileManager.init();
 
     var cropManager = {
+        uploadUrl: $("#fmconfig").data("upload-url"),
+        URL: window.URL || window.webkitURL,
+        console: window.console || { log: function () { } },
+        image: $('#image'),
+        saveLocalButton: $('#btnSaveLocal'),
+        croppedFileName: $('#croppedFileName'),
+        dataX: $('#dataX'),
+        dataY: $('#dataY'),
+        dataHeight: $('#dataHeight'),
+        dataWidth: $('#dataWidth'),
+        dataRotate: $('#dataRotate'),
+        dataScaleX: $('#dataScaleX'),
+        dataScaleY: $('#dataScaleY'),
+        outputHeight: $('#dataNewHeight'),
+        outputWidth : $('#dataNewWidth'),
+
         setup: function () {
-            var console = window.console || { log: function () { } };
-            var URL = window.URL || window.webkitURL;
-            var $image = $('#image');
-            var $download = $('#download');
-            var $dataX = $('#dataX');
-            var $dataY = $('#dataY');
-            var $dataHeight = $('#dataHeight');
-            var $dataWidth = $('#dataWidth');
-            var $dataRotate = $('#dataRotate');
-            var $dataScaleX = $('#dataScaleX');
-            var $dataScaleY = $('#dataScaleY');
+            //var console = window.console || { log: function () { } };
+            //var URL = window.URL || window.webkitURL;
+            //var $image = $('#image');
+            //var $download = $('#download');
+            //var $dataX = $('#dataX');
+            //var $dataY = $('#dataY');
+            //var $dataHeight = $('#dataHeight');
+            //var $dataWidth = $('#dataWidth');
+            //var $dataRotate = $('#dataRotate');
+            //var $dataScaleX = $('#dataScaleX');
+            //var $dataScaleY = $('#dataScaleY');
+            //var $coppedSizeLabelDiv = $('#modalSizeLabel');
+            //var $outputHeight = $('#dataNewHeight');
+            //var $outputWidth = $('#dataNewWidth');
             var options = {
                 aspectRatio: 16 / 9,
                 preview: '.img-preview',
                 crop: function (e) {
-                    $dataX.val(Math.round(e.x));
-                    $dataY.val(Math.round(e.y));
-                    $dataHeight.val(Math.round(e.height));
-                    $dataWidth.val(Math.round(e.width));
-                    $dataRotate.val(e.rotate);
-                    $dataScaleX.val(e.scaleX);
-                    $dataScaleY.val(e.scaleY);
+                    cropManager.dataX.val(Math.round(e.x));
+                    cropManager.dataY.val(Math.round(e.y));
+                    cropManager.dataHeight.val(Math.round(e.height));
+                    cropManager.dataWidth.val(Math.round(e.width));
+                    cropManager.dataRotate.val(e.rotate);
+                    cropManager.dataScaleX.val(e.scaleX);
+                    cropManager.dataScaleY.val(e.scaleY);
+                    cropManager.outputHeight.val(Math.round(e.height));
+                    cropManager.outputWidth.val(Math.round(e.width));
+                    //$coppedSizeLabelDiv.html($dataWidth.val() + 'x' + $dataHeight.val());
+                    cropManager.setCroppedFileName(Math.round(e.width), Math.round(e.height))
+
                 }
             };
-            var originalImageURL = $image.attr('src');
+            var originalImageURL = cropManager.image.attr('src');
             var uploadedImageURL;
 
 
@@ -555,7 +587,7 @@
 
 
             // Cropper
-            $image.on({
+            cropManager.image.on({
                 ready: function (e) {
                     console.log(e.type);
                 },
@@ -589,8 +621,8 @@
 
 
             // Download
-            if (typeof $download[0].download === 'undefined') {
-                $download.addClass('disabled');
+            if (typeof cropManager.saveLocalButton[0].download === 'undefined') {
+                cropManager.saveLocalButton.addClass('disabled');
             }
 
 
@@ -602,30 +634,58 @@
                 var cropBoxData;
                 var canvasData;
 
-                if (!$image.data('cropper')) {
+                if (!cropManager.image.data('cropper')) {
                     return;
                 }
 
                 if (type === 'checkbox') {
                     options[name] = $this.prop('checked');
-                    cropBoxData = $image.cropper('getCropBoxData');
-                    canvasData = $image.cropper('getCanvasData');
+                    cropBoxData = cropManager.image.cropper('getCropBoxData');
+                    canvasData = cropManager.image.cropper('getCanvasData');
 
                     options.ready = function () {
-                        $image.cropper('setCropBoxData', cropBoxData);
-                        $image.cropper('setCanvasData', canvasData);
+                        cropManager.image.cropper('setCropBoxData', cropBoxData);
+                        cropManager.image.cropper('setCanvasData', canvasData);
                     };
                 } else if (type === 'radio') {
                     options[name] = $this.val();
                 }
 
-                $image.cropper('destroy').cropper(options);
+                cropManager.image.cropper('destroy').cropper(options);
             });
 
 
             // Methods
             //uploadCroppedImage
             $("#btnUploadCropped").on('click', cropManager.uploadCroppedImage);
+
+            cropManager.outputWidth.on('blur', function () {
+                var aspect = cropManager.getCropAspectRatio();
+                //alert(aspect);
+                var newWidth = parseInt(cropManager.outputWidth.val())
+                var currentHeight = parseInt(cropManager.outputHeight.val());
+                var newHeight = parseInt(newWidth / aspect);
+                //alert(newHeight);
+                var dif = Math.abs(newHeight - currentHeight);
+                if (dif > 1) {
+                    cropManager.outputHeight.val(newHeight);
+                    cropManager.setCroppedFileName(newWidth, newHeight)
+                }
+                
+            });
+
+            cropManager.outputHeight.on('blur', function () {
+                var aspect = cropManager.getCropAspectRatio();
+                var newHeight = parseInt(cropManager.outputHeight.val());
+                var currentWidth = parseInt(cropManager.outputWidth.val());
+                var newWidth = parseInt(newHeight * aspect);
+                var dif = Math.abs(newWidth - currentWidth);
+                if (dif > 1) {
+                    cropManager.outputWidth.val(newWidth);
+                    cropManager.setCroppedFileName(newWidth, newHeight)
+                }
+                
+            });
 
             $('.docs-buttons').on('click', '[data-method]', function () {
                 var $this = $(this);
@@ -637,7 +697,7 @@
                     return;
                 }
 
-                if ($image.data('cropper') && data.method) {
+                if (cropManager.image.data('cropper') && data.method) {
                     data = $.extend({}, data); // Clone a new one
 
                     if (typeof data.target !== 'undefined') {
@@ -653,13 +713,18 @@
                     }
 
                     if (data.method === 'rotate') {
-                        $image.cropper('clear');
+                        cropManager.image.cropper('clear');
                     }
+                    if ((typeof data.option === 'undefined') && (data.method === 'getCroppedCanvas')) {
+                        //alert('need size');
+                        data.option = { width: cropManager.outputWidth.val(), height: cropManager.outputHeight.val()};
+                    }
+                    
 
-                    result = $image.cropper(data.method, data.option, data.secondOption);
+                    result = cropManager.image.cropper(data.method, data.option, data.secondOption);
 
                     if (data.method === 'rotate') {
-                        $image.cropper('crop');
+                        cropManager.image.cropper('crop');
                     }
 
                     switch (data.method) {
@@ -674,8 +739,8 @@
                                 // Bootstrap's Modal
                                 $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
 
-                                if (!$download.hasClass('disabled')) {
-                                    $download.attr('href', result.toDataURL('image/jpeg'));
+                                if (!cropManager.saveLocalButton.hasClass('disabled')) {
+                                    cropManager.saveLocalButton.attr('href', result.toDataURL('image/jpeg'));
                                 }
                             }
 
@@ -685,7 +750,7 @@
                             if (uploadedImageURL) {
                                 URL.revokeObjectURL(uploadedImageURL);
                                 uploadedImageURL = '';
-                                $image.attr('src', originalImageURL);
+                                cropManager.image.attr('src', originalImageURL);
                             }
 
                             break;
@@ -707,29 +772,29 @@
             // Keyboard
             $(document.body).on('keydown', function (e) {
 
-                if (!$image.data('cropper') || this.scrollTop > 300) {
+                if (!cropManager.image.data('cropper') || this.scrollTop > 300) {
                     return;
                 }
 
                 switch (e.which) {
                     case 37:
                         e.preventDefault();
-                        $image.cropper('move', -1, 0);
+                        cropManager.image.cropper('move', -1, 0);
                         break;
 
                     case 38:
                         e.preventDefault();
-                        $image.cropper('move', 0, -1);
+                        cropManager.image.cropper('move', 0, -1);
                         break;
 
                     case 39:
                         e.preventDefault();
-                        $image.cropper('move', 1, 0);
+                        cropManager.image.cropper('move', 1, 0);
                         break;
 
                     case 40:
                         e.preventDefault();
-                        $image.cropper('move', 0, 1);
+                        cropManager.image.cropper('move', 0, 1);
                         break;
                 }
 
@@ -739,12 +804,12 @@
             // Import image
             var $inputImage = $('#inputImage');
 
-            if (URL) {
+            if (cropManager.URL) {
                 $inputImage.change(function () {
                     var files = this.files;
                     var file;
 
-                    if (!$image.data('cropper')) {
+                    if (!cropManager.image.data('cropper')) {
                         return;
                     }
 
@@ -756,8 +821,11 @@
                                 URL.revokeObjectURL(uploadedImageURL);
                             }
 
-                            uploadedImageURL = URL.createObjectURL(file);
-                            $image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
+                            uploadedImageURL = cropManager.URL.createObjectURL(file);
+                            $('#origFileName').val(file.name.toLowerCase());
+                            cropManager.croppedFileName.val(file.name.toLowerCase());
+                            //alert(file.name);
+                            cropManager.image.cropper('destroy').attr('src', uploadedImageURL).cropper(options);
                             $inputImage.val('');
                         } else {
                             window.alert('Please choose an image file.');
@@ -773,12 +841,28 @@
                 $('#image').cropper('destroy');
             }
         },
+        setCroppedFileName: function (width, height) {
+            var origName = $('#origFileName').val();
+            var nameWithoutExtension = origName.substring(0, origName.lastIndexOf('.'));
+            var ext = origName.substring(origName.lastIndexOf('.'));
+            //alert(nameWithoutExtension);
+            //alert(ext);
+            cropManager.croppedFileName.val(nameWithoutExtension + "-" + width + "x" + height + ext);
+            cropManager.saveLocalButton.attr("download", cropManager.croppedFileName.val());
+        },
+        getCropAspectRatio: function ()
+        {
+            var cropbox = $('#image').cropper('getCropBoxData');
+            return cropbox.width / cropbox.height;
+
+        },
         uploadCroppedImage: function () {
 
-            $('#image').cropper('getCroppedCanvas').toBlob(function (blob) {
+            var opts = { width: cropManager.outputWidth.val(), height: cropManager.outputHeight.val() };
+            $('#image').cropper('getCroppedCanvas', opts).toBlob(function (blob) {
 
                 var formData = new FormData();
-                formData.append($("#croppedFileName").val(), blob);
+                formData.append(cropManager.croppedFileName.val(), blob);
 
                 var otherData = $('#frmUploadCropped').serializeArray();
                 $.each(otherData, function (key, input) {
@@ -791,9 +875,13 @@
                     data: formData,
                     processData: false,
                     contentType:false
-                }).done(function (data) {
+                }).done(function (data, textStatus, jqXHR) {
                     // alert(JSON.stringify(data));
-                    if (data.succeeded) {
+                    if (data[0].errorMessage) {
+                        fileManager.notify(data[0].errorMessage, 'alert-danger');
+                    }
+                    else {
+                        
                         var currentPath = $("#newFolderCurrentDir").val();
                         if (currentPath === fileManager.rootVirtualPath) {
                             fileManager.loadTree();
@@ -803,16 +891,14 @@
                         }
 
                         $("#newFolderName").val('');
-                        //fileManager.notify('Folder created', 'alert-success');
-                    }
-                    else {
-                        fileManager.notify(data.message, 'alert-danger');
+                        $('#getCroppedCanvasModal').modal('hide');
+                        fileManager.notify('Cropped image upload succeeded', 'alert-success');
 
                     }
 
                 })
-                .fail(function () {
-                    fileManager.notify('An error occured', 'alert-danger');
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    fileManager.notify(errorThrown, 'alert-danger');
                 });
 
             });
