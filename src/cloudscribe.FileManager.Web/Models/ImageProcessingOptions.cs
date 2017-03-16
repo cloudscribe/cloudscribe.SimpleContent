@@ -29,6 +29,9 @@
 
         public int ResizeMinAllowedHeight { get; set; } = 50;
 
-       
+        //public string AllowedFileExtensionsPipeSeparated { get; set; }
+
+
+
     }
 }

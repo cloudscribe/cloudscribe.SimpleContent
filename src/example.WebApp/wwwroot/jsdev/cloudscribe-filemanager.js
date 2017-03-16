@@ -13,6 +13,7 @@
         fileSelectorButton: $('#btnSelector'),
         deleteFolderButton: $('#btnDeleteFolder'),
         renameFolderButton: $('#btnRenameFolder'),
+        selectForCropButton: $('#btnSelectForCrop'),
         deleteFileButton: $('#btnDeleteFile'),
         renameFileButton: $('#btnRenameFile'),
         selectedFileInput: $("#fileSelection"),
@@ -22,15 +23,32 @@
         cropTab: $('#tab3'),
         treeData: [],
         selectedFileList: [],
+        setCropImageFromServer: function () {
+            var url = fileManager.selectedFileInput.val();
+            $("#image").attr("src", url);
+            $("#cropCurrentDirLabel").html(url.substring(0, url.lastIndexOf("/")));
+            $("#cropCurrentDir").val(url.substring(0, url.lastIndexOf("/")));
+            var name = url.substring(url.lastIndexOf("/"));
+            $("#croppedFileName").val(name);
+            $('#origFileName').val(name);
+            $('#lnkCrop').trigger('click');
+            //alert('ready to crop');
+        },
+        clearServerCropImage: function () {
+            $("#image").attr("src", fileManager.emptyPreviewUrl);
+            $("#croppedFileName").val('');
+            $('#origFileName').val('');
+        },
         setPreview: function (url, name) {
             $("#filePreview").attr("src", url);
-            $("#image").attr("src", url);
-            $("#cropCurrentDirLabel").html(url.substring(0, url.lastIndexOf("/") -1));
-            $("#cropCurrentDir").val(url.substring(0, url.lastIndexOf("/")));
-            $("#croppedFileName").val("crop-" + name);
-            $('#origFileName').val(name);
+            //$("#image").attr("src", url);
+            //$("#cropCurrentDirLabel").html(url.substring(0, url.lastIndexOf("/")));
+            //$("#cropCurrentDir").val(url.substring(0, url.lastIndexOf("/")));
+            //$("#croppedFileName").val("crop-" + name);
+            //$('#origFileName').val(name);
             fileManager.uploadTab.hide();
-            fileManager.cropTab.show();
+            //fileManager.cropTab.show();
+            fileManager.selectForCropButton.show();
             //fileManager.setupCropper();
 
         },
@@ -41,7 +59,9 @@
             $("#croppedFileName").val('');
             //$('#origFileName').val('');
             fileManager.uploadTab.show();
+            fileManager.selectForCropButton.hide();
             //fileManager.cropTab.hide();
+            fileManager.clearServerCropImage();
         },
         setCurrentDirectory: function (virtualPath) {
             $("#newFolderCurrentDir").val(virtualPath);
@@ -52,10 +72,8 @@
             $("#currentFolder").html(virtualPath);
             $("#folderToDelete").val(virtualPath);
             $("#folderToRename").val(virtualPath);
-            if (fileManager.canDelete) {
-                $('#frmDeleteFolder').show();
-                $("#frmRenameFolder").show();
-            }
+            fileManager.showFolderTools();
+            
 
         },
         clearCurrentDirectory: function () {
@@ -66,8 +84,7 @@
             //$("#cropCurrentDir").val('');
             $("#folderToDelete").val('');
             $("#folderToRename").val('');
-            $('#frmDeleteFolder').hide();
-            $("#frmRenameFolder").hide();
+            fileManager.hideFolderTools();
 
         },
         setCurrentFile: function (virtualPath, fileName) {
@@ -79,10 +96,7 @@
                 $("#newFileNameSegment").val(fileName);
             }
             
-            if (fileManager.canDelete) {
-                $('#frmDeleteFile').show();
-                $("#frmRenameFile").show();
-            }
+            fileManager.showFileTools();
 
         },
         clearCurrentFile: function () {
@@ -90,10 +104,36 @@
             $("#fileToRename").val('');
             $("#fileToDelete").val('');
             $("#newFileNameSegment").val('');
-            $('#frmDeleteFile').hide();
-            $("#frmRenameFile").hide();
+            fileManager.hideFileTools();
             fileManager.clearPreview();
             
+
+        },
+        showFolderTools: function () {
+            if (fileManager.canDelete) {
+                var currentFolder = $("#hdnCurrentVirtualPath").val();
+                if (currentFolder != fileManager.rootVirtualPath) {
+                    $('#frmDeleteFolder').show();
+                    $("#frmRenameFolder").show();
+                }
+                
+            }
+            $('#frmNewFolder').show();
+        },
+        hideFolderTools: function () {
+            $('#frmDeleteFolder').hide();
+            $("#frmRenameFolder").hide();
+            $('#frmNewFolder').hide();
+        },
+        showFileTools: function () {
+            if (fileManager.canDelete) {
+                $('#frmDeleteFile').show();
+                $("#frmRenameFile").show();
+            }
+        },
+        hideFileTools: function () {
+            $('#frmDeleteFile').hide();
+            $("#frmRenameFile").hide();
 
         },
         notify: function (message, cssClass) {
@@ -333,7 +373,13 @@
                 };
                 tree.updateNode(theNode, newNode, { silent: true });
                 matchingNodes = tree.findNodes(currentFolderId, 'id');
-                tree.expandNode(matchingNodes, { silent: true, ignoreChildren: false });
+                try {
+                    tree.expandNode(matchingNodes, { silent: true, ignoreChildren: false });
+                }
+                catch (err) {
+
+                }
+                
 
             }
             else {
@@ -387,9 +433,11 @@
                     if (node.type === "d") {
                         fileManager.setCurrentDirectory(node.virtualPath);
                         fileManager.clearCurrentFile();
+                        fileManager.hideFileTools();
                     }
                     else {
                         //fileManager.clearCurrentDirectory();
+                        fileManager.hideFolderTools();
                         fileManager.setCurrentFile(node.virtualPath, node.text);
                     }
                 },
@@ -403,6 +451,13 @@
                     }
                     else {
                         //fileManager.clearCurrentDirectory();
+                    }
+                    if (node.type === "d") {
+                        fileManager.hideFolderTools();
+                    }
+                    else
+                    {
+                        fileManager.hideFileTools();
                     }
                     //
                 },
@@ -518,6 +573,7 @@
             this.renameFolderButton.on('click', fileManager.renameFolder);
             this.deleteFileButton.on('click', fileManager.deleteFile);
             this.renameFileButton.on('click', fileManager.renameFile);
+            this.selectForCropButton.on('click', fileManager.setCropImageFromServer);
             this.setCurrentDirectory(this.rootVirtualPath);
 
 
@@ -534,7 +590,10 @@
         console: window.console || { log: function () { } },
         image: $('#image'),
         saveLocalButton: $('#btnSaveLocal'),
+        uploadCropButton: $('#btnUploadCrop'),
         croppedFileName: $('#croppedFileName'),
+        chkConstrainCrop: $('#chkContrainWidthOfCrop'),
+        cropMaxWidthInput: $('#cropMaxWidth'),
         dataX: $('#dataX'),
         dataY: $('#dataY'),
         dataHeight: $('#dataHeight'),
@@ -566,15 +625,44 @@
                 crop: function (e) {
                     cropManager.dataX.val(Math.round(e.x));
                     cropManager.dataY.val(Math.round(e.y));
-                    cropManager.dataHeight.val(Math.round(e.height));
-                    cropManager.dataWidth.val(Math.round(e.width));
+                    var height = Math.round(e.height);
+                    var width = Math.round(e.width);
+                    cropManager.dataHeight.val(height);
+                    cropManager.dataWidth.val(width);
                     cropManager.dataRotate.val(e.rotate);
                     cropManager.dataScaleX.val(e.scaleX);
                     cropManager.dataScaleY.val(e.scaleY);
-                    cropManager.outputHeight.val(Math.round(e.height));
-                    cropManager.outputWidth.val(Math.round(e.width));
+                    var maxWidth = Math.round(cropManager.cropMaxWidthInput.val());
+                    if (cropManager.chkConstrainCrop.is(':checked') && width > maxWidth) {
+                        cropManager.outputWidth.val(maxWidth);
+                        var aspect = cropManager.getCropAspectRatio();
+                        var newHeight = parseInt(maxWidth / aspect);
+                        cropManager.outputHeight.val(newHeight);
+                        cropManager.setCroppedFileName(maxWidth, newHeight);
+                    }
+                    else
+                    {
+                        cropManager.outputHeight.val(height);
+                        cropManager.outputWidth.val(width);
+                        cropManager.setCroppedFileName(Math.round(e.width), Math.round(e.height));
+                    }
+
+                    if ($.isFunction(document.createElement('canvas').getContext)) {
+
+                        //cropManager.uploadCropButton.prop('disabled', true);
+
+                        var currentSrc = cropManager.image.attr("src");
+                        if (currentSrc === fileManager.emptyPreviewUrl) {
+                            cropManager.uploadCropButton.prop('disabled', true);
+                        }
+                        else
+                        {
+                            cropManager.uploadCropButton.prop('disabled', false);
+                        }
+                    }
+                    
                     //$coppedSizeLabelDiv.html($dataWidth.val() + 'x' + $dataHeight.val());
-                    cropManager.setCroppedFileName(Math.round(e.width), Math.round(e.height))
+                    
 
                 }
             };
@@ -611,7 +699,8 @@
 
             // Buttons
             if (!$.isFunction(document.createElement('canvas').getContext)) {
-                $('button[data-method="getCroppedCanvas"]').prop('disabled', true);
+                cropManager.uploadCropButton.prop('disabled', true);
+                //$('button[data-method="getCroppedCanvas"]').prop('disabled', true);
             }
 
             if (typeof document.createElement('cropper').style.transition === 'undefined') {
@@ -685,6 +774,26 @@
                     cropManager.setCroppedFileName(newWidth, newHeight)
                 }
                 
+            });
+
+            cropManager.chkConstrainCrop.change(function () {
+                if ($(this).is(":checked")) {
+                    var maxWidth = Math.round(cropManager.cropMaxWidthInput.val());
+                    var currentWidth = parseInt(cropManager.dataWidth.val());
+                    if (currentWidth > maxWidth) {
+                        cropManager.outputWidth.val(maxWidth);
+                        var currentHeight = parseInt(cropManager.dataHeight.val());
+                        var aspect = cropManager.getCropAspectRatio();
+                        var newHeight = parseInt(maxWidth / aspect);
+                        cropManager.outputHeight.val(newHeight);
+                    }
+
+                }
+                else
+                {
+                    cropManager.outputHeight.val(cropManager.dataHeight.val());
+                    cropManager.outputWidth.val(cropManager.dataWidth.val());
+                }
             });
 
             $('.docs-buttons').on('click', '[data-method]', function () {
