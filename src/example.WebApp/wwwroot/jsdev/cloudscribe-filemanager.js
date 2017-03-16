@@ -373,7 +373,13 @@
                 };
                 tree.updateNode(theNode, newNode, { silent: true });
                 matchingNodes = tree.findNodes(currentFolderId, 'id');
-                tree.expandNode(matchingNodes, { silent: true, ignoreChildren: false });
+                try {
+                    tree.expandNode(matchingNodes, { silent: true, ignoreChildren: false });
+                }
+                catch (err) {
+
+                }
+                
 
             }
             else {
