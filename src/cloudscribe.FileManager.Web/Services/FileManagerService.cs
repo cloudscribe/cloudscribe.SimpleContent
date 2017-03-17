@@ -573,7 +573,7 @@ namespace cloudscribe.FileManager.Web.Services
         }
 
 
-        public async Task<List<Node>> GetFileTree(string virtualStartPath)
+        public async Task<List<Node>> GetFileTree(string fileType, string virtualStartPath)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
@@ -650,7 +650,15 @@ namespace cloudscribe.FileManager.Web.Services
                 node.Icon = GetIconCssClass(file.Extension);
                 //node.ExpandedIcon = node.Icon;
                 //file.
-                list.Add(node);
+                if(fileType == "image")
+                {
+                    if(node.CanPreview) list.Add(node);
+                }
+                else
+                {
+                    list.Add(node);
+                }
+                
             }
 
             return list;

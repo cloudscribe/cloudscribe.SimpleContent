@@ -6,6 +6,7 @@ using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.Web.Common.Razor;
 using cloudscribe.Web.Navigation;
 using cloudscribe.Web.SiteMap;
+using cloudscribe.FileManager.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
@@ -21,7 +22,15 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             routes.AddBlogRoutesForSimpleContent();
             routes.AddDefaultPageRouteForSimpleContent();
-            
+            //routes.AddCloudscribeFileManagerRoutes();
+
+
+            return routes;
+        }
+
+        public static IRouteBuilder AddCloudscribeFileManagerRoutesForSimpleContent(this IRouteBuilder routes)
+        {
+            routes.AddCloudscribeFileManagerRoutes();
             return routes;
         }
 

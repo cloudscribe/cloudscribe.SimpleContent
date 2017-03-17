@@ -1,12 +1,10 @@
 ﻿using cloudscribe.FileManager.Web.Models;
 using cloudscribe.FileManager.Web.Services;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 
 namespace cloudscribe.FileManager.Web
 {
@@ -20,6 +18,7 @@ namespace cloudscribe.FileManager.Web
             services.TryAddScoped<FileManagerService>();
             services.TryAddScoped<IImageResizer, ImageResizerService>();
             services.TryAddScoped<IFileManagerNameRules, DefaultFileManagerNameRules>();
+            services.TryAddScoped<IFileExtensionValidationRegexBuilder, FileExtensionValidationRegexBuilder>();
 
             // Angular's default header name for sending the XSRF token.
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
@@ -31,5 +30,29 @@ namespace cloudscribe.FileManager.Web
 
             return services;
         }
+
+        public static IRouteBuilder AddCloudscribeFileManagerRoutes(this IRouteBuilder routes)
+        {
+            routes.MapRoute(
+               name: "filemanagerjs",
+               template: "filemanager/js/{*slug}"
+               , defaults: new { controller = "FileManager", action = "js" }
+               );
+
+            routes.MapRoute(
+               name: "filemanagercss",
+               template: "filemanager/css/{*slug}"
+               , defaults: new { controller = "FileManager", action = "css" }
+               );
+
+            routes.MapRoute(
+               name: "filemanagerfonts",
+               template: "filemanager/font/{*slug}"
+               , defaults: new { controller = "FileManager", action = "font" }
+               );
+
+            return routes;
+        }
+
     }
 }

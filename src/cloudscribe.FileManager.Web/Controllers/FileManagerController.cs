@@ -20,6 +20,7 @@ using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         public FileManagerController(
             FileManagerService fileManagerService,
             IAuthorizationService authorizationService,
+            IFileExtensionValidationRegexBuilder allowedFilesRegexBuilder,
             IOptions<AutomaticUploadOptions> autoUploadOptionsAccessor,
             IAntiforgery antiforgery,
             ILogger<FileManagerController> logger
@@ -37,6 +39,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         {
             this.fileManagerService = fileManagerService;
             this.authorizationService = authorizationService;
+            this.allowedFilesRegexBuilder = allowedFilesRegexBuilder;
             autoUploadOptions = autoUploadOptionsAccessor.Value;
             this.antiforgery = antiforgery;
             log = logger;
@@ -44,6 +47,7 @@ namespace cloudscribe.FileManager.Web.Controllers
 
         private FileManagerService fileManagerService;
         private IAuthorizationService authorizationService;
+        private IFileExtensionValidationRegexBuilder allowedFilesRegexBuilder;
         private AutomaticUploadOptions autoUploadOptions;
         private readonly IAntiforgery antiforgery;
         // Get the default form options so that we can use them to set the default limits for
@@ -54,10 +58,10 @@ namespace cloudscribe.FileManager.Web.Controllers
         [HttpGet]
         //[GenerateAntiforgeryTokenCookieForAjax]
         [Authorize(Policy = "FileManagerPolicy")]
-        public async Task<IActionResult> CkFileDialog(CkBrowseModel model)
+        public async Task<IActionResult> FileDialog(BrowseModel model)
         {
             model.InitialVirtualPath = await fileManagerService.GetRootVirtualPath().ConfigureAwait(false);
-            model.FileTreeServiceUrl = Url.Action("GetFileTreeJson","FileManager");
+            model.FileTreeServiceUrl = Url.Action("GetFileTreeJson","FileManager", new { fileType = model.Type});
             model.UploadServiceUrl = Url.Action("Upload", "FileManager");
             model.CreateFolderServiceUrl = Url.Action("CreateFolder", "FileManager");
             model.DeleteFolderServiceUrl = Url.Action("DeleteFolder", "FileManager");
@@ -66,7 +70,15 @@ namespace cloudscribe.FileManager.Web.Controllers
             model.RenameFileServiceUrl = Url.Action("RenameFile", "FileManager");
             model.CanDelete = await authorizationService.AuthorizeAsync(User, "FileManagerDeletePolicy");
 
-            model.AllowedFileExtensionsRegex = @"/(\.|\/)(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|flv|FLV|swf|SWF|wmv|WMV|mp3|MP3|mp4|MP4|m4a|M4A|m4v|M4V|oga|OGA|ogv|OGV|webma|WEBMA|webmv|WEBMV|webm|WEBM|wav|WAV|fla|FLA|tif|TIF|asf|ASF|asx|ASX|avi|AVI|mov|MOV|mpeg|MPEG|mpg|MPG|zip|ZIP|pdf|PDF|doc|DOC|docx|DOCX|xls|XLS|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|csv|CSV|txt|TXT|htm|HTM|html|HTML|css|CSS)$/i";
+            //model.AllowedFileExtensionsRegex = @"/(\.|\/)(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG|flv|FLV|swf|SWF|wmv|WMV|mp3|MP3|mp4|MP4|m4a|M4A|m4v|M4V|oga|OGA|ogv|OGV|webma|WEBMA|webmv|WEBMV|webm|WEBM|wav|WAV|fla|FLA|tif|TIF|asf|ASF|asx|ASX|avi|AVI|mov|MOV|mpeg|MPEG|mpg|MPG|zip|ZIP|pdf|PDF|doc|DOC|docx|DOCX|xls|XLS|xlsx|XLSX|ppt|PPT|pptx|PPTX|pps|PPS|csv|CSV|txt|TXT|htm|HTM|html|HTML|css|CSS)$/i";
+            if (model.Type == "image")
+            {
+                model.AllowedFileExtensionsRegex = allowedFilesRegexBuilder.BuildRegex(autoUploadOptions.ImageFileExtensions);
+            }
+            else
+            {
+                model.AllowedFileExtensionsRegex = allowedFilesRegexBuilder.BuildRegex(autoUploadOptions.AllowedFileExtensions);
+            }
 
 
             return View(model);
@@ -76,11 +88,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         //https://docs.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads
 
 
-        /// <summary>
-        /// this method is called from the simplecontentdropfile plugin for ckeditor when
-        /// a file is dropped into the editor
-        /// </summary>
-        /// <returns></returns>
+        
         [HttpPost]
         [Authorize(Policy = "FileManagerPolicy")]
         [ValidateAntiForgeryToken] 
@@ -139,6 +147,152 @@ namespace cloudscribe.FileManager.Web.Controllers
             }
             
             return Json(imageList);
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult js()
+        {
+            var baseSegment = "cloudscribe.FileManager.Web.js.";
+            // /filemanager/js/
+            var requestPath = HttpContext.Request.Path.Value;
+            log.LogDebug(requestPath + " requested");
+
+            if (requestPath.Length < 16) return NotFound();
+
+            var seg = requestPath.Substring(16).Replace("/", ".").Replace("-", "_");
+            var ext = Path.GetExtension(requestPath);
+            var mimeType = GetMimeType(ext);
+
+            return GetResult(
+                baseSegment + seg,
+                mimeType);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult css()
+        {
+            var baseSegment = "cloudscribe.FileManager.Web.css.";
+            // /filemanager/css/
+            var requestPath = HttpContext.Request.Path.Value;
+            log.LogDebug(requestPath + " requested");
+
+            if (requestPath.Length < 17) return NotFound();
+
+            var seg = requestPath.Substring(17).Replace("/", ".").Replace("-", "_");
+            var ext = Path.GetExtension(requestPath);
+            var mimeType = GetMimeType(ext);
+
+            return GetResult(
+                baseSegment + seg,
+                mimeType);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult fonts()
+        {
+            var baseSegment = "cloudscribe.FileManager.Web.fonts.";
+            // /filemanager/fonts/
+            var requestPath = HttpContext.Request.Path.Value;
+            log.LogDebug(requestPath + " requested");
+
+            if (requestPath.Length < 19) return NotFound();
+
+            var seg = requestPath.Substring(19).Replace("/", ".").Replace("-", "_");
+            var ext = Path.GetExtension(requestPath);
+            var mimeType = GetMimeType(ext);
+
+            return GetResult(
+                baseSegment + seg,
+                mimeType);
+        }
+
+
+        private IActionResult GetResult(string resourceName, string contentType)
+        {
+            var assembly = typeof(FileManagerController).GetTypeInfo().Assembly;
+            var resourceStream = assembly.GetManifestResourceStream(resourceName);
+            if (resourceStream == null)
+            {
+                resourceStream
+                = assembly.GetManifestResourceStream(resourceName.Replace("_", "-"));
+                if (resourceStream == null)
+                {
+                    log.LogError("resource not found for " + resourceName);
+                    return NotFound();
+                }
+                log.LogDebug("resource found for " + resourceName);
+            }
+            else
+            {
+
+                log.LogDebug("resource found for " + resourceName);
+
+            }
+            //if (contentType.StartsWith("text"))
+            //{
+            //    string payload;
+            //    using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
+            //    {
+            //        payload = reader.ReadToEnd();
+            //    }
+
+            //    return new ContentResult
+            //    {
+            //        ContentType = contentType,
+            //        Content = payload,
+            //        StatusCode = 200
+            //    };
+
+            //}
+
+            return new FileStreamResult(resourceStream, contentType);
+
+
+
+        }
+
+        private string GetMimeType(string extension)
+        {
+            switch (extension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+
+                case ".gif":
+                    return "image/gif";
+
+                case ".png":
+                    return "image/png";
+
+                case ".css":
+                    return "text/css";
+
+                case ".otf":
+                    return "font/otf";
+
+                case ".eot":
+                    return "application/vnd.ms-fontobject";
+
+                case ".svg":
+                    return "image/svg+xml";
+
+                case ".ttf":
+                    return "application/octet-stream";
+
+                case ".woff":
+                case ".woff2":
+                    return "application/font-woff";
+
+                case ".js":
+                default:
+                    return "text/javascript";
+
+            }
         }
 
         //[HttpPost]
@@ -251,143 +405,146 @@ namespace cloudscribe.FileManager.Web.Controllers
         //    do not want to read the request body early, the tokens are made to be 
         //    sent via headers. The antiforgery token filter first looks for tokens
         //    in the request header and then falls back to reading the body.
-        [HttpPost]
-        [DisableFormValueModelBinding]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> StreamedUpload()
-        {
-            if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
-            {
-                return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
-            }
-
-            // Used to accumulate all the form url encoded key value pairs in the 
-            // request.
-            var formAccumulator = new KeyValueAccumulator();
-            string targetFilePath = null;
-
-            var boundary = MultipartRequestHelper.GetBoundary(
-                MediaTypeHeaderValue.Parse(Request.ContentType),
-                defaultFormOptions.MultipartBoundaryLengthLimit);
-            var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-
-            var section = await reader.ReadNextSectionAsync();
-            while (section != null)
-            {
-                ContentDispositionHeaderValue contentDisposition;
-                var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition);
-
-                if (hasContentDispositionHeader)
-                {
-                    if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
-                    {
-                        targetFilePath = Path.GetTempFileName();
-                        using (var targetStream = System.IO.File.Create(targetFilePath))
-                        {
-                            await section.Body.CopyToAsync(targetStream);
-
-                            log.LogInformation($"Copied the uploaded file '{targetFilePath}'");
-                        }
-                    }
-                    else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
-                    {
-                        // Content-Disposition: form-data; name="key"
-                        //
-                        // value
-
-                        // Do not limit the key name length here because the 
-                        // multipart headers length limit is already in effect.
-                        var key = HeaderUtilities.RemoveQuotes(contentDisposition.Name);
-                        var encoding = GetEncoding(section);
-                        using (var streamReader = new StreamReader(
-                            section.Body,
-                            encoding,
-                            detectEncodingFromByteOrderMarks: true,
-                            bufferSize: 1024,
-                            leaveOpen: true))
-                        {
-                            // The value length limit is enforced by MultipartBodyLengthLimit
-                            var value = await streamReader.ReadToEndAsync();
-                            if (String.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
-                            {
-                                value = String.Empty;
-                            }
-                            formAccumulator.Append(key, value);
-
-                            if (formAccumulator.ValueCount > defaultFormOptions.ValueCountLimit)
-                            {
-                                throw new InvalidDataException($"Form key count limit {defaultFormOptions.ValueCountLimit} exceeded.");
-                            }
-                        }
-                    }
-                }
-
-                // Drains any remaining section body that has not been consumed and
-                // reads the headers for the next section.
-                section = await reader.ReadNextSectionAsync();
-            }
-
-            // Bind form data to a model
-            //var user = new User();
-            //var formValueProvider = new FormValueProvider(
-            //    BindingSource.Form,
-            //    new FormCollection(formAccumulator.GetResults()),
-            //    CultureInfo.CurrentCulture);
-
-            //var bindingSuccessful = await TryUpdateModelAsync(user, prefix: "",
-            //    valueProvider: formValueProvider);
-            //if (!bindingSuccessful)
-            //{
-            //    if (!ModelState.IsValid)
-            //    {
-            //        return BadRequest(ModelState);
-            //    }
-            //}
-
-            //var uploadedData = new UploadedData()
-            //{
-            //    Name = user.Name,
-            //    Age = user.Age,
-            //    Zipcode = user.Zipcode,
-            //    FilePath = targetFilePath
-            //};
-            //return Json(uploadedData);
-            return Ok();
-        }
+        
 
         [HttpGet]
         [Authorize(Policy = "FileManagerPolicy")]
-        public async Task<IActionResult> GetFileTreeJson(string virtualStartPath = "")
+        public async Task<IActionResult> GetFileTreeJson(string fileType = "", string virtualStartPath = "")
         {
-            var list = await fileManagerService.GetFileTree(virtualStartPath).ConfigureAwait(false);
+            var list = await fileManagerService.GetFileTree(fileType, virtualStartPath).ConfigureAwait(false);
 
             return Json(list);
         }
 
-        [HttpGet]
-        [Authorize(Policy = "FileManagerPolicy")]
-        public IActionResult Get()
-        {
-            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+        //[HttpGet]
+        //[Authorize(Policy = "FileManagerPolicy")]
+        //public IActionResult Get()
+        //{
+        //    var tokens = antiforgery.GetAndStoreTokens(HttpContext);
 
-            return new ObjectResult(new
-            {
-                token = tokens.RequestToken,
-                tokenName = tokens.HeaderName
-            });
-        }
+        //    return new ObjectResult(new
+        //    {
+        //        token = tokens.RequestToken,
+        //        tokenName = tokens.HeaderName
+        //    });
+        //}
 
-        private static Encoding GetEncoding(MultipartSection section)
-        {
-            MediaTypeHeaderValue mediaType;
-            var hasMediaTypeHeader = MediaTypeHeaderValue.TryParse(section.ContentType, out mediaType);
-            // UTF-7 is insecure and should not be honored. UTF-8 will succeed in 
-            // most cases.
-            if (!hasMediaTypeHeader || Encoding.UTF7.Equals(mediaType.Encoding))
-            {
-                return Encoding.UTF8;
-            }
-            return mediaType.Encoding;
-        }
+        //[HttpPost]
+        //[DisableFormValueModelBinding]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> StreamedUpload()
+        //{
+        //    if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
+        //    {
+        //        return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
+        //    }
+
+        //    // Used to accumulate all the form url encoded key value pairs in the 
+        //    // request.
+        //    var formAccumulator = new KeyValueAccumulator();
+        //    string targetFilePath = null;
+
+        //    var boundary = MultipartRequestHelper.GetBoundary(
+        //        MediaTypeHeaderValue.Parse(Request.ContentType),
+        //        defaultFormOptions.MultipartBoundaryLengthLimit);
+        //    var reader = new MultipartReader(boundary, HttpContext.Request.Body);
+
+        //    var section = await reader.ReadNextSectionAsync();
+        //    while (section != null)
+        //    {
+        //        ContentDispositionHeaderValue contentDisposition;
+        //        var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out contentDisposition);
+
+        //        if (hasContentDispositionHeader)
+        //        {
+        //            if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
+        //            {
+        //                targetFilePath = Path.GetTempFileName();
+        //                using (var targetStream = System.IO.File.Create(targetFilePath))
+        //                {
+        //                    await section.Body.CopyToAsync(targetStream);
+
+        //                    log.LogInformation($"Copied the uploaded file '{targetFilePath}'");
+        //                }
+        //            }
+        //            else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
+        //            {
+        //                // Content-Disposition: form-data; name="key"
+        //                //
+        //                // value
+
+        //                // Do not limit the key name length here because the 
+        //                // multipart headers length limit is already in effect.
+        //                var key = HeaderUtilities.RemoveQuotes(contentDisposition.Name);
+        //                var encoding = GetEncoding(section);
+        //                using (var streamReader = new StreamReader(
+        //                    section.Body,
+        //                    encoding,
+        //                    detectEncodingFromByteOrderMarks: true,
+        //                    bufferSize: 1024,
+        //                    leaveOpen: true))
+        //                {
+        //                    // The value length limit is enforced by MultipartBodyLengthLimit
+        //                    var value = await streamReader.ReadToEndAsync();
+        //                    if (String.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
+        //                    {
+        //                        value = String.Empty;
+        //                    }
+        //                    formAccumulator.Append(key, value);
+
+        //                    if (formAccumulator.ValueCount > defaultFormOptions.ValueCountLimit)
+        //                    {
+        //                        throw new InvalidDataException($"Form key count limit {defaultFormOptions.ValueCountLimit} exceeded.");
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        // Drains any remaining section body that has not been consumed and
+        //        // reads the headers for the next section.
+        //        section = await reader.ReadNextSectionAsync();
+        //    }
+
+        //    // Bind form data to a model
+        //    //var user = new User();
+        //    //var formValueProvider = new FormValueProvider(
+        //    //    BindingSource.Form,
+        //    //    new FormCollection(formAccumulator.GetResults()),
+        //    //    CultureInfo.CurrentCulture);
+
+        //    //var bindingSuccessful = await TryUpdateModelAsync(user, prefix: "",
+        //    //    valueProvider: formValueProvider);
+        //    //if (!bindingSuccessful)
+        //    //{
+        //    //    if (!ModelState.IsValid)
+        //    //    {
+        //    //        return BadRequest(ModelState);
+        //    //    }
+        //    //}
+
+        //    //var uploadedData = new UploadedData()
+        //    //{
+        //    //    Name = user.Name,
+        //    //    Age = user.Age,
+        //    //    Zipcode = user.Zipcode,
+        //    //    FilePath = targetFilePath
+        //    //};
+        //    //return Json(uploadedData);
+        //    return Ok();
+        //}
+
+
+        //private static Encoding GetEncoding(MultipartSection section)
+        //{
+        //    MediaTypeHeaderValue mediaType;
+        //    var hasMediaTypeHeader = MediaTypeHeaderValue.TryParse(section.ContentType, out mediaType);
+        //    // UTF-7 is insecure and should not be honored. UTF-8 will succeed in 
+        //    // most cases.
+        //    if (!hasMediaTypeHeader || Encoding.UTF7.Equals(mediaType.Encoding))
+        //    {
+        //        return Encoding.UTF8;
+        //    }
+        //    return mediaType.Encoding;
+        //}
     }
 }
