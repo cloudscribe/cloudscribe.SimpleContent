@@ -263,7 +263,7 @@ namespace example.WebApp
 
                 routes.AddBlogRoutesForSimpleContent();
                 routes.AddCkEditorRoutesForSimpleContent();
-
+                routes.AddCloudscribeFileManagerRoutesForSimpleContent();
 
                 if (useFolders)
                 {

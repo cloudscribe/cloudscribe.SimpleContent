@@ -324,8 +324,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var model = new PostEditViewModel();
             model.ProjectId = projectSettings.Id;
-            model.FileBrowseUrl = Url.Action("CkFileDialog", "FileManager", new { type = "file" });
-            model.ImageBrowseUrl = Url.Action("CkFileDialog", "FileManager", new { type = "image" });
+            model.FileBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "file" });
+            model.ImageBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "image" });
             model.DropFileUrl = Url.Action("Upload", "FileManager");
 
             PostResult postResult = null;

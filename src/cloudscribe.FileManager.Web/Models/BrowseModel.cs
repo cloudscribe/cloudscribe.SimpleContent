@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace cloudscribe.FileManager.Web.Models
+﻿namespace cloudscribe.FileManager.Web.Models
 {
-    public class CkBrowseModel
+    public class BrowseModel
     {
         /// <summary>
         /// the type of files to browse

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-25
-// Last Modified:           2016-09-03
+// Last Modified:           2017-03-17
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -36,6 +36,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                             new XElement("post",
                                 new XElement("title", post.Title),
                                 new XElement("slug", post.Slug),
+                                new XElement("correlationkey", post.CorrelationKey),
                                 new XElement("author", post.Author),
                                 //new XElement("pubDate", post.PubDate.ToString("yyyy-MM-dd HH:mm:ss")),
                                 new XElement("pubDate", post.PubDate.ToString("O")),
@@ -107,6 +108,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Id = key,
                 Title = ReadValue(doc.Root, "title"),
                 Author = ReadValue(doc.Root, "author"),
+                CorrelationKey = ReadValue(doc.Root, "correlationkey"),
                 MetaDescription = ReadValue(doc.Root, "excerpt"),
                 Content = ReadValue(doc.Root, "content"),
                 Slug = ReadValue(doc.Root, "slug").ToLowerInvariant(),
