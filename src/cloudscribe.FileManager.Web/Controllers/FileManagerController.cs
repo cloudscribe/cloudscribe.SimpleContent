@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-14
-// Last Modified:           2017-02-24
+// Last Modified:           2017-03-18
 // 
 
-using cloudscribe.FileManager.Web.Filters;
+//using cloudscribe.FileManager.Web.Filters;
 using cloudscribe.FileManager.Web.Models;
 using cloudscribe.FileManager.Web.Services;
 using Microsoft.AspNetCore.Antiforgery;
@@ -232,23 +232,7 @@ namespace cloudscribe.FileManager.Web.Controllers
                 log.LogDebug("resource found for " + resourceName);
 
             }
-            //if (contentType.StartsWith("text"))
-            //{
-            //    string payload;
-            //    using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
-            //    {
-            //        payload = reader.ReadToEnd();
-            //    }
-
-            //    return new ContentResult
-            //    {
-            //        ContentType = contentType,
-            //        Content = payload,
-            //        StatusCode = 200
-            //    };
-
-            //}
-
+           
             return new FileStreamResult(resourceStream, contentType);
 
 

@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
 
 namespace cloudscribe.FileManager.Web
 {
@@ -54,5 +57,23 @@ namespace cloudscribe.FileManager.Web
             return routes;
         }
 
+
+        
+
+    }
+}
+namespace Microsoft.Extensions.DependencyInjection
+{
+    public static class EmbeddedViews
+    {
+        public static RazorViewEngineOptions AddBootstrap3EmbeddedViewsForFileManager(this RazorViewEngineOptions options)
+        {
+            options.FileProviders.Add(new EmbeddedFileProvider(
+                    typeof(EmbeddedViews).GetTypeInfo().Assembly,
+                    "cloudscribe.FileManager.Web"
+                ));
+
+            return options;
+        }
     }
 }

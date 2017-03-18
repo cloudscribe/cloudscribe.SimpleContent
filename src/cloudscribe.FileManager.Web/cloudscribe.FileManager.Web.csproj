@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <Description>media file management</Description>
-    <VersionPrefix>1.0.0-rc20170305</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>rc20170317</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net451;net452;net46;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -23,39 +24,7 @@
     <EmbeddedResource Include="Views\**;js\**;css\**;fonts\**" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Remove="css\1x1.gif" />
-    <EmbeddedResource Remove="Views\Shared\_LayoutDialog.cshtml" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Views\FileManager\BrowsePartial.cshtml" />
-    <None Remove="Views\FileManager\CropPartial.cshtml" />
-    <None Remove="Views\FileManager\FileDialog.cshtml" />
-    <None Remove="Views\FileManager\UploadPartial.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="css\1x1.gif">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\FileManager\BrowsePartial.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\FileManager\CropPartial.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\FileManager\FileDialog.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\FileManager\UploadPartial.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\_LayoutDialog.cshtml">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-  
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />

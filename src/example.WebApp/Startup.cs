@@ -155,6 +155,11 @@ namespace example.WebApp
                      });
             });
 
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+            });
+
             services.AddMvc()
                 .AddRazorOptions(options =>
                 {
@@ -165,6 +170,7 @@ namespace example.WebApp
                     options.AddEmbeddedViewsForCloudscribeLogging();
                     options.AddBootstrap3EmbeddedViewsForSimpleContent();
                     options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();
+                    options.AddBootstrap3EmbeddedViewsForFileManager();
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
                 })

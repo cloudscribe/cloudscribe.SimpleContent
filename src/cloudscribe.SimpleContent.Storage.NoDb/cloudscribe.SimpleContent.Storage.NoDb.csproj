@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Storage implemented with NoDb file system storage</Description>
-    <VersionPrefix>1.1.1-rc20170305</VersionPrefix>
+    <VersionPrefix>1.1.1</VersionPrefix>
+    <VersionSuffix>rc20170317</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
