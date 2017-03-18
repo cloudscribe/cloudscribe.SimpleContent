@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             )
         {
             services.TryAddScoped<IMediaPathResolver, MediaPathResolver>();
-            services.AddCloudscribeFileManager();
+            services.AddCloudscribeFileManager(configuration);
 
             return services;
         }
