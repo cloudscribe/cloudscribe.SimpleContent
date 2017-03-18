@@ -22,6 +22,7 @@ namespace cloudscribe.FileManager.Web
             services.TryAddScoped<IImageResizer, ImageResizerService>();
             services.TryAddScoped<IFileManagerNameRules, DefaultFileManagerNameRules>();
             services.TryAddScoped<IFileExtensionValidationRegexBuilder, FileExtensionValidationRegexBuilder>();
+            services.TryAddScoped<IMediaPathResolver, DefaultMediaPathResolver>();
 
             // Angular's default header name for sending the XSRF token.
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
