@@ -24,7 +24,8 @@
     "RemoveHyperlink": "fa fa-unlink",
     "InsertImage": "fa fa-file-image-o",
     "ToggleSource": "fa fa-eye",
-    "ClearAllFormatting": "fa fa-eraser"
+    "ClearAllFormatting": "fa fa-eraser",
+    "NewItem": "fa fa-plus"
 
   }
 }

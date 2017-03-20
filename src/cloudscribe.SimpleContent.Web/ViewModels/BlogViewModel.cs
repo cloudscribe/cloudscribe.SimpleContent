@@ -2,17 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-10
+// Last Modified:           2017-03-20
 // 
 
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Pagination;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -47,8 +45,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public int Month { get; set; } = 0;
         public int Day { get; set; } = 0;
         public bool CanEdit { get; set; } = false;
-        public bool IsNewPost { get; set; } = false;
-        public string Mode { get; set; } = string.Empty;
+        //public bool IsNewPost { get; set; } = false;
+        //public string Mode { get; set; } = string.Empty;
         public bool ShowComments { get; set; } = true;
         public bool CommentsAreOpen { get; set; } = false;
         //public int ApprovedCommentCount { get; set; } = 0;
