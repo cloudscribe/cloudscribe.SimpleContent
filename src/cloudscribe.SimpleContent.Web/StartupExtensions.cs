@@ -194,11 +194,11 @@ namespace Microsoft.Extensions.DependencyInjection
                , defaults: new { controller = "Blog", action = "Delete" }
                );
 
-            routes.MapRoute(
-               name: ProjectConstants.NewPostRouteName,
-               template: "blog/new"
-               , defaults: new { controller = "Blog", action = "New" }
-               );
+            //routes.MapRoute(
+            //   name: ProjectConstants.NewPostRouteName,
+            //   template: "blog/new"
+            //   , defaults: new { controller = "Blog", action = "New" }
+            //   );
 
             routes.MapRoute(
               name: ProjectConstants.MostRecentPostRouteName,

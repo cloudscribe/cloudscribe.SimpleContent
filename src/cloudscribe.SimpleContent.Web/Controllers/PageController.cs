@@ -55,8 +55,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index(
-            string slug = "", 
-            string parentSlug = ""
+            string slug = ""
+           // ,  string parentSlug = ""
            // ,string mode = ""
             )
         {
@@ -75,7 +75,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPage page = await pageService.GetPageBySlug(projectSettings.Id, slug);
             
             var model = new PageViewModel(htmlProcessor);
-            //model.Mode = mode;
             model.CurrentPage = page;
             model.ProjectSettings = projectSettings;
             model.CanEdit = canEdit;
@@ -90,8 +89,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
 
                     if (model.CurrentPage.Slug == projectSettings.DefaultPageSlug)
-                    {
-                       // model.EditorSettings.NewItemPath = Url.Action("Index", "Page", new { slug = "" });
+                    {   
                        // not setting the parent slug if the current page is home page
                        // otherwise it would be awkward to create more root level pages
                         model.NewItemPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "" });
@@ -440,6 +438,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (needToClearCache)
             {
                 pageService.ClearNavigationCache();
+            }
+
+            if(page.Slug == project.DefaultPageSlug)
+            {
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug="" });
             }
 
             //var url = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });

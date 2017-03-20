@@ -181,24 +181,24 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             return await Index(category, page);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> New()
-        {
-            return await Post(0, 0, 0, "", "new");
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> New()
+        //{
+        //    return await Post(0, 0, 0, "", "new");
+        //}
 
         [HttpGet]
         [AllowAnonymous]
         [ActionName("PostNoDate")]
-        public async Task<IActionResult> Post(string slug, string mode = "")
+        public async Task<IActionResult> Post(string slug)
         {
-            return await Post(0, 0, 0, slug, mode);
+            return await Post(0, 0, 0, slug);
         }
 
         [HttpGet]
         [AllowAnonymous]
         [ActionName("PostWithDate")]
-        public async Task<IActionResult> Post(int year , int month, int day, string slug, string mode = "")
+        public async Task<IActionResult> Post(int year , int month, int day, string slug)
         {
             var projectSettings = await projectService.GetCurrentProjectSettings();
 
@@ -230,19 +230,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if ((result == null)||(result.Post == null))
             {
-                ViewData["Title"] = "New Post";
-                if ((canEdit) && (mode.Length > 0))
-                {
-                    if (result == null) result = new PostResult();
-                    if (result.Post == null) result.Post = new Post();
-                    result.Post.BlogId = projectSettings.Id;
-                    //isNew = true;
-                }
-                else
-                {
-                    return RedirectToRoute(blogRoutes.BlogIndexRouteName);
-                }
-
+                log.LogWarning("post not found for slug " + slug + ", so redirecting to index");
+                return RedirectToRoute(blogRoutes.BlogIndexRouteName);
             }
             else
             {
@@ -264,7 +253,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 ViewData["Title"] = result.Post.Title;
             }
 
-            model.Mode = mode;
+            
             model.CurrentPost = result.Post;
             if(result.PreviousPost != null)
             {
@@ -282,7 +271,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.BlogRoutes = blogRoutes;
             model.Categories = await blogService.GetCategories(model.CanEdit);
             model.Archives = await blogService.GetArchives(model.CanEdit);
-            model.ShowComments = mode.Length == 0; // do we need this for a global disable
+            model.ShowComments = true; //mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = await blogService.CommentsAreOpen(result.Post, canEdit);
             //model.ApprovedCommentCount = post.Comments.Where(c => c.IsApproved == true).Count();
             model.TimeZoneHelper = timeZoneHelper;
