@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>PostgreSql Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170317</VersionSuffix>
+    <VersionSuffix>rc20170320</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
@@ -25,6 +25,17 @@
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.Common\cloudscribe.SimpleContent.Storage.EFCore.Common.csproj" />
+
+    <Content Remove="Properties\launchSettings.json" />
+    <Content Include="Properties\launchSettings.json" CopyToPublishDirectory="Never">
+      <Pack>false</Pack>
+    </Content>
+    <Content Remove="appsettings.json" CopyToPublishDirectory="Never" />
+    <Content Include="appsettings.json" CopyToPublishDirectory="Never">
+      <Pack>false</Pack>
+    </Content>
+      
+ 
   </ItemGroup>
 
   <ItemGroup>
