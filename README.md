@@ -46,9 +46,21 @@ My plan is to usually build sites without a database (except for large projects)
 * Works on any ASP.NET Core host including __Windows Azure__ Websites
 * RSS feed built in at /api/rss via [cloudscribe.Syndication project](https://github.com/joeaudette/cloudscribe.Syndication) 
 * Sitemap - built in [sitemap](http://www.sitemaps.org/schemas/sitemap/0.9) at /api/sitemap via [cloudscribe.Web.SiteMap](https://github.com/joeaudette/cloudscribe.Web.Navigation/tree/master/src/cloudscribe.Web.SiteMap) 
+* Support for automatic image resizing and optimization
 
 ### Planned Features - see also the to-do.md in the notes folder
-* Support for automatic image resizing and optimization - pending progress on [ImageProcessor project](https://github.com/JimBobSquarePants/ImageProcessor). This is needed for images added via the wysiwyg editor in the web browser. The best current solution is to use Open Live Writer which will resize the image before it posts to the server, or optimize the images yourself before adding them to content in the wysiwyg editor in the web browser.
 * Support for using MongoDb
 * A Utility for importing the json or xml content into Entity Framework Core or MongoDb for easy migration
+
+### Screenshots
+
+![Blog Screen shot](https://github.com/joeaudette/cloudscribe.SimpleContent/raw/master/screenshots/blog-index.png)
+
+![page edit screen shot](https://github.com/joeaudette/cloudscribe.SimpleContent/raw/master/screenshots/page-edit.png)
+
+![file browser Screen shot](https://github.com/joeaudette/cloudscribe.SimpleContent/raw/master/screenshots/file-browser.png)
+
+![file selection Screen shot](https://github.com/joeaudette/cloudscribe.SimpleContent/raw/master/screenshots/image-selection.png)
+
+![image cropper Screen shot](https://github.com/joeaudette/cloudscribe.SimpleContent/raw/master/screenshots/image-cropper.png)
 
