@@ -84,7 +84,8 @@
                 <label asp-for="DaysToComment" class="col-md-2 control-label">@sr["Days To Comment"]</label>
                 <div class="col-md-10">
                     <select asp-for="DaysToComment" class="form-control">
-                        <option value="-1">No Limit</option>
+                        <option value="-1">@sr["No Limit"]</option>
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="7">7</option>
                         <option value="15">15</option>

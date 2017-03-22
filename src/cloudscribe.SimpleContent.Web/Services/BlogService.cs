@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-11-25
+// Last Modified:           2017-03-22
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -541,10 +541,12 @@ namespace cloudscribe.SimpleContent.Services
 
         public async Task<bool> CommentsAreOpen(IPost post, bool userCanEdit)
         {
-            if(userCanEdit) { return true; }
+            
             await EnsureBlogSettings().ConfigureAwait(false);
 
             if(settings.DaysToComment == -1) { return true; }
+            if(settings.DaysToComment == 0) { return false; }
+            if (userCanEdit) { return true; }
 
             var result = post.PubDate > DateTime.UtcNow.AddDays(-settings.DaysToComment);
             return result;
