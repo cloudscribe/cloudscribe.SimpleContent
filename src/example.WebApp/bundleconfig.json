@@ -86,5 +86,11 @@
     "inputFiles": [
       "wwwroot/css/jquery.fileupload-noscript.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/jsdev/editor-ck.min.js",
+    "inputFiles": [
+      "wwwroot/jsdev/editor-ck.js"
+    ]
   }
 ]
