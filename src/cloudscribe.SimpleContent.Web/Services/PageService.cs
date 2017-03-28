@@ -330,6 +330,7 @@ namespace cloudscribe.SimpleContent.Services
         {
             await eventHandlers.HandlePreDelete(projectId, pageId).ConfigureAwait(false);
             await pageCommands.Delete(projectId, pageId).ConfigureAwait(false);
+            
 
         }
 

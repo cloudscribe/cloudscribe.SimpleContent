@@ -490,6 +490,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
 
             await pageService.DeletePage(project.Id, page.Id);
+            pageService.ClearNavigationCache();
 
             return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
 

@@ -7,6 +7,7 @@
 @inject IPageRoutes pageRoutes
 @inject IRoleSelectorProperties roleSelector
 @inject IStringLocalizer<SimpleContent> sr
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
 @section Styles {
@@ -174,7 +175,7 @@
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
-    <form id="deleteform" class="form-inline" asp-route="@pageRoutes.PageDeleteRouteName">
+    <form id="deleteform" class="form-inline" asp-controller="Page" asp-action="Delete" method="post">
         <input asp-for="Id" type="hidden" />
     </form>
 }
