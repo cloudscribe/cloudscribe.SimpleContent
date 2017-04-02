@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170323</VersionSuffix>
+    <VersionSuffix>rc20170401</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -31,11 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Identity" Version="1.1.0-rc20161206" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="1.1.0-rc20170130" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-rc20170317" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="1.1.8" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Identity" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Core.Models" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="1.1.9" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-rc20170323" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
