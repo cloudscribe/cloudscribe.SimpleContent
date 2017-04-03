@@ -52,11 +52,11 @@
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="1.1.0-rc20170401" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="1.1.0-rc20170401" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.pgsql" Version="1.1.0-rc20170401" />
-    <PackageReference Include="cloudscribe.Logging.NoDb" Version="1.1.0-rc20161129" />
-    <PackageReference Include="cloudscribe.Logging.EFCore.MSSQL" Version="1.1.0-rc20161129" />
-    <PackageReference Include="cloudscribe.Logging.EFCore.MySql" Version="1.1.0-rc20170203" />
-    <PackageReference Include="cloudscribe.Logging.EFCore.pgsql" Version="1.1.0-rc20170203" />
-    <PackageReference Include="cloudscribe.Logging.Web" Version="1.1.0-rc20170317" />
+    <PackageReference Include="cloudscribe.Logging.NoDb" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Logging.EFCore.MSSQL" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Logging.EFCore.MySql" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Logging.EFCore.pgsql" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Logging.Web" Version="1.1.0-rc20170401" />
     <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-rc20170323" />
     <PackageReference Include="cloudscribe.Web.Pagination" Version="1.1.3" />
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="1.1.0" />
