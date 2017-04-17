@@ -17,16 +17,56 @@
                 </div>
             </div>
             <div class="form-group">
+                <label asp-for="Description" class="col-md-2 control-label">@sr["Description"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Description" class="form-control" data-toggle="tooltip" title='@sr["The description also is used as the channel description in the RSS feed."]' />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+           
+    <div class="form-group">
+        <label asp-for="BlogPageText" class="col-md-2 control-label">@sr["Blog Page Menu Text"]</label>
+        <div class="col-md-10">
+            <input asp-for="BlogPageText" class="form-control" />
+            <span asp-validation-for="BlogPageText" class="text-danger"></span>
+        </div>
+    </div>
+@*
+    <input asp-for="BlogPageText" type="hidden" />
+*@
+            @*
+    <div class="form-group">
+        <label asp-for="BlogPageNavComponentVisibility" class="col-md-2 control-label">@sr["Blog Page Menu Visibility"]</label>
+        <div class="col-md-10">
+            <input asp-for="BlogPageNavComponentVisibility" class="form-control" />
+            <span asp-validation-for="BlogPageNavComponentVisibility" class="text-danger"></span>
+        </div>
+    </div>
+            *@
+            <input asp-for="BlogPageNavComponentVisibility" type="hidden" />
+            @*
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox">
+                <label>
+                    <input asp-for="AddBlogToPagesTree" /> @sr["Add Blog To Menu"]
+                </label>
+            </div>
+        </div>
+    </div>
+            *@
+            <input asp-for="AddBlogToPagesTree" type="hidden" />
+            <div class="form-group">
                 <label asp-for="BlogPagePosition" class="col-md-2 control-label">@sr["Blog Menu Position"]</label>
                 <div class="col-md-10">
-                    <input asp-for="BlogPagePosition" class="form-control" />
+                    <input asp-for="BlogPagePosition" class="form-control" data-toggle="tooltip" title='@sr["The position of the blog within the top level menu."]' />
                     <span asp-validation-for="BlogPagePosition" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="PostsPerPage" class="col-md-2 control-label">@sr["Posts Per Page"]</label>
                 <div class="col-md-10">
-                    <input asp-for="PostsPerPage" class="form-control" />
+                    <input asp-for="PostsPerPage" class="form-control" data-toggle="tooltip" title='@sr["Number of posts to show per page on the post list."]' />
                     <span asp-validation-for="PostsPerPage" class="text-danger"></span>
                 </div>
             </div>
@@ -34,7 +74,7 @@
                 <div class="col-md-10 col-md-offset-2">
                     <div class="checkbox">
                         <label>
-                            <input asp-for="ShowTitle" /> @sr["Show Blog Title and Tagline"]
+                            <input asp-for="ShowTitle" data-toggle="tooltip" title='@sr["If checked will show the blog title and description at the top of the post list."]' /> @sr["Show Blog Title and Description"]
                         </label>
                     </div>
                 </div>
@@ -43,7 +83,7 @@
                 <div class="col-md-10 col-md-offset-2">
                     <div class="checkbox">
                         <label>
-                            <input asp-for="BlogMenuLinksToNewestPost" /> @sr["Blog Menu Links To Newest Post"]
+                            <input asp-for="BlogMenuLinksToNewestPost" data-toggle="tooltip" title='@sr["If checked the blog menu item will link to the most recent post instead of the post list."]' /> @sr["Blog Menu Links To Newest Post"]
                         </label>
                     </div>
                 </div>
@@ -75,7 +115,7 @@
                 <div class="col-md-10 col-md-offset-2">
                     <div class="checkbox">
                         <label>
-                            <input asp-for="ModerateComments" /> @sr["Moderate Comments"]
+                            <input asp-for="ModerateComments" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]' /> @sr["Moderate Comments"]
                         </label>
                     </div>
                 </div>
@@ -83,7 +123,7 @@
             <div class="form-group">
                 <label asp-for="DaysToComment" class="col-md-2 control-label">@sr["Days To Comment"]</label>
                 <div class="col-md-10">
-                    <select asp-for="DaysToComment" class="form-control">
+                    <select asp-for="DaysToComment" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
                         <option value="-1">@sr["No Limit"]</option>
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -100,14 +140,14 @@
             <div class="form-group">
                 <label asp-for="CommentNotificationEmail" class="col-md-2 control-label">@sr["Comment Notification Email"]</label>
                 <div class="col-md-10">
-                    <input asp-for="CommentNotificationEmail" class="form-control" />
+                    <input asp-for="CommentNotificationEmail" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]' />
                     <span asp-validation-for="CommentNotificationEmail" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="DisqusShortName" class="col-md-2 control-label">@sr["Disqus Short Name"]</label>
                 <div class="col-md-10">
-                    <input asp-for="DisqusShortName" class="form-control" />
+                    <input asp-for="DisqusShortName" class="form-control" data-toggle="tooltip" title='@sr["Provide your Disqus site name aka short name to use Disqus instead of the internal comment system. Highly recommended."]' />
                     <span asp-validation-for="DisqusShortName" class="text-danger"></span>
                 </div>
             </div>
@@ -130,14 +170,14 @@
             <div class="form-group">
                 <label asp-for="Publisher" class="col-md-2 control-label">@sr["Publisher"]</label>
                 <div class="col-md-10">
-                    <input asp-for="Publisher" class="form-control" />
+                    <input asp-for="Publisher" class="form-control" data-toggle="tooltip" title='@sr["This is used in meta data, see http://schema.org/publisher."]' />
                     <span asp-validation-for="Publisher" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="PublisherLogoUrl" class="col-md-2 control-label">@sr["Publisher Logo Url"]</label>
                 <div class="col-md-10">
-                    <input asp-for="PublisherLogoUrl" class="form-control" />
+                    <input asp-for="PublisherLogoUrl" class="form-control" data-toggle="tooltip" title='@sr["This is used in meta data, see http://schema.org/logo."]' />
                     <span asp-validation-for="PublisherLogoUrl" class="text-danger"></span>
                 </div>
             </div>
@@ -158,7 +198,7 @@
             <div class="form-group">
                 <label asp-for="PublisherEntityType" class="col-md-2 control-label">@sr["Publisher Type"]</label>
                 <div class="col-md-10">
-                    <select asp-for="PublisherEntityType" class="form-control">
+                    <select asp-for="PublisherEntityType" class="form-control" data-toggle="tooltip" title='@sr["This is used in meta data, see http://schema.org/publisher."]'>
                         <option value="Organization">@sr["Organization"]</option>
                         <option value="Person">@sr["Person"]</option>
                     </select>
@@ -247,4 +287,9 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_SideMenuScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        });
+    </script>
 }

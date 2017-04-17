@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2016-11-15
+// Last Modified:           2017-04-17
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -216,14 +216,23 @@ namespace cloudscribe.SimpleContent.Services
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
-                if(string.IsNullOrEmpty(folderPrefix))
+                if(!string.IsNullOrEmpty(page.ExternalUrl))
                 {
-                    node.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName, new { slug = page.Slug });
+                    node.Target = "_blank";
+                    node.Url = urlHelper.Content(page.ExternalUrl);
                 }
                 else
                 {
-                    node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
+                    if (string.IsNullOrEmpty(folderPrefix))
+                    {
+                        node.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName, new { slug = page.Slug });
+                    }
+                    else
+                    {
+                        node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
+                    }
                 }
+                
                 
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
@@ -253,15 +262,23 @@ namespace cloudscribe.SimpleContent.Services
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
-
-                if (string.IsNullOrEmpty(folderPrefix))
+                if (!string.IsNullOrEmpty(page.ExternalUrl))
                 {
-                    node.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName, new { slug = page.Slug });
+                    node.Target = "_blank";
+                    node.Url = urlHelper.Content(page.ExternalUrl);
                 }
                 else
                 {
-                    node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
+                    if (string.IsNullOrEmpty(folderPrefix))
+                    {
+                        node.Url = urlHelper.RouteUrl(pageRouteHelper.PageIndexRouteName, new { slug = page.Slug });
+                    }
+                    else
+                    {
+                        node.Url = urlHelper.RouteUrl(pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
+                    }
                 }
+                
 
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists

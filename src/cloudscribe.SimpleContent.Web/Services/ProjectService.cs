@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2016-09-08
+// Last Modified:           2017-04-17
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -23,12 +23,14 @@ namespace cloudscribe.SimpleContent.Services
             IProjectQueries projectQueries,
             IProjectCommands projectCommands,
             IMemoryCache cache,
+            IPageNavigationCacheKeys cacheKeys,
             IHttpContextAccessor contextAccessor = null)
         {
             this.security = security;
             this.projectQueries = projectQueries;
             this.projectCommands = projectCommands;
             this.settingsResolver = settingsResolver;
+            this.cacheKeys = cacheKeys;
             this.cache = cache;
             context = contextAccessor?.HttpContext;
         }
@@ -40,16 +42,14 @@ namespace cloudscribe.SimpleContent.Services
         private IProjectCommands projectCommands;
         private IProjectSettingsResolver settingsResolver;
         private IProjectSettings currentSettings = null;
+        private IPageNavigationCacheKeys cacheKeys;
         private IMemoryCache cache;
 
         public void ClearNavigationCache()
         {
-            var cacheKey = "cloudscribe.SimpleContent.Services.PagesNavigationTreeBuilder";
-            cache.Remove(cacheKey);
-            cacheKey = "cloudscribe.Web.Navigation.XmlNavigationTreeBuilder";
-            cache.Remove(cacheKey);
-            cacheKey = "JsonNavigationTreeBuilder";
-            cache.Remove(cacheKey);
+            cache.Remove(cacheKeys.PageTreeCacheKey);
+            cache.Remove(cacheKeys.XmlTreeCacheKey);
+            cache.Remove(cacheKeys.JsonTreeCacheKey);
         }
 
         private async Task<bool> EnsureSettings()
