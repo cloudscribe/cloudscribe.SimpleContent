@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-15
-// Last Modified:           2017-03-06
+// Last Modified:           2017-04-17
 // 
 
 using cloudscribe.FileManager.Web.Models;
@@ -524,6 +524,7 @@ namespace cloudscribe.FileManager.Web.Services
             var webSizeName = Path.GetFileNameWithoutExtension(newName) + "-ws" + ext;
             var webFsPath = Path.Combine(currentFsPath, webSizeName);
             string webUrl = string.Empty;
+            var didResize = false;
 
             try
             {
@@ -539,7 +540,7 @@ namespace cloudscribe.FileManager.Web.Services
                     int resizeWidth = GetMaxWidth(maxWidth, options);
                     int resizeHeight = GetMaxWidth(maxHeight, options);
 
-                    imageResizer.ResizeImage(
+                    didResize = imageResizer.ResizeImage(
                         fsPath,
                         currentFsPath,
                         webSizeName,
@@ -553,7 +554,7 @@ namespace cloudscribe.FileManager.Web.Services
                 return new UploadResult
                 {
                     OriginalUrl = newUrl,
-                    ResizedUrl = webUrl,
+                    ResizedUrl = didResize? webUrl : string.Empty,
                     Name = newName,
                     Length = formFile.Length,
                     Type = formFile.ContentType
