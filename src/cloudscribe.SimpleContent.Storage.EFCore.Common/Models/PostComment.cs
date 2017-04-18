@@ -14,7 +14,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
     {
         public PostComment()
         {
-
+            Id = Guid.NewGuid().ToString();
         }
 
         public string Id { get; set; }

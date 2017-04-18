@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace cloudscribe.SimpleContent.Models
+﻿namespace cloudscribe.SimpleContent.Models
 {
     public interface IPageResource
     {
@@ -13,6 +7,7 @@ namespace cloudscribe.SimpleContent.Models
         /// the page id
         /// </summary>
         string ContentId { get; set; } 
+        int Sort { get; set; }
         /// <summary>
         /// css or js
         /// </summary>
@@ -28,9 +23,24 @@ namespace cloudscribe.SimpleContent.Models
     {
         public string Id { get; set; }
         public string ContentId { get; set; }
+        public int Sort { get; set; } = 1;
 
         public string Type { get; set; }
         public string Environment { get; set; }
         public string Url { get; set; }
+
+        public static PageResource FromIPageResource(IPageResource r)
+        {
+            var resource = new PageResource();
+            resource.ContentId = r.ContentId;
+            resource.Environment = r.Environment;
+            resource.Id = r.Id;
+            resource.Sort = r.Sort;
+            resource.Type = r.Type;
+            resource.Url = r.Url;
+
+            return resource;
+
+        }
     }
 }

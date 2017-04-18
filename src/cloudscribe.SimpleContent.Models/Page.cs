@@ -9,6 +9,7 @@ namespace cloudscribe.SimpleContent.Models
         {
             Categories = new List<string>();
             Comments = new List<IComment>();
+            Resources = new List<IPageResource>();
         }
 
         public string Id { get; set; } = string.Empty;
@@ -65,6 +66,8 @@ namespace cloudscribe.SimpleContent.Models
         public bool ShowLastModified { get; set; } = false;
         public bool ShowCategories { get; set; } = false;
         public bool ShowComments { get; set; } = false;
+
+        public List<IPageResource> Resources { get; set; }
 
         public static Page FromIPage(IPage page)
         {

@@ -35,5 +35,7 @@ namespace cloudscribe.SimpleContent.Models
         bool MenuOnly { get; set; }
 
         bool ShowMenu { get; set; }
+
+        List<IPageResource> Resources { get; set; }
     }
 }

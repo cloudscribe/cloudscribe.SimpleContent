@@ -27,6 +27,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
 
         DbSet<PageCategory> PageCategories { get; set; }
 
+        DbSet<PageResourceEntity> PageResources { get; set; }
+
         ChangeTracker ChangeTracker { get; }
 
         DatabaseFacade Database { get; }
