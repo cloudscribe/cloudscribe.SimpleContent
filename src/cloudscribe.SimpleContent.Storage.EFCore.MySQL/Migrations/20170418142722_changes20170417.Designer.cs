@@ -3,18 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using cloudscribe.SimpleContent.Storage.EFCore.MSSQL;
+using cloudscribe.SimpleContent.Storage.EFCore.MySQL;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
+namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170418142722_changes20170417")]
+    partial class changes20170417
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.1")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "1.1.1");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
                 {
@@ -22,15 +22,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36);
 
-                    b.Property<bool>("AddBlogToPagesTree")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", true);
+                    b.Property<bool>("AddBlogToPagesTree");
 
-                    b.Property<bool>("BlogMenuLinksToNewestPost")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                    b.Property<bool>("BlogMenuLinksToNewestPost");
 
                     b.Property<string>("BlogPageNavComponentVisibility")
                         .HasMaxLength(255);
@@ -73,10 +67,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("Image")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("IncludePubDateInPostUrls")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", true);
+                    b.Property<bool>("IncludePubDateInPostUrls");
 
                     b.Property<string>("LanguageCode")
                         .HasMaxLength(10);
@@ -87,10 +78,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("ManagingEditorEmail")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("ModerateComments")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", true);
+                    b.Property<bool>("ModerateComments");
 
                     b.Property<int>("PostsPerPage");
 
@@ -126,13 +114,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<bool>("ShowRecentPostsOnDefaultPage")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                        .HasDefaultValue(false);
 
-                    b.Property<bool>("ShowTitle")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                    b.Property<bool>("ShowTitle");
 
                     b.Property<string>("SmtpPassword");
 
@@ -141,18 +125,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("SmtpPreferredEncoding")
                         .HasMaxLength(20);
 
-                    b.Property<bool>("SmtpRequiresAuth")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                    b.Property<bool>("SmtpRequiresAuth");
 
                     b.Property<string>("SmtpServer")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("SmtpUseSsl")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                    b.Property<bool>("SmtpUseSsl");
 
                     b.Property<string>("SmtpUser")
                         .HasMaxLength(500);
@@ -163,24 +141,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("Title")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("UseDefaultPageAsRootNode")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", true);
+                    b.Property<bool>("UseDefaultPageAsRootNode");
 
-                    b.Property<bool>("UseMetaDescriptionInFeed")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                    b.Property<bool>("UseMetaDescriptionInFeed");
 
                     b.Property<string>("WebmasterEmail")
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_ContentProject");
+                    b.ToTable("cs_ContentProject");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageCategory", b =>
@@ -203,9 +173,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.HasIndex("Value");
 
-                    b.ToTable("PageCategories");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_PageCategory");
+                    b.ToTable("cs_PageCategory");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
@@ -250,9 +218,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("PageComments");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_PageComment");
+                    b.ToTable("cs_PageComment");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", b =>
@@ -277,15 +243,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<bool>("IsPublished")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", true);
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime>("LastModified");
 
                     b.Property<bool>("MenuOnly")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                        .HasDefaultValue(false);
 
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(500);
@@ -306,33 +270,27 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<bool>("ShowCategories")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("ShowComments")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("ShowHeading")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", true);
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("ShowLastModified")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("ShowMenu")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("ShowPubDate")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", false);
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -352,9 +310,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Pages");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_Page");
+                    b.ToTable("cs_Page");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
@@ -384,9 +340,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.HasIndex("PageEntityId");
 
-                    b.ToTable("PageResources");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_PageResource");
+                    b.ToTable("cs_PageResource");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostCategory", b =>
@@ -409,9 +363,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.HasIndex("Value");
 
-                    b.ToTable("PostCategories");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_PostCategory");
+                    b.ToTable("cs_PostCategory");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostComment", b =>
@@ -456,9 +408,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Comments");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_PostComment");
+                    b.ToTable("cs_PostComment");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity", b =>
@@ -482,10 +432,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("CorrelationKey")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("IsPublished")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ColumnType", "bit")
-                        .HasAnnotation("SqlServer:DefaultValue", true);
+                    b.Property<bool>("IsPublished");
 
                     b.Property<DateTime>("LastModified");
 
@@ -510,9 +457,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.HasIndex("Slug");
 
-                    b.ToTable("Posts");
-
-                    b.HasAnnotation("SqlServer:TableName", "cs_Post");
+                    b.ToTable("cs_Post");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
