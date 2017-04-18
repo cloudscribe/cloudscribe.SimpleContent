@@ -55,6 +55,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
+                .Include(p => p.PageResources)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == pageId, cancellationToken)
                 .ConfigureAwait(false)
@@ -115,6 +116,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
+                .Include(p => p.PageResources)
                 .AsNoTracking()
                 .Where(p => 
                 p.Slug == slug && p.ProjectId == projectId)

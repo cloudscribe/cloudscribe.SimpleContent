@@ -1,0 +1,43 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.AddPageResourceViewModel
+@using Microsoft.Extensions.Localization
+@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Models
+@using System.Globalization
+@using cloudscribe.SimpleContent.Web.TagHelpers
+@using Microsoft.Extensions.Options
+@inject IPageRoutes pageRoutes
+@inject IStringLocalizer<SimpleContent> sr
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper "*, cloudscribe.Web.Common"
+@addTagHelper "*, cloudscribe.SimpleContent.Web"
+
+@{
+}
+<form asp-controller="Page" asp-action="AddResource" class="form-horizontal" role="form">
+    <input type="hidden" name="Type" value="js" />
+    <input type="hidden" asp-for="Slug" />
+        <div class="form-group">
+            <label asp-for="Environment" class="col-md-2 control-label">@sr["Environment"]</label>
+            <div class="col-md-10">
+                <select asp-for="Environment" name="Environment" class="form-control">
+                    <option value="any">@sr["Any"]</option>
+                    <option value="dev">@sr["Development"]</option>
+                    <option value="prod">@sr["Production"]</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Sort" class="col-md-2 control-label">@sr["Sort"]</label>
+            <div class="col-md-10">
+                <input asp-for="Sort" name="Sort" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Url" class="col-md-2 control-label">@sr["Url"]</label>
+            <div class="col-md-10">
+                <input asp-for="Url" name="Url" class="form-control" />
+            </div>
+        </div>
+        <button type="submit" class="col-md-offset-2 btn btn-default">@sr["Add Javascript Url"]</button>
+    
+</form>

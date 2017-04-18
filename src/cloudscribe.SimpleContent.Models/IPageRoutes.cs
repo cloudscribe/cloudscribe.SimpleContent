@@ -5,5 +5,7 @@
         string PageRouteName { get; }
         string PageEditRouteName { get; }
         string PageDeleteRouteName { get; }
+
+        string PageDevelopRouteName { get; }
     }
 }

@@ -61,15 +61,34 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
             var p = PageEntity.FromIPage(page);
 
+            
+
             p.LastModified = DateTime.UtcNow;
             bool tracking = dbContext.ChangeTracker.Entries<PageEntity>().Any(x => x.Entity.Id == p.Id);
             if (!tracking)
             {
+                dbContext.PageResources.RemoveRange(dbContext.PageResources.Where(x => x.PageEntityId == p.Id));
                 dbContext.Pages.Update(p);
+                
             }
-
+            
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
+
+            if(page.Resources.Count > 0)
+            {
+                p.Resources = page.Resources;
+                foreach (var r in p.PageResources)
+                {
+                    r.PageEntityId = p.Id;
+
+                }
+
+                rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
+                .ConfigureAwait(false);
+            }
+
+
 
         }
 

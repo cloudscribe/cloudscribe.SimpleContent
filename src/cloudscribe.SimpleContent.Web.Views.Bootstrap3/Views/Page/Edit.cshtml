@@ -4,12 +4,19 @@
 @using cloudscribe.SimpleContent.Models
 @using System.Globalization
 @using cloudscribe.SimpleContent.Web.TagHelpers
+@using Microsoft.Extensions.Options
 @inject IPageRoutes pageRoutes
 @inject IRoleSelectorProperties roleSelector
 @inject IStringLocalizer<SimpleContent> sr
+@inject IOptions<PageEditOptions> pageEditOptionsAccessor
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
+@{ 
+    var editOptions = pageEditOptionsAccessor.Value;
+    var showDev =  editOptions.AlwaysShowDeveloperTab ? true : User.IsInRole(editOptions.DeveloperTabAllowedRole);
+    if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
+}
 @section Styles {
 <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
 }
@@ -27,12 +34,15 @@
         <li id="tab2" role="tab">
             <a href="#tabSettings" data-toggle="tab">@sr["Settings"]</a>
         </li>
-
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tabContent" role="tabpanel" aria-labelledby="tab1">
             <div class="col-md-12">
                 &nbsp;
+                @if (showDev)
+                {
+                    <a asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Add Js/Css"]</a>
+                } 
             </div>
             <div class="form-group">
                 <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
@@ -76,6 +86,18 @@
                 <div class="col-md-10">
                     <input asp-for="PubDate" class="form-control" data-locale="@CultureInfo.CurrentCulture.Name.ToLowerInvariant()" />
                     <span asp-validation-for="PubDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-success">@sr["Save"]</button>
+                    @if (!string.IsNullOrEmpty(Model.Id))
+                    {
+                        <button  type="button" class="btn btn-danger"
+                                onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
+                            @sr["Delete"]
+                        </button>
+                    }
                 </div>
             </div>
         </div>
@@ -158,20 +180,24 @@
                     <span asp-validation-for="ViewRoles" class="text-danger"></span>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
-            @if (!string.IsNullOrEmpty(Model.Id))
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
+                    @if (!string.IsNullOrEmpty(Model.Id))
             {
-                <button name="button" type="button" class="btn btn-danger"
-                        onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
-                    @sr["Delete"]
-                </button>
-            }   
+                        <button name="button" type="button" class="btn btn-danger"
+                                onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
+                            @sr["Delete"]
+                        </button>
+                    }
+                </div>
+            </div>
+
         </div>
+
+
     </div>
+    
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))
 {

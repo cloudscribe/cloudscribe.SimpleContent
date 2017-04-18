@@ -1,9 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using cloudscribe.SimpleContent.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class PageEditViewModel
     {
+        public PageEditViewModel()
+        {
+            
+        }
         public string Id { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "ProjectId is required")]
@@ -54,7 +60,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string ImageBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=image";
 
-
+        
 
     }
 }

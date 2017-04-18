@@ -17,6 +17,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
@@ -251,6 +252,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.ViewRoles = page.ViewRoles;
                 model.ShowComments = page.ShowComments;
                 
+
             }
 
             
@@ -450,6 +452,100 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             //return Content(url);
 
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Development(string slug)
+        {
+            var projectSettings = await projectService.GetCurrentProjectSettings();
+
+            if (projectSettings == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(projectSettings.Id, authorizationService);
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user cannot edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+            
+            IPage page = null;
+            if (!string.IsNullOrEmpty(slug))
+            {
+                page = await pageService.GetPageBySlug(projectSettings.Id, slug);
+            }
+            if (page == null)
+            {
+                log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Add CSS/JS - {0}"], page.Title);
+
+            var model = new PageDevelopmentViewModel();
+            model.Slug = page.Slug;
+            model.AddResourceViewModel.Slug = page.Slug;
+            model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ToList();
+            model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ToList();
+
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddResource(AddPageResourceViewModel model)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            IPage page = null;
+            if (!string.IsNullOrEmpty(model.Slug))
+            {
+                page = await pageService.GetPageBySlug(project.Id, model.Slug);
+            }
+
+            if (page == null)
+            {
+                log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var resource = new PageResource();
+            resource.ContentId = page.Id;
+            resource.Type = model.Type;
+            resource.Environment = model.Environment;
+            resource.Sort = model.Sort;
+            resource.Url = model.Url;
+            page.Resources.Add(resource);
+            
+
+
+            await pageService.Update(page, page.IsPublished);
+
+            return RedirectToRoute(pageRoutes.PageEditRouteName, new { slug = page.Slug });
+
+        }
+
 
         [HttpPost]
         [AllowAnonymous]

@@ -1,4 +1,6 @@
-﻿namespace cloudscribe.SimpleContent.Models
+﻿using System;
+
+namespace cloudscribe.SimpleContent.Models
 {
     public interface IPageResource
     {
@@ -21,6 +23,11 @@
 
     public class PageResource : IPageResource
     {
+        public PageResource()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+
         public string Id { get; set; }
         public string ContentId { get; set; }
         public int Sort { get; set; } = 1;
