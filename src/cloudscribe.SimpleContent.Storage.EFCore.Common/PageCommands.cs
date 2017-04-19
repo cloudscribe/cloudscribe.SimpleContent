@@ -72,8 +72,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 
             }
             
-            int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
+            int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
             if(page.Resources.Count > 0)
             {
@@ -84,8 +83,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 }
 
-                rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
+                rowsAffected = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
 
 

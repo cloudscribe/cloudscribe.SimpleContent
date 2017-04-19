@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-11
+// Last Modified:           2017-04-19
 // 
 
 
@@ -1029,7 +1029,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             //comment.IsApproved = true;
-            blogPost.Comments.Remove(comment);
+            //blogPost.Comments.Remove(comment);
+            var copyOfComments = blogPost.Comments.ToList();
+            for (var i =0; i < copyOfComments.Count; i++)
+            {
+                if(copyOfComments[i].Id == commentId)
+                {
+                    copyOfComments.RemoveAt(i);
+                }
+            }
+            blogPost.Comments = copyOfComments;
             await blogService.Update(blogPost);
 
             return StatusCode(200);

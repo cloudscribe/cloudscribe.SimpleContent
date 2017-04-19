@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -18,6 +14,9 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         /// any, dev, or prod
         /// </summary>
         public string Environment { get; set; }
+        [Required(ErrorMessage ="Url is required")]
+        //[DataType(DataType.Url)]
+        [RegularExpression(@"^(http(s)?://)?(\/?)[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-‌​\.\?\,\'\/\\\+&amp;%\$#_]*)?$", ErrorMessage ="Please provide a valid url or relative url")]
         public string Url { get; set; }
     }
 }

@@ -483,13 +483,13 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
-            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Add CSS/JS - {0}"], page.Title);
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Developer Tools - {0}"], page.Title);
 
             var model = new PageDevelopmentViewModel();
             model.Slug = page.Slug;
             model.AddResourceViewModel.Slug = page.Slug;
-            model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ToList();
-            model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ToList();
+            model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Environment).ThenBy(x => x.Sort).ThenBy(x => x.Url).ToList();
+            model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Environment).ThenBy(x => x.Sort).ThenBy(x => x.Url).ToList();
 
 
             return View(model);
@@ -501,6 +501,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddResource(AddPageResourceViewModel model)
         {
+            if(!ModelState.IsValid)
+            {
+                this.AlertDanger(sr["Invalid request"], true);
+                return RedirectToRoute(pageRoutes.PageDevelopRouteName, new { slug = model.Slug });
+            }
+
             var project = await projectService.GetCurrentProjectSettings();
 
             if (project == null)
@@ -542,7 +548,64 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             await pageService.Update(page, page.IsPublished);
 
-            return RedirectToRoute(pageRoutes.PageEditRouteName, new { slug = page.Slug });
+            return RedirectToRoute(pageRoutes.PageDevelopRouteName, new { slug = page.Slug });
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveResource(string slug, string id)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            IPage page = null;
+            if (!string.IsNullOrEmpty(slug))
+            {
+                page = await pageService.GetPageBySlug(project.Id, slug);
+            }
+
+            if (page == null)
+            {
+                log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var found = false;
+            for (var i = 0; i < page.Resources.Count; i++)
+            {
+                if(page.Resources[i].Id == id)
+                {
+                    found = true;
+                    page.Resources.RemoveAt(i);
+                }
+            }
+            if(found)
+            {
+                await pageService.Update(page, page.IsPublished);
+            }
+            else
+            {
+                log.LogWarning($"page resource not found for {slug} and {id}");
+            }
+            
+
+            return RedirectToRoute(pageRoutes.PageDevelopRouteName, new { slug = page.Slug });
 
         }
 

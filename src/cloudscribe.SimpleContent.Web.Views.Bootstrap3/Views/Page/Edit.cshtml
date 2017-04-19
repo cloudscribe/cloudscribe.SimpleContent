@@ -39,10 +39,6 @@
         <div class="tab-pane active" id="tabContent" role="tabpanel" aria-labelledby="tab1">
             <div class="col-md-12">
                 &nbsp;
-                @if (showDev)
-                {
-                    <a asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Add Js/Css"]</a>
-                } 
             </div>
             <div class="form-group">
                 <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
@@ -86,18 +82,6 @@
                 <div class="col-md-10">
                     <input asp-for="PubDate" class="form-control" data-locale="@CultureInfo.CurrentCulture.Name.ToLowerInvariant()" />
                     <span asp-validation-for="PubDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" class="btn btn-success">@sr["Save"]</button>
-                    @if (!string.IsNullOrEmpty(Model.Id))
-                    {
-                        <button  type="button" class="btn btn-danger"
-                                onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
-                            @sr["Delete"]
-                        </button>
-                    }
                 </div>
             </div>
         </div>
@@ -180,23 +164,30 @@
                     <span asp-validation-for="ViewRoles" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
-                    @if (!string.IsNullOrEmpty(Model.Id))
-            {
-                        <button name="button" type="button" class="btn btn-danger"
-                                onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
-                            @sr["Delete"]
-                        </button>
-                    }
-                </div>
-            </div>
+            
 
         </div>
 
 
     </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
+                @if (!string.IsNullOrEmpty(Model.Id))
+                {
+                    <button name="button" type="button" class="btn btn-danger"
+                            onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
+                        @sr["Delete"]
+                    </button>
+                }
+                @if (showDev)
+                {
+                    <a class="btn btn-default" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
+                }
+            </div>
+        </div>
+
+
     
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))

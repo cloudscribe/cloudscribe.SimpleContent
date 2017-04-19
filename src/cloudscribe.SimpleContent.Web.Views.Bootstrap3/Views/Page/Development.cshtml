@@ -14,13 +14,69 @@
 }
 <h1>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h1>
 <div>
-    @{ await Html.RenderPartialAsync("AddJsPartial", Model.AddResourceViewModel); }
-    
+<table class="table table-striped">
+    <tr>  
+        <th>@sr["Environment"]</th>
+        <th>@sr["Sort"]</th>
+        <th>@sr["Script"]</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.Js)
+    {
+        <tr>
+            <td>@item.Environment</td>
+            <td>@item.Sort</td>
+            <td>@item.Url</td>
+            <td>
+                <form asp-controller="Page" asp-action="RemoveResource">
+                    <input type="hidden" asp-for="Slug" />
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <button type="submit" class="btn btn-sm btn-warning">@sr["Delete"]</button>
+                </form>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td colspan="4">
+            @{ await Html.RenderPartialAsync("AddJsPartial", Model.AddResourceViewModel); }
+        </td>
+    </tr>
+</table>
+  
 </div>
 <div>
-    @{ await Html.RenderPartialAsync("AddCssPartial", Model.AddResourceViewModel); }
-    
+   
+<table class="table table-striped">
+    <tr>
+        <th>@sr["Environment"]</th>
+        <th>@sr["Sort"]</th>
+        <th>@sr["CSS"]</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.Css)
+    {
+        <tr>
+            <td>@item.Environment</td>
+            <td>@item.Sort</td>
+            <td>@item.Url</td>
+            <td>
+                <form asp-controller="Page" asp-action="RemoveResource">
+                    <input type="hidden" asp-for="Slug" />
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <button type="submit" class="btn btn-sm btn-warning">@sr["Delete"]</button>  
+                </form>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td colspan="4">
+            @{ await Html.RenderPartialAsync("AddCssPartial", Model.AddResourceViewModel); }
+        </td>
+    </tr>
+</table>
 </div>
-
-  
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+     
+}
 
