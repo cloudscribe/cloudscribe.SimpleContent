@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-03-06
+// Last Modified:           2017-04-19
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
             IStringLocalizer<SimpleContent> localizer,
+            IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
         {
             this.projectService = projectService;
@@ -40,6 +42,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
             this.pageRoutes = pageRoutes;
+            editOptions = pageEditOptionsAccessor.Value;
             sr = localizer;
             log = logger;
         }
@@ -52,6 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private ILogger log;
         private IPageRoutes pageRoutes;
         private IStringLocalizer<SimpleContent> sr;
+        private PageEditOptions editOptions;
 
         [HttpGet]
         [AllowAnonymous]
@@ -471,7 +475,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 log.LogInformation("redirecting to index because user cannot edit");
                 return RedirectToRoute(pageRoutes.PageRouteName);
             }
-            
+
+            var canDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
+
+            if (!canDev)
+            {
+                log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {
@@ -488,8 +500,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             var model = new PageDevelopmentViewModel();
             model.Slug = page.Slug;
             model.AddResourceViewModel.Slug = page.Slug;
-            model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Environment).ThenBy(x => x.Sort).ThenBy(x => x.Url).ToList();
-            model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Environment).ThenBy(x => x.Sort).ThenBy(x => x.Url).ToList();
+            model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
+            model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
 
 
             return View(model);
@@ -517,10 +529,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             var canEdit = await User.CanEditPages(project.Id, authorizationService);
-
             if (!canEdit)
             {
                 log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+            var canDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
+            if (!canDev)
+            {
+                log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
                 return RedirectToRoute(pageRoutes.PageRouteName);
             }
 
@@ -567,10 +584,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             var canEdit = await User.CanEditPages(project.Id, authorizationService);
-
             if (!canEdit)
             {
                 log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+            var canDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
+            if (!canDev)
+            {
+                log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
                 return RedirectToRoute(pageRoutes.PageRouteName);
             }
 
@@ -587,16 +609,19 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             var found = false;
-            for (var i = 0; i < page.Resources.Count; i++)
+            var copyOfResources = page.Resources.ToList();
+            for (var i = 0; i < copyOfResources.Count; i++)
             {
-                if(page.Resources[i].Id == id)
+                if(copyOfResources[i].Id == id)
                 {
                     found = true;
-                    page.Resources.RemoveAt(i);
+                    copyOfResources.RemoveAt(i);
                 }
             }
             if(found)
             {
+                // needed so the ef entity shadow copy of resources gets synced
+                page.Resources = copyOfResources;
                 await pageService.Update(page, page.IsPublished);
             }
             else

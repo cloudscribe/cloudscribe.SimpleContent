@@ -2,7 +2,7 @@
 {
     public class PageEditOptions
     {
-        public bool AlwaysShowDeveloperTab { get; set; } = false;
-        public string DeveloperTabAllowedRole { get; set; } = string.Empty;
+        public bool AlwaysShowDeveloperLink { get; set; } = false;
+        public string DeveloperAllowedRole { get; set; } = string.Empty;
     }
 }

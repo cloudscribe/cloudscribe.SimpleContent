@@ -14,7 +14,7 @@
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
 @{ 
     var editOptions = pageEditOptionsAccessor.Value;
-    var showDev =  editOptions.AlwaysShowDeveloperTab ? true : User.IsInRole(editOptions.DeveloperTabAllowedRole);
+    var showDev =  editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
 }
 @section Styles {

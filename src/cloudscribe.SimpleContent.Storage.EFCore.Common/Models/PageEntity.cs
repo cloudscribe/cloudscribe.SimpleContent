@@ -19,7 +19,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             categories = new List<string>();
             comments = new List<IComment>();
             pageComments = new List<PageComment>();
-            resources = new List<IPageResource>();
+            resources = new List<PageResource>();
             pageResources = new List<PageResourceEntity>();
         }
 
@@ -102,9 +102,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             set
             {
                 comments = value;
+                pageComments.Clear();
                 if (comments.Count > 0)
                 {
-                    pageComments.Clear();
                     foreach (var c in comments)
                     {
                         pageComments.Add(PageComment.FromIComment(c));
@@ -121,23 +121,27 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         }
 
 
-        private List<IPageResource> resources;
-        public List<IPageResource> Resources
+        private List<PageResource> resources;
+        public List<PageResource> Resources
         {
             get
             {
                 if (resources.Count == 0)
                 {
-                    resources.AddRange(PageResources);
+                    //resources.AddRange(PageResources);
+                    foreach(var r in pageResources)
+                    {
+                        resources.Add(PageResource.FromIPageResource(r));
+                    }
                 }
                 return resources;
             }
             set
             {
                 resources = value;
+                pageResources.Clear();
                 if (resources.Count > 0)
-                {
-                    pageResources.Clear();
+                {  
                     foreach (var c in resources)
                     {
                         pageResources.Add(PageResourceEntity.FromIPageResource(c));

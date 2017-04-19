@@ -36,6 +36,6 @@ namespace cloudscribe.SimpleContent.Models
 
         bool ShowMenu { get; set; }
 
-        List<IPageResource> Resources { get; set; }
+        List<PageResource> Resources { get; set; }
     }
 }
