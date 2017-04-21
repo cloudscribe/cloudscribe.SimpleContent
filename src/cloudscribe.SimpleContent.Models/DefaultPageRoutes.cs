@@ -7,5 +7,7 @@
         public string PageDeleteRouteName { get; } = ProjectConstants.PageDeleteRouteName;
 
         public string PageDevelopRouteName { get; } = ProjectConstants.PageDevelopRouteName;
+
+        public string PageTreeRouteName { get; } = ProjectConstants.PageTreeRouteName;
     }
 }

@@ -48,5 +48,7 @@ namespace cloudscribe.SimpleContent.Models
        
 
         void ClearNavigationCache();
+
+        Task<string> GetPageTreeJson(string node = "root");
     }
 }

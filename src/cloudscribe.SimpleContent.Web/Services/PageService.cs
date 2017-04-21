@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-10
+// Last Modified:           2017-04-21
 // 
 
 
@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
@@ -32,6 +33,7 @@ namespace cloudscribe.SimpleContent.Services
             IMediaProcessor mediaProcessor,
             IHtmlProcessor htmlProcessor,
             IUrlHelperFactory urlHelperFactory,
+            IPageRoutes pageRoutes,
             IMemoryCache cache,
             IPageNavigationCacheKeys cacheKeys,
             IActionContextAccessor actionContextAccesor,
@@ -46,6 +48,7 @@ namespace cloudscribe.SimpleContent.Services
             this.mediaProcessor = mediaProcessor;
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
+            this.pageRoutes = pageRoutes;
             this.htmlProcessor = htmlProcessor;
             this.cache = cache;
             this.cacheKeys = cacheKeys;
@@ -66,6 +69,7 @@ namespace cloudscribe.SimpleContent.Services
         private IMemoryCache cache;
         private IPageNavigationCacheKeys cacheKeys;
         private PageEvents eventHandlers;
+        private IPageRoutes pageRoutes;
 
         private async Task EnsureProjectSettings()
         {
@@ -422,7 +426,160 @@ namespace cloudscribe.SimpleContent.Services
                 ).ConfigureAwait(false);
         }
 
-        
+        public async Task<string> GetPageTreeJson(string node = "root")
+        {
+            await EnsureProjectSettings();
+            
+
+            List<IPage> list;
+            if(node == "root")
+            {
+                list = await GetRootPages();
+            }
+            else
+            {
+                list = await GetChildPages(node);
+            }
+
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+
+            var comma = string.Empty;
+            var sb = new StringBuilder();
+            sb.Append("[");
+            foreach (var p in list)
+            {
+                sb.Append(comma);
+                await BuildPageJson(sb, p, urlHelper);
+                comma = ",";
+            }
+            sb.Append("]");
+
+            return sb.ToString();
+        }
+
+        private async Task BuildPageJson(StringBuilder script, IPage page, IUrlHelper urlHelper)
+        {
+            var childPages = await GetChildPages(page.Id); // TODO: this is not effecient
+            script.Append("{");
+            script.Append("\"id\":" + "\"" + page.Id + "\"");
+            script.Append(",\"slug\":" + "\"" + page.Slug + "\"");
+            script.Append(",\"label\":\"" + Encode(page.Title) + "\"");
+            script.Append(",\"url\":\"" + ResolveUrl(page, urlHelper) + "\"");
+            //script.Append(",\"isRoot\":false");
+            script.Append(",\"parentId\":" + "\"" + page.ParentId + "\"");
+            script.Append(",\"childcount\":" + childPages.Count.ToString());
+            script.Append(",\"children\":[");
+            script.Append("]");
+            if (childPages.Count > 0)
+            {
+                script.Append(",\"load_on_demand\":true");
+            }
+
+            //if (canEdit)
+            //{
+                script.Append(",\"canEdit\":true");
+            //}
+            //else
+            //{
+            //    script.Append(",\"canEdit\":false");
+            //}
+
+
+            //if (canDelete)
+            //{
+                script.Append(",\"canDelete\":true");
+            //}
+            //else
+            //{
+             //   script.Append(",\"canDelete\":false");
+            //}
+
+            //if (canCreateChildPages)
+            //{
+                script.Append(",\"canCreateChild\":true");
+           // }
+            //else
+            //{
+           //     script.Append(",\"canCreateChild\":false");
+           // }
+
+            if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users"))
+            {
+                script.Append(",\"protection\":\"Public\"");
+            }
+            else
+            {
+                script.Append(",\"protection\":\"Protected \"");
+            }
+
+            script.Append("}");
+
+        }
+
+        private string ResolveUrl(IPage page, IUrlHelper urlHelper)
+        {
+            if(page.Slug == this.settings.DefaultPageSlug)
+            {
+                return urlHelper.RouteUrl(pageRoutes.PageRouteName);
+            }
+
+            return urlHelper.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
+        }
+
+        private string Encode(string input)
+        {
+
+            //return JsonEscape(HttpUtility.HtmlDecode(input));
+            return JsonEscape(input);
+
+        }
+
+        private static string JsonEscape(string s)
+        {
+            StringBuilder sb = new StringBuilder();
+            //sb.Append("\"");
+            foreach (char c in s)
+            {
+                switch (c)
+                {
+                    case '\"':
+                        sb.Append("\\\"");
+                        break;
+                    case '\\':
+                        sb.Append("\\\\");
+                        break;
+                    case '\b':
+                        sb.Append("\\b");
+                        break;
+                    case '\f':
+                        sb.Append("\\f");
+                        break;
+                    case '\n':
+                        sb.Append("\\n");
+                        break;
+                    case '\r':
+                        sb.Append("\\r");
+                        break;
+                    case '\t':
+                        sb.Append("\\t");
+                        break;
+                    default:
+                        int i = (int)c;
+                        if (i < 32 || i > 127)
+                        {
+                            sb.AppendFormat("\\u{0:X04}", i);
+                        }
+                        else
+                        {
+                            sb.Append(c);
+                        }
+                        break;
+                }
+            }
+            //sb.Append("\"");
+
+            return sb.ToString();
+        }
 
     }
 }

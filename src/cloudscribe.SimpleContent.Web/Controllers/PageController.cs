@@ -87,6 +87,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.CommentsAreOpen = false;
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+            model.PageTreePath = Url.RouteUrl(pageRoutes.PageTreeRouteName);
             if (canEdit)
             {
                 if (model.CurrentPage != null)
@@ -680,6 +681,130 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         }
 
+        [HttpGet]
+  
+        public async Task<IActionResult> Tree()
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            ViewData["Title"] = sr["Page Management"];
+            var model = new PageTreeViewModel();
+            model.TreeServiceUrl = Url.Action("TreeJson");
+            model.EditUrl = Url.RouteUrl(pageRoutes.PageEditRouteName);
+            model.ViewUrl = Url.RouteUrl(pageRoutes.PageRouteName);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> TreeJson(string node = "root")
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found");
+                return BadRequest();
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit");
+                return BadRequest();
+            }
+
+            var result = await pageService.GetPageTreeJson(node);
+
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                Content = result,
+                StatusCode = 200
+            };
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Move([FromBody] PageMoveModel model)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found");
+                return BadRequest();
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit");
+                return BadRequest();
+            }
+
+            var result = new PageActionResult();
+
+            if (string.IsNullOrEmpty(model.MovedNode) || string.IsNullOrEmpty(model.TargetNode) || (model.MovedNode == "-1") || (model.TargetNode == "-1") || (string.IsNullOrEmpty(model.Position)))
+            {
+                result.Success = false;
+                result.Message = "bad request";
+                return Json(result);
+            }
+
+            var movedNode = await pageService.GetPage(model.MovedNode);
+            var targetNode = await pageService.GetPage(model.TargetNode);
+
+            if ((movedNode == null) || (targetNode == null))
+            {
+                result.Success = false;
+                result.Message = "bad request";
+                return Json(result);
+            }
+
+            switch (model.Position)
+            {
+                case "inside":
+                    // this case is when moving to a new parent node that doesn't have any children yet
+                    // target is the new parent
+                    // or when momving to the first position of the current parent
+
+                    break;
+
+                case "before":
+                    // put this page before the target page beneath the same parent as the target
+
+                    break;
+
+                case "after":
+                default:
+                    // put this page after the target page beneath the same parent as the target
+
+                    break;
+            }
+
+            return Json(result);
+        }
+
         //[HttpPost]
         //[AllowAnonymous]
         //[ValidateAntiForgeryToken]
@@ -714,7 +839,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //    }
 
         //    var canEdit = await User.CanEditPages(project.Id, authorizationService);
-            
+
         //    if (!canEdit)
         //    {
         //        log.LogInformation("returning 403 user is not allowed to edit");
@@ -747,7 +872,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //        page.MetaDescription = model.MetaDescription;
         //        page.Content = model.Content;
         //        if (page.PageOrder != model.PageOrder) needToClearCache = true;
-               
+
         //    }
         //    else
         //    {
@@ -770,7 +895,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //            Content = model.Content,
         //            Slug = slug,
         //            ParentId = "0"
-                    
+
         //            //,Categories = categories.ToList()
         //        };
         //    }
@@ -786,7 +911,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //                page.ParentSlug = parentPage.Slug;
         //                needToClearCache = true;
         //            }
-                    
+
         //        }
         //    }
         //    else
@@ -809,7 +934,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //    {
         //        var localTime = DateTime.Parse(model.PubDate);
         //        page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
-                
+
         //    }
 
         //    if(isNew)
@@ -821,7 +946,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //        await pageService.Update(page, model.IsPublished);
         //    }
 
-            
+
         //    if(needToClearCache)
         //    {
         //        pageService.ClearNavigationCache();
@@ -832,7 +957,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         //}
 
-        
+
 
         //[HttpPost]
         //[AllowAnonymous]
@@ -855,7 +980,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //    }
 
         //    var canEdit = await User.CanEditPages(project.Id, authorizationService);
-            
+
         //    if (!canEdit)
         //    {
         //        log.LogInformation("returning 403 user is not allowed to edit");

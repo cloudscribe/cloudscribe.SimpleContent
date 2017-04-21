@@ -60,6 +60,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+               name: ProjectConstants.PageTreeRouteName,
+               template: "tree"
+               , defaults: new { controller = "Page", action = "Tree" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PageDeleteRouteName,
                template: "delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
@@ -92,6 +98,13 @@ namespace Microsoft.Extensions.DependencyInjection
               name: ProjectConstants.FolderPageDevelopRouteName,
               template: "{sitefolder}/development/{slug}"
               , defaults: new { controller = "Page", action = "Development" }
+              , constraints: new { name = siteFolderConstraint }
+              );
+
+            routes.MapRoute(
+              name: ProjectConstants.FolderPageTreeRouteName,
+              template: "{sitefolder}/tree"
+              , defaults: new { controller = "Page", action = "Tree" }
               , constraints: new { name = siteFolderConstraint }
               );
 
@@ -129,6 +142,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+               name: ProjectConstants.PageTreeRouteName,
+               template: prefix + "/tree"
+               , defaults: new { controller = "Page", action = "Tree" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PageDeleteRouteName,
                template: prefix + "/delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
@@ -162,6 +181,13 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.FolderPageDevelopRouteName,
                template: "{sitefolder}/" + prefix + "/development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageTreeRouteName,
+               template: "{sitefolder}/" + prefix + "/tree"
+               , defaults: new { controller = "Page", action = "Tree" }
                , constraints: new { name = siteFolderConstraint }
                );
 

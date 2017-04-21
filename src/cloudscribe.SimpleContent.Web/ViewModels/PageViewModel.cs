@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-03-10
+// Last Modified:           2017-04-21
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -27,6 +27,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string EditPath { get; set; } = string.Empty;
         public string NewItemPath { get; set; } = string.Empty;
+
+        public string PageTreePath { get; set; } = string.Empty;
       
 
         public bool CanEdit { get; set; } = false;

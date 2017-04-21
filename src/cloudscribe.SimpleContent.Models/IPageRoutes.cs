@@ -7,5 +7,6 @@
         string PageDeleteRouteName { get; }
 
         string PageDevelopRouteName { get; }
+        string PageTreeRouteName { get; }
     }
 }

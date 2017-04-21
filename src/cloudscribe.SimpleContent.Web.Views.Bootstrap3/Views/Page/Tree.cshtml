@@ -1,0 +1,63 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageTreeViewModel
+@using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContent> sr
+@{
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/jqtree.css" asp-append-version="true" />
+}
+<header class="">
+    <h1 id="article-title" itemprop="headline name">
+        @ViewData["Title"]
+    </h1>
+</header>
+<p>@sr["You can drag and drop page nodes in the treeview below to move them around in the site hierarchy or to change their sort position. Click on a page to show a menu of commands related to that page."]</p>
+<div id="tree1" class="treecontainer"></div>
+<ul id="ulCommands" class="treecommands" style="display:none;">
+    <li id="liInfo" class="pageinfo">
+    </li>
+    <li id="liEdit" class="editcontent">
+        <a id="lnkEdit" class="" href="#">@sr["Edit Page"]</a>
+    </li>
+    <li id="liPermissions" class="editpermissions">
+        <span class="permissions" id="spnPermissions"></span>
+    </li>
+    <li id="liView" class="viewpage">
+        <a id="lnkView" class="" href="#">@sr["View"]</a>
+    </li>
+    <li id="liSort" class="sortpages">
+        <a id="lnkSort" class="" href="#">@sr["Sort"]</a>
+    </li>
+    <li id="liNewChild" class="newchild">
+        <a id="lnkNewChild" class="" href="#">@sr["New Child Page"]</a>
+    </li>
+    <li id="liDeletePage" class="deletepage">
+        <a id="lnkDeletePage" class="" href="#">@sr["Delete"]</a>
+    </li>
+</ul>
+<input id="hdnSelPage" type="hidden" value="-1" />
+<span id="config" 
+      data-service-url="@Model.TreeServiceUrl"
+      data-sort-url="@Model.SortUrl"
+      data-move-url="@Model.MoveUrl"
+      data-edit-url="@Model.EditUrl"
+      data-delete-url="@Model.DeleteUrl"
+      ></span>
+@section Scripts {
+    
+        <environment names="Development">
+           <script src="~/jsdev/tree.jquery.js"></script>
+            <script src="/filemanager/js/tether.min.js"></script>
+            <script src="~/jsdev/pagetree.js" asp-append-version="true"></script>
+
+        </environment>
+        <environment names="Staging,Production">
+            
+        </environment>
+   
+}

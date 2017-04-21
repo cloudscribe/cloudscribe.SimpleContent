@@ -16,6 +16,7 @@
         public const string PageEditRouteName = "pageedit";
         public const string PageDeleteRouteName = "pagedelete";
         public const string PageDevelopRouteName = "pagedevelop";
+        public const string PageTreeRouteName = "pagetree";
 
         public const string FolderPostWithDateRouteName = "folderpostwithdate";
         public const string FolderPostWithoutDateRouteName = "folderpostwithoutdate";
@@ -32,6 +33,7 @@
         public const string FolderPageEditRouteName = "folderpageedit";
         public const string FolderPageDeleteRouteName = "folderpagedelete";
         public const string FolderPageDevelopRouteName = "folderpagedevelop";
+        public const string FolderPageTreeRouteName = "folderpagetree";
 
         public const string ContentEditorClaimType = "ContentEditor";
         public const string PageEditorClaimType = "PageEditor";

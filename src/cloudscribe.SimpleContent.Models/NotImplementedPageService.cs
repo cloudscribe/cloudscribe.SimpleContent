@@ -91,5 +91,10 @@ namespace cloudscribe.SimpleContent.Models
         {
             throw new NotImplementedException();
         }
+
+        public Task<string> GetPageTreeJson(string node = "root")
+        {
+            throw new NotImplementedException();
+        }
     }
 }
