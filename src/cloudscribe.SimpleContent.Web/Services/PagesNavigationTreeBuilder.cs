@@ -77,7 +77,7 @@ namespace cloudscribe.SimpleContent.Services
                 )
             {
                 //make the home page the "root" which contains all the other pages
-                homePage = await pageService.GetPageBySlug(project.Id, project.DefaultPageSlug);
+                homePage = await pageService.GetPageBySlug(project.DefaultPageSlug);
 
             }
 

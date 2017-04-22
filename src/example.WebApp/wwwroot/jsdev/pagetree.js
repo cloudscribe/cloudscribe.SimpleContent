@@ -165,12 +165,13 @@
 
         var node = $tree.tree('getNodeById', $selPageId.val());
         var objSort = {};
-        objSort['selNode'] = node.id;
+        objSort['pageId'] = node.id;
 
         $.ajax({
             type: "POST",
             async: false,
             processData: true,
+            //contentType: 'application/json; charset=utf-8',
 
             dataType: "json",
 
@@ -244,7 +245,7 @@
             //alert('about to delete page ' + node.id);
 
             var objDel = {};
-            objDel['delNode'] = node.id;
+            objDel['id'] = node.id;
 
             $.ajax({
                 type: "POST",

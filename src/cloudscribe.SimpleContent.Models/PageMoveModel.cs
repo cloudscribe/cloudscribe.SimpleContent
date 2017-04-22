@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.ViewModels
+namespace cloudscribe.SimpleContent.Models
 {
     public class PageMoveModel
     {

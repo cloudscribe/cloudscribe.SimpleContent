@@ -6,7 +6,7 @@ namespace cloudscribe.SimpleContent.Models
 {
     public interface IPageService
     {
-        Task DeletePage(string projectId, string pageId);
+        Task DeletePage(string pageId);
         Task<List<IPage>> GetAllPages(
             string projectId,
             string userName,
@@ -16,11 +16,11 @@ namespace cloudscribe.SimpleContent.Models
         Task<IPage> GetPage(string projectId, string pageId, string userName, string password);
         Task<IPage> GetPage(string pageId);
 
-        Task<IPage> GetPageBySlug(string projectId, string slug);
+        Task<IPage> GetPageBySlug(string slug);
         //Task<bool> PageSlugIsAvailable(string slug);
         //Task<bool> PageSlugIsAvailable(string projectId, string slug);
 
-        Task<bool> SlugIsAvailable(string projectId, string slug);
+        Task<bool> SlugIsAvailable(string slug);
         Task<string> ResolvePageUrl(IPage page);
 
         Task Create(
@@ -50,5 +50,9 @@ namespace cloudscribe.SimpleContent.Models
         void ClearNavigationCache();
 
         Task<string> GetPageTreeJson(string node = "root");
+
+        Task<PageActionResult> Move(PageMoveModel model);
+
+        Task<PageActionResult> SortChildPagesAlpha(string pageId);
     }
 }

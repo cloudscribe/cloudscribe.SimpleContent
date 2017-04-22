@@ -77,7 +77,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(string.IsNullOrEmpty(slug) || slug == "none") { slug = projectSettings.DefaultPageSlug; }
 
-            IPage page = await pageService.GetPageBySlug(projectSettings.Id, slug);
+            IPage page = await pageService.GetPageBySlug(slug);
             
             var model = new PageViewModel(htmlProcessor);
             model.CurrentPage = page;
@@ -87,7 +87,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.CommentsAreOpen = false;
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
-            model.PageTreePath = Url.RouteUrl(pageRoutes.PageTreeRouteName);
+            model.PageTreePath = Url.Action("Tree");
             if (canEdit)
             {
                 if (model.CurrentPage != null)
@@ -216,7 +216,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {
-                page = await pageService.GetPageBySlug(projectSettings.Id, slug);
+                page = await pageService.GetPageBySlug(slug);
             }
             if(page == null)
             {
@@ -325,7 +325,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.Slug = ContentUtils.CreateSlug(model.Slug);
                     if(model.Slug != page.Slug)
                     {
-                        slugIsAvailable = await pageService.SlugIsAvailable(project.Id, model.Slug);
+                        slugIsAvailable = await pageService.SlugIsAvailable(model.Slug);
                         if(slugIsAvailable)
                         {
                             page.Slug = model.Slug;
@@ -349,7 +349,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     // remove any bad chars
                     model.Slug = ContentUtils.CreateSlug(model.Slug);
-                    slugIsAvailable = await pageService.SlugIsAvailable(project.Id, model.Slug);
+                    slugIsAvailable = await pageService.SlugIsAvailable(model.Slug);
                     if(slugIsAvailable)
                     {
                         slug = model.Slug;
@@ -361,7 +361,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     slug = ContentUtils.CreateSlug(model.Title);
                 }
 
-                slugIsAvailable = await pageService.SlugIsAvailable(project.Id, slug);
+                slugIsAvailable = await pageService.SlugIsAvailable(slug);
                 if (!slugIsAvailable)
                 {
                     model.DisqusShortname = project.DisqusShortName;
@@ -388,7 +388,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (!string.IsNullOrEmpty(model.ParentSlug))
             {
-                var parentPage = await pageService.GetPageBySlug(project.Id, model.ParentSlug);
+                var parentPage = await pageService.GetPageBySlug(model.ParentSlug);
                 if (parentPage != null)
                 {
                     if (parentPage.Id != page.ParentId)
@@ -488,7 +488,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {
-                page = await pageService.GetPageBySlug(projectSettings.Id, slug);
+                page = await pageService.GetPageBySlug(slug);
             }
             if (page == null)
             {
@@ -545,7 +545,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPage page = null;
             if (!string.IsNullOrEmpty(model.Slug))
             {
-                page = await pageService.GetPageBySlug(project.Id, model.Slug);
+                page = await pageService.GetPageBySlug(model.Slug);
             }
 
             if (page == null)
@@ -600,7 +600,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {
-                page = await pageService.GetPageBySlug(project.Id, slug);
+                page = await pageService.GetPageBySlug(slug);
             }
 
             if (page == null)
@@ -645,7 +645,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (project == null)
             {
-                log.LogInformation("project not found, redirecting");
+                
+                log.LogInformation("project not found, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug="" });
             }
 
@@ -653,13 +658,21 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (!canEdit)
             {
-                log.LogInformation("user is not allowed to edit, redirecting");
+                log.LogInformation("user is not allowed to edit, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
             if (string.IsNullOrEmpty(id))
             {
-                log.LogInformation("postid not provided, redirecting");
+                log.LogInformation("postid not provided, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
 
             }
@@ -668,14 +681,23 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (page == null)
             {
-                log.LogInformation("page not found, redirecting");
+                log.LogInformation("page not found, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
             log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
 
-            await pageService.DeletePage(project.Id, page.Id);
+            await pageService.DeletePage(page.Id);
             pageService.ClearNavigationCache();
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new PageActionResult(true,"success"));
+            }
 
             return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
 
@@ -706,6 +728,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.TreeServiceUrl = Url.Action("TreeJson");
             model.EditUrl = Url.RouteUrl(pageRoutes.PageEditRouteName);
             model.ViewUrl = Url.RouteUrl(pageRoutes.PageRouteName);
+            model.MoveUrl = Url.Action("Move");
+            model.DeleteUrl = Url.Action("Delete");
+            model.SortUrl = Url.Action("SortChildPagesAlpha");
 
             return View(model);
         }
@@ -762,45 +787,35 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return BadRequest();
             }
 
-            var result = new PageActionResult();
 
-            if (string.IsNullOrEmpty(model.MovedNode) || string.IsNullOrEmpty(model.TargetNode) || (model.MovedNode == "-1") || (model.TargetNode == "-1") || (string.IsNullOrEmpty(model.Position)))
+            var result = await pageService.Move(model);
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SortChildPagesAlpha(string pageId)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
             {
-                result.Success = false;
-                result.Message = "bad request";
-                return Json(result);
+                log.LogInformation("project not found");
+                return BadRequest();
             }
 
-            var movedNode = await pageService.GetPage(model.MovedNode);
-            var targetNode = await pageService.GetPage(model.TargetNode);
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
 
-            if ((movedNode == null) || (targetNode == null))
+            if (!canEdit)
             {
-                result.Success = false;
-                result.Message = "bad request";
-                return Json(result);
+                log.LogInformation("user is not allowed to edit");
+                return BadRequest();
             }
 
-            switch (model.Position)
-            {
-                case "inside":
-                    // this case is when moving to a new parent node that doesn't have any children yet
-                    // target is the new parent
-                    // or when momving to the first position of the current parent
 
-                    break;
-
-                case "before":
-                    // put this page before the target page beneath the same parent as the target
-
-                    break;
-
-                case "after":
-                default:
-                    // put this page after the target page beneath the same parent as the target
-
-                    break;
-            }
+            var result = await pageService.SortChildPagesAlpha(pageId);
 
             return Json(result);
         }

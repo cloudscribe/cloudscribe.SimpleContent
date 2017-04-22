@@ -12,15 +12,15 @@ namespace cloudscribe.SimpleContent.Models
             
         }
 
-        public Task DeletePage(string blogId, string pageId)
+        public Task DeletePage(string pageId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<IPage>> GetAllPages(string blogId)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<List<IPage>> GetAllPages(string blogId)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<List<IPage>> GetAllPages(string projectId, string userName, string password)
         {
@@ -42,7 +42,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<IPage> GetPageBySlug(string blogId, string slug)
+        public Task<IPage> GetPageBySlug(string slug)
         {
             throw new NotImplementedException();
         }
@@ -52,15 +52,15 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<bool> PageSlugIsAvailable(string slug)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<bool> PageSlugIsAvailable(string slug)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<bool> PageSlugIsAvailable(string blogId, string slug)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<bool> PageSlugIsAvailable(string blogId, string slug)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<string> ResolvePageUrl(IPage page)
         {
@@ -87,12 +87,22 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<bool> SlugIsAvailable(string projectId, string slug)
+        public Task<bool> SlugIsAvailable(string slug)
         {
             throw new NotImplementedException();
         }
 
         public Task<string> GetPageTreeJson(string node = "root")
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PageActionResult> Move(PageMoveModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PageActionResult> SortChildPagesAlpha(string pageId)
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-04-21
+// Last Modified:           2017-04-22
 // 
 
 
@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using cloudscribe.SimpleContent.Models.EventHandlers;
+
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -116,7 +117,7 @@ namespace cloudscribe.SimpleContent.Services
         //        .ConfigureAwait(false);
         //}
 
-        public async Task<bool> SlugIsAvailable(string projectId,string slug)
+        public async Task<bool> SlugIsAvailable(string slug)
         {
             await EnsureProjectSettings();
             return await pageQueries.SlugIsAvailable(
@@ -155,7 +156,7 @@ namespace cloudscribe.SimpleContent.Services
             if (string.IsNullOrEmpty(page.Slug))
             {
                 var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await SlugIsAvailable(projectId, slug);
+                var available = await SlugIsAvailable(slug);
                 if (available)
                 {
                     page.Slug = slug;
@@ -271,7 +272,7 @@ namespace cloudscribe.SimpleContent.Services
             if (string.IsNullOrEmpty(page.Slug))
             {
                 var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await SlugIsAvailable(this.settings.Id, slug);
+                var available = await SlugIsAvailable(slug);
                 if (available)
                 {
                     page.Slug = slug;
@@ -330,10 +331,12 @@ namespace cloudscribe.SimpleContent.Services
             await eventHandlers.HandleUpdated(settings.Id, page).ConfigureAwait(false);
         }
 
-        public async Task DeletePage(string projectId, string pageId)
+        public async Task DeletePage(string pageId)
         {
-            await eventHandlers.HandlePreDelete(projectId, pageId).ConfigureAwait(false);
-            await pageCommands.Delete(projectId, pageId).ConfigureAwait(false);
+            await EnsureProjectSettings().ConfigureAwait(false);
+
+            await eventHandlers.HandlePreDelete(settings.Id, pageId).ConfigureAwait(false);
+            await pageCommands.Delete(settings.Id, pageId).ConfigureAwait(false);
             
 
         }
@@ -375,10 +378,12 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<IPage> GetPageBySlug(string projectId, string slug)
+        public async Task<IPage> GetPageBySlug(string slug)
         {
+            await EnsureProjectSettings().ConfigureAwait(false);
+
             return await pageQueries.GetPageBySlug(
-                projectId,
+                settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -424,6 +429,122 @@ namespace cloudscribe.SimpleContent.Services
                 pageId,
                 CancellationToken
                 ).ConfigureAwait(false);
+        }
+
+        public async Task<PageActionResult> Move(PageMoveModel model)
+        {
+            PageActionResult result;
+
+
+            if (string.IsNullOrEmpty(model.MovedNode) || string.IsNullOrEmpty(model.TargetNode) || (model.MovedNode == "-1") || (model.TargetNode == "-1") || (string.IsNullOrEmpty(model.Position)))
+            {
+                result = new PageActionResult(false, "bad request, failed to move page");
+                return result;
+            }
+
+            var movedNode = await GetPage(model.MovedNode);
+            var targetNode = await GetPage(model.TargetNode);
+
+            if ((movedNode == null) || (targetNode == null))
+            {
+                result = new PageActionResult(false, "bad request, page or target page not found");
+                return result;
+            }
+
+            switch (model.Position)
+            {
+                case "inside":
+                    // this case is when moving to a new parent node that doesn't have any children yet
+                    // target is the new parent
+                    // or when momving to the first position of the current parent
+                    movedNode.ParentId = targetNode.Id;
+                    movedNode.ParentSlug = targetNode.Slug;
+                    movedNode.PageOrder = 0;
+                    await pageCommands.Update(movedNode.ProjectId, movedNode);
+                    await SortChildPages(targetNode.Id);
+
+                    break;
+
+                case "before":
+                    // put this page before the target page beneath the same parent as the target
+                    if (targetNode.ParentId != movedNode.ParentId)
+                    {
+                        movedNode.ParentId = targetNode.ParentId;
+                        movedNode.ParentSlug = targetNode.ParentSlug;
+                        movedNode.PageOrder = targetNode.PageOrder - 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+
+                    }
+                    else
+                    {
+                        //parent did not change just sort
+                        // set sort and re-sort
+                        movedNode.PageOrder = targetNode.PageOrder - 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+
+                    }
+
+                    break;
+
+                case "after":
+                default:
+                    // put this page after the target page beneath the same parent as the target
+                    if (targetNode.ParentId != movedNode.ParentId)
+                    {
+                        movedNode.ParentId = targetNode.ParentId;
+                        movedNode.ParentSlug = targetNode.ParentSlug;
+                        movedNode.PageOrder = targetNode.PageOrder + 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+                    }
+                    else
+                    {
+                        //parent did not change just sort
+                        movedNode.PageOrder = targetNode.PageOrder + 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+
+                    }
+
+                    break;
+            }
+
+            ClearNavigationCache();
+
+            result = new PageActionResult(true, "operation succeeded");
+
+            return result;
+        }
+
+        public async Task SortChildPages(string pageId)
+        {
+            var children = await GetChildPages(pageId);
+            int i = 1;
+            foreach(var child in children)
+            {
+                child.PageOrder = i;
+                await pageCommands.Update(child.ProjectId, child);
+                i += 2;
+            }
+        }
+
+        public async Task<PageActionResult> SortChildPagesAlpha(string pageId)
+        {
+            var children = await GetChildPages(pageId);
+            var sorted = children.OrderBy(p => p.Title);
+            int i = 1;
+            foreach (var child in sorted)
+            {
+                child.PageOrder = i;
+                await pageCommands.Update(child.ProjectId, child);
+                i += 2;
+            }
+
+            ClearNavigationCache();
+            return new PageActionResult(true, "operation succeeded");
+
         }
 
         public async Task<string> GetPageTreeJson(string node = "root")
