@@ -28,7 +28,22 @@ namespace cloudscribe.SimpleContent.Web.Design
 
         public string ShowEditToolbar { get; set; } = "glyphicon glyphicon-pencil";
 
-       // public string JustifyLeft { get; set; } = "glyphicon glyphicon-align-left";
+        public string NewItem { get; set; } = "glyphicon glyphicon-plus";
+
+        public string PageTree { get; set; } = "glyphicon glyphicon-tree-conifer";
+
+        public string SortAlpha { get; set; } = "glyphicon glyphicon-sort-by-alphabet";
+
+        public string Edit { get; set; } = "glyphicon glyphicon-edit";
+
+        public string View { get; set; } = "glyphicon glyphicon-eye-open";
+
+        public string Delete { get; set; } = "glyphicon glyphicon-trash";
+
+
+
+
+        // public string JustifyLeft { get; set; } = "glyphicon glyphicon-align-left";
 
         //public string JustifyCenter { get; set; } = "glyphicon glyphicon-align-center";
 
@@ -54,8 +69,6 @@ namespace cloudscribe.SimpleContent.Web.Design
 
         //public string ClearAllFormatting { get; set; } = "glyphicon glyphicon-fire";
 
-        public string NewItem { get; set; } = "glyphicon glyphicon-plus";
 
-        public string PageTree { get; set; } = "glyphicon glyphicon-tree-conifer";
     }
 }

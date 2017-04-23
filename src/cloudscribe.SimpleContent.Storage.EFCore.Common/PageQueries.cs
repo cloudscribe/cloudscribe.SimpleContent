@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-03-11
+// Last Modified:			2017-04-23
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -161,28 +161,51 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         }
 
-        // not implemented, do we need categories for pages?
-        public Task<int> GetCount(
+        public async Task<int> GetChildPageCount(
             string projectId,
-            string category,
-            bool userIsBlogOwner,
+            string pageId,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            return Task.FromResult(0);
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var currentTime = DateTime.UtcNow;
+
+            var count = await dbContext.Pages
+                .CountAsync(x =>
+                x.ProjectId == projectId
+                && x.ParentId == pageId
+                && (includeUnpublished || (x.IsPublished && x.PubDate <= currentTime))
+               
+                );
+
+            return count;
         }
 
-        public Task<Dictionary<string, int>> GetCategories(
-            string projectId,
-            bool userIsBlogOwner,
-            CancellationToken cancellationToken
-            )
-        {
-            var result = new Dictionary<string, int>();
+        // not implemented, do we need categories for pages?
+        //public Task<int> GetCount(
+        //    string projectId,
+        //    string category,
+        //    bool userIsBlogOwner,
+        //    CancellationToken cancellationToken = default(CancellationToken)
+        //    )
+        //{
+        //    return Task.FromResult(0);
+        //}
+
+        //public Task<Dictionary<string, int>> GetCategories(
+        //    string projectId,
+        //    bool userIsBlogOwner,
+        //    CancellationToken cancellationToken
+        //    )
+        //{
+        //    var result = new Dictionary<string, int>();
 
 
-            return Task.FromResult(result);
-        }
+        //    return Task.FromResult(result);
+        //}
 
 
         #region IDisposable Support

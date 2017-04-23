@@ -52,5 +52,12 @@ namespace cloudscribe.SimpleContent.Models
             string pageId,
             CancellationToken cancellationToken = default(CancellationToken)
             );
+
+        Task<int> GetChildPageCount(
+            string projectId,
+            string pageId,
+            bool includeUnpublished,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
     }
 }

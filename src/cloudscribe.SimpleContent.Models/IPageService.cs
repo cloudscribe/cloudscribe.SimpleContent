@@ -54,5 +54,7 @@ namespace cloudscribe.SimpleContent.Models
         Task<PageActionResult> Move(PageMoveModel model);
 
         Task<PageActionResult> SortChildPagesAlpha(string pageId);
+
+        Task<int> GetNextChildPageOrder(string pageId);
     }
 }

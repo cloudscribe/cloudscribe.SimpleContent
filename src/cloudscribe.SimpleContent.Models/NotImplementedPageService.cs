@@ -106,5 +106,10 @@ namespace cloudscribe.SimpleContent.Models
         {
             throw new NotImplementedException();
         }
+
+        public Task<int> GetNextChildPageOrder(string pageId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

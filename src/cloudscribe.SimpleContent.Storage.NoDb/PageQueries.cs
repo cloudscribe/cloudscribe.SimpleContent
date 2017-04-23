@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-03-11
+// Last Modified:           2017-04-23
 // 
 
 
@@ -122,28 +122,45 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         }
 
-        // not implemented, do we need categories for pages?
-        public Task<int> GetCount(
+        public async Task<int> GetChildPageCount(
             string projectId,
-            string category,
-            bool userIsBlogOwner,
+            string pageId,
+            bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            return Task.FromResult(0);
+            var list = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
+
+            list = list.Where(p =>
+            p.ParentId == pageId
+                     && (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
+                      ).ToList<IPage>();
+            
+            return list.Count();
         }
 
-        public Task<Dictionary<string, int>> GetCategories(
-            string projectId,
-            bool userIsBlogOwner,
-            CancellationToken cancellationToken
-            )
-        {
-            var result = new Dictionary<string, int>();
+        // not implemented, do we need categories for pages?
+        //public Task<int> GetCount(
+        //    string projectId,
+        //    string category,
+        //    bool userIsBlogOwner,
+        //    CancellationToken cancellationToken = default(CancellationToken)
+        //    )
+        //{
+        //    return Task.FromResult(0);
+        //}
+
+        //public Task<Dictionary<string, int>> GetCategories(
+        //    string projectId,
+        //    bool userIsBlogOwner,
+        //    CancellationToken cancellationToken
+        //    )
+        //{
+        //    var result = new Dictionary<string, int>();
 
 
-            return Task.FromResult(result);
-        }
+        //    return Task.FromResult(result);
+        //}
 
     }
 }

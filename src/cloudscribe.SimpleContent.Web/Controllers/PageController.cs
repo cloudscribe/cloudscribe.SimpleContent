@@ -222,6 +222,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 ViewData["Title"] = sr["New Page"];
                 model.Slug = slug;
+                model.ParentSlug = parentSlug;
+                model.PageOrder = await pageService.GetNextChildPageOrder(parentSlug);
+                
                 var rootList = await pageService.GetRootPages().ConfigureAwait(false);
                 if(rootList.Count == 0)
                 {
@@ -234,6 +237,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
                 model.Author = User.GetUserDisplayName();
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
+
             }
             else
             {
@@ -318,6 +322,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 page.Title = model.Title;
                 page.MetaDescription = model.MetaDescription;
                 page.Content = model.Content;
+                if (page.IsPublished != model.IsPublished) needToClearCache = true;
                 if (page.PageOrder != model.PageOrder) needToClearCache = true;
                 if(!string.IsNullOrEmpty(model.Slug))
                 {
@@ -769,8 +774,14 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Move([FromBody] PageMoveModel model)
+        public async Task<IActionResult> Move(PageMoveModel model)
         {
+            if (model == null)
+            {
+                log.LogInformation("model was null");
+                return BadRequest();
+            }
+
             var project = await projectService.GetCurrentProjectSettings();
 
             if (project == null)

@@ -19,7 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using cloudscribe.SimpleContent.Models.EventHandlers;
-
+using Microsoft.Extensions.Localization;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -36,6 +36,7 @@ namespace cloudscribe.SimpleContent.Services
             IUrlHelperFactory urlHelperFactory,
             IPageRoutes pageRoutes,
             IMemoryCache cache,
+            IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             IPageNavigationCacheKeys cacheKeys,
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
@@ -54,6 +55,7 @@ namespace cloudscribe.SimpleContent.Services
             this.cache = cache;
             this.cacheKeys = cacheKeys;
             this.eventHandlers = eventHandlers;
+            sr = localizer;
         }
 
         private readonly HttpContext context;
@@ -71,6 +73,7 @@ namespace cloudscribe.SimpleContent.Services
         private IPageNavigationCacheKeys cacheKeys;
         private PageEvents eventHandlers;
         private IPageRoutes pageRoutes;
+        private IStringLocalizer sr;
 
         private async Task EnsureProjectSettings()
         {
@@ -431,6 +434,26 @@ namespace cloudscribe.SimpleContent.Services
                 ).ConfigureAwait(false);
         }
 
+        public async Task<int> GetNextChildPageOrder(string pageSlug)
+        {
+            await EnsureProjectSettings();
+            var pageId = "0"; // root level pages have this parent id
+            var page = await pageQueries.GetPageBySlug(settings.Id, pageSlug);
+            if (page != null)
+            {
+                pageId = page.Id;
+            }
+            
+            var countOfChildren =  await pageQueries.GetChildPageCount(
+                settings.Id,
+                pageId,
+                true,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            return (countOfChildren * 3) + 2;
+        }
+
         public async Task<PageActionResult> Move(PageMoveModel model)
         {
             PageActionResult result;
@@ -448,6 +471,12 @@ namespace cloudscribe.SimpleContent.Services
             if ((movedNode == null) || (targetNode == null))
             {
                 result = new PageActionResult(false, "bad request, page or target page not found");
+                return result;
+            }
+
+            if(movedNode.Slug == settings.DefaultPageSlug)
+            {
+                result = new PageActionResult(false, sr["Moving the default/home page is not allowed"]);
                 return result;
             }
 
@@ -580,61 +609,36 @@ namespace cloudscribe.SimpleContent.Services
 
         private async Task BuildPageJson(StringBuilder script, IPage page, IUrlHelper urlHelper)
         {
-            var childPages = await GetChildPages(page.Id); // TODO: this is not effecient
+            var childPagesCount = await pageQueries.GetChildPageCount(page.ProjectId, page.Id, true, CancellationToken); 
             script.Append("{");
             script.Append("\"id\":" + "\"" + page.Id + "\"");
             script.Append(",\"slug\":" + "\"" + page.Slug + "\"");
             script.Append(",\"label\":\"" + Encode(page.Title) + "\"");
             script.Append(",\"url\":\"" + ResolveUrl(page, urlHelper) + "\"");
-            //script.Append(",\"isRoot\":false");
             script.Append(",\"parentId\":" + "\"" + page.ParentId + "\"");
-            script.Append(",\"childcount\":" + childPages.Count.ToString());
+            script.Append(",\"childcount\":" + childPagesCount.ToString());
             script.Append(",\"children\":[");
             script.Append("]");
-            if (childPages.Count > 0)
+            if (childPagesCount > 0)
             {
                 script.Append(",\"load_on_demand\":true");
             }
-
-            //if (canEdit)
-            //{
-                script.Append(",\"canEdit\":true");
-            //}
-            //else
-            //{
-            //    script.Append(",\"canEdit\":false");
-            //}
-
-
-            //if (canDelete)
-            //{
-                script.Append(",\"canDelete\":true");
-            //}
-            //else
-            //{
-             //   script.Append(",\"canDelete\":false");
-            //}
-
-            //if (canCreateChildPages)
-            //{
-                script.Append(",\"canCreateChild\":true");
-           // }
-            //else
-            //{
-           //     script.Append(",\"canCreateChild\":false");
-           // }
-
-            if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users"))
-            {
-                script.Append(",\"protection\":\"Public\"");
-            }
-            else
-            {
-                script.Append(",\"protection\":\"Protected \"");
-            }
-
+            
+            script.Append(",\"canEdit\":true");
+            script.Append(",\"canDelete\":true");
+            script.Append(",\"canCreateChild\":true");
+            script.Append(",\"pubstatus\":\"" + GetPublishingStatus(page) + "\"");
+            
             script.Append("}");
 
+        }
+
+        private string GetPublishingStatus(IPage page)
+        {
+            if (!page.IsPublished) return sr["Unpublished"];
+            if (page.PubDate > DateTime.UtcNow) return sr["Future Published"];
+            if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users")) return sr["Public"];
+            return sr["Protected"];
         }
 
         private string ResolveUrl(IPage page, IUrlHelper urlHelper)
