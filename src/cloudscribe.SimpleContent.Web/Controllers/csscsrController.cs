@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2017-03-03
+// Last Modified:           2017-04-24
 // 
 
 using Microsoft.AspNetCore.Authorization;
@@ -11,71 +11,94 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
 {
     /// <summary>
     /// csscsr:cloudscribe SimpleContent static resource controller
+    /// 
     /// </summary>
     public class csscsrController : Controller
     {
-        public csscsrController(
-            ILogger<csscsrController> logger
-            //IContentTypeProvider contentTypeProvider
-            )
+        public csscsrController(ILogger<csscsrController> logger)
         {
-            //this.contentTypeProvider = contentTypeProvider;
             log = logger;
         }
 
         private ILogger log;
 
-        //private IContentTypeProvider contentTypeProvider;
-
+    
         private IActionResult GetResult(string resourceName, string contentType)
         {
             var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
-            if(resourceStream == null)
+            if (resourceStream == null)
             {
-                resourceStream 
-                = assembly.GetManifestResourceStream(resourceName.Replace("_","-"));
-                if(resourceStream == null)
+                resourceStream
+                = assembly.GetManifestResourceStream(resourceName.Replace("_", "-"));
+                if (resourceStream == null)
                 {
                     log.LogError("resource not found for " + resourceName);
                     return NotFound();
                 }
-                log.LogDebug("resource found for " + resourceName);  
+                log.LogDebug("resource found for " + resourceName);
             }
             else
             {
-                
+
                 log.LogDebug("resource found for " + resourceName);
 
             }
-            if (contentType.StartsWith("text"))
-            {
-                string payload;
-                using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
-                {
-                    payload = reader.ReadToEnd();
-                }
 
-                return new ContentResult
-                {
-                    ContentType = contentType,
-                    Content = payload,
-                    StatusCode = 200
-                };
-
-            }
-            
             return new FileStreamResult(resourceStream, contentType);
-            
 
-            
+
+
         }
+
+        
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult js()
+        {
+            var baseSegment = "cloudscribe.SimpleContent.Web.js.";
+            // /csscsr/js/
+            var requestPath = HttpContext.Request.Path.Value;
+            log.LogDebug(requestPath + " requested");
+
+            if (requestPath.Length < 11) return NotFound();
+
+            var seg = requestPath.Substring(11).Replace("/", ".").Replace("-", "_");
+            var ext = Path.GetExtension(requestPath);
+            var mimeType = GetMimeType(ext);
+
+            return GetResult(
+                baseSegment + seg,
+                mimeType);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult css()
+        {
+            var baseSegment = "cloudscribe.SimpleContent.Web.css.";
+            // /csscsr/css/
+            var requestPath = HttpContext.Request.Path.Value;
+            log.LogDebug(requestPath + " requested");
+
+            if (requestPath.Length < 12) return NotFound();
+
+            var seg = requestPath.Substring(12).Replace("/", ".").Replace("-", "_");
+            var ext = Path.GetExtension(requestPath);
+            var mimeType = GetMimeType(ext);
+
+            return GetResult(
+                baseSegment + seg,
+                mimeType);
+        }
+
+        
 
         //TODO: caching, what are best practices for caching static resources ?
         // seems like for embedded we could set long cache in production since it cannot change
@@ -100,29 +123,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 mimeType);
         }
 
-        private string GetMimeType(string extension)
-        {
-            switch(extension)
-            {
-                case ".jpg":
-                case ".jpeg":
-                    return "image/jpeg";
-
-                case ".gif":
-                    return "image/gif";
-
-                case ".png":
-                    return "image/png";
-
-                case ".css":
-                    return "text/css";
-
-                case ".js":
-                default:
-                    return "text/javascript";
-
-            }
-        }
+        
 
         [HttpGet]
         [AllowAnonymous]
@@ -163,23 +164,23 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         }
 
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult bootstrapwysiwygjs()
-        {
-            return GetResult(
-                "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.js",
-                "text/javascript");
-        }
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult bootstrapwysiwygjs()
+        //{
+        //    return GetResult(
+        //        "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.js",
+        //        "text/javascript");
+        //}
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult bootstrapwysiwygjsmin()
-        {
-            return GetResult(
-                "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.min.js",
-                "text/javascript");
-        }
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult bootstrapwysiwygjsmin()
+        //{
+        //    return GetResult(
+        //        "cloudscribe.SimpleContent.Web.js.bootstrap-wysiwyg.min.js",
+        //        "text/javascript");
+        //}
 
         [HttpGet]
         [AllowAnonymous]
@@ -318,6 +319,45 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 "text/css");
         }
 
+        private string GetMimeType(string extension)
+        {
+            switch (extension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    return "image/jpeg";
+
+                case ".gif":
+                    return "image/gif";
+
+                case ".png":
+                    return "image/png";
+
+                case ".otf":
+                    return "font/otf";
+
+                case ".eot":
+                    return "application/vnd.ms-fontobject";
+
+                case ".svg":
+                    return "image/svg+xml";
+
+                case ".ttf":
+                    return "application/octet-stream";
+
+                case ".woff":
+                case ".woff2":
+                    return "application/font-woff";
+
+                case ".css":
+                    return "text/css";
+
+                case ".js":
+                default:
+                    return "text/javascript";
+
+            }
+        }
 
     }
 }

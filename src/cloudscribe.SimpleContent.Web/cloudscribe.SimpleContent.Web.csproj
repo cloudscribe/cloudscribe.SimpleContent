@@ -26,8 +26,6 @@
     <EmbeddedResource Include="js\blog-comments.min.js" />
     <EmbeddedResource Include="js\bootstrap-datetimepicker.js" />
     <EmbeddedResource Include="js\bootstrap-datetimepicker.min.js" />
-    <EmbeddedResource Include="js\bootstrap-wysiwyg.js" />
-    <EmbeddedResource Include="js\bootstrap-wysiwyg.min.js" />
     <EmbeddedResource Include="js\ckeditor461\adapters\jquery.js" />
     <EmbeddedResource Include="js\ckeditor461\ckeditor.js" />
     <EmbeddedResource Include="js\ckeditor461\config.js" />
@@ -506,6 +504,12 @@
     <EmbeddedResource Include="css\bootstrap-datetimepicker.min.css" />
     <EmbeddedResource Include="css\content-admin.css" />
     <EmbeddedResource Include="css\content-admin.min.css" />
+    <EmbeddedResource Include="css\jqtree.css" />
+    <EmbeddedResource Include="css\jqtree.min.css" />
+    <EmbeddedResource Include="js\pagetree.js" />
+    <EmbeddedResource Include="js\pagetree.min.js" />
+    <EmbeddedResource Include="js\tree.jquery.js" />
+    <EmbeddedResource Include="js\tree.jquery.min.js" />
   </ItemGroup>
 
   

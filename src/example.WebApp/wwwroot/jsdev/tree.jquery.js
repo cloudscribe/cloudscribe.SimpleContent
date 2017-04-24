@@ -14,6 +14,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+2014-04-24 mods by Joe Audette to add bootstrap classes
  */
 
 (function() {
@@ -884,18 +886,30 @@ limitations under the License.
       button_link.className = "jqtree_common " + button_classes;
       button_link.appendChild(document.createTextNode(button_char));
       div.appendChild(button_link);
-      title_span = document.createElement('span');
-      title_span.className = "jqtree_common jqtree-title";
+      //title_span = document.createElement('span');
+      title_span = document.createElement('a');
+      $(title_span).attr('href', '#');
+      var isSelected = this.tree_widget.select_node_handler.isNodeSelected(node);
+      if (isSelected) {
+          title_span.className = "jqtree_common jqtree-title btn btn-primary btn-block";
+      }
+      else
+      {
+          title_span.className = "jqtree_common jqtree-title btn btn-default btn-block";
+      }
+      
       div.appendChild(title_span);
       title_span.innerHTML = escaped_name;
       return li;
     };
 
     ElementsRenderer.prototype.createNodeLi = function(node) {
-      var class_string, div, escaped_name, li, li_classes, title_span;
+        var class_string, div, escaped_name, li, li_classes, title_span;
+        var isSelected = this.tree_widget.select_node_handler.isNodeSelected(node);
       li_classes = ['jqtree_common'];
-      if (this.tree_widget.select_node_handler && this.tree_widget.select_node_handler.isNodeSelected(node)) {
-        li_classes.push('jqtree-selected');
+      if (this.tree_widget.select_node_handler && isSelected) {
+          li_classes.push('jqtree-selected');
+          
       }
       class_string = li_classes.join(' ');
       escaped_name = this.escapeIfNecessary(node.name);
@@ -904,8 +918,17 @@ limitations under the License.
       div = document.createElement('div');
       div.className = "jqtree-element jqtree_common";
       li.appendChild(div);
-      title_span = document.createElement('span');
-      title_span.className = "jqtree-title jqtree_common";
+      //title_span = document.createElement('span');
+      title_span = document.createElement('a');
+      $(title_span).attr('href', '#');
+      if (isSelected) {
+          title_span.className = "jqtree-title jqtree_common btn btn-primary btn-block";
+      }
+      else
+      {
+          title_span.className = "jqtree-title jqtree_common btn btn-default btn-block";
+      }
+      
       title_span.innerHTML = escaped_name;
       div.appendChild(title_span);
       return li;
@@ -927,7 +950,8 @@ limitations under the License.
         classes.push('jqtree-closed');
       }
       if (this.tree_widget.select_node_handler && this.tree_widget.select_node_handler.isNodeSelected(node)) {
-        classes.push('jqtree-selected');
+          classes.push('jqtree-selected');
+         
       }
       return classes.join(' ');
     };
@@ -1732,7 +1756,8 @@ limitations under the License.
     };
 
     NodeElement.prototype.getSpan = function() {
-      return this.$element.children('.jqtree-element').find('span.jqtree-title');
+      //return this.$element.children('.jqtree-element').find('span.jqtree-title');
+        return this.$element.children('.jqtree-element').find('a.jqtree-title');
     };
 
     NodeElement.prototype.getLi = function() {
@@ -1747,12 +1772,14 @@ limitations under the License.
       }
     };
 
-    NodeElement.prototype.select = function() {
-      return this.getLi().addClass('jqtree-selected');
+    NodeElement.prototype.select = function () {
+        this.getSpan().addClass('btn-primary');
+        return this.getLi().addClass('jqtree-selected');
     };
 
-    NodeElement.prototype.deselect = function() {
-      return this.getLi().removeClass('jqtree-selected');
+    NodeElement.prototype.deselect = function () {
+        this.getSpan().removeClass('btn-primary');
+        return this.getLi().removeClass('jqtree-selected');
     };
 
     return NodeElement;

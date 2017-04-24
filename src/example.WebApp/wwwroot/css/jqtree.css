@@ -1,5 +1,6 @@
 ul.jqtree-tree {
     margin-left: 12px;
+    
 }
 
 ul.jqtree-tree,
@@ -43,25 +44,11 @@ ul.jqtree-tree .jqtree-toggler:hover {
 
     ul.jqtree-tree .jqtree-element {
         cursor: pointer;
-        padding: 12px 12px;
+       
     }
-
-    ul.jqtree-tree .jqtree-title {
-        color: #333;
-        vertical-align: middle;
-        
-    }
-
-ul.jqtree-tree li.jqtree-folder {
-    margin-bottom: 4px;
-}
 
 ul.jqtree-tree li.jqtree-folder.jqtree-closed {
     margin-bottom: 1px;
-}
-
-ul.jqtree-tree li.jqtree-folder .jqtree-title {
-    margin-left: 0;
 }
 
 ul.jqtree-tree .jqtree-toggler.jqtree-closed {
@@ -97,8 +84,8 @@ ul.jqtree-tree li.jqtree-ghost span.jqtree-circle {
 }
 
 ul.jqtree-tree li.jqtree-ghost span.jqtree-line {
-    background-color: #89AFCA;
-    height: 20px;
+    background-color: #000;
+    height: 5px;
     padding: 0;
     position: absolute;
     top: -1px;
@@ -115,7 +102,7 @@ ul.jqtree-tree span.jqtree-border {
     position: absolute;
     display: block;
     left: -2px;
-    top: 0;
+    top: 5px;
     border: solid 2px #0000ff;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -130,34 +117,21 @@ ul.jqtree-tree .jqtree-element {
     position: relative;
 }
 
-ul.jqtree-tree li.jqtree-selected > .jqtree-element,
-ul.jqtree-tree li.jqtree-selected > .jqtree-element:hover {
-    background-color: #97BDD6;
-    background: -webkit-gradient(linear, left top, left bottom, from(#BEE0F5), to(#89AFCA));
-    background: -moz-linear-gradient(top, #BEE0F5, #89AFCA);
-    background: -ms-linear-gradient(top, #BEE0F5, #89AFCA);
-    background: -o-linear-gradient(top, #BEE0F5, #89AFCA);
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-    
-}
-
-ul.jqtree-tree .jqtree-moving > .jqtree-element .jqtree-title {
-    outline: dashed 1px #0000ff;
-}
-
-/*ul.treecommands > li::before, */
-
 li.jqtree-folder::before ,
 ul.jqtree_common > li::before
 { content: ''; display:none;}
 
 
-div.treecontainer { min-height:600px; min-width:220px; display:inline-block; }
+div.treecontainer { min-height:600px; min-width:320px; display:inline-block; }
 div.treecontainer  ul li { white-space:nowrap; }
+    div.treecontainer a.btn {
+        text-align:left;
+    }
 
 ul.pagecommands {  
     margin: 0px 0px 0px 0px; 
     padding: 0px; 
+    min-width:200px;
     max-width: 300px; 
    
     list-style-type:none;

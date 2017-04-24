@@ -1,4 +1,16 @@
-﻿$(function () {
+﻿// Author: Joe Audette
+// Version: 2017-04-24
+$(function () {
+
+    String.format = function () {
+        var s = arguments[0];
+        for (var i = 0; i < arguments.length - 1; i++) {
+            var reg = new RegExp("\\{" + i + "\\}", "gm");
+            s = s.replace(reg, arguments[i + 1]);
+        }
+        return s;
+    };
+
     var pageTree = {
         ui: {
             treeDiv: $('#tree1'),
@@ -14,7 +26,11 @@
             sortButton: $('#lnkSort'),
             newChildLink: $('#lnkNewChild'),
             deleteButton: $('#lnkDeletePage'),
-            pubStatusLabel: $('#spnPubStatus')
+            pubStatusLabel: $('#spnPubStatus'),
+            movePagePromptFormat: $('#config').data("move-prompt-format"),
+            deletePagePromptFormat: $('#config').data("delete-prompt-format"),
+            deletePageWithChildrenPromptFormat: $('#config').data("delete-with-children-prompt-format"),
+            sortChildrenAlphaPagePromptFormat: $('#config').data("sort-children-alpha-prompt-format"),
         },
         urls: {
             treeDataUrl: $('#config').data("service-url"),
@@ -90,8 +106,9 @@
         init: function () {
             this.ui.sortButton.click(function (e) {
                 e.preventDefault();
-                if (confirm('Are you sure you want to sort the child pages alphabetically?')) {
-                    var node = pageTree.ui.treeDiv.tree('getNodeById', pageTree.ui.selectedPageInput.val());
+                var node = pageTree.ui.treeDiv.tree('getNodeById', pageTree.ui.selectedPageInput.val());
+                var prompt = String.format(pageTree.ui.sortChildrenAlphaPagePromptFormat, node.name);
+                if (confirm(prompt)) {
                     var objSort = {};
                     objSort['pageId'] = node.id;
                     $.ajax({
@@ -124,11 +141,13 @@
                 var node = pageTree.ui.treeDiv.tree('getNodeById', pageTree.ui.selectedPageInput.val());
                 var doDelete = false;
                 if (node.childcount > 0) {
-                    if (confirm("Are you sure you want to delete the page and all of it's child pages?")) {
+                    var msg = String.format(pageTree.ui.deletePageWithChildrenPromptFormat, node.name, node.name);
+                    if (confirm(msg)) {
                         doDelete = true;
                     }
                 } else {
-                    if (confirm("Are you sure you want to delete the page?")) {
+                    var prompt = String.format(pageTree.ui.deletePagePromptFormat, node.name);
+                    if (confirm(prompt)) {
                         doDelete = true;
                     }
                 }
@@ -145,6 +164,7 @@
                         success: function (data, textStatus, jqXHR) {
                             if (data.success) {
                                 pageTree.ui.treeDiv.tree('removeNode', node);
+                                pageTree.ui.cmdBarDiv.hide();
                             } else {
                                 alert(data.message);
                             }
@@ -203,7 +223,8 @@
                 'tree.move',
                 function (event) {
                     event.preventDefault();
-                    if (confirm('are you sure you want to move the node')) {
+                    var prompt = String.format(pageTree.ui.movePagePromptFormat, event.move_info.moved_node.name, event.move_info.position, event.move_info.target_node.name);
+                    if (confirm(prompt)) {
                         // if did move it on the server
                         if (pageTree.moveNode(event.move_info.moved_node, event.move_info.target_node, event.move_info.previous_parent, event.move_info.position)) {
                             event.move_info.do_move(); // this moves it in the ui
@@ -232,7 +253,7 @@
                 }
             );
 
-        } // end init
+        } 
     };
     pageTree.init();
 }); 

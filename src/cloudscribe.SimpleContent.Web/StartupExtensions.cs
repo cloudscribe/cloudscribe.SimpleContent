@@ -42,6 +42,18 @@ namespace Microsoft.Extensions.DependencyInjection
                , defaults: new { controller = "csscsr", action = "ckjs" }
                );
 
+            routes.MapRoute(
+               name: "csscsrjs",
+               template: "csscsr/js/{*slug}"
+               , defaults: new { controller = "csscsr", action = "js" }
+               );
+
+            routes.MapRoute(
+               name: "csscsrcss",
+               template: "csscsr/css/{*slug}"
+               , defaults: new { controller = "csscsr", action = "css" }
+               );
+
             return routes;
         }
 

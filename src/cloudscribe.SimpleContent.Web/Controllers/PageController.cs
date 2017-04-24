@@ -686,7 +686,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (page == null)
             {
-                log.LogInformation("page not found, redirecting/rejecting");
+                log.LogInformation($"page not found for {id}, redirecting/rejecting");
                 if (Request.IsAjaxRequest())
                 {
                     return BadRequest();
@@ -694,10 +694,22 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
-            log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
+            if(page.Slug == project.DefaultPageSlug) // don't allow delete the home/default page from the ui
+            {
+                log.LogWarning($"Rejecting/redirecting, user {User.Identity.Name} tried to delete the default page {page.Slug}");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            
 
             await pageService.DeletePage(page.Id);
             pageService.ClearNavigationCache();
+
+            log.LogWarning($"user {User.Identity.Name} deleted page {page.Slug}");
 
             if (Request.IsAjaxRequest())
             {

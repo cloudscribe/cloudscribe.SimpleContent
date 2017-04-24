@@ -337,11 +337,34 @@ namespace cloudscribe.SimpleContent.Services
         public async Task DeletePage(string pageId)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
-
             await eventHandlers.HandlePreDelete(settings.Id, pageId).ConfigureAwait(false);
+
+            // we have a loosely coupled raltionship of pages not enforced in the db
+            // so we have to consider how to handle child pages belonging to a page that is about to be deleted
+            // it seems dangerous to cascade the delete to child pages
+            // in most cases a delete decisioon should be made on each page
+            // the possibility of accidently deleting multiple pages would be high
+            // so for now we will just orphan the children to become root pages
+            // which can result in a bad user experience if a bunch of pages suddenly appear in the root
+            // we will show a warning that indicates the child pages will become root pages
+            // and that they should delete child pages before deleting the parent page if that is the intent
+            await HandleChildPagesBeforeDelete(pageId);
+
             await pageCommands.Delete(settings.Id, pageId).ConfigureAwait(false);
             
 
+        }
+
+        private async Task HandleChildPagesBeforeDelete(string pageId)
+        {
+            var children = await GetChildPages(pageId);
+            foreach(var c in children)
+            {
+                // rebase to root 
+                c.ParentId = "0";
+                c.ParentSlug = string.Empty;
+                await pageCommands.Update(settings.Id, c).ConfigureAwait(false);
+            }
         }
 
         public async Task<IPage> GetPage(
@@ -625,8 +648,17 @@ namespace cloudscribe.SimpleContent.Services
             }
             
             script.Append(",\"canEdit\":true");
-            script.Append(",\"canDelete\":true");
             script.Append(",\"canCreateChild\":true");
+            if(page.Slug == settings.DefaultPageSlug)
+            {
+                script.Append(",\"canDelete\":false"); // don't allow delete the home/default page from the ui
+            }
+            else
+            {
+                script.Append(",\"canDelete\":true");
+            }
+            
+
             script.Append(",\"pubstatus\":\"" + GetPublishingStatus(page) + "\"");
             
             script.Append("}");
