@@ -1,13 +1,11 @@
 ﻿using cloudscribe.FileManager.Web.Models;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.FileManager.Web.Services
 {
@@ -24,7 +22,7 @@ namespace cloudscribe.FileManager.Web.Services
 
         
 
-        public void ResizeImage(
+        public bool ResizeImage(
             string sourceFilePath,
             string targetDirectoryPath,
             string newFileName,
@@ -54,13 +52,13 @@ namespace cloudscribe.FileManager.Web.Services
             if (!File.Exists(sourceFilePath))
             {
                 log.LogError("imageFilePath does not exist " + sourceFilePath);
-                return;
+                return false;
             }
 
             if (!Directory.Exists(targetDirectoryPath))
             {
                 log.LogError("targetDirectoryPath does not exist " + targetDirectoryPath);
-                return;
+                return false;
             }
 
             double scaleFactor = 0;
@@ -131,15 +129,17 @@ namespace cloudscribe.FileManager.Web.Services
             catch (OutOfMemoryException ex)
             {
                 log.LogError(MediaLoggingEvents.RESIZE_OPERATION, ex, ex.Message);
-                return;
+                return false;
             }
             catch (ArgumentException ex)
             {
                 log.LogError(MediaLoggingEvents.RESIZE_OPERATION, ex, ex.Message);
-                return;
+                return false;
             }
 
-            
+            return imageNeedsResizing;
+
+
         }
         
         private double GetScaleFactor(int inputWidth, int inputHeight, int maxWidth, int maxHeight)

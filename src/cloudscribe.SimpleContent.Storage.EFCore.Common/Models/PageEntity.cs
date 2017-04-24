@@ -19,6 +19,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             categories = new List<string>();
             comments = new List<IComment>();
             pageComments = new List<PageComment>();
+            resources = new List<PageResource>();
+            pageResources = new List<PageResourceEntity>();
         }
 
         public string Id { get; set; } = string.Empty;
@@ -100,9 +102,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             set
             {
                 comments = value;
+                pageComments.Clear();
                 if (comments.Count > 0)
                 {
-                    pageComments.Clear();
                     foreach (var c in comments)
                     {
                         pageComments.Add(PageComment.FromIComment(c));
@@ -116,6 +118,43 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         {
             get { return pageComments; }
             set { pageComments = value; }
+        }
+
+
+        private List<PageResource> resources;
+        public List<PageResource> Resources
+        {
+            get
+            {
+                if (resources.Count == 0)
+                {
+                    //resources.AddRange(PageResources);
+                    foreach(var r in pageResources)
+                    {
+                        resources.Add(PageResource.FromIPageResource(r));
+                    }
+                }
+                return resources;
+            }
+            set
+            {
+                resources = value;
+                pageResources.Clear();
+                if (resources.Count > 0)
+                {  
+                    foreach (var c in resources)
+                    {
+                        pageResources.Add(PageResourceEntity.FromIPageResource(c));
+                    }
+                }
+            }
+        }
+
+        private List<PageResourceEntity> pageResources;
+        public List<PageResourceEntity> PageResources
+        {
+            get { return pageResources; }
+            set { pageResources = value; }
         }
 
         public static PageEntity FromIPage(IPage page)
@@ -143,6 +182,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Title = page.Title;
             p.ViewRoles = page.ViewRoles;
             p.MenuOnly = page.MenuOnly;
+            p.ShowMenu = page.ShowMenu;
+            //p.Resources = page.Resources;
 
             return p;
         }

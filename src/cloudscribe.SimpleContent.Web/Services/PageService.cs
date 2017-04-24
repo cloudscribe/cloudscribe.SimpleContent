@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-10
+// Last Modified:           2017-04-22
 // 
 
 
@@ -14,10 +14,12 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using cloudscribe.SimpleContent.Models.EventHandlers;
+using Microsoft.Extensions.Localization;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -32,7 +34,9 @@ namespace cloudscribe.SimpleContent.Services
             IMediaProcessor mediaProcessor,
             IHtmlProcessor htmlProcessor,
             IUrlHelperFactory urlHelperFactory,
+            IPageRoutes pageRoutes,
             IMemoryCache cache,
+            IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             IPageNavigationCacheKeys cacheKeys,
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
@@ -46,10 +50,12 @@ namespace cloudscribe.SimpleContent.Services
             this.mediaProcessor = mediaProcessor;
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
+            this.pageRoutes = pageRoutes;
             this.htmlProcessor = htmlProcessor;
             this.cache = cache;
             this.cacheKeys = cacheKeys;
             this.eventHandlers = eventHandlers;
+            sr = localizer;
         }
 
         private readonly HttpContext context;
@@ -66,6 +72,8 @@ namespace cloudscribe.SimpleContent.Services
         private IMemoryCache cache;
         private IPageNavigationCacheKeys cacheKeys;
         private PageEvents eventHandlers;
+        private IPageRoutes pageRoutes;
+        private IStringLocalizer sr;
 
         private async Task EnsureProjectSettings()
         {
@@ -112,7 +120,7 @@ namespace cloudscribe.SimpleContent.Services
         //        .ConfigureAwait(false);
         //}
 
-        public async Task<bool> SlugIsAvailable(string projectId,string slug)
+        public async Task<bool> SlugIsAvailable(string slug)
         {
             await EnsureProjectSettings();
             return await pageQueries.SlugIsAvailable(
@@ -151,7 +159,7 @@ namespace cloudscribe.SimpleContent.Services
             if (string.IsNullOrEmpty(page.Slug))
             {
                 var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await SlugIsAvailable(projectId, slug);
+                var available = await SlugIsAvailable(slug);
                 if (available)
                 {
                     page.Slug = slug;
@@ -267,7 +275,7 @@ namespace cloudscribe.SimpleContent.Services
             if (string.IsNullOrEmpty(page.Slug))
             {
                 var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await SlugIsAvailable(this.settings.Id, slug);
+                var available = await SlugIsAvailable(slug);
                 if (available)
                 {
                     page.Slug = slug;
@@ -326,12 +334,37 @@ namespace cloudscribe.SimpleContent.Services
             await eventHandlers.HandleUpdated(settings.Id, page).ConfigureAwait(false);
         }
 
-        public async Task DeletePage(string projectId, string pageId)
+        public async Task DeletePage(string pageId)
         {
-            await eventHandlers.HandlePreDelete(projectId, pageId).ConfigureAwait(false);
-            await pageCommands.Delete(projectId, pageId).ConfigureAwait(false);
+            await EnsureProjectSettings().ConfigureAwait(false);
+            await eventHandlers.HandlePreDelete(settings.Id, pageId).ConfigureAwait(false);
+
+            // we have a loosely coupled raltionship of pages not enforced in the db
+            // so we have to consider how to handle child pages belonging to a page that is about to be deleted
+            // it seems dangerous to cascade the delete to child pages
+            // in most cases a delete decisioon should be made on each page
+            // the possibility of accidently deleting multiple pages would be high
+            // so for now we will just orphan the children to become root pages
+            // which can result in a bad user experience if a bunch of pages suddenly appear in the root
+            // we will show a warning that indicates the child pages will become root pages
+            // and that they should delete child pages before deleting the parent page if that is the intent
+            await HandleChildPagesBeforeDelete(pageId);
+
+            await pageCommands.Delete(settings.Id, pageId).ConfigureAwait(false);
             
 
+        }
+
+        private async Task HandleChildPagesBeforeDelete(string pageId)
+        {
+            var children = await GetChildPages(pageId);
+            foreach(var c in children)
+            {
+                // rebase to root 
+                c.ParentId = "0";
+                c.ParentSlug = string.Empty;
+                await pageCommands.Update(settings.Id, c).ConfigureAwait(false);
+            }
         }
 
         public async Task<IPage> GetPage(
@@ -371,10 +404,12 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<IPage> GetPageBySlug(string projectId, string slug)
+        public async Task<IPage> GetPageBySlug(string slug)
         {
+            await EnsureProjectSettings().ConfigureAwait(false);
+
             return await pageQueries.GetPageBySlug(
-                projectId,
+                settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -422,7 +457,286 @@ namespace cloudscribe.SimpleContent.Services
                 ).ConfigureAwait(false);
         }
 
-        
+        public async Task<int> GetNextChildPageOrder(string pageSlug)
+        {
+            await EnsureProjectSettings();
+            var pageId = "0"; // root level pages have this parent id
+            var page = await pageQueries.GetPageBySlug(settings.Id, pageSlug);
+            if (page != null)
+            {
+                pageId = page.Id;
+            }
+            
+            var countOfChildren =  await pageQueries.GetChildPageCount(
+                settings.Id,
+                pageId,
+                true,
+                CancellationToken
+                ).ConfigureAwait(false);
+
+            return (countOfChildren * 3) + 2;
+        }
+
+        public async Task<PageActionResult> Move(PageMoveModel model)
+        {
+            PageActionResult result;
+
+
+            if (string.IsNullOrEmpty(model.MovedNode) || string.IsNullOrEmpty(model.TargetNode) || (model.MovedNode == "-1") || (model.TargetNode == "-1") || (string.IsNullOrEmpty(model.Position)))
+            {
+                result = new PageActionResult(false, "bad request, failed to move page");
+                return result;
+            }
+
+            var movedNode = await GetPage(model.MovedNode);
+            var targetNode = await GetPage(model.TargetNode);
+
+            if ((movedNode == null) || (targetNode == null))
+            {
+                result = new PageActionResult(false, "bad request, page or target page not found");
+                return result;
+            }
+
+            if(movedNode.Slug == settings.DefaultPageSlug)
+            {
+                result = new PageActionResult(false, sr["Moving the default/home page is not allowed"]);
+                return result;
+            }
+
+            switch (model.Position)
+            {
+                case "inside":
+                    // this case is when moving to a new parent node that doesn't have any children yet
+                    // target is the new parent
+                    // or when momving to the first position of the current parent
+                    movedNode.ParentId = targetNode.Id;
+                    movedNode.ParentSlug = targetNode.Slug;
+                    movedNode.PageOrder = 0;
+                    await pageCommands.Update(movedNode.ProjectId, movedNode);
+                    await SortChildPages(targetNode.Id);
+
+                    break;
+
+                case "before":
+                    // put this page before the target page beneath the same parent as the target
+                    if (targetNode.ParentId != movedNode.ParentId)
+                    {
+                        movedNode.ParentId = targetNode.ParentId;
+                        movedNode.ParentSlug = targetNode.ParentSlug;
+                        movedNode.PageOrder = targetNode.PageOrder - 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+
+                    }
+                    else
+                    {
+                        //parent did not change just sort
+                        // set sort and re-sort
+                        movedNode.PageOrder = targetNode.PageOrder - 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+
+                    }
+
+                    break;
+
+                case "after":
+                default:
+                    // put this page after the target page beneath the same parent as the target
+                    if (targetNode.ParentId != movedNode.ParentId)
+                    {
+                        movedNode.ParentId = targetNode.ParentId;
+                        movedNode.ParentSlug = targetNode.ParentSlug;
+                        movedNode.PageOrder = targetNode.PageOrder + 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+                    }
+                    else
+                    {
+                        //parent did not change just sort
+                        movedNode.PageOrder = targetNode.PageOrder + 1;
+                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await SortChildPages(targetNode.ParentId);
+
+                    }
+
+                    break;
+            }
+
+            ClearNavigationCache();
+
+            result = new PageActionResult(true, "operation succeeded");
+
+            return result;
+        }
+
+        public async Task SortChildPages(string pageId)
+        {
+            var children = await GetChildPages(pageId);
+            int i = 1;
+            foreach(var child in children)
+            {
+                child.PageOrder = i;
+                await pageCommands.Update(child.ProjectId, child);
+                i += 2;
+            }
+        }
+
+        public async Task<PageActionResult> SortChildPagesAlpha(string pageId)
+        {
+            var children = await GetChildPages(pageId);
+            var sorted = children.OrderBy(p => p.Title);
+            int i = 1;
+            foreach (var child in sorted)
+            {
+                child.PageOrder = i;
+                await pageCommands.Update(child.ProjectId, child);
+                i += 2;
+            }
+
+            ClearNavigationCache();
+            return new PageActionResult(true, "operation succeeded");
+
+        }
+
+        public async Task<string> GetPageTreeJson(string node = "root")
+        {
+            await EnsureProjectSettings();
+            
+
+            List<IPage> list;
+            if(node == "root")
+            {
+                list = await GetRootPages();
+            }
+            else
+            {
+                list = await GetChildPages(node);
+            }
+
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+
+            var comma = string.Empty;
+            var sb = new StringBuilder();
+            sb.Append("[");
+            foreach (var p in list)
+            {
+                sb.Append(comma);
+                await BuildPageJson(sb, p, urlHelper);
+                comma = ",";
+            }
+            sb.Append("]");
+
+            return sb.ToString();
+        }
+
+        private async Task BuildPageJson(StringBuilder script, IPage page, IUrlHelper urlHelper)
+        {
+            var childPagesCount = await pageQueries.GetChildPageCount(page.ProjectId, page.Id, true, CancellationToken); 
+            script.Append("{");
+            script.Append("\"id\":" + "\"" + page.Id + "\"");
+            script.Append(",\"slug\":" + "\"" + page.Slug + "\"");
+            script.Append(",\"label\":\"" + Encode(page.Title) + "\"");
+            script.Append(",\"url\":\"" + ResolveUrl(page, urlHelper) + "\"");
+            script.Append(",\"parentId\":" + "\"" + page.ParentId + "\"");
+            script.Append(",\"childcount\":" + childPagesCount.ToString());
+            script.Append(",\"children\":[");
+            script.Append("]");
+            if (childPagesCount > 0)
+            {
+                script.Append(",\"load_on_demand\":true");
+            }
+            
+            script.Append(",\"canEdit\":true");
+            script.Append(",\"canCreateChild\":true");
+            if(page.Slug == settings.DefaultPageSlug)
+            {
+                script.Append(",\"canDelete\":false"); // don't allow delete the home/default page from the ui
+            }
+            else
+            {
+                script.Append(",\"canDelete\":true");
+            }
+            
+
+            script.Append(",\"pubstatus\":\"" + GetPublishingStatus(page) + "\"");
+            
+            script.Append("}");
+
+        }
+
+        private string GetPublishingStatus(IPage page)
+        {
+            if (!page.IsPublished) return sr["Unpublished"];
+            if (page.PubDate > DateTime.UtcNow) return sr["Future Published"];
+            if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users")) return sr["Public"];
+            return sr["Protected"];
+        }
+
+        private string ResolveUrl(IPage page, IUrlHelper urlHelper)
+        {
+            if(page.Slug == this.settings.DefaultPageSlug)
+            {
+                return urlHelper.RouteUrl(pageRoutes.PageRouteName);
+            }
+
+            return urlHelper.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
+        }
+
+        private string Encode(string input)
+        {
+
+            //return JsonEscape(HttpUtility.HtmlDecode(input));
+            return JsonEscape(input);
+
+        }
+
+        private static string JsonEscape(string s)
+        {
+            StringBuilder sb = new StringBuilder();
+            //sb.Append("\"");
+            foreach (char c in s)
+            {
+                switch (c)
+                {
+                    case '\"':
+                        sb.Append("\\\"");
+                        break;
+                    case '\\':
+                        sb.Append("\\\\");
+                        break;
+                    case '\b':
+                        sb.Append("\\b");
+                        break;
+                    case '\f':
+                        sb.Append("\\f");
+                        break;
+                    case '\n':
+                        sb.Append("\\n");
+                        break;
+                    case '\r':
+                        sb.Append("\\r");
+                        break;
+                    case '\t':
+                        sb.Append("\\t");
+                        break;
+                    default:
+                        int i = (int)c;
+                        if (i < 32 || i > 127)
+                        {
+                            sb.AppendFormat("\\u{0:X04}", i);
+                        }
+                        else
+                        {
+                            sb.Append(c);
+                        }
+                        break;
+                }
+            }
+            //sb.Append("\"");
+
+            return sb.ToString();
+        }
 
     }
 }

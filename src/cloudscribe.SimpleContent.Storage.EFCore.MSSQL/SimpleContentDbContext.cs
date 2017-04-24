@@ -484,6 +484,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 // a shadow property to persist the categories/tags as a csv
                 //entity.Property<string>("CategoryCsv");
+
+                entity.Ignore(p => p.Resources);
+
+                entity.HasMany(p => p.PageResources)
+                    .WithOne();
             });
 
             modelBuilder.Entity<PageComment>(entity =>
@@ -559,7 +564,47 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 ;
                 entity.HasIndex(p => p.ProjectId);
             });
-            
+
+            modelBuilder.Entity<PageResourceEntity>(entity =>
+            {
+                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageResourceTableName);
+                
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.Id)
+                .HasMaxLength(36)
+                ;
+
+                entity.Ignore(p => p.ContentId); //mapped from pageEntityid
+
+                entity.Property(p => p.PageEntityId)
+                .HasMaxLength(36)
+                //.IsRequired()
+                ;
+                entity.HasIndex(p => p.PageEntityId);
+
+                entity.Property(p => p.Environment)
+                .HasMaxLength(15)
+                .IsRequired()
+                ;
+                
+
+                entity.Property(p => p.Sort)
+               .IsRequired()
+               ;
+
+                entity.Property(p => p.Type)
+               .HasMaxLength(10)
+               .IsRequired()
+               ;
+
+                entity.Property(p => p.Url)
+               .HasMaxLength(255)
+               .IsRequired()
+               ;
+
+                
+            });
+
             // should this be called before or after we do our thing?
 
             base.OnModelCreating(modelBuilder);

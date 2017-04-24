@@ -42,6 +42,18 @@ namespace Microsoft.Extensions.DependencyInjection
                , defaults: new { controller = "csscsr", action = "ckjs" }
                );
 
+            routes.MapRoute(
+               name: "csscsrjs",
+               template: "csscsr/js/{*slug}"
+               , defaults: new { controller = "csscsr", action = "js" }
+               );
+
+            routes.MapRoute(
+               name: "csscsrcss",
+               template: "csscsr/css/{*slug}"
+               , defaults: new { controller = "csscsr", action = "css" }
+               );
+
             return routes;
         }
 
@@ -51,6 +63,18 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.PageEditRouteName,
                template: "edit/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageDevelopRouteName,
+               template: "development/{slug}"
+               , defaults: new { controller = "Page", action = "Development" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageTreeRouteName,
+               template: "tree"
+               , defaults: new { controller = "Page", action = "Tree" }
                );
 
             routes.MapRoute(
@@ -83,6 +107,20 @@ namespace Microsoft.Extensions.DependencyInjection
               );
 
             routes.MapRoute(
+              name: ProjectConstants.FolderPageDevelopRouteName,
+              template: "{sitefolder}/development/{slug}"
+              , defaults: new { controller = "Page", action = "Development" }
+              , constraints: new { name = siteFolderConstraint }
+              );
+
+            routes.MapRoute(
+              name: ProjectConstants.FolderPageTreeRouteName,
+              template: "{sitefolder}/tree"
+              , defaults: new { controller = "Page", action = "Tree" }
+              , constraints: new { name = siteFolderConstraint }
+              );
+
+            routes.MapRoute(
               name: ProjectConstants.FolderPageDeleteRouteName,
               template: "{sitefolder}/delete/{id}"
               , defaults: new { controller = "Page", action = "Delete" }
@@ -107,6 +145,18 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.PageEditRouteName,
                template: prefix + "/edit/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageDevelopRouteName,
+               template: prefix + "/development/{slug}"
+               , defaults: new { controller = "Page", action = "Development" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageTreeRouteName,
+               template: prefix + "/tree"
+               , defaults: new { controller = "Page", action = "Tree" }
                );
 
             routes.MapRoute(
@@ -136,6 +186,20 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.FolderPageEditRouteName,
                template: "{sitefolder}/" + prefix + "/edit/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageDevelopRouteName,
+               template: "{sitefolder}/" + prefix + "/development/{slug}"
+               , defaults: new { controller = "Page", action = "Development" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageTreeRouteName,
+               template: "{sitefolder}/" + prefix + "/tree"
+               , defaults: new { controller = "Page", action = "Tree" }
                , constraints: new { name = siteFolderConstraint }
                );
 
@@ -327,13 +391,20 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 // To override the css icon classes create a json config section representing the IconCssClass
                 services.Configure<IconCssClasses>(configuration.GetSection("IconCssClasses"));
+
+                services.Configure<PageEditOptions>(configuration.GetSection("PageEditOptions"));
             }
             else
             {
+                services.Configure<PageEditOptions>(c =>
+                {
+                    // not doing anything just configuring the default
+                });
+
                 services.Configure<IconCssClasses>(c =>
                 {
                     // not doing anything just configuring the default
-                });    
+                });
             }
 
             return services;

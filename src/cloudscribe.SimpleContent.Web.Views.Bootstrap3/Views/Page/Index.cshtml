@@ -6,11 +6,31 @@
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
+@using System.Linq
+@{ 
+
+}
 @section Meta {
     @{await Html.RenderPartialAsync("MetaPartial", Model); }
 }
 @section Styles {
     @{await Html.RenderPartialAsync("StylePartial", Model); }
+    @if (Model.CurrentPage != null)
+    {
+        <environment names="Development">
+            @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "css" && (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))" />
+            }
+            
+        </environment>
+        <environment names="Staging,Production">
+            @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "css" && (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))" />
+            }
+        </environment>
+    }
 }
 @section Toolbar {
     @if (Model.CanEdit)
@@ -28,5 +48,19 @@
     @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
 }
 @section Scripts {
-   
+   @if (Model.CurrentPage != null)
+   {
+    <environment names="Development">
+        @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+        {
+            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))"></script>
+        }
+    </environment>
+    <environment names="Staging,Production">
+        @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+        {
+            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))"></script>
+        }
+    </environment>
+   }
 }

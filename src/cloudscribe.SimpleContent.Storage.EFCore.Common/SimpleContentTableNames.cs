@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace cloudscribe.SimpleContent.Storage.EFCore
+﻿namespace cloudscribe.SimpleContent.Storage.EFCore
 {
     public class SimpleContentTableNames : ISimpleContentTableNames
     {
@@ -23,6 +18,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         public string PostCategoryTableName { get; set; } = "PostCategory";
 
         public string PageCommentTableName { get; set; } = "PageComment";
+        public string PageResourceTableName { get; set; } = "PageResource";
 
         public string PageCategoryTableName { get; set; } = "PageCategory";
 

@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\js\test.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views;navigation.xml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
@@ -80,6 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="wwwroot\css\test.css" />
     <EmbeddedResource Include="wwwroot\jsdev\editor-ck.js" />
   </ItemGroup>
 

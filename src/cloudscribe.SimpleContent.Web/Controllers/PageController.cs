@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-03-06
+// Last Modified:           2017-04-19
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -15,8 +15,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Controllers
@@ -31,6 +33,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
             IStringLocalizer<SimpleContent> localizer,
+            IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
         {
             this.projectService = projectService;
@@ -39,6 +42,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
             this.pageRoutes = pageRoutes;
+            editOptions = pageEditOptionsAccessor.Value;
             sr = localizer;
             log = logger;
         }
@@ -51,6 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private ILogger log;
         private IPageRoutes pageRoutes;
         private IStringLocalizer<SimpleContent> sr;
+        private PageEditOptions editOptions;
 
         [HttpGet]
         [AllowAnonymous]
@@ -72,7 +77,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if(string.IsNullOrEmpty(slug) || slug == "none") { slug = projectSettings.DefaultPageSlug; }
 
-            IPage page = await pageService.GetPageBySlug(projectSettings.Id, slug);
+            IPage page = await pageService.GetPageBySlug(slug);
             
             var model = new PageViewModel(htmlProcessor);
             model.CurrentPage = page;
@@ -82,6 +87,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.CommentsAreOpen = false;
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+            model.PageTreePath = Url.Action("Tree");
             if (canEdit)
             {
                 if (model.CurrentPage != null)
@@ -210,12 +216,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {
-                page = await pageService.GetPageBySlug(projectSettings.Id, slug);
+                page = await pageService.GetPageBySlug(slug);
             }
             if(page == null)
             {
                 ViewData["Title"] = sr["New Page"];
                 model.Slug = slug;
+                model.ParentSlug = parentSlug;
+                model.PageOrder = await pageService.GetNextChildPageOrder(parentSlug);
+                
                 var rootList = await pageService.GetRootPages().ConfigureAwait(false);
                 if(rootList.Count == 0)
                 {
@@ -228,6 +237,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 }
                 model.Author = User.GetUserDisplayName();
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
+
             }
             else
             {
@@ -251,6 +261,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.ViewRoles = page.ViewRoles;
                 model.ShowComments = page.ShowComments;
                 
+
             }
 
             
@@ -311,6 +322,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 page.Title = model.Title;
                 page.MetaDescription = model.MetaDescription;
                 page.Content = model.Content;
+                if (page.IsPublished != model.IsPublished) needToClearCache = true;
                 if (page.PageOrder != model.PageOrder) needToClearCache = true;
                 if(!string.IsNullOrEmpty(model.Slug))
                 {
@@ -318,7 +330,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     model.Slug = ContentUtils.CreateSlug(model.Slug);
                     if(model.Slug != page.Slug)
                     {
-                        slugIsAvailable = await pageService.SlugIsAvailable(project.Id, model.Slug);
+                        slugIsAvailable = await pageService.SlugIsAvailable(model.Slug);
                         if(slugIsAvailable)
                         {
                             page.Slug = model.Slug;
@@ -342,7 +354,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 {
                     // remove any bad chars
                     model.Slug = ContentUtils.CreateSlug(model.Slug);
-                    slugIsAvailable = await pageService.SlugIsAvailable(project.Id, model.Slug);
+                    slugIsAvailable = await pageService.SlugIsAvailable(model.Slug);
                     if(slugIsAvailable)
                     {
                         slug = model.Slug;
@@ -354,7 +366,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     slug = ContentUtils.CreateSlug(model.Title);
                 }
 
-                slugIsAvailable = await pageService.SlugIsAvailable(project.Id, slug);
+                slugIsAvailable = await pageService.SlugIsAvailable(slug);
                 if (!slugIsAvailable)
                 {
                     model.DisqusShortname = project.DisqusShortName;
@@ -381,7 +393,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (!string.IsNullOrEmpty(model.ParentSlug))
             {
-                var parentPage = await pageService.GetPageBySlug(project.Id, model.ParentSlug);
+                var parentPage = await pageService.GetPageBySlug(model.ParentSlug);
                 if (parentPage != null)
                 {
                     if (parentPage.Id != page.ParentId)
@@ -451,6 +463,184 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Development(string slug)
+        {
+            var projectSettings = await projectService.GetCurrentProjectSettings();
+
+            if (projectSettings == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(projectSettings.Id, authorizationService);
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user cannot edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            var canDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
+
+            if (!canDev)
+            {
+                log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            IPage page = null;
+            if (!string.IsNullOrEmpty(slug))
+            {
+                page = await pageService.GetPageBySlug(slug);
+            }
+            if (page == null)
+            {
+                log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Developer Tools - {0}"], page.Title);
+
+            var model = new PageDevelopmentViewModel();
+            model.Slug = page.Slug;
+            model.AddResourceViewModel.Slug = page.Slug;
+            model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
+            model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
+
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddResource(AddPageResourceViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                this.AlertDanger(sr["Invalid request"], true);
+                return RedirectToRoute(pageRoutes.PageDevelopRouteName, new { slug = model.Slug });
+            }
+
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+            var canDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
+            if (!canDev)
+            {
+                log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            IPage page = null;
+            if (!string.IsNullOrEmpty(model.Slug))
+            {
+                page = await pageService.GetPageBySlug(model.Slug);
+            }
+
+            if (page == null)
+            {
+                log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var resource = new PageResource();
+            resource.ContentId = page.Id;
+            resource.Type = model.Type;
+            resource.Environment = model.Environment;
+            resource.Sort = model.Sort;
+            resource.Url = model.Url;
+            page.Resources.Add(resource);
+            
+
+
+            await pageService.Update(page, page.IsPublished);
+
+            return RedirectToRoute(pageRoutes.PageDevelopRouteName, new { slug = page.Slug });
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveResource(string slug, string id)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("redirecting to index because project settings not found");
+
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+            if (!canEdit)
+            {
+                log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+            var canDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
+            if (!canDev)
+            {
+                log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
+                return RedirectToRoute(pageRoutes.PageRouteName);
+            }
+
+            IPage page = null;
+            if (!string.IsNullOrEmpty(slug))
+            {
+                page = await pageService.GetPageBySlug(slug);
+            }
+
+            if (page == null)
+            {
+                log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var found = false;
+            var copyOfResources = page.Resources.ToList();
+            for (var i = 0; i < copyOfResources.Count; i++)
+            {
+                if(copyOfResources[i].Id == id)
+                {
+                    found = true;
+                    copyOfResources.RemoveAt(i);
+                }
+            }
+            if(found)
+            {
+                // needed so the ef entity shadow copy of resources gets synced
+                page.Resources = copyOfResources;
+                await pageService.Update(page, page.IsPublished);
+            }
+            else
+            {
+                log.LogWarning($"page resource not found for {slug} and {id}");
+            }
+            
+
+            return RedirectToRoute(pageRoutes.PageDevelopRouteName, new { slug = page.Slug });
+
+        }
+
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -460,8 +650,86 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             if (project == null)
             {
-                log.LogInformation("project not found, redirecting");
+                
+                log.LogInformation("project not found, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug="" });
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+                log.LogInformation("postid not provided, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+
+            }
+
+            var page = await pageService.GetPage(id);
+
+            if (page == null)
+            {
+                log.LogInformation($"page not found for {id}, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if(page.Slug == project.DefaultPageSlug) // don't allow delete the home/default page from the ui
+            {
+                log.LogWarning($"Rejecting/redirecting, user {User.Identity.Name} tried to delete the default page {page.Slug}");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            
+
+            await pageService.DeletePage(page.Id);
+            pageService.ClearNavigationCache();
+
+            log.LogWarning($"user {User.Identity.Name} deleted page {page.Slug}");
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new PageActionResult(true,"success"));
+            }
+
+            return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+
+        }
+
+        [HttpGet]
+  
+        public async Task<IActionResult> Tree()
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found, redirecting");
+                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
             var canEdit = await User.CanEditPages(project.Id, authorizationService);
@@ -472,28 +740,107 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if (string.IsNullOrEmpty(id))
-            {
-                log.LogInformation("postid not provided, redirecting");
-                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            ViewData["Title"] = sr["Page Management"];
+            var model = new PageTreeViewModel();
+            model.TreeServiceUrl = Url.Action("TreeJson");
+            model.EditUrl = Url.RouteUrl(pageRoutes.PageEditRouteName);
+            model.ViewUrl = Url.RouteUrl(pageRoutes.PageRouteName);
+            model.MoveUrl = Url.Action("Move");
+            model.DeleteUrl = Url.Action("Delete");
+            model.SortUrl = Url.Action("SortChildPagesAlpha");
 
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> TreeJson(string node = "root")
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found");
+                return BadRequest();
             }
 
-            var page = await pageService.GetPage(id);
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
 
-            if (page == null)
+            if (!canEdit)
             {
-                log.LogInformation("page not found, redirecting");
-                return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+                log.LogInformation("user is not allowed to edit");
+                return BadRequest();
             }
 
-            log.LogWarning("user " + User.Identity.Name + " deleted page " + page.Slug);
+            var result = await pageService.GetPageTreeJson(node);
 
-            await pageService.DeletePage(project.Id, page.Id);
-            pageService.ClearNavigationCache();
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                Content = result,
+                StatusCode = 200
+            };
 
-            return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+        }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Move(PageMoveModel model)
+        {
+            if (model == null)
+            {
+                log.LogInformation("model was null");
+                return BadRequest();
+            }
+
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found");
+                return BadRequest();
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit");
+                return BadRequest();
+            }
+
+
+            var result = await pageService.Move(model);
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SortChildPagesAlpha(string pageId)
+        {
+            var project = await projectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                log.LogInformation("project not found");
+                return BadRequest();
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, authorizationService);
+
+            if (!canEdit)
+            {
+                log.LogInformation("user is not allowed to edit");
+                return BadRequest();
+            }
+
+
+            var result = await pageService.SortChildPagesAlpha(pageId);
+
+            return Json(result);
         }
 
         //[HttpPost]
@@ -530,7 +877,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //    }
 
         //    var canEdit = await User.CanEditPages(project.Id, authorizationService);
-            
+
         //    if (!canEdit)
         //    {
         //        log.LogInformation("returning 403 user is not allowed to edit");
@@ -563,7 +910,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //        page.MetaDescription = model.MetaDescription;
         //        page.Content = model.Content;
         //        if (page.PageOrder != model.PageOrder) needToClearCache = true;
-               
+
         //    }
         //    else
         //    {
@@ -586,7 +933,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //            Content = model.Content,
         //            Slug = slug,
         //            ParentId = "0"
-                    
+
         //            //,Categories = categories.ToList()
         //        };
         //    }
@@ -602,7 +949,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //                page.ParentSlug = parentPage.Slug;
         //                needToClearCache = true;
         //            }
-                    
+
         //        }
         //    }
         //    else
@@ -625,7 +972,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //    {
         //        var localTime = DateTime.Parse(model.PubDate);
         //        page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
-                
+
         //    }
 
         //    if(isNew)
@@ -637,7 +984,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //        await pageService.Update(page, model.IsPublished);
         //    }
 
-            
+
         //    if(needToClearCache)
         //    {
         //        pageService.ClearNavigationCache();
@@ -648,7 +995,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
         //}
 
-        
+
 
         //[HttpPost]
         //[AllowAnonymous]
@@ -671,7 +1018,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         //    }
 
         //    var canEdit = await User.CanEditPages(project.Id, authorizationService);
-            
+
         //    if (!canEdit)
         //    {
         //        log.LogInformation("returning 403 user is not allowed to edit");

@@ -82,9 +82,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             }
             set {
                 comments = value;
-                if(comments.Count > 0)
-                {
-                    postComments.Clear();
+                postComments.Clear();
+                if (comments.Count > 0)
+                {       
                     foreach(var c in comments)
                     {
                         postComments.Add(PostComment.FromIComment(c));
@@ -106,7 +106,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Author = post.Author;
             p.BlogId = post.BlogId;
             p.Categories = post.Categories;
-            p.Comments = post.Comments;
+            //p.Comments = post.Comments;
             p.Content = post.Content;
             p.Id = post.Id;
             p.IsPublished = post.IsPublished;

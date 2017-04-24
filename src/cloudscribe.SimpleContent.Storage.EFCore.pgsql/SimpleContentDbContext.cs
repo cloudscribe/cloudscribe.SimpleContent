@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-03-10
+// Last Modified:			2017-04-18
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -488,6 +488,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 // a shadow property to persist the categories/tags as a csv
                 //entity.Property<string>("CategoryCsv");
+                entity.Ignore(p => p.Resources);
+
+                entity.HasMany(p => p.PageResources)
+                    .WithOne();
+
             });
 
             modelBuilder.Entity<PageComment>(entity =>
@@ -563,7 +568,47 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 ;
                 entity.HasIndex(p => p.ProjectId);
             });
-            
+
+            modelBuilder.Entity<PageResourceEntity>(entity =>
+            {
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageResourceTableName);
+
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.Id)
+                .HasMaxLength(36)
+                ;
+
+                entity.Ignore(p => p.ContentId); //mapped from pageEntityid
+
+                entity.Property(p => p.PageEntityId)
+                .HasMaxLength(36)
+                //.IsRequired()
+                ;
+                entity.HasIndex(p => p.PageEntityId);
+
+                entity.Property(p => p.Environment)
+                .HasMaxLength(15)
+                .IsRequired()
+                ;
+
+
+                entity.Property(p => p.Sort)
+               .IsRequired()
+               ;
+
+                entity.Property(p => p.Type)
+               .HasMaxLength(10)
+               .IsRequired()
+               ;
+
+                entity.Property(p => p.Url)
+               .HasMaxLength(255)
+               .IsRequired()
+               ;
+
+
+            });
+
             // should this be called before or after we do our thing?
 
             base.OnModelCreating(modelBuilder);

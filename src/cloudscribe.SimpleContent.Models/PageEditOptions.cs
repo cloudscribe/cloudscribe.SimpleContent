@@ -1,0 +1,8 @@
+﻿namespace cloudscribe.SimpleContent.Models
+{
+    public class PageEditOptions
+    {
+        public bool AlwaysShowDeveloperLink { get; set; } = false;
+        public string DeveloperAllowedRole { get; set; } = string.Empty;
+    }
+}

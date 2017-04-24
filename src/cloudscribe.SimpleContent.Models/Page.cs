@@ -9,6 +9,7 @@ namespace cloudscribe.SimpleContent.Models
         {
             Categories = new List<string>();
             Comments = new List<IComment>();
+            Resources = new List<PageResource>();
         }
 
         public string Id { get; set; } = string.Empty;
@@ -66,6 +67,8 @@ namespace cloudscribe.SimpleContent.Models
         public bool ShowCategories { get; set; } = false;
         public bool ShowComments { get; set; } = false;
 
+        public List<PageResource> Resources { get; set; }
+
         public static Page FromIPage(IPage page)
         {
             var p = new Page();
@@ -74,25 +77,28 @@ namespace cloudscribe.SimpleContent.Models
             p.Comments = page.Comments;
             p.CorrelationKey = page.CorrelationKey;
             p.Content = page.Content;
+            p.ExternalUrl = page.ExternalUrl;
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;
             p.LastModified = page.LastModified;
+            p.MenuOnly = page.MenuOnly;
             p.MetaDescription = page.MetaDescription;
             p.PageOrder = page.PageOrder;
             p.ParentId = page.ParentId;
             p.ParentSlug = page.ParentSlug;
             p.ProjectId = page.ProjectId;
             p.PubDate = page.PubDate;
+            p.Resources = page.Resources;
             p.ShowCategories = page.ShowCategories;
             p.ShowComments = page.ShowComments;
             p.ShowHeading = page.ShowHeading;
             p.ShowMenu = page.ShowMenu;
-            p.MenuOnly = page.MenuOnly;
             p.ShowLastModified = page.ShowLastModified;
             p.ShowPubDate = page.ShowPubDate;
             p.Slug = page.Slug;
             p.Title = page.Title;
             p.ViewRoles = page.ViewRoles;
+            
             
             return p;
         }

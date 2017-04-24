@@ -32,9 +32,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string PubDateFormat { get; set; } = "MMMM d. yyyy";
         public bool IncludePubDateInPostUrls { get; set; } = true;
 
-        public bool BlogMenuLinksToNewestPost { get; set; } = false;
-
-        public int BlogPagePosition { get; set; } = 2; // right after home page
+       
 
 
         //public string LocalMediaVirtualPath { get; set; } = "/media/images/";
@@ -57,10 +55,13 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         
 
         // if true automatically add the blog index
-        //public bool AddBlogToPagesTree { get; set; } = true;
-        //public int BlogPagePosition { get; set; } = 2; // right after home page
-        //public string BlogPageText { get; set; } = "Blog";
-        //public string BlogPageNavComponentVisibility { get; set; } = "topnav";
+        public bool AddBlogToPagesTree { get; set; } = true;
+        public bool BlogMenuLinksToNewestPost { get; set; } = false;
+        public int BlogPagePosition { get; set; } = 2; // right after home page
+
+        [Required(ErrorMessage ="Blog Menu Text is required")]
+        public string BlogPageText { get; set; } = "Blog";
+        public string BlogPageNavComponentVisibility { get; set; } = "topnav";
 
 
         [DataType(DataType.Url)]

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-03-10
+// Last Modified:			2017-04-17
 // 
 
 using cloudscribe.Core.Models;
@@ -22,18 +22,21 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
     {
         public ContentSettingsController(
             IProjectService projectService,
+           // IPageService pageService,
             IAuthorizationService authorizationService,
             IUserQueries userQueries,
             IStringLocalizer<SimpleContentIntegration> localizer
             )
         {
             this.projectService = projectService;
+            //this.pageService = pageService;
             this.authorizationService = authorizationService;
             this.userQueries = userQueries;
             sr = localizer;
         }
 
         private IProjectService projectService;
+       // private IPageService pageService;
         private IAuthorizationService authorizationService;
         private IUserQueries userQueries;
         private IStringLocalizer sr;
@@ -62,7 +65,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             //model.RemoteFeedProcessorUseAgentFragment = projectSettings.RemoteFeedProcessorUseAgentFragment;
             model.RemoteFeedUrl = projectSettings.RemoteFeedUrl;
             model.ShowTitle = projectSettings.ShowTitle;
-            model.Title = projectSettings.Title;
+            model.Title = projectSettings.Title; //aka Blog Page Title
             model.UseMetaDescriptionInFeed = projectSettings.UseMetaDescriptionInFeed;
             model.WebmasterEmail = projectSettings.WebmasterEmail;
             model.Publisher = projectSettings.Publisher;
@@ -72,10 +75,17 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             model.PublisherEntityType = projectSettings.PublisherEntityType;
             model.DisqusShortName = projectSettings.DisqusShortName;
             model.PostsPerPage = projectSettings.PostsPerPage;
+
+            
+
             model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
             model.DefaultPageSlug = projectSettings.DefaultPageSlug;
-            model.BlogPagePosition = projectSettings.BlogPagePosition;
             model.ShowRecentPostsOnDefaultPage = projectSettings.ShowRecentPostsOnDefaultPage;
+
+            model.AddBlogToPagesTree = projectSettings.AddBlogToPagesTree;
+            model.BlogPagePosition = projectSettings.BlogPagePosition;
+            model.BlogPageText = projectSettings.BlogPageText;
+            model.BlogPageNavComponentVisibility = projectSettings.BlogPageNavComponentVisibility;
 
             bool canManageUsers = false;
             try
@@ -163,21 +173,18 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             projectSettings.ShowRecentPostsOnDefaultPage = model.ShowRecentPostsOnDefaultPage;
 
             bool needToClearMenuCache = false;
-            if(projectSettings.BlogMenuLinksToNewestPost != model.BlogMenuLinksToNewestPost)
-            {
-                needToClearMenuCache = true;
-            }
-            if(projectSettings.DefaultPageSlug != model.DefaultPageSlug)
-            {
-                needToClearMenuCache = true;
-            }
-            if (projectSettings.BlogPagePosition != model.BlogPagePosition)
-            {
-                needToClearMenuCache = true;
-            }
+            
+            if (model.BlogMenuLinksToNewestPost != projectSettings.BlogMenuLinksToNewestPost) needToClearMenuCache = true;
+            if (model.DefaultPageSlug != projectSettings.DefaultPageSlug) needToClearMenuCache = true;
+            if (model.AddBlogToPagesTree != projectSettings.AddBlogToPagesTree) needToClearMenuCache = true;
+            if (model.BlogPagePosition != projectSettings.BlogPagePosition) needToClearMenuCache = true;
+            if (model.BlogPageText != projectSettings.BlogPageText) needToClearMenuCache = true;
+
             projectSettings.BlogMenuLinksToNewestPost = model.BlogMenuLinksToNewestPost;
             projectSettings.DefaultPageSlug = model.DefaultPageSlug;
             projectSettings.BlogPagePosition = model.BlogPagePosition;
+            projectSettings.AddBlogToPagesTree = model.AddBlogToPagesTree;
+            projectSettings.BlogPageText = model.BlogPageText;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

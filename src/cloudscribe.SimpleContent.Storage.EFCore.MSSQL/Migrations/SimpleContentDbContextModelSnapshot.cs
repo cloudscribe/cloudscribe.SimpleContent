@@ -357,6 +357,38 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.HasAnnotation("SqlServer:TableName", "cs_Page");
                 });
 
+            modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(36);
+
+                    b.Property<string>("Environment")
+                        .IsRequired()
+                        .HasMaxLength(15);
+
+                    b.Property<string>("PageEntityId")
+                        .HasMaxLength(36);
+
+                    b.Property<int>("Sort");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PageEntityId");
+
+                    b.ToTable("PageResources");
+
+                    b.HasAnnotation("SqlServer:TableName", "cs_PageResource");
+                });
+
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostCategory", b =>
                 {
                     b.Property<string>("Value")
@@ -487,6 +519,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                 {
                     b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
                         .WithMany("PageComments")
+                        .HasForeignKey("PageEntityId");
+                });
+
+            modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
+                {
+                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
+                        .WithMany("PageResources")
                         .HasForeignKey("PageEntityId");
                 });
 

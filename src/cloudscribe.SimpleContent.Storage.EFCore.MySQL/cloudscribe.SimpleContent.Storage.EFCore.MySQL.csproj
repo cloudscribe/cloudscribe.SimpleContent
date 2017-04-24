@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>MySQL Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170320</VersionSuffix>
+    <VersionSuffix>rc20170417</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
