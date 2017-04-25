@@ -10,7 +10,7 @@ namespace cloudscribe.SimpleContent.Web.Design
         public string Previous { get; set; } = "glyphicon glyphicon-backward";
         public string Next { get; set; } = "glyphicon glyphicon-forward";
         public string Comments { get; set; } = "glyphicon glyphicon-comment";
-        //public string Tags { get; set; } = "glyphicon glyphicon-tags";
+        public string Tags { get; set; } = "glyphicon glyphicon-tags";
 
        public string BadRequest { get; set; } = "glyphicons glyphicons-ban-circle";
 

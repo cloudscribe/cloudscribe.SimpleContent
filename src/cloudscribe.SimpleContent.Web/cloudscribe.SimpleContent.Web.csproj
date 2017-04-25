@@ -522,12 +522,12 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.1" />
-    <PackageReference Include="cloudscribe.Messaging.Email" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Messaging.Email" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Web.Common" Version="1.1.9" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-rc20170323" />
-    <PackageReference Include="cloudscribe.Web.Pagination" Version="1.1.3" />
-    <PackageReference Include="cloudscribe.Web.SiteMap" Version="1.1.0-rc20161127" />
-    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="1.1.0-rc20161127" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.Web.SiteMap" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="1.1.0-*" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
