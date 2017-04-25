@@ -667,6 +667,8 @@ namespace cloudscribe.SimpleContent.Services
 
         private string GetPublishingStatus(IPage page)
         {
+            if(!string.IsNullOrEmpty(page.ExternalUrl)) return sr["Link Only"];
+
             if (!page.IsPublished) return sr["Unpublished"];
             if (page.PubDate > DateTime.UtcNow) return sr["Future Published"];
             if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users")) return sr["Public"];

@@ -31,11 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Identity" Version="1.1.0-rc20170401" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="1.1.0-rc20170401" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Core.Identity" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Models" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Web.Common" Version="1.1.9" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-rc20170323" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.1.0-*" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />

@@ -164,6 +164,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Categories = page.Categories;
             p.Comments = page.Comments;
             p.Content = page.Content;
+            p.ExternalUrl = page.ExternalUrl;
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;
             p.LastModified = page.LastModified;

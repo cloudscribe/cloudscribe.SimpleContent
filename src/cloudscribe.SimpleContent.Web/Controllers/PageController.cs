@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-04-19
+// Last Modified:           2017-04-25
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -158,14 +158,28 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     
                 }
             }
-            else
+            else // page is not null
             {
                 // if the page is protected by view roles return 404 if user is not in an allowed role
                 if((!canEdit) && (!string.IsNullOrEmpty(page.ViewRoles)))
                 {
                     if(!User.IsInRoles(page.ViewRoles))
                     {
-                        log.LogWarning("page is protected by roles that user is not in so returning 404");
+                        log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 404");
+                        return NotFound();
+                    }
+                }
+                if(!string.IsNullOrEmpty(page.ExternalUrl))
+                {
+                    if(canEdit)
+                    {
+                        log.LogWarning($"page {page.Title} has override url {page.ExternalUrl}, redirecting to edit since user can edit");
+                        return RedirectToRoute(pageRoutes.PageEditRouteName, new { slug= page.Slug });
+
+                    }
+                    else
+                    {
+                        log.LogWarning($"page {page.Title} has override url {page.ExternalUrl}, not intended to be viewed so returning 404");
                         return NotFound();
                     }
                 }
@@ -424,6 +438,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             page.ShowMenu = model.ShowMenu;
             page.MenuOnly = model.MenuOnly;
             page.ShowComments = model.ShowComments;
+            if (page.ExternalUrl != model.ExternalUrl)
+            {
+                needToClearCache = true;
+            }
+            page.ExternalUrl = model.ExternalUrl;
 
             if(!string.IsNullOrEmpty(model.Author))
             {
@@ -440,10 +459,12 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (isNew)
             {
                 await pageService.Create(page, model.IsPublished);
+                this.AlertSuccess(sr["The page was created successfully."], true);
             }
             else
             {
                 await pageService.Update(page, model.IsPublished);
+                this.AlertSuccess(sr["The page was updated successfully."], true);
             }
 
 
@@ -452,9 +473,17 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 pageService.ClearNavigationCache();
             }
 
-            if(page.Slug == project.DefaultPageSlug)
+            
+
+            if (page.Slug == project.DefaultPageSlug)
             {
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug="" });
+            }
+
+            if(!string.IsNullOrEmpty(page.ExternalUrl))
+            {
+                this.AlertWarning(sr["Note that since this page has an override url, the menu item will link to the url so the page is used only as a means to add a link in the menu, the content is not used."], true);
+                return RedirectToRoute(pageRoutes.PageEditRouteName, new { slug = page.Slug });
             }
 
             //var url = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });

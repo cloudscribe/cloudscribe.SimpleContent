@@ -43,14 +43,14 @@
             <div class="form-group">
                 <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
                 <div class="col-md-10">
-                    <input asp-for="Title" class="form-control" />
+                    <input asp-for="Title" class="form-control" data-toggle="tooltip" title='@sr["This is the heading and title of the page. For new pages the url slug will be generated based on the title."]' />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
                 <div class="col-md-10">
-                    <input asp-for="MetaDescription" class="form-control" />
+                    <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
                     <span asp-validation-for="MetaDescription" class="text-danger"></span>
                 </div>
             </div>
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox">
+                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["A page is visible to the public if the Is Published checkbox is checked and if the Publication Date is before the current moment, and if not protected by roles."]'>
                         <label>
                             <input asp-for="IsPublished" /> @sr["Is Published"]
                         </label>
@@ -92,20 +92,27 @@
             <div class="form-group">
                 <label asp-for="Slug" class="col-md-2 control-label">@sr["Slug"]</label>
                 <div class="col-md-10">
-                    <input asp-for="Slug" class="form-control" />
+                    <input asp-for="Slug" class="form-control" data-toggle="tooltip" title='@sr["The slug is the url segment that will be used to link to this page. It is recommended to leave the slug blank when creating new pages, the slug will be generated based on the Page Heading. Slugs should be lower case and any characters that are not allowed in urls will be automatically removed."]' />
                     <span asp-validation-for="Slug" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="ParentSlug" class="col-md-2 control-label">@sr["Parent Slug"]</label>
                 <div class="col-md-10">
-                    <input asp-for="ParentSlug" class="form-control" />
+                    <input asp-for="ParentSlug" class="form-control" data-toggle="tooltip" title='@sr["A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager."]' />
                     <span asp-validation-for="ParentSlug" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
+                <label asp-for="ExternalUrl" class="col-md-2 control-label">@sr["Override Url"]</label>
+                <div class="col-md-10">
+                    <input asp-for="ExternalUrl" class="form-control" data-toggle="tooltip" title='@sr["If you populate this field with an url then the page is used only as a means to add the url as a menu item. The page content in that case is not used or visible to users. You can use a relative url or a fully qualified url so it can link to external sites. Use this with caution and note that once populated the only way to edit the page is from the link in Page Manager."]' />
+                    <span asp-validation-for="ExternalUrl" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox">
+                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown."]'>
                         <label>
                             <input asp-for="ShowHeading" /> @sr["Show Heading"]
                         </label>
@@ -114,7 +121,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox">
+                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If the page is a parent of other pages, you check this box to make it show a menu of links to the child pages."]'>
                         <label>
                             <input asp-for="ShowMenu" /> @sr["Show Child Menu"]
                         </label>
@@ -123,7 +130,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox">
+                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["Check this box if the current page is only meant as a parent container for other pages and has no content of it's own."]'>
                         <label>
                             <input asp-for="MenuOnly" /> @sr["No Content Only Show Child Menu"]
                         </label>
@@ -149,14 +156,14 @@
             <div class="form-group">
                 <label asp-for="PageOrder" class="col-md-2 control-label">@sr["Page Order"]</label>
                 <div class="col-md-10">
-                    <input asp-for="PageOrder" class="form-control" />
+                    <input asp-for="PageOrder" class="form-control" data-toggle="tooltip" title='@sr["This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order."]' />
                     <span asp-validation-for="PageOrder" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
                 <div class="form-inline col-md-10">
-                    <input asp-for="ViewRoles" class="form-control" style="width:80%;" />
+                    <input asp-for="ViewRoles" class="form-control" style="width:80%;" data-toggle="tooltip" title='@sr["Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members."]' />
                     <a class="btn btn-default"
                        csc-role-selector="@roleSelector"
                        csc-projectId="@Model.ProjectId"
@@ -207,4 +214,9 @@
             <script src="@Url.Content(s)"></script>
         }
     }
+<script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+</script>
 }

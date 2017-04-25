@@ -48,6 +48,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public bool ShowComments { get; set; } = false;
 
+        [RegularExpression(@"^(http(s)?://)?(\/?)[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-‌​\.\?\,\'\/\\\+&amp;%\$#_]*)?$", ErrorMessage = "Please provide a valid url or relative url")]
         public string ExternalUrl { get; set; } = string.Empty;
 
         public bool ShowMenu { get; set; } = false;
