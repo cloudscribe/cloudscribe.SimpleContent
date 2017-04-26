@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using cloudscribe.SimpleContent.Models.EventHandlers;
 using Microsoft.Extensions.Localization;
+using System.Security.Claims;
+using cloudscribe.SimpleContent.Web;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -599,7 +601,7 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<string> GetPageTreeJson(string node = "root")
+        public async Task<string> GetPageTreeJson(ClaimsPrincipal user, string node = "root")
         {
             await EnsureProjectSettings();
             
@@ -622,7 +624,7 @@ namespace cloudscribe.SimpleContent.Services
             foreach (var p in list)
             {
                 sb.Append(comma);
-                await BuildPageJson(sb, p, urlHelper);
+                await BuildPageJson(user, sb, p, urlHelper);
                 comma = ",";
             }
             sb.Append("]");
@@ -630,7 +632,7 @@ namespace cloudscribe.SimpleContent.Services
             return sb.ToString();
         }
 
-        private async Task BuildPageJson(StringBuilder script, IPage page, IUrlHelper urlHelper)
+        private async Task BuildPageJson(ClaimsPrincipal user, StringBuilder script, IPage page, IUrlHelper urlHelper)
         {
             var childPagesCount = await pageQueries.GetChildPageCount(page.ProjectId, page.Id, true, CancellationToken); 
             script.Append("{");
@@ -647,18 +649,26 @@ namespace cloudscribe.SimpleContent.Services
                 script.Append(",\"load_on_demand\":true");
             }
             
-            script.Append(",\"canEdit\":true");
-            script.Append(",\"canCreateChild\":true");
-            if(page.Slug == settings.DefaultPageSlug)
+            if(!string.IsNullOrEmpty(page.ViewRoles) && !user.IsInRoles(page.ViewRoles))
             {
-                script.Append(",\"canDelete\":false"); // don't allow delete the home/default page from the ui
+                script.Append(",\"canEdit\":false");
+                script.Append(",\"canCreateChild\":false");
+                script.Append(",\"canDelete\":false");
             }
             else
             {
-                script.Append(",\"canDelete\":true");
+                script.Append(",\"canEdit\":true");
+                script.Append(",\"canCreateChild\":true");
+                if (page.Slug == settings.DefaultPageSlug)
+                {
+                    script.Append(",\"canDelete\":false"); // don't allow delete the home/default page from the ui
+                }
+                else
+                {
+                    script.Append(",\"canDelete\":true");
+                }
             }
             
-
             script.Append(",\"pubstatus\":\"" + GetPublishingStatus(page) + "\"");
             
             script.Append("}");

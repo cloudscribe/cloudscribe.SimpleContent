@@ -44,7 +44,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.1.1" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="1.1.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="1.1.*" />
   </ItemGroup>
 
   <ItemGroup>

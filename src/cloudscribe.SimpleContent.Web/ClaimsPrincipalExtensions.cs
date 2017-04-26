@@ -116,7 +116,10 @@ namespace cloudscribe.SimpleContent.Web
         }
 
         public static bool IsInRoles(this ClaimsPrincipal principal, string allowedRolesCsv)
-        { 
+        {
+            // Administraotors can not be blocked access to anything
+            if (principal.IsInRole("Administrators")) return true;
+
             if (string.IsNullOrEmpty(allowedRolesCsv)) { return true; } // empty indicates no role filtering
             string[] roles;
             // in some cases we are using semicolon separated not comma

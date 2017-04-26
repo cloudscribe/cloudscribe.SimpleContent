@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 
@@ -49,7 +50,7 @@ namespace cloudscribe.SimpleContent.Models
 
         void ClearNavigationCache();
 
-        Task<string> GetPageTreeJson(string node = "root");
+        Task<string> GetPageTreeJson(ClaimsPrincipal user, string node = "root");
 
         Task<PageActionResult> Move(PageMoveModel model);
 
