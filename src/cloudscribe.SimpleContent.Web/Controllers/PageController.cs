@@ -161,14 +161,25 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             else // page is not null
             {
                 // if the page is protected by view roles return 404 if user is not in an allowed role
-                if((!canEdit) && (!string.IsNullOrEmpty(page.ViewRoles)))
+                if ((!string.IsNullOrEmpty(page.ViewRoles)))
                 {
-                    if(!User.IsInRoles(page.ViewRoles))
+                    if (!User.IsInRoles(page.ViewRoles))
                     {
                         log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 404");
                         return NotFound();
                     }
                 }
+
+                if (!canEdit)
+                { 
+                    if(!page.IsPublished || page.PubDate > DateTime.UtcNow)
+                    {
+                        log.LogWarning($"page {page.Title} is unpublished and user is not editor so returning 404");
+                        return NotFound();
+                    }
+                }
+                
+                
                 if(!string.IsNullOrEmpty(page.ExternalUrl))
                 {
                     if(canEdit)
@@ -253,8 +264,18 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
 
             }
-            else
+            else // page not null
             {
+                // if the page is protected by view roles return 404 if user is not in an allowed role
+                if ((!string.IsNullOrEmpty(page.ViewRoles)))
+                {
+                    if (!User.IsInRoles(page.ViewRoles))
+                    {
+                        log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 404");
+                        return NotFound();
+                    }
+                }
+
                 ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], page.Title);
                 model.Author = page.Author;
                 model.Content = page.Content;
@@ -329,6 +350,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             bool slugIsAvailable = false;
             if (page != null)
             {
+                if ((!string.IsNullOrEmpty(page.ViewRoles)))
+                {
+                    if (!User.IsInRoles(page.ViewRoles))
+                    {
+                        log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                        return RedirectToRoute(pageRoutes.PageRouteName);
+                    }
+                }
+
                 if (page.Title != model.Title)
                 {
                     needToClearCache = true;
@@ -530,6 +560,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
+            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            {
+                if (!User.IsInRoles(page.ViewRoles))
+                {
+                    log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(pageRoutes.PageRouteName);
+                }
+            }
+
             ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Developer Tools - {0}"], page.Title);
 
             var model = new PageDevelopmentViewModel();
@@ -588,6 +627,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
+            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            {
+                if (!User.IsInRoles(page.ViewRoles))
+                {
+                    log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(pageRoutes.PageRouteName);
+                }
+            }
+
             var resource = new PageResource();
             resource.ContentId = page.Id;
             resource.Type = model.Type;
@@ -641,6 +689,15 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 log.LogInformation("page not found, redirecting");
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            {
+                if (!User.IsInRoles(page.ViewRoles))
+                {
+                    log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(pageRoutes.PageRouteName);
+                }
             }
 
             var found = false;
@@ -723,7 +780,16 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return RedirectToRoute(pageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if(page.Slug == project.DefaultPageSlug) // don't allow delete the home/default page from the ui
+            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            {
+                if (!User.IsInRoles(page.ViewRoles))
+                {
+                    log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(pageRoutes.PageRouteName);
+                }
+            }
+
+            if (page.Slug == project.DefaultPageSlug) // don't allow delete the home/default page from the ui
             {
                 log.LogWarning($"Rejecting/redirecting, user {User.Identity.Name} tried to delete the default page {page.Slug}");
                 if (Request.IsAjaxRequest())
@@ -801,7 +867,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 return BadRequest();
             }
 
-            var result = await pageService.GetPageTreeJson(node);
+            var result = await pageService.GetPageTreeJson(User, node);
 
             return new ContentResult
             {

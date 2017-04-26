@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
@@ -92,7 +93,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<string> GetPageTreeJson(string node = "root")
+        public Task<string> GetPageTreeJson(ClaimsPrincipal user,string node = "root")
         {
             throw new NotImplementedException();
         }

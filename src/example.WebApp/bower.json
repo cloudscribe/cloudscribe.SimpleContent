@@ -15,5 +15,6 @@
     "fontawesome": "~4.5.0",
     "tether": "~1.4.0",
     "cropper": "~2.3.4"
+    
   }
 }
