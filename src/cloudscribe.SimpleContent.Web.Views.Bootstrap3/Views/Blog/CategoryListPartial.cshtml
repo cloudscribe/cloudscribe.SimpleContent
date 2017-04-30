@@ -1,6 +1,8 @@
 ﻿@model Dictionary<string, int>
 @using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
 @using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Web.Design
 @inject IStringLocalizer<SimpleContent> sr
 @inject cloudscribe.SimpleContent.Models.IBlogRoutes blogRoutes
 @inject IOptions<IconCssClasses> iconClassesAccessor
@@ -17,7 +19,7 @@
             {
                     <li>
                         <a asp-route="@blogRoutes.BlogCategoryRouteName"
-                           asp-route-category="@cat.Key.ToLowerInvariant()">@cat.Key.ToLowerInvariant()(@cat.Value)</a>
+                           asp-route-category="@cat.Key.ToLowerInvariant()">@cat.Key.ToLowerInvariant() (@cat.Value)</a>
                     </li>
                 }
             </ul>
