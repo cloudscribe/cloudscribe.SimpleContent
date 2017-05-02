@@ -51,8 +51,8 @@ namespace cloudscribe.FileManager.Web
 
             routes.MapRoute(
                name: "filemanagerfonts",
-               template: "filemanager/font/{*slug}"
-               , defaults: new { controller = "FileManager", action = "font" }
+               template: "filemanager/fonts/{*slug}"
+               , defaults: new { controller = "FileManager", action = "fonts" }
                );
 
             return routes;
