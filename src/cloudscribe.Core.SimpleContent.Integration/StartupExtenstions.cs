@@ -54,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     authBuilder =>
                     {
                         //authBuilder.RequireClaim("blogId");
-                        authBuilder.RequireRole("Administrators");
+                        authBuilder.RequireRole("Administrators", "Content Administrators");
                     }
                  );
 
@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 "PageEditPolicy",
                 authBuilder =>
                 {
-                    authBuilder.RequireRole("Administrators");
+                    authBuilder.RequireRole("Administrators", "Content Administrators");
                 });
 
             return options;

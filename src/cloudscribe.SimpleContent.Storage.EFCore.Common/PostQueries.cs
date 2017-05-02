@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-03-11
+// Last Modified:			2017-05-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -171,6 +171,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
+                .OrderByDescending(p => p.PubDate)
                 ;
             }
             else if (month > 0)
@@ -183,6 +184,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
+                .OrderByDescending(p => p.PubDate)
                 ;
 
             }
@@ -192,7 +194,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                      .Include(p => p.PostComments)
                      .Where(
                 x => x.PubDate.Year == year
-                )
+                ).OrderByDescending(p => p.PubDate)
                 ;
             }
             

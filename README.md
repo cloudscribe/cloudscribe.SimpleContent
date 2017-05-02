@@ -64,3 +64,5 @@ My plan is to usually build sites without a database (except for large projects)
 
 ![image cropper Screen shot](https://github.com/joeaudette/cloudscribe.SimpleContent/raw/master/screenshots/image-cropper.png)
 
+![Blog Screen shot](https://github.com/joeaudette/cloudscribe.SimpleContent/raw/master/screenshots/drag-drop-page-manager.png)
+
