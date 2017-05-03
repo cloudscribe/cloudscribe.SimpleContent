@@ -66,7 +66,7 @@ namespace cloudscribe.SimpleContent.Models
         public string BlogPageText { get; set; } = "Blog";
 
         //public string HomePageText { get; set; } = "Home";
-        public string BlogPageNavComponentVisibility { get; set; } = "topnav";
+        public string BlogPageNavComponentVisibility { get; set; }
 
         // feed settings
 
