@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-04-17
+// Last Modified:			2017-05-02
 // 
 
 using cloudscribe.Core.Models;
@@ -75,9 +75,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             model.PublisherEntityType = projectSettings.PublisherEntityType;
             model.DisqusShortName = projectSettings.DisqusShortName;
             model.PostsPerPage = projectSettings.PostsPerPage;
-
             
-
             model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
             model.DefaultPageSlug = projectSettings.DefaultPageSlug;
             model.ShowRecentPostsOnDefaultPage = projectSettings.ShowRecentPostsOnDefaultPage;
@@ -179,12 +177,14 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             if (model.AddBlogToPagesTree != projectSettings.AddBlogToPagesTree) needToClearMenuCache = true;
             if (model.BlogPagePosition != projectSettings.BlogPagePosition) needToClearMenuCache = true;
             if (model.BlogPageText != projectSettings.BlogPageText) needToClearMenuCache = true;
+            if (model.BlogPageNavComponentVisibility != projectSettings.BlogPageNavComponentVisibility) needToClearMenuCache = true;
 
             projectSettings.BlogMenuLinksToNewestPost = model.BlogMenuLinksToNewestPost;
             projectSettings.DefaultPageSlug = model.DefaultPageSlug;
             projectSettings.BlogPagePosition = model.BlogPagePosition;
             projectSettings.AddBlogToPagesTree = model.AddBlogToPagesTree;
             projectSettings.BlogPageText = model.BlogPageText;
+            projectSettings.BlogPageNavComponentVisibility = model.BlogPageNavComponentVisibility;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

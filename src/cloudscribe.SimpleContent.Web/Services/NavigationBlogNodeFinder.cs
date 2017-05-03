@@ -1,11 +1,7 @@
-﻿
-
+﻿using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
@@ -16,6 +12,15 @@ namespace cloudscribe.SimpleContent.Web.Services
     /// </summary>
     public class NavigationBlogNodeFinder : IFindCurrentNode
     {
+        public NavigationBlogNodeFinder(
+            IBlogRoutes blogRoutes
+            )
+        {
+            this.blogRoutes = blogRoutes;
+        }
+
+        private IBlogRoutes blogRoutes;
+
         public TreeNode<NavigationNode> FindNode(
             TreeNode<NavigationNode> rootNode,
             IUrlHelper urlHelper,
@@ -24,8 +29,8 @@ namespace cloudscribe.SimpleContent.Web.Services
         {
             if (string.IsNullOrEmpty(currentUrl)) return null;
             if (rootNode == null) return null;
-
-            var blogUrl = (string.IsNullOrEmpty(urlPrefix)) ? "/blog" : "/" + urlPrefix + "/blog";
+            
+            var blogUrl = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
 
             Func<TreeNode<NavigationNode>, bool> match = delegate (TreeNode<NavigationNode> n)
             {
@@ -34,6 +39,9 @@ namespace cloudscribe.SimpleContent.Web.Services
                 if (currentUrl.StartsWith(blogUrl))
                 {
                     if (n.Value.Controller == "Blog") return true;
+                    if (n.Value.NamedRoute == blogRoutes.BlogIndexRouteName) return true;
+                    if (n.Value.NamedRoute == blogRoutes.MostRecentPostRouteName) return true;
+                    if (n.Value.Url == blogUrl) return true;
                 }
 
                 return false;

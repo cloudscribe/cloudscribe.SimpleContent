@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-04-19
+// Last Modified:           2017-05-02
 // 
 
 
@@ -11,6 +11,7 @@ using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
+using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -263,6 +264,10 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             {
                 model.NextPostUrl = await blogService.ResolvePostUrl(result.NextPost);
             }
+
+            var currentUrl = await blogService.ResolvePostUrl(result.Post);
+            var breadCrumbHelper = new TailCrumbUtility(HttpContext);
+            breadCrumbHelper.AddTailCrumb(result.Post.Id, result.Post.Title, currentUrl);
 
             model.NewItemPath = Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = "" });
             model.EditPath = Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = result.Post.Slug });
