@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Bootstrap 3 views for cloudscribe.SimpleContent.Web</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170429</VersionSuffix>
+    <VersionSuffix>rc20170509</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net451;net452;net46;netstandard1.6</TargetFrameworks>
     <AssemblyName>cloudscribe.SimpleContent.Web.Views.Bootstrap3</AssemblyName>
@@ -26,8 +26,8 @@
   
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="1.1.*" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="1.1.*" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
