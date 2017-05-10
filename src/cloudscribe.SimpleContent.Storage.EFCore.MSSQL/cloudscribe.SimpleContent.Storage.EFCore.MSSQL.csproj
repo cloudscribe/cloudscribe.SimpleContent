@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>MSSQL Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170429</VersionSuffix>
+    <VersionSuffix>rc20170509</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
@@ -40,16 +40,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.1.1" />
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.1.*" />
+    <PackageReference Include="System.IO.FileSystem" Version="4.3.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.*" />
   </ItemGroup>
 
 </Project>

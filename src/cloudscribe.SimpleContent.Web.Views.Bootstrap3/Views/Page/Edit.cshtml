@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Localization
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Models
+@using cloudscribe.Web.Common.Helpers
 @using System.Globalization
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
@@ -16,6 +17,7 @@
     var editOptions = pageEditOptionsAccessor.Value;
     var showDev =  editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
+    var deletePrompt = JavaScriptHelper.HtmlEncodeThenReplaceQuotesForJs(string.Format(sr["Are you sure you want to delete the page {0}? You cannot undo this action."], Model.Title));
 }
 @section Styles {
 <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
@@ -183,7 +185,7 @@
                 @if (!string.IsNullOrEmpty(Model.Id))
                 {
                     <button name="button" type="button" class="btn btn-danger"
-                            onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the page {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
+                            onclick="javascript: if(confirm('@Html.Raw(deletePrompt)')) {$('#deleteform').submit();}">
                         @sr["Delete"]
                     </button>
                 }

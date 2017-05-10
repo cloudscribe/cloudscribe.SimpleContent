@@ -3,11 +3,15 @@
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Models
 @using System.Globalization
+@using cloudscribe.Web.Common.Helpers
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @inject IStringLocalizer<SimpleContent> sr
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
-@section Styles {
+    @{ 
+        var deletePrompt = JavaScriptHelper.HtmlEncodeThenReplaceQuotesForJs(string.Format(sr["Are you sure you want to delete the post {0}? You cannot undo this action."], Model.Title));
+    }
+            @section Styles {
     <link rel="stylesheet" href="~/csscsr/bootstrapdatetimepickercssmin" />
 }
 <h2>@ViewBag.Title <small><a href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
@@ -84,7 +88,7 @@
             @if (!string.IsNullOrEmpty(Model.Id))
             {
                 <button name="button" type="button" class="btn btn-danger"
-                        onclick="javascript: if(confirm('@Html.FormatValue(Model.Title, sr["Are you sure you want to delete the post {0}? You cannot undo this action."])')) {$('#deleteform').submit();}">
+                        onclick="javascript: if(confirm('@Html.Raw(deletePrompt)')) {$('#deleteform').submit();}">
                     @sr["Delete"]
                 </button>
             }

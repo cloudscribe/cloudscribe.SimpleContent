@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Models Class Library</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170417</VersionSuffix>
+    <VersionSuffix>rc20170509</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.Security.Claims" Version="4.3.0" />
+    <PackageReference Include="System.Security.Claims" Version="4.3.*" />
   </ItemGroup>
 
 </Project>

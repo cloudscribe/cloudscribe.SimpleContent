@@ -265,6 +265,8 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.NextPostUrl = await blogService.ResolvePostUrl(result.NextPost);
             }
 
+            
+
             var currentUrl = await blogService.ResolvePostUrl(result.Post);
             var breadCrumbHelper = new TailCrumbUtility(HttpContext);
             breadCrumbHelper.AddTailCrumb(result.Post.Id, result.Post.Title, currentUrl);
@@ -291,7 +293,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             }
 
             return View("Post", model);
-
+            
 
         }
 

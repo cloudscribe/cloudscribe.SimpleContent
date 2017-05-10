@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.MetaWeblog Class Library</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170417</VersionSuffix>
+    <VersionSuffix>rc20170509</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.*" />
     <PackageReference Include="cloudscribe.MetaWeblog" Version="1.1.*" />
   </ItemGroup>
 
