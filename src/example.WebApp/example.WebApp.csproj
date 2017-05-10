@@ -50,8 +50,8 @@
     <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="1.1.0-*" />
-    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="1.1.0-rc20170401" />
-    <PackageReference Include="cloudscribe.Core.Storage.EFCore.pgsql" Version="1.1.0-rc20170401" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.pgsql" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Logging.NoDb" Version="1.1.*" />
     <PackageReference Include="cloudscribe.Logging.EFCore.MSSQL" Version="1.1.*" />
     <PackageReference Include="cloudscribe.Logging.EFCore.MySql" Version="1.1.*" />
