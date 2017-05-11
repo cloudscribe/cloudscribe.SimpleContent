@@ -4,6 +4,8 @@
     "Next": "fa fa-forward",
     "Comments": "fa fa-comment",
     "Tags": "fa fa-tags",
+    "Archives": "fa fa-calendar",
+    "About": "fa fa-star",
     "BadRequest": "fa fa-ban",
     "UnAuthorized": "fa fa-ban",
     "Forbidden": "fa fa-exclamation-circle",
