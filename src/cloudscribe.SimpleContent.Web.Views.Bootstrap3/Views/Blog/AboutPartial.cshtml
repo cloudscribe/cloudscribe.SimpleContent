@@ -1,9 +1,17 @@
-﻿@{
+﻿@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
+@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Web.Design
+@inject IStringLocalizer<SimpleContent> sr
+@inject cloudscribe.SimpleContent.Models.IBlogRoutes blogRoutes
+@inject IOptions<IconCssClasses> iconClassesAccessor
+@{
+    var icons = iconClassesAccessor.Value;
 }
 
 <section class="panel panel-default">
     <div class="panel-heading">
-        <h3>About me</h3>
+        <h3><i class="@icons.About" aria-hidden="true"></i>&nbsp;@sr["About me"]</h3>
     </div>
     <div class="panel-body">
         <p>

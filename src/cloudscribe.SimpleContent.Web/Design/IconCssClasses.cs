@@ -12,7 +12,11 @@ namespace cloudscribe.SimpleContent.Web.Design
         public string Comments { get; set; } = "glyphicon glyphicon-comment";
         public string Tags { get; set; } = "glyphicon glyphicon-tags";
 
-       public string BadRequest { get; set; } = "glyphicons glyphicons-ban-circle";
+        public string Archives { get; set; } = "glyphicon glyphicon-calendar";
+
+        public string About { get; set; } = "glyphicon glyphicon-star";
+
+        public string BadRequest { get; set; } = "glyphicons glyphicons-ban-circle";
 
        public string UnAuthorized { get; set; } = "glyphicons glyphicons-ban-circle";
 

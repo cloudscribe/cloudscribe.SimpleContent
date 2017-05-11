@@ -61,7 +61,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
         [Required(ErrorMessage ="Blog Menu Text is required")]
         public string BlogPageText { get; set; } = "Blog";
-        public string BlogPageNavComponentVisibility { get; set; } = "topnav";
+        public string BlogPageNavComponentVisibility { get; set; } 
 
 
         [DataType(DataType.Url)]
