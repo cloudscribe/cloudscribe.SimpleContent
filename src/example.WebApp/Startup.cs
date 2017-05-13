@@ -286,19 +286,28 @@ namespace example.WebApp
 
                 if (useFolders)
                 {
-                    routes.MapRoute(
-                        name: "folderdefault",
-                        template: "{sitefolder}/{controller}/{action}/{id?}",
-                        defaults: new { controller = "Home", action = "Index" },
-                        constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
-                        );
-                    if(useCustomRoutes)
+                    
+                    if (useCustomRoutes)
                     {
+                        routes.MapRoute(
+                        name: "folderdefault",
+                        template: "{sitefolder}/{controller}/{action}/{id?}"
+                        , defaults: new { controller = "Home", action = "Index" }
+                        , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                        );
+
                         routes.AddCustomPageRouteForSimpleContent("docs", new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
                     }
                     else
                     {
-                        routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                        routes.MapRoute(
+                        name: "folderdefault",
+                        template: "{sitefolder}/{controller}/{action}/{id?}"
+                        , defaults: new { controller = "Home" }
+                        , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                        );
+
+                        routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());  
                     }
                     
                     
