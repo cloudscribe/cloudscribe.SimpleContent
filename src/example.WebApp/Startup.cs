@@ -222,6 +222,19 @@ namespace example.WebApp
 
             app.UsePerTenant<cloudscribe.Core.Models.SiteContext>((ctx, builder) =>
             {
+                // custom 404 and error page - this preserves the status code (ie 404)
+                if (multiTenantOptions.Mode != cloudscribe.Core.Models.MultiTenantMode.FolderName || string.IsNullOrEmpty(ctx.Tenant.SiteFolderName))
+                {
+                    builder.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
+                }
+                else
+                {
+                    builder.UseStatusCodePagesWithReExecute("/" + ctx.Tenant.SiteFolderName + "/Home/Error/{0}");
+                }
+
+                // resolve static files from wwwroot folders within themes and within sitefiles
+                builder.UseSiteAndThemeStaticFiles(loggerFactory, multiTenantOptions, ctx.Tenant);
+
                 builder.UseCloudscribeCoreDefaultAuthentication(
                     loggerFactory,
                     multiTenantOptions,
