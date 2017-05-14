@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-04-18
+// Last Modified:			2017-05-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -472,7 +472,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 //.ForMySQLHasColumnType("bit")
                 //.ForMySQLHasDefaultValueSql(false)
                 ;
-                
+
+                entity.Property(p => p.MenuFilters)
+               .HasMaxLength(500)
+               ;
+
                 entity.Ignore(p => p.Categories);
 
                 entity.Property(p => p.CategoriesCsv)

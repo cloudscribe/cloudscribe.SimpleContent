@@ -471,6 +471,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 .ForSqlServerHasDefaultValue(false)
                 ;
 
+                entity.Property(p => p.MenuFilters)
+               .HasMaxLength(500)
+               ;
+
                 entity.Ignore(p => p.Categories);
 
                 entity.Property(p => p.CategoriesCsv)

@@ -9,6 +9,10 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+.paper-body {
+    margin-top: 18px;
+}
+ 
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 /*

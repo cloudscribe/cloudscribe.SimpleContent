@@ -54,6 +54,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool ShowMenu { get; set; } = false;
 
         public bool MenuOnly { get; set; } = false;
+        [StringLength(500, ErrorMessage ="The menu filters has a maximun length of 500 characters")]
+        public string MenuFilters { get; set; }
 
         public string DropFileUrl { get; set; } = "/filemanager/upload";
 

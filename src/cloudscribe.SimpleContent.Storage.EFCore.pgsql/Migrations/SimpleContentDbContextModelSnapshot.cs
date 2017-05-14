@@ -14,7 +14,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "1.1.1");
+                .HasAnnotation("ProductVersion", "1.1.2");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
                 {
@@ -252,6 +252,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("LastModified");
+
+                    b.Property<string>("MenuFilters")
+                        .HasMaxLength(500);
 
                     b.Property<bool>("MenuOnly")
                         .ValueGeneratedOnAdd()

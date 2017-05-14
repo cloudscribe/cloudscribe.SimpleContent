@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-04-25
+// Last Modified:           2017-05-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -10,8 +10,6 @@ using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -293,6 +291,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 model.Slug = page.Slug;
                 model.ExternalUrl = page.ExternalUrl;
                 model.Title = page.Title;
+                model.MenuFilters = page.MenuFilters;
                 model.ViewRoles = page.ViewRoles;
                 model.ShowComments = page.ShowComments;
                 
@@ -468,6 +467,11 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             page.ShowMenu = model.ShowMenu;
             page.MenuOnly = model.MenuOnly;
             page.ShowComments = model.ShowComments;
+            if (page.MenuFilters != model.MenuFilters)
+            {
+                needToClearCache = true;
+            }
+            page.MenuFilters = model.MenuFilters;
             if (page.ExternalUrl != model.ExternalUrl)
             {
                 needToClearCache = true;
