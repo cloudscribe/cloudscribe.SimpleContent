@@ -67,6 +67,8 @@ namespace cloudscribe.SimpleContent.Models
         public bool ShowCategories { get; set; } = false;
         public bool ShowComments { get; set; } = false;
 
+        public string MenuFilters { get; set; }
+
         public List<PageResource> Resources { get; set; }
 
         public static Page FromIPage(IPage page)
@@ -81,6 +83,7 @@ namespace cloudscribe.SimpleContent.Models
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;
             p.LastModified = page.LastModified;
+            p.MenuFilters = page.MenuFilters;
             p.MenuOnly = page.MenuOnly;
             p.MetaDescription = page.MetaDescription;
             p.PageOrder = page.PageOrder;

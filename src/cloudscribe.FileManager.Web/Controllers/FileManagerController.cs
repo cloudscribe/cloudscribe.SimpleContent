@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-14
-// Last Modified:           2017-03-18
+// Last Modified:           2017-05-14
 // 
 
 //using cloudscribe.FileManager.Web.Filters;
@@ -132,7 +132,8 @@ namespace cloudscribe.FileManager.Web.Controllers
                             maxWidth,
                             maxHeight,
                             currentDir,
-                            newFileName
+                            newFileName,
+                            true
                             ).ConfigureAwait(false);
                         
                         imageList.Add(uploadResult);
@@ -146,6 +147,46 @@ namespace cloudscribe.FileManager.Web.Controllers
 
             }
             
+            return Json(imageList);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "FileManagerPolicy")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DropFile()
+        {
+            var theFiles = HttpContext.Request.Form.Files;
+            var imageList = new List<UploadResult>();
+            string newFileName = string.Empty; ;
+           
+            foreach (var formFile in theFiles)
+            {
+                try
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var uploadResult = await fileManagerService.ProcessFile(
+                            formFile,
+                            autoUploadOptions,
+                            null,
+                            null,
+                            null,
+                            null,
+                            newFileName,
+                            false
+                            ).ConfigureAwait(false);
+
+                        imageList.Add(uploadResult);
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.LogError(MediaLoggingEvents.FILE_PROCCESSING, ex, ex.StackTrace);
+                }
+
+            }
+
             return Json(imageList);
         }
 

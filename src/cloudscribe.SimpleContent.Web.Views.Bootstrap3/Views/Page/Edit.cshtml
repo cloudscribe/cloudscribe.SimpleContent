@@ -163,6 +163,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <label asp-for="MenuFilters" class="col-md-2 control-label">@sr["Menu Filters"]</label>
+                <div class="col-md-10">
+                    <input asp-for="MenuFilters" class="form-control" data-toggle="tooltip" title='@sr["Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree"]' />
+                    <span asp-validation-for="MenuFilters" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
                 <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
                 <div class="form-inline col-md-10">
                     <input asp-for="ViewRoles" class="form-control" style="width:80%;" data-toggle="tooltip" title='@sr["Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members."]' />

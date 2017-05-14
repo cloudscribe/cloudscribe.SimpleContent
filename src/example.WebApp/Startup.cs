@@ -324,6 +324,12 @@ namespace example.WebApp
                     template: "{controller}/{action}/{statusCode}"
                     );
 
+                routes.MapRoute(
+                    name: "sitemap",
+                    template: "sitemap"
+                    , defaults: new { controller = "SiteMap", action = "Index" }
+                    );
+
                 var useHomeIndexAsDefault = Configuration.GetValue<bool>("DevOptions:UseHomeIndexAsDefault");
                 if(useHomeIndexAsDefault)
                 {

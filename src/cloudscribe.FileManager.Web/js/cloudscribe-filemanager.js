@@ -11,6 +11,7 @@
         canDelete: $("#fmconfig").data("can-delete"),
         emptyPreviewUrl:$("#fmconfig").data("empty-preview-url"),
         rootVirtualPath: $("#fmconfig").data("root-virtual-path"),
+        rootButton: $('#btnRoot'),
         fileSelectorButton: $('#btnSelector'),
         deleteFolderButton: $('#btnDeleteFolder'),
         renameFolderButton: $('#btnRenameFolder'),
@@ -99,6 +100,16 @@
             fileManager.clearPreview();
             
 
+        },
+        backToRoot: function () {
+            fileManager.clearCurrentFile();
+            fileManager.clearCurrentDirectory();
+            fileManager.clearPreview();
+            fileManager.setCurrentDirectory(fileManager.rootVirtualPath);
+            //var tree = $('#tree').treeview(true);
+            //tree.unselectNode();
+            fileManager.loadTree();
+            
         },
         showFolderTools: function () {
             if (fileManager.canDelete) {
@@ -232,9 +243,13 @@
                             if (parents && parents.length > 0) {
                                 fileManager.reloadSubTree(parents[0].id);
                             }
+                            else {
+                                fileManager.loadTree();
+                            }
 
                         }
-
+                        $('#newNameSegment').val('');
+                            
                         fileManager.clearCurrentDirectory();
 
                     }
@@ -346,6 +361,10 @@
             var tree = $('#tree').treeview(true);
             var currentFolderId = folderIdToReload || $("#uploadCurrentDir").val();
             //alert(currentFolderId);
+            if (currentFolderId.length === 0 || currentFolderId === fileManager.rootVirtualPath) {
+                fileManager.loadTree();
+                return;
+            }
             var matchingNodes = tree.findNodes(currentFolderId, 'id');
             if (matchingNodes.length > 0) {
                 tree.collapseNode(matchingNodes, { silent: true, ignoreChildren: false });
@@ -547,8 +566,9 @@
             this.renameFileButton.on('click', fileManager.renameFile);
             this.selectForCropButton.on('click', fileManager.setCropImageFromServer);
             this.setCurrentDirectory(this.rootVirtualPath);
+            this.rootButton.on('click', fileManager.backToRoot);
 
-
+            //alert('init');
         }
 
 

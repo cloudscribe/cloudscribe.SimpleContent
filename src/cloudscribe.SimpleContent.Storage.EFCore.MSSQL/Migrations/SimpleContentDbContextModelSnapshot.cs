@@ -13,7 +13,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.1")
+                .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
@@ -281,6 +281,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasAnnotation("SqlServer:DefaultValue", true);
 
                     b.Property<DateTime>("LastModified");
+
+                    b.Property<string>("MenuFilters")
+                        .HasMaxLength(500);
 
                     b.Property<bool>("MenuOnly")
                         .ValueGeneratedOnAdd()

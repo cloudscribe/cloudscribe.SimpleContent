@@ -28,6 +28,7 @@ namespace cloudscribe.SimpleContent.Models
         string CorrelationKey { get; set; } 
         string Title { get; set; }
         string ViewRoles { get; set; }
+        string MenuFilters { get; set; }
         /// <summary>
         /// If true then the page is just a parent for other pages in the menu
         /// the content will not be rendered, only a child page menu will be shown

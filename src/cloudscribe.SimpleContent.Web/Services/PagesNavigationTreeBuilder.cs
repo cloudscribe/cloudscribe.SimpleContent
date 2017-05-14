@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2017-04-25
+// Last Modified:           2017-05-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -186,6 +186,7 @@ namespace cloudscribe.SimpleContent.Services
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
+                node.ComponentVisibility = page.MenuFilters;
                 SetUrl(node, page, folderPrefix, urlHelper);
                 
                 // for unpublished pages PagesNavigationNodePermissionResolver
@@ -218,6 +219,7 @@ namespace cloudscribe.SimpleContent.Services
                 node.ParentKey = page.ParentId;
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
+                node.ComponentVisibility = page.MenuFilters;
                 SetUrl(node, page, folderPrefix, urlHelper);
                 
                 // for unpublished pages PagesNavigationNodePermissionResolver

@@ -26,6 +26,8 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.Core.Models" Version="1.2.*" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.*" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-15
-// Last Modified:           2017-04-17
+// Last Modified:           2017-05-14
 // 
 
 using cloudscribe.FileManager.Web.Models;
@@ -101,13 +101,7 @@ namespace cloudscribe.FileManager.Web.Services
         public async Task<OperationResult> CreateFolder(string requestedVirtualPath, string folderName)
         {
             OperationResult result;
-            if (string.IsNullOrEmpty(requestedVirtualPath))
-            {
-                result = new OperationResult(false);
-                result.Message = sr["Path not provided"];
-                return result;
-            }
-
+            
             if (string.IsNullOrEmpty(folderName))
             {
                 result = new OperationResult(false);
@@ -116,34 +110,46 @@ namespace cloudscribe.FileManager.Web.Services
             }
 
             await EnsureProjectSettings().ConfigureAwait(false);
-
-            if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
+            if (string.IsNullOrEmpty(requestedVirtualPath))
             {
-                result = new OperationResult(false);
-                result.Message = sr["Invalid path"];
-                return result;
+                requestedVirtualPath = rootPath.RootVirtualPath;
             }
 
-
+            var isRoot = (requestedVirtualPath == rootPath.RootVirtualPath);
             string requestedFsPath;
-            var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
-            var segments = virtualSubPath.Split('/');
-            if (segments.Length > 0)
+
+            if (!isRoot)
             {
-                requestedFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
-                if (!Directory.Exists(requestedFsPath))
+                if (!requestedVirtualPath.StartsWith(rootPath.RootVirtualPath))
                 {
                     result = new OperationResult(false);
                     result.Message = sr["Invalid path"];
                     return result;
                 }
-                
+
+                var virtualSubPath = requestedVirtualPath.Substring(rootPath.RootVirtualPath.Length);
+                var segments = virtualSubPath.Split('/');
+                if (segments.Length > 0)
+                {
+                    requestedFsPath = Path.Combine(rootPath.RootFileSystemPath, Path.Combine(segments));
+                    if (!Directory.Exists(requestedFsPath))
+                    {
+                        result = new OperationResult(false);
+                        result.Message = sr["Invalid path"];
+                        return result;
+                    }
+
+                }
+                else
+                {
+                    requestedFsPath = rootPath.RootFileSystemPath;
+                }
             }
             else
             {
                 requestedFsPath = rootPath.RootFileSystemPath;
             }
-
+            
             var newFolderFsPath = Path.Combine(requestedFsPath, nameRules.GetCleanFolderName(folderName));
             if (Directory.Exists(newFolderFsPath))
             {
@@ -466,7 +472,8 @@ namespace cloudscribe.FileManager.Web.Services
             int? maxWidth,
             int? maxHeight,
             string requestedVirtualPath = "",
-            string newFileName = ""
+            string newFileName = "",
+            bool allowRootPath = true
             )
         {
             await EnsureProjectSettings().ConfigureAwait(false);
@@ -503,9 +510,13 @@ namespace cloudscribe.FileManager.Web.Services
                 // only ensure the folders if no currentDir provided,
                 // if it is provided it must be an existing path
                 // options.ImageDefaultVirtualSubPath might not exist on first upload so need to ensure it
-                currentVirtualPath = currentVirtualPath + options.ImageDefaultVirtualSubPath;
-                currentFsPath = Path.Combine(currentFsPath, Path.Combine(virtualSegments));
-                EnsureSubFolders(rootPath.RootFileSystemPath, virtualSegments);
+                if(!allowRootPath)
+                {
+                    currentVirtualPath = currentVirtualPath + options.ImageDefaultVirtualSubPath;
+                    currentFsPath = Path.Combine(currentFsPath, Path.Combine(virtualSegments));
+                    EnsureSubFolders(rootPath.RootFileSystemPath, virtualSegments);
+                }
+                
             }
             string newName;
             if (!string.IsNullOrEmpty(newFileName))

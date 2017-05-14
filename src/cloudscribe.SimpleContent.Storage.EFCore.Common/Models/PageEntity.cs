@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2017-03-01
+// Last Modified:			2017-05-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -64,6 +64,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         public bool ShowLastModified { get; set; } = false;
         public bool ShowCategories { get; set; } = false;
         public bool ShowComments { get; set; } = false;
+
+        public string MenuFilters { get; set; }
 
 
         private List<string> categories;
@@ -184,6 +186,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.ViewRoles = page.ViewRoles;
             p.MenuOnly = page.MenuOnly;
             p.ShowMenu = page.ShowMenu;
+            p.MenuFilters = page.MenuFilters;
             //p.Resources = page.Resources;
 
             return p;
