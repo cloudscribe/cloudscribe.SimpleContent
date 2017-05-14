@@ -234,7 +234,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.DisqusShortname = projectSettings.DisqusShortName;
             model.FileBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "file" });
             model.ImageBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "image" });
-            model.DropFileUrl = Url.Action("Upload", "FileManager");
+            model.DropFileUrl = Url.Action("DropFile", "FileManager");
 
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))

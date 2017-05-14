@@ -220,3 +220,4 @@ src/cloudscribe.SimpleContent.Storage.EFCore.pgsql/appsettings.local.overrides.j
 src/example.WebApp/navigation.f83067b4-919d-4910-acd1-4b3b1c210ecf.xml
 **/appsettings.dev.json
 src/example.WebApp/xnavigation.f83067b4-919d-4910-acd1-4b3b1c210ecf.xml
+**/sitefiles/**/wwwroot/**

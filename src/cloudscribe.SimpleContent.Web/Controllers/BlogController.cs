@@ -322,7 +322,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             model.ProjectId = projectSettings.Id;
             model.FileBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "file" });
             model.ImageBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "image" });
-            model.DropFileUrl = Url.Action("Upload", "FileManager");
+            model.DropFileUrl = Url.Action("DropFile", "FileManager");
 
             PostResult postResult = null;
             if (!string.IsNullOrEmpty(slug))

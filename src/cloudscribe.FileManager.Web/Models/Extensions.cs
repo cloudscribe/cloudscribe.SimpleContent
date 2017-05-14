@@ -12,10 +12,21 @@ namespace cloudscribe.FileManager.Web.Models
 
             if (forceLowerCase)
             {
-                return s.ToLower().RemoveInvalidPathChars().RemoveLineBreaks().Replace("'", string.Empty).Replace("  ", " ").Replace(" ", "-").Replace("&", string.Empty).Replace("@", string.Empty).Replace("$", string.Empty).Replace("#", string.Empty).Replace("(", string.Empty).Replace(")", string.Empty);
+                s = s.ToLower();
             }
 
-            return s.RemoveInvalidPathChars().RemoveLineBreaks().Replace("'", string.Empty).Replace(" ", string.Empty).Replace("&", string.Empty).Replace("@", string.Empty).Replace("$", string.Empty).Replace("#", string.Empty).Replace("(", string.Empty).Replace(")", string.Empty);
+            return s.RemoveInvalidPathChars().RemoveLineBreaks()
+                .Replace("'", string.Empty)
+                .Replace(" ", string.Empty)
+                .Replace("&", string.Empty)
+                .Replace("@", string.Empty)
+                .Replace("$", string.Empty)
+                .Replace("#", string.Empty)
+                .Replace("(", string.Empty)
+                .Replace(")", string.Empty)
+                .Replace("/",string.Empty)
+                .Replace("\\", string.Empty)
+                ;
 
         }
 
@@ -25,10 +36,21 @@ namespace cloudscribe.FileManager.Web.Models
 
             if (forceLowerCase)
             {
-                return s.ToLower().RemoveInvalidPathChars().RemoveLineBreaks().Replace("'", string.Empty).Replace("  ", " ").Replace(" ", "-").Replace(".", string.Empty).Replace(",", string.Empty).Replace("&", string.Empty).Replace("@", string.Empty).Replace("$", string.Empty).Replace("#", string.Empty);
+                s = s.ToLower();
             }
 
-            return s.RemoveInvalidPathChars().RemoveLineBreaks().Replace("'", string.Empty).Replace(" ", string.Empty).Replace(".", string.Empty).Replace(",", string.Empty).Replace("&", string.Empty).Replace("@", string.Empty).Replace("$", string.Empty).Replace("#", string.Empty);
+            return s.RemoveInvalidPathChars().RemoveLineBreaks()
+                .Replace("'", string.Empty)
+                .Replace(" ", string.Empty)
+                .Replace(".", string.Empty)
+                .Replace(",", string.Empty)
+                .Replace("&", string.Empty)
+                .Replace("@", string.Empty)
+                .Replace("$", string.Empty)
+                .Replace("#", string.Empty)
+                .Replace("/", string.Empty)
+                .Replace("\\", string.Empty)
+                ;
 
         }
 
