@@ -9,11 +9,21 @@
     padding-left: 15px;
     padding-right: 15px;
 }
-.paper-body {
+.readable-theme , 
+.paper-theme {
     margin-top: 18px;
 }
- 
 
+
+.darkly-theme,
+.flatly-theme {
+    margin-top: 10px;
+}
+
+.sandstone-theme,
+.journal-theme {
+    margin-top: 14px;
+}
 /* Set widths on the form inputs since otherwise they're 100% wide */
 /*
 input,
@@ -22,7 +32,6 @@ textarea {
     max-width: 280px;
 }
 */
-
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
