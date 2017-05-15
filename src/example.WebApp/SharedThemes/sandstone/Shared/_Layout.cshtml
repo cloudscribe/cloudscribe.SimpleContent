@@ -44,7 +44,7 @@
         </div>
     </header>
     @RenderSection("Toolbar", required: false)
-    <div class="container body-content">
+    <div class="container body-content sandstone-theme">
         @await Component.InvokeAsync("Navigation", new { viewName = "BootstrapBreadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
         @await Html.PartialAsync("AlertsPartial")
         @RenderBody()
