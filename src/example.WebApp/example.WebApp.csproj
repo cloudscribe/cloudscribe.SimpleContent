@@ -8,7 +8,6 @@
     <OutputType>Exe</OutputType>
     <PackageId>example.WebApp</PackageId>
     <UserSecretsId>aspnet-example.WebApp-df9a79b9-e4c7-4c72-a64f-62835002c42f</UserSecretsId>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
 
@@ -46,7 +45,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.*" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.*" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.*" />
     <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="1.1.0-*" />

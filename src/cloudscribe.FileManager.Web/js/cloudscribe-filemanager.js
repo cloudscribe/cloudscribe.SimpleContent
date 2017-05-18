@@ -997,11 +997,14 @@
         }
         else {
             var related = $(e.relatedTarget).attr("href"); //previous tab
-            var hash = related.replace(/^.*?(#|$)/, '');
-            //alert(hash);
-            if (hash === "tabCrop") {
-                cropManager.tearDown();
+            if (related) {
+                var hash = related.replace(/^.*?(#|$)/, '');
+                //alert(hash);
+                if (hash === "tabCrop") {
+                    cropManager.tearDown();
+                }
             }
+            
         }
     });
 
