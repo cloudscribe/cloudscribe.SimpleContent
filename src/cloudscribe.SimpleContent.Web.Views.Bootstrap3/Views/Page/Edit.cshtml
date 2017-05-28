@@ -25,7 +25,6 @@
     <h2>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
     <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
-    <input type="hidden" id="correlationKey" name="correlationKey" value="@Model.CorrelationKey" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
     <div asp-validation-summary="All" class="text-danger"></div>
      @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
@@ -56,6 +55,7 @@
                     <span asp-validation-for="MetaDescription" class="text-danger"></span>
                 </div>
             </div>
+            @{ Html.RenderPartial("EditCorrelationKeyPartial", Model); }
             <div class="form-group">
                 <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
                 <div class="col-md-10">

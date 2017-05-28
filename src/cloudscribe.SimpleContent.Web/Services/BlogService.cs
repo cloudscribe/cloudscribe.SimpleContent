@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-22
+// Last Modified:           2017-05-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -211,7 +211,9 @@ namespace cloudscribe.SimpleContent.Services
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 post.Content);
-            
+            // olw also adds hard coded style to images
+            post.Content = htmlProcessor.RemoveImageStyleAttribute(post.Content);
+
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)
             {
@@ -257,6 +259,8 @@ namespace cloudscribe.SimpleContent.Services
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 post.Content);
+            // olw also adds hard coded style to images
+            post.Content = htmlProcessor.RemoveImageStyleAttribute(post.Content);
             
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)
@@ -273,13 +277,12 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            // here we need to process any base64 embedded images
-            // save them under wwwroot
-            // and update the src in the post with the new url
-            post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-                settings.LocalMediaVirtualPath,
-                post.Content
-                ).ConfigureAwait(false);
+            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
+            // but we don't use that anymore. now we have ckeditor and filemanager integration
+            //post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            //    settings.LocalMediaVirtualPath,
+            //    post.Content
+            //    ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
             if(post.PubDate == nonPublishedDate)
@@ -295,13 +298,12 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            // here we need to process any base64 embedded images
-            // save them under wwwroot
-            // and update the src in the post with the new url
-            post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-                settings.LocalMediaVirtualPath,
-                post.Content
-                ).ConfigureAwait(false);
+            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
+            // but we don't use that anymore. now we have ckeditor and filemanager integration
+            //post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            //    settings.LocalMediaVirtualPath,
+            //    post.Content
+            //    ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)
@@ -552,12 +554,26 @@ namespace cloudscribe.SimpleContent.Services
             return result;
         }
 
+        /// <summary>
+        /// this is only used for processing images added via metaweblog api
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public async Task<string> ResolveMediaUrl(string fileName)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
             return await mediaProcessor.ResolveMediaUrl(settings.LocalMediaVirtualPath, fileName).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// this is only used for processing images added via metaweblog api
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="bytes"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public async Task SaveMedia(
             string projectId, 
             string userName,

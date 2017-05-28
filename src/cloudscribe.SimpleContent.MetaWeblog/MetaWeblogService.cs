@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2016-08-01
+// Last Modified:           2017-05-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -221,7 +221,9 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             MediaObjectStruct mediaObject)
         {
             string extension = Path.GetExtension(mediaObject.name);
-            string fileName = Guid.NewGuid().ToString() + extension;
+            //string fileName = Guid.NewGuid().ToString() + extension;
+            string fileName = Path.GetFileName(mediaObject.name).ToLowerInvariant().Replace("_thumb", "-wlw");
+
             await blogService.SaveMedia(
                 blogId, 
                 userName,

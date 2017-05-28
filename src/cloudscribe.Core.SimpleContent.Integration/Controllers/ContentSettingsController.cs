@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-05-02
+// Last Modified:			2017-05-28
 // 
 
 using cloudscribe.Core.Models;
@@ -84,6 +84,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             model.BlogPagePosition = projectSettings.BlogPagePosition;
             model.BlogPageText = projectSettings.BlogPageText;
             model.BlogPageNavComponentVisibility = projectSettings.BlogPageNavComponentVisibility;
+            model.LocalMediaVirtualPath = projectSettings.LocalMediaVirtualPath;
 
             bool canManageUsers = false;
             try
@@ -185,6 +186,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Controllers
             projectSettings.AddBlogToPagesTree = model.AddBlogToPagesTree;
             projectSettings.BlogPageText = model.BlogPageText;
             projectSettings.BlogPageNavComponentVisibility = model.BlogPageNavComponentVisibility;
+            projectSettings.LocalMediaVirtualPath = model.LocalMediaVirtualPath;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

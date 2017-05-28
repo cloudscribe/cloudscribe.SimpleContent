@@ -9,12 +9,26 @@
     <PackageId>example.WebApp</PackageId>
     <UserSecretsId>aspnet-example.WebApp-df9a79b9-e4c7-4c72-a64f-62835002c42f</UserSecretsId>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
+    <SetExternalToolsPath Condition="'$(ExternalToolsPath)' != ''">SET PATH=$(ExternalToolsPath) &amp;&amp; </SetExternalToolsPath>
   </PropertyGroup>
 
   <ItemGroup>
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views;navigation.xml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
+
+    <Content Remove="appsettings.dev.json" CopyToPublishDirectory="Never" />
+    <Content Remove="hosting.json" CopyToPublishDirectory="Never" />
+    <Content Remove="bower.json" CopyToPublishDirectory="Never" />
+    <Content Remove="bundleconfig.json" CopyToPublishDirectory="Never" />
+    <Content Remove="wwwroot\lib\**\*" CopyToPublishDirectory="Never" />
+
+    <Content Include="appsettings.dev.json" CopyToPublishDirectory="Never" />
+    <Content Include="hosting.json" CopyToPublishDirectory="Never" />
+    <Content Include="bower.json" CopyToPublishDirectory="Never" />
+    <Content Include="bundleconfig.json" CopyToPublishDirectory="Never" />
+    <Content Include="wwwroot\lib\**\*" CopyToPublishDirectory="Never" />
+    
   </ItemGroup>
 
   <ItemGroup>
@@ -67,7 +81,7 @@
   </ItemGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install" />
+    <Exec Command="$(SetExternalToolsPath)bower install" />
     <Exec Command="dotnet bundle" />
   </Target>
 

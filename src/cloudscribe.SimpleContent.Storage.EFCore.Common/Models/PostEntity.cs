@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2017-03-10
+// Last Modified:			2017-05-28
 // 
 
 
@@ -115,6 +115,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.PubDate = post.PubDate;
             p.Slug = post.Slug;
             p.Title = post.Title;
+            p.CorrelationKey = post.CorrelationKey;
 
             return p;
         }
