@@ -5,10 +5,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -197,6 +195,44 @@ namespace cloudscribe.SimpleContent.Services
             return Task.FromResult(htmlOutput);
         }
 
+        public string RemoveImageStyleAttribute(
+            string htmlInput)
+        {
+            string newHtml;
+            using (var writer = new StringWriter())
+            {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(htmlInput);
+           
+                foreach (var img in doc.DocumentNode.Descendants("img"))
+                {
+                    if (img.Attributes["style"] != null)
+                    {
+                        img.Attributes["style"].Remove();  
+                    }
+
+                    if (img.Attributes["height"] != null)
+                    {
+                        img.Attributes["height"].Remove();
+                    }
+
+                    if (img.Attributes["width"] != null)
+                    {
+                        img.Attributes["width"].Remove();
+                    }
+
+                }
+
+                doc.Save(writer);
+                newHtml = writer.ToString();
+            }
+
+            
+
+            return newHtml;
+
+        }
+
         public string ConvertUrlsToAbsolute(
             string absoluteBaseMediaUrl,
             string htmlInput)
@@ -213,6 +249,7 @@ namespace cloudscribe.SimpleContent.Services
                     if (src.StartsWith("data")) continue; //base64
                     if (src.StartsWith("http")) continue;
                     img.Attributes["src"].Value = new Uri(new Uri(absoluteBaseMediaUrl), src).AbsoluteUri;
+                    
                 }
                 
             }

@@ -1,0 +1,16 @@
+﻿@model cloudscribe.Core.SimpleContent.Integration.ViewModels.ContentSettingsViewModel
+@using cloudscribe.Core.SimpleContent.Integration
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContentIntegration> sr
+@* comment this and uncomment the below if you want editable correlationkey *@
+<input type="hidden" asp-for="@Model.LocalMediaVirtualPath" />
+@*
+        <div class="form-group">
+        <label asp-for="LocalMediaVirtualPath" class="col-md-2 control-label">@sr["Image Path"]</label>
+        <div class="col-md-10">
+            <input asp-for="LocalMediaVirtualPath" class="form-control" />
+            <span asp-validation-for="LocalMediaVirtualPath" class="text-danger"></span>
+        </div>
+    </div>
+*@
+ 

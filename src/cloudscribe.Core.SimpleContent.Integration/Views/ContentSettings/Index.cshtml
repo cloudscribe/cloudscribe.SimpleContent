@@ -166,6 +166,7 @@
                     </div>
                 </div>
             </div>
+            @{ Html.RenderPartial("MediaPathPartial", Model); }
             <div class="form-group">
                 <label asp-for="Publisher" class="col-md-2 control-label">@sr["Publisher"]</label>
                 <div class="col-md-10">

@@ -4,6 +4,7 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
 
@@ -26,7 +27,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
             services.AddScoped<IProjectSecurityResolver, ProjectSecurityResolver>();
 
-            services.AddScoped<MediaFolderHelper, MediaFolderHelper>();
+            services.TryAddScoped<IMediaProcessor, SiteFileSystemMediaProcessor>();
+
+            //services.AddScoped<MediaFolderHelper, MediaFolderHelper>();
             services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
             services.AddScoped<IPageRoutes, MultiTenantPageRoutes>();
             services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2017-03-09
+// Last Modified:			2017-05-28
 // 
 
 using cloudscribe.Core.Models;
@@ -31,14 +31,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
         public string PubDateFormat { get; set; } = "MMMM d. yyyy";
         public bool IncludePubDateInPostUrls { get; set; } = true;
-
-       
-
-
-        //public string LocalMediaVirtualPath { get; set; } = "/media/images/";
-
-
-
+        
+        public string LocalMediaVirtualPath { get; set; } = "/media/images/";
+        
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;
 

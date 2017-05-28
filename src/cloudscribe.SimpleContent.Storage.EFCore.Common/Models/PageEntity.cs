@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2017-05-14
+// Last Modified:			2017-05-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -166,6 +166,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Categories = page.Categories;
             p.Comments = page.Comments;
             p.Content = page.Content;
+            p.CorrelationKey = page.CorrelationKey;
             p.ExternalUrl = page.ExternalUrl;
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;

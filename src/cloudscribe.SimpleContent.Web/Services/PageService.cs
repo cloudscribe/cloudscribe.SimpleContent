@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-04-22
+// Last Modified:           2017-05-28
 // 
 
 
@@ -184,6 +184,9 @@ namespace cloudscribe.SimpleContent.Services
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 page.Content);
 
+            // olw also adds hard coded style to images
+            page.Content = htmlProcessor.RemoveImageStyleAttribute(page.Content);
+
             // here we need to process any base64 embedded images
             // save them under wwwroot
             // and update the src in the post with the new url
@@ -241,6 +244,9 @@ namespace cloudscribe.SimpleContent.Services
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 page.Content);
 
+            // olw also adds hard coded style to images
+            page.Content = htmlProcessor.RemoveImageStyleAttribute(page.Content);
+
             // here we need to process any base64 embedded images
             // save them under wwwroot
             // and update the src in the post with the new url
@@ -292,10 +298,12 @@ namespace cloudscribe.SimpleContent.Services
                 imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
             }
             
-            page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-                settings.LocalMediaVirtualPath,
-                page.Content
-                ).ConfigureAwait(false);
+            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
+            // but we don't use that anymore. now we have ckeditor and filemanager integration
+            //page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            //    settings.LocalMediaVirtualPath,
+            //    page.Content
+            //    ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (page.PubDate == nonPublishedDate)
@@ -319,11 +327,13 @@ namespace cloudscribe.SimpleContent.Services
             {
                 imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
             }
-            
-            page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-                settings.LocalMediaVirtualPath,
-                page.Content
-                ).ConfigureAwait(false);
+
+            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
+            // but we don't use that anymore. now we have ckeditor and filemanager integration
+            //page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
+            //    settings.LocalMediaVirtualPath,
+            //    page.Content
+            //    ).ConfigureAwait(false);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (page.PubDate == nonPublishedDate)

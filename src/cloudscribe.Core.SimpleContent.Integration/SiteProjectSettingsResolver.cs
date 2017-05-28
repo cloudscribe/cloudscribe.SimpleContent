@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-07-11
-// Last Modified:           2016-10-08
+// Last Modified:           2017-05-28
 // 
 
 using cloudscribe.Core.Models;
@@ -16,7 +16,6 @@ namespace cloudscribe.Core.SimpleContent.Integration
     {
         public SiteProjectSettingsResolver(
             SiteContext currentSite,
-            MediaFolderHelper folderHelper,
             IProjectQueries projectQueries,
             IProjectCommands projectCommands
             )
@@ -24,11 +23,9 @@ namespace cloudscribe.Core.SimpleContent.Integration
             this.currentSite = currentSite;
             this.projectQueries = projectQueries;
             this.projectCommands = projectCommands;
-            this.folderHelper = folderHelper;
         }
 
         private SiteContext currentSite;
-        private MediaFolderHelper folderHelper;
         private IProjectQueries projectQueries;
         private IProjectCommands projectCommands;
 
@@ -41,13 +38,6 @@ namespace cloudscribe.Core.SimpleContent.Integration
             {
                 settings = new ProjectSettings();
                 settings.Id = currentSite.Id.ToString();
-                if(!string.IsNullOrEmpty(currentSite.AliasId))
-                {
-                    settings.LocalMediaVirtualPath = "/" + currentSite.AliasId + "/media/images/";
-                    // need to create the folder path below wwwroot
-                    var segments = new string[3] { currentSite.AliasId, "media", "images" };
-                    folderHelper.EnsureMediaFolderExists(segments);
-                }
                 
                 await projectCommands.Create(settings.Id, settings, cancellationToken).ConfigureAwait(false);
             }
