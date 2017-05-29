@@ -48,6 +48,7 @@
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
             </div>
+            @{ Html.RenderPartial("EditCorrelationKeyPartial", Model); }
             <div class="form-group">
                 <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
                 <div class="col-md-10">
@@ -55,7 +56,6 @@
                     <span asp-validation-for="MetaDescription" class="text-danger"></span>
                 </div>
             </div>
-            @{ Html.RenderPartial("EditCorrelationKeyPartial", Model); }
             <div class="form-group">
                 <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
                 <div class="col-md-10">
