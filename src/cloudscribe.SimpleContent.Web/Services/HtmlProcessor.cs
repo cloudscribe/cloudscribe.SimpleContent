@@ -30,6 +30,7 @@ namespace cloudscribe.SimpleContent.Services
 
         private static string ShortenUrl(string url, int max)
         {
+            if (string.IsNullOrWhiteSpace(url)) return url;
             if (url.Length <= max)
             {
                 return url;
@@ -113,6 +114,8 @@ namespace cloudscribe.SimpleContent.Services
             string cdnUrl = "",
             string rootPath = "")
         {
+            if (string.IsNullOrWhiteSpace(htmlInput)) return string.Empty;
+
             var htmlOutput = htmlInput;
 
             // Youtube content embedded using this syntax: [youtube:xyzAbc123]
@@ -198,6 +201,7 @@ namespace cloudscribe.SimpleContent.Services
         public string RemoveImageStyleAttribute(
             string htmlInput)
         {
+            if (string.IsNullOrWhiteSpace(htmlInput)) return htmlInput;
             string newHtml;
             using (var writer = new StringWriter())
             {
@@ -237,6 +241,7 @@ namespace cloudscribe.SimpleContent.Services
             string absoluteBaseMediaUrl,
             string htmlInput)
         {
+            if (string.IsNullOrWhiteSpace(htmlInput)) return htmlInput;
             var writer = new StringWriter();
             var doc = new HtmlDocument();
             doc.LoadHtml(htmlInput);
@@ -274,7 +279,9 @@ namespace cloudscribe.SimpleContent.Services
         }
 
         public string ExtractFirstImageUrl(string htmlInput)
-        { 
+        {
+            if (string.IsNullOrWhiteSpace(htmlInput)) return htmlInput;
+
             var doc = new HtmlDocument();
             doc.LoadHtml(htmlInput);
 
@@ -295,20 +302,24 @@ namespace cloudscribe.SimpleContent.Services
 
         public ImageSizeResult ExtractFirstImageDimensions(string htmlInput)
         { 
-            var doc = new HtmlDocument();
-            doc.LoadHtml(htmlInput);
-
-            foreach (var img in doc.DocumentNode.Descendants("img"))
+            if(!string.IsNullOrWhiteSpace(htmlInput))
             {
-                if(img.Attributes["style"] != null)
+                var doc = new HtmlDocument();
+                doc.LoadHtml(htmlInput);
+
+                foreach (var img in doc.DocumentNode.Descendants("img"))
                 {
-                    var style = img.Attributes["style"].Value;
-                    var styleItems = style.Split(';')
-                    .Select(s => s.Trim()).ToArray();
-                    return ExtractDims(styleItems as string[]);  
+                    if (img.Attributes["style"] != null)
+                    {
+                        var style = img.Attributes["style"].Value;
+                        var styleItems = style.Split(';')
+                        .Select(s => s.Trim()).ToArray();
+                        return ExtractDims(styleItems as string[]);
+                    }
+
                 }
-                
             }
+            
 
             return new ImageSizeResult { Width = "550px", Height = "550px" };
 

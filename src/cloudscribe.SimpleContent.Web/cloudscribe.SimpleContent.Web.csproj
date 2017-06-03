@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170527</VersionSuffix>
+    <VersionSuffix>rc20170528</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
