@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-14
-// Last Modified:           2017-05-14
+// Last Modified:           2017-06-05
 // 
 
 //using cloudscribe.FileManager.Web.Filters;
@@ -200,7 +200,7 @@ namespace cloudscribe.FileManager.Web.Controllers
             var requestPath = HttpContext.Request.Path.Value;
             log.LogDebug(requestPath + " requested");
 
-            if (requestPath.Length < 16) return NotFound();
+            if (requestPath.Length < "/filemanager/js/".Length) return NotFound();
 
             var seg = requestPath.Substring(16).Replace("/", ".").Replace("-", "_");
             var ext = Path.GetExtension(requestPath);
@@ -220,7 +220,7 @@ namespace cloudscribe.FileManager.Web.Controllers
             var requestPath = HttpContext.Request.Path.Value;
             log.LogDebug(requestPath + " requested");
 
-            if (requestPath.Length < 17) return NotFound();
+            if (requestPath.Length < "/filemanager/css/".Length) return NotFound();
 
             var seg = requestPath.Substring(17).Replace("/", ".").Replace("-", "_");
             var ext = Path.GetExtension(requestPath);
@@ -240,7 +240,7 @@ namespace cloudscribe.FileManager.Web.Controllers
             var requestPath = HttpContext.Request.Path.Value;
             log.LogDebug(requestPath + " requested");
 
-            if (requestPath.Length < 19) return NotFound();
+            if (requestPath.Length < "/filemanager/fonts/".Length) return NotFound();
 
             var seg = requestPath.Substring(19).Replace("/", ".").Replace("-", "_");
             var ext = Path.GetExtension(requestPath);

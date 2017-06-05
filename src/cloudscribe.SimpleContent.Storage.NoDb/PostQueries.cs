@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-05-01
+// Last Modified:           2017-06-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -20,20 +20,21 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     {
         public PostQueries(
             PostCache cache,
-            IBasicCommands<Post> postCommands,
-            IBasicQueries<Post> postQueries,
-            ILogger<PostQueries> logger)
+           // IBasicCommands<Post> postCommands,
+            IBasicQueries<Post> postQueries
+            //,ILogger<PostQueries> logger
+            )
         {
             this.cache = cache;
-            commands = postCommands;
+           // commands = postCommands;
             query = postQueries;
-            log = logger;
+           // log = logger;
         }
 
         private PostCache cache;
-        private IBasicCommands<Post> commands;
+       // private IBasicCommands<Post> commands;
         private IBasicQueries<Post> query;
-        private ILogger log;
+       // private ILogger log;
         
         
         public async Task<List<Post>> GetAllPosts(

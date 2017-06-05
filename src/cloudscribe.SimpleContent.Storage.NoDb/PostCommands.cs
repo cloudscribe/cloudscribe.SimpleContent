@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-11-25
+// Last Modified:           2017-06-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -21,20 +21,20 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public PostCommands(
             PostCache cache,
             IBasicCommands<Post> postCommands,
-            IBasicQueries<Post> postQueries,
-            ILogger<PostCommands> logger
+            IBasicQueries<Post> postQueries
+            //,ILogger<PostCommands> logger
             )
         {
             this.cache = cache;
             commands = postCommands;
             query = postQueries;
-            log = logger;
+           // log = logger;
         }
 
         private PostCache cache;
         private IBasicCommands<Post> commands;
         private IBasicQueries<Post> query;
-        private ILogger log;
+       // private ILogger log;
 
         public async Task HandlePubDateAboutToChange(
             string projectId,
@@ -99,12 +99,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var post = await query.FetchAsync(projectId, postId, cancellationToken).ConfigureAwait(false);
             if (post != null)
             {
-                var allPosts = await GetAllPosts(projectId, CancellationToken.None).ConfigureAwait(false);
+                //var allPosts = await GetAllPosts(projectId, CancellationToken.None).ConfigureAwait(false);
                 await commands.DeleteAsync(projectId, postId).ConfigureAwait(false);
-                allPosts.Remove(post);
+                //allPosts.Remove(post);
 
+                cache.ClearListCache(projectId);
             }
-            cache.ClearListCache(projectId);
+            
         }
 
         private async Task<List<Post>> GetAllPosts(

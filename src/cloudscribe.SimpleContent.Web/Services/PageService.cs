@@ -81,7 +81,6 @@ namespace cloudscribe.SimpleContent.Services
         {
             if (settings != null) { return; }
             settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
-            if (settings != null) { return; }
             
         }
 
