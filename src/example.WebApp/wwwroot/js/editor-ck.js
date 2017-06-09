@@ -18,7 +18,7 @@
     ['Link', 'Unlink', 'Anchor'],
     ['Image', 'oembed', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','CodeSnippet']],
         extraPlugins:'oembed,cloudscribe-filedrop,sourcedialog,codesnippet',
-        removePlugins: 'scayt,wsc,sourcearea',
+        removePlugins: 'scayt,wsc',
         format_tags: 'p;h1;h2;h3;h4;pre;address;div',
         dropFileUploadUrl: dfUrl,
         dropFileXsrfToken:xsrfToken,
@@ -27,7 +27,12 @@
         filebrowserWindowHeight:'70%',
         filebrowserWindowWidth:'80%',
         filebrowserBrowseUrl:fbUrl,
-        filebrowserImageBrowseUrl: ibUrl
+        filebrowserImageBrowseUrl: ibUrl,
+        //basicEntities: false,
+        //htmlEncodeOutput : false,
+        allowedContent : true, //temporary trying to disable filtering
+        extraAllowedContent: 'div(*){*}[*]; ol li span a(*){*}[*]', // allow all classes and attributes for these tags
+        fillEmptyBlocks: false
     };
 
     if (usingCdn === true) {
@@ -39,6 +44,13 @@
         CKEDITOR.plugins.addExternal('cloudscribe-filedrop', '/ckjs/plugins/cloudscribe-filedrop/', 'plugin.js');
 
     }
+
+    //editorConfig.protectedSource.push(/<div[^>]*><\/div>/g);
+    //CKEDITOR.dtd.$removeEmpty['div'] = false;
+
+    //$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+    //    CKEDITOR.dtd.$removeEmpty[i] = 0;
+    //});
     
     //CKEDITOR.disableAutoInline = true;
     var ck = CKEDITOR.replace(editorId, editorConfig);
@@ -47,6 +59,9 @@
     //    editor.setReadOnly(false);
     //    alert('mode');
     //});
+    ck.on('instanceCreated', function (ev) {
+        CKEDITOR.dtd.$removeEmpty['div'] = false;
+    });
 
 
     var userLocale = $('#' + datepickerid).data("locale");

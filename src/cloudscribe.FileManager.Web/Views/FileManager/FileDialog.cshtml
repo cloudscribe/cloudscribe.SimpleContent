@@ -10,11 +10,11 @@
     //https://github.com/patternfly/patternfly-bootstrap-treeview
 }
 @section style {
-    <link rel="stylesheet" href="/filemanager/css/bootstrap-treeview.min.css" />
-    <link rel="stylesheet" href="/filemanager/css/jquery.fileupload.min.css" />
-    <link rel="stylesheet" href="/filemanager/css/cropper.min.css" />
-    <link rel="stylesheet" href="/filemanager/css/filemanager.min.css" />
-    <link rel="stylesheet" href="/filemanager/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/cr/css/bootstrap-treeview.min.css" />
+    <link rel="stylesheet" href="~/cr/css/jquery.fileupload.min.css" />
+    <link rel="stylesheet" href="~/cr/css/cropper.min.css" />
+    <link rel="stylesheet" href="~/filemanager/css/filemanager.min.css" />
+    <link rel="stylesheet" href="~/cr/css/font-awesome.min.css" />
     <style>
         .fileupload-dropzone {
             border-radius: 0;
@@ -47,7 +47,7 @@
       data-delete-file-url="@Model.DeleteFileServiceUrl"
       data-rename-file-url="@Model.RenameFileServiceUrl"
       data-root-virtual-path="@Model.InitialVirtualPath"
-      data-empty-preview-url='@Url.Content("/filemanager/css/1x1.gif")'></span>
+      data-empty-preview-url='@Url.Content("~/cr/css/1x1.gif")'></span>
 <div id="alert_placeholder"></div>
 <div class="container-fluid">
     <ul class="nav nav-tabs" role="tablist">
@@ -83,26 +83,26 @@
 @section scripts {
 
     <environment names="Development">
-        <script src="/filemanager/js/jquery.js"></script>
-        <script src="/filemanager/js/tether.min.js"></script>
-        <script src="/filemanager/js/bootstrap.js"></script>
-        <script src="/filemanager/js/bootstrap-treeview.js"></script>
-        <script src="/filemanager/js/jquery.ui.widget.js"></script>
-        <script src="/filemanager/js/jquery.iframe-transport.js"></script>
-        <script src="/filemanager/js/jquery.fileupload.js"></script>
-        <script src="/filemanager/js/cropper3.js"></script>
-        <script src="/filemanager/js/cloudscribe-filemanager.js"></script>
+        <script src="~/cr/js/jquery.js"></script>
+        <script src="~/cr/js/tether.min.js"></script>
+        <script src="~/cr/js/bootstrap.js"></script>
+        <script src="~/cr/js/bootstrap-treeview.js"></script>
+        <script src="~/cr/js/jquery.ui.widget.js"></script>
+        <script src="~/cr/js/jquery.iframe-transport.js"></script>
+        <script src="~/cr/js/jquery.fileupload.js"></script>
+        <script src="~/cr/js/cropper3.js"></script>
+        <script src="~/filemanager/js/cloudscribe-filemanager.js"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="/filemanager/js/jquery.min.js"></script>
-        <script src="/filemanager/js/tether.min.js"></script>
-        <script src="/filemanager/js/bootstrap.min.js"></script>
-        <script src="/filemanager/js/bootstrap-treeview.min.js"></script>
-        <script src="/filemanager/js/jquery.ui.widget.min.js"></script>
-        <script src="/filemanager/js/jquery.iframe-transport.min.js"></script>
-        <script src="/filemanager/js/jquery.fileupload.min.js"></script>
-        <script src="/filemanager/js/cropper3.min.js"></script>
-        <script src="/filemanager/js/cloudscribe-filemanager.min.js"></script>
+        <script src="~/cr/js/jquery.min.js"></script>
+        <script src="~/cr/js/tether.min.js"></script>
+        <script src="~/cr/js/bootstrap.min.js"></script>
+        <script src="~/cr/js/bootstrap-treeview.min.js"></script>
+        <script src="~/cr/js/jquery.ui.widget.min.js"></script>
+        <script src="~/cr/js/jquery.iframe-transport.min.js"></script>
+        <script src="~/cr/js/jquery.fileupload.min.js"></script>
+        <script src="~/cr/js/cropper3.min.js"></script>
+        <script src="~/filemanager/js/cloudscribe-filemanager.min.js"></script>
     </environment>
 
     <script type="text/javascript">

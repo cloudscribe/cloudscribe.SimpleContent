@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-05-14
+// Last Modified:           2017-06-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -232,10 +232,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             var model = new PageEditViewModel();
             model.ProjectId = projectSettings.Id;
             model.DisqusShortname = projectSettings.DisqusShortName;
-            model.FileBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "file" });
-            model.ImageBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "image" });
-            model.DropFileUrl = Url.Action("DropFile", "FileManager");
-
+           
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {

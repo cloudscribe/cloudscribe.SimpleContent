@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="~/css/bootstrap.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    <link href="~/ckjs/plugins/codesnippet/lib/highlight/styles/atelier-forest.light.css" rel="stylesheet">
+    <link href="~/cr/js/ckeditor461/plugins/codesnippet/lib/highlight/styles/atelier-forest.light.css" rel="stylesheet">
     @RenderSection("Styles", required: false)
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId"></google-analytics>
 </head>
@@ -61,7 +61,7 @@
         <script src="~/js/jquery.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         <script src="~/js/bootstrap.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
     </environment>
-    <script src="~/ckjs/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+    <script src="~/cr/js/ckeditor461/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     @RenderSection("Bottom", required: false)
     @RenderSection("scripts", required: false)

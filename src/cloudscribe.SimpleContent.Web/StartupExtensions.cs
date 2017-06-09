@@ -28,20 +28,14 @@ namespace Microsoft.Extensions.DependencyInjection
             return routes;
         }
 
-        public static IRouteBuilder AddCloudscribeFileManagerRoutesForSimpleContent(this IRouteBuilder routes)
-        {
-            routes.AddCloudscribeFileManagerRoutes();
-            return routes;
-        }
+        //public static IRouteBuilder AddCloudscribeFileManagerRoutesForSimpleContent(this IRouteBuilder routes)
+        //{
+        //    routes.AddCloudscribeFileManagerRoutes();
+        //    return routes;
+        //}
 
-        public static IRouteBuilder AddCkEditorRoutesForSimpleContent(this IRouteBuilder routes)
+        public static IRouteBuilder AddSimpleContentStaticResourceRoutes(this IRouteBuilder routes)
         {
-            routes.MapRoute(
-               name: "ckjs",
-               template: "ckjs/{*slug}"
-               , defaults: new { controller = "csscsr", action = "ckjs" }
-               );
-
             routes.MapRoute(
                name: "csscsrjs",
                template: "csscsr/js/{*slug}"

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using cloudscribe.SimpleContent.Web.Controllers;
+//using cloudscribe.FileManager.Web;
 
 namespace example.WebApp
 {
@@ -85,6 +86,7 @@ namespace example.WebApp
             
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.Web.Navigation.NavigationNodePermissionResolver>();
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.SimpleContent.Web.Services.PagesNavigationNodePermissionResolver>();
+
             services.AddCloudscribeCore(Configuration);
             
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
@@ -167,7 +169,7 @@ namespace example.WebApp
                 .AddRazorOptions(options =>
                 {
                     options.AddCloudscribeViewLocationFormats();
-
+                    options.AddCloudscribeCommonEmbeddedViews();
                     options.AddEmbeddedViewsForNavigation();
                     options.AddEmbeddedBootstrap3ViewsForCloudscribeCore();
                     options.AddEmbeddedViewsForCloudscribeLogging();
@@ -218,6 +220,8 @@ namespace example.WebApp
             app.UseSession();
 
             app.UseRequestLocalization(localizationOptionsAccessor.Value);
+
+            app.UseCloudscribeCommonStaticFiles();
 
             app.UseMultitenancy<cloudscribe.Core.Models.SiteContext>();
 
@@ -287,8 +291,10 @@ namespace example.WebApp
                 }
 
                 routes.AddBlogRoutesForSimpleContent();
-                routes.AddCkEditorRoutesForSimpleContent();
-                routes.AddCloudscribeFileManagerRoutesForSimpleContent();
+                routes.AddSimpleContentStaticResourceRoutes();
+                routes.AddCloudscribeFileManagerRoutes();
+
+                //routes.AddCloudscribeFileManagerRoutesForSimpleContent();
 
                 if (useFolders)
                 {
@@ -441,14 +447,14 @@ namespace example.WebApp
                     "FileManagerPolicy",
                     authBuilder =>
                     {
-                        authBuilder.RequireRole("Administrators");
+                        authBuilder.RequireRole("Administrators", "Content Administrators");
                     });
 
                 options.AddPolicy(
                     "FileManagerDeletePolicy",
                     authBuilder =>
                     {
-                        authBuilder.RequireRole("Administrators");
+                        authBuilder.RequireRole("Administrators", "Content Administrators");
                     });
 
                 // this is what the above extension adds

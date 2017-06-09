@@ -1,6 +1,4 @@
-﻿using cloudscribe.SimpleContent.Models;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -56,13 +54,6 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool MenuOnly { get; set; } = false;
         [StringLength(500, ErrorMessage ="The menu filters has a maximun length of 500 characters")]
         public string MenuFilters { get; set; }
-
-        public string DropFileUrl { get; set; } = "/filemanager/dropfile";
-
-        public string FileBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=file";
-
-        public string ImageBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=image";
-
         
 
     }

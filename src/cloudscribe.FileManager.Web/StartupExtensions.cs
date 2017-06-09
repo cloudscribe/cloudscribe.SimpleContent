@@ -1,5 +1,6 @@
 ﻿using cloudscribe.FileManager.Web.Models;
 using cloudscribe.FileManager.Web.Services;
+using cloudscribe.FileManager.Web;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,8 +9,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
+using cloudscribe.FileManager.Web.Controllers;
 
-namespace cloudscribe.FileManager.Web
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class StartupExtensions
     {
@@ -49,32 +51,25 @@ namespace cloudscribe.FileManager.Web
                , defaults: new { controller = "FileManager", action = "css" }
                );
 
-            routes.MapRoute(
-               name: "filemanagerfonts",
-               template: "filemanager/fonts/{*slug}"
-               , defaults: new { controller = "FileManager", action = "fonts" }
-               );
+            //routes.MapRoute(
+            //   name: "filemanagerfonts",
+            //   template: "filemanager/fonts/{*slug}"
+            //   , defaults: new { controller = "FileManager", action = "fonts" }
+            //   );
 
             return routes;
         }
 
 
-        
-
-    }
-}
-namespace Microsoft.Extensions.DependencyInjection
-{
-    public static class EmbeddedViews
-    {
         public static RazorViewEngineOptions AddBootstrap3EmbeddedViewsForFileManager(this RazorViewEngineOptions options)
         {
             options.FileProviders.Add(new EmbeddedFileProvider(
-                    typeof(EmbeddedViews).GetTypeInfo().Assembly,
+                    typeof(FileManagerController).GetTypeInfo().Assembly,
                     "cloudscribe.FileManager.Web"
                 ));
 
             return options;
         }
+
     }
 }

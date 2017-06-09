@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-26
-// Last Modified:			2016-10-08
+// Last Modified:			2017-06-09
 // 
 
 
@@ -19,8 +19,8 @@ namespace cloudscribe.Core.SimpleContent.Integration
             this.currentSite = currentSite;
             
             RequiredScriptPaths = new List<string>();
-            RequiredScriptPaths.Add("~/cscsr/jqueryajax");
-            RequiredScriptPaths.Add("~/cscsr/roleselectorjs");
+            RequiredScriptPaths.Add("~/cr/js/jquery.unobtrusive-ajax.min.js");
+            RequiredScriptPaths.Add("~/cr/js/cloudscribe-role-selector.min.js");
 
         }
 

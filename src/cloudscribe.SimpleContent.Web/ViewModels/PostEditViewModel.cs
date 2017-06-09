@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2017-03-02
-// Last Modified:           2017-03-11
+// Last Modified:           2017-06-09
 // 
 
 using System.ComponentModel.DataAnnotations;
@@ -41,10 +41,6 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string DeletePostRouteName { get; set; }
 
-        public string DropFileUrl { get; set; } = "/filemanager/upload";
-
-        public string FileBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=file";
-
-        public string ImageBrowseUrl { get; set; } = "/filemanager/ckfiledialog?type=image";
+       
     }
 }
