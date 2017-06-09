@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Bootstrap 3 views for cloudscribe.SimpleContent.Web</Description>
     <VersionPrefix>1.1.1</VersionPrefix>
-    <VersionSuffix>rc20170527</VersionSuffix>
+    <VersionSuffix>rc20170607</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net451;net452;net46;netstandard1.6</TargetFrameworks>
     <AssemblyName>cloudscribe.SimpleContent.Web.Views.Bootstrap3</AssemblyName>
@@ -22,8 +22,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Views\**" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
-
-  
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="1.1.*" />

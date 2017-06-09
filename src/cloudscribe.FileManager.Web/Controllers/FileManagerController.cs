@@ -2,12 +2,13 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2017-02-14
-// Last Modified:           2017-06-05
+// Last Modified:           2017-06-09
 // 
 
 //using cloudscribe.FileManager.Web.Filters;
 using cloudscribe.FileManager.Web.Models;
 using cloudscribe.FileManager.Web.Services;
+using cloudscribe.Web.Common.Helpers;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,7 @@ namespace cloudscribe.FileManager.Web.Controllers
             IFileExtensionValidationRegexBuilder allowedFilesRegexBuilder,
             IOptions<AutomaticUploadOptions> autoUploadOptionsAccessor,
             IAntiforgery antiforgery,
+            IResourceHelper resourceHelper,
             ILogger<FileManagerController> logger
             )
         {
@@ -42,6 +44,7 @@ namespace cloudscribe.FileManager.Web.Controllers
             this.allowedFilesRegexBuilder = allowedFilesRegexBuilder;
             autoUploadOptions = autoUploadOptionsAccessor.Value;
             this.antiforgery = antiforgery;
+            this.resourceHelper = resourceHelper;
             log = logger;
         }
 
@@ -50,6 +53,7 @@ namespace cloudscribe.FileManager.Web.Controllers
         private IFileExtensionValidationRegexBuilder allowedFilesRegexBuilder;
         private AutomaticUploadOptions autoUploadOptions;
         private readonly IAntiforgery antiforgery;
+        private IResourceHelper resourceHelper;
         // Get the default form options so that we can use them to set the default limits for
         // request body data
         private static readonly FormOptions defaultFormOptions = new FormOptions();
@@ -190,135 +194,62 @@ namespace cloudscribe.FileManager.Web.Controllers
             return Json(imageList);
         }
 
-
+        // /filemanager/js/
         [HttpGet]
         [AllowAnonymous]
         public IActionResult js()
         {
             var baseSegment = "cloudscribe.FileManager.Web.js.";
-            // /filemanager/js/
+           
             var requestPath = HttpContext.Request.Path.Value;
             log.LogDebug(requestPath + " requested");
 
             if (requestPath.Length < "/filemanager/js/".Length) return NotFound();
 
-            var seg = requestPath.Substring(16).Replace("/", ".").Replace("-", "_");
+            var seg = requestPath.Substring("/filemanager/js/".Length);
             var ext = Path.GetExtension(requestPath);
-            var mimeType = GetMimeType(ext);
+            var mimeType = resourceHelper.GetMimeType(ext);
 
-            return GetResult(
-                baseSegment + seg,
-                mimeType);
+            return GetResult(baseSegment + seg, mimeType);
         }
 
+        // /filemanager/css/
         [HttpGet]
         [AllowAnonymous]
         public IActionResult css()
         {
             var baseSegment = "cloudscribe.FileManager.Web.css.";
-            // /filemanager/css/
+           
             var requestPath = HttpContext.Request.Path.Value;
             log.LogDebug(requestPath + " requested");
 
             if (requestPath.Length < "/filemanager/css/".Length) return NotFound();
 
-            var seg = requestPath.Substring(17).Replace("/", ".").Replace("-", "_");
+            var seg = requestPath.Substring("/filemanager/css/".Length);
             var ext = Path.GetExtension(requestPath);
-            var mimeType = GetMimeType(ext);
+            var mimeType = resourceHelper.GetMimeType(ext);
 
-            return GetResult(
-                baseSegment + seg,
-                mimeType);
+            return GetResult(baseSegment + seg, mimeType);
         }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult fonts()
-        {
-            var baseSegment = "cloudscribe.FileManager.Web.fonts.";
-            // /filemanager/fonts/
-            var requestPath = HttpContext.Request.Path.Value;
-            log.LogDebug(requestPath + " requested");
-
-            if (requestPath.Length < "/filemanager/fonts/".Length) return NotFound();
-
-            var seg = requestPath.Substring(19).Replace("/", ".").Replace("-", "_");
-            var ext = Path.GetExtension(requestPath);
-            var mimeType = GetMimeType(ext);
-
-            return GetResult(
-                baseSegment + seg,
-                mimeType);
-        }
-
-
+        
         private IActionResult GetResult(string resourceName, string contentType)
         {
             var assembly = typeof(FileManagerController).GetTypeInfo().Assembly;
+            resourceName = resourceHelper.ResolveResourceIdentifier(resourceName);
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
             if (resourceStream == null)
             {
-                resourceStream
-                = assembly.GetManifestResourceStream(resourceName.Replace("_", "-"));
-                if (resourceStream == null)
-                {
-                    log.LogError("resource not found for " + resourceName);
-                    return NotFound();
-                }
-                log.LogDebug("resource found for " + resourceName);
+                log.LogError("resource not found for " + resourceName);
+                return NotFound();
             }
-            else
-            {
 
-                log.LogDebug("resource found for " + resourceName);
+            log.LogDebug("resource found for " + resourceName);
 
-            }
-           
             return new FileStreamResult(resourceStream, contentType);
-
-
-
         }
 
-        private string GetMimeType(string extension)
-        {
-            switch (extension)
-            {
-                case ".jpg":
-                case ".jpeg":
-                    return "image/jpeg";
 
-                case ".gif":
-                    return "image/gif";
-
-                case ".png":
-                    return "image/png";
-
-                case ".css":
-                    return "text/css";
-
-                case ".otf":
-                    return "font/otf";
-
-                case ".eot":
-                    return "application/vnd.ms-fontobject";
-
-                case ".svg":
-                    return "image/svg+xml";
-
-                case ".ttf":
-                    return "application/octet-stream";
-
-                case ".woff":
-                case ".woff2":
-                    return "application/font-woff";
-
-                case ".js":
-                default:
-                    return "text/javascript";
-
-            }
-        }
+        
 
         //[HttpPost]
         //[Authorize(Policy = "FileManagerPolicy")]

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-05-02
+// Last Modified:           2017-06-09
 // 
 
 
@@ -320,10 +320,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
 
             var model = new PostEditViewModel();
             model.ProjectId = projectSettings.Id;
-            model.FileBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "file" });
-            model.ImageBrowseUrl = Url.Action("FileDialog", "FileManager", new { type = "image" });
-            model.DropFileUrl = Url.Action("DropFile", "FileManager");
-
+            
             PostResult postResult = null;
             if (!string.IsNullOrEmpty(slug))
             {
