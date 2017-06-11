@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-06-09
+// Last Modified:           2017-06-11
 // 
 
 
@@ -36,6 +36,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IHtmlProcessor htmlProcessor,
             IProjectEmailService emailService,
             IAuthorizationService authorizationService,
+            IAuthorNameResolver authorNameResolver,
             ITimeZoneHelper timeZoneHelper,
             IStringLocalizer<SimpleContent> localizer,
             ILogger<BlogController> logger
@@ -45,6 +46,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.blogService = blogService;
             this.htmlProcessor = htmlProcessor;
             this.blogRoutes = blogRoutes;
+            this.authorNameResolver = authorNameResolver;
             this.emailService = emailService;
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
@@ -55,6 +57,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private IProjectService projectService;
         private IBlogService blogService;
         private IBlogRoutes blogRoutes;
+        private IAuthorNameResolver authorNameResolver;
         private IProjectEmailService emailService;
         private IHtmlProcessor htmlProcessor;
         private ILogger log;
@@ -329,7 +332,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             if (postResult== null || postResult.Post == null)
             {
                 ViewData["Title"] = sr["New Post"];
-                model.Author = User.GetUserDisplayName();
+                model.Author = await authorNameResolver.GetAuthorName(User);
                 model.IsPublished = true;
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
                 model.CurrentPostUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
@@ -470,7 +473,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 post = new Post()
                 {
                     BlogId = project.Id,
-                    Author = User.GetUserDisplayName(),
+                    Author = await authorNameResolver.GetAuthorName(User),
                     Title = model.Title,
                     MetaDescription = model.MetaDescription,
                     Content = model.Content,

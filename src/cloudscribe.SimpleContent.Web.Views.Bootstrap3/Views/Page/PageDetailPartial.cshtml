@@ -31,15 +31,15 @@
     @if (Model.CurrentPage.ShowHeading)
     {
         <header class="">
-                <h1 id="article-title" itemprop="headline name">
-                    @Model.CurrentPage.Title
-                </h1>
+           <h1 id="article-title" itemprop="headline name">@Model.CurrentPage.Title</h1>
+            @{await Html.RenderPartialAsync("PageTopPartial", Model); }
         </header>
     }
     <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
+    @{await Html.RenderPartialAsync("PageBottomPartial", Model); }
     @if (!Model.CurrentPage.ShowHeading)
     {
-        <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta>
+        <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta> 
     }
     @{
         var imageUrl = Model.ExtractFirstImargeUrl(Model.CurrentPage, Url);

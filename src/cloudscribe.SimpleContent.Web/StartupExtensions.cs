@@ -359,6 +359,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IPageRoutes, DefaultPageRoutes>();
             services.TryAddScoped<IBlogRoutes, DefaultBlogRoutes>();
             services.TryAddScoped<IBlogService, BlogService>();
+            services.TryAddScoped<IAuthorNameResolver, DefaultAuthorNameResolver>();
             services.TryAddScoped<PageEvents, PageEvents>();
             services.TryAddScoped<PostEvents, PostEvents>();
 
