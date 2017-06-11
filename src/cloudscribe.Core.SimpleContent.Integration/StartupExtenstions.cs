@@ -34,6 +34,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPageRoutes, MultiTenantPageRoutes>();
             services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
             services.AddScoped<IRoleSelectorProperties, SiteRoleSelectorProperties>();
+            services.TryAddScoped<IAuthorNameResolver, AuthorNameResolver>();
+
+            
 
 
             return services;

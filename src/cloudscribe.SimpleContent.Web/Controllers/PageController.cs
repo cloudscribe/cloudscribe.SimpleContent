@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-06-09
+// Last Modified:           2017-06-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -30,6 +30,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             IPageRoutes pageRoutes,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
+            IAuthorNameResolver authorNameResolver,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
@@ -38,6 +39,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             this.pageService = blogService;
             this.htmlProcessor = htmlProcessor;
             this.authorizationService = authorizationService;
+            this.authorNameResolver = authorNameResolver;
             this.timeZoneHelper = timeZoneHelper;
             this.pageRoutes = pageRoutes;
             editOptions = pageEditOptionsAccessor.Value;
@@ -49,6 +51,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         private IPageService pageService;
         private IHtmlProcessor htmlProcessor;
         private IAuthorizationService authorizationService;
+        private IAuthorNameResolver authorNameResolver;
         private ITimeZoneHelper timeZoneHelper;
         private ILogger log;
         private IPageRoutes pageRoutes;
@@ -255,7 +258,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                     }
 
                 }
-                model.Author = User.GetUserDisplayName();
+                model.Author = await authorNameResolver.GetAuthorName(User);
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
 
             }
@@ -419,7 +422,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 page = new Page()
                 {
                     ProjectId = project.Id,
-                    Author = User.GetUserDisplayName(),
+                    Author = await authorNameResolver.GetAuthorName(User),
                     Title = model.Title,
                     MetaDescription = model.MetaDescription,
                     Content = model.Content,
