@@ -208,7 +208,7 @@ namespace example.WebApp
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/oops/error");
             }
             
             app.UseForwardedHeaders();
@@ -220,37 +220,13 @@ namespace example.WebApp
             app.UseSession();
 
             app.UseRequestLocalization(localizationOptionsAccessor.Value);
-
-            app.UseCloudscribeCommonStaticFiles();
-
-            app.UseMultitenancy<cloudscribe.Core.Models.SiteContext>();
-
+            
             var multiTenantOptions = multiTenantOptionsAccessor.Value;
 
-            app.UsePerTenant<cloudscribe.Core.Models.SiteContext>((ctx, builder) =>
-            {
-                // custom 404 and error page - this preserves the status code (ie 404)
-                if (multiTenantOptions.Mode != cloudscribe.Core.Models.MultiTenantMode.FolderName || string.IsNullOrEmpty(ctx.Tenant.SiteFolderName))
-                {
-                    builder.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
-                }
-                else
-                {
-                    builder.UseStatusCodePagesWithReExecute("/" + ctx.Tenant.SiteFolderName + "/Home/Error/{0}");
-                }
-
-                // resolve static files from wwwroot folders within themes and within sitefiles
-                builder.UseSiteAndThemeStaticFiles(loggerFactory, multiTenantOptions, ctx.Tenant);
-
-                builder.UseCloudscribeCoreDefaultAuthentication(
+            app.UseCloudscribeCore(
                     loggerFactory,
                     multiTenantOptions,
-                    ctx.Tenant,
                     SslIsAvailable);
-                
-            });
-
-            app.UseCloudscribeEnforceSiteRulesMiddleware();
 
             UseMvc(app, multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName);
 
@@ -298,7 +274,13 @@ namespace example.WebApp
 
                 if (useFolders)
                 {
-                    
+                    routes.MapRoute(
+                       name: "foldererrorhandler",
+                       template: "{sitefolder}/oops/error/{statusCode?}",
+                       defaults: new { controller = "Oops", action = "Error" },
+                       constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                    );
+
                     if (useCustomRoutes)
                     {
                         routes.MapRoute(
@@ -329,12 +311,13 @@ namespace example.WebApp
                 {
                     routes.AddCustomPageRouteForSimpleContent("docs");
                 }
-                
+
 
                 routes.MapRoute(
-                    name: "errorhandler",
-                    template: "{controller}/{action}/{statusCode}"
-                    );
+                   name: "errorhandler",
+                   template: "oops/error/{statusCode?}",
+                   defaults: new { controller = "Oops", action = "Error" }
+                   );
 
                 routes.MapRoute(
                     name: "sitemap",

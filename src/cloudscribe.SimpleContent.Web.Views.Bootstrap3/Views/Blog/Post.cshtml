@@ -43,6 +43,7 @@
     {
         await Html.RenderPartialAsync("CommentScriptsPartial");
     }
-    
+
+    @{await Html.RenderPartialAsync("BlogScriptsPartial", Model); }
     
 }
