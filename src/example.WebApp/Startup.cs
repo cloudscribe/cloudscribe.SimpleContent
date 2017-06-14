@@ -17,7 +17,7 @@ using cloudscribe.Core.SimpleContent.Integration;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-using cloudscribe.SimpleContent.Web.Controllers;
+
 //using cloudscribe.FileManager.Web;
 
 namespace example.WebApp
@@ -169,18 +169,19 @@ namespace example.WebApp
                 .AddRazorOptions(options =>
                 {
                     options.AddCloudscribeViewLocationFormats();
+                    
+
                     options.AddCloudscribeCommonEmbeddedViews();
-                    options.AddEmbeddedViewsForNavigation();
-                    options.AddEmbeddedBootstrap3ViewsForCloudscribeCore();
-                    options.AddEmbeddedViewsForCloudscribeLogging();
-                    options.AddBootstrap3EmbeddedViewsForSimpleContent();
-                    options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();
-                    options.AddBootstrap3EmbeddedViewsForFileManager();
+                    options.AddCloudscribeNavigationBootstrap3Views();
+                    options.AddCloudscribeCoreBootstrap3Views();
+                    options.AddCloudscribeFileManagerBootstrap3Views();
+                    options.AddCloudscribeSimpleContentBootstrap3Views();
+                    options.AddCloudscribeCoreSimpleContentIntegrationBootstrap3Views();
+                    options.AddCloudscribeLoggingBootstrap3Views();
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
-                })
-                //.AddApplicationPart(typeof(FsMediaController).Assembly)
-                    ;
+
+                });
 
 
         }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-06-11
+// Last Modified:           2017-06-14
 // 
 
 
@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Localization;
 
-namespace cloudscribe.SimpleContent.Web.Controllers
+namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 {
     public class BlogController : Controller
     {

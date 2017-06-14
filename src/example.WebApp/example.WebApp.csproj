@@ -38,9 +38,9 @@
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.Common\cloudscribe.SimpleContent.Storage.EFCore.Common.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.MSSQL\cloudscribe.SimpleContent.Storage.EFCore.MSSQL.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.MetaWeblog\cloudscribe.SimpleContent.MetaWeblog.csproj" />
-    <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Web.Mvc\cloudscribe.SimpleContent.Web.Mvc.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Syndication\cloudscribe.SimpleContent.Syndication.csproj" />
-    <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Integration\cloudscribe.Core.SimpleContent.Integration.csproj" />
+    <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Mvc\cloudscribe.Core.SimpleContent.Mvc.csproj" />
     <ProjectReference Include="..\cloudscribe.FileManager.CoreIntegration\cloudscribe.FileManager.CoreIntegration.csproj" />
   </ItemGroup>
 
@@ -60,7 +60,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.*" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.*" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Web.Mvc" Version="1.0.0-*" />
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="1.1.0-*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="1.1.0-*" />
