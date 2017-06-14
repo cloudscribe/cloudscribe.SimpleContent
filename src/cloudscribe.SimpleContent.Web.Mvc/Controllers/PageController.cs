@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-06-11
+// Last Modified:           2017-06-14
 // 
 
 using cloudscribe.SimpleContent.Models;

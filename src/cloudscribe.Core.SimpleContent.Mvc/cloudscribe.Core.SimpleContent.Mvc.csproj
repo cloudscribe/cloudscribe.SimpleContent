@@ -10,9 +10,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\cloudcsribe.Core.SimpleContent.Bootstrap3\cloudcsribe.Core.SimpleContent.Bootstrap3.csproj" />
-    <ProjectReference Include="..\cloudscribe.FileManager.CoreIntegration\cloudscribe.FileManager.CoreIntegration.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
+    
+    <!--
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
+    -->
+    
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent\cloudscribe.Core.SimpleContent.csproj" />
     
   </ItemGroup>

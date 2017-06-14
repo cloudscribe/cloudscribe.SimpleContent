@@ -169,20 +169,19 @@ namespace example.WebApp
                 .AddRazorOptions(options =>
                 {
                     options.AddCloudscribeViewLocationFormats();
+                    
+
                     options.AddCloudscribeCommonEmbeddedViews();
                     options.AddCloudscribeNavigationBootstrap3Views();
                     options.AddCloudscribeCoreBootstrap3Views();
-                    options.AddEmbeddedViewsForCloudscribeLogging();
-                    options.AddBootstrap3EmbeddedViewsForSimpleContent();
+                    options.AddCloudscribeFileManagerBootstrap3Views();
+                    options.AddCloudscribeSimpleContentBootstrap3Views();
                     options.AddCloudscribeCoreSimpleContentIntegrationBootstrap3Views();
-                   
-          
-                    options.AddBootstrap3EmbeddedViewsForFileManager();
+                    options.AddCloudscribeLoggingBootstrap3Views();
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
-                })
-                //.AddApplicationPart(typeof(FsMediaController).Assembly)
-                    ;
+
+                });
 
 
         }

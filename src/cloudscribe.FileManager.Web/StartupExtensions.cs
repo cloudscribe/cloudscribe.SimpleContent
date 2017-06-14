@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
 using cloudscribe.FileManager.Web.Controllers;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -60,8 +61,18 @@ namespace Microsoft.Extensions.DependencyInjection
             return routes;
         }
 
-
+        [Obsolete("AddBootstrap3EmbeddedViewsForFileManager is deprecated, please use AddCloudscribeFileManagerBootstrap3Views instead.")]
         public static RazorViewEngineOptions AddBootstrap3EmbeddedViewsForFileManager(this RazorViewEngineOptions options)
+        {
+            options.FileProviders.Add(new EmbeddedFileProvider(
+                    typeof(FileManagerController).GetTypeInfo().Assembly,
+                    "cloudscribe.FileManager.Web"
+                ));
+
+            return options;
+        }
+
+        public static RazorViewEngineOptions AddCloudscribeFileManagerBootstrap3Views(this RazorViewEngineOptions options)
         {
             options.FileProviders.Add(new EmbeddedFileProvider(
                     typeof(FileManagerController).GetTypeInfo().Assembly,
