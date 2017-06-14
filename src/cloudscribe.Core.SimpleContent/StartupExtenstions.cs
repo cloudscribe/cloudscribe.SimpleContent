@@ -1,5 +1,4 @@
 ﻿using cloudscribe.Core.SimpleContent.Integration;
-using cloudscribe.Core.SimpleContent.Integration.Controllers;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using Microsoft.AspNetCore.Authorization;
@@ -43,15 +42,15 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
 
-        public static RazorViewEngineOptions AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration(this RazorViewEngineOptions options)
-        {
-            options.FileProviders.Add(new EmbeddedFileProvider(
-                    typeof(ContentSettingsController).GetTypeInfo().Assembly,
-                    "cloudscribe.Core.SimpleContent.Integration"
-                ));
+        //public static RazorViewEngineOptions AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration(this RazorViewEngineOptions options)
+        //{
+        //    options.FileProviders.Add(new EmbeddedFileProvider(
+        //            typeof(ContentSettingsController).GetTypeInfo().Assembly,
+        //            "cloudscribe.Core.SimpleContent.Integration"
+        //        ));
 
-            return options;
-        }
+        //    return options;
+        //}
 
         public static AuthorizationOptions AddCloudscribeCoreSimpleContentIntegrationDefaultPolicies(this AuthorizationOptions options)
         {

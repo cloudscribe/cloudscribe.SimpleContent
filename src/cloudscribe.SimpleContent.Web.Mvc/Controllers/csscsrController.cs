@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Reflection;
 
-namespace cloudscribe.SimpleContent.Web.Controllers
+namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 {
     /// <summary>
     /// csscsr:cloudscribe SimpleContent static resource controller
@@ -55,7 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [AllowAnonymous]
         public IActionResult js()
         {
-            var baseSegment = "cloudscribe.SimpleContent.Web.js.";
+            var baseSegment = "cloudscribe.SimpleContent.Web.Mvc.js.";
             
             var requestPath = HttpContext.Request.Path.Value;
             log.LogDebug(requestPath + " requested");
@@ -74,7 +74,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         [AllowAnonymous]
         public IActionResult css()
         {
-            var baseSegment = "cloudscribe.SimpleContent.Web.css.";
+            var baseSegment = "cloudscribe.SimpleContent.Web.Mvc.css.";
             
             var requestPath = HttpContext.Request.Path.Value;
             log.LogDebug(requestPath + " requested");

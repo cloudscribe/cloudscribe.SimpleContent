@@ -15,7 +15,7 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Threading.Tasks;
 
-namespace cloudscribe.Core.SimpleContent.Integration.Controllers
+namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 {
     [Authorize(Policy = "AdminPolicy")]
     public class ContentSettingsController : Controller

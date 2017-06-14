@@ -17,7 +17,7 @@ using cloudscribe.Core.SimpleContent.Integration;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-using cloudscribe.SimpleContent.Web.Controllers;
+
 //using cloudscribe.FileManager.Web;
 
 namespace example.WebApp
@@ -170,11 +170,13 @@ namespace example.WebApp
                 {
                     options.AddCloudscribeViewLocationFormats();
                     options.AddCloudscribeCommonEmbeddedViews();
-                    options.AddEmbeddedViewsForNavigation();
-                    options.AddEmbeddedBootstrap3ViewsForCloudscribeCore();
+                    options.AddCloudscribeNavigationBootstrap3Views();
+                    options.AddCloudscribeCoreBootstrap3Views();
                     options.AddEmbeddedViewsForCloudscribeLogging();
                     options.AddBootstrap3EmbeddedViewsForSimpleContent();
-                    options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();
+                    options.AddCloudscribeCoreSimpleContentIntegrationBootstrap3Views();
+                   
+          
                     options.AddBootstrap3EmbeddedViewsForFileManager();
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());

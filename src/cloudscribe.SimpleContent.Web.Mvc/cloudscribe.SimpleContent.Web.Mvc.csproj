@@ -1,42 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>1.2.0</VersionPrefix>
-    <VersionSuffix>rc20170612</VersionSuffix>
+    <Description>MVC Controllers for cloudscribe.SimpleContent.Web</Description>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>rc20170613</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
-    <AssemblyName>cloudscribe.SimpleContent.Web</AssemblyName>
-    <PackageId>cloudscribe.SimpleContent.Web</PackageId>
-    <PackageTags>cloudscribe;blog</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-
-<!--
-  <ItemGroup>
-    <EmbeddedResource Include="js\**;css\**" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-  </ItemGroup>
-  -->
-  
 
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
-    <!--
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Web.Views.Bootstrap3\cloudscribe.SimpleContent.Web.Views.Bootstrap3.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
     <ProjectReference Include="..\cloudscribe.FileManager.Web\cloudscribe.FileManager.Web.csproj" />
-    -->
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.*" />
-    <PackageReference Include="cloudscribe.Messaging.Email" Version="1.2.*" />
+    <EmbeddedResource Include="js\**;css\**" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="cloudscribe.Web.Common" Version="1.3.*" />
     <PackageReference Include="cloudscribe.Web.Navigation" Version="1.2.*" />
     <PackageReference Include="cloudscribe.Web.Pagination" Version="1.1.*" />

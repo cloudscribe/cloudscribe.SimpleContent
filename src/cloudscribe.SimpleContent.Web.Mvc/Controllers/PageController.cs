@@ -19,7 +19,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Controllers
+namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 {
     public class PageController : Controller
     {

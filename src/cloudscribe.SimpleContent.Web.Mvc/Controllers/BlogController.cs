@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Localization;
 
-namespace cloudscribe.SimpleContent.Web.Controllers
+namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 {
     public class BlogController : Controller
     {
