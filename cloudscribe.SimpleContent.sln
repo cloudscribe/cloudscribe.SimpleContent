@@ -39,8 +39,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.FileManager.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.Core.SimpleContent.Mvc", "src\cloudscribe.Core.SimpleContent.Mvc\cloudscribe.Core.SimpleContent.Mvc.csproj", "{9595D935-BB5F-4038-83C5-80D7F943A85E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudcsribe.Core.SimpleContent.Bootstrap3", "src\cloudcsribe.Core.SimpleContent.Bootstrap3\cloudcsribe.Core.SimpleContent.Bootstrap3.csproj", "{0DFE9EC6-7DE0-4BC1-8357-758708FEEF23}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.SimpleContent.Web.Mvc", "src\cloudscribe.SimpleContent.Web.Mvc\cloudscribe.SimpleContent.Web.Mvc.csproj", "{4D0F696B-5DA7-47A4-84DC-9422FCBF2DE2}"
 EndProject
 Global
@@ -113,10 +111,6 @@ Global
 		{9595D935-BB5F-4038-83C5-80D7F943A85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9595D935-BB5F-4038-83C5-80D7F943A85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9595D935-BB5F-4038-83C5-80D7F943A85E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DFE9EC6-7DE0-4BC1-8357-758708FEEF23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DFE9EC6-7DE0-4BC1-8357-758708FEEF23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DFE9EC6-7DE0-4BC1-8357-758708FEEF23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DFE9EC6-7DE0-4BC1-8357-758708FEEF23}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D0F696B-5DA7-47A4-84DC-9422FCBF2DE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D0F696B-5DA7-47A4-84DC-9422FCBF2DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D0F696B-5DA7-47A4-84DC-9422FCBF2DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -142,7 +136,6 @@ Global
 		{05ACA34E-D0CC-45F0-B22C-C08195EB2FD2} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{1CE4D4F1-232C-43E0-A574-D3E62DD62A26} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{9595D935-BB5F-4038-83C5-80D7F943A85E} = {5243DE57-7C89-4208-8876-405E13605D16}
-		{0DFE9EC6-7DE0-4BC1-8357-758708FEEF23} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{4D0F696B-5DA7-47A4-84DC-9422FCBF2DE2} = {5243DE57-7C89-4208-8876-405E13605D16}
 	EndGlobalSection
 EndGlobal

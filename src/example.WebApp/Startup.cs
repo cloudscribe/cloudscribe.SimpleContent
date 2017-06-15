@@ -176,7 +176,6 @@ namespace example.WebApp
                     options.AddCloudscribeCoreBootstrap3Views();
                     options.AddCloudscribeFileManagerBootstrap3Views();
                     options.AddCloudscribeSimpleContentBootstrap3Views();
-                    options.AddCloudscribeCoreSimpleContentIntegrationBootstrap3Views();
                     options.AddCloudscribeLoggingBootstrap3Views();
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
