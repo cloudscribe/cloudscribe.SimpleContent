@@ -2,20 +2,14 @@
 
   <PropertyGroup>
     <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>rc20170613</VersionSuffix>
+    <VersionSuffix>rc20170614</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\cloudcsribe.Core.SimpleContent.Bootstrap3\cloudcsribe.Core.SimpleContent.Bootstrap3.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
-    
-    <!--
-    <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
-    -->
-    
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent\cloudscribe.Core.SimpleContent.csproj" />
     
   </ItemGroup>
