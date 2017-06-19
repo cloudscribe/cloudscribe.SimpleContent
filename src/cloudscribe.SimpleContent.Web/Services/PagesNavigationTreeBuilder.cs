@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2017-05-14
+// Last Modified:           2017-06-18
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -89,7 +89,7 @@ namespace cloudscribe.SimpleContent.Services
             if ((homePage != null) && project.UseDefaultPageAsRootNode)
             {
                 rootNav = new NavigationNode();
-                rootNav.IsRootNode = true;
+                //rootNav.IsRootNode = true;
                 rootNav.Key = homePage.Id;
                 rootNav.Text = homePage.Title;
                 rootNav.Url = pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix); // urlHelper.Content("~/" + folderPrefix);
@@ -97,7 +97,7 @@ namespace cloudscribe.SimpleContent.Services
             else
             {
                 rootNav = new NavigationNode();
-                rootNav.IsRootNode = true;
+                //rootNav.IsRootNode = true;
                 rootNav.Key = "pagesRoot";
                 rootNav.Title = "Home";
                 rootNav.Text = "Home";
@@ -131,7 +131,7 @@ namespace cloudscribe.SimpleContent.Services
                 {
                     var node = new NavigationNode();
                     node.Key = project.BlogPageText;
-                    node.ParentKey = "RootNode";
+                    //node.ParentKey = "RootNode";
                     node.Text = project.BlogPageText;
                     if(project.BlogMenuLinksToNewestPost)
                     {
@@ -157,7 +157,7 @@ namespace cloudscribe.SimpleContent.Services
                 if (!didAddBlog && (project.AddBlogToPagesTree && rootPosition == blogPosition))
                 {
                     node.Key = project.BlogPageText;
-                    node.ParentKey = "RootNode";
+                    //node.ParentKey = "RootNode";
                     node.Text = project.BlogPageText;
                     if (project.BlogMenuLinksToNewestPost)
                     {
@@ -182,8 +182,8 @@ namespace cloudscribe.SimpleContent.Services
                     continue;
                 }
                 
-                node.Key = page.Id;
-                node.ParentKey = page.ParentId;
+                //node.Key = page.Id;
+                //node.ParentKey = page.ParentId;
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
                 node.ComponentVisibility = page.MenuFilters;
@@ -216,7 +216,7 @@ namespace cloudscribe.SimpleContent.Services
             {
                 var node = new NavigationNode();
                 node.Key = page.Id;
-                node.ParentKey = page.ParentId;
+                //node.ParentKey = page.ParentId;
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
                 node.ComponentVisibility = page.MenuFilters;
