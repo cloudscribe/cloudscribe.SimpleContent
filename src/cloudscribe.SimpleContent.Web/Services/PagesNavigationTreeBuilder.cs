@@ -182,7 +182,7 @@ namespace cloudscribe.SimpleContent.Services
                     continue;
                 }
                 
-                //node.Key = page.Id;
+                node.Key = page.Id;
                 //node.ParentKey = page.ParentId;
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
