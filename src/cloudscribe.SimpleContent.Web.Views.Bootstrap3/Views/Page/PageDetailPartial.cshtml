@@ -2,6 +2,7 @@
 @using cloudscribe.SimpleContent.Models
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.SimpleContent.Web.Design
+@using cloudscribe.Web.Navigation;
 @using Microsoft.Extensions.Options
 @using System.Globalization
 @using Microsoft.Extensions.Localization
@@ -72,6 +73,10 @@
     }
     <schema-org-meta itemprop="datePublished" content="@Model.CurrentPage.PubDate.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
     <schema-org-meta itemprop="dateModified" content="@Model.CurrentPage.LastModified.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    @if (Model.CurrentPage != null && Model.CurrentPage.ShowMenu)
+    {
+        @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
+    }
     @if ((Model.CurrentPage.ShowComments) && (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName)))
     {
         await Html.RenderPartialAsync("DisqusCommentsPartial", Model);

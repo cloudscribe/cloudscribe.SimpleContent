@@ -39,10 +39,6 @@
     }
 }
 @{await Html.RenderPartialAsync("PageDetailPartial", Model); }
-@if (Model.CurrentPage != null && Model.CurrentPage.ShowMenu)
-{
-    @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
-}
 @if (Model.ProjectSettings.ShowRecentPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
 {
     @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
