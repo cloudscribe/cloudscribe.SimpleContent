@@ -791,7 +791,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {  
                 Response.StatusCode = 403;
                 //await Response.WriteAsync("Please enter a valid e-mail address");
-                return Content("Please enter a valid e-mail address");
+                return Content(sr["Please enter a valid e-mail address"]);
             }
             
             var project = await projectService.GetCurrentProjectSettings();
