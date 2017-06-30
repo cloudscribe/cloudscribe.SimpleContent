@@ -129,7 +129,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     page.Title = "Home";
                     model.CurrentPage = page;
                     model.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "home" });
-                    ViewData["Title"] = "Home";
+                    ViewData["Title"] = sr["Home"];
                 }
                 else
                 {
@@ -254,7 +254,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     // expected if home page doesn't exist yet
                     if(slug == "home")
                     {
-                        model.Title = "Home";
+                        model.Title = sr["Home"];
                     }
 
                 }

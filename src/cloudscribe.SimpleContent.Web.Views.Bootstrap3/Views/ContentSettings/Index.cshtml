@@ -1,9 +1,10 @@
 ﻿@model cloudscribe.Core.SimpleContent.Integration.ViewModels.ContentSettingsViewModel
 @using cloudscribe.Web.Navigation
 @using cloudscribe.Core.SimpleContent.Integration
+@using cloudscribe.SimpleContent.Web
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<SimpleContentIntegration> sr
+@inject IStringLocalizer<SimpleContent> sr
 <div class="row">
     <div class="col-md-10 col-md-push-2">
         <h2>@ViewBag.Title</h2>
@@ -94,13 +95,7 @@
                     <span asp-validation-for="PubDateFormat" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PostsPerPage" class="col-md-2 control-label">@sr["Posts Per Page"]</label>
-                <div class="col-md-10">
-                    <input asp-for="PostsPerPage" class="form-control" />
-                    <span asp-validation-for="PostsPerPage" class="text-danger"></span>
-                </div>
-            </div>
+            
             <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
                     <div class="checkbox">

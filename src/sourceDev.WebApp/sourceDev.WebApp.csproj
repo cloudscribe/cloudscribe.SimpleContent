@@ -56,6 +56,7 @@
     
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="1.1.*" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.Web.Localization" Version="1.2.*" />
     
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.*" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.*" />
@@ -82,6 +83,12 @@
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.*" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.*" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.*" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="GlobalResources\SimpleContent.en-US.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

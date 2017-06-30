@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-05-28
+// Last Modified:			2017-06-30
 // 
 
 using cloudscribe.Core.Models;
@@ -25,7 +25,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
            // IPageService pageService,
             IAuthorizationService authorizationService,
             IUserQueries userQueries,
-            IStringLocalizer<SimpleContentIntegration> localizer
+            IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer
             )
         {
             this.projectService = projectService;

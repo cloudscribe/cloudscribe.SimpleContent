@@ -1,8 +1,9 @@
 ﻿@model cloudscribe.Core.SimpleContent.Integration.ViewModels.ContentSettingsViewModel
 @using cloudscribe.Core.SimpleContent.Integration
+@using cloudscribe.SimpleContent.Web
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<SimpleContentIntegration> sr
-@* comment this and uncomment the below if you want editable correlationkey *@
+@inject IStringLocalizer<SimpleContent> sr
+@* comment this and uncomment the below if you want editable Image Path *@
 <input type="hidden" asp-for="@Model.LocalMediaVirtualPath" />
 @*
         <div class="form-group">
