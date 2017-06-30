@@ -56,6 +56,7 @@
     
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="1.1.*" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.Web.Localization" Version="1.2.*" />
     
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.*" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.*" />

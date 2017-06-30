@@ -372,4 +372,154 @@
   <data name="With great power comes great responsibility. This page is intended for use by developers, for adding javscript and css into the page. Use this page only if you understand what you are doing." xml:space="preserve">
     <value>With great power comes great responsibility. This page is intended for use by developers, for adding javscript and css into the page. Use this page only if you understand what you are doing.</value>
   </data>
+  <data name="A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager." xml:space="preserve">
+    <value>A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager.</value>
+  </data>
+  <data name="A page is visible to the public if the Is Published checkbox is checked and if the Publication Date is before the current moment, and if not protected by roles." xml:space="preserve">
+    <value>A page is visible to the public if the Is Published checkbox is checked and if the Publication Date is before the current moment, and if not protected by roles.</value>
+  </data>
+  <data name="Are you sure you want to delete the page {0}?" xml:space="preserve">
+    <value>Are you sure you want to delete the page {0}?</value>
+  </data>
+  <data name="Are you sure you want to delete the page {0}? You cannot undo this action." xml:space="preserve">
+    <value>Are you sure you want to delete the page {0}? You cannot undo this action.</value>
+  </data>
+  <data name="Are you sure you want to move the page {0} {1} {2}?" xml:space="preserve">
+    <value>Are you sure you want to move the page {0} {1} {2}?</value>
+  </data>
+  <data name="Are you sure you want to sort the child pages of {0} alphabetically?" xml:space="preserve">
+    <value>Are you sure you want to sort the child pages of {0} alphabetically?</value>
+  </data>
+  <data name="Bad Request" xml:space="preserve">
+    <value>Bad Request</value>
+  </data>
+  <data name="Check this box if the current page is only meant as a parent container for other pages and has no content of it's own." xml:space="preserve">
+    <value>Check this box if the current page is only meant as a parent container for other pages and has no content of it's own.</value>
+  </data>
+  <data name="Developer Tools" xml:space="preserve">
+    <value>Developer Tools</value>
+  </data>
+  <data name="Edit Page" xml:space="preserve">
+    <value>Edit Page</value>
+  </data>
+  <data name="Enable Comments" xml:space="preserve">
+    <value>Enable Comments</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Forbidden</value>
+  </data>
+  <data name="If the page is a parent of other pages, you check this box to make it show a menu of links to the child pages." xml:space="preserve">
+    <value>If the page is a parent of other pages, you check this box to make it show a menu of links to the child pages.</value>
+  </data>
+  <data name="If you populate this field with an url then the page is used only as a means to add the url as a menu item. The page content in that case is not used or visible to users. You can use a relative url or a fully qualified url so it can link to external sites. Use this with caution and note that once populated the only way to edit the page is from the link in Page Manager." xml:space="preserve">
+    <value>If you populate this field with an url then the page is used only as a means to add the url as a menu item. The page content in that case is not used or visible to users. You can use a relative url or a fully qualified url so it can link to external sites. Use this with caution and note that once populated the only way to edit the page is from the link in Page Manager.</value>
+  </data>
+  <data name="Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree" xml:space="preserve">
+    <value>Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree</value>
+  </data>
+  <data name="Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members." xml:space="preserve">
+    <value>Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members.</value>
+  </data>
+  <data name="Manage Page Hierarchy" xml:space="preserve">
+    <value>Manage Page Hierarchy</value>
+  </data>
+  <data name="Menu Filters" xml:space="preserve">
+    <value>Menu Filters</value>
+  </data>
+  <data name="New Child Page" xml:space="preserve">
+    <value>New Child Page</value>
+  </data>
+  <data name="New Root Level Page" xml:space="preserve">
+    <value>New Root Level Page</value>
+  </data>
+  <data name="No Content Only Show Child Menu" xml:space="preserve">
+    <value>No Content Only Show Child Menu</value>
+  </data>
+  <data name="No Pages Found" xml:space="preserve">
+    <value>No Pages Found</value>
+  </data>
+  <data name="No pages have been created yet, if this is your site, please login to create your first page" xml:space="preserve">
+    <value>No pages have been created yet, if this is your site, please login to create your first page</value>
+  </data>
+  <data name="On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown." xml:space="preserve">
+    <value>On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown.</value>
+  </data>
+  <data name="Override Url" xml:space="preserve">
+    <value>Override Url</value>
+  </data>
+  <data name="Page Heading" xml:space="preserve">
+    <value>Page Heading</value>
+  </data>
+  <data name="Page Not Found" xml:space="preserve">
+    <value>Page Not Found</value>
+  </data>
+  <data name="Page Order" xml:space="preserve">
+    <value>Page Order</value>
+  </data>
+  <data name="Parent Slug" xml:space="preserve">
+    <value>Parent Slug</value>
+  </data>
+  <data name="Select Roles" xml:space="preserve">
+    <value>Select Roles</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Show Child Menu" xml:space="preserve">
+    <value>Show Child Menu</value>
+  </data>
+  <data name="Show Heading" xml:space="preserve">
+    <value>Show Heading</value>
+  </data>
+  <data name="Site Home" xml:space="preserve">
+    <value>Site Home</value>
+  </data>
+  <data name="Sorry, but the page requires authentication." xml:space="preserve">
+    <value>Sorry, but the page requires authentication.</value>
+  </data>
+  <data name="Sorry, but the page you were looking for can't be found." xml:space="preserve">
+    <value>Sorry, but the page you were looking for can't be found.</value>
+  </data>
+  <data name="Sorry, but you don't have permission to access this page." xml:space="preserve">
+    <value>Sorry, but you don't have permission to access this page.</value>
+  </data>
+  <data name="Sort Child Pages Alpha" xml:space="preserve">
+    <value>Sort Child Pages Alpha</value>
+  </data>
+  <data name="The page {0} has child pages, if you delete it, all of the child pages will become root level pages. You should delete child pages before deleting the parent page. Are you sure you want to delete {1}?" xml:space="preserve">
+    <value>The page {0} has child pages, if you delete it, all of the child pages will become root level pages. You should delete child pages before deleting the parent page. Are you sure you want to delete {1}?</value>
+  </data>
+  <data name="This is the heading and title of the page. For new pages the url slug will be generated based on the title." xml:space="preserve">
+    <value>This is the heading and title of the page. For new pages the url slug will be generated based on the title.</value>
+  </data>
+  <data name="This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order." xml:space="preserve">
+    <value>This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unauthorized</value>
+  </data>
+  <data name="Unexpected Error" xml:space="preserve">
+    <value>Unexpected Error</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="View Roles" xml:space="preserve">
+    <value>View Roles</value>
+  </data>
+  <data name="Well, this is embarrassing. An error occurred while processing your request. Rest assured, this problem has been logged and hamsters have been released to fix the problem." xml:space="preserve">
+    <value>Well, this is embarrassing. An error occurred while processing your request. Rest assured, this problem has been logged and hamsters have been released to fix the problem.</value>
+  </data>
+  <data name="You can drag and drop page nodes in the treeview below to move them around in the site hierarchy or to change their sort position. Click on a page to show a menu of commands related to that page. Note that changes will not be reflected in the main menu until you refresh the page." xml:space="preserve">
+    <value>You can drag and drop page nodes in the treeview below to move them around in the site hierarchy or to change their sort position. Click on a page to show a menu of commands related to that page. Note that changes will not be reflected in the main menu until you refresh the page.</value>
+  </data>
+  <data name="Your browser sent a request that this server could not understand." xml:space="preserve">
+    <value>Your browser sent a request that this server could not understand.</value>
+  </data>
+  <data name="Content Settings" xml:space="preserve">
+    <value>Content Settings</value>
+  </data>
+  <data name="Content Settings were successfully updated." xml:space="preserve">
+    <value>Content Settings were successfully updated.</value>
+  </data>
 </root>

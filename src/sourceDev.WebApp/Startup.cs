@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using cloudscribe.SimpleContent.Models;
+using Microsoft.Extensions.Localization;
 
 namespace sourceDev.WebApp
 {
@@ -95,6 +96,11 @@ namespace sourceDev.WebApp
 
             services.AddCloudscribeFileManagerIntegration(Configuration);
 
+            // optional but recommended if you need localization 
+            // uncomment to use cloudscribe.Web.localization https://github.com/joeaudette/cloudscribe.Web.Localization
+            services.Configure<GlobalResourceOptions>(Configuration.GetSection("GlobalResourceOptions"));
+            services.AddSingleton<IStringLocalizerFactory, GlobalResourceManagerStringLocalizerFactory>();
+
             services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
 
             services.Configure<RequestLocalizationOptions>(options =>
@@ -105,6 +111,7 @@ namespace sourceDev.WebApp
                     new CultureInfo("en-GB"),
                     new CultureInfo("fr-FR"),
                     new CultureInfo("fr"),
+                    new CultureInfo("cy"),
                 };
 
                 // State what the default culture for your application is. This will be used if no specific culture
