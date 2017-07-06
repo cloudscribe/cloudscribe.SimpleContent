@@ -32,7 +32,6 @@ My plan is to usually build sites without a database (except for large projects)
 * Pages can be protected by roles for private or premium content
 * Schedule posts and pages to be published on a future date
 * Supports blog urls with or without date segments
-* Support for using [cloudscribe.Core](https://github.com/joeaudette/cloudscribe) for user and site/tenant management
 * Optional internal comment system for the blog. Built in support for Disqus and not difficult to integrate some other comment system
 * RSS feed built in at /api/rss
 * [Google Site Map](https://www.cloudscribe.com/docs/easy-google-sitemaps) built in at /api/sitemap
