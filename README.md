@@ -10,7 +10,7 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 ## Sample Apps
 
-To use SimpleContent for your own projects, we recommend start with one of our [StarterKits](https://github.com/joeaudette/cloudscribe.StarterKits) which have no "cloudscribe source code" but have only nuget dependencies.
+To use SimpleContent for your own projects, we recommend start with one of our [StarterKits](https://github.com/joeaudette/cloudscribe.StarterKits) which have no "cloudscribe source code" but have only nuget dependencies wired up for you in various common configurations.
 
 ### Current Features
 * Create and edit pages and blog posts right from the web browser or using [Open Live Writer](https://www.cloudscribe.com/docs/using-open-live-writer)
