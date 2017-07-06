@@ -25,30 +25,27 @@ Some sites do need a database though and we plan to support using both Entity Fr
 My plan is to usually build sites without a database (except for large projects), but implement a migration utility to be able to migrate any site from files to a database later if the needs of the project require it.
 
 ### Current Features
-* Cross platform, works on Windows, OSX, and Linux
-* __No database required__ uses json for pages and can use json or xml for blog posts via [NoDb](https://github.com/joeaudette/NoDb)
-* For blog posts, supports the same XML format as MiniBlog and BlogEngine.NET, to convert from one of those, just drop in your files
-* Migrate your existing blog to SimpleContent using [MiniBlog Formatter](https://github.com/madskristensen/MiniBlogFormatter)
-* Support for using Entity Framework Core with either MSSQL, MySql, or PostgreSql
-* __Inline editing__ of blog posts and pages
-* Supports multiple tenants by host name even without a database
-* Support for using [cloudscribe.Core](https://github.com/joeaudette/cloudscribe) for user and site/tenant management
-* Easy setting for serving static files from another domain. 
-*  __Open Live Writer__ (OLW) and __Windows Live Writer__ (WLW) support
-* You don't have to use OLW/WLW (but you should)
-* Schedule posts to be published on a future date
+* Create and edit pages and blog posts right from the web browser or using [Open Live Writer](https://www.cloudscribe.com/docs/using-open-live-writer)
+* Built in image browser, uploader, cropper, with configurable automatic resizing, and even drag/drop images right into the editor
+* Built in Page Manager - for easy drag/drop arrangement of the page hierarchy
+* For technical articles includes built in syntax highlighter using the [CodeSnippet plugin in CKEditor](https://www.cloudscribe.com/docs/customizing-the-editor)
+* Pages can be protected by roles for private or premium content
+* Schedule posts and pages to be published on a future date
 * Supports blog urls with or without date segments
-* Url date segments are hackable, ie /blog/2016/03/16 shows posts for the day, /blog/2016/03 shows posts for the month and /blog/2016 shows posts for the year
+* Support for using [cloudscribe.Core](https://github.com/joeaudette/cloudscribe) for user and site/tenant management
+* Optional internal comment system for the blog. Built in support for Disqus and not difficult to integrate some other comment system
+* RSS feed built in at /api/rss
+* [Google Site Map](https://www.cloudscribe.com/docs/easy-google-sitemaps) built in at /api/sitemap
+* Responsive [theming support](https://www.cloudscribe.com/docs/themes-and-web-design) based on Bootstrap
+* Uses HTML 5 microdata to add semantic meaning and improve SEO
+* Cross platform, runs on ASP.NET Core which works on Windows, Mac, and Linux
 * Comments support - can easily be replaced by 3rd-party commenting systems such as Disqus
-* [Recaptcha support](https://www.google.com/recaptcha/intro/index.html) to reduce comment spam
-* __Gravatar__ support 
-* __Drag and drop images__ to upload
-* Responsive theming support based on Bootstrap
-* Uses HTML 5 __microdata__ to add semantic meaning
-* Works on any ASP.NET Core host including __Windows Azure__ Websites
-* RSS feed built in at /api/rss via [cloudscribe.Syndication project](https://github.com/joeaudette/cloudscribe.Syndication) 
-* Sitemap - built in [sitemap](http://www.sitemaps.org/schemas/sitemap/0.9) at /api/sitemap via [cloudscribe.Web.SiteMap](https://github.com/joeaudette/cloudscribe.Web.Navigation/tree/master/src/cloudscribe.Web.SiteMap) 
-* Support for automatic image resizing and optimization
+* No database required - can use json for pages and can use json or xml for blog posts via [NoDb](https://github.com/joeaudette/NoDb). The XML format is the same as MiniBlog and BlogEngine.NET and you should be able to [migrate from other platforms](https://www.cloudscribe.com/docs/migrating-content-from-other-platforms)
+* You can optionally use a database - it currently supports MS SQL, PostgresSql, and MySql using Entity Framework Core
+* Can use either [cloudscribe Core](https://www.cloudscribe.com/docs/cloudscribe-core) or [cloudscribe SimpleAuth](https://github.com/joeaudette/cloudscribe.Web.SimpleAuth) for user accounts. (I recommend use cloudscribe Core even for small sites)
+* Can also be [integrated with other authentication systems](https://www.cloudscribe.com/docs/integrating-with-other-authentication-systems)
+* Supports [multiple tenants](https://www.cloudscribe.com/docs/multi-tenant-support) via integration using cloudscribe Core
+* [Supports Localization](https://www.cloudscribe.com/docs/localization)
 
 ### Planned Features - see also the to-do.md in the notes folder
 * More advanced meta data capabilities
