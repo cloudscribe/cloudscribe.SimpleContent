@@ -34,9 +34,9 @@ To use SimpleContent for your own projects, we recommend start with one of our [
 * Supports [multiple tenants](https://www.cloudscribe.com/docs/multi-tenant-support) via integration using cloudscribe Core
 * [Supports Localization](https://www.cloudscribe.com/docs/localization)
 
-### Planned Features - see also the to-do.md in the notes folder
+### Planned Features
 * More advanced meta data capabilities
-* Support for using MongoDb
+* Support for using MongoDb - hoping for a community member to do that
 * A Utility for importing the json or xml content into Entity Framework Core or MongoDb for easy migration
 
 ### Screenshots
