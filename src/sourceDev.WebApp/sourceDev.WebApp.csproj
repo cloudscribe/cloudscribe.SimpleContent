@@ -42,11 +42,11 @@
   
   
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Web.Mvc" Version="1.0.0-*" />
-    <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="1.1.0-*" />
-    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="1.1.0-*" />
-    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="1.1.0-*" />
-    <PackageReference Include="cloudscribe.Core.Storage.EFCore.pgsql" Version="1.1.0-*" />
+    <PackageReference Include="cloudscribe.Core.Web.Mvc" Version="1.0.*" />
+    <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.pgsql" Version="1.1.*" />
     <PackageReference Include="cloudscribe.Logging.Web" Version="1.1.*" />
     <PackageReference Include="cloudscribe.Logging.NoDb" Version="1.1.*" />
     <PackageReference Include="cloudscribe.Logging.EFCore.MSSQL" Version="1.1.*" />
