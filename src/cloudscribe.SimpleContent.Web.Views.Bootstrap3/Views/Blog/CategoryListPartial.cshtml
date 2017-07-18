@@ -19,7 +19,7 @@
             {
                     <li>
                         <a asp-route="@blogRoutes.BlogCategoryRouteName"
-                           asp-route-category="@cat.Key.ToLowerInvariant()">@cat.Key.ToLowerInvariant() (@cat.Value)</a>
+                           asp-route-category="@cat.Key">@cat.Key (@cat.Value)</a>
                     </li>
                 }
             </ul>
