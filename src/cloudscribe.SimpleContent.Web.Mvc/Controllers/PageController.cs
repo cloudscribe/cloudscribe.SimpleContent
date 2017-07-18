@@ -489,6 +489,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 page.PubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
 
             }
+            if(page.ProjectId != project.Id)
+            {
+                page.ProjectId = project.Id;
+            }
 
             if (isNew)
             {
