@@ -1,5 +1,6 @@
 ﻿using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
+using cloudscribe.SimpleContent.Web.Config;
 using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
@@ -56,6 +57,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Configure<IconCssClasses>(configuration.GetSection("IconCssClasses"));
 
                 services.Configure<PageEditOptions>(configuration.GetSection("PageEditOptions"));
+                services.Configure<SimpleContentConfig>(configuration.GetSection("SimpleContentConfig"));
             }
             else
             {

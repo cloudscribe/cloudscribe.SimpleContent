@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-06-14
+// Last Modified:           2017-07-18
 // 
 
 
@@ -23,6 +23,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using cloudscribe.SimpleContent.Web.Config;
 
 namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 {
@@ -39,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IAuthorNameResolver authorNameResolver,
             ITimeZoneHelper timeZoneHelper,
             IStringLocalizer<SimpleContent> localizer,
+            IOptions<SimpleContentConfig> configOptionsAccessor,
             ILogger<BlogController> logger
             )
         {
@@ -52,6 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             this.timeZoneHelper = timeZoneHelper;
             sr = localizer;
             log = logger;
+            config = configOptionsAccessor.Value;
         }
 
         private IProjectService projectService;
@@ -64,6 +68,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         private ITimeZoneHelper timeZoneHelper;
         private IAuthorizationService authorizationService;
         private IStringLocalizer<SimpleContent> sr;
+        private SimpleContentConfig config;
 
         [HttpGet]
         [AllowAnonymous]
@@ -399,13 +404,27 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (!string.IsNullOrEmpty(model.Categories))
             {
-                categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
+                if(config.ForceLowerCaseCategories)
+                {
+                    categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
                     .Where(x =>
                     !string.IsNullOrWhiteSpace(x)
                     && x != ","
                     )
                     .Distinct()
                     .ToList();
+                }
+                else
+                {
+                    categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim())
+                    .Where(x =>
+                    !string.IsNullOrWhiteSpace(x)
+                    && x != ","
+                    )
+                    .Distinct()
+                    .ToList();
+                }
+                
             }
 
 
