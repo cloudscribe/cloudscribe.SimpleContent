@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-04-19
+// Last Modified:			2017-07-18
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -77,20 +77,38 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             p.LastModified = DateTime.UtcNow;
 
-            //need to delete and re add PostCategorys
-            await DeleteCategoriesByPost(projectId, p.Id, true, cancellationToken).ConfigureAwait(false);
-            foreach (var c in p.Categories)
+            var cats = p.CategoriesCsv.Split(new char[] { ',' },
+                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim())
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .ToList();
+
+            //need to delete and re add PostCategories
+            await DeleteCategoriesByPost(projectId, post.Id, true, cancellationToken).ConfigureAwait(false);
+
+            
+            foreach (var c in cats)
             {
                 if (string.IsNullOrEmpty(c)) continue;
                 var t = c.Trim();
                 if (string.IsNullOrEmpty(t)) continue;
 
-                dbContext.PostCategories.Add(new PostCategory
+                var cat = new PostCategory
                 {
                     ProjectId = projectId,
                     PostEntityId = p.Id,
                     Value = t
-                });
+                };
+
+                //var trackingCat = dbContext.ChangeTracker.Entries<PostCategory>().Any(x => x.Entity.PostEntityId == p.Id && x.Entity.Value.ToLower() == t.ToLower());
+                //if(trackingCat)
+                //{
+                //    dbContext.PostCategories.Update(cat);
+                //}
+                //else
+                //{
+                    dbContext.PostCategories.Add(cat);
+                //}
+                
             }
 
 
