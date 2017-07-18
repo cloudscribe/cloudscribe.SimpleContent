@@ -51,8 +51,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             get {
                 //if(categories.Count == 0)
                 var list = CategoriesCsv.Split(new char[] { ',' },
-                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower())
-                        .Distinct()
+                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim())
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
                         .ToList();
 
                 categories.AddRange(list.Where(p2 =>
@@ -62,7 +62,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             }
             set {
                 categories = value;
-                CategoriesCsv = string.Join(",", categories.Distinct());
+                CategoriesCsv = string.Join(",", categories.Distinct(StringComparer.OrdinalIgnoreCase));
             }
         }
 

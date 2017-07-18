@@ -824,6 +824,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         }
 
         [HttpGet]
+        public IActionResult SiteMap()
+        {
+            return View("SiteMapIndex");
+        }
+
+        [HttpGet]
   
         public async Task<IActionResult> Tree()
         {

@@ -324,7 +324,7 @@ namespace sourceDev.WebApp
                 routes.MapRoute(
                     name: "sitemap",
                     template: "sitemap"
-                    , defaults: new { controller = "SiteMap", action = "Index" }
+                    , defaults: new { controller = "Page", action = "SiteMap" }
                     );
 
                 var useHomeIndexAsDefault = Configuration.GetValue<bool>("DevOptions:UseHomeIndexAsDefault");
