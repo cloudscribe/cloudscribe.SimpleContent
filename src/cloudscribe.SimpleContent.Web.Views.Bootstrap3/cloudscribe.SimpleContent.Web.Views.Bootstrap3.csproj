@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Bootstrap 3 views for cloudscribe.SimpleContent.Web</Description>
-    <VersionPrefix>1.1.1</VersionPrefix>
+    <VersionPrefix>1.1.2</VersionPrefix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>net451;net452;net46;netstandard1.6</TargetFrameworks>
     <AssemblyName>cloudscribe.SimpleContent.Web.Views.Bootstrap3</AssemblyName>
