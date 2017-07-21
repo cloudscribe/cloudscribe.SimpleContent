@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>MVC Controllers for cloudscribe.SimpleContent.Web</Description>
-    <VersionPrefix>1.0.3</VersionPrefix>
+    <VersionPrefix>1.0.4</VersionPrefix>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
@@ -39,23 +39,11 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.*" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
+  <!--
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="System.IO" Version="4.3.0" />
   </ItemGroup>
+  -->
 
 </Project>
