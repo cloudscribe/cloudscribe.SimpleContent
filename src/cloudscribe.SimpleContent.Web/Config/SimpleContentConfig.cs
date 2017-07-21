@@ -2,6 +2,6 @@
 {
     public class SimpleContentConfig
     {
-        public bool ForceLowerCaseCategories { get; set; } = true;
+        public bool ForceLowerCaseCategories { get; set; } = false;
     }
 }

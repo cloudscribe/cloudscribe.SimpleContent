@@ -181,6 +181,33 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         }
 
+        private async Task DeleteCommentsByPost(
+            string projectId,
+            string postId,
+            bool saveChanges,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            //ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var query = from l in dbContext.Comments
+                        where (
+                        l.ProjectId == projectId
+                        && l.PostEntityId == postId
+                        )
+                        select l;
+
+            dbContext.Comments.RemoveRange(query);
+            if (saveChanges)
+            {
+                int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
+                    .ConfigureAwait(false);
+
+            }
+
+
+        }
+
         public async Task Delete(
             string projectId,
             string postId,
@@ -193,6 +220,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                .ConfigureAwait(false);
 
             if (itemToRemove == null) throw new InvalidOperationException("Post not found");
+
+            await DeleteCommentsByPost(projectId, postId, false);
+            await DeleteCategoriesByPost(projectId, postId, false);
 
             dbContext.Posts.Remove(itemToRemove);
             int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)

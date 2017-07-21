@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>1.2.1</VersionPrefix>
+    <VersionPrefix>1.2.3</VersionPrefix>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>net46;net452;net451;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>cloudscribe.SimpleContent.Web</AssemblyName>
     <PackageId>cloudscribe.SimpleContent.Web</PackageId>
@@ -12,8 +12,6 @@
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -46,23 +44,11 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.*" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
+  <!--
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="System.IO" Version="4.3.0" />
   </ItemGroup>
+  -->
 
 </Project>
