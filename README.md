@@ -6,6 +6,9 @@ A simple, yet flexible content and blog engine for ASP.NET Core that can work wi
 
 If you have questions or just want to be social, say hello in our gitter chat room. I try to monitor that room on a regular basis while I'm working, but if I'm not around you can leave  message.
 
+[![Build Status](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent.svg?branch=master)](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent)
+[![Build status](https://ci.appveyor.com/api/projects/status/d0900wcf3y7l7jup?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-simplecontent)
+
 [![Join the chat at https://gitter.im/joeaudette/cloudscribe](https://badges.gitter.im/joeaudette/cloudscribe.svg)](https://gitter.im/joeaudette/cloudscribe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Sample Apps
