@@ -2,7 +2,7 @@
 @using cloudscribe.Core.Models
 @inject SiteContext Tenant
 <!DOCTYPE html>
-<html>
+<html prefix="og: http://ogp.me/ns#" lang="@Tenant.ForcedUICulture">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - @(Tenant?.SiteName ?? "Sample")</title>

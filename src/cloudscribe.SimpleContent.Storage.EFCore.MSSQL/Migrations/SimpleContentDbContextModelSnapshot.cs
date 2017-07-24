@@ -293,6 +293,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(500);
 
+                    b.Property<string>("MetaHtml");
+
+                    b.Property<string>("MetaJson");
+
                     b.Property<int>("PageOrder");
 
                     b.Property<string>("ParentId")
@@ -494,6 +498,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(500);
+
+                    b.Property<string>("MetaHtml");
+
+                    b.Property<string>("MetaJson");
 
                     b.Property<DateTime>("PubDate");
 
