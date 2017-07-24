@@ -43,6 +43,8 @@ namespace cloudscribe.SimpleContent.Models
         public string CorrelationKey { get; set; } = string.Empty;
 
         public string MetaDescription { get; set; } = string.Empty;
+        public string MetaJson { get; set; }
+        public string MetaHtml { get; set; }
 
         public string Content { get; set; } = string.Empty;
 
@@ -86,6 +88,8 @@ namespace cloudscribe.SimpleContent.Models
             p.MenuFilters = page.MenuFilters;
             p.MenuOnly = page.MenuOnly;
             p.MetaDescription = page.MetaDescription;
+            p.MetaHtml = page.MetaHtml;
+            p.MetaJson = page.MetaJson;
             p.PageOrder = page.PageOrder;
             p.ParentId = page.ParentId;
             p.ParentSlug = page.ParentSlug;

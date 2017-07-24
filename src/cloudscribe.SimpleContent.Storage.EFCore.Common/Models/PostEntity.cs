@@ -36,6 +36,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         public string Slug { get; set; }
 
         public string MetaDescription { get; set; }
+        public string MetaJson { get; set; }
+        public string MetaHtml { get; set; }
 
         public string Content { get; set; }
 
