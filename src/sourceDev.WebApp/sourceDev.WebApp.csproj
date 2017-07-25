@@ -39,7 +39,6 @@
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web.Mvc\cloudscribe.SimpleContent.Web.Mvc.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Syndication\cloudscribe.SimpleContent.Syndication.csproj" />
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Mvc\cloudscribe.Core.SimpleContent.Mvc.csproj" />
-    <ProjectReference Include="..\cloudscribe.FileManager.CoreIntegration\cloudscribe.FileManager.CoreIntegration.csproj" />
   </ItemGroup>
   
   
