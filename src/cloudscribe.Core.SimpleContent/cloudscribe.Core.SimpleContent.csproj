@@ -16,7 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\cloudscribe.FileManager.CoreIntegration\cloudscribe.FileManager.CoreIntegration.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
   </ItemGroup>
@@ -26,6 +25,7 @@
     <PackageReference Include="cloudscribe.Core.Models" Version="1.2.*" />
     <PackageReference Include="cloudscribe.Core.Web" Version="1.2.*" />
     <PackageReference Include="cloudscribe.Web.Common" Version="1.3.*" />
+    <PackageReference Include="cloudscribe.FileManager.Web" Version="1.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="1.1.*" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.*" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.*" />
