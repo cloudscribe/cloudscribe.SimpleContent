@@ -44,6 +44,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         public string CorrelationKey { get; set; } = string.Empty;
 
         public string MetaDescription { get; set; } = string.Empty;
+        public string MetaJson { get; set; }
+        public string MetaHtml { get; set; }
 
         public string Content { get; set; } = string.Empty;
 

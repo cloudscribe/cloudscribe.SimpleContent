@@ -31,7 +31,9 @@ namespace cloudscribe.SimpleContent.Models
         public string Slug { get; set; }
         
         public string MetaDescription { get; set; }
-        
+        public string MetaJson { get; set; }
+        public string MetaHtml { get; set; }
+
         public string Content { get; set; }
 
         public DateTime PubDate { get; set; } = DateTime.UtcNow;
@@ -55,6 +57,8 @@ namespace cloudscribe.SimpleContent.Models
             p.IsPublished = post.IsPublished;
             p.LastModified = post.LastModified;
             p.MetaDescription = post.MetaDescription;
+            p.MetaHtml = post.MetaHtml;
+            p.MetaJson = post.MetaJson;
             p.PubDate = post.PubDate;
             p.Slug = post.Slug;
             p.Title = post.Title;

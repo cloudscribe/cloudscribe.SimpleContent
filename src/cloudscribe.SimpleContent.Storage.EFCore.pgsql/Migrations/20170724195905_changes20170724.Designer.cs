@@ -8,9 +8,10 @@ using cloudscribe.SimpleContent.Storage.EFCore.pgsql;
 namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170724195905_changes20170724")]
+    partial class changes20170724
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
