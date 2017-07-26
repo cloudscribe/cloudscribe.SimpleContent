@@ -10,7 +10,7 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 | Windows  | Linux/Mac |
 | ------------- | ------------- |
-| [![Build status](https://ci.appveyor.com/api/projects/status/d0900wcf3y7l7jup?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-simplecontent)  | [![Build Status](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent.svg?branch=master)](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent) |
+| [![Build status](https://ci.appveyor.com/api/projects/status/d0900wcf3y7l7jup/branch/master?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-simplecontent/branch/master)  | [![Build Status](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent.svg?branch=master)](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent) |
 
 [![Join the chat at https://gitter.im/joeaudette/cloudscribe](https://badges.gitter.im/joeaudette/cloudscribe.svg)](https://gitter.im/joeaudette/cloudscribe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
