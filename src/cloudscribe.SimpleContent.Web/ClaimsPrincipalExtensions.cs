@@ -79,7 +79,8 @@ namespace cloudscribe.SimpleContent.Web
             {
                 try
                 {
-                    return await authorizationService.AuthorizeAsync(principal, ProjectConstants.PageEditPolicy).ConfigureAwait(false);
+                    var result = await authorizationService.AuthorizeAsync(principal, ProjectConstants.PageEditPolicy).ConfigureAwait(false);
+                    return result.Succeeded;
                 }
                 catch(InvalidOperationException) { }
                 
@@ -106,7 +107,8 @@ namespace cloudscribe.SimpleContent.Web
             {
                 try
                 {
-                    return await authorizationService.AuthorizeAsync(principal, ProjectConstants.BlogEditPolicy).ConfigureAwait(false);
+                    var result = await authorizationService.AuthorizeAsync(principal, ProjectConstants.BlogEditPolicy).ConfigureAwait(false);
+                    return result.Succeeded;
                 }
                 catch (InvalidOperationException) { }
 

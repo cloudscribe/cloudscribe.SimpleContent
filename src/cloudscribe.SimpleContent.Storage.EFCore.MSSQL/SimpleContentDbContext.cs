@@ -2,14 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-03-10
+// Last Modified:			2017-07-30
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 {
@@ -22,15 +21,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ISimpleContentTableNames tableNames = this.GetService<ISimpleContentTableNames>();
-            if (tableNames == null)
-            {
-                tableNames = new SimpleContentTableNames();
-            }
+            ISimpleContentTableNames tableNames = new SimpleContentTableNames();
+            
             
             modelBuilder.Entity<ProjectSettings>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.ProjectTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.ProjectTableName);
 
                 entity.HasKey(p => p.Id);
 
@@ -56,8 +52,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.ModerateComments)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(true)
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.CommentNotificationEmail)
@@ -66,8 +62,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.BlogMenuLinksToNewestPost)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.LocalMediaVirtualPath)
@@ -84,8 +80,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.IncludePubDateInPostUrls)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(true)
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.TimeZoneId)
@@ -106,20 +102,20 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.UseDefaultPageAsRootNode)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(true)
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowTitle)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.AddBlogToPagesTree)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(true)
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.BlogPageText)
@@ -136,8 +132,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.UseMetaDescriptionInFeed)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.LanguageCode)
@@ -177,10 +173,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 ;
 
                 entity.Property(p => p.SmtpPort)
-                //.IsRequired()
-                //.ForSqlServerHasColumnType("int")
-                //.HasDefaultValue(25)
-                //.ValueGeneratedNever()
                 ;
 
                 entity.Property(p => p.SmtpUser)
@@ -196,14 +188,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.SmtpRequiresAuth)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.SmtpUseSsl)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.PublisherLogoWidth)
@@ -224,15 +216,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.ShowRecentPostsOnDefaultPage)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PostTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PostTableName);
 
                 entity.HasKey(p => p.Id);
 
@@ -273,8 +265,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(true)
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 ;
 
                 entity.Ignore(p => p.Categories);
@@ -297,7 +289,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
             modelBuilder.Entity<PostComment>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
 
                 //entity.HasDiscriminator<string>("comment_type")
                 //    .HasValue<Comment>("comment_base")
@@ -345,7 +337,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
             modelBuilder.Entity<PostCategory>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PostCategoryTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PostCategoryTableName);
 
                 entity.HasKey(p => new { p.Value, p.PostEntityId });
 
@@ -371,7 +363,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
             modelBuilder.Entity<PageEntity>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageTableName);
 
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
@@ -423,52 +415,52 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(true)
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.MenuOnly)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowMenu)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
 
 
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(true)
+                .HasColumnType("bit")
+                .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowPubDate)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowLastModified)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowCategories)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowComments)
                 .IsRequired()
-                .ForSqlServerHasColumnType("bit")
-                .ForSqlServerHasDefaultValue(false)
+                .HasColumnType("bit")
+                .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.MenuFilters)
@@ -497,7 +489,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
             modelBuilder.Entity<PageComment>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
 
                 //entity.HasDiscriminator<string>("comment_type")
                 //    .HasValue<Comment>("comment_base")
@@ -545,7 +537,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
             modelBuilder.Entity<PageCategory>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageCategoryTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageCategoryTableName);
 
                 entity.HasKey(p => new { p.Value, p.PageEntityId });
 
@@ -571,7 +563,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
             modelBuilder.Entity<PageResourceEntity>(entity =>
             {
-                entity.ForSqlServerToTable(tableNames.TablePrefix + tableNames.PageResourceTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageResourceTableName);
                 
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)

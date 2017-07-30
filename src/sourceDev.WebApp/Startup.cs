@@ -206,7 +206,7 @@ namespace sourceDev.WebApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
             }
             else
             {
@@ -389,7 +389,7 @@ namespace sourceDev.WebApp
 
                         case "MySql":
                             var mysqlConnection = Configuration.GetConnectionString("MySqlEntityFrameworkConnectionString");
-                            services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
+                            //services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
                             services.AddCloudscribeLoggingEFStorageMySQL(mysqlConnection);
                             services.AddCloudscribeSimpleContentEFStorageMySQL(mysqlConnection);
 

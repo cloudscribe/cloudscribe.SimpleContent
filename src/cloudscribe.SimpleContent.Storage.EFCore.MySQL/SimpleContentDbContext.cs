@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-05-14
+// Last Modified:			2017-07-30
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -10,8 +10,7 @@ using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-//using MySQL.Data.EntityFrameworkCore;
-//using MySQL.Data.EntityFrameworkCore.Extensions;
+
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 {
@@ -24,11 +23,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ISimpleContentTableNames tableNames = this.GetService<ISimpleContentTableNames>();
-            if (tableNames == null)
-            {
-                tableNames = new SimpleContentTableNames();
-            }
+            ISimpleContentTableNames tableNames = new SimpleContentTableNames();
+
             
             modelBuilder.Entity<ProjectSettings>(entity =>
             {
@@ -58,8 +54,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.ModerateComments)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(true)
                 ;
 
                 entity.Property(p => p.CommentNotificationEmail)
@@ -68,8 +62,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.BlogMenuLinksToNewestPost)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.LocalMediaVirtualPath)
@@ -86,8 +78,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.IncludePubDateInPostUrls)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(true)
                 ;
 
                 entity.Property(p => p.TimeZoneId)
@@ -108,20 +98,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.UseDefaultPageAsRootNode)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(true)
                 ;
 
                 entity.Property(p => p.ShowTitle)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.AddBlogToPagesTree)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(true)
                 ;
 
                 entity.Property(p => p.BlogPageText)
@@ -138,8 +122,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.UseMetaDescriptionInFeed)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.LanguageCode)
@@ -179,10 +161,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 ;
 
                 entity.Property(p => p.SmtpPort)
-                //.IsRequired()
-                //.ForSqlServerHasColumnType("int")
-                //.HasDefaultValue(25)
-                //.ValueGeneratedNever()
                 ;
 
                 entity.Property(p => p.SmtpUser)
@@ -198,14 +176,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.SmtpRequiresAuth)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.SmtpUseSsl)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.PublisherLogoWidth)
@@ -273,8 +247,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(true)
                 ;
 
                 entity.Ignore(p => p.Categories);
@@ -291,18 +263,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 ;
 
-                // a shadow property to persist the categories/tags as a csv
-                //entity.Property<string>("CategoryCsv");
+                
             });
 
             modelBuilder.Entity<PostComment>(entity =>
             {
                 entity.ToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
-
-                //entity.HasDiscriminator<string>("comment_type")
-                //    .HasValue<Comment>("comment_base")
-                //    .HasValue<PageComment>("comment_page");
-
+                
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
                 .HasMaxLength(36)
@@ -424,8 +391,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
                 .HasDefaultValue(true)
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(true)
                 ;
 
                 entity.Property(p => p.MenuOnly)
@@ -441,36 +406,26 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
                 .HasDefaultValue(true)
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(true)
                 ;
 
                 entity.Property(p => p.ShowPubDate)
                 .IsRequired()
                 .HasDefaultValue(false)
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.ShowLastModified)
                 .IsRequired()
                 .HasDefaultValue(false)
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.ShowCategories)
                 .IsRequired()
                 .HasDefaultValue(false)
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.ShowComments)
                 .IsRequired()
                 .HasDefaultValue(false)
-                //.ForMySQLHasColumnType("bit")
-                //.ForMySQLHasDefaultValueSql(false)
                 ;
 
                 entity.Property(p => p.MenuFilters)
@@ -500,11 +455,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
             modelBuilder.Entity<PageComment>(entity =>
             {
                 entity.ToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
-
-                //entity.HasDiscriminator<string>("comment_type")
-                //    .HasValue<Comment>("comment_base")
-                //    .HasValue<PageComment>("comment_page");
-
+                
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
                 .HasMaxLength(36)

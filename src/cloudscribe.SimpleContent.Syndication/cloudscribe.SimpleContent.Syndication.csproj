@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Syndication Class Library</Description>
-    <VersionPrefix>1.1.2</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
+	<VersionSuffix>preview20170725</VersionSuffix>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>cloudscribe.SimpleContent.Syndication</AssemblyName>
     <PackageId>cloudscribe.SimpleContent.Syndication</PackageId>
@@ -24,8 +25,8 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.Syndication" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.1.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0-*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0-*" />
   </ItemGroup>
 
 

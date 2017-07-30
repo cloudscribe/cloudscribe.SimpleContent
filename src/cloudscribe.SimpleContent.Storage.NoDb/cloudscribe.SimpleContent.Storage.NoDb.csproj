@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Storage implemented with NoDb file system storage</Description>
-    <VersionPrefix>1.1.3</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
+	<VersionSuffix>preview20170725</VersionSuffix>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>cloudscribe.SimpleContent.Storage.NoDb</AssemblyName>
     <PackageId>cloudscribe.SimpleContent.Storage.NoDb</PackageId>
@@ -23,8 +24,8 @@
 
   <ItemGroup>
     <PackageReference Include="NoDb" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="1.1.*" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0-*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.0-*" />
   </ItemGroup>
 
 
