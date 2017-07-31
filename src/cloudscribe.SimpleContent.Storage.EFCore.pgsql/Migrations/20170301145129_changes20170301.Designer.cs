@@ -135,9 +135,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("cs_ContentProject");
 
-                    b.HasAnnotation("Npgsql:TableName", "cs_ContentProject");
+                  
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageCategory", b =>
@@ -160,9 +160,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.HasIndex("Value");
 
-                    b.ToTable("PageCategories");
+                    b.ToTable("cs_PageCategory");
 
-                    b.HasAnnotation("Npgsql:TableName", "cs_PageCategory");
+                   
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
@@ -207,9 +207,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("PageComments");
+                    b.ToTable("cs_PageComment");
 
-                    b.HasAnnotation("Npgsql:TableName", "cs_PageComment");
+                    
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", b =>
@@ -301,9 +301,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Pages");
+                    b.ToTable("cs_Page");
 
-                    b.HasAnnotation("Npgsql:TableName", "cs_Page");
+               
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostCategory", b =>
@@ -326,9 +326,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.HasIndex("Value");
 
-                    b.ToTable("PostCategories");
+                    b.ToTable("cs_PostCategory");
 
-                    b.HasAnnotation("Npgsql:TableName", "cs_PostCategory");
+                  
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostComment", b =>
@@ -373,9 +373,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("cs_PostComment");
 
-                    b.HasAnnotation("Npgsql:TableName", "cs_PostComment");
+                   
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity", b =>
@@ -419,9 +419,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.HasIndex("Slug");
 
-                    b.ToTable("Posts");
+                    b.ToTable("cs_Post");
 
-                    b.HasAnnotation("Npgsql:TableName", "cs_Post");
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
