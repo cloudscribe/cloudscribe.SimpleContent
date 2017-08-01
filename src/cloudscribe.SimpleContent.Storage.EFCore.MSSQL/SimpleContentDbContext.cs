@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-07-30
+// Last Modified:			2017-08-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -53,7 +53,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.ModerateComments)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(true)
+                //.HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.CommentNotificationEmail)
@@ -63,7 +63,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.BlogMenuLinksToNewestPost)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.LocalMediaVirtualPath)
@@ -81,7 +81,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.IncludePubDateInPostUrls)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(true)
+               // .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.TimeZoneId)
@@ -103,19 +103,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.UseDefaultPageAsRootNode)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(true)
+               // .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowTitle)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.AddBlogToPagesTree)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(true)
+                //.HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.BlogPageText)
@@ -133,7 +133,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.UseMetaDescriptionInFeed)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+              //  .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.LanguageCode)
@@ -189,13 +189,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.SmtpRequiresAuth)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.SmtpUseSsl)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.PublisherLogoWidth)
@@ -217,7 +217,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.ShowRecentPostsOnDefaultPage)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
             });
@@ -266,7 +266,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(true)
+               // .HasDefaultValue(true)
                 ;
 
                 entity.Ignore(p => p.Categories);
@@ -416,19 +416,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(true)
+                //.HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.MenuOnly)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowMenu)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
 
@@ -436,31 +436,31 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(true)
+                //.HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowPubDate)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowLastModified)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowCategories)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowComments)
                 .IsRequired()
                 .HasColumnType("bit")
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.MenuFilters)
@@ -482,9 +482,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 //entity.Property<string>("CategoryCsv");
 
                 entity.Ignore(p => p.Resources);
-
+                
                 entity.HasMany(p => p.PageResources)
                     .WithOne();
+
+                entity.Property(p => p.DisableEditor)
+               .IsRequired()
+               ;
+
+
             });
 
             modelBuilder.Entity<PageComment>(entity =>

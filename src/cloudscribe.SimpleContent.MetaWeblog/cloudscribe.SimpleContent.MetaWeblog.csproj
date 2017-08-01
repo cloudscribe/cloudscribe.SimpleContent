@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0-*" />
-    <PackageReference Include="cloudscribe.MetaWeblog" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.MetaWeblog" Version="2.0.0-*" />
   </ItemGroup>
 
   

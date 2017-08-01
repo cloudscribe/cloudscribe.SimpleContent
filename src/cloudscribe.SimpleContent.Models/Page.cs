@@ -71,6 +71,8 @@ namespace cloudscribe.SimpleContent.Models
 
         public string MenuFilters { get; set; }
 
+        public bool DisableEditor { get; set; } = false;
+
         public List<PageResource> Resources { get; set; }
 
         public static Page FromIPage(IPage page)
@@ -81,6 +83,7 @@ namespace cloudscribe.SimpleContent.Models
             p.Comments = page.Comments;
             p.CorrelationKey = page.CorrelationKey;
             p.Content = page.Content;
+            p.DisableEditor = page.DisableEditor;
             p.ExternalUrl = page.ExternalUrl;
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;
@@ -105,7 +108,6 @@ namespace cloudscribe.SimpleContent.Models
             p.Slug = page.Slug;
             p.Title = page.Title;
             p.ViewRoles = page.ViewRoles;
-            
             
             return p;
         }
