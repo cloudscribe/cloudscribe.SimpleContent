@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
     <VersionPrefix>2.0.0</VersionPrefix>
-	<VersionSuffix>preview20170725</VersionSuffix>
+	<VersionSuffix>preview20170726</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -27,10 +27,10 @@
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.*" />
     <PackageReference Include="cloudscribe.Messaging.Email" Version="2.0.0-*" />
     <PackageReference Include="cloudscribe.Web.Common" Version="2.0.0-*" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.2.*" />
-    <PackageReference Include="cloudscribe.Web.Pagination" Version="1.1.*" />
-    <PackageReference Include="cloudscribe.Web.SiteMap" Version="1.2.*" />
-    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="1.2.*" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.0.0-*" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="2.0.0-*" />
+    <PackageReference Include="cloudscribe.Web.SiteMap" Version="2.0.0-*" />
+    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.0.0-*" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.0-*" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.0.0-*" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0-*" />
