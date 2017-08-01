@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-07-30
+// Last Modified:			2017-08-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -200,7 +200,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.ShowRecentPostsOnDefaultPage)
                 .IsRequired()
-                .HasDefaultValue(false)
+                
                 ;
             });
 
@@ -390,42 +390,42 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                .HasDefaultValue(true)
+                //.HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.MenuOnly)
                 .IsRequired()
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowMenu)
                 .IsRequired()
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
-                .HasDefaultValue(true)
+                //.HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowPubDate)
                 .IsRequired()
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowLastModified)
                 .IsRequired()
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowCategories)
                 .IsRequired()
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowComments)
                 .IsRequired()
-                .HasDefaultValue(false)
+                //.HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.MenuFilters)
@@ -450,6 +450,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.HasMany(p => p.PageResources)
                     .WithOne();
+
+                entity.Property(p => p.DisableEditor)
+                  .IsRequired();
+
             });
 
             modelBuilder.Entity<PageComment>(entity =>

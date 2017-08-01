@@ -379,7 +379,7 @@ namespace sourceDev.WebApp
 
                     switch (efProvider)
                     {
-                        case "pqsql":
+                        case "pgsql":
                             var pgConnection = Configuration.GetConnectionString("PostgreSqlEntityFrameworkConnectionString");
                             services.AddCloudscribeCoreEFStoragePostgreSql(pgConnection);
                             services.AddCloudscribeLoggingEFStoragePostgreSql(pgConnection);
@@ -389,7 +389,7 @@ namespace sourceDev.WebApp
 
                         case "MySql":
                             var mysqlConnection = Configuration.GetConnectionString("MySqlEntityFrameworkConnectionString");
-                            //services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
+                            services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
                             services.AddCloudscribeLoggingEFStorageMySQL(mysqlConnection);
                             services.AddCloudscribeSimpleContentEFStorageMySQL(mysqlConnection);
 

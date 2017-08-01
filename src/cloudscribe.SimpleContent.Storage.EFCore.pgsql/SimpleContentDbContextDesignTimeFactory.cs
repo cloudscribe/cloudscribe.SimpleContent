@@ -1,14 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
+namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 {
     public class SimpleContentDbContextDesignTimeFactory : IDesignTimeDbContextFactory<SimpleContentDbContext>
     {
         public SimpleContentDbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<SimpleContentDbContext>();
-            builder.UseSqlServer("Server=(local);Database=DATABASENAME;Trusted_Connection=True;MultipleActiveResultSets=true");
+            builder.UseNpgsql("server=yourservername;UID=yourdatabaseusername;PWD=yourdatabaseuserpassword;database=yourdatabasename");
 
             return new SimpleContentDbContext(builder.Options);
         }

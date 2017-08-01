@@ -2,14 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-07-30
+// Last Modified:			2017-08-01
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 {
@@ -198,7 +197,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.ShowRecentPostsOnDefaultPage)
                 .IsRequired()
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 
                 ;
 
@@ -390,43 +389,43 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                .HasDefaultValue(true)
+               // .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.MenuOnly)
                 .IsRequired()
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowMenu)
                .IsRequired()
-               .HasDefaultValue(false)
+              // .HasDefaultValue(false)
                ;
 
 
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
-                .HasDefaultValue(true)
+              //  .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowPubDate)
                 .IsRequired()
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowLastModified)
                 .IsRequired()
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowCategories)
                 .IsRequired()
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowComments)
                 .IsRequired()
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Ignore(p => p.Categories);
@@ -450,6 +449,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.HasMany(p => p.PageResources)
                     .WithOne();
+
+                entity.Property(p => p.DisableEditor)
+                  .IsRequired();
 
             });
 
