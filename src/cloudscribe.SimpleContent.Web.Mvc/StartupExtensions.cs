@@ -1,18 +1,6 @@
 ﻿using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Services;
-using cloudscribe.SimpleContent.Web.Design;
-using cloudscribe.SimpleContent.Web.Services;
-using cloudscribe.SimpleContent.Web.TagHelpers;
-using cloudscribe.Web.Common.Razor;
-using cloudscribe.Web.Navigation;
-using cloudscribe.Web.SiteMap;
-using cloudscribe.FileManager.Web;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,18 +10,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             routes.AddBlogRoutesForSimpleContent();
             routes.AddDefaultPageRouteForSimpleContent();
-            //routes.AddCloudscribeFileManagerRoutes();
-
+            
 
             return routes;
         }
-
-        //public static IRouteBuilder AddCloudscribeFileManagerRoutesForSimpleContent(this IRouteBuilder routes)
-        //{
-        //    routes.AddCloudscribeFileManagerRoutes();
-        //    return routes;
-        //}
-
+        
         public static IRouteBuilder AddSimpleContentStaticResourceRoutes(this IRouteBuilder routes)
         {
             routes.MapRoute(

@@ -43,12 +43,12 @@ namespace sourceDev.WebApp
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            environment = env;
+           environment = env;
 
         }
 
         public IHostingEnvironment environment { get; set; }
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
         public bool SslIsAvailable { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -201,7 +201,7 @@ namespace sourceDev.WebApp
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            ConfigureLogging(loggerFactory, serviceProvider, logRepo);
+            ConfigureLogging(env, loggerFactory, serviceProvider, logRepo);
 
             if (env.IsDevelopment())
             {
@@ -468,6 +468,7 @@ namespace sourceDev.WebApp
         }
 
         private void ConfigureLogging(
+            IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             IServiceProvider serviceProvider
             , cloudscribe.Logging.Web.ILogRepository logRepo
@@ -475,7 +476,7 @@ namespace sourceDev.WebApp
         {
             // a customizable filter for logging
             LogLevel minimumLevel;
-            if (environment.IsProduction())
+            if (env.IsProduction())
             {
                 minimumLevel = LogLevel.Warning;
             }
