@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2016-11-09
+// Last Modified:			2017-08-03
 // 
 
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
@@ -20,10 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
             )
         {
             services.AddEntityFrameworkNpgsql()
-                .AddDbContext<SimpleContentDbContext>((serviceProvider, options) =>
-                options.UseNpgsql(connectionString)
-                       .UseInternalServiceProvider(serviceProvider)
-                       );
+                .AddDbContext<SimpleContentDbContext>(options =>
+                    options.UseNpgsql(connectionString));
 
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 

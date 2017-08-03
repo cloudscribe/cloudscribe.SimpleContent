@@ -2,26 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
   </PropertyGroup>
-
-  <!--
-  <PropertyGroup>
-    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
-  </PropertyGroup>
-  -->
 
   <ItemGroup>
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views;navigation.xml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
 
-    <Content Remove="appsettings.dev.json" CopyToPublishDirectory="Never" />
+    <Content Remove="appsettings.Development.json" CopyToPublishDirectory="Never" />
     <Content Remove="hosting.json" CopyToPublishDirectory="Never" />
     <Content Remove="bower.json" CopyToPublishDirectory="Never" />
     <Content Remove="bundleconfig.json" CopyToPublishDirectory="Never" />
     <Content Remove="wwwroot\lib\**\*" CopyToPublishDirectory="Never" />
 
-    <Content Include="appsettings.dev.json" CopyToPublishDirectory="Never" />
+    <Content Include="appsettings.Development.json" CopyToPublishDirectory="Never" />
     <Content Include="hosting.json" CopyToPublishDirectory="Never" />
     <Content Include="bower.json" CopyToPublishDirectory="Never" />
     <Content Include="bundleconfig.json" CopyToPublishDirectory="Never" />
@@ -60,28 +55,10 @@
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="2.0.0-*" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="2.0.0-*" />
     <PackageReference Include="cloudscribe.Web.Localization" Version="2.0.0-*" />
-    
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0-*" />
-	<!--
-    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.*" />
-	-->
-    
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.0.0-*" />
+
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0-preview2-final" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0-preview2-final" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0-preview2-final" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup>

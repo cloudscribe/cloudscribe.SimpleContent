@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-08-01
+// Last Modified:			2017-08-03
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -18,11 +18,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
         {
 
         }
-        
+
+        protected SimpleContentDbContext() { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             ISimpleContentTableNames tableNames = new SimpleContentTableNames();
-            
             
             modelBuilder.Entity<ProjectSettings>(entity =>
             {
@@ -607,9 +610,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 
             });
 
-            // should this be called before or after we do our thing?
-
-            base.OnModelCreating(modelBuilder);
+           
+            
         }
 
     }

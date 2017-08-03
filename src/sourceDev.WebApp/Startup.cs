@@ -20,34 +20,13 @@ namespace sourceDev.WebApp
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            //builder.AddJsonFile("app-tenants-users.json");
-            //builder.AddJsonFile("font-awesome-icon-map.json");
-
-
-            //builder.AddJsonFile("app-content-project-settings.json");
-
-            // this file name is ignored by gitignore
-            // so you can create it and use on your local dev machine
-            // remember last config source added wins if it has the same settings
-            builder.AddJsonFile("appsettings.dev.json", optional: true, reloadOnChange: true);
-
-
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
-
-           environment = env;
-
+            Configuration = configuration;
+            Environment = env;
         }
 
-        public IHostingEnvironment environment { get; set; }
+        public IHostingEnvironment Environment { get; set; }
         public IConfiguration Configuration { get; }
         public bool SslIsAvailable { get; set; }
 
@@ -56,7 +35,7 @@ namespace sourceDev.WebApp
         {
             //services.AddGlimpse();
 
-            string pathToCryptoKeys = Path.Combine(environment.ContentRootPath, "dp_keys");
+            string pathToCryptoKeys = Path.Combine(Environment.ContentRootPath, "dp_keys");
             services.AddDataProtection()
                 .PersistKeysToFileSystem(new System.IO.DirectoryInfo(pathToCryptoKeys));
 
@@ -194,19 +173,21 @@ namespace sourceDev.WebApp
             ILoggerFactory loggerFactory,
             IOptions<cloudscribe.Core.Models.MultiTenantOptions> multiTenantOptionsAccessor,
             IServiceProvider serviceProvider,
-            IOptions<RequestLocalizationOptions> localizationOptionsAccessor,
-            cloudscribe.Logging.Web.ILogRepository logRepo
+            IOptions<RequestLocalizationOptions> localizationOptionsAccessor
             )
         {
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            ConfigureLogging(env, loggerFactory, serviceProvider, logRepo);
+            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var logRepo = scope.ServiceProvider.GetService<cloudscribe.Logging.Web.ILogRepository>();
+                ConfigureLogging(env, loggerFactory, serviceProvider, logRepo);
+            }
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseBrowserLink();
+                app.UseBrowserLink();
             }
             else
             {
@@ -215,10 +196,7 @@ namespace sourceDev.WebApp
 
             app.UseForwardedHeaders();
             app.UseStaticFiles();
-
-            // custom 404 and error page - this preserves the status code (ie 404)
-            //app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
-
+            
             //app.UseSession();
 
             app.UseRequestLocalization(localizationOptionsAccessor.Value);

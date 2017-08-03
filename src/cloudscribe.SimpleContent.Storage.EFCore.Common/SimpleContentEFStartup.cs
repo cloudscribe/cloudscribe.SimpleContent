@@ -10,13 +10,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
         {
 
-            using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = serviceProvider.CreateScope())
             {
                 var db = serviceScope.ServiceProvider.GetService<ISimpleContentDbContext>();
-
                 await db.Database.MigrateAsync();
-
-
             }
         }
     }

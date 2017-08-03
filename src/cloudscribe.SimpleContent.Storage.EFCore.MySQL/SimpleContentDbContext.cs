@@ -2,15 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-08-01
+// Last Modified:			2017-08-03
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 {
@@ -20,11 +18,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
         {
 
         }
-        
+
+        protected SimpleContentDbContext() { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ISimpleContentTableNames tableNames = new SimpleContentTableNames();
+            base.OnModelCreating(modelBuilder);
 
+            ISimpleContentTableNames tableNames = new SimpleContentTableNames();
             
             modelBuilder.Entity<ProjectSettings>(entity =>
             {
@@ -566,9 +567,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
             });
 
-            // should this be called before or after we do our thing?
-
-            base.OnModelCreating(modelBuilder);
+            
         }
 
     }
