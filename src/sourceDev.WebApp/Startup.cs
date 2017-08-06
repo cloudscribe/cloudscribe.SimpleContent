@@ -209,29 +209,7 @@ namespace sourceDev.WebApp
                     SslIsAvailable);
 
             UseMvc(app, multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName);
-
-            var storage = Configuration["DevOptions:DbPlatform"];
-            switch (storage)
-            {
-                case "NoDb":
-                    CoreNoDbStartup.InitializeDataAsync(app.ApplicationServices).Wait();
-                    break;
-
-                case "ef":
-                default:
-                    // this creates ensures the database is created and initial data
-                    CoreEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
-
-                    // this one is only needed if using cloudscribe Logging with EF as the logging storage
-                    LoggingEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
-
-                    SimpleContentEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
-
-                    break;
-            }
-
-
-
+            
         }
 
 
