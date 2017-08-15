@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
     <VersionPrefix>2.0.0</VersionPrefix>
-	<VersionSuffix>preview20170725</VersionSuffix>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -22,22 +21,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Identity" Version="2.0.0-*" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="2.0.0-*" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="2.0.0-*" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="2.0.0-*" />
-    <PackageReference Include="cloudscribe.FileManager.Web" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0-*" />
+    <PackageReference Include="cloudscribe.Core.Identity" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Core.Models" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.FileManager.Web" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0-*" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.*" />
   </ItemGroup>
 
 
