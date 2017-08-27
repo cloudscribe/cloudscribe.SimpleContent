@@ -326,21 +326,21 @@ namespace sourceDev.WebApp
 
                     switch (efProvider)
                     {
-                        //case "pgsql":
-                        //    var pgConnection = Configuration.GetConnectionString("PostgreSqlEntityFrameworkConnectionString");
-                        //    services.AddCloudscribeCoreEFStoragePostgreSql(pgConnection);
-                        //    services.AddCloudscribeLoggingEFStoragePostgreSql(pgConnection);
-                        //    services.AddCloudscribeSimpleContentEFStoragePostgreSql(pgConnection);
+                        case "pgsql":
+                            var pgConnection = Configuration.GetConnectionString("PostgreSqlEntityFrameworkConnectionString");
+                            services.AddCloudscribeCoreEFStoragePostgreSql(pgConnection);
+                            services.AddCloudscribeLoggingEFStoragePostgreSql(pgConnection);
+                            services.AddCloudscribeSimpleContentEFStoragePostgreSql(pgConnection);
 
-                        //    break;
+                            break;
 
-                        //case "MySql":
-                        //    var mysqlConnection = Configuration.GetConnectionString("MySqlEntityFrameworkConnectionString");
-                        //    services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
-                        //    services.AddCloudscribeLoggingEFStorageMySQL(mysqlConnection);
-                        //    services.AddCloudscribeSimpleContentEFStorageMySQL(mysqlConnection);
+                        case "MySql":
+                            var mysqlConnection = Configuration.GetConnectionString("MySqlEntityFrameworkConnectionString");
+                            services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
+                            services.AddCloudscribeLoggingEFStorageMySQL(mysqlConnection);
+                            services.AddCloudscribeSimpleContentEFStorageMySQL(mysqlConnection);
 
-                        //    break;
+                            break;
 
                         case "MSSQL":
                         default:
