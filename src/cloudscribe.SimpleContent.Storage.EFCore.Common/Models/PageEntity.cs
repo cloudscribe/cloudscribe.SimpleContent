@@ -161,6 +161,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             set { pageResources = value; }
         }
 
+        public bool DisableEditor { get; set; } = false;
+
         public static PageEntity FromIPage(IPage page)
         {
             var p = new PageEntity();
@@ -169,6 +171,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Comments = page.Comments;
             p.Content = page.Content;
             p.CorrelationKey = page.CorrelationKey;
+            p.DisableEditor = page.DisableEditor;
             p.ExternalUrl = page.ExternalUrl;
             p.Id = page.Id;
             p.IsPublished = page.IsPublished;

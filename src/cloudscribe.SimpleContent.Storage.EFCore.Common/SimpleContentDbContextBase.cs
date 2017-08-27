@@ -2,13 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-04-18
+// Last Modified:			2017-08-03
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore
 {
@@ -18,6 +17,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         {
 
         }
+
+        protected SimpleContentDbContextBase() { }
 
         public DbSet<ProjectSettings> Projects { get; set; }
 

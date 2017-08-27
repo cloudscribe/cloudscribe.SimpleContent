@@ -12,6 +12,7 @@ using cloudscribe.SimpleContent.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace cloudscribe.Core.SimpleContent.Integration
 {
@@ -19,7 +20,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
     {
         public ProjectSecurityResolver(
             SiteUserManager<SiteUser> userManager,
-            SiteSignInManager<SiteUser> signInManager,
+            SignInManager<SiteUser> signInManager,
             IProjectSettingsResolver projectResolver,
             IAuthorizationService authorizationService
             )
@@ -31,7 +32,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
         }
 
         private SiteUserManager<SiteUser> userManager;
-        private SiteSignInManager<SiteUser> signInManager;
+        private SignInManager<SiteUser> signInManager;
         private IAuthorizationService authorizationService;
         private IProjectSettingsResolver projectResolver;
 

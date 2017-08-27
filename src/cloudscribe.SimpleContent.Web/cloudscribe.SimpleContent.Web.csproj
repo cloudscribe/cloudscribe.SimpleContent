@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>1.2.3</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>cloudscribe.SimpleContent.Web</AssemblyName>
     <PackageId>cloudscribe.SimpleContent.Web</PackageId>
@@ -24,31 +24,24 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.*" />
-    <PackageReference Include="cloudscribe.Messaging.Email" Version="1.2.*" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="1.3.*" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="1.2.*" />
-    <PackageReference Include="cloudscribe.Web.Pagination" Version="1.1.*" />
-    <PackageReference Include="cloudscribe.Web.SiteMap" Version="1.2.*" />
-    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="1.2.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="1.1.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="1.1.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="1.1.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="1.1.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="1.1.*" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.*" />
+    <PackageReference Include="cloudscribe.Messaging.Email" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.SiteMap" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.*" />
   </ItemGroup>
-
-  <!--
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.IO" Version="4.3.0" />
-  </ItemGroup>
-  -->
 
 </Project>
