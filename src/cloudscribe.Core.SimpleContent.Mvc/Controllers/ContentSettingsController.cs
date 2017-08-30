@@ -89,7 +89,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             bool canManageUsers = false;
             try
             {
-                canManageUsers = await authorizationService.AuthorizeAsync(User, "UserManagementPolicy");
+                var result = await authorizationService.AuthorizeAsync(User, "UserManagementPolicy");
+                canManageUsers = result.Succeeded;
             }
             catch (InvalidOperationException) { } // thrown if policy doesn't exist
             

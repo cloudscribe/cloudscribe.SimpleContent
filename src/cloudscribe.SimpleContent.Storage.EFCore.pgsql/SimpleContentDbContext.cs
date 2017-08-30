@@ -2,15 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-05-14
+// Last Modified:			2017-08-03
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 {
@@ -20,18 +18,18 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
         {
 
         }
-        
+
+        protected SimpleContentDbContext() { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            ISimpleContentTableNames tableNames = this.GetService<ISimpleContentTableNames>();
-            if (tableNames == null)
-            {
-                tableNames = new SimpleContentTableNames();
-            }
+            base.OnModelCreating(modelBuilder);
+
+            ISimpleContentTableNames tableNames = new SimpleContentTableNames();
             
             modelBuilder.Entity<ProjectSettings>(entity =>
             {
-                entity.ForNpgsqlToTable(tableNames.TablePrefix + tableNames.ProjectTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.ProjectTableName);
 
                 entity.HasKey(p => p.Id);
 
@@ -57,8 +55,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.ModerateComments)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.CommentNotificationEmail)
@@ -67,8 +63,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.BlogMenuLinksToNewestPost)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.LocalMediaVirtualPath)
@@ -85,8 +79,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.IncludePubDateInPostUrls)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.TimeZoneId)
@@ -107,20 +99,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.UseDefaultPageAsRootNode)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowTitle)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.AddBlogToPagesTree)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.BlogPageText)
@@ -137,8 +123,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.UseMetaDescriptionInFeed)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.LanguageCode)
@@ -178,10 +162,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 ;
 
                 entity.Property(p => p.SmtpPort)
-                //.IsRequired()
-                //.ForSqlServerHasColumnType("int")
-                //.HasDefaultValue(25)
-                //.ValueGeneratedNever()
                 ;
 
                 entity.Property(p => p.SmtpUser)
@@ -197,14 +177,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.SmtpRequiresAuth)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.SmtpUseSsl)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.PublisherLogoWidth)
@@ -225,7 +201,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.ShowRecentPostsOnDefaultPage)
                 .IsRequired()
-                .ForNpgsqlHasDefaultValue(false)
+               // .HasDefaultValue(false)
                 
                 ;
 
@@ -233,7 +209,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
             modelBuilder.Entity<PostEntity>(entity =>
             {
-                entity.ForNpgsqlToTable(tableNames.TablePrefix + tableNames.PostTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PostTableName);
 
                 entity.HasKey(p => p.Id);
 
@@ -274,8 +250,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(true)
                 ;
 
                 entity.Ignore(p => p.Categories);
@@ -292,18 +266,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 ;
 
-                // a shadow property to persist the categories/tags as a csv
-                //entity.Property<string>("CategoryCsv");
+                
             });
 
             modelBuilder.Entity<PostComment>(entity =>
             {
-                entity.ForNpgsqlToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
-
-                //entity.HasDiscriminator<string>("comment_type")
-                //    .HasValue<Comment>("comment_base")
-                //    .HasValue<PageComment>("comment_page");
-
+                entity.ToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
+                
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
                 .HasMaxLength(36)
@@ -346,7 +315,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
             modelBuilder.Entity<PostCategory>(entity =>
             {
-                entity.ForNpgsqlToTable(tableNames.TablePrefix + tableNames.PostCategoryTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PostCategoryTableName);
 
                 entity.HasKey(p => new { p.Value, p.PostEntityId });
 
@@ -372,7 +341,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
             modelBuilder.Entity<PageEntity>(entity =>
             {
-                entity.ForNpgsqlToTable(tableNames.TablePrefix + tableNames.PageTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageTableName);
 
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
@@ -424,55 +393,43 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                .HasDefaultValue(true)
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(true)
+               // .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.MenuOnly)
                 .IsRequired()
-                .HasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowMenu)
                .IsRequired()
-               .HasDefaultValue(false)
+              // .HasDefaultValue(false)
                ;
 
 
                 entity.Property(p => p.ShowHeading)
                 .IsRequired()
-                .HasDefaultValue(true)
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(true)
+              //  .HasDefaultValue(true)
                 ;
 
                 entity.Property(p => p.ShowPubDate)
                 .IsRequired()
-                .HasDefaultValue(false)
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowLastModified)
                 .IsRequired()
-                .HasDefaultValue(false)
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowCategories)
                 .IsRequired()
-                .HasDefaultValue(false)
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Property(p => p.ShowComments)
                 .IsRequired()
-                .HasDefaultValue(false)
-                //.ForSqlServerHasColumnType("bit")
-                //.ForSqlServerHasDefaultValue(false)
+               // .HasDefaultValue(false)
                 ;
 
                 entity.Ignore(p => p.Categories);
@@ -497,16 +454,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 entity.HasMany(p => p.PageResources)
                     .WithOne();
 
+                entity.Property(p => p.DisableEditor)
+                  .IsRequired();
+
             });
 
             modelBuilder.Entity<PageComment>(entity =>
             {
-                entity.ForNpgsqlToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
-
-                //entity.HasDiscriminator<string>("comment_type")
-                //    .HasValue<Comment>("comment_base")
-                //    .HasValue<PageComment>("comment_page");
-
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
+                
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id)
                 .HasMaxLength(36)
@@ -549,7 +505,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
             modelBuilder.Entity<PageCategory>(entity =>
             {
-                entity.ForNpgsqlToTable(tableNames.TablePrefix + tableNames.PageCategoryTableName);
+                entity.ToTable(tableNames.TablePrefix + tableNames.PageCategoryTableName);
 
                 entity.HasKey(p => new { p.Value, p.PageEntityId });
 
@@ -612,10 +568,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
 
             });
-
-            // should this be called before or after we do our thing?
-
-            base.OnModelCreating(modelBuilder);
+            
+            
         }
 
     }

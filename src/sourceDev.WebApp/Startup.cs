@@ -20,35 +20,14 @@ namespace sourceDev.WebApp
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            //builder.AddJsonFile("app-tenants-users.json");
-            //builder.AddJsonFile("font-awesome-icon-map.json");
-
-
-            //builder.AddJsonFile("app-content-project-settings.json");
-
-            // this file name is ignored by gitignore
-            // so you can create it and use on your local dev machine
-            // remember last config source added wins if it has the same settings
-            builder.AddJsonFile("appsettings.dev.json", optional: true, reloadOnChange: true);
-
-
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
-
-            environment = env;
-
+            Configuration = configuration;
+            Environment = env;
         }
 
-        public IHostingEnvironment environment { get; set; }
-        public IConfigurationRoot Configuration { get; }
+        public IHostingEnvironment Environment { get; set; }
+        public IConfiguration Configuration { get; }
         public bool SslIsAvailable { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -56,7 +35,7 @@ namespace sourceDev.WebApp
         {
             //services.AddGlimpse();
 
-            string pathToCryptoKeys = Path.Combine(environment.ContentRootPath, "dp_keys");
+            string pathToCryptoKeys = Path.Combine(Environment.ContentRootPath, "dp_keys");
             services.AddDataProtection()
                 .PersistKeysToFileSystem(new System.IO.DirectoryInfo(pathToCryptoKeys));
 
@@ -193,16 +172,9 @@ namespace sourceDev.WebApp
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             IOptions<cloudscribe.Core.Models.MultiTenantOptions> multiTenantOptionsAccessor,
-            IServiceProvider serviceProvider,
-            IOptions<RequestLocalizationOptions> localizationOptionsAccessor,
-            cloudscribe.Logging.Web.ILogRepository logRepo
+            IOptions<RequestLocalizationOptions> localizationOptionsAccessor
             )
         {
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            ConfigureLogging(loggerFactory, serviceProvider, logRepo);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -215,10 +187,7 @@ namespace sourceDev.WebApp
 
             app.UseForwardedHeaders();
             app.UseStaticFiles();
-
-            // custom 404 and error page - this preserves the status code (ie 404)
-            //app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
-
+            
             //app.UseSession();
 
             app.UseRequestLocalization(localizationOptionsAccessor.Value);
@@ -231,29 +200,7 @@ namespace sourceDev.WebApp
                     SslIsAvailable);
 
             UseMvc(app, multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName);
-
-            var storage = Configuration["DevOptions:DbPlatform"];
-            switch (storage)
-            {
-                case "NoDb":
-                    CoreNoDbStartup.InitializeDataAsync(app.ApplicationServices).Wait();
-                    break;
-
-                case "ef":
-                default:
-                    // this creates ensures the database is created and initial data
-                    CoreEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
-
-                    // this one is only needed if using cloudscribe Logging with EF as the logging storage
-                    LoggingEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
-
-                    SimpleContentEFStartup.InitializeDatabaseAsync(app.ApplicationServices).Wait();
-
-                    break;
-            }
-
-
-
+            
         }
 
 
@@ -379,7 +326,7 @@ namespace sourceDev.WebApp
 
                     switch (efProvider)
                     {
-                        case "pqsql":
+                        case "pgsql":
                             var pgConnection = Configuration.GetConnectionString("PostgreSqlEntityFrameworkConnectionString");
                             services.AddCloudscribeCoreEFStoragePostgreSql(pgConnection);
                             services.AddCloudscribeLoggingEFStoragePostgreSql(pgConnection);
@@ -467,49 +414,6 @@ namespace sourceDev.WebApp
 
         }
 
-        private void ConfigureLogging(
-            ILoggerFactory loggerFactory,
-            IServiceProvider serviceProvider
-            , cloudscribe.Logging.Web.ILogRepository logRepo
-            )
-        {
-            // a customizable filter for logging
-            LogLevel minimumLevel;
-            if (environment.IsProduction())
-            {
-                minimumLevel = LogLevel.Warning;
-            }
-            else
-            {
-                minimumLevel = LogLevel.Information;
-            }
-
-
-            // add exclusions to remove noise in the logs
-            var excludedLoggers = new List<string>
-            {
-                "Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware",
-                "Microsoft.AspNetCore.Hosting.Internal.WebHost",
-            };
-
-            Func<string, LogLevel, bool> logFilter = (string loggerName, LogLevel logLevel) =>
-            {
-                if (logLevel < minimumLevel)
-                {
-                    return false;
-                }
-
-                if (excludedLoggers.Contains(loggerName))
-                {
-                    return false;
-                }
-
-                return true;
-            };
-
-            loggerFactory.AddDbLogger(serviceProvider, logFilter, logRepo);
-        }
-
-
+        
     }
 }

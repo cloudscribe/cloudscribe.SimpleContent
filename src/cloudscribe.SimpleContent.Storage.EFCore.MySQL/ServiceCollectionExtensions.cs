@@ -2,14 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2016-11-09
+// Last Modified:			2017-08-03
 // 
 
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.MySQL;
 using Microsoft.EntityFrameworkCore;
-//using MySQL.Data.EntityFrameworkCore;
-//using MySQL.Data.EntityFrameworkCore.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,10 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
             )
         {
             services.AddEntityFrameworkMySql()
-                .AddDbContext<SimpleContentDbContext>((serviceProvider, options) =>
-                options.UseMySql(connectionString)
-                       .UseInternalServiceProvider(serviceProvider)
-                       );
+                .AddDbContext<SimpleContentDbContext>(options =>
+                    options.UseMySql(connectionString));
 
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 

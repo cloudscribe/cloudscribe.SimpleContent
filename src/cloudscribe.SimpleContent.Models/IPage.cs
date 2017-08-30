@@ -47,6 +47,7 @@ namespace cloudscribe.SimpleContent.Models
         bool MenuOnly { get; set; }
 
         bool ShowMenu { get; set; }
+        bool DisableEditor { get; set; }
 
         List<PageResource> Resources { get; set; }
     }
