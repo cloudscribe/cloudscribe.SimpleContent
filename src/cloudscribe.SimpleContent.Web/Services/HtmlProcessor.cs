@@ -278,7 +278,7 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public string ExtractFirstImageUrl(string htmlInput)
+        public string ExtractFirstImageUrl(string htmlInput, string fallbackImageUrl = null)
         {
             if (string.IsNullOrWhiteSpace(htmlInput)) return htmlInput;
 
@@ -295,12 +295,12 @@ namespace cloudscribe.SimpleContent.Services
                 
             }
 
-            return null;
+            return fallbackImageUrl;
 
         }
 
 
-        public ImageSizeResult ExtractFirstImageDimensions(string htmlInput)
+        public ImageSizeResult ExtractFirstImageDimensions(string htmlInput, string fallbackWidth = "550px", string fallbackHeight = "550px")
         { 
             if(!string.IsNullOrWhiteSpace(htmlInput))
             {
@@ -314,21 +314,21 @@ namespace cloudscribe.SimpleContent.Services
                         var style = img.Attributes["style"].Value;
                         var styleItems = style.Split(';')
                         .Select(s => s.Trim()).ToArray();
-                        return ExtractDims(styleItems as string[]);
+                        return ExtractDims(styleItems as string[], fallbackWidth, fallbackHeight);
                     }
 
                 }
             }
             
 
-            return new ImageSizeResult { Width = "550px", Height = "550px" };
+            return new ImageSizeResult { Width = fallbackWidth, Height = fallbackHeight };
 
         }
 
-        private ImageSizeResult ExtractDims(string[] atts)
+        private ImageSizeResult ExtractDims(string[] atts, string fallbackWidth = "550px", string fallbackHeight = "550px")
         {
-            string h = "550px";
-            string w = "550px";
+            string h = fallbackHeight;
+            string w = fallbackWidth;
             foreach(var item in atts)
             {
                 
