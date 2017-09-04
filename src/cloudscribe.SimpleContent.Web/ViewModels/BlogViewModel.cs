@@ -94,14 +94,14 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public IBlogRoutes BlogRoutes { get; set; }
         
-        public string ExtractFirstImargeUrl(IPost post, IUrlHelper urlHelper)
+        public string ExtractFirstImargeUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
         {
             if (post == null) return string.Empty;
             if (urlHelper == null) return string.Empty;
 
             var result = filter.ExtractFirstImageUrl(post.Content);
 
-            if (result == null) return string.Empty;
+            if (result == null) return fallbackImageUrl;
 
             if(result.StartsWith("http")) return result;
 
