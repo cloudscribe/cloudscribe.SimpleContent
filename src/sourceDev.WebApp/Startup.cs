@@ -244,6 +244,13 @@ namespace sourceDev.WebApp
                     else
                     {
                         routes.MapRoute(
+                            name: "foldersitemap",
+                            template: "{sitefolder}/sitemap"
+                            , defaults: new { controller = "Page", action = "SiteMap" }
+                            , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                            );
+
+                        routes.MapRoute(
                         name: "folderdefault",
                         template: "{sitefolder}/{controller}/{action}/{id?}"
                         , defaults: new { controller = "Home" }
