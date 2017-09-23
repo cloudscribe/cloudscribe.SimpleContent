@@ -1,10 +1,12 @@
 ﻿using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
+using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Web.Config;
 using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.Web.Common.Razor;
+using cloudscribe.Web.Common.Setup;
 using cloudscribe.Web.Navigation;
 using cloudscribe.Web.SiteMap;
 //using cloudscribe.FileManager.Web;
@@ -49,6 +51,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
 
             services.TryAddScoped<IRoleSelectorProperties, NotImplementedRoleSelectorProperties>();
+
+            services.AddScoped<IVersionProvider, VersionInfo>();
 
             // registering an IOptions<IconCssClasses> that canbe injected into views
             if (configuration != null)
