@@ -29,9 +29,13 @@ namespace cloudscribe.SimpleContent.Web.Services
         {
             if (string.IsNullOrEmpty(currentUrl)) return null;
             if (rootNode == null) return null;
-            
-            var blogUrl = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
+            if (rootNode.Value.Controller == "Blog") return rootNode;
+            if (rootNode.Value.NamedRoute == blogRoutes.BlogIndexRouteName) return rootNode;
+            if (rootNode.Value.NamedRoute == blogRoutes.MostRecentPostRouteName) return rootNode;
 
+            var blogUrl = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
+            if (rootNode.Value.Url == blogUrl) return rootNode;
+            
             Func<TreeNode<NavigationNode>, bool> match = delegate (TreeNode<NavigationNode> n)
             {
                 if (n == null) { return false; }

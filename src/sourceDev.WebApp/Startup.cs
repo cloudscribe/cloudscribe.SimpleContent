@@ -219,7 +219,7 @@ namespace sourceDev.WebApp
                 routes.AddSimpleContentStaticResourceRoutes();
                 routes.AddCloudscribeFileManagerRoutes();
 
-                //routes.AddCloudscribeFileManagerRoutesForSimpleContent();
+                
 
                 if (useFolders)
                 {
@@ -258,6 +258,8 @@ namespace sourceDev.WebApp
                         );
 
                         routes.AddDefaultPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+
+                        //routes.AddBlogRoutesForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint(),"");
                     }
 
 
@@ -304,6 +306,7 @@ namespace sourceDev.WebApp
                 {
                     routes.AddDefaultPageRouteForSimpleContent();
                 }
+                //routes.AddBlogRoutesForSimpleContent("");
 
 
             })

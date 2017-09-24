@@ -197,18 +197,37 @@ namespace Microsoft.Extensions.DependencyInjection
             return routes;
         }
 
-        public static IRouteBuilder AddBlogRoutesForSimpleContent(this IRouteBuilder routes)
+        private static string GetSegmentTemplate(string providedStartSegment)
         {
+            string segmentResult = "";
+            if (!string.IsNullOrEmpty(providedStartSegment))
+            {
+                if (providedStartSegment != string.Empty)
+                {
+                    if (!providedStartSegment.EndsWith("/"))
+                    {
+                        segmentResult = providedStartSegment + "/";
+                    }
+                }
+            }
+
+            return segmentResult;
+        }
+
+        public static IRouteBuilder AddBlogRoutesForSimpleContent(this IRouteBuilder routes, string startSegment = "blog")
+        {
+            string firstSegment = GetSegmentTemplate(startSegment);
+            
             routes.MapRoute(
                    name: ProjectConstants.BlogCategoryRouteName,
-                   template: "blog/category/{category=''}/{pagenumber=1}"
+                   template: firstSegment + "category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    );
 
 
             routes.MapRoute(
                   ProjectConstants.BlogArchiveRouteName,
-                  "blog/{year}/{month}/{day}",
+                  firstSegment + "{year}/{month}/{day}",
                   new { controller = "Blog", action = "Archive", month = "00", day = "00" },
                   //new { controller = "Blog", action = "Archive" },
                   new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
@@ -216,44 +235,38 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                   ProjectConstants.PostWithDateRouteName,
-                  "blog/{year}/{month}/{day}/{slug}",
+                  firstSegment + "{year}/{month}/{day}/{slug}",
                   new { controller = "Blog", action = "PostWithDate" },
                   new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
             routes.MapRoute(
                name: ProjectConstants.PostEditRouteName,
-               template: "blog/edit/{slug?}"
+               template: firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
                );
 
             routes.MapRoute(
                name: ProjectConstants.PostDeleteRouteName,
-               template: "blog/delete/{id?}"
+               template: firstSegment + "delete/{id?}"
                , defaults: new { controller = "Blog", action = "Delete" }
                );
-
-            //routes.MapRoute(
-            //   name: ProjectConstants.NewPostRouteName,
-            //   template: "blog/new"
-            //   , defaults: new { controller = "Blog", action = "New" }
-            //   );
-
+            
             routes.MapRoute(
               name: ProjectConstants.MostRecentPostRouteName,
-              template: "blog/mostrecent"
+              template: firstSegment + "mostrecent"
               , defaults: new { controller = "Blog", action = "MostRecent" }
               );
 
             routes.MapRoute(
                name: ProjectConstants.PostWithoutDateRouteName,
-               template: "blog/{slug}"
+               template: firstSegment + "{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
                );
 
             routes.MapRoute(
                name: ProjectConstants.BlogIndexRouteName,
-               template: "blog/"
+               template: firstSegment
                , defaults: new { controller = "Blog", action = "Index" }
                );
 
@@ -262,68 +275,71 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IRouteBuilder AddBlogRoutesForSimpleContent(
             this IRouteBuilder routes,
-            IRouteConstraint siteFolderConstraint
+            IRouteConstraint siteFolderConstraint,
+            string startSegment = "blog"
             )
         {
+            string firstSegment = GetSegmentTemplate(startSegment);
+
             routes.MapRoute(
                    name: ProjectConstants.FolderBlogCategoryRouteName,
-                   template: "{sitefolder}/blog/category/{category=''}/{pagenumber=1}"
+                   template: "{sitefolder}/" + firstSegment + "category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    , constraints: new { name = siteFolderConstraint }
                    );
 
             routes.MapRoute(
                   ProjectConstants.FolderBlogArchiveRouteName,
-                  "{sitefolder}/blog/{year}/{month}/{day}",
+                  "{sitefolder}/" + firstSegment + "{year}/{month}/{day}",
                   new { controller = "Blog", action = "Archive", month = "00", day = "00" },
                   new { name = siteFolderConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
             routes.MapRoute(
                   ProjectConstants.FolderPostWithDateRouteName,
-                  "{sitefolder}/blog/{year}/{month}/{day}/{slug}",
+                  "{sitefolder}/" + firstSegment + "{year}/{month}/{day}/{slug}",
                   new { controller = "Blog", action = "PostWithDate" },
                   new { name = siteFolderConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPostEditRouteName,
-               template: "{sitefolder}/blog/edit/{slug?}"
+               template: "{sitefolder}/" + firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
                , constraints: new { name = siteFolderConstraint }
                );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPostDeleteRouteName,
-               template: "{sitefolder}/blog/delete/{id?}"
+               template: "{sitefolder}/" + firstSegment + "delete/{id?}"
                , defaults: new { controller = "Blog", action = "Delete" }
                , constraints: new { name = siteFolderConstraint }
                );
 
             routes.MapRoute(
                name: ProjectConstants.FolderNewPostRouteName,
-               template: "{sitefolder}/blog/new"
+               template: "{sitefolder}/" + firstSegment + "new"
                , defaults: new { controller = "Blog", action = "New" }
                , constraints: new { name = siteFolderConstraint }
                );
 
             routes.MapRoute(
               name: ProjectConstants.FolderMostRecentPostRouteName,
-              template: "{sitefolder}/blog/mostrecent"
+              template: "{sitefolder}/" + firstSegment + "mostrecent"
               , defaults: new { controller = "Blog", action = "MostRecent" }
               , constraints: new { name = siteFolderConstraint }
               );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPostWithoutDateRouteName,
-               template: "{sitefolder}/blog/{slug}"
+               template: "{sitefolder}/" + firstSegment + "{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
                , constraints: new { name = siteFolderConstraint }
                );
 
             routes.MapRoute(
                name: ProjectConstants.FolderBlogIndexRouteName,
-               template: "{sitefolder}/blog/"
+               template: "{sitefolder}/" + firstSegment + ""
                , defaults: new { controller = "Blog", action = "Index" }
                , constraints: new { name = siteFolderConstraint }
                );

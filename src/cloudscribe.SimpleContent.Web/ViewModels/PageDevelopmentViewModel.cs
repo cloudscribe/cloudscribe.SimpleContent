@@ -1,9 +1,5 @@
 ﻿using cloudscribe.SimpleContent.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -22,5 +18,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public List<IPageResource> Js { get; set; }
 
         public AddPageResourceViewModel AddResourceViewModel { get; set; }
+
+       
     }
 }

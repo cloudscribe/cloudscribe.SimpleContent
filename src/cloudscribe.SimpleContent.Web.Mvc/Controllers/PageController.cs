@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-06-14
+// Last Modified:           2017-09-24
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -294,7 +294,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.MenuFilters = page.MenuFilters;
                 model.ViewRoles = page.ViewRoles;
                 model.ShowComments = page.ShowComments;
-                
+                model.DisableEditor = page.DisableEditor;
 
             }
 
@@ -466,6 +466,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             page.ShowHeading = model.ShowHeading;
             page.ShowMenu = model.ShowMenu;
             page.MenuOnly = model.MenuOnly;
+            page.DisableEditor = model.DisableEditor;
             page.ShowComments = model.ShowComments;
             if (page.MenuFilters != model.MenuFilters)
             {
@@ -584,7 +585,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.AddResourceViewModel.Slug = page.Slug;
             model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
             model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
-
+            
 
             return View(model);
 

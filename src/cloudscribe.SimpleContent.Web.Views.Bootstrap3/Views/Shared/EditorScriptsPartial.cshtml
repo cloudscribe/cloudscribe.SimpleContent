@@ -1,14 +1,2 @@
-﻿<environment names="Development">
-    <script src="~/cr/js/jquery.hotkeys.js"></script> 
-    <script src="~/cr/js/jquery.cookie.js"></script>
-    <script src="~/cr/js/ckeditor461/ckeditor.js"></script>
-    <script src="~/cr/js/ckeditor461/adapters/jquery.js"></script>
-    <script src="~/cr/js/cloudscribe-ckeditor-unobtrusive.js"></script>
-</environment>
-<environment names="Staging,Production">
-    <script src="~/cr/js/jquery.hotkeys.min.js"></script>
-    <script src="~/cr/js/jquery.cookie.min.js"></script>
-    <script src="~/cr/js/ckeditor461/ckeditor.js"></script>
-    <script src="~/cr/js/ckeditor461/adapters/jquery.js"></script>
-    <script src="~/cr/js/cloudscribe-ckeditor-unobtrusive.min.js"></script>
-</environment>
+﻿@{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }
+@{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }

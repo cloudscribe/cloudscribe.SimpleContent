@@ -1,0 +1,38 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
+@using Microsoft.Extensions.Localization
+@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Models
+@using cloudscribe.Web.Common.Helpers
+@using System.Globalization
+@using cloudscribe.Web.Common.Models
+@using cloudscribe.Web.Common.Components
+@using cloudscribe.SimpleContent.Web.TagHelpers
+@using Microsoft.Extensions.Options
+@inject IStringLocalizer<SimpleContent> sr
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper "*, cloudscribe.Web.Common"
+@addTagHelper "*, cloudscribe.SimpleContent.Web"
+@{ 
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();  
+}  
+<div class="form-group">
+	<label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
+	<div class="col-md-10">
+    @if (Model.DisableEditor)
+    {
+        <textarea asp-for="Content" class="form-control" rows="10" cols="70"></textarea>
+    }
+    else
+    {
+        <textarea asp-for="Content" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    }
+		<span asp-validation-for="Content" class="text-danger"></span>
+	</div>
+</div>
