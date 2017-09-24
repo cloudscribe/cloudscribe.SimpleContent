@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-25
-// Last Modified:           2017-03-17
+// Last Modified:           2017-09-23
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
@@ -96,13 +95,15 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         }
 
+        
+
         public Post Deserialize(string xmlString, string key)
         {
             // we need the key passed in here because the xml format adopted from MiniBlog/BlogEngine
             // does not store the post id in the xml but only as part of the file name
 
             var doc = XDocument.Parse(xmlString);
-
+            
             Post post = new Post()
             {
                 Id = key,
@@ -112,22 +113,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 MetaDescription = ReadValue(doc.Root, "excerpt"),
                 Content = ReadValue(doc.Root, "content"),
                 Slug = ReadValue(doc.Root, "slug").ToLowerInvariant(),
-                PubDate = DateTime.ParseExact(
-                    ReadValue(doc.Root, "pubDate"),
-                    "O",
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.AssumeUniversal |
-                    DateTimeStyles.AdjustToUniversal
-                ),
-
-                LastModified = DateTime.ParseExact(
-                    ReadValue(doc.Root, "lastModified", DateTime.UtcNow.ToString()),
-                    "O",
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.AssumeUniversal |
-                    DateTimeStyles.AdjustToUniversal
-                    ),
-
+                PubDate = GetDate(doc.Root, "pubDate"),
+                LastModified = GetDate(doc.Root, "lastModified"),
                 IsPublished = bool.Parse(ReadValue(doc.Root, "ispublished", "true")),
             };
 
@@ -179,6 +166,40 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
                 post.Comments.Add(comment);
             }
+        }
+
+        protected DateTime GetDate(XElement doc, XName name)
+        {
+            if (doc.Element(name) == null)
+                return DateTime.UtcNow;
+
+            DateTime d;
+            try
+            {
+                d = DateTime.ParseExact(
+                    ReadValue(doc, "pubDate", DateTime.UtcNow.ToString()),
+                    "O",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal |
+                    DateTimeStyles.AdjustToUniversal
+                );
+            }
+            catch (FormatException)
+            {
+                try
+                {
+                    d = DateTime.Parse(ReadValue(doc, "pubDate"));
+                }
+                catch(Exception ex)
+                {
+                    log.LogError("failed to parse date so returning current date/time error: " + ex.Message + " " + ex.StackTrace);
+                    d = DateTime.UtcNow;
+                }
+                
+
+            }
+
+            return d;
         }
 
         protected string ReadValue(XElement doc, XName name, string defaultValue = "")

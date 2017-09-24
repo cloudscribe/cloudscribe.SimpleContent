@@ -4,20 +4,16 @@
 @using cloudscribe.SimpleContent.Models
 @using cloudscribe.Web.Common.Helpers
 @using System.Globalization
-@using cloudscribe.Web.Common.Models
-@using cloudscribe.Web.Common.Components
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
 @inject IPageRoutes pageRoutes
 @inject IRoleSelectorProperties roleSelector
 @inject IStringLocalizer<SimpleContent> sr
-@inject ICkeditorOptionsResolver editorOptionsResolver
 @inject IOptions<PageEditOptions> pageEditOptionsAccessor
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
 @{ 
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var editOptions = pageEditOptionsAccessor.Value;
     var showDev =  editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
@@ -60,20 +56,8 @@
                     <span asp-validation-for="MetaDescription" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
-                <div class="col-md-10">
-                    <textarea asp-for="Content" class="form-control"
-                              data-ckeditor-unobtrusive="" 
-                          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                          data-ckeditor-config-language="@ckOptions.LanguageCode"
-                          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"
-                              ></textarea>
-                    <span asp-validation-for="Content" class="text-danger"></span>
-                </div>
-            </div>
+            @{ Html.RenderPartial("EditorPartial", Model); }
+            
             <div class="form-group">
                 <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
                 <div class="col-md-10">
@@ -146,6 +130,23 @@
                     </div>
                 </div>
             </div>
+            @if (editOptions.ShowDisableEditorOption)
+            {
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If you don't want to use the HTML WYSIWYG editor check this box. This would be useful if you are embedding javascript and application style markup."]'>
+                            <label>
+                                <input asp-for="DisableEditor" /> @sr["Disable HTML Editor"]
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <input type="hidden" id="DisableEditor" name="DisableEditor" value="false" />
+            }
             <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
                     <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["Check this box if the current page is only meant as a parent container for other pages and has no content of it's own."]'>
@@ -214,9 +215,6 @@
                 }
             </div>
         </div>
-
-
-    
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
@@ -226,8 +224,7 @@
 }
 @section Scripts {
 @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
-@{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }
-@{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
+@{ await Html.RenderPartialAsync("EditorScriptsPartial"); }
     @if (roleSelector.RequiredScriptPaths != null)
     {
         foreach (var s in roleSelector.RequiredScriptPaths)
