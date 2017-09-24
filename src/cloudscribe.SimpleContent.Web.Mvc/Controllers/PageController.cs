@@ -126,10 +126,23 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     page = new Page();
                     page.ProjectId = projectSettings.Id;
-                    page.Title = "Home";
+                    if(HttpContext.Request.Path == "/")
+                    {
+                        ViewData["Title"] = sr["Home"];
+                        page.Title = "No pages found, please click the pencil to create the home page";
+                    }
+                    else
+                    {
+                        ViewData["Title"] = sr["No Pages Found"];
+                        page.Title = "No pages found, please click the pencil to create the first page";
+                        
+                    }
+
+                    
+                    
                     model.CurrentPage = page;
                     model.EditPath = Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = "home" });
-                    ViewData["Title"] = sr["Home"];
+                    
                 }
                 else
                 {
@@ -251,8 +264,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 var rootList = await pageService.GetRootPages().ConfigureAwait(false);
                 if(rootList.Count == 0)
                 {
+                    var rootPagePath = Url.RouteUrl(pageRoutes.PageRouteName);
                     // expected if home page doesn't exist yet
-                    if(slug == "home")
+                    if(slug == "home" && rootPagePath == "/home")
                     {
                         model.Title = sr["Home"];
                     }
