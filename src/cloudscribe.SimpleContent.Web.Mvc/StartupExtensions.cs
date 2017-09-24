@@ -153,8 +153,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IRouteBuilder AddCustomPageRouteForSimpleContent(
             this IRouteBuilder routes,
-            string prefix,
-            IRouteConstraint siteFolderConstraint
+            IRouteConstraint siteFolderConstraint,
+            string prefix
+            
             )
         {
             routes.MapRoute(

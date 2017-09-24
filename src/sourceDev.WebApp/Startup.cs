@@ -66,7 +66,7 @@ namespace sourceDev.WebApp
 
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
 
-            services.AddCloudscribeCoreIntegrationForSimpleContent();
+            services.AddCloudscribeCoreIntegrationForSimpleContent(Configuration);
             services.AddSimpleContent(Configuration);
 
             services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
@@ -239,7 +239,7 @@ namespace sourceDev.WebApp
                         , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
                         );
 
-                        routes.AddCustomPageRouteForSimpleContent("docs", new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
+                        routes.AddCustomPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint(), "docs");
                     }
                     else
                     {
