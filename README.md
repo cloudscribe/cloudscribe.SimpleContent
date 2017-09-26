@@ -14,9 +14,9 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 [![Join the chat at https://gitter.im/joeaudette/cloudscribe](https://badges.gitter.im/joeaudette/cloudscribe.svg)](https://gitter.im/joeaudette/cloudscribe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## Sample Apps
+## Getting Started
 
-To use SimpleContent for your own projects, we recommend start with one of our [StarterKits](https://github.com/joeaudette/cloudscribe.StarterKits) which have no "cloudscribe source code" but have only nuget dependencies wired up for you in various common configurations.
+See the [Introduction](https://www.cloudscribe.com/docs/introduction) to get the big picture and learn how to start new projects using our project template for Visual Studio or the .NET Core CLI
 
 ### Current Features
 * Create and edit pages and blog posts right from the web browser or using [Open Live Writer](https://www.cloudscribe.com/docs/using-open-live-writer)
