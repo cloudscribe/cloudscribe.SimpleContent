@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>2.0.4</VersionPrefix>
-    <AssemblyVersion>2.0.4</AssemblyVersion>
+    <VersionPrefix>2.0.5</VersionPrefix>
+    <AssemblyVersion>2.0.5</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -26,7 +26,7 @@
     <PackageReference Include="cloudscribe.Messaging.Email" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Web.Common" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Web.Navigation" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Web.Pagination" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="2.1.*" />
     <PackageReference Include="cloudscribe.Web.SiteMap" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.*" />
