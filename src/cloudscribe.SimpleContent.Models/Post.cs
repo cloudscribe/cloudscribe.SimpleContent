@@ -44,6 +44,12 @@ namespace cloudscribe.SimpleContent.Models
         
         public List<string> Categories { get; set; }
         public List<IComment> Comments { get; set; }
+        public bool IsFeatured { get; set; }
+
+        // not currently used but could be later
+        public string ImageUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
+        
 
         public static Post FromIPost(IPost post)
         {
@@ -63,6 +69,9 @@ namespace cloudscribe.SimpleContent.Models
             p.Slug = post.Slug;
             p.Title = post.Title;
             p.CorrelationKey = post.CorrelationKey;
+            p.ImageUrl = post.ImageUrl;
+            p.ThumbnailUrl = post.ThumbnailUrl;
+            p.IsFeatured = post.IsFeatured;
             
             return p;
         }

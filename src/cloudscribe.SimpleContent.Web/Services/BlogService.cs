@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-05-28
+// Last Modified:           2017-10-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -130,6 +130,17 @@ namespace cloudscribe.SimpleContent.Services
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await postQueries.GetRecentPosts(
+                settings.Id,
+                numberToGet,
+                CancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<List<IPost>> GetFeaturedPosts(int numberToGet)
+        {
+            await EnsureBlogSettings().ConfigureAwait(false);
+
+            return await postQueries.GetFeaturedPosts(
                 settings.Id,
                 numberToGet,
                 CancellationToken)

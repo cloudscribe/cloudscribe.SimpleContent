@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-07-18
+// Last Modified:           2017-10-05
 // 
 
 
@@ -357,6 +357,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.CurrentPostUrl = await blogService.ResolvePostUrl(postResult.Post).ConfigureAwait(false);
                 model.DeletePostRouteName = blogRoutes.PostDeleteRouteName;
                 model.Categories = string.Join(",", postResult.Post.Categories);
+                model.ImageUrl = postResult.Post.ImageUrl;
+                model.ThumbnailUrl = postResult.Post.ThumbnailUrl;
+                model.IsFeatured = postResult.Post.IsFeatured;
 
             }
 
@@ -507,6 +510,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
             post.IsPublished = model.IsPublished;
             post.CorrelationKey = model.CorrelationKey;
+            post.ImageUrl = model.ImageUrl;
+            post.ThumbnailUrl = model.ThumbnailUrl;
+            post.IsFeatured = model.IsFeatured;
       
            
             if (!string.IsNullOrEmpty(model.PubDate))

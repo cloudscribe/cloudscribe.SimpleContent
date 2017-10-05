@@ -5,7 +5,7 @@
   <correlationkey />
   <author>Joe Audette</author>
   <pubDate>2016-02-22T16:58:00.0000000Z</pubDate>
-  <lastModified>2017-05-15T12:00:12.3410779Z</lastModified>
+  <lastModified>2017-10-05T18:22:59.6687064Z</lastModified>
   <excerpt />
   <content>&lt;p&gt;so they say so they say&lt;/p&gt;
 
@@ -16,6 +16,7 @@
 &lt;p&gt;more more more&lt;/p&gt;
 </content>
   <ispublished>true</ispublished>
+  <isFeatured>true</isFeatured>
   <categories>
     <category>food</category>
     <category>vegan</category>

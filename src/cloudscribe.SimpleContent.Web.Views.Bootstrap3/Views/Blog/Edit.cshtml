@@ -69,11 +69,21 @@
             <span asp-validation-for="Author" class="text-danger"></span>
         </div>
     </div>
+    @{ Html.RenderPartial("EditImageUrlPartial", Model); }
     <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
                     <input asp-for="IsPublished" /> @sr["Is Published"]
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox">
+                <label>
+                    <input asp-for="IsFeatured" /> @sr["Is Featured"]
                 </label>
             </div>
         </div>

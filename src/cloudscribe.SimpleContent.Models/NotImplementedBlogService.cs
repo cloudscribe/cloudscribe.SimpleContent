@@ -97,6 +97,11 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
+        public Task<List<IPost>> GetFeaturedPosts(int numberToGet)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<IPost>> GetRecentPosts(string blogId, int numberToGet)
         {
             throw new NotImplementedException();

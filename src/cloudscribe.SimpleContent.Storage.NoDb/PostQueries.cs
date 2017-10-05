@@ -2,11 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-07-18
+// Last Modified:           2017-10-05
 // 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.Logging;
 using NoDb;
 using System;
 using System.Collections.Generic;
@@ -167,6 +166,29 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             posts = posts.Where(p =>
                 p.IsPublished
+                && p.PubDate <= DateTime.UtcNow)
+                .OrderByDescending(p => p.PubDate)
+                .Take(numberToGet).ToList<Post>();
+
+            var result = new List<IPost>();
+            result.AddRange(posts);
+
+            return result;
+
+        }
+
+        public async Task<List<IPost>> GetFeaturedPosts(
+            string blogId,
+            int numberToGet,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
+
+            posts = posts.Where(p =>
+                p.IsPublished
+                && p.IsFeatured
                 && p.PubDate <= DateTime.UtcNow)
                 .OrderByDescending(p => p.PubDate)
                 .Take(numberToGet).ToList<Post>();

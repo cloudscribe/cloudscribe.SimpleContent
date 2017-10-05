@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-25
-// Last Modified:           2017-09-23
+// Last Modified:           2017-10-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -43,7 +43,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                                 new XElement("lastModified", post.LastModified.ToString("O")),
                                 new XElement("excerpt", post.MetaDescription),
                                 new XElement("content", post.Content),
+                                new XElement("imageUrl", post.ImageUrl),
+                                new XElement("thumbnailUrl", post.ThumbnailUrl),
                                 new XElement("ispublished", post.IsPublished),
+                                new XElement("isFeatured", post.IsFeatured),
                                 new XElement("categories", string.Empty),
                                 new XElement("comments", string.Empty)
                             ));
@@ -113,9 +116,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 MetaDescription = ReadValue(doc.Root, "excerpt"),
                 Content = ReadValue(doc.Root, "content"),
                 Slug = ReadValue(doc.Root, "slug").ToLowerInvariant(),
+                ImageUrl = ReadValue(doc.Root, "imageUrl"),
+                ThumbnailUrl = ReadValue(doc.Root, "thumbnailUrl"),
                 PubDate = GetDate(doc.Root, "pubDate"),
                 LastModified = GetDate(doc.Root, "lastModified"),
                 IsPublished = bool.Parse(ReadValue(doc.Root, "ispublished", "true")),
+                IsFeatured = bool.Parse(ReadValue(doc.Root, "isFeatured", "false"))
             };
 
             LoadCategories(post, doc.Root);

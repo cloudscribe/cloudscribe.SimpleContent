@@ -18,7 +18,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.0.0-preview2-25794");
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
                 {
@@ -115,6 +115,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.Property<string>("RemoteFeedUrl")
                         .HasMaxLength(255);
+
+                    b.Property<bool>("ShowFeaturedPostsOnDefaultPage");
 
                     b.Property<bool>("ShowRecentPostsOnDefaultPage");
 
@@ -427,6 +429,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                     b.Property<string>("CorrelationKey")
                         .HasMaxLength(255);
 
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(250);
+
+                    b.Property<bool>("IsFeatured");
+
                     b.Property<bool>("IsPublished");
 
                     b.Property<DateTime>("LastModified");
@@ -443,6 +450,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(255);
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasMaxLength(250);
 
                     b.Property<string>("Title")
                         .IsRequired()

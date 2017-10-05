@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-10
+// Last Modified:           2017-10-05
 // 
 
 namespace cloudscribe.SimpleContent.Models
@@ -105,6 +105,7 @@ namespace cloudscribe.SimpleContent.Models
         public bool SmtpUseSsl { get; set; } = false;
 
         public bool ShowRecentPostsOnDefaultPage { get; set; }
+        public bool ShowFeaturedPostsOnDefaultPage { get; set; }
 
         public static ProjectSettings FromIProjectSettings(IProjectSettings project)
         {
@@ -157,6 +158,7 @@ namespace cloudscribe.SimpleContent.Models
             p.PublisherEntityType = project.PublisherEntityType;
             p.DisqusShortName = project.DisqusShortName;
             p.ShowRecentPostsOnDefaultPage = project.ShowRecentPostsOnDefaultPage;
+            p.ShowFeaturedPostsOnDefaultPage = project.ShowFeaturedPostsOnDefaultPage;
             
 
             return p;

@@ -31,7 +31,8 @@ namespace cloudscribe.SimpleContent.Models
 
         Task<PostResult> GetPostBySlug(string slug);
         Task<List<IPost>> GetRecentPosts(int numberToGet);
-          
+        Task<List<IPost>> GetFeaturedPosts(int numberToGet);
+
         Task<List<IPost>> GetPosts(bool includeUnpublished);
         Task<PagedPostResult> GetPosts(string category, int pageNumber, bool includeUnpublished);
         Task<string> ResolveBlogUrl(IProjectSettings blog);

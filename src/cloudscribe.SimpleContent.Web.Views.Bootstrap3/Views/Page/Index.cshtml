@@ -43,6 +43,10 @@
 {
     @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
 }
+@if (Model.ProjectSettings.ShowFeaturedPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
+{
+    @await Component.InvokeAsync("FeaturedPosts", new { viewName = "FeaturedPosts", numberToShow = 3 })
+}
 @section Scripts {
    @if (Model.CurrentPage != null)
    {
