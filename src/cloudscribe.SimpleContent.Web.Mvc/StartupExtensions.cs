@@ -1,11 +1,27 @@
 ﻿using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Mvc;
+using cloudscribe.Web.Common.Setup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class StartupExtensions
     {
+        public static IServiceCollection AddSimpleContentMvc(
+            this IServiceCollection services,
+            IConfiguration configuration = null
+            )
+        {
+            services.AddSimpleContentCommon(configuration);
+
+            services.AddScoped<IVersionProvider, ControllerVersionInfo>();
+
+            return services;
+        }
+
+
         public static IRouteBuilder AddStandardRoutesForSimpleContent(this IRouteBuilder routes)
         {
             routes.AddBlogRoutesForSimpleContent();

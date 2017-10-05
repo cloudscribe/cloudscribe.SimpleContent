@@ -62,19 +62,18 @@ namespace sourceDev.WebApp
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.Web.Navigation.NavigationNodePermissionResolver>();
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.SimpleContent.Web.Services.PagesNavigationNodePermissionResolver>();
 
-            services.AddCloudscribeCore(Configuration);
+            services.AddCloudscribeCoreMvc(Configuration);
 
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
 
             services.AddCloudscribeCoreIntegrationForSimpleContent(Configuration);
-            services.AddSimpleContent(Configuration);
+            services.AddSimpleContentMvc(Configuration);
 
             services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));
 
             services.AddSimpleContentRssSyndiction();
 
-            services.AddCloudscribeFileManagerIntegration(Configuration);
-
+            
             // optional but recommended if you need localization 
             // uncomment to use cloudscribe.Web.localization https://github.com/joeaudette/cloudscribe.Web.Localization
             services.Configure<GlobalResourceOptions>(Configuration.GetSection("GlobalResourceOptions"));

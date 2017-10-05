@@ -21,8 +21,20 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        
+        [Obsolete("this method is deprecated, please use services.AddSimpleContentMvc instead.")]
         public static IServiceCollection AddSimpleContent(
+            this IServiceCollection services,
+            IConfiguration configuration = null
+            )
+        {
+
+            services.AddSimpleContentCommon(configuration);
+
+            return services;
+        }
+
+
+        public static IServiceCollection AddSimpleContentCommon(
             this IServiceCollection services,
             IConfiguration configuration = null
             )
@@ -53,6 +65,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IRoleSelectorProperties, NotImplementedRoleSelectorProperties>();
 
             services.AddScoped<IVersionProvider, VersionInfo>();
+            services.AddScoped<IVersionProvider, DataStorageVersionInfo>();
 
             // registering an IOptions<IconCssClasses> that canbe injected into views
             if (configuration != null)
