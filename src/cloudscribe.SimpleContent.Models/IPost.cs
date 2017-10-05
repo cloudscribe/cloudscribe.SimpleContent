@@ -29,5 +29,8 @@ namespace cloudscribe.SimpleContent.Models
         string Slug { get; set; }
         string Title { get; set; }
         string CorrelationKey { get; set; }
+        bool IsFeatured { get; set; }
+        string ImageUrl { get; set; }
+        string ThumbnailUrl { get; set; }
     }
 }

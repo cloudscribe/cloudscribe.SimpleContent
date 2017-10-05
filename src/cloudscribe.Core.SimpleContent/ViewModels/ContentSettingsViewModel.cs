@@ -93,6 +93,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string DisqusShortName { get; set; } = string.Empty;
         public bool ShowRecentPostsOnDefaultPage { get; set; }
 
+        public bool ShowFeaturedPostsOnDefaultPage { get; set; }
+
 
     }
 }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-06-30
+// Last Modified:			2017-10-05
 // 
 
 using cloudscribe.Core.Models;
@@ -22,21 +22,18 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
     {
         public ContentSettingsController(
             IProjectService projectService,
-           // IPageService pageService,
             IAuthorizationService authorizationService,
             IUserQueries userQueries,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer
             )
         {
             this.projectService = projectService;
-            //this.pageService = pageService;
             this.authorizationService = authorizationService;
             this.userQueries = userQueries;
             sr = localizer;
         }
 
         private IProjectService projectService;
-       // private IPageService pageService;
         private IAuthorizationService authorizationService;
         private IUserQueries userQueries;
         private IStringLocalizer sr;
@@ -79,6 +76,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
             model.DefaultPageSlug = projectSettings.DefaultPageSlug;
             model.ShowRecentPostsOnDefaultPage = projectSettings.ShowRecentPostsOnDefaultPage;
+            model.ShowFeaturedPostsOnDefaultPage = projectSettings.ShowFeaturedPostsOnDefaultPage;
 
             model.AddBlogToPagesTree = projectSettings.AddBlogToPagesTree;
             model.BlogPagePosition = projectSettings.BlogPagePosition;
@@ -171,6 +169,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.PublisherEntityType = model.PublisherEntityType;
             projectSettings.DisqusShortName = model.DisqusShortName;
             projectSettings.ShowRecentPostsOnDefaultPage = model.ShowRecentPostsOnDefaultPage;
+            projectSettings.ShowFeaturedPostsOnDefaultPage = model.ShowFeaturedPostsOnDefaultPage;
 
             bool needToClearMenuCache = false;
             

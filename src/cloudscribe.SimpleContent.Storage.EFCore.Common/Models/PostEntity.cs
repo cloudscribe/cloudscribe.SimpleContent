@@ -47,6 +47,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public bool IsPublished { get; set; }
 
+        public bool IsFeatured { get; set; }
+
+        public string ImageUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
+
         private List<string> categories;
         public List<string> Categories
         {
@@ -118,6 +123,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Slug = post.Slug;
             p.Title = post.Title;
             p.CorrelationKey = post.CorrelationKey;
+            p.ImageUrl = post.ImageUrl;
+            p.ThumbnailUrl = post.ThumbnailUrl;
+            p.IsFeatured = post.IsFeatured;
 
             return p;
         }

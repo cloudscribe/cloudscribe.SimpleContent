@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-08-03
+// Last Modified:			2017-10-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -33,195 +33,116 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.HasKey(p => p.Id);
 
-                entity.Property(p => p.Id)
-                .HasMaxLength(36)
-                ;
+                entity.Property(p => p.Id).HasMaxLength(36);
 
-                entity.Property(p => p.Title)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.Title).HasMaxLength(255);
 
-                entity.Property(p => p.Publisher)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.Publisher).HasMaxLength(255);
 
-                entity.Property(p => p.PublisherLogoUrl)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.PublisherLogoUrl).HasMaxLength(255);
 
-                entity.Property(p => p.CopyrightNotice)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.CopyrightNotice).HasMaxLength(255);
 
                 entity.Property(p => p.ModerateComments)
                 .IsRequired()
-                .HasColumnType("bit")
-                //.HasDefaultValue(true)
-                ;
+                .HasColumnType("bit");
 
-                entity.Property(p => p.CommentNotificationEmail)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.CommentNotificationEmail).HasMaxLength(100);
 
                 entity.Property(p => p.BlogMenuLinksToNewestPost)
                 .IsRequired()
-                .HasColumnType("bit")
-               // .HasDefaultValue(false)
-                ;
+                .HasColumnType("bit");
 
-                entity.Property(p => p.LocalMediaVirtualPath)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.LocalMediaVirtualPath).HasMaxLength(255);
 
-                entity.Property(p => p.CdnUrl)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.CdnUrl).HasMaxLength(255);
 
-                entity.Property(p => p.PubDateFormat)
-                .HasMaxLength(75)
-                ;
+                entity.Property(p => p.PubDateFormat).HasMaxLength(75);
 
                 entity.Property(p => p.IncludePubDateInPostUrls)
                 .IsRequired()
-                .HasColumnType("bit")
-               // .HasDefaultValue(true)
-                ;
+                .HasColumnType("bit");
 
-                entity.Property(p => p.TimeZoneId)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.TimeZoneId).HasMaxLength(100);
 
-                entity.Property(p => p.RecaptchaPrivateKey)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.RecaptchaPrivateKey).HasMaxLength(255);
 
-                entity.Property(p => p.RecaptchaPublicKey)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.RecaptchaPublicKey).HasMaxLength(255);
 
-                entity.Property(p => p.DefaultPageSlug)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.DefaultPageSlug).HasMaxLength(255);
 
                 entity.Property(p => p.UseDefaultPageAsRootNode)
                 .IsRequired()
-                .HasColumnType("bit")
-               // .HasDefaultValue(true)
-                ;
+                .HasColumnType("bit");
 
                 entity.Property(p => p.ShowTitle)
                 .IsRequired()
-                .HasColumnType("bit")
-               // .HasDefaultValue(false)
-                ;
+                .HasColumnType("bit");
 
                 entity.Property(p => p.AddBlogToPagesTree)
                 .IsRequired()
-                .HasColumnType("bit")
-                //.HasDefaultValue(true)
-                ;
+                .HasColumnType("bit");
 
                 entity.Property(p => p.BlogPageText)
-                .HasMaxLength(255)
-                ;
+                .HasMaxLength(255);
 
-                entity.Property(p => p.BlogPageNavComponentVisibility)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.BlogPageNavComponentVisibility).HasMaxLength(255);
 
-                entity.Property(p => p.Image)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.Image).HasMaxLength(255);
 
                 entity.Property(p => p.UseMetaDescriptionInFeed)
                 .IsRequired()
-                .HasColumnType("bit")
-              //  .HasDefaultValue(false)
-                ;
+                .HasColumnType("bit");
 
-                entity.Property(p => p.LanguageCode)
-               .HasMaxLength(10)
-               ;
+                entity.Property(p => p.LanguageCode).HasMaxLength(10);
 
-                entity.Property(p => p.ChannelCategoriesCsv)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.ChannelCategoriesCsv).HasMaxLength(255);
 
-                entity.Property(p => p.ManagingEditorEmail)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.ManagingEditorEmail).HasMaxLength(100);
 
-                entity.Property(p => p.ChannelRating)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.ChannelRating).HasMaxLength(100);
 
-                entity.Property(p => p.WebmasterEmail)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.WebmasterEmail).HasMaxLength(100);
 
-                entity.Property(p => p.RemoteFeedUrl)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.RemoteFeedUrl).HasMaxLength(255);
 
-                entity.Property(p => p.RemoteFeedProcessorUseAgentFragment)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.RemoteFeedProcessorUseAgentFragment).HasMaxLength(255);
 
-                entity.Property(p => p.EmailFromAddress)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.EmailFromAddress).HasMaxLength(100);
 
-                entity.Property(p => p.SmtpServer)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.SmtpServer).HasMaxLength(100);
 
-                entity.Property(p => p.SmtpPort)
-                ;
+                entity.Property(p => p.SmtpPort);
 
-                entity.Property(p => p.SmtpUser)
-                .HasMaxLength(500)
-                ;
+                entity.Property(p => p.SmtpUser).HasMaxLength(500);
 
-                entity.Property(p => p.SmtpPassword)
-                ;
+                entity.Property(p => p.SmtpPassword);
 
-                entity.Property(p => p.SmtpPreferredEncoding)
-                .HasMaxLength(20);
-                ;
+                entity.Property(p => p.SmtpPreferredEncoding).HasMaxLength(20);
 
                 entity.Property(p => p.SmtpRequiresAuth)
                 .IsRequired()
-                .HasColumnType("bit")
-                //.HasDefaultValue(false)
-                ;
+                .HasColumnType("bit");
 
                 entity.Property(p => p.SmtpUseSsl)
                 .IsRequired()
-                .HasColumnType("bit")
-               // .HasDefaultValue(false)
-                ;
+                .HasColumnType("bit");
 
-                entity.Property(p => p.PublisherLogoWidth)
-                .HasMaxLength(20)
-                ;
+                entity.Property(p => p.PublisherLogoWidth).HasMaxLength(20);
 
-                entity.Property(p => p.PublisherLogoHeight)
-                .HasMaxLength(20)
-                ;
+                entity.Property(p => p.PublisherLogoHeight).HasMaxLength(20);
 
-                entity.Property(p => p.DisqusShortName)
-                .HasMaxLength(100)
-                ;
+                entity.Property(p => p.DisqusShortName).HasMaxLength(100);
 
-                entity.Property(p => p.PublisherEntityType)
-                .HasMaxLength(50)
-                ;
+                entity.Property(p => p.PublisherEntityType).HasMaxLength(50);
 
                 entity.Property(p => p.ShowRecentPostsOnDefaultPage)
                 .IsRequired()
-                .HasColumnType("bit")
-               // .HasDefaultValue(false)
-                ;
+                .HasColumnType("bit");
+
+                entity.Property(p => p.ShowFeaturedPostsOnDefaultPage)
+               .IsRequired()
+               .HasColumnType("bit");
 
             });
 
@@ -231,63 +152,58 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
                 entity.HasKey(p => p.Id);
 
-                entity.Property(p => p.Id)
-                .HasMaxLength(36)
-                ;
+                entity.Property(p => p.Id).HasMaxLength(36);
 
-                entity.Property(p => p.CorrelationKey)
-                .HasMaxLength(255)
-                ;
+                entity.Property(p => p.CorrelationKey).HasMaxLength(255);
 
                 entity.HasIndex(p => p.CorrelationKey);
 
                 entity.Property(p => p.BlogId)
                 .HasMaxLength(36)
-                .IsRequired()
-                ;
+                .IsRequired();
+
                 entity.HasIndex(p => p.BlogId);
 
                 entity.Property(p => p.Title)
                 .HasMaxLength(255)
-                .IsRequired()
-                ;
+                .IsRequired();
 
                 entity.Property(p => p.Author)
-                .HasMaxLength(255)
-                ;
+                .HasMaxLength(255);
 
                 entity.Property(p => p.Slug)
                 .HasMaxLength(255)
-                .IsRequired()
-                ;
+                .IsRequired();
+
                 entity.HasIndex(p => p.Slug);
 
                 entity.Property(p => p.MetaDescription)
-                .HasMaxLength(500)
-                ;
+                .HasMaxLength(500);
 
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
-                .HasColumnType("bit")
-               // .HasDefaultValue(true)
-                ;
+                .HasColumnType("bit");
 
                 entity.Ignore(p => p.Categories);
 
                 entity.Property(p => p.CategoriesCsv)
-                .HasMaxLength(500)
-                ;
+                .HasMaxLength(500);
 
                 entity.Ignore(p => p.Comments);
 
-                // will this create a shadow foriegn key?
                 entity.HasMany(p => p.PostComments)
-                    .WithOne()
+                    .WithOne();
 
-                ;
+                entity.Property(p => p.ImageUrl)
+                .HasMaxLength(250);
 
-                // a shadow property to persist the categories/tags as a csv
-                //entity.Property<string>("CategoryCsv");
+                entity.Property(p => p.ThumbnailUrl)
+                .HasMaxLength(250);
+
+                entity.Property(p => p.IsFeatured)
+                .IsRequired();
+
+
             });
 
             modelBuilder.Entity<PostComment>(entity =>

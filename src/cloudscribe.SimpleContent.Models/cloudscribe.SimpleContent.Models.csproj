@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Models Class Library</Description>
-    <VersionPrefix>2.0.3</VersionPrefix>
-    <AssemblyVersion>2.0.3</AssemblyVersion>
+    <VersionPrefix>2.0.4</VersionPrefix>
+    <AssemblyVersion>2.0.4</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>

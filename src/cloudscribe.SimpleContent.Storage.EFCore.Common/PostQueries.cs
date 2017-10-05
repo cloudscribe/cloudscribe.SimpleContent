@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-05-01
+// Last Modified:			2017-10-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -132,6 +132,31 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                // .Include(p => p.Comments) //think this is only used to populate a list in OLW so don't need the comments
                 .Where(p =>
                 p.IsPublished
+                && p.PubDate <= DateTime.UtcNow)
+                .OrderByDescending(p => p.PubDate)
+                ;
+
+            return await query
+                .AsNoTracking()
+                .Take(numberToGet)
+                .ToListAsync<IPost>()
+                .ConfigureAwait(false);
+
+        }
+
+        public async Task<List<IPost>> GetFeaturedPosts(
+            string blogId,
+            int numberToGet,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            ThrowIfDisposed();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var query = dbContext.Posts
+                .Where(p =>
+                p.IsPublished
+                && p.IsFeatured
                 && p.PubDate <= DateTime.UtcNow)
                 .OrderByDescending(p => p.PubDate)
                 ;

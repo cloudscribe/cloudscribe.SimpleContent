@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-08-03
+// Last Modified:			2017-10-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -200,10 +200,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 ;
 
                 entity.Property(p => p.ShowRecentPostsOnDefaultPage)
-                .IsRequired()
-               // .HasDefaultValue(false)
-                
-                ;
+                .IsRequired();
+
+                entity.Property(p => p.ShowFeaturedPostsOnDefaultPage)
+                .IsRequired();
 
             });
 
@@ -260,13 +260,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Ignore(p => p.Comments);
 
-                // will this create a shadow foriegn key?
                 entity.HasMany(p => p.PostComments)
-                    .WithOne()
+                    .WithOne();
 
-                ;
+                entity.Property(p => p.ImageUrl)
+                .HasMaxLength(250);
 
-                
+                entity.Property(p => p.ThumbnailUrl)
+                .HasMaxLength(250);
+
+                entity.Property(p => p.IsFeatured)
+                .IsRequired();
+
+
             });
 
             modelBuilder.Entity<PostComment>(entity =>

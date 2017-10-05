@@ -57,6 +57,12 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
+        Task<List<IPost>> GetFeaturedPosts(
+            string blogId,
+            int numberToGet,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
         Task<List<IPost>> GetPosts(
             string blogId,
             bool includeUnpublished,

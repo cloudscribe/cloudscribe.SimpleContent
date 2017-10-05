@@ -522,4 +522,22 @@
   <data name="Content Settings were successfully updated." xml:space="preserve">
     <value>Content Settings were successfully updated.</value>
   </data>
+  <data name="Image Url" xml:space="preserve">
+    <value>Image Url</value>
+  </data>
+  <data name="Is Featured" xml:space="preserve">
+    <value>Is Featured</value>
+  </data>
+  <data name="Thumbnail Url" xml:space="preserve">
+    <value>Thumbnail Url</value>
+  </data>
+  <data name="Show Featured Posts on Default Page" xml:space="preserve">
+    <value>Show Featured Posts on Default Page</value>
+  </data>
+  <data name="Featured Posts" xml:space="preserve">
+    <value>Featured Posts</value>
+  </data>
+  <data name="Recent Posts" xml:space="preserve">
+    <value>Recent Posts</value>
+  </data>
 </root>

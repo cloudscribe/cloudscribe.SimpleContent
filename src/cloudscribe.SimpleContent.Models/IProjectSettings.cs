@@ -50,6 +50,7 @@
         string PublisherEntityType { get; set; }
         string DisqusShortName { get; set; }
         bool ShowRecentPostsOnDefaultPage { get; set; }
+        bool ShowFeaturedPostsOnDefaultPage { get; set; }
 
     }
 }

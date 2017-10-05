@@ -5,13 +5,14 @@
   <correlationkey />
   <author></author>
   <pubDate>2016-03-13T22:23:00.0000000Z</pubDate>
-  <lastModified>2017-05-15T11:54:47.6973000Z</lastModified>
+  <lastModified>2017-10-05T18:09:57.6691592Z</lastModified>
   <excerpt>Starsky and Hutch</excerpt>
   <content>&lt;p&gt;Starsky and Hutch&lt;br /&gt;
 &lt;img alt="dudes" src="/media/images/dudes1-550x412.jpeg" style="height:412px; width:550px" /&gt;&lt;br /&gt;
 cool dudes man!&lt;/p&gt;
 </content>
   <ispublished>true</ispublished>
+  <isFeatured>true</isFeatured>
   <categories>
     <category>foo</category>
     <category>bar</category>

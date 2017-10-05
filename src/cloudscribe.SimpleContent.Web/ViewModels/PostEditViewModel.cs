@@ -41,6 +41,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string DeletePostRouteName { get; set; }
 
-       
+        public bool IsFeatured { get; set; } = false;
+
+        public string ImageUrl { get; set; }
+        public string ThumbnailUrl { get; set; }
+
+
     }
 }

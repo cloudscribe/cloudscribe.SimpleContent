@@ -21,38 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public const string FolderNewPostRouteName = "foldernewpost";
         public const string FolderPageIndexRouteName = "folderpageindex";
 
-        public static IServiceCollection AddCloudscribeCoreIntegrationForSimpleContent(
-            this IServiceCollection services,
-            IConfiguration configuration = null
-            )
-        {
-            services.AddScoped<IProjectSettingsResolver, SiteProjectSettingsResolver>();
-            services.AddScoped<IProjectSecurityResolver, ProjectSecurityResolver>();
-
-            services.TryAddScoped<IMediaProcessor, SiteFileSystemMediaProcessor>();
-
-            //services.AddScoped<MediaFolderHelper, MediaFolderHelper>();
-            services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
-            services.AddScoped<IPageRoutes, MultiTenantPageRoutes>();
-            services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
-            services.AddScoped<IRoleSelectorProperties, SiteRoleSelectorProperties>();
-            services.TryAddScoped<IAuthorNameResolver, AuthorNameResolver>();
-
-            if(configuration != null)
-            {
-                services.Configure<ContentSettingsUIConfig>(configuration.GetSection("ContentSettingsUIConfig"));
-            }
-            else
-            {
-                services.Configure<ContentSettingsUIConfig>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-            }
-
-
-            return services;
-        }
+        
 
 
         //public static RazorViewEngineOptions AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration(this RazorViewEngineOptions options)
