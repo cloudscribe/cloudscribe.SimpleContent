@@ -22,6 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddNoDbProjectStorage();
             services.AddNoDbPostStorage();
             services.AddNoDbPageStorage();
+            services.AddScoped<IStorageInfo, StorageInfo>();
 
             return services;
         }

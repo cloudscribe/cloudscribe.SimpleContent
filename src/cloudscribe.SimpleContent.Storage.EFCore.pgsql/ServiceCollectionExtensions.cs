@@ -5,6 +5,7 @@
 // Last Modified:			2017-08-03
 // 
 
+using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.pgsql;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 
             services.AddCloudscribeSimpleContentEFStorageCommon();
-            
+            services.AddScoped<IStorageInfo, StorageInfo>();
+
             return services;
         }
 
