@@ -57,6 +57,11 @@ namespace cloudscribe.Core.SimpleContent.Integration
                 settings.RecaptchaPrivateKey = currentSite.RecaptchaPrivateKey;
             }
 
+            if (!uiOptions.ShowBlogMenuOptions)
+            {
+                settings.AddBlogToPagesTree = false;        
+            }
+
             settings.EmailFromAddress = currentSite.DefaultEmailFromAddress;
             settings.SmtpPassword = currentSite.SmtpPassword;
             settings.SmtpPort = currentSite.SmtpPort;
