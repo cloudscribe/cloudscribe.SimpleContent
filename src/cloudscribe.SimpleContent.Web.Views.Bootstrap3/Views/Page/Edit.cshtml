@@ -22,7 +22,7 @@
 @section Styles {
 @{ await Html.RenderPartialAsync("_DatePickerCssPartial"); }
 }
-    <h2>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
+    <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
     <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
@@ -201,7 +201,7 @@
     </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
+                <button id="btnSave" name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
                 @if (!string.IsNullOrEmpty(Model.Id))
                 {
                     <button name="button" type="button" class="btn btn-danger"
