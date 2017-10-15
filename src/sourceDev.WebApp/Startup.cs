@@ -148,7 +148,7 @@ namespace sourceDev.WebApp
             services.AddMvc()
                 .AddRazorOptions(options =>
                 {
-                    options.AddCloudscribeViewLocationFormats();
+                    //options.AddCloudscribeViewLocationFormats();
 
 
                     options.AddCloudscribeCommonEmbeddedViews();
