@@ -24,19 +24,19 @@ branches:
     - master
 
 
-#sudo: false
-#dist: trusty
-#mono: none
-#dotnet: 2.0.0
-#env:
+# sudo: false
+# dist: trusty
+# mono: none
+# dotnet: 2.0.0
+# env:
 #  global:
 #    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 #    - DOTNET_CLI_TELEMETRY_OPTOUT: 1   
-#os:
-  - linux
+# os:
+#  - linux
 #  - osx
 # osx_image: xcode8.3
-#script:
+# script:
 #  - if test "$TRAVIS_OS_NAME" == "linux"; then dotnet restore; fi
 #  - if test "$TRAVIS_OS_NAME" == "osx"; then dotnet restore --disable-parallel; fi
 #  - dotnet build -c Release
