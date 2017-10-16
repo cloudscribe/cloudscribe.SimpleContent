@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-10-05
+// Last Modified:			2017-10-16
 // 
 
 using cloudscribe.Core.Models;
@@ -83,6 +83,11 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.BlogPageText = projectSettings.BlogPageText;
             model.BlogPageNavComponentVisibility = projectSettings.BlogPageNavComponentVisibility;
             model.LocalMediaVirtualPath = projectSettings.LocalMediaVirtualPath;
+
+            model.FacebookAppId = projectSettings.FacebookAppId;
+            model.SiteName = projectSettings.SiteName;
+            model.TwitterCreator = projectSettings.TwitterCreator;
+            model.TwitterPublisher = projectSettings.TwitterPublisher;
 
             bool canManageUsers = false;
             try
@@ -187,6 +192,11 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.BlogPageText = model.BlogPageText;
             projectSettings.BlogPageNavComponentVisibility = model.BlogPageNavComponentVisibility;
             projectSettings.LocalMediaVirtualPath = model.LocalMediaVirtualPath;
+
+            projectSettings.FacebookAppId = model.FacebookAppId;
+            projectSettings.SiteName = model.SiteName;
+            projectSettings.TwitterPublisher = model.TwitterPublisher;
+            projectSettings.TwitterCreator = model.TwitterCreator;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

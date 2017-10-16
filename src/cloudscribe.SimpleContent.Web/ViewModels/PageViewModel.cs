@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-04-21
+// Last Modified:           2017-10-16
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -68,22 +68,32 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return filter.FilterCommentLinks(c.Content);
         }
 
+        private string firstImageUrl;
         public string ExtractFirstImargeUrl(IPage page, IUrlHelper urlHelper)
         {
-            if (page == null) return string.Empty;
             if (urlHelper == null) return string.Empty;
 
-            var result = filter.ExtractFirstImageUrl(page.Content);
-
-            if (result == null) return string.Empty;
-
-            if (result.StartsWith("http")) return result;
-
             var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
-                        "://",
-                        urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+                       "://",
+                       urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
 
-            return baseUrl + result;
+            if (!string.IsNullOrWhiteSpace(firstImageUrl))
+            {
+                if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+
+                return baseUrl + firstImageUrl; //don't extract it more than once
+            }
+
+            if (page == null) return string.Empty;
+            
+
+            firstImageUrl = filter.ExtractFirstImageUrl(page.Content);
+
+            if (firstImageUrl == null) return string.Empty;
+
+            if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+            
+            return baseUrl + firstImageUrl;
         }
 
         public ImageSizeResult ExtractFirstImageDimensions(IPage page)

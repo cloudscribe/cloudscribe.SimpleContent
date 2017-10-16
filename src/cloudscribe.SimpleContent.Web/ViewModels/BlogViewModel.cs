@@ -93,23 +93,35 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         }
 
         public IBlogRoutes BlogRoutes { get; set; }
-        
+
+        private string firstImageUrl;
         public string ExtractFirstImargeUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
         {
-            if (post == null) return string.Empty;
             if (urlHelper == null) return string.Empty;
-
-            var result = filter.ExtractFirstImageUrl(post.Content);
-
-            if (result == null) return fallbackImageUrl;
-
-            if(result.StartsWith("http")) return result;
 
             var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
                         "://",
                         urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
 
-            return baseUrl + result;
+            if (!string.IsNullOrWhiteSpace(firstImageUrl))
+            {
+                if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+
+                return baseUrl + firstImageUrl; //don't extract it more than once
+            }
+
+            if (post == null) return string.Empty;
+            
+
+            firstImageUrl = filter.ExtractFirstImageUrl(post.Content);
+
+            if (firstImageUrl == null) return fallbackImageUrl;
+
+            if(firstImageUrl.StartsWith("http")) return firstImageUrl;
+
+            
+
+            return baseUrl + firstImageUrl;
         }
 
         public ImageSizeResult ExtractFirstImageDimensions(IPost post)

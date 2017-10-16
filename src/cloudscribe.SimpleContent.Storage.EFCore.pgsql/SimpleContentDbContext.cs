@@ -205,6 +205,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 entity.Property(p => p.ShowFeaturedPostsOnDefaultPage)
                 .IsRequired();
 
+                entity.Property(p => p.FacebookAppId).HasMaxLength(100);
+                entity.Property(p => p.SiteName).HasMaxLength(200);
+                entity.Property(p => p.TwitterCreator).HasMaxLength(100);
+                entity.Property(p => p.TwitterPublisher).HasMaxLength(100);
+
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
