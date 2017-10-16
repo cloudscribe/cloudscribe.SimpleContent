@@ -52,5 +52,10 @@
         bool ShowRecentPostsOnDefaultPage { get; set; }
         bool ShowFeaturedPostsOnDefaultPage { get; set; }
 
+        string FacebookAppId { get; set; }
+        string SiteName { get; set; }
+        string TwitterPublisher { get; set; }
+        string TwitterCreator { get; set; }
+
     }
 }

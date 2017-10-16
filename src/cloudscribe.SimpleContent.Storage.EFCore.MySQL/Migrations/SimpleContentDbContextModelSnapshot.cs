@@ -68,6 +68,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("EmailFromAddress")
                         .HasMaxLength(100);
 
+                    b.Property<string>("FacebookAppId")
+                        .HasMaxLength(100);
+
                     b.Property<string>("Image")
                         .HasMaxLength(255);
 
@@ -122,6 +125,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<bool>("ShowTitle");
 
+                    b.Property<string>("SiteName")
+                        .HasMaxLength(200);
+
                     b.Property<string>("SmtpPassword");
 
                     b.Property<int>("SmtpPort");
@@ -144,6 +150,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("Title")
                         .HasMaxLength(255);
+
+                    b.Property<string>("TwitterCreator")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("TwitterPublisher")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("UseDefaultPageAsRootNode");
 

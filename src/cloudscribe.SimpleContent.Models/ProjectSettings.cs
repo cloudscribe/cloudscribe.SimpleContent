@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-10-05
+// Last Modified:           2017-10-16
 // 
 
 namespace cloudscribe.SimpleContent.Models
@@ -107,6 +107,11 @@ namespace cloudscribe.SimpleContent.Models
         public bool ShowRecentPostsOnDefaultPage { get; set; }
         public bool ShowFeaturedPostsOnDefaultPage { get; set; }
 
+        public string FacebookAppId { get; set; }
+        public string SiteName { get; set; }
+        public string TwitterPublisher { get; set; }
+        public string TwitterCreator { get; set; }
+
         public static ProjectSettings FromIProjectSettings(IProjectSettings project)
         {
             var p = new ProjectSettings();
@@ -125,6 +130,7 @@ namespace cloudscribe.SimpleContent.Models
             p.DefaultPageSlug = project.DefaultPageSlug;
             p.Description = project.Description;
             p.EmailFromAddress = project.EmailFromAddress;
+            p.FacebookAppId = project.FacebookAppId;
             p.Id = project.Id;
             p.Image = project.Image;
             p.IncludePubDateInPostUrls = project.IncludePubDateInPostUrls;
@@ -139,6 +145,7 @@ namespace cloudscribe.SimpleContent.Models
             p.RemoteFeedProcessorUseAgentFragment = project.RemoteFeedProcessorUseAgentFragment;
             p.RemoteFeedUrl = project.RemoteFeedUrl;
             p.ShowTitle = project.ShowTitle;
+            p.SiteName = project.SiteName;
             p.SmtpPassword = project.SmtpPassword;
             p.SmtpPort = project.SmtpPort;
             p.SmtpPreferredEncoding = project.SmtpPreferredEncoding;
@@ -148,6 +155,8 @@ namespace cloudscribe.SimpleContent.Models
             p.SmtpUseSsl = project.SmtpUseSsl;
             p.TimeZoneId = project.TimeZoneId;
             p.Title = project.Title;
+            p.TwitterCreator = project.TwitterCreator;
+            p.TwitterPublisher = project.TwitterPublisher;
             p.UseDefaultPageAsRootNode = project.UseDefaultPageAsRootNode;
             p.UseMetaDescriptionInFeed = project.UseMetaDescriptionInFeed;
             p.WebmasterEmail = project.WebmasterEmail;

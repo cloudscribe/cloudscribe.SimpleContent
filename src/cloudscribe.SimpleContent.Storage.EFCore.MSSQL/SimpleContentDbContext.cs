@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-10-05
+// Last Modified:			2017-10-16
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -143,6 +143,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.ShowFeaturedPostsOnDefaultPage)
                .IsRequired()
                .HasColumnType("bit");
+
+                entity.Property(p => p.FacebookAppId).HasMaxLength(100);
+                entity.Property(p => p.SiteName).HasMaxLength(200);
+                entity.Property(p => p.TwitterCreator).HasMaxLength(100);
+                entity.Property(p => p.TwitterPublisher).HasMaxLength(100);
 
             });
 

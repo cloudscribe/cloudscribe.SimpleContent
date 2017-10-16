@@ -95,6 +95,18 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
         public bool ShowFeaturedPostsOnDefaultPage { get; set; }
 
+        [StringLength(100, ErrorMessage = "FacebookAppId has a maximum length of 100 characters")]
+        public string FacebookAppId { get; set; }
+
+        [StringLength(200, ErrorMessage = "SiteName has a maximum length of 200 characters")]
+        public string SiteName { get; set; }
+
+        [StringLength(100, ErrorMessage = "TwitterPublisher has a maximum length of 100 characters")]
+        public string TwitterPublisher { get; set; }
+
+        [StringLength(100, ErrorMessage = "TwitterCreator has a maximum length of 100 characters")]
+        public string TwitterCreator { get; set; }
+
 
     }
 }
