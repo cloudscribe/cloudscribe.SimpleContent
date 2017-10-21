@@ -8,7 +8,7 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 ### Build Status
 
-| Windows  | Linux/Mac |
+| Windows  | Linux |
 | ------------- | ------------- |
 | [![Build status](https://ci.appveyor.com/api/projects/status/d0900wcf3y7l7jup/branch/master?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-simplecontent/branch/master)  | [![Build Status](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent.svg?branch=master)](https://travis-ci.org/joeaudette/cloudscribe.SimpleContent) |
 
