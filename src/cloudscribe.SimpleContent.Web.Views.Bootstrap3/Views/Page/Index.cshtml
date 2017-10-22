@@ -53,13 +53,13 @@
     <environment names="Development">
         @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
         {
-            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))"></script>
+            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
         }
     </environment>
     <environment names="Staging,Production">
         @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
         {
-            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))"></script>
+            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
         }
     </environment>
    }
