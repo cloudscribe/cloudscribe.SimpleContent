@@ -2,15 +2,17 @@
 <post>
   <title>Starsky and Hutch</title>
   <slug>starsky-and-hutch</slug>
-  <correlationkey />
+  <correlationkey></correlationkey>
   <author></author>
   <pubDate>2016-03-13T22:23:00.0000000Z</pubDate>
-  <lastModified>2017-10-05T18:09:57.6691592Z</lastModified>
+  <lastModified>2017-10-24T14:54:47.1035761Z</lastModified>
   <excerpt>Starsky and Hutch</excerpt>
   <content>&lt;p&gt;Starsky and Hutch&lt;br /&gt;
 &lt;img alt="dudes" src="/media/images/dudes1-550x412.jpeg" style="height:412px; width:550px" /&gt;&lt;br /&gt;
 cool dudes man!&lt;/p&gt;
 </content>
+  <imageUrl></imageUrl>
+  <thumbnailUrl></thumbnailUrl>
   <ispublished>true</ispublished>
   <isFeatured>true</isFeatured>
   <categories>
@@ -26,6 +28,15 @@ cool dudes man!&lt;/p&gt;
       <userAgent>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36</userAgent>
       <date>2016-09-08T11:52:04.4968035-04:00</date>
       <content>foo was here</content>
+    </comment>
+    <comment isAdmin="false" isApproved="true" id="4a196ac8-60c5-4135-b860-c2bf39a2dac4">
+      <author>foo</author>
+      <email>foo@foo.com</email>
+      <website></website>
+      <ip>127.0.0.1</ip>
+      <userAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36</userAgent>
+      <date>2017-10-24T10:53:53.5406034-04:00</date>
+      <content>more foo for you</content>
     </comment>
   </comments>
 </post>

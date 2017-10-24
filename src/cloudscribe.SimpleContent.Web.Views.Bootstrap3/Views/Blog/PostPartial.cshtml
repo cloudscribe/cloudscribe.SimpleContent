@@ -57,7 +57,7 @@
             } 
         </h1>
         <div class="bh">
-            <time class="@GetPubDateClass()" datetime="@Model.FormatDateForEdit(Model.TmpPost.PubDate)" itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
+            <time class="@GetPubDateClass()" datetime='@Model.TmpPost.PubDate.ToString("s")' itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
              @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
                 <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
