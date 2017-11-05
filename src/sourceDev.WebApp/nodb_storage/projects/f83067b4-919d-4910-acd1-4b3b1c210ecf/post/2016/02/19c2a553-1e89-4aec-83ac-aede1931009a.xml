@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-16"?>
 <post>
+  <id>19c2a553-1e89-4aec-83ac-aede1931009a</id>
   <title>Open Live Writer Rocks</title>
   <slug>open-live-writer-rocks</slug>
   <correlationkey />
   <author>Joe Audette</author>
   <pubDate>2016-02-22T16:58:00.0000000Z</pubDate>
-  <lastModified>2017-10-05T18:22:59.6687064Z</lastModified>
+  <lastModified>2017-11-05T12:46:19.9696890Z</lastModified>
   <excerpt />
   <content>&lt;p&gt;so they say so they say&lt;/p&gt;
 
@@ -15,6 +16,8 @@
 
 &lt;p&gt;more more more&lt;/p&gt;
 </content>
+  <imageUrl />
+  <thumbnailUrl />
   <ispublished>true</ispublished>
   <isFeatured>true</isFeatured>
   <categories>

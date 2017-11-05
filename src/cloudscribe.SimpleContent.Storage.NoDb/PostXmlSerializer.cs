@@ -33,6 +33,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             var doc = new XDocument(
                             new XElement("post",
+                                new XElement("id", post.Id),
                                 new XElement("title", post.Title),
                                 new XElement("slug", post.Slug),
                                 new XElement("correlationkey", post.CorrelationKey),

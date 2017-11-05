@@ -94,16 +94,18 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public IBlogRoutes BlogRoutes { get; set; }
 
+        private string pslug = string.Empty;
         private string firstImageUrl;
         public string ExtractFirstImargeUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
         {
             if (urlHelper == null) return string.Empty;
+            if (post == null) return string.Empty;
 
             var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
                         "://",
                         urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
 
-            if (!string.IsNullOrWhiteSpace(firstImageUrl))
+            if (!string.IsNullOrWhiteSpace(firstImageUrl) && pslug == post.Slug)
             {
                 if (firstImageUrl.StartsWith("http")) return firstImageUrl;
 
@@ -114,6 +116,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             
 
             firstImageUrl = filter.ExtractFirstImageUrl(post.Content);
+            pslug = post.Slug;
 
             if (firstImageUrl == null) return fallbackImageUrl;
 
