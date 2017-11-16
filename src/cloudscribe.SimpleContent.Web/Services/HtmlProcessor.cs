@@ -278,6 +278,34 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
+        private HtmlNode GetPrimaryOrFirstImage(HtmlDocument doc)
+        {
+            foreach (var img in doc.DocumentNode.Descendants("img"))
+            {
+                if (img.Attributes["data-primary-image"] != null)
+                {
+                    return img;
+                }
+            }
+
+            foreach (var img in doc.DocumentNode.Descendants("img"))
+            {
+                if (img.Attributes["src"] != null)
+                {
+                    return img;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// extracts the src url of the first image found, if the first image is not the one you want 
+        /// then you can add an attribute data-primary-image="true" to make it use that image instead of the first one
+        /// </summary>
+        /// <param name="htmlInput"></param>
+        /// <param name="fallbackImageUrl"></param>
+        /// <returns></returns>
         public string ExtractFirstImageUrl(string htmlInput, string fallbackImageUrl = null)
         {
             if (string.IsNullOrWhiteSpace(htmlInput)) return htmlInput;
@@ -285,16 +313,12 @@ namespace cloudscribe.SimpleContent.Services
             var doc = new HtmlDocument();
             doc.LoadHtml(htmlInput);
 
-            foreach (var img in doc.DocumentNode.Descendants("img"))
+            var img = GetPrimaryOrFirstImage(doc);
+            if(img != null && img.Attributes["src"] != null)
             {
-                if(img.Attributes["src"] != null)
-                {
-                    var src = img.Attributes["src"].Value;
-                    return src;
-                }
-                
+                return img.Attributes["src"].Value;
             }
-
+            
             return fallbackImageUrl;
 
         }
@@ -307,17 +331,15 @@ namespace cloudscribe.SimpleContent.Services
                 var doc = new HtmlDocument();
                 doc.LoadHtml(htmlInput);
 
-                foreach (var img in doc.DocumentNode.Descendants("img"))
+                var img = GetPrimaryOrFirstImage(doc);
+                if (img != null && img.Attributes["style"] != null)
                 {
-                    if (img.Attributes["style"] != null)
-                    {
-                        var style = img.Attributes["style"].Value;
-                        var styleItems = style.Split(';')
-                        .Select(s => s.Trim()).ToArray();
-                        return ExtractDims(styleItems as string[], fallbackWidth, fallbackHeight);
-                    }
-
+                    var style = img.Attributes["style"].Value;
+                    var styleItems = style.Split(';')
+                    .Select(s => s.Trim()).ToArray();
+                    return ExtractDims(styleItems as string[], fallbackWidth, fallbackHeight);
                 }
+
             }
             
 
