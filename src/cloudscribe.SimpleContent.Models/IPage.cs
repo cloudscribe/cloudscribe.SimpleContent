@@ -50,5 +50,7 @@ namespace cloudscribe.SimpleContent.Models
         bool DisableEditor { get; set; }
 
         List<PageResource> Resources { get; set; }
+
+        string ContentType { get; set; }
     }
 }

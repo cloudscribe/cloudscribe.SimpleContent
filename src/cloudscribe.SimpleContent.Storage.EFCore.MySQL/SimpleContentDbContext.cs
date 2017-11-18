@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2017-10-16
+// Last Modified:			2017-11-18
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -210,6 +210,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.TwitterCreator).HasMaxLength(100);
                 entity.Property(p => p.TwitterPublisher).HasMaxLength(100);
 
+                entity.Property(p => p.DefaultContentType)
+                .HasMaxLength(50)
+                .HasDefaultValue("html")
+                ;
+
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
@@ -276,6 +281,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.IsFeatured)
                 .IsRequired();
+
+                entity.Property(p => p.ContentType)
+               .HasMaxLength(50)
+               .HasDefaultValue("html")
+               ;
 
 
             });
@@ -467,6 +477,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
 
                 entity.Property(p => p.DisableEditor)
                   .IsRequired();
+
+                entity.Property(p => p.ContentType)
+               .HasMaxLength(50)
+               .HasDefaultValue("html")
+               ;
 
             });
 

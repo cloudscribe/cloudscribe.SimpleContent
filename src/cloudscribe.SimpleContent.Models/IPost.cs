@@ -32,5 +32,6 @@ namespace cloudscribe.SimpleContent.Models
         bool IsFeatured { get; set; }
         string ImageUrl { get; set; }
         string ThumbnailUrl { get; set; }
+        string ContentType { get; set; }
     }
 }
