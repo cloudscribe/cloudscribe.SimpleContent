@@ -59,12 +59,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Directory.CreateDirectory(firstFolderPath);
             }
 
-            //var projectsFolderPath = pathOptions.AppRootFolderPath
-            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-            //    + pathOptions.FolderSeparator
-            //    + pathOptions.ProjectsFolderName
-            //    + pathOptions.FolderSeparator
-            //    ;
+           
             var projectsFolderPath = Path.Combine(firstFolderPath, pathOptions.ProjectsFolderName);
 
             if (ensureFoldersExist && !Directory.Exists(projectsFolderPath))
@@ -72,14 +67,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Directory.CreateDirectory(projectsFolderPath);
             }
 
-            //var projectIdFolderPath = pathOptions.AppRootFolderPath
-            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-            //    + pathOptions.FolderSeparator
-            //    + pathOptions.ProjectsFolderName
-            //    + pathOptions.FolderSeparator
-            //    + projectId
-            //    + pathOptions.FolderSeparator
-            //    ;
+           
             var projectIdFolderPath = Path.Combine(projectsFolderPath, projectId);
 
             if (ensureFoldersExist && !Directory.Exists(projectIdFolderPath))
@@ -89,16 +77,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var type = typeof(Post).Name.ToLowerInvariant();
 
-            //var typeFolderPath = pathOptions.AppRootFolderPath
-            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-            //    + pathOptions.FolderSeparator
-            //    + pathOptions.ProjectsFolderName
-            //    + pathOptions.FolderSeparator
-            //    + projectId
-            //    + pathOptions.FolderSeparator
-            //    + type.ToLowerInvariant().Trim()
-            //    + pathOptions.FolderSeparator
-            //    ;
+            
             var typeFolderPath = Path.Combine(projectIdFolderPath, type.ToLowerInvariant().Trim());
 
             if (ensureFoldersExist && !Directory.Exists(typeFolderPath))
@@ -166,12 +145,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Directory.CreateDirectory(firstFolderPath);
             }
 
-            //var projectsFolderPath = pathOptions.AppRootFolderPath
-            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-            //    + pathOptions.FolderSeparator
-            //    + pathOptions.ProjectsFolderName
-            //    + pathOptions.FolderSeparator
-            //    ;
+           
             var projectsFolderPath = Path.Combine(firstFolderPath, pathOptions.ProjectsFolderName);
 
             if (ensureFoldersExist && !Directory.Exists(projectsFolderPath))
@@ -179,14 +153,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Directory.CreateDirectory(projectsFolderPath);
             }
 
-            //var projectIdFolderPath = pathOptions.AppRootFolderPath
-            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-            //    + pathOptions.FolderSeparator
-            //    + pathOptions.ProjectsFolderName
-            //    + pathOptions.FolderSeparator
-            //    + projectId
-            //    + pathOptions.FolderSeparator
-            //    ;
+            
             var projectIdFolderPath = Path.Combine(projectsFolderPath, projectId);
 
             if (ensureFoldersExist && !Directory.Exists(projectIdFolderPath))
@@ -196,16 +163,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var type = typeof(Post).Name.ToLowerInvariant();
 
-            //var typeFolderPath = pathOptions.AppRootFolderPath
-            //    + pathOptions.BaseFolderVPath.Replace("/", pathOptions.FolderSeparator)
-            //    + pathOptions.FolderSeparator
-            //    + pathOptions.ProjectsFolderName
-            //    + pathOptions.FolderSeparator
-            //    + projectId
-            //    + pathOptions.FolderSeparator
-            //    + type.ToLowerInvariant().Trim()
-            //    + pathOptions.FolderSeparator
-            //    ;
+            
             var typeFolderPath = Path.Combine(projectIdFolderPath, type.ToLowerInvariant().Trim());
 
             if (ensureFoldersExist && !Directory.Exists(typeFolderPath))

@@ -46,6 +46,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string ImageUrl { get; set; }
         public string ThumbnailUrl { get; set; }
 
+        public string ContentType { get; set; } = "html";
+
 
     }
 }

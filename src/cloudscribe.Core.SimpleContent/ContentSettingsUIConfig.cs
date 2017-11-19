@@ -9,5 +9,6 @@ namespace cloudscribe.Core.SimpleContent
         public bool ShowBlogMenuOptions { get; set; } = true;
         public bool ShowBlogSettings { get; set; } = true;
         public bool ShowPageSettings { get; set; } = true;
+        public bool ShowDefaultContentType { get; set; } = false;
     }
 }

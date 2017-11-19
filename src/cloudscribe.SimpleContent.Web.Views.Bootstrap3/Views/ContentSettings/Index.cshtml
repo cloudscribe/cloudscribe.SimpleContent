@@ -184,6 +184,24 @@
                         <span asp-validation-for="DisqusShortName" class="text-danger"></span>
                     </div>
                 </div>
+                @if (uiOptions.ShowDefaultContentType)
+                {
+                    <div class="form-group">
+                        <label asp-for="DefaultContentType" class="col-md-2 control-label">@sr["Default Content Type"]</label>
+                        <div class="col-md-10">
+                            <select asp-for="DefaultContentType" class="form-control" data-toggle="tooltip">
+                                <option value="html">html</option>
+                                <option value="markdown">markdown</option>
+                            </select>
+                            <span asp-validation-for="DefaultContentType" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <input asp-for="DefaultContentType" type="hidden" />
+                }
                 @if (uiOptions.ShowPageSettings)
                 {
                     <div class="form-group">

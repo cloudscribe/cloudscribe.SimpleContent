@@ -14,7 +14,9 @@
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
 @{ 
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();  
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var contentId = Model.Id;
+    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page"; }
 }  
 <div class="form-group">
 	<label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
@@ -25,13 +27,30 @@
     }
     else
     {
-        <textarea asp-for="Content" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+        if (Model.ContentType == "markdown")
+        {
+            <textarea asp-for="Content" class="form-control" rows="10" cols="70"
+                      data-markdown-unobtrusive=""
+                      data-markdown-autosave="true"
+                      data-markdown-contentid="@contentId"
+                      data-markdown-forceSync="true"
+                      data-markdown-indentWithTabs="true"
+                      data-markdown-spellChecker="true"
+                      data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
+
+        }
+        else
+        {
+            <textarea asp-for="Content" class="form-control"
+                      data-ckeditor-unobtrusive=""
+                      data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                      data-ckeditor-config-language="@ckOptions.LanguageCode"
+                      data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                      data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                      data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+        }
+
     }
 		<span asp-validation-for="Content" class="text-danger"></span>
 	</div>

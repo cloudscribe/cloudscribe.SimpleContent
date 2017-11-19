@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>bdc02f42-70ec-403c-a636-fd7d81437854</id>
+  <title>What about Markdown</title>
+  <slug>what-about-markdown</slug>
+  <correlationkey />
+  <author>Admin</author>
+  <pubDate>2017-11-19T12:32:00.0000000Z</pubDate>
+  <lastModified>2017-11-19T14:53:24.6996747Z</lastModified>
+  <excerpt>a post about markdown</excerpt>
+  <content>## Developers love it!
+
+what about you
+
+[![](/media/images/img_1909-ws.jpg)](/media/images/img_1909.jpg)</content>
+  <contentType>markdown</contentType>
+  <imageUrl />
+  <thumbnailUrl />
+  <ispublished>true</ispublished>
+  <isFeatured>false</isFeatured>
+  <categories>
+    <category>markdown</category>
+  </categories>
+  <comments></comments>
+</post>

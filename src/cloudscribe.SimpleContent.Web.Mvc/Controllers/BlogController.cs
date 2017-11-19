@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-10-05
+// Last Modified:           2017-11-19
 // 
 
 
@@ -307,7 +307,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Edit(string slug = "")
+        public async Task<IActionResult> Edit(string slug = "", string type="")
         {
             var projectSettings = await projectService.GetCurrentProjectSettings();
 
@@ -341,6 +341,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.IsPublished = true;
                 model.PubDate = timeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
                 model.CurrentPostUrl = Url.RouteUrl(blogRoutes.BlogIndexRouteName);
+                model.ContentType = projectSettings.DefaultContentType;
+                if(config.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
+                {
+                    model.ContentType = "markdown";  
+                }
             }
             else
             {
@@ -360,6 +365,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ImageUrl = postResult.Post.ImageUrl;
                 model.ThumbnailUrl = postResult.Post.ThumbnailUrl;
                 model.IsFeatured = postResult.Post.IsFeatured;
+                model.ContentType = postResult.Post.ContentType;
 
             }
 
@@ -513,6 +519,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             post.ImageUrl = model.ImageUrl;
             post.ThumbnailUrl = model.ThumbnailUrl;
             post.IsFeatured = model.IsFeatured;
+            post.ContentType = model.ContentType;
       
            
             if (!string.IsNullOrEmpty(model.PubDate))

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-09-24
+// Last Modified:           2017-11-19
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -225,7 +225,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Edit(
             string slug = "",
-            string parentSlug = ""
+            string parentSlug = "",
+            string type =""
             )
         {
             var projectSettings = await projectService.GetCurrentProjectSettings();
@@ -260,7 +261,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.Slug = slug;
                 model.ParentSlug = parentSlug;
                 model.PageOrder = await pageService.GetNextChildPageOrder(parentSlug);
-                
+                model.ContentType = projectSettings.DefaultContentType;
+                if (editOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
+                {
+                    model.ContentType = "markdown";
+                }
+
                 var rootList = await pageService.GetRootPages().ConfigureAwait(false);
                 if(rootList.Count == 0)
                 {
@@ -309,6 +315,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ViewRoles = page.ViewRoles;
                 model.ShowComments = page.ShowComments;
                 model.DisableEditor = page.DisableEditor;
+                model.ContentType = page.ContentType;
 
             }
 
@@ -492,6 +499,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 needToClearCache = true;
             }
             page.ExternalUrl = model.ExternalUrl;
+            page.ContentType = model.ContentType;
 
             if(!string.IsNullOrEmpty(model.Author))
             {

@@ -14,7 +14,8 @@
     "eonasdan-bootstrap-datetimepicker": "~4.17.37",
     "fontawesome": "~4.5.0",
     "tether": "~1.4.0",
-    "cropper": "~2.3.4"
-    
+    "cropper": "~2.3.4",
+    "simplemde": "^1.11.2"
+
   }
 }

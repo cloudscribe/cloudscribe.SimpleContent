@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-25
-// Last Modified:           2017-10-05
+// Last Modified:           2017-11-19
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -44,6 +44,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                                 new XElement("lastModified", post.LastModified.ToString("O")),
                                 new XElement("excerpt", post.MetaDescription),
                                 new XElement("content", post.Content),
+                                new XElement("contentType", post.ContentType),
                                 new XElement("imageUrl", post.ImageUrl),
                                 new XElement("thumbnailUrl", post.ThumbnailUrl),
                                 new XElement("ispublished", post.IsPublished),
@@ -116,6 +117,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 CorrelationKey = ReadValue(doc.Root, "correlationkey"),
                 MetaDescription = ReadValue(doc.Root, "excerpt"),
                 Content = ReadValue(doc.Root, "content"),
+                ContentType = ReadValue(doc.Root, "contentType"),
                 Slug = ReadValue(doc.Root, "slug").ToLowerInvariant(),
                 ImageUrl = ReadValue(doc.Root, "imageUrl"),
                 ThumbnailUrl = ReadValue(doc.Root, "thumbnailUrl"),
