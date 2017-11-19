@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-10-16
+// Last Modified:           2017-11-18
 // 
 
 namespace cloudscribe.SimpleContent.Models
@@ -112,6 +112,8 @@ namespace cloudscribe.SimpleContent.Models
         public string TwitterPublisher { get; set; }
         public string TwitterCreator { get; set; }
 
+        public string DefaultContentType { get; set; } = "html";
+
         public static ProjectSettings FromIProjectSettings(IProjectSettings project)
         {
             var p = new ProjectSettings();
@@ -128,6 +130,7 @@ namespace cloudscribe.SimpleContent.Models
             p.CopyrightNotice = project.CopyrightNotice;
             p.DaysToComment = project.DaysToComment;
             p.DefaultPageSlug = project.DefaultPageSlug;
+            p.DefaultContentType = project.DefaultContentType;
             p.Description = project.Description;
             p.EmailFromAddress = project.EmailFromAddress;
             p.FacebookAppId = project.FacebookAppId;

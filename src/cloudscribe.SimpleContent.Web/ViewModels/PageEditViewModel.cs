@@ -57,6 +57,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public bool DisableEditor { get; set; }
 
+        public string ContentType { get; set; } = "html";
+
 
     }
 }

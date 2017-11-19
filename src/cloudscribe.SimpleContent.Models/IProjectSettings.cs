@@ -56,6 +56,7 @@
         string SiteName { get; set; }
         string TwitterPublisher { get; set; }
         string TwitterCreator { get; set; }
+        string DefaultContentType { get; set; }
 
     }
 }

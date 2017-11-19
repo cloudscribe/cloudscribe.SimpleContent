@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-10-16
+// Last Modified:			2017-11-19
 // 
 
 using cloudscribe.Core.Models;
@@ -88,6 +88,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.SiteName = projectSettings.SiteName;
             model.TwitterCreator = projectSettings.TwitterCreator;
             model.TwitterPublisher = projectSettings.TwitterPublisher;
+            model.DefaultContentType = projectSettings.DefaultContentType;
 
             bool canManageUsers = false;
             try
@@ -197,6 +198,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.SiteName = model.SiteName;
             projectSettings.TwitterPublisher = model.TwitterPublisher;
             projectSettings.TwitterCreator = model.TwitterCreator;
+            projectSettings.DefaultContentType = model.DefaultContentType;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

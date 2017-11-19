@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2017-05-28
+// Last Modified:			2017-11-18
 // 
 
 
@@ -107,6 +107,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             set { postComments = value; }
         }
 
+        public string ContentType { get; set; } = "html";
+
         public static PostEntity FromIPost(IPost post)
         {
             var p = new PostEntity();
@@ -115,6 +117,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.Categories = post.Categories;
             //p.Comments = post.Comments;
             p.Content = post.Content;
+            p.ContentType = post.ContentType;
             p.Id = post.Id;
             p.IsPublished = post.IsPublished;
             p.LastModified = post.LastModified;

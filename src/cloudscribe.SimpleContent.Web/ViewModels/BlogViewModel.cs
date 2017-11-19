@@ -2,12 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-03-20
+// Last Modified:           2017-11-19
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Pagination;
+using Markdig;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -24,9 +26,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             Archives = new Dictionary<string, int>();
             filter = htmlProcessor;
             BlogRoutes = new DefaultBlogRoutes();
+            mdProcessor = new MarkdownProcessor();
         }
 
         private IHtmlProcessor filter;
+        private MarkdownProcessor mdProcessor;
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
 
@@ -63,6 +67,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string FilterHtml(IPost p)
         {
+            if(p.ContentType == "markdown")
+            {
+                return Markdown.ToHtml(p.Content);
+            }
             return filter.FilterHtml(
                 p.Content, 
                 ProjectSettings.CdnUrl, 
@@ -100,10 +108,23 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         {
             if (urlHelper == null) return string.Empty;
             if (post == null) return string.Empty;
-
+            
             var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
                         "://",
                         urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+
+            if (post.ContentType == "markdown")
+            {
+                var mdImg = mdProcessor.ExtractFirstImageUrl(post.Content);
+                if(!string.IsNullOrEmpty(mdImg))
+                {
+                    if (mdImg.StartsWith("http")) return mdImg;
+
+                    return baseUrl + mdImg;
+                }
+
+                return string.Empty;
+            }
 
             if (!string.IsNullOrWhiteSpace(firstImageUrl) && pslug == post.Slug)
             {

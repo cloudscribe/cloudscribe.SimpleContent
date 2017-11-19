@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2017-05-28
+// Last Modified:			2017-11-19
 // 
 
 using cloudscribe.Core.Models;
@@ -42,12 +42,14 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string CommentNotificationEmail { get; set; } = string.Empty;
         
         public string DefaultPageSlug { get; set; } = "home";
+
+        public string DefaultContentType { get; set; } = "html";
         //public bool UseDefaultPageAsRootNode { get; set; } = true;
 
-        
+
 
         //public string AllowedEditRoles { get; set; } = "Administrators";
-        
+
 
         // if true automatically add the blog index
         public bool AddBlogToPagesTree { get; set; } = true;

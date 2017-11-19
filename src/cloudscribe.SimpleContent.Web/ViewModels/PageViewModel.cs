@@ -2,13 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-10-16
+// Last Modified:           2017-11-19
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Common;
 using Microsoft.AspNetCore.Mvc;
+using Markdig;
 using System;
+using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -17,10 +19,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public PageViewModel(IHtmlProcessor htmlProcessor)
         {
             filter = htmlProcessor;
-           
+            mdProcessor = new MarkdownProcessor();
         }
 
         private IHtmlProcessor filter;
+        private MarkdownProcessor mdProcessor;
 
         public IProjectSettings ProjectSettings { get; set; }
         public IPage CurrentPage { get; set; } = null;
@@ -57,6 +60,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string FilterHtml(IPage p)
         {
+            if (p.ContentType == "markdown")
+            {
+                return Markdown.ToHtml(p.Content);
+            }
+
             return filter.FilterHtml(
                 p.Content,
                 ProjectSettings.CdnUrl,
@@ -76,6 +84,19 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
                        "://",
                        urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+
+            if (page.ContentType == "markdown")
+            {
+                var mdImg = mdProcessor.ExtractFirstImageUrl(page.Content);
+                if (!string.IsNullOrEmpty(mdImg))
+                {
+                    if (mdImg.StartsWith("http")) return mdImg;
+
+                    return baseUrl + mdImg;
+                }
+
+                return string.Empty;
+            }
 
             if (!string.IsNullOrWhiteSpace(firstImageUrl))
             {

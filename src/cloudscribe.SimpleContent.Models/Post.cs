@@ -49,7 +49,9 @@ namespace cloudscribe.SimpleContent.Models
         // not currently used but could be later
         public string ImageUrl { get; set; }
         public string ThumbnailUrl { get; set; }
-        
+
+        public string ContentType { get; set; } = "html";
+
 
         public static Post FromIPost(IPost post)
         {
@@ -59,6 +61,7 @@ namespace cloudscribe.SimpleContent.Models
             p.Categories = post.Categories;
             p.Comments = post.Comments;
             p.Content = post.Content;
+            p.ContentType = post.ContentType;
             p.Id = post.Id;
             p.IsPublished = post.IsPublished;
             p.LastModified = post.LastModified;

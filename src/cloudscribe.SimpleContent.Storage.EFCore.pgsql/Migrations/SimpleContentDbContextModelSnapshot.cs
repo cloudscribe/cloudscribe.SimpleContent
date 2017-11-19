@@ -18,7 +18,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
                 {
@@ -56,6 +56,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                         .HasMaxLength(255);
 
                     b.Property<int>("DaysToComment");
+
+                    b.Property<string>("DefaultContentType")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("html")
+                        .HasMaxLength(50);
 
                     b.Property<string>("DefaultPageSlug")
                         .HasMaxLength(255);
@@ -251,6 +256,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.Property<string>("Content");
 
+                    b.Property<string>("ContentType")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("html")
+                        .HasMaxLength(50);
+
                     b.Property<string>("CorrelationKey")
                         .HasMaxLength(255);
 
@@ -437,6 +447,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                         .HasMaxLength(500);
 
                     b.Property<string>("Content");
+
+                    b.Property<string>("ContentType")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("html")
+                        .HasMaxLength(50);
 
                     b.Property<string>("CorrelationKey")
                         .HasMaxLength(255);

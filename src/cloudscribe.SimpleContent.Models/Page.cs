@@ -75,6 +75,8 @@ namespace cloudscribe.SimpleContent.Models
 
         public List<PageResource> Resources { get; set; }
 
+        public string ContentType { get; set; } = "html";
+
         public static Page FromIPage(IPage page)
         {
             var p = new Page();
@@ -83,6 +85,7 @@ namespace cloudscribe.SimpleContent.Models
             p.Comments = page.Comments;
             p.CorrelationKey = page.CorrelationKey;
             p.Content = page.Content;
+            p.ContentType = page.ContentType;
             p.DisableEditor = page.DisableEditor;
             p.ExternalUrl = page.ExternalUrl;
             p.Id = page.Id;
