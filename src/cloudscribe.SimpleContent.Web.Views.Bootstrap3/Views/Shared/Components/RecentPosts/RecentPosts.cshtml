@@ -4,50 +4,41 @@
 @using cloudscribe.SimpleContent.Models
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SimpleContent> sr
-@inject IHtmlProcessor htmlFilter
 @{
     var defaultImageUrl = ""; //you can specify a default image
+}
+@functions{
+
+    public string GetUrl(IPost post)
+    {
+        if (Model.ProjectSettings.IncludePubDateInPostUrls)
+        {
+            return Url.RouteUrl(blogRoutes.PostWithDateRouteName, new { year = post.PubDate.Year, month = post.PubDate.Month.ToString("00"), day = post.PubDate.Day.ToString("00"), slug = post.Slug });
+
+        }
+
+        return Url.RouteUrl(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
+
+    }
+
 }
 @if (Model.Posts.Count > 0)
 {
     <h3 class="footer-widget-title">@sr["Recent Posts"]</h3>
-        @foreach (var post in Model.Posts)
-        {
-            var imgUrl = htmlFilter.ExtractFirstImageUrl(post.Content, defaultImageUrl);
-            <div class="media">
-                @if (Model.ProjectSettings.IncludePubDateInPostUrls)
-                {
-                    @if (!string.IsNullOrWhiteSpace(imgUrl))
-                    {
-                        <a class="pull-left" href="#"><img class="media-object" src="@imgUrl" width="100" height="75" alt="image"></a>
-                    }
-                    <div class="media-body">
-                        <h4 class="media-heading">
-                            <a asp-route="@blogRoutes.PostWithDateRouteName"
-                               asp-route-year="@post.PubDate.Year"
-                               asp-route-month="@post.PubDate.Month.ToString("00")"
-                               asp-route-day="@post.PubDate.Day.ToString("00")"
-                               asp-route-slug="@post.Slug">@post.Title</a>
-                        </h4>
-                        <small>@Model.FormatDate(post.PubDate)</small>
-                    </div>
-
-                }
-                else
-                {
-                    @if (!string.IsNullOrWhiteSpace(imgUrl))
-                    {
-                        <a class="pull-left" href="#"><img class="media-object" src="@imgUrl" width="100" height="75" alt="image"></a>
-                    }
-                    <div class="media-body">
-                        <h4 class="media-heading">
-                            <a asp-route="@blogRoutes.PostWithoutDateRouteName" asp-route-slug="@post.Slug">@post.Title</a>
-                        </h4>
-                        <small>@Model.FormatDate(post.PubDate)</small>
-                   </div>
-                    
-                } 
+    @foreach (var post in Model.Posts)
+    {
+        var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
+        <div class="media">
+            @if (!string.IsNullOrWhiteSpace(imgUrl))
+            {
+                <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" height="75" alt="image"></a>
+            }
+            <div class="media-body">
+                <h4 class="media-heading">
+                    <a href="@GetUrl(post)">@post.Title</a>
+                </h4>
+                <small>@Model.FormatDate(post.PubDate)</small>
             </div>
-
-        }
+        </div>
+    }
 }

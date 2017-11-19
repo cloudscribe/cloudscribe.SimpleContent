@@ -43,7 +43,7 @@
         <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta> 
     }
     @{
-        var imageUrl = Model.ExtractFirstImargeUrl(Model.CurrentPage, Url);
+        var imageUrl = Model.ExtractFirstImageUrl(Model.CurrentPage, Url);
         var imageSize = Model.ExtractFirstImageDimensions(Model.CurrentPage);
     }
     @if (!string.IsNullOrEmpty(imageUrl))

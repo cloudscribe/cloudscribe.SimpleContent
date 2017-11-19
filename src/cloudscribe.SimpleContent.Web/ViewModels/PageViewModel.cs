@@ -58,11 +58,17 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return localTime.ToString();
         }
 
+        private MarkdownPipeline _mdPipeline = null;
+
         public string FilterHtml(IPage p)
         {
             if (p.ContentType == "markdown")
             {
-                return Markdown.ToHtml(p.Content);
+                if (_mdPipeline == null)
+                {
+                    _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+                }
+                return Markdown.ToHtml(p.Content, _mdPipeline);
             }
 
             return filter.FilterHtml(
@@ -77,7 +83,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         }
 
         private string firstImageUrl;
-        public string ExtractFirstImargeUrl(IPage page, IUrlHelper urlHelper)
+        public string ExtractFirstImageUrl(IPage page, IUrlHelper urlHelper)
         {
             if (urlHelper == null) return string.Empty;
 

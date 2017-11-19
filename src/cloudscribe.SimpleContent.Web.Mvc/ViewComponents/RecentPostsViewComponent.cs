@@ -11,22 +11,25 @@ namespace cloudscribe.SimpleContent.Web
         public RecentPostsViewComponent(
             IProjectService projectService,
             IPostQueries postQueries,
+            IHtmlProcessor htmlProcessor,
             ITimeZoneHelper timeZoneHelper
             )
         {
             this.projectService = projectService;
             this.postQueries = postQueries;
             this.timeZoneHelper = timeZoneHelper;
+            this.htmlProcessor = htmlProcessor;
         }
 
         private IProjectService projectService;
         private IPostQueries postQueries;
         private ITimeZoneHelper timeZoneHelper;
+        private IHtmlProcessor htmlProcessor;
 
 
         public async Task<IViewComponentResult> InvokeAsync(string viewName = "RecentPosts", int numberToShow = 5)
         {
-            var model = new RecentPostsViewModel();
+            var model = new RecentPostsViewModel(htmlProcessor);
             var settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             var list = await postQueries.GetRecentPosts(settings.Id, numberToShow);
             model.ProjectSettings = settings;

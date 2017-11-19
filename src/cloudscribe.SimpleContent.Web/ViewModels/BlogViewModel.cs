@@ -65,11 +65,18 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string NextPostUrl { get; set; } = string.Empty;
 
+        private MarkdownPipeline _mdPipeline = null;
+
         public string FilterHtml(IPost p)
         {
             if(p.ContentType == "markdown")
             {
-                return Markdown.ToHtml(p.Content);
+                if(_mdPipeline == null)
+                {
+                    _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+                }
+                
+                return Markdown.ToHtml(p.Content, _mdPipeline);
             }
             return filter.FilterHtml(
                 p.Content, 
@@ -104,7 +111,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         private string pslug = string.Empty;
         private string firstImageUrl;
-        public string ExtractFirstImargeUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
+        public string ExtractFirstImageUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
         {
             if (urlHelper == null) return string.Empty;
             if (post == null) return string.Empty;

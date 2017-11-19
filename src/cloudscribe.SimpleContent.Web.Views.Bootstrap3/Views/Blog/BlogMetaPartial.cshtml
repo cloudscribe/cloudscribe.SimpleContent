@@ -1,7 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @using cloudscribe.Web.Common.Extensions
 @{
-    var imageUrl = Model.ExtractFirstImargeUrl(Model.CurrentPost, Url);
+    var imageUrl = Model.ExtractFirstImageUrl(Model.CurrentPost, Url);
   
 }
 @if (Model.CurrentPost != null && !string.IsNullOrEmpty(Model.CurrentPost.MetaDescription))
