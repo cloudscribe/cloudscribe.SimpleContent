@@ -77,7 +77,7 @@
      @{ await Html.RenderPartialAsync("NextPreviousPartial", Model); }
      <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPost))</div>
     @{
-        var imageUrl = Model.ExtractFirstImargeUrl(Model.CurrentPost, Url);
+        var imageUrl = Model.ExtractFirstImageUrl(Model.CurrentPost, Url);
         var imageSize = Model.ExtractFirstImageDimensions(Model.CurrentPost);
     }
     @if (!string.IsNullOrEmpty(imageUrl))

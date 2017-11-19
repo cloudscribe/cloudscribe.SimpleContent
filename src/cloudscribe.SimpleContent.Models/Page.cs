@@ -80,38 +80,7 @@ namespace cloudscribe.SimpleContent.Models
         public static Page FromIPage(IPage page)
         {
             var p = new Page();
-            p.Author = page.Author;
-            p.Categories = page.Categories;
-            p.Comments = page.Comments;
-            p.CorrelationKey = page.CorrelationKey;
-            p.Content = page.Content;
-            p.ContentType = page.ContentType;
-            p.DisableEditor = page.DisableEditor;
-            p.ExternalUrl = page.ExternalUrl;
-            p.Id = page.Id;
-            p.IsPublished = page.IsPublished;
-            p.LastModified = page.LastModified;
-            p.MenuFilters = page.MenuFilters;
-            p.MenuOnly = page.MenuOnly;
-            p.MetaDescription = page.MetaDescription;
-            p.MetaHtml = page.MetaHtml;
-            p.MetaJson = page.MetaJson;
-            p.PageOrder = page.PageOrder;
-            p.ParentId = page.ParentId;
-            p.ParentSlug = page.ParentSlug;
-            p.ProjectId = page.ProjectId;
-            p.PubDate = page.PubDate;
-            p.Resources = page.Resources;
-            p.ShowCategories = page.ShowCategories;
-            p.ShowComments = page.ShowComments;
-            p.ShowHeading = page.ShowHeading;
-            p.ShowMenu = page.ShowMenu;
-            p.ShowLastModified = page.ShowLastModified;
-            p.ShowPubDate = page.ShowPubDate;
-            p.Slug = page.Slug;
-            p.Title = page.Title;
-            p.ViewRoles = page.ViewRoles;
-            
+            page.CopyTo(p);
             return p;
         }
     }

@@ -86,7 +86,7 @@
     </header>
     <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.TmpPost))</div>
     @{
-        var imageUrl = Model.ExtractFirstImargeUrl(Model.TmpPost, Url);
+        var imageUrl = Model.ExtractFirstImageUrl(Model.TmpPost, Url);
         var imageSize = Model.ExtractFirstImageDimensions(Model.TmpPost);
     }
     @if (!string.IsNullOrEmpty(imageUrl))

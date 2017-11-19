@@ -117,62 +117,7 @@ namespace cloudscribe.SimpleContent.Models
         public static ProjectSettings FromIProjectSettings(IProjectSettings project)
         {
             var p = new ProjectSettings();
-            p.AddBlogToPagesTree = project.AddBlogToPagesTree;
-            p.BlogMenuLinksToNewestPost = project.BlogMenuLinksToNewestPost;
-            p.BlogPageNavComponentVisibility = project.BlogPageNavComponentVisibility;
-            p.BlogPagePosition = project.BlogPagePosition;
-            p.BlogPageText = project.BlogPageText;
-            p.CdnUrl = project.CdnUrl;
-            p.ChannelCategoriesCsv = project.ChannelCategoriesCsv;
-            p.ChannelRating = project.ChannelRating;
-            p.ChannelTimeToLive = project.ChannelTimeToLive;
-            p.CommentNotificationEmail = project.CommentNotificationEmail;
-            p.CopyrightNotice = project.CopyrightNotice;
-            p.DaysToComment = project.DaysToComment;
-            p.DefaultPageSlug = project.DefaultPageSlug;
-            p.DefaultContentType = project.DefaultContentType;
-            p.Description = project.Description;
-            p.EmailFromAddress = project.EmailFromAddress;
-            p.FacebookAppId = project.FacebookAppId;
-            p.Id = project.Id;
-            p.Image = project.Image;
-            p.IncludePubDateInPostUrls = project.IncludePubDateInPostUrls;
-            p.LanguageCode = project.LanguageCode;
-            p.LocalMediaVirtualPath = project.LocalMediaVirtualPath;
-            p.ManagingEditorEmail = project.ManagingEditorEmail;
-            p.ModerateComments = project.ModerateComments;
-            p.PostsPerPage = project.PostsPerPage;
-            p.PubDateFormat = project.PubDateFormat;
-            p.RecaptchaPrivateKey = project.RecaptchaPrivateKey;
-            p.RecaptchaPublicKey = project.RecaptchaPublicKey;
-            p.RemoteFeedProcessorUseAgentFragment = project.RemoteFeedProcessorUseAgentFragment;
-            p.RemoteFeedUrl = project.RemoteFeedUrl;
-            p.ShowTitle = project.ShowTitle;
-            p.SiteName = project.SiteName;
-            p.SmtpPassword = project.SmtpPassword;
-            p.SmtpPort = project.SmtpPort;
-            p.SmtpPreferredEncoding = project.SmtpPreferredEncoding;
-            p.SmtpRequiresAuth = project.SmtpRequiresAuth;
-            p.SmtpServer = project.SmtpServer;
-            p.SmtpUser = project.SmtpUser;
-            p.SmtpUseSsl = project.SmtpUseSsl;
-            p.TimeZoneId = project.TimeZoneId;
-            p.Title = project.Title;
-            p.TwitterCreator = project.TwitterCreator;
-            p.TwitterPublisher = project.TwitterPublisher;
-            p.UseDefaultPageAsRootNode = project.UseDefaultPageAsRootNode;
-            p.UseMetaDescriptionInFeed = project.UseMetaDescriptionInFeed;
-            p.WebmasterEmail = project.WebmasterEmail;
-            p.Publisher = project.Publisher;
-            p.PublisherLogoUrl = project.PublisherLogoUrl;
-            p.PublisherLogoWidth = project.PublisherLogoWidth;
-            p.PublisherLogoHeight = project.PublisherLogoHeight;
-            p.PublisherEntityType = project.PublisherEntityType;
-            p.DisqusShortName = project.DisqusShortName;
-            p.ShowRecentPostsOnDefaultPage = project.ShowRecentPostsOnDefaultPage;
-            p.ShowFeaturedPostsOnDefaultPage = project.ShowFeaturedPostsOnDefaultPage;
-            
-
+            project.CopyTo(p);
             return p;
         }
 
