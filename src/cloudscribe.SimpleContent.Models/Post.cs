@@ -56,26 +56,7 @@ namespace cloudscribe.SimpleContent.Models
         public static Post FromIPost(IPost post)
         {
             var p = new Post();
-            p.Author = post.Author;
-            p.BlogId = post.BlogId;
-            p.Categories = post.Categories;
-            p.Comments = post.Comments;
-            p.Content = post.Content;
-            p.ContentType = post.ContentType;
-            p.Id = post.Id;
-            p.IsPublished = post.IsPublished;
-            p.LastModified = post.LastModified;
-            p.MetaDescription = post.MetaDescription;
-            p.MetaHtml = post.MetaHtml;
-            p.MetaJson = post.MetaJson;
-            p.PubDate = post.PubDate;
-            p.Slug = post.Slug;
-            p.Title = post.Title;
-            p.CorrelationKey = post.CorrelationKey;
-            p.ImageUrl = post.ImageUrl;
-            p.ThumbnailUrl = post.ThumbnailUrl;
-            p.IsFeatured = post.IsFeatured;
-            
+            post.CopyTo(p);
             return p;
         }
 
