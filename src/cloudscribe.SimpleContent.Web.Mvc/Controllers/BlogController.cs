@@ -346,6 +346,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     model.ContentType = "markdown";  
                 }
+                if(!string.IsNullOrWhiteSpace(type) && type == "html")
+                {
+                    model.ContentType = "html";
+                }
             }
             else
             {

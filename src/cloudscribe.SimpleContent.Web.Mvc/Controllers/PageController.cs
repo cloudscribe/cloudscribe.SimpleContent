@@ -60,11 +60,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index(
-            string slug = ""
-           // ,  string parentSlug = ""
-           // ,string mode = ""
-            )
+        public async Task<IActionResult> Index(string slug = "")
         {
             var projectSettings = await projectService.GetCurrentProjectSettings();
 
@@ -84,7 +80,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.CurrentPage = page;
             model.ProjectSettings = projectSettings;
             model.CanEdit = canEdit;
-            //model.ShowComments = mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = false;
             model.TimeZoneHelper = timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
@@ -265,6 +260,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 if (editOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
                 {
                     model.ContentType = "markdown";
+                }
+                if (!string.IsNullOrWhiteSpace(type) && type == "html")
+                {
+                    model.ContentType = "html";
                 }
 
                 var rootList = await pageService.GetRootPages().ConfigureAwait(false);
