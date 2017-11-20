@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-06-26
+// Last Modified:           2017-11-20
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -90,10 +90,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 return typeFolderPath;
             }
 
-            var fileName = key + fileExtension;
+            var fileName = key + ".xml";
             var filePath =  Path.Combine(typeFolderPath, key + fileExtension);
             if (File.Exists(filePath)) return filePath;
-
+            
             // if the file is not found in the type folder
             // we need to check for deeper folders year/month
             // if the file is found there then return the path
@@ -104,6 +104,20 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 )
             {
                 return file; 
+            }
+
+            fileName = key + ".md";
+            filePath = Path.Combine(typeFolderPath, key + fileExtension);
+            if (File.Exists(filePath)) return filePath;
+
+            //try again with .md
+            foreach (string file in Directory.EnumerateFiles(
+                typeFolderPath,
+                fileName,
+                SearchOption.AllDirectories) // this is needed for blog posts which are nested in year/month folders
+                )
+            {
+                return file;
             }
 
             // otherwise return the best path calculation based on info provided
@@ -190,7 +204,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             // we don't care if this file eists
             // this method is for calculating where to save a post
-            return Path.Combine(monthPath, key + fileExtension);
+            if(post.ContentType == "markdown")
+            {
+                return Path.Combine(monthPath, key + ".md");
+            }
+
+            return Path.Combine(monthPath, key + ".xml");
         }
 
     }

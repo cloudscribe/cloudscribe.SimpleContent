@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-01
+// Last Modified:           2017-11-20
 // 
 
 
@@ -17,7 +17,11 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddNoDbStorageForSimpleContent(this IServiceCollection services)
         {
-            services.TryAddScoped<IStringSerializer<Post>, PostXmlSerializer>();
+            services.AddScoped<PostXmlSerializer>();
+            services.AddScoped<PostMarkdownSerializer>();
+
+            //services.TryAddScoped<IStringSerializer<Post>, PostXmlSerializer>();
+            services.TryAddScoped<IStringSerializer<Post>, CompositePostSerializer>();
             services.TryAddScoped<IStoragePathResolver<Post>, PostStoragePathResolver>();
             services.AddNoDbProjectStorage();
             services.AddNoDbPostStorage();
