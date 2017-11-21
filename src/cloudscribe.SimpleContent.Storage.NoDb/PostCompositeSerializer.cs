@@ -11,19 +11,19 @@ using NoDb;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class CompositePostSerializer : IStringSerializer<Post>
+    public class PostCompositeSerializer : IStringSerializer<Post>
     {
-        public CompositePostSerializer(
+        public PostCompositeSerializer(
             PostXmlSerializer xmlSerializer,
-            PostMarkdownSerializer mardownSerializer
+            PostMarkdownSerializer markdownSerializer
             )
         {
             _xmlSerializer = xmlSerializer;
-            _mardownSerializer = mardownSerializer;
+            _markdownSerializer = markdownSerializer;
         }
 
         private PostXmlSerializer _xmlSerializer;
-        private PostMarkdownSerializer _mardownSerializer;
+        private PostMarkdownSerializer _markdownSerializer;
 
         public string ExpectedFileExtension { get; } = "";
 
@@ -31,7 +31,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             if(post.ContentType == "markdown")
             {
-                return _mardownSerializer.Serialize(post);
+                return _markdownSerializer.Serialize(post);
             }
 
             return _xmlSerializer.Serialize(post);
@@ -41,7 +41,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             if(input.StartsWith("---"))
             {
-                return _mardownSerializer.Deserialize(input, key);
+                return _markdownSerializer.Deserialize(input, key);
             }
 
             return _xmlSerializer.Deserialize(input, key);

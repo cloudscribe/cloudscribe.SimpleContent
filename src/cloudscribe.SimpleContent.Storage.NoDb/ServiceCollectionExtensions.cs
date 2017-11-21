@@ -17,12 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddNoDbStorageForSimpleContent(this IServiceCollection services)
         {
-            services.AddScoped<PostXmlSerializer>();
-            services.AddScoped<PostMarkdownSerializer>();
-
-            //services.TryAddScoped<IStringSerializer<Post>, PostXmlSerializer>();
-            services.TryAddScoped<IStringSerializer<Post>, CompositePostSerializer>(); 
-            services.TryAddScoped<IStoragePathResolver<Post>, PostStoragePathResolver>();
+            
             services.TryAddScoped<IKeyGenerator, DefaultKeyGenerator>();
           
             services.AddNoDbProjectStorage();
@@ -35,6 +30,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddNoDbPageStorage(this IServiceCollection services)
         {
+            services.AddScoped<PageJsonSerializer>();
+            services.AddScoped<PageMarkdownSerializer>();
+
+            services.TryAddScoped<IStringSerializer<Page>, PageCompositeSerializer>();
+            services.TryAddScoped<IStoragePathResolver<Page>, PageStoragePathResolver>();
+
             services.AddNoDb<Page>();
             services.TryAddScoped<IPageQueries, PageQueries>();
             services.TryAddScoped<IPageCommands, PageCommands>();
@@ -44,6 +45,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddNoDbPostStorage(this IServiceCollection services)
         {
+            services.AddScoped<PostXmlSerializer>();
+            services.AddScoped<PostMarkdownSerializer>();
+
+            //services.TryAddScoped<IStringSerializer<Post>, PostXmlSerializer>();
+            services.TryAddScoped<IStringSerializer<Post>, PostCompositeSerializer>();
+            services.TryAddScoped<IStoragePathResolver<Post>, PostStoragePathResolver>();
+
             services.AddNoDb<Post>();
             services.TryAddScoped<IPostQueries, PostQueries>();
             services.TryAddScoped<IPostCommands, PostCommands>();

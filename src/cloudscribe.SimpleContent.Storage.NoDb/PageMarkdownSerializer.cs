@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
-// Created:                 2017-11-20
+// Created:                 2017-11-21
 // Last Modified:           2017-11-21
 //
 
@@ -15,53 +15,54 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class PostMarkdownSerializer : IStringSerializer<Post>
+    public class PageMarkdownSerializer : IStringSerializer<Page>
     {
-        public PostMarkdownSerializer(
-            ILogger<PostMarkdownSerializer> logger)
+        public PageMarkdownSerializer(
+            ILogger<PageMarkdownSerializer> logger
+            )
         {
             _log = logger;
         }
 
         private ILogger _log;
-        
+
         public string ExpectedFileExtension { get; } = ".md";
 
-        public string Serialize(Post post)
+        public string Serialize(Page page)
         {
-            var yamlPost = new YamlPost();
-            post.CopyTo(yamlPost);
-            foreach(var c in post.Comments)
-            {
-                if (c is Comment comment)
-                {
-                    yamlPost.TheComments.Add(comment);
-                }
-            }
+            var yamlPage = new YamlPage();
+            page.CopyTo(yamlPage);
+            //foreach (var c in page.Comments)
+            //{
+            //    if (c is Comment comment)
+            //    {
+            //        yamlPage.TheComments.Add(comment);
+            //    }
+            //}
 
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .Build();
-            var yaml = serializer.Serialize(yamlPost);
+            var yaml = serializer.Serialize(yamlPage);
 
             var sb = new StringBuilder();
             sb.Append("---\r\n");
             sb.Append(yaml);
             sb.Append("---\r\n");
-            sb.Append(post.Content);
+            sb.Append(page.Content);
 
             return sb.ToString();
 
         }
 
-        public Post Deserialize(string markdownWithYaml, string key)
+        public Page Deserialize(string markdownWithYaml, string key)
         {
             var yamlHelper = new YamlHelper();
             string extractedYaml = null;
             var match = yamlHelper.MatchFrontMatter(markdownWithYaml);
 
-            var post = new Post();
-            if(match.Success)
+            var page = new Page();
+            if (match.Success)
             {
                 extractedYaml = match.Value;
 
@@ -72,20 +73,21 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .Build();
 
-                var yamlPost = deserializer.Deserialize<YamlPost>(input);
-                yamlPost.CopyTo(post);
-                post.Comments.AddRange(yamlPost.TheComments);
-                post.Content = markdownWithYaml.Replace(extractedYaml, string.Empty).TrimStart('\r', '\n');
+                var yamlPost = deserializer.Deserialize<YamlPage>(input);
+                yamlPost.CopyTo(page);
+
+                //post.Id = key;
+                //post.Comments.AddRange(yamlPost.TheComments);
+                page.Content = markdownWithYaml.Replace(extractedYaml, string.Empty).TrimStart('\r', '\n');
             }
             else
             {
-                _log.LogError($"failed to deserialize yamlBlock from post with key {key}");
+                _log.LogError($"failed to deserialize yamlBlock from page with key {key}");
             }
-            
-            return post;
+
+            return page;
 
         }
 
-       
     }
 }
