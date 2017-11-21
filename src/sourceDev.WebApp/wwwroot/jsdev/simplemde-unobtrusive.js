@@ -29,6 +29,18 @@ $(function () {
             var dropFileXsrfToken = $('[name="__RequestVerificationToken"]:first').val();
 
             var simplemde = new SimpleMDE(config);
+            //var imgButton = simplemde.toolbar[9]; 
+            //if (imgButton) {
+            //    //alert(imgButton.name);
+            //    imgButton.action = function customFunction(editor) {
+            //       // Add your own code
+            //            alert('you clicked image');
+            //        };
+            //}
+            //simplemde.toolbar[16].action = function customFunction(editor) {
+            //    // Add your own code
+            //    alert('you clicked image');
+            //};
             if (dropfileuploadurl) {
                 simplemde.codemirror.on("drop", function (instance, event) {
                     //console.log("drop fired");

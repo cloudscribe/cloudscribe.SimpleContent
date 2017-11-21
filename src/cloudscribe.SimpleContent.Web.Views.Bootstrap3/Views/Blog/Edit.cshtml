@@ -15,7 +15,7 @@
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var deletePrompt = JavaScriptHelper.HtmlEncodeThenReplaceQuotesForJs(string.Format(sr["Are you sure you want to delete the post {0}? You cannot undo this action."], Model.Title));
     var contentId = Model.Id;
-    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post"; }
+    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
 @section Styles {
   @{ await Html.RenderPartialAsync("_DatePickerCssPartial"); }
@@ -60,7 +60,7 @@
             {
                 <textarea asp-for="Content" class="form-control" rows="10" cols="70"
                           data-markdown-unobtrusive=""
-                          data-markdown-autosave="false"
+                          data-markdown-autosave="true"
                           data-markdown-contentid="@contentId"
                           data-markdown-forceSync="true"
                           data-markdown-indentWithTabs="true"
@@ -151,11 +151,12 @@
 @if (Model.ContentType == "markdown")
 {
     <script src="~/cr/js/simplemde.min.js"></script>
-    <script src="~/cr/js/simplemde-unobtrusive.min.js"></script> 
+    <script src="~/cr/js/simplemde-unobtrusive.min.js"></script>
+    @*<script src="~/jsdev/simplemde-unobtrusive.js" asp-append-version="true"></script>*@
 }
 else
 {
-     await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); 
+    await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial");
 }
 @{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
 <script>

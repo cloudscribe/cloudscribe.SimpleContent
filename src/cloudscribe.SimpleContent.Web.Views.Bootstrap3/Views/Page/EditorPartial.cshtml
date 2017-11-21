@@ -16,7 +16,7 @@
 @{ 
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
-    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page"; }
+    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }  
 <div class="form-group">
 	<label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
@@ -31,7 +31,7 @@
         {
             <textarea asp-for="Content" class="form-control" rows="10" cols="70"
                       data-markdown-unobtrusive=""
-                      data-markdown-autosave="false"
+                      data-markdown-autosave="true"
                       data-markdown-contentid="@contentId"
                       data-markdown-forceSync="true"
                       data-markdown-indentWithTabs="true"
