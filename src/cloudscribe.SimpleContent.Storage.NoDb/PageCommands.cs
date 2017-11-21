@@ -2,11 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-09-08
+// Last Modified:           2017-11-21
 // 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.Logging;
 using NoDb;
 using System;
 using System.Collections.Generic;
@@ -20,18 +19,22 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     {
         public PageCommands(
             IBasicCommands<Page> pageCommands,
-            IBasicQueries<Page> pageQueries
+            IBasicQueries<Page> pageQueries,
+            IKeyGenerator keyGenerator
             //,ILogger<PageCommands> logger
             )
         {
             commands = pageCommands;
             query = pageQueries;
+            _keyGenerator = keyGenerator;
             //log = logger;
         }
 
         private IBasicCommands<Page> commands;
         private IBasicQueries<Page> query;
+        private IKeyGenerator _keyGenerator;
         //private ILogger log;
+
 
         public async Task Create(
             string projectId,
@@ -39,11 +42,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
+            //if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
 
             var p = Page.FromIPage(page);
+            p.Id = _keyGenerator.GenerateKey(p);
             p.LastModified = DateTime.UtcNow;
-            
             p.PubDate = DateTime.UtcNow;
   
             await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);

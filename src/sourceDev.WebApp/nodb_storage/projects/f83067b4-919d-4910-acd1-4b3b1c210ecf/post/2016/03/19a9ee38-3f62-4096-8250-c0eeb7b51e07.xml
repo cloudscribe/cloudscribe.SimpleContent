@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-16"?>
 <post>
+  <id>19a9ee38-3f62-4096-8250-c0eeb7b51e07</id>
   <title>Starsky and Hutch</title>
   <slug>starsky-and-hutch</slug>
-  <correlationkey></correlationkey>
+  <correlationkey />
   <author></author>
   <pubDate>2016-03-13T22:23:00.0000000Z</pubDate>
-  <lastModified>2017-10-24T14:54:47.1035761Z</lastModified>
+  <lastModified>2017-11-20T20:33:50.1409387Z</lastModified>
   <excerpt>Starsky and Hutch</excerpt>
-  <content>&lt;p&gt;Starsky and Hutch&lt;br /&gt;
+  <content>&lt;p&gt;Starsky and Hutcherson&lt;br /&gt;
 &lt;img alt="dudes" src="/media/images/dudes1-550x412.jpeg" style="height:412px; width:550px" /&gt;&lt;br /&gt;
 cool dudes man!&lt;/p&gt;
 </content>
-  <imageUrl></imageUrl>
-  <thumbnailUrl></thumbnailUrl>
+  <contentType />
+  <imageUrl />
+  <thumbnailUrl />
   <ispublished>true</ispublished>
   <isFeatured>true</isFeatured>
   <categories>

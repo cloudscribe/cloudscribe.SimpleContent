@@ -3,16 +3,15 @@ using System.Collections.Generic;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public interface IPage
+    public interface IPage : IContentItem
     {
         string Author { get; set; }
         List<string> Categories { get; set; }
         List<IComment> Comments { get; set; }
-        string Content { get; set; }
-        string Id { get; set; }
+        
         bool IsPublished { get; set; }
         DateTime LastModified { get; set; }
-        string MetaDescription { get; set; }
+       
         /// <summary>
         /// the idea is to serialize an object with list of metadata and meta links
         /// whenever this model is modified it is reserialized here then
@@ -28,16 +27,16 @@ namespace cloudscribe.SimpleContent.Models
         string ParentId { get; set; }
         string ParentSlug { get; set; }
         string ProjectId { get; set; }
-        DateTime PubDate { get; set; }
+
         bool ShowCategories { get; set; }
         bool ShowComments { get; set; }
         bool ShowHeading { get; set; }
         bool ShowLastModified { get; set; }
         bool ShowPubDate { get; set; }
-        string Slug { get; set; }
+        
         string ExternalUrl { get; set; }
         string CorrelationKey { get; set; } 
-        string Title { get; set; }
+        
         string ViewRoles { get; set; }
         string MenuFilters { get; set; }
         /// <summary>
@@ -51,6 +50,6 @@ namespace cloudscribe.SimpleContent.Models
 
         List<PageResource> Resources { get; set; }
 
-        string ContentType { get; set; }
+        
     }
 }

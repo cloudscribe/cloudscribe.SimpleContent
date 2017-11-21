@@ -16,7 +16,7 @@
 @{ 
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
-    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page"; }
+    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }  
 <div class="form-group">
 	<label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>

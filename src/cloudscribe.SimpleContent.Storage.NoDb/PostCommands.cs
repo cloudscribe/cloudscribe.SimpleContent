@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-06-04
+// Last Modified:           2017-11-21
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -21,19 +21,22 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public PostCommands(
             PostCache cache,
             IBasicCommands<Post> postCommands,
-            IBasicQueries<Post> postQueries
+            IBasicQueries<Post> postQueries,
+            IKeyGenerator keyGenerator
             //,ILogger<PostCommands> logger
             )
         {
             this.cache = cache;
             commands = postCommands;
             query = postQueries;
+            _keyGenerator = keyGenerator;
            // log = logger;
         }
 
         private PostCache cache;
         private IBasicCommands<Post> commands;
         private IBasicQueries<Post> query;
+        private IKeyGenerator _keyGenerator;
        // private ILogger log;
 
         public async Task HandlePubDateAboutToChange(
@@ -69,7 +72,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             p.LastModified = DateTime.UtcNow;
 
-            if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
+            p.Id = _keyGenerator.GenerateKey(p);
+
+            //if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
             
             await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
             cache.ClearListCache(projectId);

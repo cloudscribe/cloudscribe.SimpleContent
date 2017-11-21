@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2016-08-01
+// Last Modified:           2017-11-20
 // 
 
 
@@ -17,8 +17,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddNoDbStorageForSimpleContent(this IServiceCollection services)
         {
-            services.TryAddScoped<IStringSerializer<Post>, PostXmlSerializer>();
-            services.TryAddScoped<IStoragePathResolver<Post>, PostStoragePathResolver>();
+            
+            services.TryAddScoped<IKeyGenerator, DefaultKeyGenerator>();
+          
             services.AddNoDbProjectStorage();
             services.AddNoDbPostStorage();
             services.AddNoDbPageStorage();
@@ -29,6 +30,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddNoDbPageStorage(this IServiceCollection services)
         {
+            services.AddScoped<PageJsonSerializer>();
+            services.AddScoped<PageMarkdownSerializer>();
+
+            services.TryAddScoped<IStringSerializer<Page>, PageCompositeSerializer>();
+            services.TryAddScoped<IStoragePathResolver<Page>, PageStoragePathResolver>();
+
             services.AddNoDb<Page>();
             services.TryAddScoped<IPageQueries, PageQueries>();
             services.TryAddScoped<IPageCommands, PageCommands>();
@@ -38,6 +45,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddNoDbPostStorage(this IServiceCollection services)
         {
+            services.AddScoped<PostXmlSerializer>();
+            services.AddScoped<PostMarkdownSerializer>();
+
+            //services.TryAddScoped<IStringSerializer<Post>, PostXmlSerializer>();
+            services.TryAddScoped<IStringSerializer<Post>, PostCompositeSerializer>();
+            services.TryAddScoped<IStoragePathResolver<Post>, PostStoragePathResolver>();
+
             services.AddNoDb<Post>();
             services.TryAddScoped<IPostQueries, PostQueries>();
             services.TryAddScoped<IPostCommands, PostCommands>();
