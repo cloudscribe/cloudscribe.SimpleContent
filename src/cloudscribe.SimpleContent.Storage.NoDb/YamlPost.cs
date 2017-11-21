@@ -1,8 +1,6 @@
 ﻿using cloudscribe.SimpleContent.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using YamlDotNet;
 using YamlDotNet.Serialization;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
@@ -16,53 +14,68 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             TheComments = new List<Comment>();
         }
 
-        //[YamlMember()]
+        [YamlMember(Order = 1)]
         public string Id { get; set; }
 
+        [YamlMember(Order = 2)]
         public string BlogId { get; set; }
 
-        public string Title { get; set; }
-
-        /// <summary>
-        /// This field is a place to store a surrogate key if needed.
-        /// For example in a multi-tenant multi-lanaguage setup, it could be used
-        /// to correlate posts between the different language sites
-        /// to implement a language switcher. ie the corresponding post in the other
-        /// site could be found by looking it up by the correlationkey
-        /// </summary>
+        [YamlMember(Order = 3)]
         public string CorrelationKey { get; set; } = string.Empty;
 
-        public string Author { get; set; }
-
+        [YamlMember(Order = 4)]
         public string Slug { get; set; }
 
+        [YamlMember(Order = 5)]
+        public string ContentType { get; set; } = "html";
+
+        [YamlMember(Order = 6)]
+        public string Title { get; set; }
+
+        [YamlMember(Order = 7)]
+        public string Author { get; set; }
+        
+        [YamlMember(Order = 8)]
         public string MetaDescription { get; set; }
+
+        [YamlMember(Order = 9)]
         public string MetaJson { get; set; }
+        [YamlMember(Order = 10)]
         public string MetaHtml { get; set; }
-
-        [YamlIgnore]
-        public string Content { get; set; }
-
-        public DateTime PubDate { get; set; } = DateTime.UtcNow;
-
-        public DateTime LastModified { get; set; } = DateTime.UtcNow;
-
+        
+        [YamlMember(Order = 11)]
         public bool IsPublished { get; set; }
 
+        [YamlMember(Order = 12)]
+        public DateTime PubDate { get; set; } = DateTime.UtcNow;
+
+        [YamlMember(Order = 13)]
+        public DateTime LastModified { get; set; } = DateTime.UtcNow;
+
+        [YamlMember(Order = 14)]
+        public bool IsFeatured { get; set; }
+
+        [YamlMember(Order = 15)]
         public List<string> Categories { get; set; }
 
-        //[YamlMember(serializeAs:typeof(List<Comment>))]
+        [YamlMember(Order = 16, Alias = "Comments")]
+        public List<Comment> TheComments { get; set; }
+
+        
+
+        
+
         [YamlIgnore]
         public List<IComment> Comments { get; set; }
 
-        public List<Comment> TheComments { get; set; }
-        public bool IsFeatured { get; set; }
+        [YamlIgnore]
+        public string Content { get; set; }
 
         // not currently used but could be later
         public string ImageUrl { get; set; }
         public string ThumbnailUrl { get; set; }
 
-        public string ContentType { get; set; } = "html";
+        
 
     }
 }

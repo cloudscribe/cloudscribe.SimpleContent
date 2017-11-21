@@ -28,8 +28,6 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         }
 
         private IContentProcessor _contentProcessor;
-
-        private MarkdownProcessor mdProcessor;
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
 

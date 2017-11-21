@@ -24,7 +24,6 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         private IContentProcessor _contentProcessor;
         
-
         public IProjectSettings ProjectSettings { get; set; }
         public IPage CurrentPage { get; set; } = null;
 
@@ -58,8 +57,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return localTime.ToString();
         }
 
-        private MarkdownPipeline _mdPipeline = null;
-
+        
         public string FilterHtml(IPage p)
         {
             return _contentProcessor.FilterHtml(p, ProjectSettings);

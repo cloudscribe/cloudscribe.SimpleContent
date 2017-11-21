@@ -21,8 +21,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<PostMarkdownSerializer>();
 
             //services.TryAddScoped<IStringSerializer<Post>, PostXmlSerializer>();
-            services.TryAddScoped<IStringSerializer<Post>, CompositePostSerializer>();
+            services.TryAddScoped<IStringSerializer<Post>, CompositePostSerializer>(); 
             services.TryAddScoped<IStoragePathResolver<Post>, PostStoragePathResolver>();
+            services.TryAddScoped<IKeyGenerator, DefaultKeyGenerator>();
+          
             services.AddNoDbProjectStorage();
             services.AddNoDbPostStorage();
             services.AddNoDbPageStorage();

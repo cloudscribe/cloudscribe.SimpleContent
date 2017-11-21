@@ -8,9 +8,6 @@
 
 using cloudscribe.SimpleContent.Models;
 using NoDb;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
