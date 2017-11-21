@@ -39,8 +39,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             post.CopyTo(yamlPost);
             foreach(var c in post.Comments)
             {
-                var comment = c as Comment;
-                if(comment != null)
+                if (c is Comment comment)
                 {
                     yamlPost.TheComments.Add(comment);
                 }

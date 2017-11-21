@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-11-19
+// Last Modified:           2017-11-21
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -16,14 +16,14 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class PageViewModel
     {
-        public PageViewModel(IHtmlProcessor htmlProcessor)
+        public PageViewModel(IContentProcessor contentProcessor)
         {
-            filter = htmlProcessor;
-            mdProcessor = new MarkdownProcessor();
+            _contentProcessor = contentProcessor;
+           
         }
 
-        private IHtmlProcessor filter;
-        private MarkdownProcessor mdProcessor;
+        private IContentProcessor _contentProcessor;
+        
 
         public IProjectSettings ProjectSettings { get; set; }
         public IPage CurrentPage { get; set; } = null;
@@ -62,70 +62,61 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string FilterHtml(IPage p)
         {
-            if (p.ContentType == "markdown")
-            {
-                if (_mdPipeline == null)
-                {
-                    _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-                }
-                return Markdown.ToHtml(p.Content, _mdPipeline);
-            }
-
-            return filter.FilterHtml(
-                p.Content,
-                ProjectSettings.CdnUrl,
-                ProjectSettings.LocalMediaVirtualPath);
+            return _contentProcessor.FilterHtml(p, ProjectSettings);
+            
         }
 
         public string FilterComment(IComment c)
         {
-            return filter.FilterCommentLinks(c.Content);
+            return _contentProcessor.FilterComment(c);
         }
 
-        private string firstImageUrl;
+        //private string firstImageUrl;
         public string ExtractFirstImageUrl(IPage page, IUrlHelper urlHelper)
         {
-            if (urlHelper == null) return string.Empty;
+            return _contentProcessor.ExtractFirstImageUrl(page, urlHelper);
 
-            var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
-                       "://",
-                       urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+            //if (urlHelper == null) return string.Empty;
 
-            if (page.ContentType == "markdown")
-            {
-                var mdImg = mdProcessor.ExtractFirstImageUrl(page.Content);
-                if (!string.IsNullOrEmpty(mdImg))
-                {
-                    if (mdImg.StartsWith("http")) return mdImg;
+            //var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
+            //           "://",
+            //           urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
 
-                    return baseUrl + mdImg;
-                }
+            //if (page.ContentType == "markdown")
+            //{
+            //    var mdImg = mdProcessor.ExtractFirstImageUrl(page.Content);
+            //    if (!string.IsNullOrEmpty(mdImg))
+            //    {
+            //        if (mdImg.StartsWith("http")) return mdImg;
 
-                return string.Empty;
-            }
+            //        return baseUrl + mdImg;
+            //    }
 
-            if (!string.IsNullOrWhiteSpace(firstImageUrl))
-            {
-                if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+            //    return string.Empty;
+            //}
 
-                return baseUrl + firstImageUrl; //don't extract it more than once
-            }
+            //if (!string.IsNullOrWhiteSpace(firstImageUrl))
+            //{
+            //    if (firstImageUrl.StartsWith("http")) return firstImageUrl;
 
-            if (page == null) return string.Empty;
+            //    return baseUrl + firstImageUrl; //don't extract it more than once
+            //}
+
+            //if (page == null) return string.Empty;
             
 
-            firstImageUrl = filter.ExtractFirstImageUrl(page.Content);
+            //firstImageUrl = filter.ExtractFirstImageUrl(page.Content);
 
-            if (firstImageUrl == null) return string.Empty;
+            //if (firstImageUrl == null) return string.Empty;
 
-            if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+            //if (firstImageUrl.StartsWith("http")) return firstImageUrl;
             
-            return baseUrl + firstImageUrl;
+            //return baseUrl + firstImageUrl;
         }
 
         public ImageSizeResult ExtractFirstImageDimensions(IPage page)
         {
-            return filter.ExtractFirstImageDimensions(page.Content);
+            return _contentProcessor.ExtractFirstImageDimensions(page);
         }
     }
 }

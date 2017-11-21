@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-11-19
+// Last Modified:           2017-11-21
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
@@ -26,7 +27,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         public PageController(
             IProjectService projectService,
             IPageService blogService,
-            IHtmlProcessor htmlProcessor,
+            IContentProcessor contentProcessor,
             IPageRoutes pageRoutes,
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
@@ -37,7 +38,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         {
             this.projectService = projectService;
             this.pageService = blogService;
-            this.htmlProcessor = htmlProcessor;
+            this.contentProcessor = contentProcessor;
             this.authorizationService = authorizationService;
             this.authorNameResolver = authorNameResolver;
             this.timeZoneHelper = timeZoneHelper;
@@ -49,7 +50,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         private IProjectService projectService;
         private IPageService pageService;
-        private IHtmlProcessor htmlProcessor;
+        private IContentProcessor contentProcessor;
         private IAuthorizationService authorizationService;
         private IAuthorNameResolver authorNameResolver;
         private ITimeZoneHelper timeZoneHelper;
@@ -76,7 +77,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             IPage page = await pageService.GetPageBySlug(slug);
             
-            var model = new PageViewModel(htmlProcessor);
+            var model = new PageViewModel(contentProcessor);
             model.CurrentPage = page;
             model.ProjectSettings = projectSettings;
             model.CanEdit = canEdit;

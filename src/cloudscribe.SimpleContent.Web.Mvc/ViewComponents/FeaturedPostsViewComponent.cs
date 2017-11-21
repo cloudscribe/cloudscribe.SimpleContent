@@ -1,4 +1,5 @@
 ﻿using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -11,24 +12,24 @@ namespace cloudscribe.SimpleContent.Web
         public FeaturedPostsViewComponent(
             IProjectService projectService,
             IPostQueries postQueries,
-            IHtmlProcessor htmlProcessor,
+            IContentProcessor contentProcessor,
             ITimeZoneHelper timeZoneHelper
             )
         {
             this.projectService = projectService;
             this.postQueries = postQueries;
             this.timeZoneHelper = timeZoneHelper;
-            this.htmlProcessor = htmlProcessor;
+            this.contentProcessor = contentProcessor;
         }
 
         private IProjectService projectService;
         private IPostQueries postQueries;
         private ITimeZoneHelper timeZoneHelper;
-        private IHtmlProcessor htmlProcessor;
+        private IContentProcessor contentProcessor;
 
         public async Task<IViewComponentResult> InvokeAsync(string viewName = "FeaturedPosts", int numberToShow = 5)
         {
-            var model = new RecentPostsViewModel(htmlProcessor);
+            var model = new RecentPostsViewModel(contentProcessor);
             var settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             var list = await postQueries.GetFeaturedPosts(settings.Id, numberToShow);
             model.ProjectSettings = settings;

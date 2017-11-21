@@ -3,10 +3,11 @@ using System.Text.RegularExpressions;
 using Markdig;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
+using cloudscribe.SimpleContent.Models;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
-    public class MarkdownProcessor
+    public class MarkdownProcessor : IMarkdownProcessor
     {
         private MarkdownPipeline _mdPipeline = null;
         public string ExtractFirstImageUrl(string markdown)

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-11-19
+// Last Modified:           2017-11-21
 // 
 
 
@@ -25,6 +25,7 @@ using System.Globalization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using cloudscribe.SimpleContent.Web.Config;
+using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 {
@@ -35,7 +36,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IProjectService projectService,
             IBlogService blogService,
             IBlogRoutes blogRoutes,
-            IHtmlProcessor htmlProcessor,
+            IContentProcessor contentProcessor,
             IProjectEmailService emailService,
             IAuthorizationService authorizationService,
             IAuthorNameResolver authorNameResolver,
@@ -47,7 +48,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         {
             this.projectService = projectService;
             this.blogService = blogService;
-            this.htmlProcessor = htmlProcessor;
+            this.contentProcessor = contentProcessor;
             this.blogRoutes = blogRoutes;
             this.authorNameResolver = authorNameResolver;
             this.emailService = emailService;
@@ -63,7 +64,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         private IBlogRoutes blogRoutes;
         private IAuthorNameResolver authorNameResolver;
         private IProjectEmailService emailService;
-        private IHtmlProcessor htmlProcessor;
+        private IContentProcessor contentProcessor;
         private ILogger log;
         private ITimeZoneHelper timeZoneHelper;
         private IAuthorizationService authorizationService;
@@ -84,7 +85,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return new EmptyResult();
             }
 
-            var model = new BlogViewModel(htmlProcessor);
+            var model = new BlogViewModel(contentProcessor);
             model.ProjectSettings = projectSettings;
             // check if the user has the BlogEditor claim or meets policy
             model.CanEdit = await User.CanEditBlog(projectSettings.Id, authorizationService);
@@ -147,7 +148,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             int page = 1)
         {
 
-            var model = new BlogViewModel(htmlProcessor);
+            var model = new BlogViewModel(contentProcessor);
             model.ProjectSettings = await projectService.GetCurrentProjectSettings();
             model.BlogRoutes = blogRoutes;
             model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
@@ -234,7 +235,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 result = await blogService.GetPostBySlug(slug);
             }
             
-            var model = new BlogViewModel(htmlProcessor);
+            var model = new BlogViewModel(contentProcessor);
             model.CanEdit = canEdit;
 
             if ((result == null)||(result.Post == null))
@@ -933,7 +934,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     ).Forget(); //async but don't want to wait
             }
             
-            var viewModel = new BlogViewModel(htmlProcessor);
+            var viewModel = new BlogViewModel(contentProcessor);
             viewModel.ProjectSettings = project;
             viewModel.BlogRoutes = blogRoutes;
             viewModel.CurrentPost = blogPost;

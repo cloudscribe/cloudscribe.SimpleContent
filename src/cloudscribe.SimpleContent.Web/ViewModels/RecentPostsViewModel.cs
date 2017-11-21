@@ -9,16 +9,16 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class RecentPostsViewModel
     {
-        public RecentPostsViewModel(IHtmlProcessor htmlProcessor)
+        public RecentPostsViewModel(IContentProcessor contentProcessor)
         {
-            filter = htmlProcessor;
-            mdProcessor = new MarkdownProcessor();
+            _contentProcessor = contentProcessor;
+            
             ProjectSettings = new ProjectSettings();
             Posts = new List<IPost>();
         }
 
-        private IHtmlProcessor filter;
-        private MarkdownProcessor mdProcessor;
+        private IContentProcessor _contentProcessor;
+        
 
         public IProjectSettings ProjectSettings { get; set; }
 
@@ -33,50 +33,52 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return localTime.ToString(ProjectSettings.PubDateFormat);
         }
 
-        private string pslug = string.Empty;
-        private string firstImageUrl;
+        //private string pslug = string.Empty;
+        //private string firstImageUrl;
         public string ExtractFirstImageUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
         {
-            if (urlHelper == null) return string.Empty;
-            if (post == null) return string.Empty;
+            return _contentProcessor.ExtractFirstImageUrl(post, urlHelper, fallbackImageUrl);
 
-            var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
-                        "://",
-                        urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+            //if (urlHelper == null) return string.Empty;
+            //if (post == null) return string.Empty;
 
-            if (post.ContentType == "markdown")
-            {
-                var mdImg = mdProcessor.ExtractFirstImageUrl(post.Content);
-                if (!string.IsNullOrEmpty(mdImg))
-                {
-                    if (mdImg.StartsWith("http")) return mdImg;
+            //var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
+            //            "://",
+            //            urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
 
-                    return baseUrl + mdImg;
-                }
+            //if (post.ContentType == "markdown")
+            //{
+            //    var mdImg = mdProcessor.ExtractFirstImageUrl(post.Content);
+            //    if (!string.IsNullOrEmpty(mdImg))
+            //    {
+            //        if (mdImg.StartsWith("http")) return mdImg;
 
-                return string.Empty;
-            }
+            //        return baseUrl + mdImg;
+            //    }
 
-            if (!string.IsNullOrWhiteSpace(firstImageUrl) && pslug == post.Slug)
-            {
-                if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+            //    return string.Empty;
+            //}
 
-                return baseUrl + firstImageUrl; //don't extract it more than once
-            }
+            //if (!string.IsNullOrWhiteSpace(firstImageUrl) && pslug == post.Slug)
+            //{
+            //    if (firstImageUrl.StartsWith("http")) return firstImageUrl;
 
-            if (post == null) return string.Empty;
+            //    return baseUrl + firstImageUrl; //don't extract it more than once
+            //}
 
-
-            firstImageUrl = filter.ExtractFirstImageUrl(post.Content);
-            pslug = post.Slug;
-
-            if (firstImageUrl == null) return fallbackImageUrl;
-
-            if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+            //if (post == null) return string.Empty;
 
 
+            //firstImageUrl = filter.ExtractFirstImageUrl(post.Content);
+            //pslug = post.Slug;
 
-            return baseUrl + firstImageUrl;
+            //if (firstImageUrl == null) return fallbackImageUrl;
+
+            //if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+
+
+
+            //return baseUrl + firstImageUrl;
         }
 
     }

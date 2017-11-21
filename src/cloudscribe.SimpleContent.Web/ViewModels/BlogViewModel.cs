@@ -2,14 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-11-19
+// Last Modified:           2017-11-21
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Pagination;
-using Markdig;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,18 +17,18 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class BlogViewModel
     {
-        public BlogViewModel(IHtmlProcessor htmlProcessor)
+        public BlogViewModel(IContentProcessor contentProcessor)
         {
+            _contentProcessor = contentProcessor;
             ProjectSettings = new ProjectSettings();
             Paging = new PaginationSettings();
             Categories = new Dictionary<string, int>();
             Archives = new Dictionary<string, int>();
-            filter = htmlProcessor;
             BlogRoutes = new DefaultBlogRoutes();
-            mdProcessor = new MarkdownProcessor();
         }
 
-        private IHtmlProcessor filter;
+        private IContentProcessor _contentProcessor;
+
         private MarkdownProcessor mdProcessor;
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
@@ -64,29 +63,16 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string PreviousPostUrl { get; set; } = string.Empty;
 
         public string NextPostUrl { get; set; } = string.Empty;
-
-        private MarkdownPipeline _mdPipeline = null;
-
+        
         public string FilterHtml(IPost p)
         {
-            if(p.ContentType == "markdown")
-            {
-                if(_mdPipeline == null)
-                {
-                    _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-                }
-                
-                return Markdown.ToHtml(p.Content, _mdPipeline);
-            }
-            return filter.FilterHtml(
-                p.Content, 
-                ProjectSettings.CdnUrl, 
-                ProjectSettings.LocalMediaVirtualPath);
+            return _contentProcessor.FilterHtml(p, ProjectSettings);
+            
         }
 
         public string FilterComment(IComment c)
         {
-            return filter.FilterCommentLinks(c.Content);
+            return _contentProcessor.FilterComment(c);
         }
 
         public string FormatDate(DateTime pubDate)
@@ -109,55 +95,56 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public IBlogRoutes BlogRoutes { get; set; }
 
-        private string pslug = string.Empty;
-        private string firstImageUrl;
+        //private string pslug = string.Empty;
+        //private string firstImageUrl;
         public string ExtractFirstImageUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
         {
-            if (urlHelper == null) return string.Empty;
-            if (post == null) return string.Empty;
+            return _contentProcessor.ExtractFirstImageUrl(post, urlHelper, fallbackImageUrl);
+            //if (urlHelper == null) return string.Empty;
+            //if (post == null) return string.Empty;
             
-            var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
-                        "://",
-                        urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
+            //var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
+            //            "://",
+            //            urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
 
-            if (post.ContentType == "markdown")
-            {
-                var mdImg = mdProcessor.ExtractFirstImageUrl(post.Content);
-                if(!string.IsNullOrEmpty(mdImg))
-                {
-                    if (mdImg.StartsWith("http")) return mdImg;
+            //if (post.ContentType == "markdown")
+            //{
+            //    var mdImg = mdProcessor.ExtractFirstImageUrl(post.Content);
+            //    if(!string.IsNullOrEmpty(mdImg))
+            //    {
+            //        if (mdImg.StartsWith("http")) return mdImg;
 
-                    return baseUrl + mdImg;
-                }
+            //        return baseUrl + mdImg;
+            //    }
 
-                return string.Empty;
-            }
+            //    return string.Empty;
+            //}
 
-            if (!string.IsNullOrWhiteSpace(firstImageUrl) && pslug == post.Slug)
-            {
-                if (firstImageUrl.StartsWith("http")) return firstImageUrl;
+            //if (!string.IsNullOrWhiteSpace(firstImageUrl) && pslug == post.Slug)
+            //{
+            //    if (firstImageUrl.StartsWith("http")) return firstImageUrl;
 
-                return baseUrl + firstImageUrl; //don't extract it more than once
-            }
+            //    return baseUrl + firstImageUrl; //don't extract it more than once
+            //}
 
-            if (post == null) return string.Empty;
-            
-
-            firstImageUrl = filter.ExtractFirstImageUrl(post.Content);
-            pslug = post.Slug;
-
-            if (firstImageUrl == null) return fallbackImageUrl;
-
-            if(firstImageUrl.StartsWith("http")) return firstImageUrl;
-
+            //if (post == null) return string.Empty;
             
 
-            return baseUrl + firstImageUrl;
+            //firstImageUrl = filter.ExtractFirstImageUrl(post.Content);
+            //pslug = post.Slug;
+
+            //if (firstImageUrl == null) return fallbackImageUrl;
+
+            //if(firstImageUrl.StartsWith("http")) return firstImageUrl;
+
+            
+
+            //return baseUrl + firstImageUrl;
         }
 
         public ImageSizeResult ExtractFirstImageDimensions(IPost post)
         {
-            return filter.ExtractFirstImageDimensions(post.Content);
+            return _contentProcessor.ExtractFirstImageDimensions(post);
         }
 
 
