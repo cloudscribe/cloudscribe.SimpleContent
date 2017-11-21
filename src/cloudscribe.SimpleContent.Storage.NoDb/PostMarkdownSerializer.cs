@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using NoDb;
 using System.IO;
 using System.Text;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -72,14 +73,24 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .Build();
 
-                var yamlPost = deserializer.Deserialize<YamlPost>(input);
-                yamlPost.CopyTo(post);
-                post.Comments.AddRange(yamlPost.TheComments);
-                post.Content = markdownWithYaml.Replace(extractedYaml, string.Empty).TrimStart('\r', '\n');
+                try
+                {
+                    var yamlPost = deserializer.Deserialize<YamlPost>(input);
+                    yamlPost.CopyTo(post);
+                    post.Comments.AddRange(yamlPost.TheComments);
+                    post.Content = markdownWithYaml.Replace(extractedYaml, string.Empty).TrimStart('\r', '\n');
+                }
+                catch(YamlException ex)
+                {
+                    _log.LogError($"failed to deserialize post with key {key}, error message {ex.Message} stacktrace {ex.StackTrace}");
+                    return null;
+                }
+                
             }
             else
             {
                 _log.LogError($"failed to deserialize yamlBlock from post with key {key}");
+                return null;
             }
             
             return post;

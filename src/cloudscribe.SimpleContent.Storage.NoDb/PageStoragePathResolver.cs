@@ -70,7 +70,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var filePath = Path.Combine(typeFolderPath, key + ".md");
             if (File.Exists(filePath)) return filePath;
 
-            return Path.Combine(typeFolderPath, key + fileExtension);
+            return Path.Combine(typeFolderPath, key + ".json");
         }
 
 
