@@ -19,6 +19,7 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 See the [Introduction](https://www.cloudscribe.com/docs/introduction) to get the big picture and learn how to start new projects using our project template for Visual Studio or the .NET Core CLI
 
 ### Current Features
+* Supports markdown and/or html editing, the [documentation on using markdown](https://www.cloudscribe.com/docs/using-markdown)
 * Create and edit pages and blog posts right from the web browser or using [Open Live Writer](https://www.cloudscribe.com/docs/using-open-live-writer)
 * Built in image browser, uploader, cropper, with configurable automatic resizing, and even drag/drop images right into the editor
 * Built in Page Manager - for easy drag/drop arrangement of the page hierarchy
@@ -33,7 +34,7 @@ See the [Introduction](https://www.cloudscribe.com/docs/introduction) to get the
 * Uses HTML 5 microdata to add semantic meaning and improve SEO
 * Cross platform, runs on ASP.NET Core which works on Windows, Mac, and Linux
 * Comments support - can easily be replaced by 3rd-party commenting systems such as Disqus
-* No database required - can use json for pages and can use json or xml for blog posts via [NoDb](https://github.com/joeaudette/NoDb). The XML format is the same as MiniBlog and BlogEngine.NET and you should be able to [migrate from other platforms](https://www.cloudscribe.com/docs/migrating-content-from-other-platforms)
+* No database required - can use [markdown](https://www.cloudscribe.com/docs/using-markdown) or json for pages and can use markdown or xml for blog posts via [NoDb](https://github.com/joeaudette/NoDb). The XML format is the same as MiniBlog and BlogEngine.NET and you should be able to [migrate from other platforms](https://www.cloudscribe.com/docs/migrating-content-from-other-platforms)
 * You can optionally use a database - it currently supports MS SQL, PostgresSql, and MySql using Entity Framework Core
 * Can use either [cloudscribe Core](https://www.cloudscribe.com/docs/cloudscribe-core) or [cloudscribe SimpleAuth](https://github.com/joeaudette/cloudscribe.Web.SimpleAuth) for user accounts. (I recommend use cloudscribe Core even for small sites)
 * Can also be [integrated with other authentication systems](https://www.cloudscribe.com/docs/integrating-with-other-authentication-systems)
@@ -43,7 +44,7 @@ See the [Introduction](https://www.cloudscribe.com/docs/introduction) to get the
 ### Planned Features
 * More advanced meta data capabilities
 * Support for using MongoDb - hoping for a community member to do that
-* A Utility for importing the json or xml content into Entity Framework Core or MongoDb for easy migration
+* A Utility for importing the NoDb content into Entity Framework Core or MongoDb for easy migration
 
 ### Screenshots
 
