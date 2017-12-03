@@ -26,6 +26,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             if (string.IsNullOrWhiteSpace(projectId)) throw new ArgumentException("projectId must be provided");
 
+            if (string.IsNullOrWhiteSpace(fileExtension)) fileExtension = ".json";
+
             var pathOptions = await _optionsResolver.Resolve(projectId).ConfigureAwait(false);
 
             var firstFolderPath = pathOptions.AppRootFolderPath
@@ -70,7 +72,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var filePath = Path.Combine(typeFolderPath, key + ".md");
             if (File.Exists(filePath)) return filePath;
 
-            return Path.Combine(typeFolderPath, key + ".json");
+            return Path.Combine(typeFolderPath, key + fileExtension);
         }
 
 
@@ -85,7 +87,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             )
         {
             
-            if(page.Content == "markdown")
+            if(page.ContentType == "markdown")
             {
                 fileExtension = ".md";
             }
