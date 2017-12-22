@@ -335,6 +335,14 @@ namespace sourceDev.WebApp
 
                     switch (efProvider)
                     {
+                        case "sqlite":
+                            var slConnection = Configuration.GetConnectionString("SQLiteEntityFrameworkConnectionString");
+                            services.AddCloudscribeCoreEFStorageSQLite(slConnection);
+                            services.AddCloudscribeLoggingEFStorageSQLite(slConnection);
+                            services.AddCloudscribeSimpleContentEFStorageSQLite(slConnection);
+
+                            break;
+
                         case "pgsql":
                             var pgConnection = Configuration.GetConnectionString("PostgreSqlEntityFrameworkConnectionString");
                             services.AddCloudscribeCoreEFStoragePostgreSql(pgConnection);

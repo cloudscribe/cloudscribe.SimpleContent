@@ -226,3 +226,4 @@ src/example.WebApp/xnavigation.f83067b4-919d-4910-acd1-4b3b1c210ecf.xml
 src/sourceDev.WebApp/appsettings.Development.json
 src/sourceDev.WebApp/nodb_storage/projects/**/userlocation/**
 
+src/sourceDev.WebApp/cloudscribe-dev.db

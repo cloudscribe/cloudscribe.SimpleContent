@@ -1,20 +1,13 @@
-﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-// Author:					Joe Audette
-// Created:					2016-11-10
-// Last Modified:			2017-11-18
-// 
-
-using cloudscribe.SimpleContent.Models;
+﻿using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
+namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 {
     public class SimpleContentDbContext : SimpleContentDbContextBase, ISimpleContentDbContext
     {
-        public SimpleContentDbContext(DbContextOptions<SimpleContentDbContext> options):base(options)
+        public SimpleContentDbContext(DbContextOptions<SimpleContentDbContext> options) : base(options)
         {
 
         }
@@ -26,7 +19,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
             base.OnModelCreating(modelBuilder);
 
             var tableNames = new SimpleContentTableNames();
-            
+
             modelBuilder.Entity<ProjectSettings>(entity =>
             {
                 entity.ToTable(tableNames.TablePrefix + tableNames.ProjectTableName);
@@ -187,7 +180,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
             modelBuilder.Entity<PostComment>(entity =>
             {
                 entity.ToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
-                
+
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
 
@@ -310,7 +303,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
             modelBuilder.Entity<PageComment>(entity =>
             {
                 entity.ToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
-                
+
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
 
@@ -379,9 +372,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
 
             });
-            
-            
+
+
         }
 
     }
 }
+
