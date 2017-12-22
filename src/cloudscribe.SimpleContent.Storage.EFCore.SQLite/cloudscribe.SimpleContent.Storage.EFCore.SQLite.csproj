@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>SQLite Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
+    <VersionPrefix>2.0.1</VersionPrefix>
+    <AssemblyVersion>2.0.1</AssemblyVersion>
+    <Authors>Joe Audette</Authors>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <PackageTags>cloudscribe;commands;queries;ef</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
+    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.Common\cloudscribe.SimpleContent.Storage.EFCore.Common.csproj" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.*" />
+  </ItemGroup>
+
+</Project>

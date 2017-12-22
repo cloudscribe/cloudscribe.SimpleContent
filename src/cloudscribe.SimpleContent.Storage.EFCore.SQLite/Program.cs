@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using System.IO;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
+namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 {
     public class Program
     {
