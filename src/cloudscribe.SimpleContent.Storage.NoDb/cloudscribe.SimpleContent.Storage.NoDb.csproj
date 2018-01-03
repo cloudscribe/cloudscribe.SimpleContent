@@ -27,9 +27,4 @@
     <PackageReference Include="YamlDotNet" Version="4.2.*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
-
 </Project>
