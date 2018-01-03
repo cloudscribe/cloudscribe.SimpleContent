@@ -35,7 +35,7 @@ See the [Introduction](https://www.cloudscribe.com/docs/introduction) to get the
 * Cross platform, runs on ASP.NET Core which works on Windows, Mac, and Linux
 * Comments support - can easily be replaced by 3rd-party commenting systems such as Disqus
 * No database required - can use [markdown](https://www.cloudscribe.com/docs/using-markdown) or json for pages and can use markdown or xml for blog posts via [NoDb](https://github.com/joeaudette/NoDb). The XML format is the same as MiniBlog and BlogEngine.NET and you should be able to [migrate from other platforms](https://www.cloudscribe.com/docs/migrating-content-from-other-platforms)
-* You can optionally use a database - it currently supports MS SQL, PostgresSql, and MySql using Entity Framework Core
+* You can optionally use a database - it currently supports SQLite, MS SQL, PostgresSql, and MySql using Entity Framework Core
 * Can use either [cloudscribe Core](https://www.cloudscribe.com/docs/cloudscribe-core) or [cloudscribe SimpleAuth](https://github.com/joeaudette/cloudscribe.Web.SimpleAuth) for user accounts. (I recommend use cloudscribe Core even for small sites)
 * Can also be [integrated with other authentication systems](https://www.cloudscribe.com/docs/integrating-with-other-authentication-systems)
 * Supports [multiple tenants](https://www.cloudscribe.com/docs/multi-tenant-support) via integration using cloudscribe Core
