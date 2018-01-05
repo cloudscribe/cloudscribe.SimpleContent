@@ -84,7 +84,7 @@
             } 
         </div>
     </header>
-    <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.TmpPost))</div>
+    <div itemprop="articleBody">@Html.Raw(Model.FilterHtmlForList(Model.TmpPost))</div>
     @{
         var imageUrl = Model.ExtractFirstImageUrl(Model.TmpPost, Url);
         var imageSize = Model.ExtractFirstImageDimensions(Model.TmpPost);

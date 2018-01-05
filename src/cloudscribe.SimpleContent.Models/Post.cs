@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Author:					Joe Audette
+// Created:					
+// Last Modified:			2017-12-22
+// 
+using System;
 using System.Collections.Generic;
 
 namespace cloudscribe.SimpleContent.Models
@@ -52,6 +58,15 @@ namespace cloudscribe.SimpleContent.Models
 
         public string ContentType { get; set; } = "html";
 
+        /// <summary>
+        /// If not null or whitespace, displays this teaser on blog index/listing views regardless of <see cref="AutoTeaserMode"/> settings.
+        /// </summary>
+        public string TeaserOverride { get; set; }
+
+        /// <summary>
+        /// If true, will display an entire blog post on index/listing views regardless of <see cref="AutoTeaserMode"/> settings.
+        /// </summary>
+        public bool SuppressAutoTeaser { get; set; }
 
         public static Post FromIPost(IPost post)
         {
