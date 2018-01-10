@@ -10,7 +10,7 @@
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<IconCssClasses> iconClassesAccessor
 @{
-    var icons = iconClassesAccessor.Value;    
+    var icons = iconClassesAccessor.Value;
 }
 @functions{
 
@@ -48,30 +48,30 @@
                    asp-route-year="@Model.TmpPost.PubDate.Year"
                    asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
-                   asp-route-slug="@Model.TmpPost.Slug" 
+                   asp-route-slug="@Model.TmpPost.Slug"
                    itemprop="url">@Model.TmpPost.Title</a>
             }
             else
             {
                 <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@Model.TmpPost.Title</a>
-            } 
+            }
         </h1>
         <div class="bh">
             <time class="@GetPubDateClass()" datetime='@Model.TmpPost.PubDate.ToString("s")' itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
-             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+            @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
                 <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
                    asp-route-year="@Model.TmpPost.PubDate.Year"
                    asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
-                   asp-route-slug="@Model.TmpPost.Slug" 
+                   asp-route-slug="@Model.TmpPost.Slug"
                    asp-fragment="@GetCommentFragment()"
-                   itemprop="url"><i class="@icons.Comments"></i> @Html.Raw(GetCommentString(Model.TmpPost))</a>
+                   itemprop="url"><i class="@icons.Comments"></i>@Html.Raw(GetCommentString(Model.TmpPost))</a>
             }
             else
             {
                 <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" asp-fragment="@GetCommentFragment()" itemprop="url"><i class="@icons.Comments"></i> @Html.Raw(GetCommentString(Model.TmpPost))</a>
-            } 
+            }
             @if (Model.TmpPost.Categories.Count > 0)
             {
                 <ul class="categories">
@@ -81,10 +81,28 @@
                         <li itemprop="articleSection"><a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a></li>
                     }
                 </ul>
-            } 
+            }
         </div>
     </header>
-    <div itemprop="articleBody">@Html.Raw(Model.FilterHtmlForList(Model.TmpPost))</div>
+    <div itemprop="articleBody">
+        @Html.Raw(Model.FilterHtmlForList(Model.TmpPost))
+        @if (Model.ShouldDisplayReadMorePrompt(Model.TmpPost))
+        {
+            @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+            {
+                <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
+                   asp-route-year="@Model.TmpPost.PubDate.Year"
+                   asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
+                   asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
+                   asp-route-slug="@Model.TmpPost.Slug"
+                   itemprop="url">[Read More]</a>
+            }
+            else
+            {
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">[Read More]</a>
+            }
+        }
+    </div>
     @{
         var imageUrl = Model.ExtractFirstImageUrl(Model.TmpPost, Url);
         var imageSize = Model.ExtractFirstImageDimensions(Model.TmpPost);

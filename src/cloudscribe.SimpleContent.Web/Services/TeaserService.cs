@@ -30,8 +30,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         public string CreateTeaserIfNeeded(IProjectSettings projectSettings, IPost post, string html)
             => ShouldDisplayTeaser(projectSettings, post) ? CreateTeaser(projectSettings, post, html) : html;
 
-        // Internal for unit testing purposes only.
-        internal bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post)
+        public bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post)
             => !string.IsNullOrWhiteSpace(post.TeaserOverride) || (projectSettings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser);
 
         // Internal for unit testing purposes only.

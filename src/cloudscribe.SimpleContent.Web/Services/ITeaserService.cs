@@ -15,5 +15,13 @@ namespace cloudscribe.SimpleContent.Web.Services
         /// <param name="html">The final HTML which would be rendered for the blog posting.</param>
         /// <returns>Abbreviated teaser or unmodified HTML.</returns>
         string CreateTeaserIfNeeded(IProjectSettings projectSettings, IPost post, string html);
+
+        /// <summary>
+        /// Checks project/post settings to see if a teaser should be displayed.
+        /// </summary>
+        /// <param name="projectSettings">SimpleContent project settings.</param>
+        /// <param name="post">SimpleContent blog posting.</param>
+        /// <returns>True if a teaser should be displayed; otherwise, false.</returns>
+        bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post);
     }
 }
