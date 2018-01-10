@@ -24,17 +24,24 @@ namespace cloudscribe.SimpleContent.Web.Services
     {
         private const int defaultLengthWords = 20;
         private const int defaultLengthCharacters = 200;
-        private const int defaultLengthParagraphs = 1;
+        private const int defaultLengthAbsolute = 30;
         private const string terminator = "...";
 
         public string CreateTeaserIfNeeded(IProjectSettings projectSettings, IPost post, string html)
-            => ShouldDisplayTeaser(projectSettings, post) ? CreateTeaser(projectSettings, html) : html;
+            => ShouldDisplayTeaser(projectSettings, post) ? CreateTeaser(projectSettings, post, html) : html;
 
-        private bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post)
+        // Internal for unit testing purposes only.
+        internal bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post)
             => !string.IsNullOrWhiteSpace(post.TeaserOverride) || (projectSettings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser);
 
-        private string CreateTeaser(IProjectSettings projectSettings, string html)
+        // Internal for unit testing purposes only.
+        internal string CreateTeaser(IProjectSettings projectSettings, IPost post, string html)
         {
+            if (!string.IsNullOrWhiteSpace(post.TeaserOverride))
+            {
+                return post.TeaserOverride;
+            }
+
             // Try to get language metadata for humanizer.
             var languageCode = projectSettings.LanguageCode;
             var cultureInfo = CultureInfo.InvariantCulture;
@@ -61,12 +68,13 @@ namespace cloudscribe.SimpleContent.Web.Services
             return doc.DocumentNode.InnerHtml;
         }
 
-        private int GetDefaultTeaserLength(TeaserTruncationMode mode)
+        // Internal for unit testing purposes only.
+        internal int GetDefaultTeaserLength(TeaserTruncationMode mode)
         {
             switch (mode)
             {
                 case TeaserTruncationMode.Length:
-                    return defaultLengthParagraphs;
+                    return defaultLengthAbsolute;
                 case TeaserTruncationMode.Character:
                     return defaultLengthCharacters;
                 case TeaserTruncationMode.Word:
@@ -75,7 +83,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             }
         }
 
-        private string TruncatePost(TeaserTruncationMode mode, string content, int length, bool isRightToLeftLanguage = false)
+        // Internal for unit testing purposes only.
+        internal string TruncatePost(TeaserTruncationMode mode, string content, int length, bool isRightToLeftLanguage = false)
         {
             var truncateFrom = isRightToLeftLanguage ? TruncateFrom.Left : TruncateFrom.Right;
             content = content ?? "";
