@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-11-18
+// Last Modified:			2017-12-22
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -154,6 +154,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 .HasDefaultValue("html")
                 ;
 
+                entity.Property(p => p.AutoTeaserMode)
+                .HasDefaultValue(AutoTeaserMode.Off);
+
+                entity.Property(p => p.TeaserTruncationMode)
+                .HasDefaultValue(TeaserTruncationMode.Word);
+
+                entity.Property(p => p.TeaserTruncationLength)
+                .HasDefaultValue(20);
+
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
@@ -217,7 +226,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                    .HasMaxLength(50)
                    .HasDefaultValue("html");
 
-
+                entity.Property(p => p.SuppressAutoTeaser)
+                    .HasDefaultValue(false);
             });
 
             modelBuilder.Entity<PostComment>(entity =>

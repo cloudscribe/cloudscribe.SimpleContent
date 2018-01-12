@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-11-21
+// Last Modified:           2017-12-22
 // 
 
 
@@ -43,7 +43,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             ITimeZoneHelper timeZoneHelper,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<SimpleContentConfig> configOptionsAccessor,
-            ILogger<BlogController> logger
+            ILogger<BlogController> logger,
+            ITeaserService teaserService
             )
         {
             this.projectService = projectService;
@@ -54,6 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             this.emailService = emailService;
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
+            this.teaserService = teaserService;
             sr = localizer;
             log = logger;
             config = configOptionsAccessor.Value;
@@ -70,6 +72,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         private IAuthorizationService authorizationService;
         private IStringLocalizer<SimpleContent> sr;
         private SimpleContentConfig config;
+        private ITeaserService teaserService;
 
         [HttpGet]
         [AllowAnonymous]
@@ -85,7 +88,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return new EmptyResult();
             }
 
-            var model = new BlogViewModel(contentProcessor);
+            var model = new BlogViewModel(contentProcessor, teaserService);
             model.ProjectSettings = projectSettings;
             // check if the user has the BlogEditor claim or meets policy
             model.CanEdit = await User.CanEditBlog(projectSettings.Id, authorizationService);
@@ -148,7 +151,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             int page = 1)
         {
 
-            var model = new BlogViewModel(contentProcessor);
+            var model = new BlogViewModel(contentProcessor, teaserService);
             model.ProjectSettings = await projectService.GetCurrentProjectSettings();
             model.BlogRoutes = blogRoutes;
             model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
@@ -235,7 +238,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 result = await blogService.GetPostBySlug(slug);
             }
             
-            var model = new BlogViewModel(contentProcessor);
+            var model = new BlogViewModel(contentProcessor, teaserService);
             model.CanEdit = canEdit;
 
             if ((result == null)||(result.Post == null))
@@ -371,7 +374,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ThumbnailUrl = postResult.Post.ThumbnailUrl;
                 model.IsFeatured = postResult.Post.IsFeatured;
                 model.ContentType = postResult.Post.ContentType;
-
+                model.TeaserOverride = postResult.Post.TeaserOverride;
+                model.SuppressAutoTeaser = postResult.Post.SuppressAutoTeaser;
             }
 
 
@@ -473,7 +477,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         this.AlertDanger(sr["The post slug was not changed because the requested slug is already in use."], true);
                     }
                 }
-
             }
             else
             {
@@ -525,8 +528,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             post.ThumbnailUrl = model.ThumbnailUrl;
             post.IsFeatured = model.IsFeatured;
             post.ContentType = model.ContentType;
-      
-           
+
+            post.TeaserOverride = model.TeaserOverride;
+            post.SuppressAutoTeaser = model.SuppressAutoTeaser;
+
             if (!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);
@@ -934,7 +939,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     ).Forget(); //async but don't want to wait
             }
             
-            var viewModel = new BlogViewModel(contentProcessor);
+            var viewModel = new BlogViewModel(contentProcessor, teaserService);
             viewModel.ProjectSettings = project;
             viewModel.BlogRoutes = blogRoutes;
             viewModel.CurrentPost = blogPost;

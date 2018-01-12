@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2017-11-18
+// Last Modified:			2017-12-22
 // 
 
 
@@ -109,6 +109,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public string ContentType { get; set; } = "html";
 
+        // Teaser.
+        public string TeaserOverride { get; set; }
+        public bool SuppressAutoTeaser { get; set; }
+        
         public static PostEntity FromIPost(IPost post)
         {
             var p = new PostEntity();
@@ -129,7 +133,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.ImageUrl = post.ImageUrl;
             p.ThumbnailUrl = post.ThumbnailUrl;
             p.IsFeatured = post.IsFeatured;
-
+            p.TeaserOverride = post.TeaserOverride;
+            p.SuppressAutoTeaser = post.SuppressAutoTeaser;
             return p;
         }
 

@@ -1,5 +1,9 @@
-﻿
-
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Author:					Joe Audette
+// Created:					
+// Last Modified:			2017-12-22
+// 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +52,8 @@ namespace cloudscribe.SimpleContent.Models
             target.ImageUrl = input.ImageUrl;
             target.ThumbnailUrl = input.ThumbnailUrl;
             target.IsFeatured = input.IsFeatured;
+            target.TeaserOverride = input.TeaserOverride;
+            target.SuppressAutoTeaser = input.SuppressAutoTeaser;
         }
 
         public static void CopyTo(this IPage input, IPage target)
@@ -143,8 +149,9 @@ namespace cloudscribe.SimpleContent.Models
             target.DisqusShortName = input.DisqusShortName;
             target.ShowRecentPostsOnDefaultPage = input.ShowRecentPostsOnDefaultPage;
             target.ShowFeaturedPostsOnDefaultPage = input.ShowFeaturedPostsOnDefaultPage;
+            target.AutoTeaserMode = input.AutoTeaserMode;
+            target.TeaserTruncationMode = input.TeaserTruncationMode;
+            target.TeaserTruncationLength = input.TeaserTruncationLength;
         }
-
-
     }
 }

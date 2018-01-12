@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-11-21
+// Last Modified:           2017-12-22
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -17,9 +17,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class BlogViewModel
     {
-        public BlogViewModel(IContentProcessor contentProcessor)
+        public BlogViewModel(IContentProcessor contentProcessor, ITeaserService teaserService)
         {
             _contentProcessor = contentProcessor;
+            _teaserService = teaserService;
             ProjectSettings = new ProjectSettings();
             Paging = new PaginationSettings();
             Categories = new Dictionary<string, int>();
@@ -28,6 +29,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         }
 
         private IContentProcessor _contentProcessor;
+        private ITeaserService _teaserService;
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
 
@@ -65,8 +67,15 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string FilterHtml(IPost p)
         {
             return _contentProcessor.FilterHtml(p, ProjectSettings);
-            
         }
+            
+        public string FilterHtmlForList(IPost p)
+        {
+            var html = _contentProcessor.FilterHtml(p, ProjectSettings);
+            return _teaserService.CreateTeaserIfNeeded(ProjectSettings, p, html);
+        }
+
+        public bool ShouldDisplayReadMorePrompt(IPost p) => _teaserService.ShouldDisplayTeaser(ProjectSettings, p);
 
         public string FilterComment(IComment c)
         {

@@ -55,6 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IMarkdownProcessor, MarkdownProcessor>();
             services.TryAddScoped<IContentProcessor, ContentProcessor>();
 
+            services.TryAddSingleton<ITeaserService, TeaserService>();
             
             services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
