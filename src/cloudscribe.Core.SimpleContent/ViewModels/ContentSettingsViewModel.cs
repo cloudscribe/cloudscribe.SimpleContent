@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2017-11-19
+// Last Modified:			2017-12-22
 // 
 
 using cloudscribe.Core.Models;
+using cloudscribe.SimpleContent.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -109,6 +110,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         [StringLength(100, ErrorMessage = "TwitterCreator has a maximum length of 100 characters")]
         public string TwitterCreator { get; set; }
 
-
+        public AutoTeaserMode AutoTeaserMode { get; set; }
+        public TeaserTruncationMode TeaserTruncationMode { get; set; }
+        public int TeaserTruncationLength { get; set; } = 20;   // Default 20 words.
     }
 }

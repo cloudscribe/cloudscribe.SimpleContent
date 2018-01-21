@@ -140,6 +140,23 @@
         </div>
     </div>
     <div class="form-group">
+        <label asp-for="TeaserOverride" class="col-md-2 control-label">@sr["Teaser Override"]</label>
+        <div class="col-md-10">
+            @* Check w/ Joe to see if necessary to enable CK editior for the teaser override. *@
+            <textarea asp-for="TeaserOverride" class="form-control" rows="10" cols="70"></textarea>
+            <span asp-validation-for="TeaserOverride" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If checked, then show entire blog post on index/listing pages regardless of teaser settings."]'>
+                <label>
+                    <input asp-for="SuppressAutoTeaser" /> @sr["Suppress Auto Teaser"]
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button id="btnSave" name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
             @if (!string.IsNullOrEmpty(Model.Id))

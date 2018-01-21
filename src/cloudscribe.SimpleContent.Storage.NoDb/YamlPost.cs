@@ -61,9 +61,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 16, Alias = "Comments")]
         public List<Comment> TheComments { get; set; }
 
-        
+        [YamlMember(Order = 17, Alias = "Comments")]
+        public string TeaserOverride { get; set; }
+        [YamlMember(Order = 18, Alias = "Comments")]
+        public bool SuppressAutoTeaser { get; set; }
 
-        
+
+
 
         [YamlIgnore]
         public List<IComment> Comments { get; set; }
@@ -74,8 +78,5 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         // not currently used but could be later
         public string ImageUrl { get; set; }
         public string ThumbnailUrl { get; set; }
-
-        
-
     }
 }
