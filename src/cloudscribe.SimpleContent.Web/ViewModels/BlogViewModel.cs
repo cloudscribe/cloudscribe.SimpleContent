@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-12-22
+// Last Modified:           2018-01-22
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -48,12 +48,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public int Month { get; set; } = 0;
         public int Day { get; set; } = 0;
         public bool CanEdit { get; set; } = false;
-        //public bool IsNewPost { get; set; } = false;
-        //public string Mode { get; set; } = string.Empty;
+        
         public bool ShowComments { get; set; } = true;
         public bool CommentsAreOpen { get; set; } = false;
-        //public int ApprovedCommentCount { get; set; } = 0;
-        //public bool CommentsRequireApproval { get; set; } = true;
+        
 
         public IComment TmpComment { get; set; } = null;
         public IPost TmpPost { get; set; } = null;
@@ -102,51 +100,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public IBlogRoutes BlogRoutes { get; set; }
 
-        //private string pslug = string.Empty;
-        //private string firstImageUrl;
+        
         public string ExtractFirstImageUrl(IPost post, IUrlHelper urlHelper, string fallbackImageUrl = null)
         {
             return _contentProcessor.ExtractFirstImageUrl(post, urlHelper, fallbackImageUrl);
-            //if (urlHelper == null) return string.Empty;
-            //if (post == null) return string.Empty;
             
-            //var baseUrl = string.Concat(urlHelper.ActionContext.HttpContext.Request.Scheme,
-            //            "://",
-            //            urlHelper.ActionContext.HttpContext.Request.Host.ToUriComponent());
-
-            //if (post.ContentType == "markdown")
-            //{
-            //    var mdImg = mdProcessor.ExtractFirstImageUrl(post.Content);
-            //    if(!string.IsNullOrEmpty(mdImg))
-            //    {
-            //        if (mdImg.StartsWith("http")) return mdImg;
-
-            //        return baseUrl + mdImg;
-            //    }
-
-            //    return string.Empty;
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(firstImageUrl) && pslug == post.Slug)
-            //{
-            //    if (firstImageUrl.StartsWith("http")) return firstImageUrl;
-
-            //    return baseUrl + firstImageUrl; //don't extract it more than once
-            //}
-
-            //if (post == null) return string.Empty;
-            
-
-            //firstImageUrl = filter.ExtractFirstImageUrl(post.Content);
-            //pslug = post.Slug;
-
-            //if (firstImageUrl == null) return fallbackImageUrl;
-
-            //if(firstImageUrl.StartsWith("http")) return firstImageUrl;
-
-            
-
-            //return baseUrl + firstImageUrl;
         }
 
         public ImageSizeResult ExtractFirstImageDimensions(IPost post)

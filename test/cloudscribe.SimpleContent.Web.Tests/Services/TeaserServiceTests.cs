@@ -125,5 +125,62 @@ namespace cloudscribe.SimpleContent.Web.Services
             var result = teaserService.CreateTeaser(projectSettings, post, input);
             Assert.Equal(expected, result);
         }
+
+        // Joe A comment 2018-01-22
+        // using charcter trunction set at 400
+        // this results in malformed html that breaks the read more link
+        // double quotes changed manually here to single quotes
+        // notice bad a link in output
+        string badInputHtml = @"<p>Once you get to know it</p>
+<pre><code>private MarkdownPipeline _mdPipeline = null;
+
+    public string FilterHtml(IPage p)
+    {
+        if (p.ContentType == &quot;markdown&quot;)
+        {
+            if (_mdPipeline == null)
+            {
+                _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            }
+            return Markdown.ToHtml(p.Content, _mdPipeline);
+        }
+
+        return filter.FilterHtml(
+            p.Content,
+            ProjectSettings.CdnUrl,
+            ProjectSettings.LocalMediaVirtualPath);
+    }
+			
+</code></pre>
+<p>then add an image</p>
+<p><a href='/media/images/img_1349.jpg'><img src='/media/images/img_1349-ws.jpg' alt='my pond' /></a></p>";
+
+
+        string badOutputHtml = @"<p>Once you get to know it</p>
+<pre><code>private MarkdownPipeline _mdPipeline = null;
+
+    public string FilterHtml(IPage p)
+    {
+        if (p.ContentType == &quot;markdown&quot;)
+        {
+            if (_mdPipeline == null)
+            {
+                _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            }
+            return Markdown.ToHtml(p.Content, _mdPipeline);
+        }
+
+        return filter.FilterHtml(
+            p.Content,
+            ProjectSettings.CdnUrl,
+            ProjectSettings.LocalMediaVirtualPath);
+    }
+			
+</code></pre>
+<p>then add an image</p>
+<p></p><a href='/media/imag...href=''></a href='/media/imag...>
+                <a itemprop='url' href='/blog/2017/11/19/markdown-rocks'>[Read More]</a>";
+
+
     }
 }

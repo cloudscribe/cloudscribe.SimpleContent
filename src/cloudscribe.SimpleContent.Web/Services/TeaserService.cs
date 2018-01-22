@@ -42,14 +42,16 @@ namespace cloudscribe.SimpleContent.Web.Services
             }
 
             // Try to get language metadata for humanizer.
-            var languageCode = projectSettings.LanguageCode;
             var cultureInfo = CultureInfo.InvariantCulture;
-            try
+            if(!string.IsNullOrEmpty(projectSettings.LanguageCode))
             {
-                cultureInfo = new CultureInfo(languageCode);
+                try
+                {
+                    cultureInfo = new CultureInfo(projectSettings.LanguageCode);
+                }
+                catch (CultureNotFoundException) { }
             }
-            catch { }
-
+            
             var isRightToLeftLanguage = cultureInfo.TextInfo.IsRightToLeft;
 
             // Get global teaser settings.
