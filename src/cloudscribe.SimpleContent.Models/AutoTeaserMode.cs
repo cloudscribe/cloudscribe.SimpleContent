@@ -4,9 +4,6 @@
 // Created:					2017-12-22
 // Last Modified:			2017-12-22
 // 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace cloudscribe.SimpleContent.Models
 {

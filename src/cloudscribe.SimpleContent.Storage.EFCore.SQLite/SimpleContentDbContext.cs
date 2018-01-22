@@ -124,6 +124,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 .HasDefaultValue("html")
                 ;
 
+                entity.Property(p => p.AutoTeaserMode)
+                .HasDefaultValue(AutoTeaserMode.Off);
+
+                entity.Property(p => p.TeaserTruncationMode)
+                .HasDefaultValue(TeaserTruncationMode.Word);
+
+                entity.Property(p => p.TeaserTruncationLength)
+                .HasDefaultValue(20);
+
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
