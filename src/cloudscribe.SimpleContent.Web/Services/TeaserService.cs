@@ -21,17 +21,25 @@ namespace cloudscribe.SimpleContent.Web.Services
     public class TeaserService : ITeaserService
     {
         public TeaserService(
+            TeaserCache cache = null,
             ILogger<TeaserService> logger = null
             )
         {
+            if(cache != null)
+            {
+                _cache = cache;
+            }
+
             if(logger != null) // can be null in Unit Tests
             {
                 _log = logger;
             }
            
+           
         }
 
         private ILogger _log = null;
+        private TeaserCache _cache = null;
 
         private const int defaultLengthWords = 20;
         private const int defaultLengthCharacters = 200;
@@ -66,6 +74,15 @@ namespace cloudscribe.SimpleContent.Web.Services
                     cultureInfo = new CultureInfo(projectSettings.LanguageCode);
                 }
                 catch (CultureNotFoundException) { }
+            }
+
+            if(_cache != null)
+            {
+                var cachedTeaser = _cache.GetTeaser(post.Id);
+                if(!string.IsNullOrEmpty(cachedTeaser))
+                {
+                    return cachedTeaser;
+                }
             }
             
             var isRightToLeftLanguage = cultureInfo.TextInfo.IsRightToLeft;
@@ -104,12 +121,17 @@ namespace cloudscribe.SimpleContent.Web.Services
                 return html;
             }
 
-            //    return result;
+            if (_cache != null)
+            {
+                _cache.AddToCache(text, post.Id);
+            }
 
-            var doc = new HtmlDocument();
+            return text;
+
+            //var doc = new HtmlDocument();
            
-            doc.LoadHtml(text);
-            return doc.DocumentNode.InnerHtml;
+            //doc.LoadHtml(text);
+            //return doc.DocumentNode.InnerHtml;
         }
         
         private bool IsValidMarkup(string html)
