@@ -50,7 +50,29 @@ namespace cloudscribe.SimpleContent.Web.Services
             => ShouldDisplayTeaser(projectSettings, post) ? CreateTeaser(projectSettings, post, html) : html;
 
         public bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post)
-            => !string.IsNullOrWhiteSpace(post.TeaserOverride) || (projectSettings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser);
+        {
+            return !string.IsNullOrWhiteSpace(post.TeaserOverride) || (projectSettings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser);
+        }
+
+        public bool ShouldDisplayReadMore(IProjectSettings projectSettings, IPost post)
+        {
+            if (!string.IsNullOrWhiteSpace(post.TeaserOverride)) { return true; }
+            if (projectSettings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser)
+            {
+                // known issue:
+                // this will not be correct if content is markdown
+                // since it hasn't been converted to html yet
+                var contentLength = GetContentLength(post.Content, projectSettings.TeaserTruncationMode);
+                if (contentLength > projectSettings.TeaserTruncationLength)
+                {
+                    return true;
+                }
+
+            }
+
+            return false;
+        }
+        
 
         // Internal for unit testing purposes only.
         internal string CreateTeaser(IProjectSettings projectSettings, IPost post, string html)

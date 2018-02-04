@@ -55,19 +55,22 @@ namespace cloudscribe.SimpleContent.Web.Services
             Assert.False(teaserService.ShouldDisplayTeaser(projectSettings, post));
         }
 
-        [Fact]
-        [Description("If teaser override is not specified and suppress auto teaser is false, go with the auto teaser mode setting.")]
-        public void ShouldDisplayTeaser_AutoTeaserModeOn_ReturnsTrue()
-        {
-            postMock.Setup(m => m.TeaserOverride).Returns("");
-            projectSettingsMock.Setup(m => m.AutoTeaserMode).Returns(AutoTeaserMode.On);
-            postMock.Setup(m => m.SuppressAutoTeaser).Returns(false);
 
-            var post = postMock.Object;
-            var projectSettings = projectSettingsMock.Object;
+        //TODO: this test has bad logic
+        // should not display a teaser unless content length in words chars or string length is greater than projectSettings.TeaserTruncationLength
+        //[Fact]
+        //[Description("If teaser override is not specified and suppress auto teaser is false, go with the auto teaser mode setting.")]
+        //public void ShouldDisplayTeaser_AutoTeaserModeOn_ReturnsTrue()
+        //{
+        //    postMock.Setup(m => m.TeaserOverride).Returns("");
+        //    projectSettingsMock.Setup(m => m.AutoTeaserMode).Returns(AutoTeaserMode.On);
+        //    postMock.Setup(m => m.SuppressAutoTeaser).Returns(false);
 
-            Assert.True(teaserService.ShouldDisplayTeaser(projectSettings, post));
-        }
+        //    var post = postMock.Object;
+        //    var projectSettings = projectSettingsMock.Object;
+
+        //    Assert.True(teaserService.ShouldDisplayTeaser(projectSettings, post));
+        //}
 
         [Fact]
         [Description("If teaser override is not specified and suppress auto teaser is false, go with the auto teaser mode setting.")]

@@ -23,5 +23,6 @@ namespace cloudscribe.SimpleContent.Web.Services
         /// <param name="post">SimpleContent blog posting.</param>
         /// <returns>True if a teaser should be displayed; otherwise, false.</returns>
         bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post);
+        bool ShouldDisplayReadMore(IProjectSettings projectSettings, IPost post);
     }
 }

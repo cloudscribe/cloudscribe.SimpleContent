@@ -56,15 +56,17 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public bool IsFeatured { get; set; }
 
         [YamlMember(Order = 15)]
+        public string TeaserOverride { get; set; }
+        [YamlMember(Order = 16)]
+        public bool SuppressAutoTeaser { get; set; }
+
+        [YamlMember(Order = 17)]
         public List<string> Categories { get; set; }
 
-        [YamlMember(Order = 16, Alias = "Comments")]
+        [YamlMember(Order = 18, Alias = "Comments")]
         public List<Comment> TheComments { get; set; }
 
-        [YamlMember(Order = 17, Alias = "Comments")]
-        public string TeaserOverride { get; set; }
-        [YamlMember(Order = 18, Alias = "Comments")]
-        public bool SuppressAutoTeaser { get; set; }
+        
 
 
 

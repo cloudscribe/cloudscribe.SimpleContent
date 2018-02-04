@@ -73,7 +73,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
             return _teaserService.CreateTeaserIfNeeded(ProjectSettings, p, html);
         }
 
-        public bool ShouldDisplayReadMorePrompt(IPost p) => _teaserService.ShouldDisplayTeaser(ProjectSettings, p);
+        public bool ShouldDisplayReadMorePrompt(IPost p) => _teaserService.ShouldDisplayReadMore(ProjectSettings, p);
 
         public string FilterComment(IComment c)
         {
