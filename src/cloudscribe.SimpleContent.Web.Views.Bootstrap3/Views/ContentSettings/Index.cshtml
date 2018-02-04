@@ -178,9 +178,9 @@
                         <label asp-for="TeaserTruncationMode" class="col-md-2 control-label">@sr["Teaser Truncation Mode"]</label>
                         <div class="col-md-10">
                             <select asp-for="TeaserTruncationMode" class="form-control" data-toggle="tooltip" title='@sr["Truncate blog postings by character/word/length for teasers."]'>
-                                <option value="0">Word</option>
-                                <option value="1">Length</option>
-                                <option value="2">Character</option>
+                                <option value="0">@sr["Words"]</option>
+                                <option value="1">@sr["Absolute string lenth including white space"]</option>
+                                <option value="2">@sr["Letters or digits"]</option>
                             </select>
                             <span asp-validation-for="TeaserTruncationMode" class="text-danger"></span>
                         </div>

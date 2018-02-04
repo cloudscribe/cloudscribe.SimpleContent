@@ -2,6 +2,7 @@
 using cloudscribe.HtmlAgilityPack;
 using cloudscribe.SimpleContent.Models;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -370,7 +371,22 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        
+        //public bool IsValidMarkup(string html)
+        //{
+        //    var errors = GetMarkupErrors(html);
+        //    return errors.Count() == 0;
+        //}
+
+        //private IEnumerable<HtmlParseError> GetMarkupErrors(string html)
+        //{
+        //    var document = new HtmlAgilityPack.HtmlDocument();
+        //    document.OptionFixNestedTags = true;
+        //    document.LoadHtml(html);
+
+        //    return document.ParseErrors;
+        //}
+
+
 
     }
 }

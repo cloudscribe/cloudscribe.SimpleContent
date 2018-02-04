@@ -12,5 +12,7 @@ namespace cloudscribe.SimpleContent.Models
         string FilterCommentLinks(string rawComment);
         string FilterHtml(string htmlInput, string cdnUrl = "", string rootPath = "");
         string RemoveImageStyleAttribute(string htmlInput);
+        //bool IsValidMarkup(string html);
+       
     }
 }
