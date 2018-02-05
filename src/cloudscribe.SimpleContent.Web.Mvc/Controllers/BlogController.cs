@@ -97,7 +97,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.CurrentCategory = category;
             if(!string.IsNullOrEmpty(model.CurrentCategory))
             {
-                model.ListAction = "Category";
+                model.ListRouteName = blogRoutes.BlogCategoryRouteName;
+            }
+            else
+            {
+                model.ListRouteName = blogRoutes.BlogIndexRouteName;
             }
 
             ViewData["Title"] = model.ProjectSettings.Title;

@@ -3,8 +3,9 @@
 @using cloudscribe.SimpleContent.Web
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
+
 @section Meta {
-<meta name="robots" content="noindex" />
+    <meta name="robots" content="noindex" />
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
 }
 @section Styles {
@@ -28,11 +29,10 @@
                           cs-suppress-empty-nextprev="true"
                           cs-previous-page-text="< Older"
                           cs-next-page-text="Newer >"
-                          asp-route="blogarchive"
+                          asp-route="@Model.BlogRoutes.BlogArchiveRouteName"
                           asp-route-year="@Model.Year"
                           asp-route-month="@Model.Month.ToString("00")"
-                          asp-route-day="@Model.Day.ToString("00")"
-                          ></cs-pager>
+                          asp-route-day="@Model.Day.ToString("00")"></cs-pager>
             </nav>
         </main>
         <aside role="complementary" class="col-md-3 blog-aside">

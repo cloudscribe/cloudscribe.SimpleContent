@@ -35,7 +35,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string CurrentCategory { get; set; } = string.Empty;
 
-        public string ListAction { get; set; } = "Index";
+        public string ListRouteName { get; set; } 
 
         public string EditPath { get; set; } = string.Empty;
         public string NewItemPath { get; set; } = string.Empty;

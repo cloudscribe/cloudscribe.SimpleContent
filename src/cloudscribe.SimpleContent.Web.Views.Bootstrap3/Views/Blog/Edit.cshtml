@@ -30,11 +30,10 @@
     }
 }
 <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
-<form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
+<form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
     <input type="hidden" asp-for="ContentType" />
-
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
     <div class="form-group">
@@ -58,11 +57,11 @@
         <div class="col-md-10">
             @if (Model.ContentType == "markdown")
             {
-                 Html.RenderPartial("EditContentMarkdownPartial", Model); 
+                Html.RenderPartial("EditContentMarkdownPartial", Model);
             }
             else
             {
-                 Html.RenderPartial("EditContentHtmlPartial", Model); 
+                Html.RenderPartial("EditContentHtmlPartial", Model);
             }
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
@@ -116,21 +115,21 @@
     {
         if (Model.ContentType == "markdown")
         {
-             Html.RenderPartial("EditTeaserMarkdownPartial", Model); 
+            Html.RenderPartial("EditTeaserMarkdownPartial", Model);
         }
         else
         {
-             Html.RenderPartial("EditTeaserHtmlPartial", Model); 
+            Html.RenderPartial("EditTeaserHtmlPartial", Model);
         }
     }
     else
     {
-         Html.RenderPartial("EditTeaserDisabledPartial"); 
+        Html.RenderPartial("EditTeaserDisabledPartial");
     }
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button id="btnSave" name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
+            <button id="btnSave" name="submit" type="submit" class="btn btn-success" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
             @if (!string.IsNullOrEmpty(Model.Id))
             {
                 <button name="button" type="button" class="btn btn-danger"
@@ -149,11 +148,12 @@
 }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
+    <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
+    <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
     @if (Model.ContentType == "markdown")
     {
         <script src="~/cr/js/simplemde.min.js"></script>
         <script src="~/cr/js/simplemde-unobtrusive.min.js"></script>
-        @*<script src="~/jsdev/simplemde-unobtrusive.js" asp-append-version="true"></script>*@
     }
     else
     {

@@ -6,7 +6,7 @@
   <correlationkey />
   <author>Joe Audette</author>
   <pubDate>2016-02-22T16:58:00.0000000Z</pubDate>
-  <lastModified>2017-11-16T12:11:14.4591415Z</lastModified>
+  <lastModified>2018-02-05T21:22:40.8088227Z</lastModified>
   <excerpt>a post about nothing really</excerpt>
   <content>&lt;p&gt;so they say so they say&lt;/p&gt;
 
@@ -18,13 +18,17 @@
 
 &lt;p&gt;&lt;a href="/media/images/img_1150.jpg"&gt;&lt;img alt=" " data-primary-image="true" src="/media/images/img_1150-ws.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
 </content>
+  <contentType />
   <imageUrl />
   <thumbnailUrl />
   <ispublished>true</ispublished>
   <isFeatured>true</isFeatured>
+  <teaserOverride />
+  <suppressAutoTeaser>false</suppressAutoTeaser>
   <categories>
     <category>food</category>
     <category>vegan</category>
+    <category>foo</category>
   </categories>
   <comments></comments>
 </post>
