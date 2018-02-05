@@ -216,7 +216,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 ;
 
                 entity.Property(p => p.AutoTeaserMode)
-                .HasDefaultValue(AutoTeaserMode.Off);
+                .HasDefaultValue(TeaserMode.Off);
 
                 entity.Property(p => p.TeaserTruncationMode)
                 .HasDefaultValue(TeaserTruncationMode.Word);

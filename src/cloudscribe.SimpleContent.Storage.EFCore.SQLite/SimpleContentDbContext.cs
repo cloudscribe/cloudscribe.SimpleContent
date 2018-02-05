@@ -125,7 +125,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 ;
 
                 entity.Property(p => p.AutoTeaserMode)
-                .HasDefaultValue(AutoTeaserMode.Off);
+                .HasDefaultValue(TeaserMode.Off);
 
                 entity.Property(p => p.TeaserTruncationMode)
                 .HasDefaultValue(TeaserTruncationMode.Word);

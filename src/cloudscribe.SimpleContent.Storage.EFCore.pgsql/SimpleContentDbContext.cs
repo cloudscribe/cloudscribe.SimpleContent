@@ -132,7 +132,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 ;
 
                 entity.Property(p => p.AutoTeaserMode)
-                .HasDefaultValue(AutoTeaserMode.Off);
+                .HasDefaultValue(TeaserMode.Off);
 
                 entity.Property(p => p.TeaserTruncationMode)
                 .HasDefaultValue(TeaserTruncationMode.Word);

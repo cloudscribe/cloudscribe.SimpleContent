@@ -38,12 +38,12 @@ namespace cloudscribe.SimpleContent.Models
         string ThumbnailUrl { get; set; }
 
         /// <summary>
-        /// If not null or whitespace, displays this teaser on blog index/listing views regardless of <see cref="AutoTeaserMode"/> settings.
+        /// If not null or whitespace, displays this teaser on blog index/listing views regardless of <see cref="TeaserMode"/> settings.
         /// </summary>
         string TeaserOverride { get; set; }
 
         /// <summary>
-        /// If true, will display an entire blog post on index/listing views regardless of <see cref="AutoTeaserMode"/> settings.
+        /// If true, will display an entire blog post on index/listing views regardless of <see cref="TeaserMode"/> settings.
         /// </summary>
         bool SuppressAutoTeaser { get; set; }
     }

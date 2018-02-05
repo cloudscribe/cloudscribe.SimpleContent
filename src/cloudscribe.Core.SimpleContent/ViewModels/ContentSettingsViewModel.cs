@@ -110,7 +110,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         [StringLength(100, ErrorMessage = "TwitterCreator has a maximum length of 100 characters")]
         public string TwitterCreator { get; set; }
 
-        public AutoTeaserMode AutoTeaserMode { get; set; }
+        public TeaserMode AutoTeaserMode { get; set; }
         public TeaserTruncationMode TeaserTruncationMode { get; set; }
         public int TeaserTruncationLength { get; set; } = 20;   // Default 20 words.
     }

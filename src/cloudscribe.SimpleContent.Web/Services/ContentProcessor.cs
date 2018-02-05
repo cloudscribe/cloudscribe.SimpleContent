@@ -147,7 +147,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         public ContentFilterResult FilterHtmlForList(IPost post, IProjectSettings settings)
         {
             var result = new ContentFilterResult();
-            if(settings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser)
+            if(settings.AutoTeaserMode == TeaserMode.On && !post.SuppressAutoTeaser)
             {
                 TeaserResult teaserResult = null;
                 string teaser = null;

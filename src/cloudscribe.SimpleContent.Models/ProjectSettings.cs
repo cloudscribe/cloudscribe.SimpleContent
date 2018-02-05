@@ -113,7 +113,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string DefaultContentType { get; set; } = "html";
 
-        public AutoTeaserMode AutoTeaserMode { get; set; }
+        public TeaserMode AutoTeaserMode { get; set; }
         public TeaserTruncationMode TeaserTruncationMode { get; set; }
         public int TeaserTruncationLength { get; set; } = 20;   // Default 20 words.
 

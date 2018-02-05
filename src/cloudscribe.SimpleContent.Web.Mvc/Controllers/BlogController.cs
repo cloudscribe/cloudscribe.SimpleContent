@@ -336,7 +336,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var model = new PostEditViewModel();
             model.ProjectId = projectSettings.Id;
-            model.TeasersEnabled = projectSettings.AutoTeaserMode == AutoTeaserMode.On;
+            model.TeasersEnabled = projectSettings.AutoTeaserMode == TeaserMode.On;
             
             PostResult postResult = null;
             if (!string.IsNullOrEmpty(slug))
@@ -405,7 +405,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], model.Title);
                 }
                 model.ProjectId = project.Id;
-                model.TeasersEnabled = project.AutoTeaserMode == AutoTeaserMode.On;
+                model.TeasersEnabled = project.AutoTeaserMode == TeaserMode.On;
 
                 return View(model);
             }

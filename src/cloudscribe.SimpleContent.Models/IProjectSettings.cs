@@ -69,7 +69,7 @@ namespace cloudscribe.SimpleContent.Models
         /// Specifies whether SimpleContent should show teasers for blog posts on index/listing views.
         /// The default is OFF (show entire post).
         /// </summary>
-        AutoTeaserMode AutoTeaserMode { get; set; }
+        TeaserMode AutoTeaserMode { get; set; }
         /// <summary>
         /// Specifies how SimpleContent will truncate blog posts to create teasers for index/listing views.
         /// </summary>
