@@ -17,10 +17,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 {
     public class BlogViewModel
     {
-        public BlogViewModel(IContentProcessor contentProcessor, ITeaserService teaserService)
+        public BlogViewModel(IContentProcessor contentProcessor)
         {
             _contentProcessor = contentProcessor;
-            _teaserService = teaserService;
+           
             ProjectSettings = new ProjectSettings();
             Paging = new PaginationSettings();
             Categories = new Dictionary<string, int>();
@@ -29,7 +29,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         }
 
         private IContentProcessor _contentProcessor;
-        private ITeaserService _teaserService;
+        
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
 
@@ -66,14 +66,20 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         {
             return _contentProcessor.FilterHtml(p, ProjectSettings);
         }
-            
-        public string FilterHtmlForList(IPost p)
+
+        //public string FilterHtmlForList(IPost p)
+        //{
+        //    var html = _contentProcessor.FilterHtml(p, ProjectSettings);
+        //    return _teaserService.CreateTeaserIfNeeded(ProjectSettings, p, html);
+        //}
+
+        public ContentFilterResult FilterHtmlForList(IPost p)
         {
-            var html = _contentProcessor.FilterHtml(p, ProjectSettings);
-            return _teaserService.CreateTeaserIfNeeded(ProjectSettings, p, html);
+            return _contentProcessor.FilterHtmlForList(p, ProjectSettings);
+            
         }
 
-        public bool ShouldDisplayReadMorePrompt(IPost p) => _teaserService.ShouldDisplayReadMore(ProjectSettings, p);
+        //public bool ShouldDisplayReadMorePrompt(IPost p) => _teaserService.ShouldDisplayReadMore(ProjectSettings, p);
 
         public string FilterComment(IComment c)
         {

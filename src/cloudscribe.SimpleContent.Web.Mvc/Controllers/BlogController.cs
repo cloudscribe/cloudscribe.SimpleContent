@@ -43,8 +43,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             ITimeZoneHelper timeZoneHelper,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<SimpleContentConfig> configOptionsAccessor,
-            ILogger<BlogController> logger,
-            ITeaserService teaserService
+            ILogger<BlogController> logger
+            
             )
         {
             this.projectService = projectService;
@@ -55,7 +55,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             this.emailService = emailService;
             this.authorizationService = authorizationService;
             this.timeZoneHelper = timeZoneHelper;
-            this.teaserService = teaserService;
+            
             sr = localizer;
             log = logger;
             config = configOptionsAccessor.Value;
@@ -72,7 +72,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         private IAuthorizationService authorizationService;
         private IStringLocalizer<SimpleContent> sr;
         private SimpleContentConfig config;
-        private ITeaserService teaserService;
+        
 
         [HttpGet]
         [AllowAnonymous]
@@ -88,7 +88,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return new EmptyResult();
             }
 
-            var model = new BlogViewModel(contentProcessor, teaserService);
+            var model = new BlogViewModel(contentProcessor);
             model.ProjectSettings = projectSettings;
             // check if the user has the BlogEditor claim or meets policy
             model.CanEdit = await User.CanEditBlog(projectSettings.Id, authorizationService);
@@ -151,7 +151,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             int page = 1)
         {
 
-            var model = new BlogViewModel(contentProcessor, teaserService);
+            var model = new BlogViewModel(contentProcessor);
             model.ProjectSettings = await projectService.GetCurrentProjectSettings();
             model.BlogRoutes = blogRoutes;
             model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, authorizationService);
@@ -238,7 +238,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 result = await blogService.GetPostBySlug(slug);
             }
             
-            var model = new BlogViewModel(contentProcessor, teaserService);
+            var model = new BlogViewModel(contentProcessor);
             model.CanEdit = canEdit;
 
             if ((result == null)||(result.Post == null))
@@ -939,7 +939,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     ).Forget(); //async but don't want to wait
             }
             
-            var viewModel = new BlogViewModel(contentProcessor, teaserService);
+            var viewModel = new BlogViewModel(contentProcessor);
             viewModel.ProjectSettings = project;
             viewModel.BlogRoutes = blogRoutes;
             viewModel.CurrentPost = blogPost;

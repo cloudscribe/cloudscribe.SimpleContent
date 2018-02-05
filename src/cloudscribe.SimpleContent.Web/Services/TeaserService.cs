@@ -44,7 +44,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private const int defaultLengthWords = 20;
         private const int defaultLengthCharacters = 200;
         private const int defaultLengthAbsolute = 30;
-        private const string terminator = "...";
+        private const string terminator = "";
 
         public string CreateTeaserIfNeeded(IProjectSettings projectSettings, IPost post, string html)
             => ShouldDisplayTeaser(projectSettings, post) ? CreateTeaser(projectSettings, post, html) : html;
@@ -72,7 +72,104 @@ namespace cloudscribe.SimpleContent.Web.Services
 
             return false;
         }
-        
+
+        public TeaserResult GenerateTeaser(
+            TeaserTruncationMode truncationMode,
+            int truncationLength,
+            string html,
+            string cacheKey,
+            string slug,
+            string languageCode)
+        {
+            var result = new TeaserResult();
+
+            if (string.IsNullOrWhiteSpace(html))
+            {
+                result.Content = html;
+                result.DidTruncate = false;
+                return result;
+            }
+
+            // Try to get language metadata for humanizer.
+            var cultureInfo = CultureInfo.InvariantCulture;
+            if (!string.IsNullOrEmpty(languageCode))
+            {
+                try
+                {
+                    cultureInfo = new CultureInfo(languageCode);
+                }
+                catch (CultureNotFoundException) { }
+            }
+
+            var contentLength = GetContentLength(html, truncationMode);
+            if(contentLength <= truncationLength)
+            {
+                result.Content = html;
+                result.DidTruncate = false;
+                return result;
+            }
+
+            if (_cache != null)
+            {
+                var cachedTeaser = _cache.GetTeaser(cacheKey);
+                if (!string.IsNullOrEmpty(cachedTeaser))
+                {
+                    result.Content = cachedTeaser;
+                    result.DidTruncate = true;
+                    return result;
+                }
+            }
+
+            var isRightToLeftLanguage = cultureInfo.TextInfo.IsRightToLeft;
+
+            // Get global teaser settings.
+            //var autoTeaserMode = projectSettings.AutoTeaserMode;
+            //var teaserTruncationMode = projectSettings.TeaserTruncationMode;
+            var truncationLengthToUse = truncationLength <= 0 ? GetDefaultTeaserLength(truncationMode) : truncationLength;
+
+            // Truncate the raw content first. In general, Humanizer is smart enough to ignore tags, especially if using word truncation.
+            var text = TruncatePost(truncationMode, html, truncationLengthToUse, isRightToLeftLanguage);
+            // Don't leave dangling <p> tags.
+            HtmlNode.ElementsFlags["p"] = HtmlElementFlag.Closed;
+
+            var modeDesc = GetModeDescription(truncationMode);
+            
+            //if we get bad output try increasing the allowed length unti it is valid
+            while (!IsValidMarkup(text) && truncationLengthToUse <= contentLength)
+            {
+                truncationLengthToUse += 1;
+                if (_log != null)
+                {
+                    _log.LogWarning($"teaser truncation for post {slug}, produced invalid html, so trying again and increasing the truncation length to {truncationLengthToUse} {modeDesc}. Might be best to make an explicit teaser for this post.");
+                }
+
+                text = TruncatePost(truncationMode, html, truncationLengthToUse, isRightToLeftLanguage);
+            }
+
+            if (!IsValidMarkup(text))
+            {
+                if (_log != null)
+                {
+                    _log.LogError($"failed to create valid teaser for post {slug}, so returning full content");
+                }
+
+                result.Content = html;
+                result.DidTruncate = false;
+                return result;
+            }
+
+            if (_cache != null)
+            {
+                _cache.AddToCache(text, cacheKey);
+            }
+
+            result.Content = text;
+            result.DidTruncate = true;
+            return result;
+
+            
+        }
+
 
         // Internal for unit testing purposes only.
         internal string CreateTeaser(IProjectSettings projectSettings, IPost post, string html)

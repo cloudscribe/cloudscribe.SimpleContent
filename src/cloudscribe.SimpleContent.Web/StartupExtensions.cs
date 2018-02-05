@@ -51,7 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
             services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
 
-            services.TryAddScoped<IHtmlProcessor, HtmlProcessor>();
+            //services.TryAddScoped<IHtmlProcessor, HtmlProcessor>();
             services.TryAddScoped<IMarkdownProcessor, MarkdownProcessor>();
             services.TryAddScoped<IContentProcessor, ContentProcessor>();
 

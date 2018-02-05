@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Syndication
 {
@@ -29,14 +30,15 @@ namespace cloudscribe.SimpleContent.Syndication
             IHttpContextAccessor contextAccessor,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor,
-            IHtmlProcessor htmlProcessor)
+            IContentProcessor contentProcessor
+            )
         {
             this.projectService = projectService;
             this.blogService = blogService;
             this.contextAccessor = contextAccessor;
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
-            this.htmlProcessor = htmlProcessor;
+            _contentProcessor = contentProcessor;
             this.blogRoutes = blogRoutes;
         }
 
@@ -46,7 +48,8 @@ namespace cloudscribe.SimpleContent.Syndication
         private IProjectService projectService;
         private IBlogService blogService;
         private IBlogRoutes blogRoutes;
-        private IHtmlProcessor htmlProcessor;
+        private IContentProcessor _contentProcessor;
+       
         private int maxFeedItems = 20;
 
         public string Name { get; } = "cloudscribe.SimpleContent.Syndication.RssChannelProvider";
@@ -166,7 +169,7 @@ namespace cloudscribe.SimpleContent.Syndication
                 else
                 {
                     // change relative urls in content to absolute
-                    rssItem.Description = htmlProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
+                    rssItem.Description = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
                 }
                 
                 //rssItem.Enclosures

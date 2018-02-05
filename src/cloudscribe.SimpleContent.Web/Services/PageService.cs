@@ -22,6 +22,7 @@ using cloudscribe.SimpleContent.Models.EventHandlers;
 using Microsoft.Extensions.Localization;
 using System.Security.Claims;
 using cloudscribe.SimpleContent.Web;
+using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -34,7 +35,8 @@ namespace cloudscribe.SimpleContent.Services
             IPageCommands pageCommands,
             PageEvents eventHandlers,
             IMediaProcessor mediaProcessor,
-            IHtmlProcessor htmlProcessor,
+            IContentProcessor contentProcessor,
+            //IHtmlProcessor htmlProcessor,
             IUrlHelperFactory urlHelperFactory,
             IPageRoutes pageRoutes,
             IMemoryCache cache,
@@ -53,7 +55,8 @@ namespace cloudscribe.SimpleContent.Services
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
             this.pageRoutes = pageRoutes;
-            this.htmlProcessor = htmlProcessor;
+            _contentProcessor = contentProcessor;
+            //this.htmlProcessor = htmlProcessor;
             this.cache = cache;
             this.cacheKeys = cacheKeys;
             this.eventHandlers = eventHandlers;
@@ -70,7 +73,8 @@ namespace cloudscribe.SimpleContent.Services
         private IMediaProcessor mediaProcessor;
         private IProjectService projectService;
         private IProjectSettings settings = null;
-        private IHtmlProcessor htmlProcessor;
+        private IContentProcessor _contentProcessor;
+        //private IHtmlProcessor htmlProcessor;
         private IMemoryCache cache;
         private IPageNavigationCacheKeys cacheKeys;
         private PageEvents eventHandlers;
@@ -178,13 +182,13 @@ namespace cloudscribe.SimpleContent.Services
             // open live writer passes in posts with absolute urls
             // we want to change them to relative to keep the files portable
             // to a different root url
-            page.Content = await htmlProcessor.ConvertMediaUrlsToRelative(
+            page.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 page.Content);
 
             // olw also adds hard coded style to images
-            page.Content = htmlProcessor.RemoveImageStyleAttribute(page.Content);
+            page.Content = _contentProcessor.RemoveImageStyleAttribute(page.Content);
 
             // here we need to process any base64 embedded images
             // save them under wwwroot
@@ -238,13 +242,13 @@ namespace cloudscribe.SimpleContent.Services
             // open live writer passes in posts with absolute urls
             // we want to change them to relative to keep the files portable
             // to a different root url
-            page.Content = await htmlProcessor.ConvertMediaUrlsToRelative(
+            page.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 page.Content);
 
             // olw also adds hard coded style to images
-            page.Content = htmlProcessor.RemoveImageStyleAttribute(page.Content);
+            page.Content = _contentProcessor.RemoveImageStyleAttribute(page.Content);
 
             // here we need to process any base64 embedded images
             // save them under wwwroot

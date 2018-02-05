@@ -5,6 +5,8 @@
 // Last Modified:			2017-12-22
 // 
 
+// TODO: think this should be renamed to TeaserMode since off means no teaser whether manually created or not
+
 namespace cloudscribe.SimpleContent.Models
 {
     /// <summary>

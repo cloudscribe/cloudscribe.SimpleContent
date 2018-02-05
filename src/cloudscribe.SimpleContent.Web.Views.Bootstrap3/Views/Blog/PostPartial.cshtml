@@ -85,8 +85,11 @@
         </div>
     </header>
     <div itemprop="articleBody">
-        @Html.Raw(Model.FilterHtmlForList(Model.TmpPost))
-        @if (Model.ShouldDisplayReadMorePrompt(Model.TmpPost))
+        @{ 
+            var result = Model.FilterHtmlForList(Model.TmpPost);
+        }
+        @Html.Raw(result.FilteredContent)
+        @if (!result.IsFullContent)
         {
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
@@ -95,11 +98,11 @@
                    asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
                    asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
                    asp-route-slug="@Model.TmpPost.Slug"
-                   itemprop="url">[Read More]</a>
+                   itemprop="url">@sr["[...Read More]"]</a>
             }
             else
             {
-                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">[Read More]</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@sr["[...Read More]"]</a>
             }
         }
     </div>
