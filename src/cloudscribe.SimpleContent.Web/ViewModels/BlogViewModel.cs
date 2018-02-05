@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-01-22
+// Last Modified:           2018-02-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -66,21 +66,12 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         {
             return _contentProcessor.FilterHtml(p, ProjectSettings);
         }
-
-        //public string FilterHtmlForList(IPost p)
-        //{
-        //    var html = _contentProcessor.FilterHtml(p, ProjectSettings);
-        //    return _teaserService.CreateTeaserIfNeeded(ProjectSettings, p, html);
-        //}
-
+        
         public ContentFilterResult FilterHtmlForList(IPost p)
         {
             return _contentProcessor.FilterHtmlForList(p, ProjectSettings);
-            
         }
-
-        //public bool ShouldDisplayReadMorePrompt(IPost p) => _teaserService.ShouldDisplayReadMore(ProjectSettings, p);
-
+        
         public string FilterComment(IComment c)
         {
             return _contentProcessor.FilterComment(c);

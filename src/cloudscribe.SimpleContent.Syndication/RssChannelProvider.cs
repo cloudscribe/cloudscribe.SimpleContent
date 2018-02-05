@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2017-03-10
+// Last Modified:           2018-02-05
 // 
 
 using System;
@@ -159,7 +159,6 @@ namespace cloudscribe.SimpleContent.Syndication
                         rssItem.Categories.Add(new RssCategory(c));
                     }
                 }
-
                 
                 //rssItem.Comments
                 if(project.UseMetaDescriptionInFeed)
@@ -168,8 +167,10 @@ namespace cloudscribe.SimpleContent.Syndication
                 }
                 else
                 {
-                    // change relative urls in content to absolute
-                    rssItem.Description = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
+                    
+                    //rssItem.Description = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
+                    var filteredResult = _contentProcessor.FilterHtmlForRss(post, project, baseUrl);
+                    rssItem.Description = filteredResult.FilteredContent;
                 }
                 
                 //rssItem.Enclosures

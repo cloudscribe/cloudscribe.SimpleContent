@@ -6,7 +6,7 @@
   <correlationkey />
   <author></author>
   <pubDate>2016-03-13T22:23:00.0000000Z</pubDate>
-  <lastModified>2018-02-04T17:30:19.4049730Z</lastModified>
+  <lastModified>2018-02-05T18:12:28.9363640Z</lastModified>
   <excerpt>Starsky and Hutch</excerpt>
   <content>&lt;p&gt;Starsky and Hutcherson&lt;br /&gt;
 &lt;img alt="dudes" src="/media/images/dudes1-550x412.jpeg" style="height:412px; width:550px" /&gt;&lt;br /&gt;
@@ -17,7 +17,7 @@ cool dudes man!&lt;/p&gt;
   <thumbnailUrl />
   <ispublished>true</ispublished>
   <isFeatured>true</isFeatured>
-  <teaserOverride>Cool dudes</teaserOverride>
+  <teaserOverride />
   <suppressAutoTeaser>false</suppressAutoTeaser>
   <categories>
     <category>foo</category>

@@ -11,6 +11,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         string ExtractFirstImageUrl(IContentItem item, IUrlHelper urlHelper, string fallbackImageUrl = null);
         string FilterHtml(IContentItem p, IProjectSettings projectSettings);
         ContentFilterResult FilterHtmlForList(IPost post, IProjectSettings settings);
+        ContentFilterResult FilterHtmlForRss(IPost post, IProjectSettings settings, string absoluteMediaBaseUrl);
         string FilterComment(IComment comment);
 
         string ConvertMarkdownToHtml(string markdown);

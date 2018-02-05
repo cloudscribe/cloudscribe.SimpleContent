@@ -136,13 +136,18 @@ namespace cloudscribe.SimpleContent.Web.Services
             return null;
         }
 
+        public ContentFilterResult FilterHtmlForRss(IPost post, IProjectSettings settings, string absoluteMediaBaseUrl)
+        {
+            var result = FilterHtmlForList(post, settings);
+            result.FilteredContent = ConvertUrlsToAbsolute(absoluteMediaBaseUrl, result.FilteredContent);
+
+            return result;
+        }
+
         public ContentFilterResult FilterHtmlForList(IPost post, IProjectSettings settings)
         {
-            //var html = _contentProcessor.FilterHtml(p, ProjectSettings);
-            //return _teaserService.CreateTeaserIfNeeded(ProjectSettings, p, html);
-
             var result = new ContentFilterResult();
-            if(settings.AutoTeaserMode == AutoTeaserMode.On)
+            if(settings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser)
             {
                 TeaserResult teaserResult = null;
                 string teaser = null;

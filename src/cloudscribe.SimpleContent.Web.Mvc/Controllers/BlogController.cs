@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-12-22
+// Last Modified:           2018-02-05
 // 
 
 
@@ -332,6 +332,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var model = new PostEditViewModel();
             model.ProjectId = projectSettings.Id;
+            model.TeasersEnabled = projectSettings.AutoTeaserMode == AutoTeaserMode.On;
             
             PostResult postResult = null;
             if (!string.IsNullOrEmpty(slug))
@@ -387,6 +388,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(PostEditViewModel model)
         {
+            var project = await projectService.GetCurrentProjectSettings();
+
             if (!ModelState.IsValid)
             {
                 if (string.IsNullOrEmpty(model.Id))
@@ -397,11 +400,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], model.Title);
                 }
+                model.ProjectId = project.Id;
+                model.TeasersEnabled = project.AutoTeaserMode == AutoTeaserMode.On;
+
                 return View(model);
             }
 
            
-            var project = await projectService.GetCurrentProjectSettings();
+            
 
             if (project == null)
             {

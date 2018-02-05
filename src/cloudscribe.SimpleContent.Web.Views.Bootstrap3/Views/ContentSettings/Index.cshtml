@@ -165,9 +165,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label asp-for="AutoTeaserMode" class="col-md-2 control-label">@sr["Auto-Teaser Mode"]</label>
+                        <label asp-for="AutoTeaserMode" class="col-md-2 control-label">@sr["Teaser Mode"]</label>
                         <div class="col-md-10">
-                            <select asp-for="AutoTeaserMode" class="form-control" data-toggle="tooltip" title='@sr["If ON, create truncated 'teasers' for blog postings on index views."]'>
+                            <select asp-for="AutoTeaserMode" class="form-control" data-toggle="tooltip" title='@sr["If ON, create automatic truncated 'teasers' for blog postings on index views. You can overide the auto generated teaser per post with a manually created teaser"]'>
                                 <option value = "0">Off</option>
                                 <option value="1">On</option>
                             </select>

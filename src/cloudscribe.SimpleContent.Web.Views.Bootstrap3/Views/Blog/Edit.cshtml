@@ -11,30 +11,30 @@
 @inject ICkeditorOptionsResolver editorOptionsResolver
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
-@{ 
+@{
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var deletePrompt = JavaScriptHelper.HtmlEncodeThenReplaceQuotesForJs(string.Format(sr["Are you sure you want to delete the post {0}? You cannot undo this action."], Model.Title));
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
 @section Styles {
-  @{ await Html.RenderPartialAsync("_DatePickerCssPartial"); }
-@if (Model.ContentType == "markdown")
-{
-    <link rel="stylesheet" href="~/cr/css/simplemde.min.css" />
-    <style>
-        .editor-toolbar.fullscreen {
-            z-index: 1040;
-        }
-    </style>
-}
+    @{ await Html.RenderPartialAsync("_DatePickerCssPartial"); }
+    @if (Model.ContentType == "markdown")
+    {
+        <link rel="stylesheet" href="~/cr/css/simplemde.min.css" />
+        <style>
+            .editor-toolbar.fullscreen {
+                z-index: 1040;
+            }
+        </style>
+    }
 }
 <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
     <input type="hidden" asp-for="ContentType" />
-  
+
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
     <div class="form-group">
@@ -58,38 +58,12 @@
         <div class="col-md-10">
             @if (Model.ContentType == "markdown")
             {
-                <textarea asp-for="Content" class="form-control" rows="10" cols="70"
-                          data-markdown-unobtrusive=""
-                          data-markdown-autosave="true"
-                          data-markdown-contentid="@contentId"
-                          data-markdown-forceSync="true"
-                          data-markdown-indentWithTabs="true"
-                          data-markdown-spellChecker="true"
-                          data-markdown-filemodalid="#fileBrowseDialog"
-                          data-markdown-filebrowseurl="/filemanager/filedialog"
-                          data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"
-                          ></textarea>
-                        <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i title="Close" class="fa fa-close"></i></button>
-                                    </div>
-                                    <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 600px;"></iframe>
-                                </div>
-                            </div>
-                        </div>
+                 Html.RenderPartial("EditContentMarkdownPartial", Model); 
             }
             else
             {
-                <textarea asp-for="Content" class="form-control" rows="10" cols="70"
-                          data-ckeditor-unobtrusive=""
-                          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                          data-ckeditor-config-language="@ckOptions.LanguageCode"
-                          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-            } 
+                 Html.RenderPartial("EditContentHtmlPartial", Model); 
+            }
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
     </div>
@@ -129,33 +103,31 @@
     <div class="form-group">
         <label asp-for="PubDate" class="col-md-2 control-label">@sr["Publication Date"]</label>
         <div class="col-md-10">
-            <input asp-for="PubDate" class="form-control" 
+            <input asp-for="PubDate" class="form-control"
                    data-bs-datepicker="true"
                    data-bs-datepicker-debug="false"
                    data-bs-datepicker-keepOpen="false"
                    data-bs-datepicker-allowInputToggle="true"
-                   data-bs-datepicker-locale="@CultureInfo.CurrentCulture.Name"
-                   />
+                   data-bs-datepicker-locale="@CultureInfo.CurrentCulture.Name" />
             <span asp-validation-for="PubDate" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group">
-        <label asp-for="TeaserOverride" class="col-md-2 control-label">@sr["Teaser Override"]</label>
-        <div class="col-md-10">
-            @* Check w/ Joe to see if necessary to enable CK editior for the teaser override. *@
-            <textarea asp-for="TeaserOverride" class="form-control" rows="10" cols="70"></textarea>
-            <span asp-validation-for="TeaserOverride" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-10 col-md-offset-2">
-            <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If checked, then show entire blog post on index/listing pages regardless of teaser settings."]'>
-                <label>
-                    <input asp-for="SuppressAutoTeaser" /> @sr["Suppress Auto Teaser"]
-                </label>
-            </div>
-        </div>
-    </div>
+    @if (Model.TeasersEnabled)
+    {
+        if (Model.ContentType == "markdown")
+        {
+             Html.RenderPartial("EditTeaserMarkdownPartial", Model); 
+        }
+        else
+        {
+             Html.RenderPartial("EditTeaserHtmlPartial", Model); 
+        }
+    }
+    else
+    {
+         Html.RenderPartial("EditTeaserDisabledPartial"); 
+    }
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button id="btnSave" name="submit" type="submit" class="btn btn-success">@sr["Save"]</button>
@@ -177,20 +149,20 @@
 }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
-@if (Model.ContentType == "markdown")
-{
-    <script src="~/cr/js/simplemde.min.js"></script>
-    <script src="~/cr/js/simplemde-unobtrusive.min.js"></script>
-    @*<script src="~/jsdev/simplemde-unobtrusive.js" asp-append-version="true"></script>*@
-}
-else
-{
-    await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial");
-}
-@{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
-<script>
+    @if (Model.ContentType == "markdown")
+    {
+        <script src="~/cr/js/simplemde.min.js"></script>
+        <script src="~/cr/js/simplemde-unobtrusive.min.js"></script>
+        @*<script src="~/jsdev/simplemde-unobtrusive.js" asp-append-version="true"></script>*@
+    }
+    else
+    {
+        await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial");
+    }
+    @{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
+    <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
-</script>
+    </script>
 }

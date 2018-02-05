@@ -16,12 +16,12 @@ using System.Linq;
 namespace cloudscribe.SimpleContent.Web.Services
 {
     /// <summary>
-    /// Encapsulates the logic to display abbreviated teasers of blog posts on the index view.
+    /// Encapsulates the logic to generate abbreviated teasers of html.
     /// </summary>
     public class TeaserService : ITeaserService
     {
         public TeaserService(
-            TeaserCache cache = null,
+            TeaserCache cache = null, //nulls allowed for unit test
             ILogger<TeaserService> logger = null
             )
         {
@@ -34,8 +34,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             {
                 _log = logger;
             }
-           
-           
+            
         }
 
         private ILogger _log = null;
@@ -45,34 +44,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private const int defaultLengthCharacters = 200;
         private const int defaultLengthAbsolute = 30;
         private const string terminator = "";
-
-        public string CreateTeaserIfNeeded(IProjectSettings projectSettings, IPost post, string html)
-            => ShouldDisplayTeaser(projectSettings, post) ? CreateTeaser(projectSettings, post, html) : html;
-
-        public bool ShouldDisplayTeaser(IProjectSettings projectSettings, IPost post)
-        {
-            return !string.IsNullOrWhiteSpace(post.TeaserOverride) || (projectSettings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser);
-        }
-
-        public bool ShouldDisplayReadMore(IProjectSettings projectSettings, IPost post)
-        {
-            if (!string.IsNullOrWhiteSpace(post.TeaserOverride)) { return true; }
-            if (projectSettings.AutoTeaserMode == AutoTeaserMode.On && !post.SuppressAutoTeaser)
-            {
-                // known issue:
-                // this will not be correct if content is markdown
-                // since it hasn't been converted to html yet
-                var contentLength = GetContentLength(post.Content, projectSettings.TeaserTruncationMode);
-                if (contentLength > projectSettings.TeaserTruncationLength)
-                {
-                    return true;
-                }
-
-            }
-
-            return false;
-        }
-
+        
         public TeaserResult GenerateTeaser(
             TeaserTruncationMode truncationMode,
             int truncationLength,
@@ -123,8 +95,6 @@ namespace cloudscribe.SimpleContent.Web.Services
             var isRightToLeftLanguage = cultureInfo.TextInfo.IsRightToLeft;
 
             // Get global teaser settings.
-            //var autoTeaserMode = projectSettings.AutoTeaserMode;
-            //var teaserTruncationMode = projectSettings.TeaserTruncationMode;
             var truncationLengthToUse = truncationLength <= 0 ? GetDefaultTeaserLength(truncationMode) : truncationLength;
 
             // Truncate the raw content first. In general, Humanizer is smart enough to ignore tags, especially if using word truncation.
@@ -163,94 +133,13 @@ namespace cloudscribe.SimpleContent.Web.Services
                 _cache.AddToCache(text, cacheKey);
             }
 
-            result.Content = text;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(text);
+            
+            result.Content = doc.DocumentNode.InnerHtml;
             result.DidTruncate = true;
             return result;
 
-            
-        }
-
-
-        // Internal for unit testing purposes only.
-        internal string CreateTeaser(IProjectSettings projectSettings, IPost post, string html)
-        {
-            if (!string.IsNullOrWhiteSpace(post.TeaserOverride))
-            {
-                return post.TeaserOverride;
-            }
-
-            if(string.IsNullOrWhiteSpace(html))
-            {
-                return html;
-            }
-
-            // Try to get language metadata for humanizer.
-            var cultureInfo = CultureInfo.InvariantCulture;
-            if(!string.IsNullOrEmpty(projectSettings.LanguageCode))
-            {
-                try
-                {
-                    cultureInfo = new CultureInfo(projectSettings.LanguageCode);
-                }
-                catch (CultureNotFoundException) { }
-            }
-
-            if(_cache != null)
-            {
-                var cachedTeaser = _cache.GetTeaser(post.Id);
-                if(!string.IsNullOrEmpty(cachedTeaser))
-                {
-                    return cachedTeaser;
-                }
-            }
-            
-            var isRightToLeftLanguage = cultureInfo.TextInfo.IsRightToLeft;
-
-            // Get global teaser settings.
-            var autoTeaserMode = projectSettings.AutoTeaserMode;
-            var teaserTruncationMode = projectSettings.TeaserTruncationMode;
-            var teaserTruncationLength = projectSettings.TeaserTruncationLength <= 0 ? GetDefaultTeaserLength(teaserTruncationMode) : projectSettings.TeaserTruncationLength;
-
-            // Truncate the raw content first. In general, Humanizer is smart enough to ignore tags, especially if using word truncation.
-            var text = TruncatePost(teaserTruncationMode, html, teaserTruncationLength, isRightToLeftLanguage);
-            // Don't leave dangling <p> tags.
-            HtmlNode.ElementsFlags["p"] = HtmlElementFlag.Closed;
-
-            var modeDesc = GetModeDescription(teaserTruncationMode);
-            var contentLength = GetContentLength(html, teaserTruncationMode);
-            //if we get bad output try increasing the allowed length unti it is valid
-            while (!IsValidMarkup(text) && teaserTruncationLength <= contentLength)
-            {
-                teaserTruncationLength += 1;
-                if (_log != null)
-                {
-                    _log.LogWarning($"teaser truncation for post {post.Slug}, produced invalid html, so trying again and increasing the truncation length to {teaserTruncationLength} {modeDesc}. Might be best to make an explicit teaser for this post.");
-                }
-                
-                text = TruncatePost(teaserTruncationMode, html, teaserTruncationLength, isRightToLeftLanguage);
-            }
-
-            if (!IsValidMarkup(text))
-            {
-                if(_log != null)
-                {
-                    _log.LogError($"failed to create valid teaser for post {post.Slug}, so returning full content");
-                }
-                
-                return html;
-            }
-
-            if (_cache != null)
-            {
-                _cache.AddToCache(text, post.Id);
-            }
-
-            return text;
-
-            //var doc = new HtmlDocument();
-           
-            //doc.LoadHtml(text);
-            //return doc.DocumentNode.InnerHtml;
         }
         
         private bool IsValidMarkup(string html)
@@ -298,7 +187,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         }
 
         // Internal for unit testing purposes only.
-        internal int GetDefaultTeaserLength(TeaserTruncationMode mode)
+        private int GetDefaultTeaserLength(TeaserTruncationMode mode)
         {
             switch (mode)
             {
@@ -313,7 +202,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         }
 
         // Internal for unit testing purposes only.
-        internal string TruncatePost(TeaserTruncationMode mode, string content, int length, bool isRightToLeftLanguage = false)
+        private string TruncatePost(TeaserTruncationMode mode, string content, int length, bool isRightToLeftLanguage = false)
         {
             var truncateFrom = isRightToLeftLanguage ? TruncateFrom.Left : TruncateFrom.Right;
             switch (mode)

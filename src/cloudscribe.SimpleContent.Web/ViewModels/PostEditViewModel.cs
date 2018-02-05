@@ -52,5 +52,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string TeaserOverride { get; set; }
 
         public bool SuppressAutoTeaser { get; set; }
+
+        public bool TeasersEnabled { get; set; }
+
     }
 }
