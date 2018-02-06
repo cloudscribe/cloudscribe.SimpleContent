@@ -9,7 +9,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "SuppressAutoTeaser",
+                name: "SuppressTeaser",
                 table: "cs_Post",
                 nullable: false,
                 defaultValue: false);
@@ -20,7 +20,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<byte>(
-                name: "AutoTeaserMode",
+                name: "TeaserMode",
                 table: "cs_ContentProject",
                 nullable: false,
                 defaultValue: (byte)0);
@@ -30,7 +30,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                 table: "cs_ContentProject",
                 nullable: false,
                 defaultValue: 20)
-                .Annotation("Sqlite:Autoincrement", true);
+                ;
 
             migrationBuilder.AddColumn<byte>(
                 name: "TeaserTruncationMode",
@@ -42,7 +42,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "SuppressAutoTeaser",
+                name: "SuppressTeaser",
                 table: "cs_Post");
 
             migrationBuilder.DropColumn(
@@ -50,7 +50,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                 table: "cs_Post");
 
             migrationBuilder.DropColumn(
-                name: "AutoTeaserMode",
+                name: "TeaserMode",
                 table: "cs_ContentProject");
 
             migrationBuilder.DropColumn(

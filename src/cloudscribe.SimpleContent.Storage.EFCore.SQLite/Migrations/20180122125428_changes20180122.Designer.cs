@@ -29,7 +29,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
                     b.Property<bool>("AddBlogToPagesTree");
 
-                    b.Property<byte>("AutoTeaserMode")
+                    b.Property<byte>("TeaserMode")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue((byte)0);
 
@@ -491,7 +491,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<bool>("SuppressAutoTeaser");
+                    b.Property<bool>("SuppressTeaser");
 
                     b.Property<string>("TeaserOverride");
 

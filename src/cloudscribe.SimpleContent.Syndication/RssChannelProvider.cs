@@ -2,22 +2,21 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2018-02-05
+// Last Modified:           2018-02-06
 // 
 
+using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Services;
+using cloudscribe.Syndication.Models.Rss;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using cloudscribe.SimpleContent.Models;
-using cloudscribe.Syndication.Models.Rss;
-using cloudscribe.SimpleContent.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Syndication
 {
@@ -160,30 +159,14 @@ namespace cloudscribe.SimpleContent.Syndication
                     }
                 }
 
-                //rssItem.Comments
-                //if(project.UseMetaDescriptionInFeed)
-                //{
-                //    rssItem.Description = post.MetaDescription;
-                //}
-                //else
-                //{
-
-                //    //rssItem.Description = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
-                var filteredResult = _contentProcessor.FilterHtmlForRss(post, project, baseUrl);
-                rssItem.Description = filteredResult.FilteredContent;
-                //}
-
-                //rssItem.Enclosures
-
                 var postUrl = await blogService.ResolvePostUrl(post);
-                
-                if(string.IsNullOrEmpty(postUrl))
+
+                if (string.IsNullOrEmpty(postUrl))
                 {
                     //TODO: log 
                     continue;
                 }
 
-                
                 if (postUrl.StartsWith("/"))
                 {
                     //postUrl = urlHelper.Content(postUrl);
@@ -193,6 +176,22 @@ namespace cloudscribe.SimpleContent.Syndication
                         contextAccessor.HttpContext.Request.Host.ToUriComponent(),
                         postUrl);
                 }
+
+                var filteredResult = _contentProcessor.FilterHtmlForRss(post, project, baseUrl);
+                rssItem.Description = filteredResult.FilteredContent;
+                if(!filteredResult.IsFullContent)
+                {
+                    //TODO: localize
+                    var readMore = " <a href='" + postUrl + "'>...read more</a>";
+                    rssItem.Description += readMore;
+                }
+                
+                //rssItem.Enclosures
+
+                
+
+                
+                
 
                 rssItem.Guid = new RssGuid(postUrl,true);
                 rssItem.Link = new Uri(postUrl);
