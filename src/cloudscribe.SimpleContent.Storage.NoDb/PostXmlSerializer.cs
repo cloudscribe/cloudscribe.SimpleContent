@@ -50,7 +50,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                                 new XElement("ispublished", post.IsPublished),
                                 new XElement("isFeatured", post.IsFeatured),
                                 new XElement("teaserOverride", post.TeaserOverride),
-                                new XElement("suppressAutoTeaser", post.SuppressAutoTeaser),
+                                new XElement("suppressAutoTeaser", post.SuppressTeaser),
                                 new XElement("categories", string.Empty),
                                 new XElement("comments", string.Empty)
                             ));
@@ -128,7 +128,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 IsPublished = bool.Parse(ReadValue(doc.Root, "ispublished", "true")),
                 IsFeatured = bool.Parse(ReadValue(doc.Root, "isFeatured", "false")),
                 TeaserOverride = ReadValue(doc.Root, "teaserOverride"),
-                SuppressAutoTeaser = bool.Parse(ReadValue(doc.Root, "suppressAutoTeaser", "false")),
+                SuppressTeaser = bool.Parse(ReadValue(doc.Root, "suppressAutoTeaser", "false")),
             };
 
             LoadCategories(post, doc.Root);

@@ -9,6 +9,8 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.pgsql;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,12 +19,32 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddCloudscribeSimpleContentEFStoragePostgreSql(
             this IServiceCollection services,
-            string connectionString
+            string connectionString,
+            int maxConnectionRetryCount = 0,
+            int maxConnectionRetryDelaySeconds = 30,
+            ICollection<string> transientErrorCodesToAdd = null
             )
         {
+            //services.AddEntityFrameworkNpgsql()
+            //    .AddDbContext<SimpleContentDbContext>(options =>
+            //        options.UseNpgsql(connectionString));
+
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<SimpleContentDbContext>(options =>
-                    options.UseNpgsql(connectionString));
+                    options.UseNpgsql(connectionString,
+                    NpgsqlOptionsAction: sqlOptions =>
+                    {
+                        if (maxConnectionRetryCount > 0)
+                        {
+                            //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                            sqlOptions.EnableRetryOnFailure(
+                                maxRetryCount: maxConnectionRetryCount,
+                                maxRetryDelay: TimeSpan.FromSeconds(maxConnectionRetryDelaySeconds),
+                                errorCodesToAdd: transientErrorCodesToAdd);
+                        }
+
+
+                    }));
 
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 

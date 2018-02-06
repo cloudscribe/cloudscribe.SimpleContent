@@ -66,7 +66,7 @@ namespace cloudscribe.SimpleContent.Models
         /// <summary>
         /// If true, will display an entire blog post on index/listing views regardless of <see cref="TeaserMode"/> settings.
         /// </summary>
-        public bool SuppressAutoTeaser { get; set; }
+        public bool SuppressTeaser { get; set; }
 
         public static Post FromIPost(IPost post)
         {

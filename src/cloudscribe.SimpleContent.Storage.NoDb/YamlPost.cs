@@ -58,7 +58,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 15)]
         public string TeaserOverride { get; set; }
         [YamlMember(Order = 16)]
-        public bool SuppressAutoTeaser { get; set; }
+        public bool SuppressTeaser { get; set; }
 
         [YamlMember(Order = 17)]
         public List<string> Categories { get; set; }

@@ -138,7 +138,8 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         public ContentFilterResult FilterHtmlForRss(IPost post, IProjectSettings settings, string absoluteMediaBaseUrl)
         {
-            var result = FilterHtmlForList(post, settings);
+            bool useTeaser = (settings.TeaserMode == TeaserMode.ListsAndFeed || settings.TeaserMode == TeaserMode.FeedOnly) && !post.SuppressTeaser;
+            var result = FilterHtmlForList(post, settings, useTeaser);
             result.FilteredContent = ConvertUrlsToAbsolute(absoluteMediaBaseUrl, result.FilteredContent);
 
             return result;
@@ -146,15 +147,22 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         public ContentFilterResult FilterHtmlForList(IPost post, IProjectSettings settings)
         {
+            bool useTeaser = (settings.TeaserMode == TeaserMode.ListsAndFeed || settings.TeaserMode == TeaserMode.ListOnly) && !post.SuppressTeaser;
+
+            return FilterHtmlForList(post, settings, useTeaser);
+        }
+
+        private ContentFilterResult FilterHtmlForList(IPost post, IProjectSettings settings, bool useTeaser)
+        {
             var result = new ContentFilterResult();
-            if(settings.AutoTeaserMode == TeaserMode.On && !post.SuppressAutoTeaser)
+            if (useTeaser)
             {
                 TeaserResult teaserResult = null;
                 string teaser = null;
 
                 if (!string.IsNullOrWhiteSpace(post.TeaserOverride))
-                { 
-                    if(post.ContentType == "markdown")
+                {
+                    if (post.ContentType == "markdown")
                     {
                         teaser = MapImageUrlsToCdn(
                             ConvertMarkdownToHtml(post.TeaserOverride),
@@ -167,7 +175,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                         teaser = MapImageUrlsToCdn(
                             post.TeaserOverride,
                             settings.CdnUrl,
-                            settings.LocalMediaVirtualPath); 
+                            settings.LocalMediaVirtualPath);
                     }
 
                     result.FilteredContent = teaser;
@@ -213,7 +221,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     result.IsFullContent = !teaserResult.DidTruncate;
                 }
 
-                
+
             }
             else
             {

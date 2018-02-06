@@ -159,22 +159,22 @@ namespace cloudscribe.SimpleContent.Syndication
                         rssItem.Categories.Add(new RssCategory(c));
                     }
                 }
-                
+
                 //rssItem.Comments
-                if(project.UseMetaDescriptionInFeed)
-                {
-                    rssItem.Description = post.MetaDescription;
-                }
-                else
-                {
-                    
-                    //rssItem.Description = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
-                    var filteredResult = _contentProcessor.FilterHtmlForRss(post, project, baseUrl);
-                    rssItem.Description = filteredResult.FilteredContent;
-                }
-                
+                //if(project.UseMetaDescriptionInFeed)
+                //{
+                //    rssItem.Description = post.MetaDescription;
+                //}
+                //else
+                //{
+
+                //    //rssItem.Description = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, post.Content);
+                var filteredResult = _contentProcessor.FilterHtmlForRss(post, project, baseUrl);
+                rssItem.Description = filteredResult.FilteredContent;
+                //}
+
                 //rssItem.Enclosures
-               
+
                 var postUrl = await blogService.ResolvePostUrl(post);
                 
                 if(string.IsNullOrEmpty(postUrl))

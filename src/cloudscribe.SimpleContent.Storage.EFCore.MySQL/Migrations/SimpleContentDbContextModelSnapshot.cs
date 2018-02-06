@@ -29,10 +29,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<bool>("AddBlogToPagesTree");
 
-                    b.Property<byte>("AutoTeaserMode")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue((byte)0);
-
                     b.Property<bool>("BlogMenuLinksToNewestPost");
 
                     b.Property<string>("BlogPageNavComponentVisibility")
@@ -155,6 +151,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("SmtpUser")
                         .HasMaxLength(500);
 
+                    b.Property<byte>("TeaserMode")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue((byte)0);
+
                     b.Property<int>("TeaserTruncationLength")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(20);
@@ -176,8 +176,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                         .HasMaxLength(100);
 
                     b.Property<bool>("UseDefaultPageAsRootNode");
-
-                    b.Property<bool>("UseMetaDescriptionInFeed");
 
                     b.Property<string>("WebmasterEmail")
                         .HasMaxLength(100);
@@ -491,7 +489,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<bool>("SuppressAutoTeaser");
+                    b.Property<bool>("SuppressTeaser");
 
                     b.Property<string>("TeaserOverride");
 

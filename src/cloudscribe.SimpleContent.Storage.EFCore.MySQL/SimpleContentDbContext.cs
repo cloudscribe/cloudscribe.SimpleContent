@@ -121,9 +121,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 .HasMaxLength(255)
                 ;
 
-                entity.Property(p => p.UseMetaDescriptionInFeed)
-                .IsRequired()
-                ;
+                //entity.Property(p => p.UseMetaDescriptionInFeed)
+                //.IsRequired()
+                //;
 
                 entity.Property(p => p.LanguageCode)
                .HasMaxLength(10)
@@ -215,7 +215,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 .HasDefaultValue("html")
                 ;
 
-                entity.Property(p => p.AutoTeaserMode)
+                entity.Property(p => p.TeaserMode)
                 .HasDefaultValue(TeaserMode.Off);
 
                 entity.Property(p => p.TeaserTruncationMode)

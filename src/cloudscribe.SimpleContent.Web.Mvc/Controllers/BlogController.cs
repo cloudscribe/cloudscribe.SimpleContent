@@ -336,7 +336,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var model = new PostEditViewModel();
             model.ProjectId = projectSettings.Id;
-            model.TeasersEnabled = projectSettings.AutoTeaserMode == TeaserMode.On;
+            model.TeasersEnabled = projectSettings.TeaserMode != TeaserMode.Off;
             
             PostResult postResult = null;
             if (!string.IsNullOrEmpty(slug))
@@ -380,7 +380,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.IsFeatured = postResult.Post.IsFeatured;
                 model.ContentType = postResult.Post.ContentType;
                 model.TeaserOverride = postResult.Post.TeaserOverride;
-                model.SuppressAutoTeaser = postResult.Post.SuppressAutoTeaser;
+                model.SuppressTeaser = postResult.Post.SuppressTeaser;
             }
 
 
@@ -405,7 +405,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], model.Title);
                 }
                 model.ProjectId = project.Id;
-                model.TeasersEnabled = project.AutoTeaserMode == TeaserMode.On;
+                model.TeasersEnabled = project.TeaserMode != TeaserMode.Off;
 
                 return View(model);
             }
@@ -540,7 +540,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             post.ContentType = model.ContentType;
 
             post.TeaserOverride = model.TeaserOverride;
-            post.SuppressAutoTeaser = model.SuppressAutoTeaser;
+            post.SuppressTeaser = model.SuppressTeaser;
 
             if (!string.IsNullOrEmpty(model.PubDate))
             {

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2017-12-22
+// Last Modified:			2018-02-06
 // 
 using System;
 using System.Collections.Generic;
@@ -45,6 +45,6 @@ namespace cloudscribe.SimpleContent.Models
         /// <summary>
         /// If true, will display an entire blog post on index/listing views regardless of <see cref="TeaserMode"/> settings.
         /// </summary>
-        bool SuppressAutoTeaser { get; set; }
+        bool SuppressTeaser { get; set; }
     }
 }

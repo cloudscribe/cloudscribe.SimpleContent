@@ -53,7 +53,7 @@ namespace cloudscribe.SimpleContent.Models
             target.ThumbnailUrl = input.ThumbnailUrl;
             target.IsFeatured = input.IsFeatured;
             target.TeaserOverride = input.TeaserOverride;
-            target.SuppressAutoTeaser = input.SuppressAutoTeaser;
+            target.SuppressTeaser = input.SuppressTeaser;
         }
 
         public static void CopyTo(this IPage input, IPage target)
@@ -139,7 +139,7 @@ namespace cloudscribe.SimpleContent.Models
             target.TwitterCreator = input.TwitterCreator;
             target.TwitterPublisher = input.TwitterPublisher;
             target.UseDefaultPageAsRootNode = input.UseDefaultPageAsRootNode;
-            target.UseMetaDescriptionInFeed = input.UseMetaDescriptionInFeed;
+            //target.UseMetaDescriptionInFeed = input.UseMetaDescriptionInFeed;
             target.WebmasterEmail = input.WebmasterEmail;
             target.Publisher = input.Publisher;
             target.PublisherLogoUrl = input.PublisherLogoUrl;
@@ -149,7 +149,7 @@ namespace cloudscribe.SimpleContent.Models
             target.DisqusShortName = input.DisqusShortName;
             target.ShowRecentPostsOnDefaultPage = input.ShowRecentPostsOnDefaultPage;
             target.ShowFeaturedPostsOnDefaultPage = input.ShowFeaturedPostsOnDefaultPage;
-            target.AutoTeaserMode = input.AutoTeaserMode;
+            target.TeaserMode = input.TeaserMode;
             target.TeaserTruncationMode = input.TeaserTruncationMode;
             target.TeaserTruncationLength = input.TeaserTruncationLength;
         }

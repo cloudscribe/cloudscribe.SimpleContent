@@ -111,7 +111,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         // Teaser.
         public string TeaserOverride { get; set; }
-        public bool SuppressAutoTeaser { get; set; }
+        public bool SuppressTeaser { get; set; }
         
         public static PostEntity FromIPost(IPost post)
         {
@@ -134,7 +134,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             p.ThumbnailUrl = post.ThumbnailUrl;
             p.IsFeatured = post.IsFeatured;
             p.TeaserOverride = post.TeaserOverride;
-            p.SuppressAutoTeaser = post.SuppressAutoTeaser;
+            p.SuppressTeaser = post.SuppressTeaser;
             return p;
         }
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2017-12-22
+// Last Modified:			2018-02-06
 // 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -49,7 +49,7 @@ namespace cloudscribe.SimpleContent.Models
         string TimeZoneId { get; set; }
         string Title { get; set; }
         bool UseDefaultPageAsRootNode { get; set; }
-        bool UseMetaDescriptionInFeed { get; set; }
+        //bool UseMetaDescriptionInFeed { get; set; }
         string WebmasterEmail { get; set; }
         string PublisherLogoWidth { get; set; } 
         string PublisherLogoHeight { get; set; }
@@ -69,7 +69,7 @@ namespace cloudscribe.SimpleContent.Models
         /// Specifies whether SimpleContent should show teasers for blog posts on index/listing views.
         /// The default is OFF (show entire post).
         /// </summary>
-        TeaserMode AutoTeaserMode { get; set; }
+        TeaserMode TeaserMode { get; set; }
         /// <summary>
         /// Specifies how SimpleContent will truncate blog posts to create teasers for index/listing views.
         /// </summary>
