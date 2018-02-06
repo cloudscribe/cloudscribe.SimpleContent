@@ -64,7 +64,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     TwitterCreator = table.Column<string>(maxLength: 100, nullable: true),
                     TwitterPublisher = table.Column<string>(maxLength: 100, nullable: true),
                     UseDefaultPageAsRootNode = table.Column<bool>(nullable: false),
-                    UseMetaDescriptionInFeed = table.Column<bool>(nullable: false),
+                    //UseMetaDescriptionInFeed = table.Column<bool>(nullable: false),
                     WebmasterEmail = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>

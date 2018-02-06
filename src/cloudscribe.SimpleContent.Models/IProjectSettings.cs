@@ -1,4 +1,10 @@
-﻿namespace cloudscribe.SimpleContent.Models
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Author:					Joe Audette
+// Created:					
+// Last Modified:			2018-02-06
+// 
+namespace cloudscribe.SimpleContent.Models
 {
     public interface IProjectSettings
     {
@@ -43,7 +49,7 @@
         string TimeZoneId { get; set; }
         string Title { get; set; }
         bool UseDefaultPageAsRootNode { get; set; }
-        bool UseMetaDescriptionInFeed { get; set; }
+        //bool UseMetaDescriptionInFeed { get; set; }
         string WebmasterEmail { get; set; }
         string PublisherLogoWidth { get; set; } 
         string PublisherLogoHeight { get; set; }
@@ -58,5 +64,19 @@
         string TwitterCreator { get; set; }
         string DefaultContentType { get; set; }
 
+        // Teaser properties.
+        /// <summary>
+        /// Specifies whether SimpleContent should show teasers for blog posts on index/listing views.
+        /// The default is OFF (show entire post).
+        /// </summary>
+        TeaserMode TeaserMode { get; set; }
+        /// <summary>
+        /// Specifies how SimpleContent will truncate blog posts to create teasers for index/listing views.
+        /// </summary>
+        TeaserTruncationMode TeaserTruncationMode { get; set; }
+        /// <summary>
+        /// Specifies the length in characters/words/paragraphs that a post will be truncated to create a teaser for index/listing views.
+        /// </summary>
+        int TeaserTruncationLength { get; set; }
     }
 }

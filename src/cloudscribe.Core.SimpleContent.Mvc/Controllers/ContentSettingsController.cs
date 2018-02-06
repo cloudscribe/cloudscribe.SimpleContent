@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2017-11-19
+// Last Modified:			2018-02-06
 // 
 
 using cloudscribe.Core.Models;
@@ -63,7 +63,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.RemoteFeedUrl = projectSettings.RemoteFeedUrl;
             model.ShowTitle = projectSettings.ShowTitle;
             model.Title = projectSettings.Title; //aka Blog Page Title
-            model.UseMetaDescriptionInFeed = projectSettings.UseMetaDescriptionInFeed;
+            //model.UseMetaDescriptionInFeed = projectSettings.UseMetaDescriptionInFeed;
             model.WebmasterEmail = projectSettings.WebmasterEmail;
             model.Publisher = projectSettings.Publisher;
             model.PublisherLogoUrl = projectSettings.PublisherLogoUrl;
@@ -83,12 +83,17 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.BlogPageText = projectSettings.BlogPageText;
             model.BlogPageNavComponentVisibility = projectSettings.BlogPageNavComponentVisibility;
             model.LocalMediaVirtualPath = projectSettings.LocalMediaVirtualPath;
+            model.CdnUrl = projectSettings.CdnUrl;
 
             model.FacebookAppId = projectSettings.FacebookAppId;
             model.SiteName = projectSettings.SiteName;
             model.TwitterCreator = projectSettings.TwitterCreator;
             model.TwitterPublisher = projectSettings.TwitterPublisher;
             model.DefaultContentType = projectSettings.DefaultContentType;
+
+            model.TeaserMode = projectSettings.TeaserMode;
+            model.TeaserTruncationMode = projectSettings.TeaserTruncationMode;
+            model.TeaserTruncationLength = projectSettings.TeaserTruncationLength;
 
             bool canManageUsers = false;
             try
@@ -166,7 +171,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.RemoteFeedUrl = model.RemoteFeedUrl;
             projectSettings.ShowTitle = model.ShowTitle;
             projectSettings.Title = model.Title;
-            projectSettings.UseMetaDescriptionInFeed = model.UseMetaDescriptionInFeed;
+            //projectSettings.UseMetaDescriptionInFeed = model.UseMetaDescriptionInFeed;
             projectSettings.WebmasterEmail = model.WebmasterEmail;
             projectSettings.Publisher = model.Publisher;
             projectSettings.PublisherLogoUrl = model.PublisherLogoUrl;
@@ -193,12 +198,17 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.BlogPageText = model.BlogPageText;
             projectSettings.BlogPageNavComponentVisibility = model.BlogPageNavComponentVisibility;
             projectSettings.LocalMediaVirtualPath = model.LocalMediaVirtualPath;
+            projectSettings.CdnUrl = model.CdnUrl;
 
             projectSettings.FacebookAppId = model.FacebookAppId;
             projectSettings.SiteName = model.SiteName;
             projectSettings.TwitterPublisher = model.TwitterPublisher;
             projectSettings.TwitterCreator = model.TwitterCreator;
             projectSettings.DefaultContentType = model.DefaultContentType;
+
+            projectSettings.TeaserMode = model.TeaserMode;
+            projectSettings.TeaserTruncationLength = model.TeaserTruncationLength;
+            projectSettings.TeaserTruncationMode = model.TeaserTruncationMode;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

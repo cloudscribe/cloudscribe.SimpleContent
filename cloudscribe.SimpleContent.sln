@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5243DE57-7C89-4208-8876-405E13605D16}"
 EndProject
@@ -37,7 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sourceDev.WebApp", "src\sourceDev.WebApp\sourceDev.WebApp.csproj", "{8479648C-E355-4850-B670-764F65C4F3D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.SimpleContent.Storage.EFCore.SQLite", "src\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj", "{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.Storage.EFCore.SQLite", "src\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj", "{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E9B2D007-5701-4DEB-AC64-A435D71AA05F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.Web.Tests", "test\cloudscribe.SimpleContent.Web.Tests\cloudscribe.SimpleContent.Web.Tests.csproj", "{16735222-D50E-4535-A9BD-85EE05AA5308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +113,10 @@ Global
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16735222-D50E-4535-A9BD-85EE05AA5308}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16735222-D50E-4535-A9BD-85EE05AA5308}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16735222-D50E-4535-A9BD-85EE05AA5308}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16735222-D50E-4535-A9BD-85EE05AA5308}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,6 +138,7 @@ Global
 		{4D0F696B-5DA7-47A4-84DC-9422FCBF2DE2} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{8479648C-E355-4850-B670-764F65C4F3D5} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9} = {5243DE57-7C89-4208-8876-405E13605D16}
+		{16735222-D50E-4535-A9BD-85EE05AA5308} = {E9B2D007-5701-4DEB-AC64-A435D71AA05F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADB1ABEA-D5DB-4F22-BEA1-26E93BFF1BDD}

@@ -1,17 +1,20 @@
 ﻿@using cloudscribe.SimpleContent.Web
 @using cloudscribe.Web.Pagination
+@using Microsoft.Extensions.Localization
 @addTagHelper "*, cloudscribe.Web.Pagination"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
+@inject IStringLocalizer<SimpleContent> sr
+
 @{
     var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
 }
 @section Meta {
-<meta name="robots" content="noindex, follow" />
+    <meta name="robots" content="noindex, follow" />
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
 }
 @section Styles {
-@{await Html.RenderPartialAsync("BlogStylePartial", Model); }
+    @{await Html.RenderPartialAsync("BlogStylePartial", Model); }
 }
 @section Toolbar {
     @if (Model.CanEdit)
@@ -24,9 +27,9 @@
     {
         await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
     }
-    <div itemscope itemtype="http://schema.org/Blog" class="row blogroot"> 
+    <div itemscope itemtype="http://schema.org/Blog" class="row blogroot">
         <main class="col-md-9">
-            @{await Html.RenderPartialAsync("PostListPartial", Model); }  
+            @{await Html.RenderPartialAsync("PostListPartial", Model); }
             <nav>
                 <cs-pager cs-paging-info="@Model.Paging"
                           cs-pager-ul-class="pager"
@@ -35,10 +38,9 @@
                           cs-show-numbered="false"
                           cs-use-reverse-increment="true"
                           cs-suppress-empty-nextprev="true"
-                          cs-previous-page-text="< Older"
-                          cs-next-page-text="Newer >"
-                          asp-controller="Blog"
-                          asp-action="@Model.ListAction"
+                          cs-previous-page-text='@sr["< Older"]'
+                          cs-next-page-text='@sr["Newer >"]'
+                          asp-route="@Model.ListRouteName"
                           asp-route-category="@Model.CurrentCategory"></cs-pager>
             </nav>
         </main>
@@ -52,9 +54,9 @@
 @section Bottom {
 }
 @section Scripts {
-@if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
-{
-    <script id="dsq-count-scr" src="@disqusCommentCountScriptPath" async></script>
-}
-@{await Html.RenderPartialAsync("BlogScriptsPartial", Model); }
+    @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+    {
+        <script id="dsq-count-scr" src="@disqusCommentCountScriptPath" async></script>
+    }
+    @{await Html.RenderPartialAsync("BlogScriptsPartial", Model); }
 }
