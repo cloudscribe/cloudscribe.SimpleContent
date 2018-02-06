@@ -27,7 +27,8 @@ namespace cloudscribe.SimpleContent.Services
             IPostQueries postQueries,
             IPostCommands postCommands,
             IMediaProcessor mediaProcessor,
-            IHtmlProcessor htmlProcessor,
+            IContentProcessor contentProcessor,
+            //IHtmlProcessor htmlProcessor,
             IBlogRoutes blogRoutes,
             PostEvents eventHandlers,
             IUrlHelperFactory urlHelperFactory,
@@ -42,7 +43,8 @@ namespace cloudscribe.SimpleContent.Services
             this.urlHelperFactory = urlHelperFactory;
             this.actionContextAccesor = actionContextAccesor;
             this.projectService = projectService;
-            this.htmlProcessor = htmlProcessor;
+            //this.htmlProcessor = htmlProcessor;
+            _contentProcessor = contentProcessor;
             this.blogRoutes = blogRoutes;
             this.eventHandlers = eventHandlers;
         }
@@ -57,7 +59,8 @@ namespace cloudscribe.SimpleContent.Services
         private IPostCommands postCommands;
         private IMediaProcessor mediaProcessor;
         private IProjectSettings settings = null;
-        private IHtmlProcessor htmlProcessor;
+        private IContentProcessor _contentProcessor;
+        //private IHtmlProcessor htmlProcessor;
         private IBlogRoutes blogRoutes;
         private PostEvents eventHandlers;
 
@@ -218,12 +221,12 @@ namespace cloudscribe.SimpleContent.Services
             // open live writer passes in posts with absolute urls
             // we want to change them to relative to keep the files portable
             // to a different root url
-            post.Content = await htmlProcessor.ConvertMediaUrlsToRelative(
+            post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 post.Content);
             // olw also adds hard coded style to images
-            post.Content = htmlProcessor.RemoveImageStyleAttribute(post.Content);
+            post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
 
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)
@@ -266,12 +269,12 @@ namespace cloudscribe.SimpleContent.Services
             // open live writer passes in posts with absolute urls
             // we want to change them to relative to keep the files portable
             // to a different root url
-            post.Content = await htmlProcessor.ConvertMediaUrlsToRelative(
+            post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
                 settings.LocalMediaVirtualPath,
                 imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
                 post.Content);
             // olw also adds hard coded style to images
-            post.Content = htmlProcessor.RemoveImageStyleAttribute(post.Content);
+            post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
             
             var nonPublishedDate = new DateTime(1, 1, 1);
             if (post.PubDate == nonPublishedDate)

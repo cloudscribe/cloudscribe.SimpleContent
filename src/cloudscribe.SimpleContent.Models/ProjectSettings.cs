@@ -2,9 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-11-18
+// Last Modified:           2017-12-22
 // 
-
 namespace cloudscribe.SimpleContent.Models
 {
 
@@ -76,7 +75,7 @@ namespace cloudscribe.SimpleContent.Models
         /// default is false, set to true if you want to use the metadescription instead of the full 
         /// post content in the feed.
         /// </summary>
-        public bool UseMetaDescriptionInFeed { get; set; } = false;
+        //public bool UseMetaDescriptionInFeed { get; set; } = false;
         public int ChannelTimeToLive { get; set; } = 60;
         public string LanguageCode { get; set; } = "en-US";
         public string ChannelCategoriesCsv { get; set; } = string.Empty;
@@ -113,6 +112,10 @@ namespace cloudscribe.SimpleContent.Models
         public string TwitterCreator { get; set; }
 
         public string DefaultContentType { get; set; } = "html";
+
+        public TeaserMode TeaserMode { get; set; }
+        public TeaserTruncationMode TeaserTruncationMode { get; set; }
+        public int TeaserTruncationLength { get; set; } = 20;   // Default 20 words.
 
         public static ProjectSettings FromIProjectSettings(IProjectSettings project)
         {

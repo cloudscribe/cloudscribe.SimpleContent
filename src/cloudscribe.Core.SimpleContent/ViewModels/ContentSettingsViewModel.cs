@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2017-11-19
+// Last Modified:			2017-12-22
 // 
 
 using cloudscribe.Core.Models;
+using cloudscribe.SimpleContent.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -33,7 +34,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public bool IncludePubDateInPostUrls { get; set; } = true;
         
         public string LocalMediaVirtualPath { get; set; } = "/media/images/";
-        
+        public string CdnUrl { get; set; }
+
         public int DaysToComment { get; set; } = -1;
         public bool ModerateComments { get; set; } = true;
 
@@ -68,7 +70,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         /// ie Feedburner User Agent fragment "FeedBurner"
         /// </summary>
         public string RemoteFeedProcessorUseAgentFragment { get; set; } = "FeedBurner";
-        public bool UseMetaDescriptionInFeed { get; set; } = false;
+       // public bool UseMetaDescriptionInFeed { get; set; } = false;
         public int ChannelTimeToLive { get; set; } = 60;
         public string LanguageCode { get; set; } = "en-US";
         public string ChannelCategoriesCsv { get; set; } = string.Empty;
@@ -109,6 +111,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         [StringLength(100, ErrorMessage = "TwitterCreator has a maximum length of 100 characters")]
         public string TwitterCreator { get; set; }
 
-
+        public TeaserMode TeaserMode { get; set; }
+        public TeaserTruncationMode TeaserTruncationMode { get; set; }
+        public int TeaserTruncationLength { get; set; } = 20;   // Default 20 words.
     }
 }

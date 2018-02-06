@@ -56,14 +56,20 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public bool IsFeatured { get; set; }
 
         [YamlMember(Order = 15)]
+        public string TeaserOverride { get; set; }
+        [YamlMember(Order = 16)]
+        public bool SuppressTeaser { get; set; }
+
+        [YamlMember(Order = 17)]
         public List<string> Categories { get; set; }
 
-        [YamlMember(Order = 16, Alias = "Comments")]
+        [YamlMember(Order = 18, Alias = "Comments")]
         public List<Comment> TheComments { get; set; }
 
         
 
-        
+
+
 
         [YamlIgnore]
         public List<IComment> Comments { get; set; }
@@ -74,8 +80,5 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         // not currently used but could be later
         public string ImageUrl { get; set; }
         public string ThumbnailUrl { get; set; }
-
-        
-
     }
 }

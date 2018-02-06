@@ -2,9 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2017-03-02
-// Last Modified:           2017-06-09
+// Last Modified:           2017-12-22
 // 
 
+using cloudscribe.SimpleContent.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
@@ -48,6 +49,11 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string ContentType { get; set; } = "html";
 
+        public string TeaserOverride { get; set; }
+
+        public bool SuppressTeaser { get; set; }
+
+        public bool TeasersEnabled { get; set; }
 
     }
 }

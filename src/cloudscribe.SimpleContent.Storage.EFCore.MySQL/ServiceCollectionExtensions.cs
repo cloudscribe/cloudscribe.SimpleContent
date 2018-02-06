@@ -2,13 +2,15 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2017-08-03
+// Last Modified:			2018-02-06
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.MySQL;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,12 +19,34 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddCloudscribeSimpleContentEFStorageMySQL(
             this IServiceCollection services,
-            string connectionString
+            string connectionString,
+            int maxConnectionRetryCount = 0,
+            int maxConnectionRetryDelaySeconds = 30,
+            ICollection<int> transientSqlErrorNumbersToAdd = null
             )
         {
+            //services.AddEntityFrameworkMySql()
+            //    .AddDbContext<SimpleContentDbContext>(optionsBuilder =>
+            //        optionsBuilder.UseMySql(connectionString)
+            //        );
+
             services.AddEntityFrameworkMySql()
-                .AddDbContext<SimpleContentDbContext>(options =>
-                    options.UseMySql(connectionString));
+                .AddDbContext<SimpleContentDbContext>(optionsBuilder =>
+                    optionsBuilder.UseMySql(connectionString,
+                    mySqlOptionsAction: sqlOptions =>
+                    {
+                        if (maxConnectionRetryCount > 0)
+                        {
+                            //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                            sqlOptions.EnableRetryOnFailure(
+                                maxRetryCount: maxConnectionRetryCount,
+                                maxRetryDelay: TimeSpan.FromSeconds(maxConnectionRetryDelaySeconds),
+                                errorNumbersToAdd: transientSqlErrorNumbersToAdd);
+                        }
+
+
+                    }));
+                 
 
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 
