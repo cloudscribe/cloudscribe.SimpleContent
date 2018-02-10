@@ -67,6 +67,10 @@ namespace sourceDev.WebApp
             services.Configure<List<ProjectSettings>>(Configuration.GetSection("ContentProjects"));
 
             services.AddCloudscribeCoreIntegrationForSimpleContent(Configuration);
+
+            // for testing that teasers can be disabled
+            //services.AddScoped<ITeaserService, cloudscribe.SimpleContent.Web.Services.TeaserServiceDisabled>();
+
             services.AddSimpleContentMvc(Configuration);
 
             services.AddMetaWeblogForSimpleContent(Configuration.GetSection("MetaWeblogApiOptions"));

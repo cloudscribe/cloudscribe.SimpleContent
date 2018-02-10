@@ -2,12 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2018-02-06
+// Last Modified:			2018-02-10
 // 
 
 using cloudscribe.Core.Models;
 using cloudscribe.Core.SimpleContent.Integration.ViewModels;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             IProjectService projectService,
             IAuthorizationService authorizationService,
             IUserQueries userQueries,
+            ITeaserService teaserService,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer
             )
         {
@@ -31,11 +33,16 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             this.authorizationService = authorizationService;
             this.userQueries = userQueries;
             sr = localizer;
+            if(teaserService is TeaserServiceDisabled)
+            {
+                _teasersDisabled = true;
+            }
         }
 
         private IProjectService projectService;
         private IAuthorizationService authorizationService;
         private IUserQueries userQueries;
+        private bool _teasersDisabled = false;
         private IStringLocalizer sr;
 
         // GET: /ContentSettings
@@ -91,6 +98,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.TwitterPublisher = projectSettings.TwitterPublisher;
             model.DefaultContentType = projectSettings.DefaultContentType;
 
+            model.TeasersDisabled = _teasersDisabled;
             model.TeaserMode = projectSettings.TeaserMode;
             model.TeaserTruncationMode = projectSettings.TeaserTruncationMode;
             model.TeaserTruncationLength = projectSettings.TeaserTruncationLength;
@@ -150,6 +158,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 
             if (!ModelState.IsValid)
             {
+                model.TeasersDisabled = _teasersDisabled;
                 return View(model);
             }
             

@@ -14,17 +14,14 @@ namespace cloudscribe.SimpleContent.Web.Services
     public class ContentProcessor : IContentProcessor
     {
         public ContentProcessor(
-            //IHtmlProcessor htmlProcessor,
             ITeaserService teaserService,
             IMarkdownProcessor markdownProcessor
             )
         {
-            //_htmlProcessor = htmlProcessor;
             _markdownProcessor = markdownProcessor;
             _teaserService = teaserService;
         }
 
-        //private IHtmlProcessor _htmlProcessor;
         private IMarkdownProcessor _markdownProcessor;
         private ITeaserService _teaserService;
         private MarkdownPipeline _mdPipeline = null;
