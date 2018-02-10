@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <VersionPrefix>2.0.7</VersionPrefix>
-    <AssemblyVersion>2.0.7</AssemblyVersion>
+    <VersionPrefix>2.0.8</VersionPrefix>
+    <AssemblyVersion>2.0.8</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>

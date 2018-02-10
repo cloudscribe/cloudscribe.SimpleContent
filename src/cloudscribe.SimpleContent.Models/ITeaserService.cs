@@ -1,6 +1,4 @@
-﻿using cloudscribe.SimpleContent.Models;
-
-namespace cloudscribe.SimpleContent.Web.Services
+﻿namespace cloudscribe.SimpleContent.Models
 {
     /// <summary>
     /// Service which extracts abbreviated "teaser" text from html content for display on index/listing views.
