@@ -1,5 +1,5 @@
 ﻿// Author: Joe Audette
-// Version: 2017-04-24
+// Version: 2018-02-12
 $(function () {
 
     String.format = function () {
@@ -108,13 +108,17 @@ $(function () {
                 e.preventDefault();
                 var node = pageTree.ui.treeDiv.tree('getNodeById', pageTree.ui.selectedPageInput.val());
                 var prompt = String.format(pageTree.ui.sortChildrenAlphaPagePromptFormat, node.name);
-                if (confirm(prompt)) {
+                $("#confirmModalBody").html(prompt);
+                $("#mdlConfirm").modal('show');
+
+                var sorter = function () {
+                    $("#mdlConfirm").modal('hide');
                     var objSort = {};
                     objSort['pageId'] = node.id;
                     $.ajax({
                         type: "POST",
                         url: pageTree.urls.sortUrl,
-                        headers: {'X-XSRF-TOKEN': pageTree.xsrfToken },
+                        headers: { 'X-XSRF-TOKEN': pageTree.xsrfToken },
                         async: false,
                         processData: true,
                         dataType: "json",
@@ -125,33 +129,35 @@ $(function () {
                             } else {
                                 alert(data.message);
                             }
-                        }, 
+                        },
                         complete: function (jqXHR, textStatus) {
 
-                        },  
+                        },
                         error: function (jqXHR, textStatus, errorThrown) {
                             alert(errorThrown);
                         }
-                    });  
-                }  
+                    });
+                };
+                $('#btnConfirm').off('click').on('click', sorter);     
+                
             }); // end sortbutton click
 
             pageTree.ui.deleteButton.click(function (e) {
                 e.preventDefault();
                 var node = pageTree.ui.treeDiv.tree('getNodeById', pageTree.ui.selectedPageInput.val());
                 var doDelete = false;
+                var prompt;
                 if (node.childcount > 0) {
-                    var msg = String.format(pageTree.ui.deletePageWithChildrenPromptFormat, node.name, node.name);
-                    if (confirm(msg)) {
-                        doDelete = true;
-                    }
+                    prompt = String.format(pageTree.ui.deletePageWithChildrenPromptFormat, node.name, node.name);
                 } else {
-                    var prompt = String.format(pageTree.ui.deletePagePromptFormat, node.name);
-                    if (confirm(prompt)) {
-                        doDelete = true;
-                    }
+                    prompt = String.format(pageTree.ui.deletePagePromptFormat, node.name);
                 }
-                if (doDelete) {
+
+                $("#confirmDeleteModalBody").html(prompt);
+                $("#mdlDelete").modal('show');
+                
+                var deleter = function () {
+                    $("#mdlDelete").modal('hide');
                     var objDel = {};
                     objDel['id'] = node.id;
                     $.ajax({
@@ -176,7 +182,10 @@ $(function () {
                             alert(textStatus);
                         }
                     });
-                }
+                };
+
+                $('#btnConfirmDelete').off('click').on('click', deleter);     
+
             }); // end delete click
 
             pageTree.ui.treeDiv.tree({
@@ -224,12 +233,17 @@ $(function () {
                 function (event) {
                     event.preventDefault();
                     var prompt = String.format(pageTree.ui.movePagePromptFormat, event.move_info.moved_node.name, event.move_info.position, event.move_info.target_node.name);
-                    if (confirm(prompt)) {
-                        // if did move it on the server
+                    $("#confirmModalBody").html(prompt);
+                    $("#mdlConfirm").modal('show');
+                    var mover = function () {
+                        $("#mdlConfirm").modal('hide');
                         if (pageTree.moveNode(event.move_info.moved_node, event.move_info.target_node, event.move_info.previous_parent, event.move_info.position)) {
                             event.move_info.do_move(); // this moves it in the ui
                         }
+                        return false;
                     }
+
+                    $('#btnConfirm').off('click').on('click', mover);   
                 }
             );
             pageTree.ui.treeDiv.bind(

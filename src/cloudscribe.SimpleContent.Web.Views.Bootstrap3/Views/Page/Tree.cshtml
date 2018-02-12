@@ -42,6 +42,40 @@
     </ul>
 </div>
     <input id="hdnSelPage" type="hidden" value="-1" />
+    <div id="mdlConfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmHeading">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmHeading">@sr["Confirm"]</h4>
+                </div>
+                <div id="confirmModalBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@sr["Cancel"]</button>
+                    <button id="btnConfirm" type="button" class="btn btn-success btn-ok">@sr["Confirm"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mdlDelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteHeading">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmDeleteHeading">@sr["Confirm Delete"]</h4>
+                </div>
+                <div id="confirmDeleteModalBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@sr["Cancel"]</button>
+                    <button id="btnConfirmDelete" type="button" class="btn btn-danger btn-ok">@sr["Delete"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @* This form is just to get an antiforgery token on the page that is used from js when making posts to server*@
     <form asp-controller="Page" asp-action="Move"></form>
     <span id="config"
