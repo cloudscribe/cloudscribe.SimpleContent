@@ -41,6 +41,7 @@
   
   <ItemGroup>
     <PackageReference Include="cloudscribe.Core.Web.Mvc" Version="2.1.*" />
+    <PackageReference Include="cloudscribe.Core.Web.Views.Bootstrap3" Version="2.1.*" />
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="2.0.*" />
