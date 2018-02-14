@@ -11,6 +11,7 @@ using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -192,7 +193,10 @@ namespace cloudscribe.SimpleContent.Services
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
                 // filter node from view unless user has edit permissions
-                if (!page.IsPublished ) { node.CustomData = project.Id; }
+                if (!page.IsPublished || page.PubDate > DateTime.UtcNow )
+                {
+                    node.CustomData = project.Id;
+                }
 
                 var treeNode = treeRoot.AddChild(node);
                 await AddChildNodes(treeNode, project, folderPrefix).ConfigureAwait(false);
@@ -221,11 +225,14 @@ namespace cloudscribe.SimpleContent.Services
                 node.ViewRoles = page.ViewRoles;
                 node.ComponentVisibility = page.MenuFilters;
                 SetUrl(node, page, folderPrefix, urlHelper);
-                
+
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
                 // filter node from view unless user has edit permissions
-                if (!page.IsPublished) { node.CustomData = project.Id; }
+                if (!page.IsPublished || page.PubDate > DateTime.UtcNow)
+                {
+                    node.CustomData = project.Id;
+                }
 
                 var childNode = treeNode.AddChild(node);
                 await AddChildNodes(childNode, project, folderPrefix).ConfigureAwait(false); //recurse
