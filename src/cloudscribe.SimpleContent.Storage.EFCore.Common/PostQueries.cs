@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-10-05
+// Last Modified:			2018-02-19
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -41,10 +41,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            var currentTime = DateTime.UtcNow;
             var query = dbContext.Posts
                 .Where(p =>
                     p.BlogId == blogId
-                    &&  (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
+                    &&  (includeUnpublished || (p.IsPublished == true && p.PubDate <= currentTime))
                       )
                       .OrderByDescending(p => p.PubDate);
 
@@ -76,8 +77,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .Include(p => p.PostComments)
                 .Where(x =>
                 x.BlogId == blogId
-                && (includeUnpublished || (x.IsPublished && x.PubDate <= currentTime))
-                && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category)) // will this work?
+                && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
+                && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category)) 
                 )
                 .OrderByDescending(x => x.PubDate)
                 ;
@@ -109,14 +110,32 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var currentTime = DateTime.UtcNow;
 
-            var count = await dbContext.Posts
-                .CountAsync(x =>
+            if(includeUnpublished)
+            {
+                return await dbContext.Posts
+                .CountAsync<PostEntity>(x =>
                 x.BlogId == blogId
-                && (includeUnpublished || (x.IsPublished && x.PubDate <= currentTime))
-                && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category)) // will this work?
+                && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category))
                 );
+            }
+            else
+            {
+                return await dbContext.Posts
+                .CountAsync<PostEntity>(x =>
+                x.BlogId == blogId
+                && (x.IsPublished == true && x.PubDate <= currentTime)
+                && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category))
+                );
+            }
+
+            //var count = await dbContext.Posts
+            //    .CountAsync(x =>
+            //    x.BlogId == blogId
+            //    && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
+            //    && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category)) 
+            //    );
             
-            return count;
+            //return count;
         }
 
         public async Task<List<IPost>> GetRecentPosts(
@@ -127,12 +146,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         {
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
+            var currentTime = DateTime.UtcNow;
             
             var query = dbContext.Posts
                // .Include(p => p.Comments) //think this is only used to populate a list in OLW so don't need the comments
                 .Where(p =>
-                p.IsPublished
-                && p.PubDate <= DateTime.UtcNow)
+                p.IsPublished == true
+                && p.PubDate <= currentTime)
                 .OrderByDescending(p => p.PubDate)
                 ;
 
@@ -153,11 +173,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
+            var currentTime = DateTime.UtcNow;
             var query = dbContext.Posts
                 .Where(p =>
                 p.IsPublished
                 && p.IsFeatured
-                && p.PubDate <= DateTime.UtcNow)
+                && p.PubDate <= currentTime)
                 .OrderByDescending(p => p.PubDate)
                 ;
 
@@ -184,6 +205,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             cancellationToken.ThrowIfCancellationRequested();
             
             IQueryable<PostEntity> query;
+            var currentTime = DateTime.UtcNow;
             
             if (day > 0 && month > 0)
             {
@@ -193,8 +215,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && x.PubDate.Day == day
-                && (includeUnpublished || (x.IsPublished
-                && x.PubDate <= DateTime.UtcNow))
+                && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
                 )
                 .OrderByDescending(p => p.PubDate)
                 ;
@@ -206,8 +227,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     .Where(
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
-                && (includeUnpublished || (x.IsPublished
-                && x.PubDate <= DateTime.UtcNow))
+                && (includeUnpublished || (x.IsPublished == true  && x.PubDate <= currentTime))
                 )
                 .OrderByDescending(p => p.PubDate)
                 ;
@@ -251,6 +271,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             cancellationToken.ThrowIfCancellationRequested();
 
             IQueryable<PostEntity> query;
+            var currentTime = DateTime.UtcNow;
 
             if (day > 0 && month > 0)
             {
@@ -258,8 +279,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && x.PubDate.Day == day
-                && (includeUnpublished || (x.IsPublished
-                && x.PubDate <= DateTime.UtcNow))
+                && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
                 )
                 ;
             }
@@ -268,8 +288,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 query = dbContext.Posts.Where(
                 x => x.PubDate.Year == year
                 && x.PubDate.Month == month
-                && (includeUnpublished || (x.IsPublished
-                && x.PubDate <= DateTime.UtcNow))
+                && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
                 )
                 ;
 
@@ -403,22 +422,52 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var result = new Dictionary<string, int>();
 
-            var query = from x in dbContext.PostCategories
-                        join y in dbContext.Posts
-                        on x.PostEntityId equals y.Id
-                        where (
+            var currentTime = DateTime.UtcNow;
+
+            var posts = await dbContext.Posts
+                .AsNoTracking()
+                .Where(x =>
+                    (x.BlogId.Equals(blogId))
+                    //&& (includeUnpublished || (x.IsPublished == true && x.PubDate <= DateTime.UtcNow))
+                    )
+                            
+                    .ToListAsync(cancellationToken);
+
+            var categories = await dbContext.PostCategories
+                .AsNoTracking()
+                .Where(x =>
+                    (x.ProjectId.Equals(blogId))
+                            
+                    )
+                            
+                    .ToListAsync(cancellationToken);
+
+            //var query = from x in dbContext.PostCategories
+            //            join y in dbContext.Posts
+            //            on x.PostEntityId equals y.Id
+            //            where (
+            //                (x.ProjectId.Equals(blogId))
+            //                && (includeUnpublished || (y.IsPublished && y.PubDate <= DateTime.UtcNow))
+            //                )
+            //            select x
+            //            ;
+
+            //var list = await query
+            //    .AsNoTracking()
+            //   .ToListAsync(cancellationToken)
+            //   .ConfigureAwait(false);
+
+            var list = from y in posts
+                        join x in categories
+                        on y.Id equals x.PostEntityId
+                       where (
                             (x.ProjectId.Equals(blogId))
-                            && (includeUnpublished || (y.IsPublished && y.PubDate <= DateTime.UtcNow))
+                            && (includeUnpublished || (y.IsPublished && y.PubDate <= currentTime))
                             )
-                        select x
+                       select x
                         ;
 
-            var list = await query
-                .AsNoTracking()
-               .ToListAsync(cancellationToken)
-               .ConfigureAwait(false);
 
-            
             var grouped = from x in list
                         group x by  x.Value
                         into grp
@@ -449,9 +498,25 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
+            var currentTime = DateTime.UtcNow;
+
             var result = new Dictionary<string, int>();
-            
-            var query = from p in dbContext.Posts
+
+            var query = dbContext.Posts
+                        .Where(x =>
+                            (x.BlogId.Equals(blogId))
+                            && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
+                            )
+                        ;
+
+            var list = await query
+                .AsNoTracking()
+               .ToListAsync(cancellationToken)
+               .ConfigureAwait(false);
+
+
+
+            var grouped = from p in list
                           group p by new { month = p.PubDate.Month, year = p.PubDate.Year } into d
                           select new
                           {
@@ -460,7 +525,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                               count = d.Count()
                           };
 
-            var grouped = await query.ToListAsync().ConfigureAwait(false);
+            //var grouped = query2.ToList();
 
             foreach (var item in grouped)
             {
