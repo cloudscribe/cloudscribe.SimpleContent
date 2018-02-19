@@ -12,9 +12,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             //    name: "AutoTeaserMode",
             //    table: "cs_ContentProject");
 
-            migrationBuilder.DropColumn(
-                name: "UseMetaDescriptionInFeed",
-                table: "cs_ContentProject");
+            // https://docs.microsoft.com/en-us/ef/core/providers/sqlite/limitations
+
+            //migrationBuilder.DropColumn(
+            //    name: "UseMetaDescriptionInFeed",
+            //    table: "cs_ContentProject");
 
             //migrationBuilder.RenameColumn(
             //    name: "SuppressAutoTeaser",
@@ -84,11 +86,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             //    defaultValue: (byte)0)
             //    ;
 
-            migrationBuilder.AddColumn<bool>(
-                name: "UseMetaDescriptionInFeed",
-                table: "cs_ContentProject",
-                nullable: false,
-                defaultValue: false);
+            //migrationBuilder.AddColumn<bool>(
+            //    name: "UseMetaDescriptionInFeed",
+            //    table: "cs_ContentProject",
+            //    nullable: false,
+            //    defaultValue: false);
         }
     }
 }
