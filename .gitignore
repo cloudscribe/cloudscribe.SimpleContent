@@ -227,3 +227,4 @@ src/sourceDev.WebApp/appsettings.Development.json
 src/sourceDev.WebApp/nodb_storage/projects/**/userlocation/**
 
 src/sourceDev.WebApp/cloudscribe-dev.db
+src/sourceDev.WebApp/cloudscribe4-dev.db

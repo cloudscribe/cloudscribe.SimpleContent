@@ -177,7 +177,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
                     b.Property<bool>("UseDefaultPageAsRootNode");
 
-                    b.Property<bool>("UseMetaDescriptionInFeed");
+                   // b.Property<bool>("UseMetaDescriptionInFeed");
 
                     b.Property<string>("WebmasterEmail")
                         .HasMaxLength(100);

@@ -41,25 +41,27 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "SuppressTeaser",
-                table: "cs_Post");
+            //https://docs.microsoft.com/en-us/ef/core/providers/sqlite/limitations
 
-            migrationBuilder.DropColumn(
-                name: "TeaserOverride",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "SuppressTeaser",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "TeaserMode",
-                table: "cs_ContentProject");
+            //migrationBuilder.DropColumn(
+            //    name: "TeaserOverride",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "TeaserTruncationLength",
-                table: "cs_ContentProject");
+            //migrationBuilder.DropColumn(
+            //    name: "TeaserMode",
+            //    table: "cs_ContentProject");
 
-            migrationBuilder.DropColumn(
-                name: "TeaserTruncationMode",
-                table: "cs_ContentProject");
+            //migrationBuilder.DropColumn(
+            //    name: "TeaserTruncationLength",
+            //    table: "cs_ContentProject");
+
+            //migrationBuilder.DropColumn(
+            //    name: "TeaserTruncationMode",
+            //    table: "cs_ContentProject");
         }
     }
 }
