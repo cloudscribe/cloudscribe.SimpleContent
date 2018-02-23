@@ -12,9 +12,10 @@ using System;
 namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180223151637_simplecontent_changes20180223")]
+    partial class simplecontent_changes20180223
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
