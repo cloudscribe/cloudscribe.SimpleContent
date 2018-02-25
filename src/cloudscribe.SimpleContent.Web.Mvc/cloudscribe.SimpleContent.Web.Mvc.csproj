@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>MVC Controllers for cloudscribe.SimpleContent.Web</Description>
-    <VersionPrefix>2.0.23</VersionPrefix>
-    <AssemblyVersion>2.0.23</AssemblyVersion>
+    <VersionPrefix>2.0.24</VersionPrefix>
+    <AssemblyVersion>2.0.24</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -19,9 +19,7 @@
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="js\**;css\**" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
-  </ItemGroup>
+  
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.FileManager.Web" Version="2.0.*" />
