@@ -75,7 +75,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "BlogViewPolicy")]
         public async Task<IActionResult> Index(
             string category = "",
             int page = 1)
@@ -121,7 +121,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
        
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "BlogViewPolicy")]
         public async Task<IActionResult> MostRecent()
         {
             var projectSettings = await projectService.GetCurrentProjectSettings();
@@ -147,7 +147,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "BlogViewPolicy")]
         public async Task<IActionResult> Archive(
             int year,
             int month = 0,
@@ -190,7 +190,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "BlogViewPolicy")]
         public async Task<IActionResult> Category(
             string category = "",
             int page = 1)
@@ -205,7 +205,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         //}
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostNoDate")]
         public async Task<IActionResult> Post(string slug)
         {
@@ -213,7 +213,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostWithDate")]
         public async Task<IActionResult> Post(int year , int month, int day, string slug)
         {
@@ -394,25 +394,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         {
             var project = await projectService.GetCurrentProjectSettings();
 
-            if (!ModelState.IsValid)
-            {
-                if (string.IsNullOrEmpty(model.Id))
-                {
-                    ViewData["Title"] = sr["New Post"];
-                }
-                else
-                {
-                    ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], model.Title);
-                }
-                model.ProjectId = project.Id;
-                model.TeasersEnabled = project.TeaserMode != TeaserMode.Off;
-
-                return View(model);
-            }
-
-           
-            
-
             if (project == null)
             {
                 log.LogInformation("redirecting to index because project settings not found");
@@ -428,6 +409,22 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(blogRoutes.BlogIndexRouteName);
             }
 
+            if (!ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(model.Id))
+                {
+                    ViewData["Title"] = sr["New Post"];
+                }
+                else
+                {
+                    ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, sr["Edit - {0}"], model.Title);
+                }
+                model.ProjectId = project.Id;
+                model.TeasersEnabled = project.TeaserMode != TeaserMode.Off;
+
+                return View(model);
+            }
+            
             var categories = new List<string>();
 
             if (!string.IsNullOrEmpty(model.Categories))
@@ -621,212 +618,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> AjaxPost(PostViewModel model)
-        //{
-        //    // disable status code page for ajax requests
-        //    var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
-        //    if (statusCodePagesFeature != null)
-        //    {
-        //        statusCodePagesFeature.Enabled = false;
-        //    }
-
-        //    if (string.IsNullOrEmpty(model.Title))
-        //    {
-        //        log.LogInformation("returning 500 because no title was posted");
-        //        return StatusCode(500);
-        //    }
-            
-        //    var project = await projectService.GetCurrentProjectSettings();
-
-        //    if (project == null)
-        //    {
-        //        log.LogInformation("returning 500 blog not found");
-        //        return StatusCode(500);
-        //    }
-
-        //    bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
-            
-
-        //    if (!canEdit)
-        //    {
-        //        log.LogInformation("returning 403 user is not allowed to edit");
-        //        return StatusCode(403);
-        //    }
-
-        //    var categories = new List<string>();
-
-        //    if (!string.IsNullOrEmpty(model.Categories))
-        //    {
-        //        categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
-        //            .Where(x => 
-        //            !string.IsNullOrWhiteSpace(x)
-        //            && x != ","
-        //            )
-        //            .Distinct()
-        //            .ToList();
-        //    }
-
-        //    IPost post = null;
-        //    if (!string.IsNullOrEmpty(model.Id))
-        //    {
-        //        post = await blogService.GetPost(model.Id);
-        //    }
-
-        //    var isNew = false;
-        //    if (post != null)
-        //    {
-        //        post.Title = model.Title;
-        //        post.MetaDescription = model.MetaDescription;
-        //        post.Content = model.Content;
-        //        post.Categories = categories;
-        //    }
-        //    else
-        //    {
-        //        isNew = true;
-        //        var slug = blogService.CreateSlug(model.Title);
-        //        var available = await blogService.SlugIsAvailable(slug);
-        //        if (!available)
-        //        {
-        //            log.LogInformation("returning 409 because slug already in use");
-                    
-        //            return StatusCode(409);
-        //        }
-
-        //        post = new Post()
-        //        {
-        //            BlogId = project.Id,
-        //            Author = User.GetUserDisplayName(),
-        //            Title = model.Title,
-        //            MetaDescription = model.MetaDescription,
-        //            Content = model.Content,
-        //            Slug = slug,
-        //            Categories = categories.ToList()
-        //        };
-        //    }
-
-        //    post.IsPublished = model.IsPublished;
-        //    if(!string.IsNullOrEmpty(model.PubDate))
-        //    {
-        //        var localTime = DateTime.Parse(model.PubDate);
-        //        var pubDate = timeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
-
-        //        if (!isNew)
-        //        {
-        //            if (pubDate != post.PubDate)
-        //            {
-                        
-        //                await blogService.HandlePubDateAboutToChange(post, pubDate).ConfigureAwait(false);
-        //            }
-        //        }
-        //        post.PubDate = pubDate;
-               
-        //    }
-
-        //    try
-        //    {
-        //        if (isNew)
-        //        {
-        //            await blogService.Create(post);
-        //        }
-        //        else
-        //        {
-        //            await blogService.Update(post);
-        //        }
-
-                
-        //        string url;
-        //        if (project.IncludePubDateInPostUrls)
-        //        {
-        //            url = Url.Link(blogRoutes.PostWithDateRouteName,
-        //                new
-        //                {
-        //                    year = post.PubDate.Year,
-        //                    month = post.PubDate.Month.ToString("00"),
-        //                    day = post.PubDate.Date.Day.ToString("00"),
-        //                    slug = post.Slug
-        //                });
-        //        }
-        //        else
-        //        {
-        //            url = Url.Link(blogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
-        //        }
-
-        //        //Response.StatusCode = 200;
-        //        //await Response.WriteAsync(url);
-        //        return Content(url);
-                
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        log.LogError("ajax post failed with exception " + ex.Message + " " + ex.StackTrace, ex);
-                
-        //        return StatusCode(500);
-        //    }
-            
-            
-        //}
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> AjaxDelete(string id)
-        //{
-        //    // disable status code page for ajax requests
-        //    var statusCodePagesFeature = HttpContext.Features.Get<IStatusCodePagesFeature>();
-        //    if (statusCodePagesFeature != null)
-        //    {
-        //        statusCodePagesFeature.Enabled = false;
-        //    }
-
-        //    var project = await projectService.GetCurrentProjectSettings();
-
-        //    if (project == null)
-        //    {
-        //        log.LogInformation("returning 500 blog not found");
-        //        return StatusCode(500);
-        //    }
-
-        //    bool canEdit = await User.CanEditBlog(project.Id, authorizationService);
-            
-        //    if (!canEdit)
-        //    {
-        //        log.LogInformation("returning 403 user is not allowed to edit");
-                
-        //        return StatusCode(403);
-        //    }
-
-        //    if (string.IsNullOrEmpty(id))
-        //    {
-        //        log.LogInformation("returning 404 postid not provided");
-        //        Response.StatusCode = 404;
-        //        return StatusCode(404);
-        //    }
-
-        //    var post = await blogService.GetPost(id);
-
-        //    if (post == null)
-        //    {
-        //        log.LogInformation("returning 404 not found");
-                
-        //        return StatusCode(404);
-        //    }
-        //    log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
-
-        //    await blogService.Delete(post.Id);
-
-        //    // TODO: clear cache
-
-        //    //Response.StatusCode = 200;
-        //    //return; //new EmptyResult();
-        //    return StatusCode(200);
-
-        //}
+        
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = "BlogViewPolicy")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AjaxPostComment(CommentViewModel model)
         {
