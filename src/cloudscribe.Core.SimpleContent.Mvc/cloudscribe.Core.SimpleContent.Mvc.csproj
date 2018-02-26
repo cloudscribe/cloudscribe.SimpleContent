@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>2.0.8</VersionPrefix>
-    <AssemblyVersion>2.0.8</AssemblyVersion>
+    <VersionPrefix>2.0.9</VersionPrefix>
+    <AssemblyVersion>2.0.9</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -20,11 +20,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Identity" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Core.Web.Mvc" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="2.0.*" />
+    
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.*" />
