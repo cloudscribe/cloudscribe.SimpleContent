@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2018-02-06
+// Last Modified:			2018-02-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -22,7 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
             string connectionString,
             int maxConnectionRetryCount = 0,
             int maxConnectionRetryDelaySeconds = 30,
-            ICollection<int> transientSqlErrorNumbersToAdd = null
+            ICollection<int> transientSqlErrorNumbersToAdd = null,
+            bool useSql2008Compatibility = false
             )
         {
             //services.AddEntityFrameworkSqlServer()
@@ -42,6 +43,10 @@ namespace Microsoft.Extensions.DependencyInjection
                                maxRetryCount: maxConnectionRetryCount,
                                maxRetryDelay: TimeSpan.FromSeconds(maxConnectionRetryDelaySeconds),
                                errorNumbersToAdd: transientSqlErrorNumbersToAdd);
+                       }
+                       if (useSql2008Compatibility)
+                       {
+                           sqlOptions.UseRowNumberForPaging();
                        }
 
 
