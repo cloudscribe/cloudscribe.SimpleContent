@@ -86,21 +86,21 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.Property(p => p.RemoteFeedProcessorUseAgentFragment).HasMaxLength(255);
 
-                entity.Property(p => p.EmailFromAddress).HasMaxLength(100);
+                //entity.Property(p => p.EmailFromAddress).HasMaxLength(100);
 
-                entity.Property(p => p.SmtpServer).HasMaxLength(100);
+                //entity.Property(p => p.SmtpServer).HasMaxLength(100);
 
-                entity.Property(p => p.SmtpPort);
+                //entity.Property(p => p.SmtpPort);
 
-                entity.Property(p => p.SmtpUser).HasMaxLength(500);
+                //entity.Property(p => p.SmtpUser).HasMaxLength(500);
 
-                entity.Property(p => p.SmtpPassword);
+                //entity.Property(p => p.SmtpPassword);
 
-                entity.Property(p => p.SmtpPreferredEncoding).HasMaxLength(20);
+                //entity.Property(p => p.SmtpPreferredEncoding).HasMaxLength(20);
 
-                entity.Property(p => p.SmtpRequiresAuth).IsRequired();
+                //entity.Property(p => p.SmtpRequiresAuth).IsRequired();
 
-                entity.Property(p => p.SmtpUseSsl).IsRequired();
+                //entity.Property(p => p.SmtpUseSsl).IsRequired();
 
                 entity.Property(p => p.PublisherLogoWidth).HasMaxLength(20);
 

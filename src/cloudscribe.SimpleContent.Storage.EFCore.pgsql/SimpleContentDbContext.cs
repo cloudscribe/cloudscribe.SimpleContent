@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2018-01-22
+// Last Modified:			2018-03-15
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -93,21 +93,21 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.RemoteFeedProcessorUseAgentFragment).HasMaxLength(255);
 
-                entity.Property(p => p.EmailFromAddress).HasMaxLength(100);
+                //entity.Property(p => p.EmailFromAddress).HasMaxLength(100);
 
-                entity.Property(p => p.SmtpServer).HasMaxLength(100);
+                //entity.Property(p => p.SmtpServer).HasMaxLength(100);
 
-                entity.Property(p => p.SmtpPort);
+                //entity.Property(p => p.SmtpPort);
 
-                entity.Property(p => p.SmtpUser).HasMaxLength(500);
+                //entity.Property(p => p.SmtpUser).HasMaxLength(500);
 
-                entity.Property(p => p.SmtpPassword);
+                //entity.Property(p => p.SmtpPassword);
 
-                entity.Property(p => p.SmtpPreferredEncoding).HasMaxLength(20);
+                //entity.Property(p => p.SmtpPreferredEncoding).HasMaxLength(20);
 
-                entity.Property(p => p.SmtpRequiresAuth).IsRequired();
+                //entity.Property(p => p.SmtpRequiresAuth).IsRequired();
 
-                entity.Property(p => p.SmtpUseSsl).IsRequired();
+                //entity.Property(p => p.SmtpUseSsl).IsRequired();
 
                 entity.Property(p => p.PublisherLogoWidth).HasMaxLength(20);
 

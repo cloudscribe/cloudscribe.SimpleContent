@@ -84,7 +84,7 @@ namespace cloudscribe.Core.SimpleContent
 
                 await sender.SendEmailAsync(
                     project.CommentNotificationEmail, //to
-                    project.EmailFromAddress, //from
+                    site.DefaultEmailFromAddress, //from
                     subject,
                     plainTextMessage,
                     htmlMessage,

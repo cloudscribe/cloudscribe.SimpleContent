@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2018-02-06
+// Last Modified:			2018-03-15
 // 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -22,7 +22,7 @@ namespace cloudscribe.SimpleContent.Models
         int DaysToComment { get; set; }
         string DefaultPageSlug { get; set; }
         string Description { get; set; }
-        string EmailFromAddress { get; set; }
+        //string EmailFromAddress { get; set; }
         string Id { get; set; }
         string Image { get; set; }
         bool IncludePubDateInPostUrls { get; set; }
@@ -39,13 +39,13 @@ namespace cloudscribe.SimpleContent.Models
         string RemoteFeedProcessorUseAgentFragment { get; set; }
         string RemoteFeedUrl { get; set; }
         bool ShowTitle { get; set; }
-        string SmtpPassword { get; set; }
-        int SmtpPort { get; set; }
-        string SmtpPreferredEncoding { get; set; }
-        bool SmtpRequiresAuth { get; set; }
-        string SmtpServer { get; set; }
-        string SmtpUser { get; set; }
-        bool SmtpUseSsl { get; set; }
+        //string SmtpPassword { get; set; }
+        //int SmtpPort { get; set; }
+        //string SmtpPreferredEncoding { get; set; }
+        //bool SmtpRequiresAuth { get; set; }
+        //string SmtpServer { get; set; }
+        //string SmtpUser { get; set; }
+        //bool SmtpUseSsl { get; set; }
         string TimeZoneId { get; set; }
         string Title { get; set; }
         bool UseDefaultPageAsRootNode { get; set; }
