@@ -16,10 +16,10 @@ namespace cloudscribe.SimpleContent.Web.Services
             IBlogRoutes blogRoutes
             )
         {
-            this.blogRoutes = blogRoutes;
+            _blogRoutes = blogRoutes;
         }
 
-        private IBlogRoutes blogRoutes;
+        private IBlogRoutes _blogRoutes;
 
         public TreeNode<NavigationNode> FindNode(
             TreeNode<NavigationNode> rootNode,
@@ -30,10 +30,10 @@ namespace cloudscribe.SimpleContent.Web.Services
             if (string.IsNullOrEmpty(currentUrl)) return null;
             if (rootNode == null) return null;
             if (rootNode.Value.Controller == "Blog") return rootNode;
-            if (rootNode.Value.NamedRoute == blogRoutes.BlogIndexRouteName) return rootNode;
-            if (rootNode.Value.NamedRoute == blogRoutes.MostRecentPostRouteName) return rootNode;
+            if (rootNode.Value.NamedRoute == _blogRoutes.BlogIndexRouteName) return rootNode;
+            if (rootNode.Value.NamedRoute == _blogRoutes.MostRecentPostRouteName) return rootNode;
 
-            var blogUrl = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
+            var blogUrl = urlHelper.RouteUrl(_blogRoutes.BlogIndexRouteName);
             if (rootNode.Value.Url == blogUrl) return rootNode;
             
             Func<TreeNode<NavigationNode>, bool> match = delegate (TreeNode<NavigationNode> n)
@@ -43,8 +43,8 @@ namespace cloudscribe.SimpleContent.Web.Services
                 if (currentUrl.StartsWith(blogUrl))
                 {
                     if (n.Value.Controller == "Blog") return true;
-                    if (n.Value.NamedRoute == blogRoutes.BlogIndexRouteName) return true;
-                    if (n.Value.NamedRoute == blogRoutes.MostRecentPostRouteName) return true;
+                    if (n.Value.NamedRoute == _blogRoutes.BlogIndexRouteName) return true;
+                    if (n.Value.NamedRoute == _blogRoutes.MostRecentPostRouteName) return true;
                     if (n.Value.Url == blogUrl) return true;
                 }
 

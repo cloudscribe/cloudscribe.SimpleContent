@@ -16,25 +16,25 @@ namespace cloudscribe.SimpleContent.Web
             ITimeZoneHelper timeZoneHelper
             )
         {
-            this.projectService = projectService;
-            this.postQueries = postQueries;
-            this.timeZoneHelper = timeZoneHelper;
-            this.contentProcessor = contentProcessor;
+            _projectService = projectService;
+            _postQueries = postQueries;
+            _timeZoneHelper = timeZoneHelper;
+            _contentProcessor = contentProcessor;
         }
 
-        private IProjectService projectService;
-        private IPostQueries postQueries;
-        private ITimeZoneHelper timeZoneHelper;
-        private IContentProcessor contentProcessor;
+        private IProjectService _projectService;
+        private IPostQueries _postQueries;
+        private ITimeZoneHelper _timeZoneHelper;
+        private IContentProcessor _contentProcessor;
 
         public async Task<IViewComponentResult> InvokeAsync(string viewName = "FeaturedPosts", int numberToShow = 5)
         {
-            var model = new RecentPostsViewModel(contentProcessor);
-            var settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
-            var list = await postQueries.GetFeaturedPosts(settings.Id, numberToShow);
+            var model = new RecentPostsViewModel(_contentProcessor);
+            var settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
+            var list = await _postQueries.GetFeaturedPosts(settings.Id, numberToShow);
             model.ProjectSettings = settings;
             model.Posts = list;
-            model.TimeZoneHelper = timeZoneHelper;
+            model.TimeZoneHelper = _timeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
 
             return View(viewName, model);

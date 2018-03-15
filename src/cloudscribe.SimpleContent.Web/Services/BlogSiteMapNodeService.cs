@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-21
-// Last Modified:           2016-09-03
+// Last Modified:           2018-03-15
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -23,28 +23,28 @@ namespace cloudscribe.SimpleContent.Services
             IHttpContextAccessor contextAccessor,
             ILogger<BlogSiteMapNodeService> logger)
         {
-            this.blogService = blogService;
-            this.contextAccessor = contextAccessor;
-            log = logger;
+            _blogService = blogService;
+            _contextAccessor = contextAccessor;
+            _log = logger;
         }
 
-        private IBlogService blogService;
-        private ILogger log;
-        private IHttpContextAccessor contextAccessor;
-        private string baseUrl = string.Empty;
-        private List<string> addedUrls = new List<string>();
+        private IBlogService _blogService;
+        private ILogger _log;
+        private IHttpContextAccessor _contextAccessor;
+        private string _baseUrl = string.Empty;
+        private List<string> _addedUrls = new List<string>();
 
         public string BaseUrl
         {
             get
             {
-                if (string.IsNullOrEmpty(baseUrl))
+                if (string.IsNullOrEmpty(_baseUrl))
                 {
-                    baseUrl = string.Concat(contextAccessor.HttpContext.Request.Scheme,
+                    _baseUrl = string.Concat(_contextAccessor.HttpContext.Request.Scheme,
                         "://",
-                        contextAccessor.HttpContext.Request.Host.ToUriComponent());
+                        _contextAccessor.HttpContext.Request.Host.ToUriComponent());
                 }
-                return baseUrl;
+                return _baseUrl;
             }
         }
 
@@ -54,10 +54,10 @@ namespace cloudscribe.SimpleContent.Services
         {
             var mapNodes = new List<SiteMapNode>();
             var includeUnpublished = false;
-            var posts = await blogService.GetPosts(includeUnpublished).ConfigureAwait(false);
+            var posts = await _blogService.GetPosts(includeUnpublished).ConfigureAwait(false);
             if(posts == null)
             {
-                log.LogWarning("post list came back null so returning empty list of sitemapnodes");
+                _log.LogWarning("post list came back null so returning empty list of sitemapnodes");
                 return mapNodes;
             }
 
@@ -69,11 +69,11 @@ namespace cloudscribe.SimpleContent.Services
 
                 if (string.IsNullOrEmpty(url))
                 {
-                    log.LogWarning("failed to resolve url for post " + post.Id + ", skipping this post for sitemap");
+                    _log.LogWarning("failed to resolve url for post " + post.Id + ", skipping this post for sitemap");
                     continue;
                 }
 
-                if (addedUrls.Contains(url)) continue;
+                if (_addedUrls.Contains(url)) continue;
 
                 mapNodes.Add(
                             new SiteMapNode(url)
@@ -81,7 +81,7 @@ namespace cloudscribe.SimpleContent.Services
                                 LastModified = post.LastModified  
                             });
 
-                addedUrls.Add(url);
+                _addedUrls.Add(url);
             }
 
             return mapNodes;
@@ -90,7 +90,7 @@ namespace cloudscribe.SimpleContent.Services
         private async Task<string> ResolveUrl(IPost post)
         {
             if (string.IsNullOrWhiteSpace(post.Slug)) return string.Empty;
-            var url = await blogService.ResolvePostUrl(post).ConfigureAwait(false);
+            var url = await _blogService.ResolvePostUrl(post).ConfigureAwait(false);
             if (url == null) return string.Empty;
             if (url.StartsWith("http")) return url;
 

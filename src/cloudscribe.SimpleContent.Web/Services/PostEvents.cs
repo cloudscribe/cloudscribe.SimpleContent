@@ -25,18 +25,18 @@ namespace cloudscribe.SimpleContent.Web.Services
             ILogger<PostEvents> logger
             )
         {
-            this.preUpdateHandlers = preUpdateHandlers;
-            this.preDeleteHandlers = preDeleteHandlers;
-            this.createdHandlers = createdHandlers;
-            this.updateHandlers = updateHandlers;
-            log = logger;
+            _preUpdateHandlers = preUpdateHandlers;
+            _preDeleteHandlers = preDeleteHandlers;
+            _createdHandlers = createdHandlers;
+            _updateHandlers = updateHandlers;
+            _log = logger;
         }
 
-        private IEnumerable<IHandlePostPreUpdate> preUpdateHandlers;
-        private IEnumerable<IHandlePostPreDelete> preDeleteHandlers;
-        private IEnumerable<IHandlePostCreated> createdHandlers;
-        private IEnumerable<IHandlePostUpdated> updateHandlers;
-        private ILogger log;
+        private IEnumerable<IHandlePostPreUpdate> _preUpdateHandlers;
+        private IEnumerable<IHandlePostPreDelete> _preDeleteHandlers;
+        private IEnumerable<IHandlePostCreated> _createdHandlers;
+        private IEnumerable<IHandlePostUpdated> _updateHandlers;
+        private ILogger _log;
 
         public async Task HandlePreUpdate(
             string projectId,
@@ -44,7 +44,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach (var handler in preUpdateHandlers)
+            foreach (var handler in _preUpdateHandlers)
             {
                 try
                 {
@@ -52,7 +52,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
 
             }
@@ -64,7 +64,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach (var handler in preDeleteHandlers)
+            foreach (var handler in _preDeleteHandlers)
             {
                 try
                 {
@@ -72,7 +72,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
 
             }
@@ -84,7 +84,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach (var handler in createdHandlers)
+            foreach (var handler in _createdHandlers)
             {
                 try
                 {
@@ -92,7 +92,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
 
             }
@@ -104,7 +104,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach (var handler in updateHandlers)
+            foreach (var handler in _updateHandlers)
             {
                 try
                 {
@@ -112,7 +112,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
 
             }

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-//using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Services

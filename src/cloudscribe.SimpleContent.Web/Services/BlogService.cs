@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-10-05
+// Last Modified:           2018-03-15
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -35,47 +35,45 @@ namespace cloudscribe.SimpleContent.Services
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor = null)
         {
-            this.security = security;
-            this.postQueries = postQueries;
-            this.postCommands = postCommands;
+            _security = security;
+            _postQueries = postQueries;
+            _postCommands = postCommands;
             context = contextAccessor?.HttpContext;
-            this.mediaProcessor = mediaProcessor;
-            this.urlHelperFactory = urlHelperFactory;
-            this.actionContextAccesor = actionContextAccesor;
-            this.projectService = projectService;
-            //this.htmlProcessor = htmlProcessor;
+            _mediaProcessor = mediaProcessor;
+            _urlHelperFactory = urlHelperFactory;
+            _actionContextAccesor = actionContextAccesor;
+            _projectService = projectService;
             _contentProcessor = contentProcessor;
-            this.blogRoutes = blogRoutes;
-            this.eventHandlers = eventHandlers;
+            _blogRoutes = blogRoutes;
+            _eventHandlers = eventHandlers;
         }
 
-        private IProjectService projectService;
-        private IProjectSecurityResolver security;
+        private IProjectService _projectService;
+        private IProjectSecurityResolver _security;
         private readonly HttpContext context;
         private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
-        private IUrlHelperFactory urlHelperFactory;
-        private IActionContextAccessor actionContextAccesor;
-        private IPostQueries postQueries;
-        private IPostCommands postCommands;
-        private IMediaProcessor mediaProcessor;
-        private IProjectSettings settings = null;
+        private IUrlHelperFactory _urlHelperFactory;
+        private IActionContextAccessor _actionContextAccesor;
+        private IPostQueries _postQueries;
+        private IPostCommands _postCommands;
+        private IMediaProcessor _mediaProcessor;
+        private IProjectSettings _settings = null;
         private IContentProcessor _contentProcessor;
-        //private IHtmlProcessor htmlProcessor;
-        private IBlogRoutes blogRoutes;
-        private PostEvents eventHandlers;
+        private IBlogRoutes _blogRoutes;
+        private PostEvents _eventHandlers;
 
         private async Task EnsureBlogSettings()
         {
-            if(settings != null) { return; }
-            settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);    
+            if(_settings != null) { return; }
+            _settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);    
         }
         
         public async Task<List<IPost>> GetPosts(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetPosts(
-                settings.Id,
+            return await _postQueries.GetPosts(
+                _settings.Id,
                 includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -88,12 +86,12 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetPosts(
-                settings.Id,
+            return await _postQueries.GetPosts(
+                _settings.Id,
                 category,
                 includeUnpublished,
                 pageNumber,
-                settings.PostsPerPage,
+                _settings.PostsPerPage,
                 CancellationToken)
                 .ConfigureAwait(false);
         }
@@ -102,8 +100,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetCount(
-                settings.Id,
+            return await _postQueries.GetCount(
+                _settings.Id,
                 category,
                 includeUnpublished,
                 CancellationToken)
@@ -118,7 +116,7 @@ namespace cloudscribe.SimpleContent.Services
             bool includeUnpublished = false
             )
         {
-            return await postQueries.GetCount(
+            return await _postQueries.GetCount(
                 projectId,
                 year,
                 month,
@@ -132,8 +130,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetRecentPosts(
-                settings.Id,
+            return await _postQueries.GetRecentPosts(
+                _settings.Id,
                 numberToGet,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -143,8 +141,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetFeaturedPosts(
-                settings.Id,
+            return await _postQueries.GetFeaturedPosts(
+                _settings.Id,
                 numberToGet,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -156,7 +154,7 @@ namespace cloudscribe.SimpleContent.Services
             string password,
             int numberToGet)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -169,7 +167,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             
-            return await postQueries.GetRecentPosts(
+            return await _postQueries.GetRecentPosts(
                 projectId,
                 numberToGet,
                 CancellationToken)
@@ -185,7 +183,7 @@ namespace cloudscribe.SimpleContent.Services
             int pageSize = 10,
             bool includeUnpublished = false)
         {
-            return await postQueries.GetPosts(projectId, year, month, day, pageNumber, pageSize, includeUnpublished).ConfigureAwait(false);
+            return await _postQueries.GetPosts(projectId, year, month, day, pageNumber, pageSize, includeUnpublished).ConfigureAwait(false);
         }
 
         public async Task Create(
@@ -195,7 +193,7 @@ namespace cloudscribe.SimpleContent.Services
             IPost post, 
             bool publish)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -207,11 +205,11 @@ namespace cloudscribe.SimpleContent.Services
                 return; 
             }
 
-            var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
+            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
             
             await InitializeNewPosts(projectId, post, publish);
 
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
             if(context != null)
             {
@@ -234,8 +232,8 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await postCommands.Create(settings.Id, post).ConfigureAwait(false);
-            await eventHandlers.HandleCreated(settings.Id, post).ConfigureAwait(false);
+            await _postCommands.Create(settings.Id, post).ConfigureAwait(false);
+            await _eventHandlers.HandleCreated(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -245,7 +243,7 @@ namespace cloudscribe.SimpleContent.Services
             IPost post,
             bool publish)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -257,9 +255,9 @@ namespace cloudscribe.SimpleContent.Services
                 return;
             }
 
-            var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
+            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
             
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
             if (context != null)
             {
@@ -282,9 +280,9 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await eventHandlers.HandlePreUpdate(settings.Id, post.Id).ConfigureAwait(false);
-            await postCommands.Update(settings.Id, post).ConfigureAwait(false);
-            await eventHandlers.HandleUpdated(settings.Id, post).ConfigureAwait(false);
+            await _eventHandlers.HandlePreUpdate(settings.Id, post.Id).ConfigureAwait(false);
+            await _postCommands.Update(settings.Id, post).ConfigureAwait(false);
+            await _eventHandlers.HandleUpdated(settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Create(IPost post)
@@ -304,8 +302,8 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await postCommands.Create(settings.Id, post).ConfigureAwait(false);
-            await eventHandlers.HandleCreated(settings.Id, post).ConfigureAwait(false);
+            await _postCommands.Create(_settings.Id, post).ConfigureAwait(false);
+            await _eventHandlers.HandleCreated(_settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task Update(IPost post)
@@ -325,16 +323,16 @@ namespace cloudscribe.SimpleContent.Services
                 post.PubDate = DateTime.UtcNow;
             }
 
-            await eventHandlers.HandlePreUpdate(settings.Id, post.Id).ConfigureAwait(false);
-            await postCommands.Update(settings.Id, post).ConfigureAwait(false);
-            await eventHandlers.HandleUpdated(settings.Id, post).ConfigureAwait(false);
+            await _eventHandlers.HandlePreUpdate(_settings.Id, post.Id).ConfigureAwait(false);
+            await _postCommands.Update(_settings.Id, post).ConfigureAwait(false);
+            await _eventHandlers.HandleUpdated(_settings.Id, post).ConfigureAwait(false);
         }
 
         public async Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            await postCommands.HandlePubDateAboutToChange(settings.Id, post, newPubDate);
+            await _postCommands.HandlePubDateAboutToChange(_settings.Id, post, newPubDate);
         }
 
         private async Task InitializeNewPosts(string projectId, IPost post, bool publish)
@@ -361,11 +359,11 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<string> ResolvePostUrl(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             string postUrl;
-            if (settings.IncludePubDateInPostUrls)
+            if (_settings.IncludePubDateInPostUrls)
             {
-                postUrl = urlHelper.RouteUrl(blogRoutes.PostWithDateRouteName,
+                postUrl = urlHelper.RouteUrl(_blogRoutes.PostWithDateRouteName,
                     new
                     {
                         year = post.PubDate.Year,
@@ -376,7 +374,7 @@ namespace cloudscribe.SimpleContent.Services
             }
             else
             {
-                postUrl = urlHelper.RouteUrl(blogRoutes.PostWithoutDateRouteName,
+                postUrl = urlHelper.RouteUrl(_blogRoutes.PostWithoutDateRouteName,
                     new { slug = post.Slug });
             }
 
@@ -390,7 +388,7 @@ namespace cloudscribe.SimpleContent.Services
         {
             //await EnsureBlogSettings().ConfigureAwait(false);
 
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             var result = urlHelper.Action("Index", "Blog");
 
             return Task.FromResult(result);
@@ -401,8 +399,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetPost(
-                settings.Id,
+            return await _postQueries.GetPost(
+                _settings.Id,
                 postId,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -417,7 +415,7 @@ namespace cloudscribe.SimpleContent.Services
             )
         {
 
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -429,7 +427,7 @@ namespace cloudscribe.SimpleContent.Services
                 return null;
             }
             
-            return await postQueries.GetPost(
+            return await _postQueries.GetPost(
                 projectId,
                 postId,
                 CancellationToken)
@@ -441,8 +439,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetPostBySlug(
-                settings.Id,
+            return await _postQueries.GetPostBySlug(
+                _settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -458,8 +456,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.SlugIsAvailable(
-                settings.Id,
+            return await _postQueries.SlugIsAvailable(
+                _settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -468,7 +466,7 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<bool> SlugIsAvailable(string projectId, string slug)
         {
             
-            return await postQueries.SlugIsAvailable(
+            return await _postQueries.SlugIsAvailable(
                 projectId,
                 slug,
                 CancellationToken)
@@ -480,8 +478,8 @@ namespace cloudscribe.SimpleContent.Services
         public async Task Delete(string postId)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-            await eventHandlers.HandlePreDelete(settings.Id, postId).ConfigureAwait(false);
-            await postCommands.Delete(settings.Id, postId).ConfigureAwait(false);
+            await _eventHandlers.HandlePreDelete(_settings.Id, postId).ConfigureAwait(false);
+            await _postCommands.Delete(_settings.Id, postId).ConfigureAwait(false);
 
         }
 
@@ -491,7 +489,7 @@ namespace cloudscribe.SimpleContent.Services
             string userName,
             string password)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -503,8 +501,8 @@ namespace cloudscribe.SimpleContent.Services
                 return; //TODO: exception here?
             }
 
-            await eventHandlers.HandlePreDelete(projectId, postId).ConfigureAwait(false);
-            await postCommands.Delete(projectId, postId).ConfigureAwait(false);
+            await _eventHandlers.HandlePreDelete(projectId, postId).ConfigureAwait(false);
+            await _postCommands.Delete(projectId, postId).ConfigureAwait(false);
 
         }
 
@@ -512,8 +510,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            return await postQueries.GetCategories(
-                settings.Id,
+            return await _postQueries.GetCategories(
+                _settings.Id,
                 includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -524,7 +522,7 @@ namespace cloudscribe.SimpleContent.Services
             string userName,
             string password)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -535,9 +533,9 @@ namespace cloudscribe.SimpleContent.Services
             {
                 return new Dictionary<string, int>(); //empty
             }
-            var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
+            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
-            return await postQueries.GetCategories(
+            return await _postQueries.GetCategories(
                 settings.Id,
                 permission.CanEditPosts,
                 CancellationToken)
@@ -548,8 +546,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureBlogSettings().ConfigureAwait(false);
             
-            return await postQueries.GetArchives(
-                settings.Id,
+            return await _postQueries.GetArchives(
+                _settings.Id,
                 includeUnpublished,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -560,11 +558,11 @@ namespace cloudscribe.SimpleContent.Services
             
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            if(settings.DaysToComment == -1) { return true; }
-            if(settings.DaysToComment == 0) { return false; }
+            if(_settings.DaysToComment == -1) { return true; }
+            if(_settings.DaysToComment == 0) { return false; }
             if (userCanEdit) { return true; }
 
-            var result = post.PubDate > DateTime.UtcNow.AddDays(-settings.DaysToComment);
+            var result = post.PubDate > DateTime.UtcNow.AddDays(-_settings.DaysToComment);
             return result;
         }
 
@@ -576,7 +574,7 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<string> ResolveMediaUrl(string fileName)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-            return await mediaProcessor.ResolveMediaUrl(settings.LocalMediaVirtualPath, fileName).ConfigureAwait(false);
+            return await _mediaProcessor.ResolveMediaUrl(_settings.LocalMediaVirtualPath, fileName).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -595,7 +593,7 @@ namespace cloudscribe.SimpleContent.Services
             byte[] bytes, string 
             fileName)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -607,9 +605,9 @@ namespace cloudscribe.SimpleContent.Services
                 return;
             }
 
-            var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
+            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
 
-            await mediaProcessor.SaveMedia(settings.LocalMediaVirtualPath, fileName, bytes).ConfigureAwait(false);
+            await _mediaProcessor.SaveMedia(settings.LocalMediaVirtualPath, fileName, bytes).ConfigureAwait(false);
         }
 
         

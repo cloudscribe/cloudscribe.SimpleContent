@@ -20,12 +20,12 @@ namespace cloudscribe.SimpleContent.Web.Services
             IAuthorizationService authorizationService
             )
         {
-            this.httpContextAccessor = httpContextAccessor;
-            this.authorizationService = authorizationService;
+            _httpContextAccessor = httpContextAccessor;
+            _authorizationService = authorizationService;
         }
 
-        private IHttpContextAccessor httpContextAccessor;
-        private IAuthorizationService authorizationService;
+        private IHttpContextAccessor _httpContextAccessor;
+        private IAuthorizationService _authorizationService;
 
         public virtual bool ShouldAllowView(TreeNode<NavigationNode> menuNode)
         {
@@ -34,7 +34,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             if (string.IsNullOrEmpty(menuNode.Value.CustomData)) { return true; }
             
             // if the user is not authenticated no need to check further
-            if (!httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
                 return false;
             }
@@ -42,11 +42,11 @@ namespace cloudscribe.SimpleContent.Web.Services
             bool canEdit = false;
 
             var projectId = menuNode.Value.CustomData;
-            var user = httpContextAccessor.HttpContext.User;
+            var user = _httpContextAccessor.HttpContext.User;
             try
             {
                 // http://stackoverflow.com/questions/22628087/calling-async-method-synchronously
-                canEdit = user.CanEditPages(projectId, authorizationService).Result;
+                canEdit = user.CanEditPages(projectId, _authorizationService).Result;
             }
             catch(InvalidOperationException)
             { }
