@@ -25,26 +25,26 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IResourceHelper resourceHelper,
             ILogger<csscsrController> logger)
         {
-            this.resourceHelper = resourceHelper;
-            log = logger;
+            _resourceHelper = resourceHelper;
+            _log = logger;
         }
         
-        private IResourceHelper resourceHelper;
-        private ILogger log;
+        private IResourceHelper _resourceHelper;
+        private ILogger _log;
 
 
         private IActionResult GetResult(string resourceName, string contentType)
         {
             var assembly = typeof(csscsrController).GetTypeInfo().Assembly;
-            resourceName = resourceHelper.ResolveResourceIdentifier(resourceName);
+            resourceName = _resourceHelper.ResolveResourceIdentifier(resourceName);
             var resourceStream = assembly.GetManifestResourceStream(resourceName);
             if (resourceStream == null)
             {
-                log.LogError("resource not found for " + resourceName);
+                _log.LogError("resource not found for " + resourceName);
                 return NotFound();
             }
 
-            log.LogDebug("resource found for " + resourceName);
+            _log.LogDebug("resource found for " + resourceName);
 
             return new FileStreamResult(resourceStream, contentType);
         }
@@ -58,13 +58,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var baseSegment = "cloudscribe.SimpleContent.Web.js.";
             
             var requestPath = HttpContext.Request.Path.Value;
-            log.LogDebug(requestPath + " requested");
+            _log.LogDebug(requestPath + " requested");
 
             if (requestPath.Length < "/csscsr/js/".Length) return NotFound();
 
             var seg = requestPath.Substring("/csscsr/js/".Length);
             var ext = Path.GetExtension(requestPath);
-            var mimeType = resourceHelper.GetMimeType(ext);
+            var mimeType = _resourceHelper.GetMimeType(ext);
 
             return GetResult(baseSegment + seg, mimeType);
         }
@@ -77,13 +77,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var baseSegment = "cloudscribe.SimpleContent.Web.css.";
             
             var requestPath = HttpContext.Request.Path.Value;
-            log.LogDebug(requestPath + " requested");
+            _log.LogDebug(requestPath + " requested");
 
             if (requestPath.Length < "/csscsr/css/".Length) return NotFound();
 
             var seg = requestPath.Substring("/csscsr/css/".Length);
             var ext = Path.GetExtension(requestPath);
-            var mimeType = resourceHelper.GetMimeType(ext);
+            var mimeType = _resourceHelper.GetMimeType(ext);
 
             return GetResult(
                 baseSegment + seg,

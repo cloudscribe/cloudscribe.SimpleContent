@@ -17,14 +17,14 @@ namespace cloudscribe.SimpleContent.Services
             IProjectQueries projectQueries
             )
         {
-            queries = projectQueries;
+            _queries = projectQueries;
         }
 
-        private IProjectQueries queries;
+        private IProjectQueries _queries;
 
         public async Task<IProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {
-            return await queries.GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
+            return await _queries.GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
  
         }
     }

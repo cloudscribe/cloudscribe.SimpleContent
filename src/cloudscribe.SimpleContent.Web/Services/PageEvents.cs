@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-11-25
-// Last Modified:           2016-11-25
+// Last Modified:           2018-03-15
 // 
 
 using System.Collections.Generic;
@@ -25,18 +25,18 @@ namespace cloudscribe.SimpleContent.Services
             ILogger<PageEvents> logger
             )
         {
-            this.preUpdateHandlers = preUpdateHandlers;
-            this.preDeleteHandlers = preDeleteHandlers;
-            this.createdHandlers = createdHandlers;
-            this.updateHandlers = updateHandlers;
-            log = logger;
+            _preUpdateHandlers = preUpdateHandlers;
+            _preDeleteHandlers = preDeleteHandlers;
+            _createdHandlers = createdHandlers;
+            _updateHandlers = updateHandlers;
+            _log = logger;
         }
 
-        private IEnumerable<IHandlePagePreUpdate> preUpdateHandlers;
-        private IEnumerable<IHandlePagePreDelete> preDeleteHandlers;
-        private IEnumerable<IHandlePageCreated> createdHandlers;
-        private IEnumerable<IHandlePageUpdated> updateHandlers;
-        private ILogger log;
+        private IEnumerable<IHandlePagePreUpdate> _preUpdateHandlers;
+        private IEnumerable<IHandlePagePreDelete> _preDeleteHandlers;
+        private IEnumerable<IHandlePageCreated> _createdHandlers;
+        private IEnumerable<IHandlePageUpdated> _updateHandlers;
+        private ILogger _log;
 
         public async Task HandlePreUpdate(
             string projectId,
@@ -44,7 +44,7 @@ namespace cloudscribe.SimpleContent.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach(var handler in preUpdateHandlers)
+            foreach(var handler in _preUpdateHandlers)
             {
                 try
                 {
@@ -52,7 +52,7 @@ namespace cloudscribe.SimpleContent.Services
                 }
                 catch(Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
                 
             }
@@ -64,7 +64,7 @@ namespace cloudscribe.SimpleContent.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach (var handler in preDeleteHandlers)
+            foreach (var handler in _preDeleteHandlers)
             {
                 try
                 {
@@ -72,7 +72,7 @@ namespace cloudscribe.SimpleContent.Services
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
                 
             }
@@ -84,7 +84,7 @@ namespace cloudscribe.SimpleContent.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach (var handler in createdHandlers)
+            foreach (var handler in _createdHandlers)
             {
                 try
                 {
@@ -92,7 +92,7 @@ namespace cloudscribe.SimpleContent.Services
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
                 
             }
@@ -104,7 +104,7 @@ namespace cloudscribe.SimpleContent.Services
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            foreach (var handler in updateHandlers)
+            foreach (var handler in _updateHandlers)
             {
                 try
                 {
@@ -112,7 +112,7 @@ namespace cloudscribe.SimpleContent.Services
                 }
                 catch (Exception ex)
                 {
-                    log.LogError(ex.Message + "-" + ex.StackTrace);
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
                 
             }

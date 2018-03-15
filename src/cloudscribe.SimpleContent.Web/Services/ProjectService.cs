@@ -26,37 +26,37 @@ namespace cloudscribe.SimpleContent.Services
             IPageNavigationCacheKeys cacheKeys,
             IHttpContextAccessor contextAccessor = null)
         {
-            this.security = security;
-            this.projectQueries = projectQueries;
-            this.projectCommands = projectCommands;
-            this.settingsResolver = settingsResolver;
-            this.cacheKeys = cacheKeys;
-            this.cache = cache;
-            context = contextAccessor?.HttpContext;
+            _security = security;
+            _projectQueries = projectQueries;
+            _projectCommands = projectCommands;
+            _settingsResolver = settingsResolver;
+            _cacheKeys = cacheKeys;
+            _cache = cache;
+            _context = contextAccessor?.HttpContext;
         }
 
-        private readonly HttpContext context;
-        private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
-        private IProjectSecurityResolver security;
-        private IProjectQueries projectQueries;
-        private IProjectCommands projectCommands;
-        private IProjectSettingsResolver settingsResolver;
-        private IProjectSettings currentSettings = null;
-        private IPageNavigationCacheKeys cacheKeys;
-        private IMemoryCache cache;
+        private readonly HttpContext _context;
+        private CancellationToken CancellationToken => _context?.RequestAborted ?? CancellationToken.None;
+        private IProjectSecurityResolver _security;
+        private IProjectQueries _projectQueries;
+        private IProjectCommands _projectCommands;
+        private IProjectSettingsResolver _settingsResolver;
+        private IProjectSettings _currentSettings = null;
+        private IPageNavigationCacheKeys _cacheKeys;
+        private IMemoryCache _cache;
 
         public void ClearNavigationCache()
         {
-            cache.Remove(cacheKeys.PageTreeCacheKey);
-            cache.Remove(cacheKeys.XmlTreeCacheKey);
-            cache.Remove(cacheKeys.JsonTreeCacheKey);
+            _cache.Remove(_cacheKeys.PageTreeCacheKey);
+            _cache.Remove(_cacheKeys.XmlTreeCacheKey);
+            _cache.Remove(_cacheKeys.JsonTreeCacheKey);
         }
 
         private async Task<bool> EnsureSettings()
         {
-            if (currentSettings != null) { return true; }
-            currentSettings = await settingsResolver.GetCurrentProjectSettings(CancellationToken);
-            if (currentSettings != null)
+            if (_currentSettings != null) { return true; }
+            _currentSettings = await _settingsResolver.GetCurrentProjectSettings(CancellationToken);
+            if (_currentSettings != null)
             {
                 //if (context.User.Identity.IsAuthenticated)
                 //{
@@ -75,29 +75,29 @@ namespace cloudscribe.SimpleContent.Services
 
         public async Task Create(IProjectSettings project)
         {
-            await projectCommands.Create(project.Id, project, CancellationToken.None).ConfigureAwait(false);
+            await _projectCommands.Create(project.Id, project, CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task Update(IProjectSettings project)
         {
-            await projectCommands.Update(project.Id, project, CancellationToken.None).ConfigureAwait(false);
+            await _projectCommands.Update(project.Id, project, CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task<IProjectSettings> GetCurrentProjectSettings()
         {
             await EnsureSettings().ConfigureAwait(false);
-            return currentSettings;
+            return _currentSettings;
         }
 
         public async Task<IProjectSettings> GetProjectSettings(string projectId)
         {
             
-            return await projectQueries.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
+            return await _projectQueries.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<IProjectSettings>> GetUserProjects(string userName, string password)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 string.Empty,
                 userName,
                 password,
@@ -111,7 +111,7 @@ namespace cloudscribe.SimpleContent.Services
                 return result; //empty
             }
 
-            var project = await projectQueries.GetProjectSettings(permission.ProjectId, CancellationToken);
+            var project = await _projectQueries.GetProjectSettings(permission.ProjectId, CancellationToken);
             if(project != null)
             {
                 result.Add(project);
@@ -120,7 +120,7 @@ namespace cloudscribe.SimpleContent.Services
             
             //await EnsureBlogSettings().ConfigureAwait(false);
             //return settings;
-            return await projectQueries.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);
+            return await _projectQueries.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -14,9 +14,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             IOptions<TeaserCacheOptions> optionsAccessor = null
             )
         {
-            if (cache == null) { throw new ArgumentNullException(nameof(cache)); }
-            _cache = cache;
-
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _options = optionsAccessor?.Value;
             if (_options == null) _options = new TeaserCacheOptions();
         }

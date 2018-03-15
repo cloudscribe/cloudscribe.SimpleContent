@@ -2,27 +2,26 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-05-28
+// Last Modified:           2018-03-15
 // 
 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using cloudscribe.SimpleContent.Web;
+using cloudscribe.SimpleContent.Web.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
-using cloudscribe.SimpleContent.Models.EventHandlers;
-using Microsoft.Extensions.Localization;
-using System.Security.Claims;
-using cloudscribe.SimpleContent.Web;
-using cloudscribe.SimpleContent.Web.Services;
 
 namespace cloudscribe.SimpleContent.Services
 {
@@ -36,7 +35,6 @@ namespace cloudscribe.SimpleContent.Services
             PageEvents eventHandlers,
             IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
-            //IHtmlProcessor htmlProcessor,
             IUrlHelperFactory urlHelperFactory,
             IPageRoutes pageRoutes,
             IMemoryCache cache,
@@ -46,59 +44,57 @@ namespace cloudscribe.SimpleContent.Services
             IHttpContextAccessor contextAccessor = null)
         {
 
-            this.projectService = projectService;
-            this.security = security;
-            this.pageQueries = pageQueries;
-            this.pageCommands = pageCommands;
-            context = contextAccessor?.HttpContext;
-            this.mediaProcessor = mediaProcessor;
-            this.urlHelperFactory = urlHelperFactory;
-            this.actionContextAccesor = actionContextAccesor;
-            this.pageRoutes = pageRoutes;
+            _projectService = projectService;
+            _security = security;
+            _pageQueries = pageQueries;
+            _pageCommands = pageCommands;
+            _context = contextAccessor?.HttpContext;
+            _mediaProcessor = mediaProcessor;
+            _urlHelperFactory = urlHelperFactory;
+            _actionContextAccesor = actionContextAccesor;
+            _pageRoutes = pageRoutes;
             _contentProcessor = contentProcessor;
-            //this.htmlProcessor = htmlProcessor;
-            this.cache = cache;
-            this.cacheKeys = cacheKeys;
-            this.eventHandlers = eventHandlers;
-            sr = localizer;
+            _cache = cache;
+            _cacheKeys = cacheKeys;
+            _eventHandlers = eventHandlers;
+            _sr = localizer;
         }
 
-        private readonly HttpContext context;
-        private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
-        private IUrlHelperFactory urlHelperFactory;
-        private IActionContextAccessor actionContextAccesor;
-        private IProjectSecurityResolver security;
-        private IPageQueries pageQueries;
-        private IPageCommands pageCommands;
-        private IMediaProcessor mediaProcessor;
-        private IProjectService projectService;
-        private IProjectSettings settings = null;
+        private readonly HttpContext _context;
+        private CancellationToken CancellationToken => _context?.RequestAborted ?? CancellationToken.None;
+        private IUrlHelperFactory _urlHelperFactory;
+        private IActionContextAccessor _actionContextAccesor;
+        private IProjectSecurityResolver _security;
+        private IPageQueries _pageQueries;
+        private IPageCommands _pageCommands;
+        private IMediaProcessor _mediaProcessor;
+        private IProjectService _projectService;
+        private IProjectSettings _settings = null;
         private IContentProcessor _contentProcessor;
-        //private IHtmlProcessor htmlProcessor;
-        private IMemoryCache cache;
-        private IPageNavigationCacheKeys cacheKeys;
-        private PageEvents eventHandlers;
-        private IPageRoutes pageRoutes;
-        private IStringLocalizer sr;
+        private IMemoryCache _cache;
+        private IPageNavigationCacheKeys _cacheKeys;
+        private PageEvents _eventHandlers;
+        private IPageRoutes _pageRoutes;
+        private IStringLocalizer _sr;
 
         private async Task EnsureProjectSettings()
         {
-            if (settings != null) { return; }
-            settings = await projectService.GetCurrentProjectSettings().ConfigureAwait(false);
+            if (_settings != null) { return; }
+            _settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             
         }
 
         public void ClearNavigationCache()
         {  
-            cache.Remove(cacheKeys.PageTreeCacheKey);
-            cache.Remove(cacheKeys.XmlTreeCacheKey);
-            cache.Remove(cacheKeys.JsonTreeCacheKey);
+            _cache.Remove(_cacheKeys.PageTreeCacheKey);
+            _cache.Remove(_cacheKeys.XmlTreeCacheKey);
+            _cache.Remove(_cacheKeys.JsonTreeCacheKey);
         }
 
         public Task<string> ResolvePageUrl(IPage page)
         {
             //await EnsureBlogSettings().ConfigureAwait(false);
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
        
             var result = urlHelper.Action("Index", "Page", new { slug = page.Slug });
 
@@ -128,8 +124,8 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<bool> SlugIsAvailable(string slug)
         {
             await EnsureProjectSettings();
-            return await pageQueries.SlugIsAvailable(
-                settings.Id,
+            return await _pageQueries.SlugIsAvailable(
+                _settings.Id,
                 slug,
                 CancellationToken
                 ).ConfigureAwait(false);
@@ -142,7 +138,7 @@ namespace cloudscribe.SimpleContent.Services
             IPage page,
             bool publish)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -154,7 +150,7 @@ namespace cloudscribe.SimpleContent.Services
                 return; 
             }
 
-            var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
+            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
             
             if (publish)
             {
@@ -172,11 +168,11 @@ namespace cloudscribe.SimpleContent.Services
 
             }
             
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if (context != null)
+            if (_context != null)
             {
-                imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
+                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
             }
 
             // open live writer passes in posts with absolute urls
@@ -207,8 +203,8 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
-            await pageCommands.Create(projectId, page).ConfigureAwait(false);
-            await eventHandlers.HandleCreated(projectId, page).ConfigureAwait(false);
+            await _pageCommands.Create(projectId, page).ConfigureAwait(false);
+            await _eventHandlers.HandleCreated(projectId, page).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -218,7 +214,7 @@ namespace cloudscribe.SimpleContent.Services
             IPage page,
             bool publish)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -230,13 +226,13 @@ namespace cloudscribe.SimpleContent.Services
                 return;
             }
 
-            var settings = await projectService.GetProjectSettings(projectId).ConfigureAwait(false);
+            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
             
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if (context != null)
+            if (_context != null)
             {
-                imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
+                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
             }
 
             // open live writer passes in posts with absolute urls
@@ -267,9 +263,9 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
-            await eventHandlers.HandlePreUpdate(projectId, page.Id).ConfigureAwait(false);
-            await pageCommands.Update(projectId, page).ConfigureAwait(false);
-            await eventHandlers.HandleUpdated(projectId, page).ConfigureAwait(false);
+            await _eventHandlers.HandlePreUpdate(projectId, page.Id).ConfigureAwait(false);
+            await _pageCommands.Update(projectId, page).ConfigureAwait(false);
+            await _eventHandlers.HandleUpdated(projectId, page).ConfigureAwait(false);
         }
 
         public async Task Create(
@@ -294,11 +290,11 @@ namespace cloudscribe.SimpleContent.Services
 
             }
             
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if (context != null)
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
+            var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
+            if (_context != null)
             {
-                imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
+                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
             }
             
             //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
@@ -314,8 +310,8 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
-            await pageCommands.Create(settings.Id, page).ConfigureAwait(false);
-            await eventHandlers.HandleCreated(settings.Id, page).ConfigureAwait(false);
+            await _pageCommands.Create(_settings.Id, page).ConfigureAwait(false);
+            await _eventHandlers.HandleCreated(_settings.Id, page).ConfigureAwait(false);
         }
 
         public async Task Update(
@@ -324,11 +320,11 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings().ConfigureAwait(false);
             
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if (context != null)
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
+            var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
+            if (_context != null)
             {
-                imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
+                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
             }
 
             //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
@@ -344,15 +340,15 @@ namespace cloudscribe.SimpleContent.Services
                 page.PubDate = DateTime.UtcNow;
             }
 
-            await eventHandlers.HandlePreUpdate(settings.Id, page.Id).ConfigureAwait(false);
-            await pageCommands.Update(settings.Id, page).ConfigureAwait(false);
-            await eventHandlers.HandleUpdated(settings.Id, page).ConfigureAwait(false);
+            await _eventHandlers.HandlePreUpdate(_settings.Id, page.Id).ConfigureAwait(false);
+            await _pageCommands.Update(_settings.Id, page).ConfigureAwait(false);
+            await _eventHandlers.HandleUpdated(_settings.Id, page).ConfigureAwait(false);
         }
 
         public async Task DeletePage(string pageId)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
-            await eventHandlers.HandlePreDelete(settings.Id, pageId).ConfigureAwait(false);
+            await _eventHandlers.HandlePreDelete(_settings.Id, pageId).ConfigureAwait(false);
 
             // we have a loosely coupled raltionship of pages not enforced in the db
             // so we have to consider how to handle child pages belonging to a page that is about to be deleted
@@ -365,7 +361,7 @@ namespace cloudscribe.SimpleContent.Services
             // and that they should delete child pages before deleting the parent page if that is the intent
             await HandleChildPagesBeforeDelete(pageId);
 
-            await pageCommands.Delete(settings.Id, pageId).ConfigureAwait(false);
+            await _pageCommands.Delete(_settings.Id, pageId).ConfigureAwait(false);
             
 
         }
@@ -378,7 +374,7 @@ namespace cloudscribe.SimpleContent.Services
                 // rebase to root 
                 c.ParentId = "0";
                 c.ParentSlug = string.Empty;
-                await pageCommands.Update(settings.Id, c).ConfigureAwait(false);
+                await _pageCommands.Update(_settings.Id, c).ConfigureAwait(false);
             }
         }
 
@@ -388,7 +384,7 @@ namespace cloudscribe.SimpleContent.Services
             string userName,
             string password)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -400,7 +396,7 @@ namespace cloudscribe.SimpleContent.Services
                 return null;
             }
 
-            return await pageQueries.GetPage(
+            return await _pageQueries.GetPage(
                 projectId,
                 pageId,
                 CancellationToken)
@@ -412,8 +408,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
-            return await pageQueries.GetPage(
-                settings.Id,
+            return await _pageQueries.GetPage(
+                _settings.Id,
                 pageId,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -423,8 +419,8 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
-            return await pageQueries.GetPageBySlug(
-                settings.Id,
+            return await _pageQueries.GetPageBySlug(
+                _settings.Id,
                 slug,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -435,7 +431,7 @@ namespace cloudscribe.SimpleContent.Services
             string userName,
             string password)
         {
-            var permission = await security.ValidatePermissions(
+            var permission = await _security.ValidatePermissions(
                 projectId,
                 userName,
                 password,
@@ -447,7 +443,7 @@ namespace cloudscribe.SimpleContent.Services
                 return new List<IPage>(); // empty
             }
 
-            return await pageQueries.GetAllPages(
+            return await _pageQueries.GetAllPages(
                 projectId,
                 CancellationToken)
                 .ConfigureAwait(false);
@@ -456,8 +452,8 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<List<IPage>> GetRootPages()
         {
             await EnsureProjectSettings();
-            return await pageQueries.GetRootPages(
-                settings.Id,
+            return await _pageQueries.GetRootPages(
+                _settings.Id,
                 CancellationToken
                 ).ConfigureAwait(false);
         }
@@ -465,8 +461,8 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<List<IPage>> GetChildPages(string pageId)
         {
             await EnsureProjectSettings();
-            return await pageQueries.GetChildPages(
-                settings.Id,
+            return await _pageQueries.GetChildPages(
+                _settings.Id,
                 pageId,
                 CancellationToken
                 ).ConfigureAwait(false);
@@ -476,14 +472,14 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings();
             var pageId = "0"; // root level pages have this parent id
-            var page = await pageQueries.GetPageBySlug(settings.Id, pageSlug);
+            var page = await _pageQueries.GetPageBySlug(_settings.Id, pageSlug);
             if (page != null)
             {
                 pageId = page.Id;
             }
             
-            var countOfChildren =  await pageQueries.GetChildPageCount(
-                settings.Id,
+            var countOfChildren =  await _pageQueries.GetChildPageCount(
+                _settings.Id,
                 pageId,
                 true,
                 CancellationToken
@@ -512,9 +508,9 @@ namespace cloudscribe.SimpleContent.Services
                 return result;
             }
 
-            if(movedNode.Slug == settings.DefaultPageSlug)
+            if(movedNode.Slug == _settings.DefaultPageSlug)
             {
-                result = new PageActionResult(false, sr["Moving the default/home page is not allowed"]);
+                result = new PageActionResult(false, _sr["Moving the default/home page is not allowed"]);
                 return result;
             }
 
@@ -527,7 +523,7 @@ namespace cloudscribe.SimpleContent.Services
                     movedNode.ParentId = targetNode.Id;
                     movedNode.ParentSlug = targetNode.Slug;
                     movedNode.PageOrder = 0;
-                    await pageCommands.Update(movedNode.ProjectId, movedNode);
+                    await _pageCommands.Update(movedNode.ProjectId, movedNode);
                     await SortChildPages(targetNode.Id);
 
                     break;
@@ -539,7 +535,7 @@ namespace cloudscribe.SimpleContent.Services
                         movedNode.ParentId = targetNode.ParentId;
                         movedNode.ParentSlug = targetNode.ParentSlug;
                         movedNode.PageOrder = targetNode.PageOrder - 1;
-                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await _pageCommands.Update(movedNode.ProjectId, movedNode);
                         await SortChildPages(targetNode.ParentId);
 
                     }
@@ -548,7 +544,7 @@ namespace cloudscribe.SimpleContent.Services
                         //parent did not change just sort
                         // set sort and re-sort
                         movedNode.PageOrder = targetNode.PageOrder - 1;
-                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await _pageCommands.Update(movedNode.ProjectId, movedNode);
                         await SortChildPages(targetNode.ParentId);
 
                     }
@@ -563,14 +559,14 @@ namespace cloudscribe.SimpleContent.Services
                         movedNode.ParentId = targetNode.ParentId;
                         movedNode.ParentSlug = targetNode.ParentSlug;
                         movedNode.PageOrder = targetNode.PageOrder + 1;
-                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await _pageCommands.Update(movedNode.ProjectId, movedNode);
                         await SortChildPages(targetNode.ParentId);
                     }
                     else
                     {
                         //parent did not change just sort
                         movedNode.PageOrder = targetNode.PageOrder + 1;
-                        await pageCommands.Update(movedNode.ProjectId, movedNode);
+                        await _pageCommands.Update(movedNode.ProjectId, movedNode);
                         await SortChildPages(targetNode.ParentId);
 
                     }
@@ -592,7 +588,7 @@ namespace cloudscribe.SimpleContent.Services
             foreach(var child in children)
             {
                 child.PageOrder = i;
-                await pageCommands.Update(child.ProjectId, child);
+                await _pageCommands.Update(child.ProjectId, child);
                 i += 2;
             }
         }
@@ -605,7 +601,7 @@ namespace cloudscribe.SimpleContent.Services
             foreach (var child in sorted)
             {
                 child.PageOrder = i;
-                await pageCommands.Update(child.ProjectId, child);
+                await _pageCommands.Update(child.ProjectId, child);
                 i += 2;
             }
 
@@ -629,7 +625,7 @@ namespace cloudscribe.SimpleContent.Services
                 list = await GetChildPages(node);
             }
 
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
 
             var comma = string.Empty;
             var sb = new StringBuilder();
@@ -647,7 +643,7 @@ namespace cloudscribe.SimpleContent.Services
 
         private async Task BuildPageJson(ClaimsPrincipal user, StringBuilder script, IPage page, IUrlHelper urlHelper)
         {
-            var childPagesCount = await pageQueries.GetChildPageCount(page.ProjectId, page.Id, true, CancellationToken); 
+            var childPagesCount = await _pageQueries.GetChildPageCount(page.ProjectId, page.Id, true, CancellationToken); 
             script.Append("{");
             script.Append("\"id\":" + "\"" + page.Id + "\"");
             script.Append(",\"slug\":" + "\"" + page.Slug + "\"");
@@ -672,7 +668,7 @@ namespace cloudscribe.SimpleContent.Services
             {
                 script.Append(",\"canEdit\":true");
                 script.Append(",\"canCreateChild\":true");
-                if (page.Slug == settings.DefaultPageSlug)
+                if (page.Slug == _settings.DefaultPageSlug)
                 {
                     script.Append(",\"canDelete\":false"); // don't allow delete the home/default page from the ui
                 }
@@ -690,22 +686,22 @@ namespace cloudscribe.SimpleContent.Services
 
         private string GetPublishingStatus(IPage page)
         {
-            if(!string.IsNullOrEmpty(page.ExternalUrl)) return sr["Link Only"];
+            if(!string.IsNullOrEmpty(page.ExternalUrl)) return _sr["Link Only"];
 
-            if (!page.IsPublished) return sr["Unpublished"];
-            if (page.PubDate > DateTime.UtcNow) return sr["Future Published"];
-            if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users")) return sr["Public"];
-            return sr["Protected"];
+            if (!page.IsPublished) return _sr["Unpublished"];
+            if (page.PubDate > DateTime.UtcNow) return _sr["Future Published"];
+            if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users")) return _sr["Public"];
+            return _sr["Protected"];
         }
 
         private string ResolveUrl(IPage page, IUrlHelper urlHelper)
         {
-            if(page.Slug == this.settings.DefaultPageSlug)
+            if(page.Slug == this._settings.DefaultPageSlug)
             {
-                return urlHelper.RouteUrl(pageRoutes.PageRouteName);
+                return urlHelper.RouteUrl(_pageRoutes.PageRouteName);
             }
 
-            return urlHelper.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
+            return urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = page.Slug });
         }
 
         private string Encode(string input)
