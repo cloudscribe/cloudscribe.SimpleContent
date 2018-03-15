@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <VersionPrefix>2.0.9</VersionPrefix>
-    <AssemblyVersion>2.0.9</AssemblyVersion>
+    <VersionPrefix>2.0.10</VersionPrefix>
+    <AssemblyVersion>2.0.10</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -17,6 +17,10 @@
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Views\**" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,8 +38,12 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0-*" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\" />
   </ItemGroup>
 
  

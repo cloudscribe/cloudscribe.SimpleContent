@@ -1,33 +1,39 @@
-﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+﻿using cloudscribe.Core.Models;
+using cloudscribe.Core.SimpleContent.ViewModels;
+// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
-// Created:                 2016-04-21
-// Last Modified:           2018-03-12
+// Created:                 2018-03-15
+// Last Modified:           2018-03-15
 // 
+
 
 using cloudscribe.Email;
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.Logging;
 using cloudscribe.Web.Common.Razor;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Services
+namespace cloudscribe.Core.SimpleContent
 {
-    public class ProjectEmailService : IProjectEmailService
+    public class CoreProjectEmailService : IProjectEmailService
     {
-
-        public ProjectEmailService(
+        public CoreProjectEmailService(
             ViewRenderer viewRenderer,
+            ISiteContextResolver siteResolver,
             IEmailSenderResolver emailSenderResolver,
-            ILogger<ProjectEmailService> logger)
+            ILogger<CoreProjectEmailService> logger
+            )
         {
             _viewRenderer = viewRenderer;
             _emailSenderResolver = emailSenderResolver;
+            _siteResolver = siteResolver;
             _log = logger;
         }
 
         private ViewRenderer _viewRenderer;
+        private ISiteContextResolver _siteResolver;
         private IEmailSenderResolver _emailSenderResolver;
         private ILogger _log;
 
@@ -54,27 +60,28 @@ namespace cloudscribe.SimpleContent.Services
                 _log.LogError(logMessage);
                 return;
             }
-
             
-            var model = new CommentNotificationModel(project, post, comment, postUrl);
+            var site = await _siteResolver.GetById(new Guid(project.Id));
+
+            var model = new CoreCommentNotificationModel(site, project, post, comment, postUrl);
             var subject = "Blog comment: " + post.Title;
 
             string plainTextMessage = null;
             string htmlMessage = null;
-            
+
             try
             {
                 try
                 {
-                    htmlMessage 
-                        = await _viewRenderer.RenderViewAsString<CommentNotificationModel>("CommentEmail", model);
+                    htmlMessage
+                        = await _viewRenderer.RenderViewAsString<CoreCommentNotificationModel>("CommentNotificationEmail", model);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _log.LogError("error generating html email from razor template", ex);
                     return;
                 }
-                
+
                 await sender.SendEmailAsync(
                     project.CommentNotificationEmail, //to
                     project.EmailFromAddress, //from
@@ -92,6 +99,5 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        
     }
 }
