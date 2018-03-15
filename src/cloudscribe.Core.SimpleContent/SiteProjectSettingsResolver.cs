@@ -62,13 +62,13 @@ namespace cloudscribe.Core.SimpleContent.Integration
                 settings.AddBlogToPagesTree = false;        
             }
 
-            settings.EmailFromAddress = currentSite.DefaultEmailFromAddress;
-            settings.SmtpPassword = currentSite.SmtpPassword;
-            settings.SmtpPort = currentSite.SmtpPort;
-            settings.SmtpRequiresAuth = currentSite.SmtpRequiresAuth;
-            settings.SmtpServer = currentSite.SmtpServer;
-            settings.SmtpUser = currentSite.SmtpUser;
-            settings.SmtpUseSsl = currentSite.SmtpUseSsl;
+            //settings.EmailFromAddress = currentSite.DefaultEmailFromAddress;
+            //settings.SmtpPassword = currentSite.SmtpPassword;
+            //settings.SmtpPort = currentSite.SmtpPort;
+            //settings.SmtpRequiresAuth = currentSite.SmtpRequiresAuth;
+            //settings.SmtpServer = currentSite.SmtpServer;
+            //settings.SmtpUser = currentSite.SmtpUser;
+            //settings.SmtpUseSsl = currentSite.SmtpUseSsl;
             settings.TimeZoneId = currentSite.TimeZoneId;
             
             return settings;

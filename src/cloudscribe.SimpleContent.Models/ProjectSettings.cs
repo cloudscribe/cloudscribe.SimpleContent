@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-12-22
+// Last Modified:           2018-03-15
 // 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -94,14 +94,14 @@ namespace cloudscribe.SimpleContent.Models
         public string RemoteFeedProcessorUseAgentFragment { get; set; } = string.Empty;
 
         //smtp settings
-        public string EmailFromAddress { get; set; }
-        public string SmtpServer { get; set; }
-        public string SmtpUser { get; set; }
-        public string SmtpPassword { get; set; }
-        public int SmtpPort { get; set; } = 25;
-        public string SmtpPreferredEncoding { get; set; }
-        public bool SmtpRequiresAuth { get; set; } = false;
-        public bool SmtpUseSsl { get; set; } = false;
+        //public string EmailFromAddress { get; set; }
+        //public string SmtpServer { get; set; }
+        //public string SmtpUser { get; set; }
+        //public string SmtpPassword { get; set; }
+        //public int SmtpPort { get; set; } = 25;
+        //public string SmtpPreferredEncoding { get; set; }
+        //public bool SmtpRequiresAuth { get; set; } = false;
+        //public bool SmtpUseSsl { get; set; } = false;
 
         public bool ShowRecentPostsOnDefaultPage { get; set; }
         public bool ShowFeaturedPostsOnDefaultPage { get; set; }
