@@ -75,8 +75,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     b.Property<string>("DisqusShortName")
                         .HasMaxLength(100);
 
-                    b.Property<string>("EmailFromAddress")
-                        .HasMaxLength(100);
+                    //b.Property<string>("EmailFromAddress")
+                    //    .HasMaxLength(100);
 
                     b.Property<string>("FacebookAppId")
                         .HasMaxLength(100);
@@ -138,22 +138,22 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     b.Property<string>("SiteName")
                         .HasMaxLength(200);
 
-                    b.Property<string>("SmtpPassword");
+                    //b.Property<string>("SmtpPassword");
 
-                    b.Property<int>("SmtpPort");
+                    //b.Property<int>("SmtpPort");
 
-                    b.Property<string>("SmtpPreferredEncoding")
-                        .HasMaxLength(20);
+                    //b.Property<string>("SmtpPreferredEncoding")
+                    //    .HasMaxLength(20);
 
-                    b.Property<bool>("SmtpRequiresAuth");
+                    //b.Property<bool>("SmtpRequiresAuth");
 
-                    b.Property<string>("SmtpServer")
-                        .HasMaxLength(100);
+                    //b.Property<string>("SmtpServer")
+                    //    .HasMaxLength(100);
 
-                    b.Property<bool>("SmtpUseSsl");
+                    //b.Property<bool>("SmtpUseSsl");
 
-                    b.Property<string>("SmtpUser")
-                        .HasMaxLength(500);
+                    //b.Property<string>("SmtpUser")
+                    //    .HasMaxLength(500);
 
                     b.Property<int>("TeaserTruncationLength")
                         .ValueGeneratedOnAdd()
