@@ -1,0 +1,36 @@
+﻿@using cloudscribe.Web.Navigation
+@model NavigationViewModel
+@if (Model.CurrentNode != null && (Model.ParentChain.Count > 1 || (Model.TailCrumbs != null && Model.TailCrumbs.Count > 0)))
+{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            @foreach (var node in Model.ParentChain)
+            {
+                if (!Model.ShouldAllowView(node)) { continue; }
+                if (node.EqualsNode(Model.CurrentNode))
+                {
+                    if (Model.TailCrumbs != null)
+                    {
+                        <li class="breadcrumb-item"><a href="@Url.Content(Model.AdjustUrl(node))">@Model.AdjustText(node)</a></li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item active">@Model.AdjustText(node)</li>
+                    }
+                }
+                else
+                {
+                    <li class="breadcrumb-item"><a href="@Url.Content(Model.AdjustUrl(node))">@Model.AdjustText(node)</a></li>
+                }
+            }
+            @if (Model.TailCrumbs != null)
+            {
+                foreach (var n in Model.TailCrumbs)
+                {
+                    <li class="breadcrumb-item active">@n.Text</li>
+                }
+            }
+        </ol>
+    </nav>
+
+}
