@@ -1,0 +1,94 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageTreeViewModel
+@using cloudscribe.SimpleContent.Models
+@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SimpleContent> sr
+@inject IOptions<IconCssClasses> iconClassesAccessor
+@{
+    var icons = iconClassesAccessor.Value;
+}
+@section Styles {
+@{await Html.RenderPartialAsync("TreeStylePartial"); }
+}
+<header class="">
+    <h1 id="article-title" itemprop="headline name">
+        @ViewData["Title"]
+    </h1>
+</header>
+<p>@sr["You can drag and drop page nodes in the treeview below to move them around in the site hierarchy or to change their sort position. Click on a page to show a menu of commands related to that page. Note that changes will not be reflected in the main menu until you refresh the page."]</p>
+<a href="@Model.EditUrl" class="btn btn-default pagecommand"><span class="@icons.NewItem" aria-hidden="true"></span> @sr["New Root Level Page"]</a>
+<div id="tree1" class="treecontainer"></div>
+<div id="cmdBar" class="panel panel-default commandPanel" style="display:none;">
+    <div id="cmdHeading" class="btn btn-primary btn-block" >Panel heading</div>
+    <ul id="ulCommands" class="pagecommands" >
+        <li id="liEdit" class="editcontent">
+            <a id="lnkEdit" class="btn btn-default pagecommand" href="#"><span class="@icons.Edit" aria-hidden="true"></span> @sr["Edit Page"] (<small class="pubstatus" id="spnPubStatus"></small>)</a>
+        </li>
+        <li id="liView" class="viewpage">
+            <a id="lnkView" class="btn btn-default pagecommand" href="#"><span class="@icons.View" aria-hidden="true"></span> @sr["View"]</a>
+        </li>
+        <li id="liSort" class="sortpages">
+            <a id="lnkSort" class="btn btn-default pagecommand" href="#"><span class="@icons.SortAlpha" aria-hidden="true"></span> @sr["Sort Child Pages Alpha"]</a>
+        </li>
+        <li id="liNewChild" class="newchild">
+            <a id="lnkNewChild" class="btn btn-default pagecommand" href="#"><span class="@icons.NewItem" aria-hidden="true"></span> @sr["New Child Page"]</a>
+        </li>
+        <li id="liDelete" class="deletepage">
+            <a id="lnkDeletePage" class="btn btn-default pagecommand" href="#"><span class="@icons.Delete" aria-hidden="true"></span>  @sr["Delete"]</a>
+        </li>
+    </ul>
+</div>
+    <input id="hdnSelPage" type="hidden" value="-1" />
+    <div id="mdlConfirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmHeading">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmHeading">@sr["Confirm"]</h4>
+                </div>
+                <div id="confirmModalBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@sr["Cancel"]</button>
+                    <button id="btnConfirm" type="button" class="btn btn-success btn-ok">@sr["Confirm"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mdlDelete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteHeading">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmDeleteHeading">@sr["Confirm Delete"]</h4>
+                </div>
+                <div id="confirmDeleteModalBody" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@sr["Cancel"]</button>
+                    <button id="btnConfirmDelete" type="button" class="btn btn-danger btn-ok">@sr["Delete"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@* This form is just to get an antiforgery token on the page that is used from js when making posts to server*@
+    <form asp-controller="Page" asp-action="Move"></form>
+    <span id="config"
+          data-service-url="@Model.TreeServiceUrl"
+          data-sort-url="@Model.SortUrl"
+          data-move-url="@Model.MoveUrl"
+          data-edit-url="@Model.EditUrl"
+          data-delete-url="@Model.DeleteUrl"
+          data-sort-children-alpha-prompt-format='@sr["Are you sure you want to sort the child pages of {0} alphabetically?"]'
+          data-move-prompt-format='@sr["Are you sure you want to move the page {0} {1} {2}?"]'
+          data-delete-prompt-format='@sr["Are you sure you want to delete the page {0}?"]'
+          data-delete-with-children-prompt-format='@sr["The page {0} has child pages, if you delete it, all of the child pages will become root level pages. You should delete child pages before deleting the parent page. Are you sure you want to delete {1}?"]'
+          ></span>
+@section Scripts {
+@{await Html.RenderPartialAsync("TreeScriptsPartial"); }      
+}

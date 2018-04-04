@@ -1,0 +1,22 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@inject IOptions<IconCssClasses> iconClassesAccessor
+@inject IStringLocalizer<SimpleContent> sr
+@{
+    var icons = iconClassesAccessor.Value;
+}
+<a id="pageManagerLink" href="@Model.PageTreePath" title="@sr["Manage Page Hierarchy"]" class="btn btn-sm content-tree" style="position:absolute;top:70px;right:0px;">
+    <span class="@icons.PageTree" aria-hidden="true"></span>
+</a>
+<a id="newPageLink" href="@Model.NewItemPath" title="@sr["New Page"]" class="btn btn-sm content-new" style="position:absolute;top:100px;right:0px;">
+    <span class="@icons.NewItem" aria-hidden="true"></span>
+</a>
+@if (Model.CurrentPage != null)
+{
+    <a id="editPageLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit" style="position:absolute;top:130px;right:0px;">
+        <span class="@icons.ShowEditToolbar" aria-hidden="true"></span>
+    </a>
+}

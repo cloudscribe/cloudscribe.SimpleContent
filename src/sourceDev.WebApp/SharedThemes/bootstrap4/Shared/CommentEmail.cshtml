@@ -1,0 +1,18 @@
+﻿@model cloudscribe.SimpleContent.Models.CommentNotificationModel
+
+@{
+    Layout = "_LayoutEmailCommentNotification";
+    ViewData["Title"] = "Post Comment Notification";
+}
+<h3  style="color:#5F5F5F;line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:normal;margin-top:0;margin-bottom:3px;text-align:left;">
+   @Model.Comment.Author   on <a href="@Model.PostUrl"> @Model.Post.Title :</a>
+</h3>
+<div style="font: 11pt/1.5 calibri, arial;">
+ <br />
+    @Model.Comment.Content  <br /><br />
+
+    <br /><br /><hr />
+    Website:  @Model.Comment.Website <br />
+    E-mail:  @Model.Comment.Email <br />
+    IP-address: @Model.Comment.Ip
+</div>

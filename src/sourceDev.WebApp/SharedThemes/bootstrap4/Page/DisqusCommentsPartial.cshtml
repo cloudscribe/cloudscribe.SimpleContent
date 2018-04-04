@@ -1,0 +1,31 @@
+﻿@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Models
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<SimpleContent> sr
+@{
+    var disqusScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/embed.js";
+}
+@if ((Model.CurrentPage != null) && (!string.IsNullOrEmpty(Model.CurrentPage.Id)))
+{
+    @sr["Comments"]
+    <div id="disqus_thread"></div>
+        <script>
+        var disqus_config = function () {
+            this.page.url = "@Context.Request.GetCurrentFullUrl()";
+            this.page.identifier = "@Model.CurrentPage.Id";
+        };
+
+        (function () {
+            var d = document, s = d.createElement('script');
+            s.src = '@disqusScriptPath';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+}
