@@ -48,16 +48,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Log = logger;
         }
 
-        protected IProjectService ProjectService;
-        protected IPageService PageService;
-        protected IContentProcessor ContentProcessor;
-        protected IAuthorizationService AuthorizationService;
-        protected IAuthorNameResolver AuthorNameResolver;
-        protected ITimeZoneHelper TimeZoneHelper;
-        protected ILogger Log;
-        protected IPageRoutes PageRoutes;
-        protected IStringLocalizer<SimpleContent> StringLocalizer;
-        protected PageEditOptions EditOptions;
+        protected IProjectService ProjectService { get; private set; }
+        protected IPageService PageService { get; private set; }
+        protected IContentProcessor ContentProcessor { get; private set; }
+        protected IAuthorizationService AuthorizationService { get; private set; }
+        protected IAuthorNameResolver AuthorNameResolver { get; private set; }
+        protected ITimeZoneHelper TimeZoneHelper { get; private set; }
+        protected ILogger Log { get; private set; }
+        protected IPageRoutes PageRoutes { get; private set; }
+        protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
+        protected PageEditOptions EditOptions { get; private set; }
 
         [HttpGet]
         [AllowAnonymous]
