@@ -59,18 +59,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             ContentOptions = configOptionsAccessor.Value;
         }
 
-        private IProjectService ProjectService;
-        private IBlogService BlogService;
-        private IBlogRoutes BlogRoutes;
-        private IAuthorNameResolver AuthorNameResolver;
-        private IProjectEmailService EmailService;
-        private IContentProcessor ContentProcessor;
-        private ILogger Log;
-        private ITimeZoneHelper TimeZoneHelper;
-        private IAuthorizationService AuthorizationService;
-        private IStringLocalizer<SimpleContent> StringLocalizer;
-        private SimpleContentConfig ContentOptions;
-        
+        protected IProjectService ProjectService { get; private set; }
+        protected IBlogService BlogService { get; private set; }
+        protected IBlogRoutes BlogRoutes { get; private set; }
+        protected IAuthorNameResolver AuthorNameResolver { get; private set; }
+        protected IProjectEmailService EmailService { get; private set; }
+        protected IContentProcessor ContentProcessor { get; private set; }
+        protected ILogger Log { get; private set; }
+        protected ITimeZoneHelper TimeZoneHelper { get; private set; }
+        protected IAuthorizationService AuthorizationService { get; private set; }
+        protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
+        protected SimpleContentConfig ContentOptions { get; private set; }
+
 
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]

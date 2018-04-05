@@ -29,8 +29,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Log = logger;
         }
         
-        protected IResourceHelper ResourceHelper;
-        protected ILogger Log;
+        protected IResourceHelper ResourceHelper { get; private set; }
+        protected ILogger Log { get; private set; }
 
 
         protected virtual IActionResult GetResult(string resourceName, string contentType)
