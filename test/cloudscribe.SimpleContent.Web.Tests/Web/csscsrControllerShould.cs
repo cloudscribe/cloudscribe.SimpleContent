@@ -17,17 +17,17 @@ namespace cloudscribe.SimpleContent.Web.Web
         public void Return_Expected_Stream_For_PageTree_js()
         {
 
-            var controllerLoggerMock = new Mock<ILogger<csscsrController>>();
+            var controllerLoggerMock = new Mock<ILogger<CsscsrController>>();
             var resourceHelperMock = new ResourceHelper(new Mock<ILogger<ResourceHelper>>().Object);
 
 
-            var csscsrController = new csscsrController(resourceHelperMock, controllerLoggerMock.Object);
+            var csscsrController = new CsscsrController(resourceHelperMock, controllerLoggerMock.Object);
 
             csscsrController.ControllerContext = new ControllerContext();
             csscsrController.ControllerContext.HttpContext = new DefaultHttpContext();
             csscsrController.ControllerContext.HttpContext.Request.Path = "/csscsr/js/pagetree.js";
 
-            var result = csscsrController.js();
+            var result = csscsrController.Js();
 
             Assert.IsAssignableFrom<FileStreamResult>(result);
         }
@@ -36,17 +36,17 @@ namespace cloudscribe.SimpleContent.Web.Web
         public void Return_Expected_Stream_For_BlogCommon_css()
         {
 
-            var controllerLoggerMock = new Mock<ILogger<csscsrController>>();
+            var controllerLoggerMock = new Mock<ILogger<CsscsrController>>();
             var resourceHelperMock = new ResourceHelper(new Mock<ILogger<ResourceHelper>>().Object);
 
 
-            var csscsrController = new csscsrController(resourceHelperMock, controllerLoggerMock.Object);
+            var csscsrController = new CsscsrController(resourceHelperMock, controllerLoggerMock.Object);
 
             csscsrController.ControllerContext = new ControllerContext();
             csscsrController.ControllerContext.HttpContext = new DefaultHttpContext();
             csscsrController.ControllerContext.HttpContext.Request.Path = "/csscsr/css/blog-common.css";
 
-            var result = csscsrController.css();
+            var result = csscsrController.Css();
 
             Assert.IsAssignableFrom<FileStreamResult>(result);
             
