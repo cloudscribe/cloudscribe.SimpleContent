@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <Description>SQLite Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <VersionPrefix>2.0.6</VersionPrefix>
-    <AssemblyVersion>2.0.6</AssemblyVersion>
+    <VersionPrefix>2.0.7</VersionPrefix>
+    <AssemblyVersion>2.0.7</AssemblyVersion>
     <Authors>Joe Audette</Authors>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <OutputType>Exe</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <PackageTags>cloudscribe;commands;queries;ef</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
@@ -22,7 +21,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.*" />
   </ItemGroup>
 
