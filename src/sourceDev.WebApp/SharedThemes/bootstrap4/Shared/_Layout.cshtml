@@ -32,18 +32,23 @@
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
 </head>
 <body class="@ViewData["BodyClass"]">
+    <a id="skippy" class="sr-only sr-only-focusable" href="#content">
+        <div class="container">
+            <span class="skiplink-text">Skip to main content</span>
+        </div>
+    </a>
     <header>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a href="~/@(Tenant?.SiteFolderName ?? "")" class="navbar-brand">@(Tenant?.SiteName ?? "Sample")</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-                @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-        </nav>
-    </header>
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+                <a href="~/@(Tenant?.SiteFolderName ?? "")" class="navbar-brand">@(Tenant?.SiteName ?? "Sample")</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                    @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
+            </nav>
+        </header>
 
     <main role="main" class="container-fluid">
 
@@ -81,7 +86,7 @@
     @RenderSection("Bottom", required: false)
     @RenderSection("scripts", required: false)
     <script>
-        
+
 //        $(document).ready( function () {
 //    $('.dropdown-menu a.dropdown-toggle').on( 'click', function ( e ) {
 //        var $el = $( this );
@@ -91,13 +96,13 @@
 //        }
 //        var $subMenu = $( this ).next( ".dropdown-menu" );
 //        $subMenu.toggleClass( 'show' );
-        
+
 //        $( this ).parent( "li" ).toggleClass( 'show' );
 
 //        $( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
 //            $( '.dropdown-menu .show' ).removeClass( "show" );
 //        } );
-        
+
 //         if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
 //            $el.next().css( { "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 } );
 //        }
@@ -105,7 +110,7 @@
 //        return false;
 //    } );
 //} );
-        
+
 
         /*
         $( document ).ready( function () {
@@ -117,13 +122,13 @@
         }
         var $subMenu = $( this ).next( ".dropdown-menu" );
         $subMenu.toggleClass( 'show' );
-        
+
         $( this ).parent( "li" ).toggleClass( 'show' );
 
         $( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
             $( '.dropdown-menu .show' ).removeClass( "show" );
         } );
-        
+
          if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
             $el.next().css( { "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 } );
         }
