@@ -11,13 +11,13 @@
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
 }
 <div class="row">
-    <div class="col-md-10 col-md-push-2">
-        <h2>@ViewBag.Title</h2>
+    <div class="col order-2">
+        <h2><a id="sidenavtoggle" class="mr-1 d-none d-md-inline d-lg-inline" title="@sr["Toggle Side Menu"]" href="#" data-target="#sidenavmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-bars fa-sm"></i></a>@ViewBag.Title</h2>
         <form method="post" role="form" asp-antiforgery="true" data-submit-once="true">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input asp-for="SiteId" type="hidden" />
             <div class="form-group">
-                <label asp-for="LoginInfoTop" class="control-label">@sr["Login Info Top"]</label>
+                <label asp-for="LoginInfoTop">@sr["Login Info Top"]</label>
                 <textarea class="form-control" rows="5" asp-for="LoginInfoTop"
                           data-ckeditor-unobtrusive=""
                           data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -28,7 +28,7 @@
                 <span asp-validation-for="LoginInfoTop" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LoginInfoBottom" class="control-label">@sr["Login Info Bottom"]</label>
+                <label asp-for="LoginInfoBottom">@sr["Login Info Bottom"]</label>
                 <textarea class="form-control" rows="5" asp-for="LoginInfoBottom"
                           data-ckeditor-unobtrusive=""
                           data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -43,13 +43,13 @@
             </div>
         </form>
     </div>
-    <div class="col-md-2 col-md-pull-10 hidden-xs hidden-sm">
-        @await Component.InvokeAsync("Navigation", new { viewName = "SideNavAlt1", filterName = NamedNavigationFilters.ParentTree, startingNodeKey = "SiteAdmin" })
-    </div>
+    <nav id="sidenavmenu" class="col col-3 order-1 collapse">
+        @await Component.InvokeAsync("Navigation", new { viewName = "Bs4SideNav", filterName = NamedNavigationFilters.ParentTree, startingNodeKey = "SiteAdmin" })
+    </nav>
 </div>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_SideMenuScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("_SideNavScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
