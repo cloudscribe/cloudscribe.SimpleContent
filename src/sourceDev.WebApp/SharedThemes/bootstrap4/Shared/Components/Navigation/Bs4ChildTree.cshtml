@@ -1,0 +1,25 @@
+﻿@using cloudscribe.Web.Navigation
+@using System.Text
+@model NavigationViewModel
+@if (Model.HasVisibleChildren(Model.CurrentNode))
+{
+   <nav>
+    <ul class="childtree list-unstyled">
+        @foreach (var node in Model.CurrentNode.Children)
+        {
+            if (!Model.ShouldAllowView(node)) { continue; }
+            if (!Model.HasVisibleChildren(node))
+            {
+                <li class='nav-item'><a class='nav-link' href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a></li>
+            }
+            else
+            {
+                <li class='nav-item'>
+                    <a class="nav-link" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a>
+                    @Model.UpdateTempNode(node)@Html.Partial("Bs4NavigationNodeChildTreePartial", Model)
+                </li>
+            }
+        }
+    </ul>
+  </nav>  
+}

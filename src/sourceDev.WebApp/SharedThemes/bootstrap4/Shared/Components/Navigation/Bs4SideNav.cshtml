@@ -1,0 +1,42 @@
+﻿@using cloudscribe.Web.Navigation
+@using System.Text
+@model NavigationViewModel
+@if (Model.HasVisibleChildren(Model.StartingNode))
+{
+        <ul class="nav nav-pills flex-column" id="side-menu">
+            @foreach (var node in Model.StartingNode.Children)
+            {
+                if (!Model.ShouldAllowView(node)) { continue; }
+                if (!Model.HasVisibleChildren(node))
+                {
+                    if (node.EqualsNode(Model.CurrentNode))
+                    {
+                        <li class="nav-item"><a class="nav-link active" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a></li>
+                    }
+                }
+                else
+                {
+                    if (node.EqualsNode(Model.CurrentNode))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link active" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a>
+                            @Model.UpdateTempNode(node)
+                            @Html.Partial("SideNavPartial", Model)
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a>
+                            @Model.UpdateTempNode(node)
+                            @Html.Partial("Bs4SideNavPartial", Model)
+                        </li>
+                    }
+                }
+            }
+        </ul>
+}

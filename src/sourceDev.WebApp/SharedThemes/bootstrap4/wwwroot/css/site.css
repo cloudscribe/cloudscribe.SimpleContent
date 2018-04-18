@@ -177,4 +177,9 @@ ul.navbar-nav li.dropdown:hover > ul.dropdown-menu {
     border-radius:6px 0 6px 6px;
 }*/
 
+/*bootstrasp4 uses vertical-align:top by default which skews the layout */
+
+.table td, .table th {
+    vertical-align:inherit;
+}
 

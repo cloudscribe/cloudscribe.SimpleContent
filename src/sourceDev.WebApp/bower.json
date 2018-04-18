@@ -16,6 +16,8 @@
     "tether": "~1.4.0",
     "cropper": "~2.3.4",
     "simplemde": "^1.11.2"
-
+  },
+  "resolutions": {
+    "jquery": ">=1.8.3"
   }
 }

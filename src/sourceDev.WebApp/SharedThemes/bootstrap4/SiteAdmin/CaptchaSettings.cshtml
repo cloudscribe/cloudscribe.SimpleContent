@@ -5,65 +5,50 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<CloudscribeCore> sr
 <div class="row">
-    <div class="col-md-10 col-md-push-2">
-        <h2>@ViewData["Title"]</h2>
+    <div class="col order-2">
+        <h2><a id="sidenavtoggle" class="mr-1 d-none d-md-inline d-lg-inline" title="@sr["Toggle Side Menu"]" href="#" data-target="#sidenavmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-bars fa-sm"></i></a>@ViewData["Title"]</h2>
         <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input asp-for="SiteId" type="hidden" />
             <div class="form-group">
-                <label asp-for="RecaptchaPublicKey" class="col-md-2 control-label">@sr["Recaptcha Public Key"]</label>
-                <div class="col-md-10">
-                    <input asp-for="RecaptchaPublicKey" class="form-control" />
-                    <span asp-validation-for="RecaptchaPublicKey" class="text-danger"></span>
+                <label asp-for="RecaptchaPublicKey">@sr["Recaptcha Public Key"]</label>
+                <input asp-for="RecaptchaPublicKey" class="form-control" />
+                <span asp-validation-for="RecaptchaPublicKey" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecaptchaPrivateKey">@sr["Recaptcha Private Key"]</label>
+                <input asp-for="RecaptchaPrivateKey" class="form-control" />
+                <span asp-validation-for="RecaptchaPrivateKey" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input asp-for="UseInvisibleCaptcha" class="form-check-input" />
+                    <label class="form-check-label">@sr["Use Invisible reCaptcha?"]</label>
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="RecaptchaPrivateKey" class="col-md-2 control-label">@sr["Recaptcha Private Key"]</label>
-                <div class="col-md-10">
-                    <input asp-for="RecaptchaPrivateKey" class="form-control" />
-                    <span asp-validation-for="RecaptchaPrivateKey" class="text-danger"></span>
+                <div class="form-check">
+                    <input asp-for="RequireCaptchaOnRegistration" class="form-check-input" />
+                    <label class="form-check-label">@sr["Require Captcha On Registration?"]</label>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="UseInvisibleCaptcha" /> @sr["Use Invisible reCaptcha?"]
-                        </label>
-                    </div>
+                <div class="form-check">
+                    <input asp-for="RequireCaptchaOnLogin" class="form-check-input" />
+                    <label class="form-check-label">@sr["Require Captcha On Login?"]</label>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="RequireCaptchaOnRegistration" /> @sr["Require Captcha On Registration?"]
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <div class="checkbox">
-                        <label>
-                            <input asp-for="RequireCaptchaOnLogin" /> @sr["Require Captcha On Login?"]
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button name="submit" type="submit" class="btn btn-default" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
-                </div>
+                <button name="submit" type="submit" class="btn btn-default" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
             </div>
         </form>
     </div>
-    <div class="col-md-2 col-md-pull-10 hidden-xs hidden-sm">
-        @await Component.InvokeAsync("Navigation", new { viewName = "SideNavAlt1", filterName = NamedNavigationFilters.ParentTree, startingNodeKey = "SiteAdmin" })
-    </div>
+    <nav id="sidenavmenu" class="col col-3 order-1 collapse">
+        @await Component.InvokeAsync("Navigation", new { viewName = "Bs4SideNav", filterName = NamedNavigationFilters.ParentTree, startingNodeKey = "SiteAdmin" })
+    </nav>
 </div>
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_SideMenuScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("_SideNavScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
     <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
