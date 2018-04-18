@@ -24,132 +24,103 @@
     <input asp-for="SiteId" type="hidden" />
     <input asp-for="ReturnPageNumber" type="hidden" />
     <div class="form-group">
-        <label asp-for="SiteName" class="col-md-2 control-label">@sr["Site Name"]</label>
-        <div class="col-md-10">
-            <input asp-for="SiteName" class="form-control" />
-            <span asp-validation-for="SiteName" class="text-danger"></span>
-        </div>
+        <label asp-for="SiteName">@sr["Site Name"]</label>
+        <input asp-for="SiteName" class="form-control" />
+        <span asp-validation-for="SiteName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="AliasId" class="col-md-2 control-label">@sr["AliasId"]</label>
-        <div class="col-md-10">
-            <span class="form-control">@Model.AliasId</span>
-            <span asp-validation-for="AliasId" class="text-danger"></span>
-        </div>
+        <label asp-for="AliasId">@sr["AliasId"]</label>
+        <span class="form-control">@Model.AliasId</span>
     </div>
     @if (useFolderTenants)
     {
         <div class="form-group">
-            <label asp-for="SiteFolderName" class="col-md-2 control-label">@sr["Site Folder Name"]</label>
-            <div class="col-md-10">
-                <div class="input-group">
-                    <span class="input-group-addon">@baseUrl</span>
-                    <input asp-for="SiteFolderName" class="form-control"
-                           data-remote-validate-onblur="true"
-                           data-error-target-id="spnFolderNameWarn"
-                           data-additional-input-ids="SiteId"
-                           data-validation-url='@Url.Action("FolderNameAvailable", "SiteAdmin")' />
+            <label asp-for="SiteFolderName">@sr["Site Folder Name"]</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">@baseUrl</span>
                 </div>
-                <span id="spnFolderNameWarn" class="text-danger" data-error-message='@sr["Requested Site Folder Name is not available, please try another value"]'></span>
-                <span asp-validation-for="SiteFolderName" class="text-danger"></span>
-                @Html.ValidationMessage("foldererror", new { @class = "text-danger" })
+                <input asp-for="SiteFolderName" class="form-control"
+                       data-remote-validate-onblur="true"
+                       data-error-target-id="spnFolderNameWarn"
+                       data-additional-input-ids="SiteId"
+                       data-validation-url='@Url.Action("FolderNameAvailable", "SiteAdmin")' />
             </div>
-        </div>
+            <span id="spnFolderNameWarn" class="text-danger" data-error-message='@sr["Requested Site Folder Name is not available, please try another value"]'></span>
+            <span asp-validation-for="SiteFolderName" class="text-danger"></span>
+            @Html.ValidationMessage("foldererror", new { @class = "text-danger" })
+        </div> 
     }
     else if (useHostTenants)
     {
         <div class="form-group">
-            <label asp-for="HostName" class="col-md-2 control-label">@sr["Host Name"]</label>
-            <div class="col-md-10">
-                <input asp-for="HostName" class="form-control" />
-                <span asp-validation-for="HostName" class="text-danger"></span>
-                @Html.ValidationMessage("hosterror", new { @class = "text-danger" })
-                <a class="hostmap" asp-action="SiteHostMappings"
-                   asp-controller="SiteAdmin"
-                   asp-route-siteGuid="SiteGuid"
-                   asp-route-slp="ReturnPageNumber">@sr["Domain Mappings"]</a>
-            </div>
+            <label asp-for="HostName">@sr["Host Name"]</label>
+            <input asp-for="HostName" class="form-control" />
+            <span asp-validation-for="HostName" class="text-danger"></span>
+            @Html.ValidationMessage("hosterror", new { @class = "text-danger" })
+            <a class="hostmap" asp-action="SiteHostMappings"
+                asp-controller="SiteAdmin"
+                asp-route-siteGuid="SiteGuid"
+                asp-route-slp="ReturnPageNumber">@sr["Domain Mappings"]</a>
         </div>
     }
     <div class="form-group">
-        <label asp-for="TimeZoneId" class="col-md-2 control-label">@sr["Time Zone"]</label>
-        <div class="col-md-10">
-            <select asp-for="TimeZoneId"
-                    asp-items="Model.AllTimeZones" class="form-control"></select>
-            <span asp-validation-for="TimeZoneId" class="text-danger"></span>
-        </div>
+        <label asp-for="TimeZoneId">@sr["Time Zone"]</label>
+        <select asp-for="TimeZoneId" asp-items="Model.AllTimeZones" class="form-control"></select>
+        <span asp-validation-for="TimeZoneId" class="text-danger"></span>
     </div>
     @if (Model.AvailableThemes.Count > 0)
     {
         <div class="form-group">
-            <label asp-for="Theme" class="col-md-2 control-label">@sr["Theme"]</label>
-            <div class="col-md-10">
-                <select id="Layout" asp-for="Theme"
-                        asp-items="Model.AvailableThemes" class="form-control"></select>
-                <span asp-validation-for="Theme" class="text-danger"></span>
-            </div>
+            <label asp-for="Theme">@sr["Theme"]</label>
+            <select id="Layout" asp-for="Theme" asp-items="Model.AvailableThemes" class="form-control"></select>
+            <span asp-validation-for="Theme" class="text-danger"></span>
         </div>
     }
     @if (Model.AvailableCultures.Count > 0)
     {
         <div class="form-group">
-            <label asp-for="ForcedCulture" class="col-md-2 control-label">@sr["Forced Culture"]</label>
-            <div class="col-md-10">
-                <select asp-for="ForcedCulture"
-                        asp-items="Model.AvailableCultures" class="form-control"></select>
-                <span asp-validation-for="ForcedCulture" class="text-danger"></span>
-            </div>
+            <label asp-for="ForcedCulture">@sr["Forced Culture"]</label>
+            <select asp-for="ForcedCulture" asp-items="Model.AvailableCultures" class="form-control"></select>
+            <span asp-validation-for="ForcedCulture" class="text-danger"></span>
         </div>
     }
     @if (Model.AvailableUICultures.Count > 0)
     {
         <div class="form-group">
-            <label asp-for="ForcedUICulture" class="col-md-2 control-label">@sr["Forced UI Culture"]</label>
-            <div class="col-md-10">
-                <select asp-for="ForcedUICulture"
-                        asp-items="Model.AvailableUICultures" class="form-control"></select>
-                <span asp-validation-for="ForcedUICulture" class="text-danger"></span>
-            </div>
+            <label asp-for="ForcedUICulture">@sr["Forced UI Culture"]</label>
+            <select asp-for="ForcedUICulture" asp-items="Model.AvailableUICultures" class="form-control"></select>
+            <span asp-validation-for="ForcedUICulture" class="text-danger"></span>
         </div>
     }
     <div class="form-group">
-        <label asp-for="GoogleAnalyticsProfileId" class="col-md-2 control-label">@sr["Google Analytics ProfileId"]</label>
-        <div class="col-md-10">
-            <input asp-for="GoogleAnalyticsProfileId" class="form-control" />
-            <span asp-validation-for="GoogleAnalyticsProfileId" class="text-danger"></span>
+        <label asp-for="GoogleAnalyticsProfileId">@sr["Google Analytics ProfileId"]</label>
+        <input asp-for="GoogleAnalyticsProfileId" class="form-control" />
+        <span asp-validation-for="GoogleAnalyticsProfileId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AddThisProfileId">@sr["AddThis.com ProfileId"]</label>
+        <input asp-for="AddThisProfileId" class="form-control" />
+        <span asp-validation-for="AddThisProfileId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="form-check">
+            <input asp-for="IsClosed" class="form-check-input" />
+            <label asp-for="IsClosed" class="form-check-label">@sr["Close Site To Public"]</label>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="AddThisProfileId" class="col-md-2 control-label">@sr["AddThis.com ProfileId"]</label>
-        <div class="col-md-10">
-            <input asp-for="AddThisProfileId" class="form-control" />
-            <span asp-validation-for="AddThisProfileId" class="text-danger"></span>
-        </div>
+        <label asp-for="ClosedMessage">@sr["Closed Message"]</label>
+        <textarea class="form-control" rows="5" asp-for="ClosedMessage"
+                    data-ckeditor-unobtrusive=""
+                    data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                    data-ckeditor-config-language="@ckOptions.LanguageCode"
+                    data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                    data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                    data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+        <span asp-validation-for="ClosedMessage" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <div class="checkbox">
-                <label>
-                    <input asp-for="IsClosed" /> @sr["Close Site To Public"]
-                </label>
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="ClosedMessage" class="col-md-2 control-label">@sr["Closed Message"]</label>
-        <div class="col-md-10">
-            <textarea class="form-control" rows="5" asp-for="ClosedMessage"
-                      data-ckeditor-unobtrusive=""
-                      data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                      data-ckeditor-config-language="@ckOptions.LanguageCode"
-                      data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                      data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                      data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-            <span asp-validation-for="ClosedMessage" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
             <button name="submit" type="submit" class="btn btn-default" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
             @if ((Model.ShowDelete) && (Model.SiteId != Guid.Empty))
             {
@@ -158,7 +129,6 @@
                 </button>
                 @Html.ValidationMessage("deleteerror", new { @class = "text-danger" })
             }
-        </div>
     </div>
 </form>
 @if ((Model.ShowDelete) && (Model.SiteId != Guid.Empty))

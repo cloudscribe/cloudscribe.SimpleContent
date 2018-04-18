@@ -2,7 +2,7 @@
 @model NavigationViewModel
 @if ((Model.TempNode != null) && (Model.HasVisibleChildren(Model.TempNode)))
 {
-    @:<ul class="nav navbar-nav nav-second-level">
+    <ul class="list-unstyled ml-4 ">
 
         @foreach (var childNode in Model.TempNode.Children)
         {
@@ -12,22 +12,20 @@
             {
                 if (childNode.EqualsNode(Model.CurrentNode))
                 {
-                    @:
-                    <li class="active"><a class="active" href="@Url.Content(Model.AdjustUrl(childNode))">@childNode.Value.Text</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="@Url.Content(Model.AdjustUrl(childNode))">@Html.Raw(Model.GetIcon(childNode.Value))@childNode.Value.Text</a></li>
                 }
                 else
                 {
-                    @:
-                    <li><a href="@Url.Content(Model.AdjustUrl(childNode))">@childNode.Value.Text</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Content(Model.AdjustUrl(childNode))">@Html.Raw(Model.GetIcon(childNode.Value))@childNode.Value.Text</a></li>
                 }
             }
             else
             {
                 if (childNode.EqualsNode(Model.CurrentNode))
                 {
-                    <li class="active">
-                        <a class="active" href="@Url.Content(Model.AdjustUrl(childNode))">
-                            @childNode.Value.Text
+                    <li class="nav-item">
+                        <a class="nav-link active" href="@Url.Content(Model.AdjustUrl(childNode))">
+                            @Html.Raw(Model.GetIcon(childNode.Value))@childNode.Value.Text
                         </a>
                         @Model.UpdateTempNode(childNode)
                         @Html.Partial("SideNavPartial", Model) @* recursion *@
@@ -35,15 +33,15 @@
                 }
                 else
                 {
-                    <li>
-                        <a href="@Url.Content(Model.AdjustUrl(childNode))">
-                            @childNode.Value.Text
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Content(Model.AdjustUrl(childNode))">
+                            @Html.Raw(Model.GetIcon(childNode.Value))@childNode.Value.Text
                         </a>
                         @Model.UpdateTempNode(childNode)
-                        @Html.Partial("SideNavPartial", Model) @* recursion *@
+                        @Html.Partial("Bs4SideNavPartial", Model) @* recursion *@
                     </li>
                 }
             }
         }
-        @:</ul>
+        </ul>
 }
