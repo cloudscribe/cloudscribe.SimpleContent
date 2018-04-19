@@ -83,17 +83,23 @@
 <div>
     <div>@totalUsersMessage</div>
     <cs-pager 
-              asp-action="@Model.ActionName" asp-controller="UserAdmin"
-              asp-route-siteId="@Model.SiteId"
-              asp-route-query="@Model.AlphaQuery"
-              asp-route-sortmode="@Model.SortMode"
-              asp-route-pagesize="@Model.UserList.PageSize"
-              cs-paging-pagesize="@Model.UserList.PageSize"
-              cs-paging-pagenumber="@Model.UserList.PageNumber"
-              cs-paging-totalitems="@Model.UserList.TotalItems"
-              cs-first-page-title='@sr["First Page"]'
-              cs-last-page-title='@sr["Last Page"]'
-              cs-previous-page-title='@sr["Previous page"]'
-              cs-next-page-title='@sr["Next page"]'
-              ></cs-pager>
+        asp-action="@Model.ActionName" asp-controller="UserAdmin"
+        asp-route-siteId="@Model.SiteId"
+        asp-route-query="@Model.AlphaQuery"
+        asp-route-sortmode="@Model.SortMode"
+        asp-route-pagesize="@Model.UserList.PageSize"
+        cs-paging-pagesize="@Model.UserList.PageSize"
+        cs-paging-pagenumber="@Model.UserList.PageNumber"
+        cs-paging-totalitems="@Model.UserList.TotalItems"
+        cs-first-page-title='@sr["First Page"]'
+        cs-last-page-title='@sr["Last Page"]'
+        cs-previous-page-title='@sr["Previous page"]'
+        cs-next-page-title='@sr["Next page"]'
+        cs-pager-ul-class="pagination d-flex flex-wrap"
+        cs-pager-li-current-class="page-item active"
+        cs-pager-li-other-class="page-item"
+        cs-pager-li-non-active-class="page-item disabled"
+        cs-pager-link-current-class="page-link"
+        cs-pager-link-other-class="page-link"
+        ></cs-pager>
 </div>

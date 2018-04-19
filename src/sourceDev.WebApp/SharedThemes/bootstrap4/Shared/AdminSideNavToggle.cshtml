@@ -1,0 +1,20 @@
+﻿@using Microsoft.Extensions.Localization
+@using cloudscribe.Core.Web
+@using cloudscribe.Core.Web.Design
+@inject CoreThemeHelper themeHelper
+@inject IStringLocalizer<CloudscribeCore> sr
+@{ 
+    var themeSettings = themeHelper.GetThemeSettings();
+    var expanded = "false";
+    if(themeSettings.AdminSideNavExpanded)
+    {
+        expanded = "true";
+    }
+}
+<a id="sidenavtoggle"
+   class="btn btn-sm d-none d-md-inline d-lg-inline"
+   style="position:absolute;top:120px;right:5px;"
+   title="@sr["Toggle Side Menu"]" href="#"
+   data-target="#sidenavmenu"
+   data-toggle="collapse"
+   aria-expanded='@expanded'><i class="fas fa-bars"></i></a>

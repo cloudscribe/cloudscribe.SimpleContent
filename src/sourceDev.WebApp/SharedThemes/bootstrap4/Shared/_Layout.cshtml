@@ -8,6 +8,12 @@
 @addTagHelper "*, cloudscribe.Web.Pagination"
 @addTagHelper "*, cloudscribe.Core.Web"
 @inject SiteContext Tenant
+@{ 
+    string sideNavToggleClass = ViewData["SideNavToggle"]?.ToString() ?? "collapse";
+    string aside1ToggleClass = ViewData["Aside1Toggle"]?.ToString() ?? "collapse";
+    string aside2ToggleClass = ViewData["Aside2Toggle"]?.ToString() ?? "collapse";
+
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,16 +57,24 @@
                 </div>
             </nav>
         </header>
-
-    <main role="main" class="container-fluid">
-
+    <div id="wrapper" class="container-fluid">
         @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
-
-        @await Html.PartialAsync("AlertsPartial")
-        @RenderBody()
-
-
-    </main>
+        <div class="row">
+            <main role="main" class="col order-3">
+                @await Html.PartialAsync("AlertsPartial")
+                @RenderBody()
+            </main>
+            <nav id="sidenavmenu" class="col col-3 order-1 @sideNavToggleClass">
+                @RenderSection("SideNav", required: false)
+            </nav>
+            <aside id="aside1" class="col col-1 order-2 @aside1ToggleClass">
+                @RenderSection("Aside1", required: false)
+            </aside>
+            <aside id="aside2" class="col col-1 order-4 @aside2ToggleClass">
+                @RenderSection("Aside2", required: false)
+            </aside>
+        </div>
+    </div>
     <footer class="footer">
         <div class="container">
             <small class="float-left">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</small>
@@ -71,10 +85,7 @@
             </small>
         </div>
     </footer>
-
     @RenderSection("Toolbar", required: false)
-
-
     <environment names="Development">
         <script src="~/js/jquery.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
         @*<script src="~/js/popper.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
@@ -90,7 +101,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     </environment>
     @RenderSection("Bottom", required: false)
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
     <script>
 
 //        $(document).ready( function () {
