@@ -3,17 +3,19 @@
 @using Microsoft.Extensions.Localization
 @using cloudscribe.Core.Web
 @inject IStringLocalizer<CloudscribeCore> sr
-<div class="row">
-    <div class="col order-2">
-        <h2><a id="sidenavtoggle" class="mr-1 d-none d-md-inline d-lg-inline" title="@sr["Toggle Side Menu"]" href="#" data-target="#sidenavmenu" data-toggle="collapse" aria-expanded="false"><i class="fas fa-bars fa-sm"></i></a>@ViewBag.Title</h2>
-        @{await Html.RenderPartialAsync("_BasicSettingsPartial", Model); }
-    </div>
-    <nav id="sidenavmenu" class="col col-3 order-1 collapse">
-        @await Component.InvokeAsync("Navigation", new { viewName = "Bs4SideNav", filterName = NamedNavigationFilters.ParentTree, startingNodeKey = "SiteAdmin" })
-    </nav>
-</div>
+@{
+    //ViewData["SideNavToggle"] = "show";
+}
+<h2>@ViewBag.Title</h2>
+@{await Html.RenderPartialAsync("_BasicSettingsPartial", Model); }
+@section SideNav {
+    @{ await Html.RenderPartialAsync("AdminSideNav"); }
+}
+@section Toolbar{
+    @{ await Html.RenderPartialAsync("AdminSideNavToggle"); }
+}
 @section scripts {
-    @{ await Html.RenderPartialAsync("_SideNavScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("AdminSideNavScripts"); }
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>

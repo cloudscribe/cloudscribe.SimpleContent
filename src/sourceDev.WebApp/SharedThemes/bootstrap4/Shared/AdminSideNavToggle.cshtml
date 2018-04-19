@@ -1,0 +1,10 @@
+﻿@using Microsoft.Extensions.Localization
+@using cloudscribe.Core.Web
+@inject IStringLocalizer<CloudscribeCore> sr
+<a id="sidenavtoggle" 
+   class="btn btn-sm d-none d-md-inline d-lg-inline" 
+   style="position:absolute;top:120px;right:5px;" 
+   title="@sr["Toggle Side Menu"]" href="#" 
+   data-target="#sidenavmenu" 
+   data-toggle="collapse" 
+   aria-expanded="false"><i class="fas fa-bars fa-sm"></i></a>
