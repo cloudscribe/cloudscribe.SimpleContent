@@ -3,7 +3,13 @@
 @using cloudscribe.Core.Web
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
+@using cloudscribe.Core.Web.Design
 @inject IStringLocalizer<CloudscribeCore> sr
+@inject CoreThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+    if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
+}
 <h2>@ViewBag.Title</h2>
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
     <div asp-validation-summary="All" class="text-danger"></div>

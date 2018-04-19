@@ -4,11 +4,22 @@
 }
 
 body {
-    /*min-height: 75rem;*/
+    
     padding-top: 3.5rem;
     margin-bottom: 60px; /* Margin bottom by footer height */
 }
+
+/* not sure why but top nav gets taller in this range so
+    more padding is needed to keep the heading below the nav
+*/
+@media screen and (max-width: 993px) and (min-width:767px) {
+    body {
+        padding-top: 4.5rem;
+    }
+}
+
 /* sticky footer */
+
 .footer {
     position: absolute;
     bottom: 0;
@@ -19,51 +30,10 @@ body {
 }
 
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-.readable-theme , 
-.paper-theme {
-    margin-top: 18px;
-}
-
-
-.darkly-theme,
-.flatly-theme {
-    margin-top: 10px;
-}
-
-.sandstone-theme,
-.journal-theme {
-    margin-top: 14px;
-}
-/* Set widths on the form inputs since otherwise they're 100% wide */
-/*
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-*/
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
-}
-
-/* buttons and links extension to use brackets: [ click me ] */
-.btn-bracketed::before {
-    display:inline-block;
-    content: "[";
-    padding-right: 0.5em;
-}
-.btn-bracketed::after {
-    display:inline-block;
-    content: "]";
-    padding-left: 0.5em;
 }
 
 /* Hide/rearrange for smaller screens */
@@ -74,32 +44,16 @@ textarea {
   }
 }
 
-/* make room for gravatar */
+ 
 
-/*header.navbar-fixed-top { min-height:45px;}*/ 
-    
-
-/*div.navbar-gravatar {
-
-    margin:10px 0 0 0;
-    
-
-}*/
-    
-    
-
-.navbar-text img {
+/*.navbar-text img {
   max-height:30px;
   width:auto;
   vertical-align:middle;
   padding:0;
   margin:0;
-}
+}*/
 
-.mybrand {
-    padding-top:15px;
-    
-}
 
 img, video, iframe {
     max-width: 100%;
@@ -108,23 +62,6 @@ img, video, iframe {
 td img, video, iframe {
     max-width: none;
 }
-
-/*
-article[data-id="0fe39377-57a9-4d42-a9f1-22fc0c5ba18c"] {
-    padding: 0 0 0 0; margin: 0 0 0 0; min-height:0;
-}
-#myCarousel {
-   
-    position:relative; top:-60px;
-    max-height:420px;
-        
-}
-
-    */
-/*.psetform {
-    min-width:340px;
-    padding: 4px 4px 4px 4px;
-}*/
 
 
 ul.navbar-nav li.dropdown:hover > ul.dropdown-menu {
@@ -162,22 +99,7 @@ ul.navbar-nav li.dropdown:hover > ul.dropdown-menu {
     margin-right:-10px;
 }
 
-/*.dropdown-submenu:hover>a:after {
-    border-left-color:#ffffff;
-}*/
 
-/*.dropdown-submenu.pull-left {
-    float:none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-    left:-100%;
-    margin-left:10px;
-    -webkit-border-radius:6px 0 6px 6px;
-    -moz-border-radius:6px 0 6px 6px;
-    border-radius:6px 0 6px 6px;
-}*/
-
-/*bootstrasp4 uses vertical-align:top by default which skews the layout */
 
 .table td, .table th {
     vertical-align:inherit;

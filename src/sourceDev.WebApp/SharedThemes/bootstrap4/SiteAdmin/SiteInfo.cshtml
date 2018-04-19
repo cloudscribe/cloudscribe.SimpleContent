@@ -2,9 +2,12 @@
 @using cloudscribe.Web.Navigation
 @using Microsoft.Extensions.Localization
 @using cloudscribe.Core.Web
+@using cloudscribe.Core.Web.Design
+@inject CoreThemeHelper themeHelper
 @inject IStringLocalizer<CloudscribeCore> sr
 @{
-    //ViewData["SideNavToggle"] = "show";
+    var themeSettings = themeHelper.GetThemeSettings();
+    if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
 }
 <h2>@ViewBag.Title</h2>
 @{await Html.RenderPartialAsync("_BasicSettingsPartial", Model); }

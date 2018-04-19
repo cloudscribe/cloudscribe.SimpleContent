@@ -5,9 +5,13 @@
 @using cloudscribe.Core.Web
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
+@using cloudscribe.Core.Web.Design
+@inject CoreThemeHelper themeHelper
 @inject IStringLocalizer<CloudscribeCore> sr
 @{
     ViewData["Title"] = sr["Country List Administration"];
+    var themeSettings = themeHelper.GetThemeSettings();
+    if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
 }
 <h2>@ViewData["Title"]</h2>
 <table class="table table-striped table-hover table-sm">

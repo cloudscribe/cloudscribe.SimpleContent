@@ -5,9 +5,13 @@
 @using cloudscribe.Web.Navigation
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<CloudscribeCore> sr
+@using cloudscribe.Core.Web.Design
 @inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IStringLocalizer<CloudscribeCore> sr
+@inject CoreThemeHelper themeHelper
 @{
+    var themeSettings = themeHelper.GetThemeSettings();
+    if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
 }
 <h2>@ViewBag.Title</h2>
