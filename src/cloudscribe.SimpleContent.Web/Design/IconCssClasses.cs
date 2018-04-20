@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace cloudscribe.SimpleContent.Web.Design
+﻿namespace cloudscribe.SimpleContent.Web.Design
 {
     public class IconCssClasses
     {
+        public string SetId { get; set; } = "glyphicons";
+
         public string Previous { get; set; } = "glyphicon glyphicon-backward";
         public string Next { get; set; } = "glyphicon glyphicon-forward";
         public string Comments { get; set; } = "glyphicon glyphicon-comment";

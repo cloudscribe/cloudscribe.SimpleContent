@@ -7,8 +7,6 @@
 @{
 }
 <div class="form-group">
-    <label for="@Model.Key" class="col-md-2 control-label">@sr[Model.Label]</label>
-    <div class="col-md-10">
-        <span class="form-control">@ViewData[Model.Key]</span>
-    </div>
+    <label for="@Model.Key">@sr[Model.Label]</label>
+    <span class="form-control">@ViewData[Model.Key]</span>
 </div>

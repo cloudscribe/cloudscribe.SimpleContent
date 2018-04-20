@@ -8,15 +8,15 @@
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
 @using cloudscribe.Core.Web.Design
+@inject ISiteContextResolver siteResolver
 @inject CoreThemeHelper themeHelper
-@inject SiteContext Tenant
 @inject IStringLocalizer<CloudscribeCore> sr
-@inject SiteContext site
 @{
     var themeSettings = themeHelper.GetThemeSettings();
     ViewData["BodyClass"] = "account-section login-page";
     ViewData["SocialFormat"] = sr["Log in using your {0} account"];
     ViewData["SocialHeading"] = sr["Use an existing account to log in"];
+    var site = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
 
 }
 @section Meta {

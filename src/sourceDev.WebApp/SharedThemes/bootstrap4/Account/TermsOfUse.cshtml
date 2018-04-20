@@ -15,37 +15,32 @@
 <h2>@ViewData["Title"]</h2>
 @if (!string.IsNullOrWhiteSpace(Model.RegistrationPreamble))
 {
-    <div class="row">
-        <div class="col-md-12">
-            @Html.Raw(Model.RegistrationPreamble)
-        </div>
+
+    <div class="registration-preamble">
+        @Html.Raw(Model.RegistrationPreamble)
     </div>
 }
-<form id="register-form" asp-controller="Account" asp-action="TermsOfUse" method="post" class="form-horizontal" role="form">
+<form id="register-form" asp-controller="Account" asp-action="TermsOfUse" method="post" role="form">
     <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="col-md-12">
+    <div class="">
         @sr["Agreement  Terms as of:"] @Model.TermsUpdatedDate
     </div>
     <div class="form-group">
-        <div class="col-md-12 agreementcontainer">
+        <div class=" agreementcontainer">
             @Html.Raw(Model.RegistrationAgreement)
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="hidden" asp-for="AgreementRequired" />
-            <div class="checkbox">
-                <input asp-for="AgreeToTerms" data-val-enforcetrue='@sr["You must agree to the terms."]' />
-                <label asp-for="AgreeToTerms">@sr["I Agree to these terms of use."]</label>
-                <span asp-validation-for="AgreeToTerms" class="text-danger"></span>
-                @Html.ValidationMessage("agreementerror", new { @class = "text-danger" })
-            </div>
+        <input type="hidden" asp-for="AgreementRequired" />
+        <div class="form-check">
+            <input asp-for="AgreeToTerms" class="form-check-input" data-val-enforcetrue='@sr["You must agree to the terms."]' />
+            <label asp-for="AgreeToTerms" class="form-check-label">@sr["I Agree to these terms of use."]</label>
+            <span asp-validation-for="AgreeToTerms" class="text-danger"></span>
+            @Html.ValidationMessage("agreementerror", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
         <button name="submit" type="submit" class="btn btn-default">@sr["Submit"]</button>
-        </div>
     </div>
 </form>
 

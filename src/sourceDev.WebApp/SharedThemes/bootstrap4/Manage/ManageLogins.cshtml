@@ -4,49 +4,51 @@
 @using cloudscribe.Core.Web
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
-@inject SiteContext Tenant
+@using cloudscribe.Core.Web.Design
+@inject CoreThemeHelper themeHelper
+@inject ISiteContextResolver siteResolver
 @inject IStringLocalizer<CloudscribeCore> sr
-@{ 
-    var socFormat = sr["Log in using your {0} account"];
-    ViewData["BodyClass"] = "manage-section manage-logins";
-}
-@functions {
-    public string GetIconForLogin(string displayName)
-    {
-        switch (displayName)
-        {
-            case "Facebook":
-                return "<i class='fa fa-facebook-square' aria-hidden='true'></i>";
-            case "Google":
-                return "<i class='fa fa-google' aria-hidden='true'></i>";
-            case "Twitter":
-                return "<i class='fa fa-twitter' aria-hidden='true'></i>";
-            case "Microsoft":
-                return "<i class='fa fa-windows' aria-hidden='true'></i>";
-
-
-        }
-
-        return "<i class='fa fa-arrow-circle-right' aria-hidden='true'></i>";
-    }
-    public string GetDisplayName(string displayName)
-    {
-        if (displayName == "OpenIdConnect")
-        {
-            return Tenant.OidConnectDisplayName;
-
-        }
-
-        return displayName;
-    }
-}
-
 @{
+
     ViewData["Title"] = sr["Manage your external logins"];
     ViewData["BodyClass"] = "manage-section manage-logins";
     var removeFormat = sr["Remove this {0} login from your account"];
     var loginFormat = sr["Log in using your {0} account"];
+    var socFormat = sr["Log in using your {0} account"];
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var themeSettings = themeHelper.GetThemeSettings();
 }
+@functions {
+public string GetIconForLogin(string displayName, CoreThemeSettings themeSettings)
+{
+    switch (displayName)
+    {
+        case "Facebook":
+            return $"<i class='{themeSettings.Icons.Facebook}' aria-hidden='true'></i>";
+        case "Google":
+            return $"<i class='{themeSettings.Icons.Google}' aria-hidden='true'></i>";
+        case "Twitter":
+            return $"<i class='{themeSettings.Icons.Twitter}' aria-hidden='true'></i>";
+        case "Microsoft":
+            return $"<i class='{themeSettings.Icons.Microsoft}' aria-hidden='true'></i>";
+
+
+    }
+
+    return $"<i class='{themeSettings.Icons.OpenIDConnect}' aria-hidden='true'></i>";
+}
+public string GetDisplayName(string displayName, SiteContext tenant)
+{
+    if (displayName == "OpenIdConnect")
+    {
+        return tenant.OidConnectDisplayName;
+
+    }
+
+    return displayName;
+}
+}
+
 <h2>@ViewData["Title"]</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 @if (Model.CurrentLogins.Count > 0)
@@ -88,11 +90,11 @@
             <p>
                 @foreach (Microsoft.AspNetCore.Authentication.AuthenticationScheme p in Model.OtherLogins)
                 {
-                    <button type="submit" class="btn btn-default" id="@p.Name" name="provider" value="@p.Name" 
-                             title="@string.Format(socFormat,p.DisplayName)">
-                        @Html.Raw(GetIconForLogin(p.DisplayName))
-                        @GetDisplayName(p.DisplayName)
-					</button>
+                    <button type="submit" class="btn btn-default" id="@p.Name" name="provider" value="@p.Name"
+                            title="@string.Format(socFormat,p.DisplayName)">
+                        @Html.Raw(GetIconForLogin(p.DisplayName, themeSettings))
+                        @GetDisplayName(p.DisplayName, Tenant)
+                    </button>
                 }
             </p>
         </div>

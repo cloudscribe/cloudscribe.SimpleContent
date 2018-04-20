@@ -9,12 +9,12 @@
 @using Microsoft.Extensions.Localization
 @using cloudscribe.Core.Web.Design
 @inject CoreThemeHelper themeHelper
-@inject SiteContext Tenant
+@inject ISiteContextResolver siteResolver
 @inject IStringLocalizer<CloudscribeCore> sr
-@inject SiteContext site
 @{
     var socFormat = ViewData["SocialFormat"].ToString();
     var themeSettings = themeHelper.GetThemeSettings();
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
 
 }
 @functions {
@@ -36,11 +36,11 @@ public string GetIconForLogin(string displayName, CoreThemeSettings themeSetting
 
     return $"<i class='{themeSettings.Icons.OpenIDConnect}' aria-hidden='true'></i>";
 }
-public string GetDisplayName(string displayName)
+public string GetDisplayName(string displayName, ISiteContext tenant)
 {
     if (displayName == "OpenIdConnect")
     {
-        return Tenant.OidConnectDisplayName;
+        return tenant.OidConnectDisplayName;
 
     }
 
@@ -59,7 +59,7 @@ public string GetDisplayName(string displayName)
                     <button type="submit" class="btn btn-default" id="@p.Name" name="provider" value="@p.Name"
                             title="@string.Format(socFormat,p.DisplayName)">
                         @Html.Raw(GetIconForLogin(p.DisplayName, themeSettings))
-                        @GetDisplayName(p.DisplayName)
+                        @GetDisplayName(p.DisplayName, Tenant)
                     </button>
                 }
             </p>
