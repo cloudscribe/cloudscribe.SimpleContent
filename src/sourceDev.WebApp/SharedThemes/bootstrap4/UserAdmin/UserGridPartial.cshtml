@@ -12,7 +12,7 @@
     var totalUsersMessage = string.Format(sr["{0} - Users"], Model.UserList.TotalItems);
 }
 
-<table class="table table-striped">
+<table class="table table-striped table-hover">
     <tr>
         <th>
             <a class="btn btn-xs btn-default" asp-action="NewUser" asp-controller="UserAdmin" asp-route-siteId="@Model.SiteId">@sr["New User"]</a>

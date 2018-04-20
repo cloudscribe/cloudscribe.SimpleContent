@@ -37,14 +37,20 @@ body {
 }
 
 /* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
   /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
+    .sidenav-col,
+    .carousel-caption {
+        display: none
+    }
 }
 
- 
+@media screen and (max-width: 812px) {
+    #sidenavtoggle,
+    .sidenav-col {
+        display: none;
+    }
+}
 
 /*.navbar-text img {
   max-height:30px;
