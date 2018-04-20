@@ -16,7 +16,7 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<form class="form-horizontal" role="form" asp-controller="UserAdmin" asp-action="NewUser" data-submit-once="true">
+<form role="form" asp-controller="UserAdmin" asp-action="NewUser" data-submit-once="true">
     <input asp-for="UserId" type="hidden" />
     <input asp-for="SiteId" type="hidden" />
     @if (Model.UserId != Guid.Empty)
