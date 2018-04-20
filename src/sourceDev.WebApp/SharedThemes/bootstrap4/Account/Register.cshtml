@@ -6,6 +6,7 @@
 @using Microsoft.Extensions.Localization
 @using Microsoft.AspNetCore.Authentication
 @using cloudscribe.Core.Web.Design
+@inject ISiteContextResolver siteResolver
 @inject CoreThemeHelper themeHelper
 @inject SiteContext Tenant
 @inject IStringLocalizer<CloudscribeCore> sr
@@ -14,7 +15,8 @@
     ViewData["BodyClass"] = "account-section registration-page";
     ViewData["SocialFormat"] = sr["Register using your {0} account"];
     ViewData["SocialHeading"] = sr["Use an existing account"];
-   
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+
 }
 @section Meta {
     <meta name="robots" content="noindex" />

@@ -24,16 +24,16 @@
  }
 @if (Model.Posts.Count > 0)
         {
-    <h3 class="footer-widget-title">@sr["Featured Posts"]</h3>
+    <h3 class="featured-posts">@sr["Featured Posts"]</h3>
     @foreach (var post in Model.Posts)
     {
         var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
-        <div class="media">
+        <div class="media mb-1">
         @if (!string.IsNullOrWhiteSpace(imgUrl))
         {
             <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" height="75" alt="image"></a>
         }
-        <div class="media-body">
+        <div class="media-body pl-1">
             <h4 class="media-heading">
                 <a href="@GetUrl(post)">@post.Title</a>
             </h4>

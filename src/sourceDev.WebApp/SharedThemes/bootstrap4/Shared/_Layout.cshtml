@@ -7,12 +7,12 @@
 @addTagHelper "*, cloudscribe.Web.Navigation"
 @addTagHelper "*, cloudscribe.Web.Pagination"
 @addTagHelper "*, cloudscribe.Core.Web"
-@inject SiteContext Tenant
+@inject ISiteContextResolver siteResolver
 @{ 
     string sideNavToggleClass = ViewData["SideNavToggle"]?.ToString() ?? "collapse";
     string aside1ToggleClass = ViewData["Aside1Toggle"]?.ToString() ?? "collapse";
     string aside2ToggleClass = ViewData["Aside2Toggle"]?.ToString() ?? "collapse";
-
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
 }
 <!DOCTYPE html>
 <html>
@@ -64,7 +64,7 @@
                 @await Html.PartialAsync("AlertsPartial")
                 @RenderBody()
             </main>
-            <nav id="sidenavmenu" class="col col-3 order-1 @sideNavToggleClass">
+            <nav id="sidenavmenu" class="d-none d-lg-block d-xl-block col col-3 order-1 @sideNavToggleClass">
                 @RenderSection("SideNav", required: false)
             </nav>
             <aside id="aside1" class="col col-1 order-2 @aside1ToggleClass">

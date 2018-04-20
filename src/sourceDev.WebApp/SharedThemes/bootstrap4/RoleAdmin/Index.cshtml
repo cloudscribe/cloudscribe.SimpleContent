@@ -25,11 +25,11 @@
     @foreach (var item in Model.SiteRoles.Data)
     {
         <li class=" list-group-item d-flex flex-wrap">
-            <h3 class="colz h4">
+            <h3 class="h4">
                 @Html.DisplayFor(modelItem => item.RoleName)
                 &nbsp;
             </h3>
-            <div class=" colz" role="group">
+            <div  role="group">
                 <span class="btn btn-default ">
                     <a asp-action="RoleMembers"
                        asp-controller="RoleAdmin"

@@ -7,7 +7,7 @@
 @{
     var grpClass = "";// input-group
     var spnClass = ""; //input-group-addon
-    if(!string.IsNullOrWhiteSpace(Model.IconCssClass))
+    if (!string.IsNullOrWhiteSpace(Model.IconCssClass))
     {
         grpClass = "input-group";
         spnClass = "input-group-addon";
@@ -15,20 +15,22 @@
     }
 }
 <div class="form-group">
-    <label for="@Model.Key" class="col-md-2 control-label">@sr[Model.Label]</label>
-    <div class="col-md-10">
-        <div class="@grpClass">
-            @if (!string.IsNullOrWhiteSpace(Model.IconCssClass) && Model.IconOnLeft)
-            {
+    <label for="@Model.Key">@sr[Model.Label]</label>
+    <div class="@grpClass">
+        @if (!string.IsNullOrWhiteSpace(Model.IconCssClass) && Model.IconOnLeft)
+        {
+            <div class="input-group-prepend">
                 <span class="@spnClass"><i class="@Model.IconCssClass" aria-hidden="true"></i></span>
-            }   
-            <input id="@Model.Key" name="@Model.Key" value="@ViewData[Model.Key]" title="@Model.Tooltip" class="form-control @Model.CssClass" cs-form-item-definition="@Model" />
-            @if (!string.IsNullOrWhiteSpace(Model.IconCssClass) && !Model.IconOnLeft)
-            {
+            </div>
+        }
+        <input id="@Model.Key" name="@Model.Key" value="@ViewData[Model.Key]" title="@Model.Tooltip" class="form-control @Model.CssClass" cs-form-item-definition="@Model" />
+        @if (!string.IsNullOrWhiteSpace(Model.IconCssClass) && !Model.IconOnLeft)
+        {
+            <div class="input-group-append">
                 <span class="@spnClass"><i class="@Model.IconCssClass" aria-hidden="true"></i></span>
-            }            
-        </div>
-        <span class="text-danger field-validation-valid" data-valmsg-for="@Model.Key" data-valmsg-replace="true"></span>
-        @Html.ValidationMessage(Model.Key + "Error", new { @class = "text-danger" })
+            </div>
+        }
     </div>
+    <span class="text-danger field-validation-valid" data-valmsg-for="@Model.Key" data-valmsg-replace="true"></span>
+    @Html.ValidationMessage(Model.Key + "Error", new { @class = "text-danger" })
 </div>

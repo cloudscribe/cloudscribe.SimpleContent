@@ -11,7 +11,7 @@
 @{await Html.RenderPartialAsync("UserInfoStylePartial"); }
 }
 <h2>@ViewData["Title"]</h2>
-<form asp-controller="Manage" asp-action="UserInfo" method="post" class="form-horizontal" role="form">
+<form asp-controller="Manage" asp-action="UserInfo" method="post" role="form">
     <div asp-validation-summary="All" class="text-danger"></div>
     @if (string.IsNullOrWhiteSpace(Model.FirstName))
     {
