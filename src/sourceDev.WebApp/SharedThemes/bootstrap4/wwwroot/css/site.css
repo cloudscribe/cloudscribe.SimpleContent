@@ -18,8 +18,36 @@ body {
     }
 }
 
-/* sticky footer */
+#newPostLink {
+    position: absolute;
+    top: 70px;
+    right: 0px;
+}
+#editPostLink {
+    position: absolute;
+    top: 100px;
+    right: 0px;
+}
+#pageManagerLink {
+    position: absolute;
+    top: 70px;
+    right: 0px;
+}
 
+#newPageLink {
+    position: absolute;
+    top: 100px;
+    right: 0px;
+}
+
+#editPageLink {
+    position: absolute;
+    top: 130px;
+    right: 0px
+}
+
+
+/* sticky footer */
 .footer {
     position: absolute;
     bottom: 0;

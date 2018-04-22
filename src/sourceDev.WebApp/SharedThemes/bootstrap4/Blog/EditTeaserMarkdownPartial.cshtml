@@ -1,7 +1,4 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
-@using cloudscribe.SimpleContent.Web
-@using cloudscribe.Web.Common.Components
-@using Microsoft.Extensions.Localization
 @inject ICkeditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<SimpleContent> sr
 @{
@@ -10,27 +7,22 @@
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-teaser-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
 <div class="form-group">
-    <label asp-for="TeaserOverride" class="col-md-2 control-label">@sr["Teaser Override"]</label>
-    <div class="col-md-10">
-        <textarea asp-for="TeaserOverride" class="form-control" rows="7" cols="70"
-                  data-markdown-unobtrusive=""
-                  data-markdown-autosave="true"
-                  data-markdown-contentid="@contentId"
-                  data-markdown-forceSync="true"
-                  data-markdown-indentWithTabs="true"
-                  data-markdown-spellChecker="true"
-                  data-markdown-filemodalid="#fileBrowseDialog"
-                  data-markdown-filebrowseurl="/filemanager/filedialog"
-                  data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
-    </div>
+    <label asp-for="TeaserOverride">@sr["Teaser Override"]</label>
+    <textarea asp-for="TeaserOverride" class="form-control" rows="7" cols="70"
+                data-markdown-unobtrusive=""
+                data-markdown-autosave="true"
+                data-markdown-contentid="@contentId"
+                data-markdown-forceSync="true"
+                data-markdown-indentWithTabs="true"
+                data-markdown-spellChecker="true"
+                data-markdown-filemodalid="#fileBrowseDialog"
+                data-markdown-filebrowseurl="/filemanager/filedialog"
+                data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
 </div>
 <div class="form-group">
-    <div class="col-md-10 col-md-offset-2">
-        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If checked, then show entire blog post on index/listing pages regardless of teaser settings."]'>
-            <label>
-                <input asp-for="SuppressTeaser" /> @sr["No teaser, use full post"]
-            </label>
-        </div>
+    <div class="form-check" data-toggle="tooltip" data-placement="left" title='@sr["If checked, then show entire blog post on index/listing pages regardless of teaser settings."]'>
+        <input asp-for="SuppressTeaser" class="form-check-input" />
+        <label asp-for="SuppressTeaser" class="form-check-label">@sr["No teaser, use full post"]</label>
     </div>
 </div>
 

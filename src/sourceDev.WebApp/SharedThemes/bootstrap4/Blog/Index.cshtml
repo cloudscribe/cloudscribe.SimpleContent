@@ -1,13 +1,9 @@
-﻿@using cloudscribe.SimpleContent.Web
-@using cloudscribe.Web.Pagination
-@using Microsoft.Extensions.Localization
-@addTagHelper "*, cloudscribe.Web.Pagination"
-@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
 @inject IStringLocalizer<SimpleContent> sr
-
 @{
     var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
+    ViewData["AsidePrimaryToggle"] = "show";
 }
 @section Meta {
     <meta name="robots" content="noindex, follow" />
@@ -22,47 +18,41 @@
         await Html.RenderPartialAsync("ToolsPartial", Model);
     }
 }
-<div class="blog-container">
-    @if (Model.ProjectSettings.ShowTitle)
-    {
-        await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
-    }
-    <div itemscope itemtype="http://schema.org/Blog" class="row blogroot">
-        <main class="col-md-9">
-            @{await Html.RenderPartialAsync("PostListPartial", Model); }
-            <nav>
-                <cs-pager cs-paging-info="@Model.Paging"
-                    cs-pagenumber-param="page"
-                    cs-show-first-last="false"
-                    cs-show-numbered="false"
-                    cs-use-reverse-increment="true"
-                    cs-suppress-empty-nextprev="true"
-                    cs-previous-page-text='@sr["< Older"]'
-                    cs-next-page-text='@sr["Newer >"]'
-                    asp-route="@Model.ListRouteName"
-                    asp-route-category="@Model.CurrentCategory"
-                    cs-pager-ul-class="pagination d-flex flex-wrap"
-                    cs-pager-li-current-class="page-item active"
-                    cs-pager-li-other-class="page-item"
-                    cs-pager-li-non-active-class="page-item disabled"
-                    cs-pager-link-current-class="page-link"
-                    cs-pager-link-other-class="page-link"
-                          ></cs-pager>
-            </nav>
-        </main>
-        <aside class="col-md-3 blog-aside">
-            @{await Html.RenderPartialAsync("AboutPartial"); }
-            @{await Html.RenderPartialAsync("CategoryListPartial", Model.Categories); }
-            @{await Html.RenderPartialAsync("ArchiveListPartial", Model.Archives); }
-        </aside>
-    </div>
+@if (Model.ProjectSettings.ShowTitle)
+{
+await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
+}
+<div itemscope itemtype="http://schema.org/Blog" class="blogroot">
+    @{await Html.RenderPartialAsync("PostListPartial", Model); }
 </div>
-@section Bottom {
+<nav>
+    <cs-pager cs-paging-info="@Model.Paging"
+        cs-pagenumber-param="page"
+        cs-show-first-last="false"
+        cs-show-numbered="false"
+        cs-use-reverse-increment="true"
+        cs-suppress-empty-nextprev="true"
+        cs-previous-page-text='@sr["< Older"]'
+        cs-next-page-text='@sr["Newer >"]'
+        asp-route="@Model.ListRouteName"
+        asp-route-category="@Model.CurrentCategory"
+        cs-pager-ul-class="pagination d-flex flex-wrap"
+        cs-pager-li-current-class="page-item active"
+        cs-pager-li-other-class="page-item"
+        cs-pager-li-non-active-class="page-item disabled"
+        cs-pager-link-current-class="page-link"
+        cs-pager-link-other-class="page-link"
+        ></cs-pager>
+</nav>
+@section AsidePrimary {
+@{await Html.RenderPartialAsync("AboutPartial"); }
+@{await Html.RenderPartialAsync("CategoryListPartial", Model.Categories); }
+@{await Html.RenderPartialAsync("ArchiveListPartial", Model.Archives); }
 }
 @section Scripts {
-    @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
-    {
+        @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
         <script id="dsq-count-scr" src="@disqusCommentCountScriptPath" async></script>
-    }
-    @{await Html.RenderPartialAsync("BlogScriptsPartial", Model); }
-}
+        }
+        @{await Html.RenderPartialAsync("BlogScriptsPartial", Model); }
+ }

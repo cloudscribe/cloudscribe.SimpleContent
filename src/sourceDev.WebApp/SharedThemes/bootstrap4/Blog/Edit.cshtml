@@ -1,16 +1,6 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
-@using Microsoft.Extensions.Localization
-@using cloudscribe.SimpleContent.Web
-@using cloudscribe.SimpleContent.Models
-@using System.Globalization
-@using cloudscribe.Web.Common.Models
-@using cloudscribe.Web.Common.Components
-@using cloudscribe.Web.Common.Helpers
-@using cloudscribe.SimpleContent.Web.TagHelpers
 @inject IStringLocalizer<SimpleContent> sr
 @inject ICkeditorOptionsResolver editorOptionsResolver
-@addTagHelper "*, cloudscribe.Web.Common"
-@addTagHelper "*, cloudscribe.SimpleContent.Web"
 @{
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
@@ -36,79 +26,61 @@
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
     <div class="form-group">
-        <label asp-for="Title" class="col-md-2 control-label">@sr["Title"]</label>
-        <div class="col-md-10">
-            <input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
+        <label asp-for="Title">@sr["Title"]</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     @{ Html.RenderPartial("EditCorrelationKeyPartial", Model); }
     @{ Html.RenderPartial("EditSlugPartial", Model); }
     <div class="form-group">
-        <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
-        <div class="col-md-10">
-            <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
-            <span asp-validation-for="MetaDescription" class="text-danger"></span>
-        </div>
+        <label asp-for="MetaDescription">@sr["Meta Description"]</label>
+        <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
+        <span asp-validation-for="MetaDescription" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
-        <div class="col-md-10">
-            @if (Model.ContentType == "markdown")
-            {
-                Html.RenderPartial("EditContentMarkdownPartial", Model);
-            }
-            else
-            {
-                Html.RenderPartial("EditContentHtmlPartial", Model);
-            }
-            <span asp-validation-for="Content" class="text-danger"></span>
-        </div>
+        <label asp-for="Content">@sr["Content"]</label>
+        @if (Model.ContentType == "markdown")
+        {
+            Html.RenderPartial("EditContentMarkdownPartial", Model);
+        }
+        else
+        {
+            Html.RenderPartial("EditContentHtmlPartial", Model);
+        }
+        <span asp-validation-for="Content" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Categories" class="col-md-2 control-label">@sr["Categories"]</label>
-        <div class="col-md-10">
-            <input asp-for="Categories" class="form-control" />
-            <span asp-validation-for="Categories" class="text-danger"></span>
-        </div>
+        <label asp-for="Categories">@sr["Categories"]</label>
+        <input asp-for="Categories" class="form-control" />
+        <span asp-validation-for="Categories" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
-        <div class="col-md-10">
-            <input asp-for="Author" class="form-control" />
-            <span asp-validation-for="Author" class="text-danger"></span>
-        </div>
+        <label asp-for="Author">@sr["Author"]</label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
     </div>
     @{ Html.RenderPartial("EditImageUrlPartial", Model); }
     <div class="form-group">
-        <div class="col-md-10 col-md-offset-2">
-            <div class="checkbox">
-                <label>
-                    <input asp-for="IsPublished" /> @sr["Is Published"]
-                </label>
-            </div>
+        <div class="form-check">
+            <input asp-for="IsPublished" class="form-check-input" />
+            <label asp-for="IsPublished" class="form-check-label">@sr["Is Published"]</label>
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-10 col-md-offset-2">
-            <div class="checkbox">
-                <label>
-                    <input asp-for="IsFeatured" /> @sr["Is Featured"]
-                </label>
-            </div>
+        <div class="form-check">
+            <input asp-for="IsFeatured" class="form-check-input" />
+            <label asp-for="IsFeatured" class="form-check-label">@sr["Is Featured"]</label>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="PubDate" class="col-md-2 control-label">@sr["Publication Date"]</label>
-        <div class="col-md-10">
-            <input asp-for="PubDate" class="form-control"
-                   data-bs-datepicker="true"
-                   data-bs-datepicker-debug="false"
-                   data-bs-datepicker-keepOpen="false"
-                   data-bs-datepicker-allowInputToggle="true"
-                   data-bs-datepicker-locale="@CultureInfo.CurrentCulture.Name" />
-            <span asp-validation-for="PubDate" class="text-danger"></span>
-        </div>
+        <label asp-for="PubDate">@sr["Publication Date"]</label>
+        <input asp-for="PubDate" class="form-control"
+                data-bs-datepicker="true"
+                data-bs-datepicker-debug="false"
+                data-bs-datepicker-keepOpen="false"
+                data-bs-datepicker-allowInputToggle="true"
+                data-bs-datepicker-locale="@CultureInfo.CurrentCulture.Name" />
+        <span asp-validation-for="PubDate" class="text-danger"></span>
     </div>
     @if (Model.TeasersEnabled)
     {
@@ -127,15 +99,13 @@
     }
 
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button id="btnSave" name="submit" type="submit" class="btn btn-default" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
-            @if (!string.IsNullOrEmpty(Model.Id))
-            {
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
-                    @sr["Delete"]
-                </button>
-            }
-        </div>
+        <button id="btnSave" name="submit" type="submit" class="btn btn-default" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
+        @if (!string.IsNullOrEmpty(Model.Id))
+        {
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                @sr["Delete"]
+            </button>
+        }
     </div>
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))
