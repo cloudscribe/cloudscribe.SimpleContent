@@ -1,12 +1,5 @@
 ﻿@model cloudscribe.Web.Common.Models.FormItemDefinition
-@using cloudscribe.Web.Common.Models
-@using cloudscribe.Web.Common
-@using Microsoft.Extensions.Localization
 @inject IStringLocalizer<CloudscribeCommonResources> sr
-@addTagHelper "*, cloudscribe.Web.Common"
-@{
-   
-}
 <div class="form-group">
     <label for="@Model.Key">@sr[Model.Label]</label>
     <textarea rows="5" id="@Model.Key" name="@Model.Key" title="@Model.Tooltip" class="form-control @Model.CssClass" cs-form-item-definition="@Model">@ViewData[Model.Key]</textarea>
