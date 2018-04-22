@@ -16,15 +16,15 @@ namespace cloudscribe.SimpleContent.Web
     public static class ClaimsPrincipalExtensions
     {
 
-        public static string GetEmail(this ClaimsPrincipal principal)
-        {
-            if (principal == null)
-            {
-                throw new ArgumentNullException(nameof(principal));
-            }
-            var claim = principal.FindFirst("Email");
-            return claim != null ? claim.Value : null;
-        }
+        //public static string GetEmail(this ClaimsPrincipal principal)
+        //{
+        //    if (principal == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(principal));
+        //    }
+        //    var claim = principal.FindFirst("Email");
+        //    return claim != null ? claim.Value : null;
+        //}
 
         public static string GetUserDisplayName(this ClaimsPrincipal principal)
         {
