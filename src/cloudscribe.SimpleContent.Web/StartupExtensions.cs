@@ -427,6 +427,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 services.Configure<PageEditOptions>(configuration.GetSection("PageEditOptions"));
                 services.Configure<SimpleContentConfig>(configuration.GetSection("SimpleContentConfig"));
+
+                services.Configure<SimpleContentIconConfig>(configuration.GetSection("SimpleContentIconConfig"));
+                services.Configure<SimpleContentThemeConfig>(configuration.GetSection("SimpleContentThemeConfig"));
+
+                
+                //services.AddScoped<CoreThemeHelper>();
             }
             else
             {
@@ -439,7 +445,19 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     // not doing anything just configuring the default
                 });
+
+                services.Configure<SimpleContentIconConfig>(c =>
+                {
+                    // not doing anything just configuring the default
+                });
+
+                services.Configure<SimpleContentThemeConfig>(c =>
+                {
+                    // not doing anything just configuring the default
+                });
             }
+
+            services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
 
             return services;
         }

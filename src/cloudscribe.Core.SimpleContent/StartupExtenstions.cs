@@ -2,6 +2,7 @@
 using cloudscribe.Core.SimpleContent.Integration;
 using cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -57,6 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRoleSelectorProperties, SiteRoleSelectorProperties>();
             services.TryAddScoped<IAuthorNameResolver, AuthorNameResolver>();
             services.TryAddScoped<IProjectEmailService, CoreProjectEmailService>();
+            services.AddScoped<ISimpleContentThemeHelper, SiteSimpleContentThemeHelper>();
 
             if (configuration != null)
             {

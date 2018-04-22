@@ -1,8 +1,8 @@
 ﻿@inject ISiteContextResolver siteResolver
 @{ 
     string sideNavToggleClass = ViewData["SideNavToggle"]?.ToString() ?? "collapse";
-    string aside1ToggleClass = ViewData["Aside1Toggle"]?.ToString() ?? "collapse";
-    string aside2ToggleClass = ViewData["Aside2Toggle"]?.ToString() ?? "collapse";
+    string aside1ToggleClass = ViewData["AsidePrimaryToggle"]?.ToString() ?? "collapse";
+    string aside2ToggleClass = ViewData["AsideSecondaryToggle"]?.ToString() ?? "collapse";
     var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
 }
 <!DOCTYPE html>
@@ -58,11 +58,11 @@
             <nav id="sidenavmenu" class=" col col-3 order-1 @sideNavToggleClass sidenav-col">
                 @RenderSection("SideNav", required: false)
             </nav>
-            <aside id="aside1" class="col col-1 order-2 @aside1ToggleClass">
-                @RenderSection("Aside1", required: false)
+            <aside id="aside2" class="col col-1 order-2 @aside2ToggleClass">
+                @RenderSection("AsideSecondary", required: false)
             </aside>
-            <aside id="aside2" class="col col-1 order-4 @aside2ToggleClass">
-                @RenderSection("Aside2", required: false)
+            <aside id="aside1" class="col-12 col-md-3 col-sm-12  col-sm-12 order-4 @aside1ToggleClass">
+                @RenderSection("AsidePrimary", required: false)
             </aside>
         </div>
     </div>
