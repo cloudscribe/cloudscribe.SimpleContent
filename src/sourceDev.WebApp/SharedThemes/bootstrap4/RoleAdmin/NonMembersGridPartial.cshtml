@@ -1,9 +1,4 @@
 ﻿@model cloudscribe.Core.Web.ViewModels.RoleAdmin.RoleMemberListViewModel
-@using cloudscribe.Web.Pagination
-@addTagHelper "*, cloudscribe.Web.Pagination"
-@using cloudscribe.Core.Web
-@using Microsoft.Extensions.Options
-@using Microsoft.Extensions.Localization
 @inject IStringLocalizer<CloudscribeCore> sr
     <form role="form" method="get" class="form-inline" asp-controller="RoleAdmin" asp-action="RoleNonMembers" asp-antiforgery="false"
         data-ajax="true" 
