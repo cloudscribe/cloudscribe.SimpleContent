@@ -1,27 +1,23 @@
 ﻿@model Dictionary<string, int>
-@using Microsoft.Extensions.Localization
-@using Microsoft.Extensions.Options
-@using cloudscribe.SimpleContent.Web
-@using cloudscribe.SimpleContent.Web.Design
 @inject IStringLocalizer<SimpleContent> sr
-@inject cloudscribe.SimpleContent.Models.IBlogRoutes blogRoutes
-@inject IOptions<IconCssClasses> iconClassesAccessor
+@inject IBlogRoutes blogRoutes
+@inject ISimpleContentThemeHelper themeHelper
 @{
-    var icons = iconClassesAccessor.Value;
+    var themeSettings = themeHelper.GetThemeSettings();
 }
-    <section class="panel panel-default">
-        <div class="panel-heading">
-            <h3><i class="@icons.Tags" aria-hidden="true"></i>&nbsp;@sr["Categories"]</h3>
-        </div>
-        <div class="panel-body">
-            <ul class="list-inline category-list">
-                @foreach (var cat in Model)
+<section class="panel panel-default">
+    <div class="panel-heading">
+        <h3><i class="@themeSettings.Icons.Tags" aria-hidden="true"></i>&nbsp;@sr["Categories"]</h3>
+    </div>
+    <div class="panel-body">
+        <ul class="list-inline category-list">
+            @foreach (var cat in Model)
             {
-                    <li>
-                        <a asp-route="@blogRoutes.BlogCategoryRouteName"
-                           asp-route-category="@cat.Key">@cat.Key (@cat.Value)</a>
-                    </li>
-                }
-            </ul>
-        </div>
-    </section>
+                <li>
+                    <a asp-route="@blogRoutes.BlogCategoryRouteName"
+                       asp-route-category="@cat.Key">@cat.Key (@cat.Value)</a>
+                </li>
+            }
+        </ul>
+    </div>
+</section>

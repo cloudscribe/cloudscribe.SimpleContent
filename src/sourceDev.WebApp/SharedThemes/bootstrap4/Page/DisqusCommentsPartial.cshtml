@@ -1,11 +1,4 @@
-﻿@using cloudscribe.SimpleContent.Web
-@using cloudscribe.SimpleContent.Models
-@using Microsoft.AspNetCore.Mvc.ViewFeatures
-@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
-@using cloudscribe.SimpleContent.Web.Design
-@using Microsoft.Extensions.Options
-@using Microsoft.Extensions.Localization
-@using System.Globalization
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @inject IStringLocalizer<SimpleContent> sr
 @{
     var disqusScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/embed.js";

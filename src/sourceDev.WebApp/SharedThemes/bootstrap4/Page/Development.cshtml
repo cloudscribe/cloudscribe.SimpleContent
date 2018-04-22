@@ -1,21 +1,10 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageDevelopmentViewModel
-@using Microsoft.Extensions.Localization
-@using cloudscribe.SimpleContent.Web
-@using cloudscribe.SimpleContent.Models
-@using System.Globalization
-@using cloudscribe.SimpleContent.Web.TagHelpers
-@using Microsoft.Extensions.Options
 @inject IPageRoutes pageRoutes
 @inject IStringLocalizer<SimpleContent> sr
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@addTagHelper "*, cloudscribe.Web.Common"
-@addTagHelper "*, cloudscribe.SimpleContent.Web"
-@{
-}
 <h1>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h1>
 <p>@sr["With great power comes great responsibility. This page is intended for use by developers, for adding javscript and css into the page. Use this page only if you understand what you are doing."]</p>
 <div>
-<table class="table table-striped">
+<table class="table table-striped table-hover">
     <tr>  
         <th>@sr["Environment"]</th>
         <th>@sr["Sort"]</th>
@@ -47,7 +36,7 @@
 </div>
 <div>
    
-<table class="table table-striped">
+<table class="table table-striped table-hover">
     <tr>
         <th>@sr["Environment"]</th>
         <th>@sr["Sort"]</th>

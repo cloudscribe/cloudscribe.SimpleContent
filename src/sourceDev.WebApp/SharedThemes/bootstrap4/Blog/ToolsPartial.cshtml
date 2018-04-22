@@ -4,12 +4,12 @@
 @{
     var themeSettings = themeHelper.GetThemeSettings();
 }
-<a id="newPostLink" href="@Model.NewItemPath" title="@sr["New Post"]" class="btn btn-sm content-new" style="position:absolute;top:70px;right:0px;">
+<a id="newPostLink" href="@Model.NewItemPath" title="@sr["New Post"]" class="btn btn-sm content-new">
     <span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span>
 </a>
 @if (Model.CurrentPost != null)
 {
-    <a id="editPostLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit" style="position:absolute;top:100px;right:0px;">
+    <a id="editPostLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit">
         <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
     </a>
 }

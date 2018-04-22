@@ -1,26 +1,13 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
-@using Microsoft.Extensions.Localization
-@using cloudscribe.SimpleContent.Web
-@using cloudscribe.SimpleContent.Models
-@using cloudscribe.Web.Common.Helpers
-@using System.Globalization
-@using cloudscribe.Web.Common.Models
-@using cloudscribe.Web.Common.Components
-@using cloudscribe.SimpleContent.Web.TagHelpers
-@using Microsoft.Extensions.Options
 @inject IStringLocalizer<SimpleContent> sr
 @inject ICkeditorOptionsResolver editorOptionsResolver
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@addTagHelper "*, cloudscribe.Web.Common"
-@addTagHelper "*, cloudscribe.SimpleContent.Web"
 @{ 
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }  
 <div class="form-group">
-	<label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
-	<div class="col-md-10">
+	<label asp-for="Content">@sr["Content"]</label>
     @if (Model.DisableEditor)
     {
         <textarea asp-for="Content" class="form-control" rows="10" cols="70"></textarea>
@@ -64,6 +51,5 @@
         }
 
     }
-		<span asp-validation-for="Content" class="text-danger"></span>
-	</div>
+    <span asp-validation-for="Content" class="text-danger"></span>
 </div>

@@ -1,21 +1,14 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
-@using cloudscribe.SimpleContent.Models
-@using cloudscribe.SimpleContent.Web
-@using cloudscribe.SimpleContent.Web.Design
-@using cloudscribe.Web.Navigation;
-@using Microsoft.Extensions.Options
-@using System.Globalization
-@using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SimpleContent> sr
-@inject IOptions<IconCssClasses> iconClassesAccessor
+@inject ISimpleContentThemeHelper themeHelper
 @{
-    var icons = iconClassesAccessor.Value;
+    var themeSettings = themeHelper.GetThemeSettings();
 }
 @functions{
 
     public string GetFooterClass()
     {
-       
+
         return "bh";
     }
     public string GetEditTitle()
@@ -32,7 +25,7 @@
     @if (Model.CurrentPage.ShowHeading)
     {
         <header class="">
-           <h1 id="article-title" itemprop="headline name">@Model.CurrentPage.Title</h1>
+            <h1 id="article-title" itemprop="headline name">@Model.CurrentPage.Title</h1>
             @{await Html.RenderPartialAsync("PageTopPartial", Model); }
         </header>
     }
@@ -40,7 +33,7 @@
     @{await Html.RenderPartialAsync("PageBottomPartial", Model); }
     @if (!Model.CurrentPage.ShowHeading)
     {
-        <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta> 
+        <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta>
     }
     @{
         var imageUrl = Model.ExtractFirstImageUrl(Model.CurrentPage, Url);

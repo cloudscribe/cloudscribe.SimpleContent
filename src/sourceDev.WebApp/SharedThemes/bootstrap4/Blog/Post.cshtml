@@ -1,7 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
-@using cloudscribe.SimpleContent.Models
 @{
     var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
+    ViewData["AsidePrimaryToggle"] = "show";
 }
 @section Meta {
     @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
@@ -10,29 +10,22 @@
     @{await Html.RenderPartialAsync("BlogStylePartial", Model); }
 }
 @section Toolbar {
-   @if (Model.CanEdit)
-   {
-       await Html.RenderPartialAsync("ToolsPartial", Model);
-   }
-}
-<div class="blog-container">
-    @if (Model.ProjectSettings.ShowTitle)
+    @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings); 
+        await Html.RenderPartialAsync("ToolsPartial", Model);
     }
-    <div itemscope itemtype="http://schema.org/Blog" class="row blogroot">
-        <main class="col-md-9">
-            @{await Html.RenderPartialAsync("PostDetailPartial", Model); }
-        </main>
-        <aside class="col-md-3 blog-aside">
-            @{await Html.RenderPartialAsync("AboutPartial"); }
-            @{await Html.RenderPartialAsync("CategoryListPartial", Model.Categories); }
-            @{await Html.RenderPartialAsync("ArchiveListPartial", Model.Archives); }
-        </aside>
-    </div>
+}
+@if (Model.ProjectSettings.ShowTitle)
+{
+    await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
+}
+<div itemscope itemtype="http://schema.org/Blog" class="blogroot">
+    @{await Html.RenderPartialAsync("PostDetailPartial", Model); }
 </div>
-@section Bottom {
-    
+@section AsidePrimary {
+    @{await Html.RenderPartialAsync("AboutPartial"); }
+    @{await Html.RenderPartialAsync("CategoryListPartial", Model.Categories); }
+    @{await Html.RenderPartialAsync("ArchiveListPartial", Model.Archives); }
 }
 @section Scripts {
     @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
@@ -43,7 +36,5 @@
     {
         await Html.RenderPartialAsync("CommentScriptsPartial");
     }
-
     @{await Html.RenderPartialAsync("BlogScriptsPartial", Model); }
-    
 }
