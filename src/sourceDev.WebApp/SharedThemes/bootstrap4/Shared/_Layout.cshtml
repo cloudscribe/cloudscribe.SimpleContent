@@ -3,7 +3,7 @@
     string sideNavToggleClass = ViewData["SideNavToggle"]?.ToString() ?? "collapse";
     string aside1ToggleClass = ViewData["AsidePrimaryToggle"]?.ToString() ?? "collapse";
     string aside2ToggleClass = ViewData["AsideSecondaryToggle"]?.ToString() ?? "collapse";
-    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
 }
 <!DOCTYPE html>
 <html>

@@ -1,5 +1,5 @@
 ﻿@model cloudscribe.Core.Web.ViewModels.SiteUser.ManageLoginsViewModel
-@inject CoreThemeHelper themeHelper
+@inject ICoreThemeHelper themeHelper
 @inject ISiteContextResolver siteResolver
 @inject IStringLocalizer<CloudscribeCore> sr
 @{
@@ -9,7 +9,7 @@
     var removeFormat = sr["Remove this {0} login from your account"];
     var loginFormat = sr["Log in using your {0} account"];
     var socFormat = sr["Log in using your {0} account"];
-    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
     var themeSettings = themeHelper.GetThemeSettings();
 }
 @functions {

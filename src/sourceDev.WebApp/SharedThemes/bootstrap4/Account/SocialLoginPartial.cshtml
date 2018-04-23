@@ -1,11 +1,11 @@
 ﻿@model List<Microsoft.AspNetCore.Authentication.AuthenticationScheme>
-@inject CoreThemeHelper themeHelper
+@inject ICoreThemeHelper themeHelper
 @inject ISiteContextResolver siteResolver
 @inject IStringLocalizer<CloudscribeCore> sr
 @{
     var socFormat = ViewData["SocialFormat"].ToString();
     var themeSettings = themeHelper.GetThemeSettings();
-    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
 
 }
 @functions {
