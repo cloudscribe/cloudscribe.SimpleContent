@@ -10,7 +10,7 @@
     
 }
 @section Styles {
-    @{ await Html.RenderPartialAsync("_DatePickerCssPartial"); }
+    @{ await Html.RenderPartialAsync("DatePickerBs4Css"); }
     @if (Model.ContentType == "markdown")
     {
         <link rel="stylesheet" href="~/cr/css/simplemde.min.css" />
@@ -192,7 +192,7 @@
     </form>
 }
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("DatePickerBs4Scripts"); }
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
     <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
