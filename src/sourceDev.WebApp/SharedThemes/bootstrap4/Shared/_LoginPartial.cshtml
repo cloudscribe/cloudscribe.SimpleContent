@@ -1,16 +1,9 @@
-﻿@using cloudscribe.Core.Models
-@using cloudscribe.Core.Identity
-@using cloudscribe.Web.Common.Extensions
-@using cloudscribe.Core.Web
-@using Microsoft.Extensions.Options
-@using Microsoft.Extensions.Localization
-@using Microsoft.AspNetCore.Identity
-@inject IStringLocalizer<CloudscribeCore> sr
+﻿@inject IStringLocalizer<CloudscribeCore> sr
 @inject ISiteContextResolver siteResolver
 @inject SignInManager<SiteUser> SignInManager
 @{
     var helloFormat = sr["Hello {0}!"];
-    var site = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var site = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
 }
 @if (SignInManager.IsSignedIn(User))
 {

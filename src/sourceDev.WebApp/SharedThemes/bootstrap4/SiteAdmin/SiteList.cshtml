@@ -1,7 +1,7 @@
 ﻿@model cloudscribe.Core.Web.ViewModels.SiteSettings.SiteListViewModel
 @inject IOptions<MultiTenantOptions> multiTenantOptions
 @inject IStringLocalizer<CloudscribeCore> sr
-@inject CoreThemeHelper themeHelper
+@inject ICoreThemeHelper themeHelper
 @{
     var themeSettings = themeHelper.GetThemeSettings();
     if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }

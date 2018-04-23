@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = sr["Manage your account"];
     ViewData["BodyClass"] = "manage-section manage-index";
-    var currentSite = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var currentSite = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
     var showExternal = currentSite.HasAnySocialAuthEnabled();
 }
 <h2>@ViewData["Title"]</h2>

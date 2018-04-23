@@ -11,6 +11,7 @@ using cloudscribe.Core.SimpleContent.ViewModels;
 using cloudscribe.Email;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Common.Razor;
+using cloudscribe.Core.Web.Components;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;

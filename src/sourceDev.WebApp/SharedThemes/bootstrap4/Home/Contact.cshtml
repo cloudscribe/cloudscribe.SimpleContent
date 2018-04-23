@@ -2,7 +2,7 @@
 @inject ISiteContextResolver siteResolver
 @{
     ViewData["Title"] = "Contact";
-    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
     var contentId = "my-content" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh");
 }
 @section Styles {

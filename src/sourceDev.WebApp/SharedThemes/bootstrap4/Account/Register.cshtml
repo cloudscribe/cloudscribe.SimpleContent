@@ -1,6 +1,6 @@
 ﻿@model cloudscribe.Core.Web.ViewModels.Account.RegisterViewModel
 @inject ISiteContextResolver siteResolver
-@inject CoreThemeHelper themeHelper
+@inject ICoreThemeHelper themeHelper
 @inject SiteContext Tenant
 @inject IStringLocalizer<CloudscribeCore> sr
 @{
@@ -8,7 +8,7 @@
     ViewData["BodyClass"] = "account-section registration-page";
     ViewData["SocialFormat"] = sr["Register using your {0} account"];
     ViewData["SocialHeading"] = sr["Use an existing account"];
-    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path.StartingSegment());
+    var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
 
 }
 @section Meta {
