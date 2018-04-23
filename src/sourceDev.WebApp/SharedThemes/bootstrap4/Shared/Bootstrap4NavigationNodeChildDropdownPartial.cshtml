@@ -3,29 +3,29 @@
 @addTagHelper *, cloudscribe.Web.Navigation
 @if ((Model.TempNode != null) && (Model.HasVisibleChildren(Model.TempNode)))
 {
-<ul class="dropdown-menu" aria-labelledby="dropdown-@Model.TempNode.Value.Key">
-    @foreach (var childNode in Model.TempNode.Children)
-    {
-        if (!Model.ShouldAllowView(childNode)) { continue; }
+    <ul class="dropdown-menu" aria-labelledby="dropdown-@Model.TempNode.Value.Key">
+        @foreach (var childNode in Model.TempNode.Children)
+        {
+            if (!Model.ShouldAllowView(childNode)) { continue; }
 
-    @*if (childNode.Value.Text == "Separator")
-        {
-            <li class="divider"></li>
-            continue;
-        }*@
-        if (!Model.HasVisibleChildren(childNode))
-        {
-    <li class='@Model.GetClass(childNode.Value, "nav-item")'><a class="dropdown-item" href="@Url.Content(Model.AdjustUrl(childNode))">@Html.Raw(Model.GetIcon(childNode.Value))@Model.AdjustText(childNode)</a></li>
+            @*if (childNode.Value.Text == "Separator")
+                {
+                    <li class="divider"></li>
+                    continue;
+                }*@
+            if (!Model.HasVisibleChildren(childNode))
+            {
+                <li class='@Model.GetClass(childNode.Value, "")'><a class="dropdown-item" href="@Url.Content(Model.AdjustUrl(childNode))">@Html.Raw(Model.GetIcon(childNode.Value))@Model.AdjustText(childNode)</a></li>
+            }
+            else
+            {
+
+                <li class='@Model.GetClass(childNode.Value, "dropdown ",  "active", true)'>
+                    <a class="dropdown-item dropdown-toggle" href="@Url.Content(Model.AdjustUrl(childNode))">@Html.Raw(Model.GetIcon(childNode.Value))@Model.AdjustText(childNode) </a>
+                    @Model.UpdateTempNode(childNode)@Html.Partial("Bootstrap4NavigationNodeChildDropdownPartial", Model)  @* recursion *@
+                </li>
+
+            }
         }
-        else
-        {
-
-    <li class='@Model.GetClass(childNode.Value, "nav-item dropdown-submenu",  "active", true)'>
-        <a class="dropdown-item dropdown-submenu dropdown-toggle" href="@Url.Content(Model.AdjustUrl(childNode))">@Html.Raw(Model.GetIcon(childNode.Value))@Model.AdjustText(childNode) </a>
-        @Model.UpdateTempNode(childNode)@Html.Partial("Bootstrap4NavigationNodeChildDropdownPartial", Model)  @* recursion *@
-    </li>
-
-        }
-    }
-</ul>
+    </ul>
 }

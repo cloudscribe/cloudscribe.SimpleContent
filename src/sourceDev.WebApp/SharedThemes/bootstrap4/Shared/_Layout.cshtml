@@ -37,12 +37,13 @@
         </div>
     </a>
     <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
                 <a href="~/@(Tenant?.SiteFolderName ?? "")" class="navbar-brand">@(Tenant?.SiteName ?? "Sample")</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
@@ -66,15 +67,22 @@
             </aside>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container">
-            <small class="float-left">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</small>
-            <small class="float-right">
-                <a href="/sitemap">Site Map</a> |
-                @* you are free to remove the powered by cloudscribe link but we appreciate it if you choose to keep it! *@
-                <a target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
-            </small>
-        </div>
+    <footer class="sticky-bottom border d-flex flex-wrap justify-content-center">
+            <div class="p-2 text-nowrap">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</div>
+            <div class="p-2">
+                <div class="d-flex flex-wrap">
+                    <div class=" border-right p-0 m-0 pr-2">
+                        <a class="text-nowrap" href="/sitemap">Site Map</a>
+                    </div>
+                    <div class=" pl-2">
+                        @* you are free to remove the powered by cloudscribe link but we appreciate it if you choose to keep it! *@
+                        <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
+                    </div>
+                </div>
+            
+               
+            </div>
+   
     </footer>
     @RenderSection("Toolbar", required: false)
     <environment names="Development">
@@ -83,6 +91,10 @@
         <script src="~/js/bootstrap.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>*@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+        <script src="~/js/jquery.smartmenus.min.js"></script>
+        <script src="~/js/jquery.smartmenus.bootstrap-4.min.js"></script>
+
     </environment>
     <environment names="Staging,Production">
         <script src="~/js/jquery.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
@@ -90,6 +102,10 @@
         <script src="~/js/bootstrap.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>*@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+        <script src="~/js/bs4.smartmenus.min.js"></script>
+       
+
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
