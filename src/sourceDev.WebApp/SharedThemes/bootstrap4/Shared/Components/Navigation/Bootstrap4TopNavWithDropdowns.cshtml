@@ -12,11 +12,11 @@
             if (!Model.ShouldAllowView(node)) { continue; }
             if (!Model.HasVisibleChildren(node))
             {
-                <li role="presentation" class='@Model.GetClass(node.Value, "nav-item")'  cwn-data-attributes="@node.Value.DataAttributes"><a class="nav-link" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a></li>
+                <li class='@Model.GetClass(node.Value, "nav-item")'  cwn-data-attributes="@node.Value.DataAttributes"><a class="nav-link" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node)</a></li>
             }
             else
             {
-                <li role="presentation" class='@Model.GetClass(node.Value, "nav-item dropdown",  "active", true)' cwn-data-attributes="@node.Value.DataAttributes">
+                <li class='@Model.GetClass(node.Value, "nav-item dropdown",  "active", true)' cwn-data-attributes="@node.Value.DataAttributes">
                     <a class="nav-link dropdown-toggle" id="dropdown-@node.Value.Key" aria-haspopup="true" aria-expanded="false" href="@Url.Content(Model.AdjustUrl(node))">@Html.Raw(Model.GetIcon(node.Value))@Model.AdjustText(node) </a>
                     @Model.UpdateTempNode(node)@Html.Partial("Bootstrap4NavigationNodeChildDropdownPartial", Model)
                 </li>
