@@ -161,10 +161,10 @@ namespace Microsoft.AspNetCore.Builder
 
                     options.AddCloudscribeCommonEmbeddedViews();
                     options.AddCloudscribeNavigationBootstrap3Views();
-                    //options.AddCloudscribeCoreBootstrap3Views();
+                    options.AddCloudscribeCoreBootstrap3Views();
                     options.AddCloudscribeFileManagerBootstrap3Views();
-                    //options.AddCloudscribeSimpleContentBootstrap3Views();
-                    //options.AddCloudscribeLoggingBootstrap3Views();
+                    options.AddCloudscribeSimpleContentBootstrap3Views();
+                    options.AddCloudscribeLoggingBootstrap3Views();
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
 
