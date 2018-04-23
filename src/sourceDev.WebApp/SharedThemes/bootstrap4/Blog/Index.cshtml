@@ -45,9 +45,7 @@ await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
         ></cs-pager>
 </nav>
 @section AsidePrimary {
-@{await Html.RenderPartialAsync("AboutPartial"); }
-@{await Html.RenderPartialAsync("CategoryListPartial", Model.Categories); }
-@{await Html.RenderPartialAsync("ArchiveListPartial", Model.Archives); }
+@{await Html.RenderPartialAsync("SideBarPartial", Model); }
 }
 @section Scripts {
         @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))

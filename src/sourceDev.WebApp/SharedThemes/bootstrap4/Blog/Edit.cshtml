@@ -7,7 +7,7 @@
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
 @section Styles {
-    @{ await Html.RenderPartialAsync("_DatePickerCssPartial"); }
+    @{ await Html.RenderPartialAsync("DatePickerBs4Css"); }
     @if (Model.ContentType == "markdown")
     {
         <link rel="stylesheet" href="~/cr/css/simplemde.min.css" />
@@ -145,7 +145,7 @@
     {
         await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial");
     }
-    @{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("DatePickerBs4Scripts"); }
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()

@@ -30,7 +30,7 @@
     </style>
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
 </head>
-<body class="@ViewData["BodyClass"]">
+<body class="h-100 @ViewData["BodyClass"]">
     <a id="skippy" class="sr-only sr-only-focusable" href="#content">
         <div class="container">
             <span class="skiplink-text">Skip to main content</span>
@@ -49,7 +49,7 @@
                 </div>
             </nav>
         </header>
-    <div id="wrapper" class="container-fluid">
+    <div id="wrapper" class="container-fluid cs-container">
         @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
         <div class="row">
             <main role="main" class="col order-3">
@@ -67,18 +67,19 @@
             </aside>
         </div>
     </div>
-    <footer class="sticky-bottom border d-flex flex-wrap justify-content-center">
+    <footer class="sticky-bottom border pt-2 d-flex flex-wrap justify-content-center">
             <div class="p-2 text-nowrap">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</div>
             <div class="p-2">
-                <div class="d-flex flex-wrap">
-                    <div class=" border-right p-0 m-0 pr-2">
+                <ul class="list-unstyled d-flex flex-wrap">
+                    <li class=" mr-2">
                         <a class="text-nowrap" href="/sitemap">Site Map</a>
-                    </div>
-                    <div class=" pl-2">
+                    </li>
+                    <li class="border-left pl-2 mr-2">
                         @* you are free to remove the powered by cloudscribe link but we appreciate it if you choose to keep it! *@
                         <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
-                    </div>
-                </div>
+                    </li>
+                   
+                </ul>
             
                
             </div>
@@ -92,8 +93,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
-        <script src="~/js/jquery.smartmenus.min.js"></script>
-        <script src="~/js/jquery.smartmenus.bootstrap-4.min.js"></script>
+        <script src="~/js/bs4.smartmenus.min.js"></script>
 
     </environment>
     <environment names="Staging,Production">
