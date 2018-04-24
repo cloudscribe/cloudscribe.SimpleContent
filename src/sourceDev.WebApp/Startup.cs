@@ -11,21 +11,21 @@ namespace sourceDev.WebApp
     {
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            Configuration = configuration;
-            Environment = env;
-            SslIsAvailable = Configuration.GetValue<bool>("AppSettings:UseSsl");
+            _configuration = configuration;
+            _environment = env;
+            _sslIsAvailable = _configuration.GetValue<bool>("AppSettings:UseSsl");
         }
 
-        public IHostingEnvironment Environment { get; set; }
-        public IConfiguration Configuration { get; }
-        public bool SslIsAvailable { get; set; }
+        private IHostingEnvironment _environment;
+        private IConfiguration _configuration;
+        private bool _sslIsAvailable;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddGlimpse();
 
-            services.SetupDataProtection(Configuration, Environment);
+            services.SetupDataProtection(_configuration, _environment);
             
             //services.AddMemoryCache();
 
@@ -39,13 +39,13 @@ namespace sourceDev.WebApp
 
             });
             
-            services.SetupDataStorage(Configuration);
+            services.SetupDataStorage(_configuration);
 
-            services.SetupCloudscribeFeatures(Configuration);
+            services.SetupCloudscribeFeatures(_configuration);
             
-            services.SetupLocalization(Configuration);
+            services.SetupLocalization(_configuration);
 
-            services.SetupMvc(SslIsAvailable);
+            services.SetupMvc(_configuration, _sslIsAvailable);
             
         }
 
@@ -80,7 +80,7 @@ namespace sourceDev.WebApp
             app.UseCloudscribeCore(
                     loggerFactory,
                     multiTenantOptions,
-                    SslIsAvailable);
+                    _sslIsAvailable);
 
             app.UseMvc(routes =>
             {
@@ -88,7 +88,7 @@ namespace sourceDev.WebApp
                 //*** IMPORTANT ***
                 // this is in Config/RoutingAndMvc.cs
                 // you can change or add routes there
-                routes.UseCustomRoutes(useFolders, Configuration);
+                routes.UseCustomRoutes(useFolders, _configuration);
             });
             
             
