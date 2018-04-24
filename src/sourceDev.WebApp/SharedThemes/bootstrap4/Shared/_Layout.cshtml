@@ -13,50 +13,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @RenderSection("Meta", required: false)
   <environment names="Development">
-      @*<link rel="stylesheet" href="~/css/bootstrap.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />*@
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+      <link rel="stylesheet" href="~/css/bootstrap4.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />
       <link rel="stylesheet" href="~/css/fontawesome-all.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />
       <link rel="stylesheet" href="~/css/site.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />
-      @*<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
   </environment>
   <environment names="Staging,Production">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
-      @*<link rel="stylesheet" href="~/css/bootstrap.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />*@
-      @*<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />*@
+      <link rel="stylesheet" href="~/css/bootstrap4.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />
+      <link rel="stylesheet" href="~/css/fontawesome-all.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />
+      <link rel="stylesheet" href="~/css/site.min.css" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant" />
   </environment>
     @RenderSection("Styles", required: false)
-    <style>
-        
-    </style>
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
 </head>
-<body class="h-100 @ViewData["BodyClass"]">
-    <a id="skippy" class="sr-only sr-only-focusable" href="#content">
-        <div class="container">
-            <span class="skiplink-text">Skip to main content</span>
-        </div>
-    </a>
+<body class="d-flex flex-column @ViewData["BodyClass"]">
     <header>
-            <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
-                <a href="~/@(Tenant?.SiteFolderName ?? "")" class="navbar-brand">@(Tenant?.SiteName ?? "Sample")</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <a id="skippy" class="sr-only sr-only-focusable" href="#content">
+            <div class="container">
+                <span class="skiplink-text">Skip to main content</span>
+            </div>
+        </a>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+            <a href="~/@(Tenant?.SiteFolderName ?? "")" class="navbar-brand">@(Tenant?.SiteName ?? "Sample")</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
-                    @await Html.PartialAsync("_LoginPartial")
-                </div>
-            </nav>
-        </header>
-    <div id="wrapper" class="container-fluid cs-container">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
+                @await Html.PartialAsync("_LoginPartial")
+            </div>
+        </nav>
+    </header>
+    <div id="wrapper" class="container-fluid cs-container flex-fill">
         @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
         <div class="row">
-            <main role="main" class="col order-3">
+            <main id="content" role="main" class="col order-3">
                 @await Html.PartialAsync("AlertsPartial")
                 @RenderBody()
             </main>
-            <nav id="sidenavmenu" class=" col col-3 order-1 @sideNavToggleClass sidenav-col">
+            <nav id="sidenavmenu" class=" col col-3 order-1 @sideNavToggleClass">
                 @RenderSection("SideNav", required: false)
             </nav>
             <aside id="aside2" class="col col-1 order-2 @aside2ToggleClass">
@@ -67,101 +62,33 @@
             </aside>
         </div>
     </div>
-    <footer class="sticky-bottom border pt-2 d-flex flex-wrap justify-content-center">
-            <div class="p-2 text-nowrap">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</div>
-            <div class="p-2">
-                <ul class="list-unstyled d-flex flex-wrap">
-                    <li class=" mr-2">
-                        <a class="text-nowrap" href="/sitemap">Site Map</a>
-                    </li>
-                    <li class="border-left pl-2 mr-2">
-                        @* you are free to remove the powered by cloudscribe link but we appreciate it if you choose to keep it! *@
-                        <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
-                    </li>
-                   
-                </ul>
-            
-               
-            </div>
-   
+    <footer class="sticky-bottom border pt-2 d-flex h-100 flex-wrap flex-grow justify-content-center">
+        <div class="p-2">
+            <ul class="list-unstyled d-flex flex-wrap">
+                <li class=" mr-2">
+                    <a class="text-nowrap" href="/sitemap">Site Map</a>
+                </li>
+                <li class="border-left pl-2 mr-2">
+                    @* you are free to remove the powered by cloudscribe link but we appreciate it if you choose to keep it! *@
+                    <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
+                </li>
+            </ul>
+        </div>
+        <div class="p-2 text-nowrap">Copyright &copy; @DateTime.Now.Year - @(Tenant?.SiteName ?? "Sample")</div>
     </footer>
     @RenderSection("Toolbar", required: false)
     <environment names="Development">
         <script src="~/js/jquery.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
-        @*<script src="~/js/popper.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
-        <script src="~/js/bootstrap.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>*@
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
-        <script src="~/js/bs4.smartmenus.min.js"></script>
-
+        <script src="~/js/bootstrap4.bundle.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
+        <script src="~/cr/js/bs4.smartmenus.min.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/js/jquery.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
-        @*<script src="~/js/popper.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
-        <script src="~/js/bootstrap.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>*@
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
-        <script src="~/js/bs4.smartmenus.min.js"></script>
-       
-
+        <script src="~/js/bootstrap4.bundle.min.js" cs-resolve-theme-resource="true" cs-shared-theme="true" cs-tenant="@Tenant"></script>
+        <script src="~/cr/js/bs4.smartmenus.min.js"></script>
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
-    <script>
-
-//        $(document).ready( function () {
-//    $('.dropdown-menu a.dropdown-toggle').on( 'click', function ( e ) {
-//        var $el = $( this );
-//        var $parent = $( this ).offsetParent( ".dropdown-menu" );
-//        if ( !$( this ).next().hasClass( 'show' ) ) {
-//            $( this ).parents( '.dropdown-menu' ).first().find( '.show' ).removeClass( "show" );
-//        }
-//        var $subMenu = $( this ).next( ".dropdown-menu" );
-//        $subMenu.toggleClass( 'show' );
-
-//        $( this ).parent( "li" ).toggleClass( 'show' );
-
-//        $( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
-//            $( '.dropdown-menu .show' ).removeClass( "show" );
-//        } );
-
-//         if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
-//            $el.next().css( { "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 } );
-//        }
-
-//        return false;
-//    } );
-//} );
-
-
-        /*
-        $( document ).ready( function () {
-    $( '.dropdown-menu a.dropdown-toggle' ).on( 'click', function ( e ) {
-        var $el = $( this );
-        var $parent = $( this ).offsetParent( ".dropdown-menu" );
-        if ( !$( this ).next().hasClass( 'show' ) ) {
-            $( this ).parents( '.dropdown-menu' ).first().find( '.show' ).removeClass( "show" );
-        }
-        var $subMenu = $( this ).next( ".dropdown-menu" );
-        $subMenu.toggleClass( 'show' );
-
-        $( this ).parent( "li" ).toggleClass( 'show' );
-
-        $( this ).parents( 'li.nav-item.dropdown.show' ).on( 'hidden.bs.dropdown', function ( e ) {
-            $( '.dropdown-menu .show' ).removeClass( "show" );
-        } );
-
-         if ( !$parent.parent().hasClass( 'navbar-nav' ) ) {
-            $el.next().css( { "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 } );
-        }
-
-        return false;
-    } );
-} );
-        */
-    </script>
     <add-this profile-id="@Tenant.AddThisDotComUsername" async></add-this>
 </body>
 </html>

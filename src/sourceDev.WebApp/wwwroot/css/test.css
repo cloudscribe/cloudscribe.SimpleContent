@@ -1,3 +1,107 @@
-﻿body
-{ background-color:green;
+﻿.cs-container {
+    min-height: 1000px;
+}
+
+/* ipad pro */
+@media (max-height: 2048px) {
+    .cs-container {
+        min-height: 1200px;
+    }
+}
+
+@media (max-height: 2048px) and (orientation : landscape) {
+    .cs-container {
+        min-height: 899px;
+    }
+}
+/* ipad */
+@media (max-height: 1024px) {
+    .cs-container {
+        min-height: 819px;
+    }
+}
+
+@media (max-height: 823px) and (orientation : portrait) {
+    .cs-container {
+        min-height: 640px;
+    }
+}
+/* iphone x */
+@media (max-height: 812px) and (orientation : portrait) {
+    .cs-container {
+        min-height: 630px;
+    }
+}
+
+/* 15 in macbook pro retina */
+@media (max-height: 795px) {
+    .cs-container {
+        min-height: 670px;
+    }
+}
+
+@media (max-height: 768px) {
+    .cs-container {
+        min-height: 600px;
+    }
+}
+
+@media (max-height: 736px) {
+    .cs-container {
+        min-height: 570px;
+    }
+}
+
+@media (max-height: 736px) and (orientation : portrait) {
+    .cs-container {
+        min-height: 570px;
+    }
+}
+
+@media (max-height: 731px) and (orientation : portrait) {
+    .cs-container {
+        min-height: 550px;
+    }
+}
+
+@media (max-height: 731px) and (orientation : landscape) {
+    .cs-container {
+        min-height: 10px;
+    }
+}
+
+@media (max-height: 667px) and (orientation : portrait) {
+    .cs-container {
+        min-height: 500px;
+    }
+}
+
+@media (max-height: 640px) and (orientation : portrait) {
+    .cs-container {
+        min-height: 470px;
+    }
+}
+
+@media (max-height: 375px) {
+
+    .cs-container {
+        min-height: 10px;
+    }
+}
+
+
+@media (max-height: 360px) {
+
+    .cs-container {
+        min-height: 100px; /* screen height - 380*/
+    }
+}
+
+/* not sure why but top nav gets taller in this range so
+    more padding is needed to keep the heading below the nav
+*/
+@media screen and (max-width: 993px) and (min-width:767px) {
+    body {
+        padding-top: 4.5rem;
+    }
 }

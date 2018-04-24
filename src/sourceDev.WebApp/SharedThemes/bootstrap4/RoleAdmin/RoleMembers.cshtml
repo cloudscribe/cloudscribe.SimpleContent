@@ -145,7 +145,7 @@
     @{ await Html.RenderPartialAsync("AdminSideNavScripts"); }
     @{await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
     <script src="~/cr/js/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/cr/js/cloudscribe-modaldialog-bootstrap.min.js"></script>
+    <script src="~/js/cloudscribe-modaldialog-bootstrap4.js"></script>
     <script>
     $('#confirmAddRoleModal').on('show.bs.modal', function (e) {
         var message = $(e.relatedTarget).data('message');

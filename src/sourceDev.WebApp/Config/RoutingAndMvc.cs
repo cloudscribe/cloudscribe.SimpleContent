@@ -119,6 +119,7 @@ namespace Microsoft.AspNetCore.Builder
 
         public static IServiceCollection SetupMvc(
             this IServiceCollection services,
+            IConfiguration config,
             bool sslIsAvailable
             )
         {
@@ -153,6 +154,8 @@ namespace Microsoft.AspNetCore.Builder
                 options.LowercaseUrls = true;
             });
 
+            var boostrapVersion = config.GetValue<int>("DevOptions:BootstrapVersion");
+
             services.AddMvc()
                 .AddRazorOptions(options =>
                 {
@@ -161,10 +164,27 @@ namespace Microsoft.AspNetCore.Builder
 
                     options.AddCloudscribeCommonEmbeddedViews();
                     options.AddCloudscribeNavigationBootstrap3Views();
-                    options.AddCloudscribeCoreBootstrap3Views();
                     options.AddCloudscribeFileManagerBootstrap3Views();
-                    options.AddCloudscribeSimpleContentBootstrap3Views();
-                    options.AddCloudscribeLoggingBootstrap3Views();
+
+                    switch(boostrapVersion)
+                    {
+                        case 4:
+
+                            // using local views at the moment
+
+                            break;
+
+                        case 3:
+                        default:
+
+                            options.AddCloudscribeCoreBootstrap3Views();
+                            options.AddCloudscribeSimpleContentBootstrap3Views();
+                            options.AddCloudscribeLoggingBootstrap3Views();
+
+                            break;
+                    }
+
+                    
 
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
 
