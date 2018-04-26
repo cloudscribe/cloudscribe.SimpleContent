@@ -3,6 +3,7 @@
 @inject IStringLocalizer<SimpleContent> sr
 @{
     var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
+    ViewData["AsidePrimaryVisible"] = true;
     ViewData["AsidePrimaryToggle"] = "show";
 }
 @section Meta {

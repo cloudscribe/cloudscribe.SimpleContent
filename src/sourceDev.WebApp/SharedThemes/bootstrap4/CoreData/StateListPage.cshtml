@@ -5,6 +5,7 @@
     ViewData["Title"] = sr["State List Administration"];
     var themeSettings = themeHelper.GetThemeSettings();
     if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
+    ViewData["SideNavVisible"] = true;
 }
 
 <h2>@ViewData["Title"]</h2>

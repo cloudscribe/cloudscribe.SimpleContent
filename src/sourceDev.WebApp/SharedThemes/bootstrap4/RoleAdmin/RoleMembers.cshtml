@@ -5,6 +5,7 @@
     ViewData["BodyClass"] = "admin-section role-members";
     var themeSettings = themeHelper.GetThemeSettings();
     if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
+    ViewData["SideNavVisible"] = true;
 }
 <h2>@Model.Heading1</h2>
 <h3>@Model.Heading2</h3>
