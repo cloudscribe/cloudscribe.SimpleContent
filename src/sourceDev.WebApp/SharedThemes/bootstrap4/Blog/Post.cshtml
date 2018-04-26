@@ -1,6 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @{
     var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
+    ViewData["AsidePrimaryVisible"] = true;
     ViewData["AsidePrimaryToggle"] = "show";
 }
 @section Meta {

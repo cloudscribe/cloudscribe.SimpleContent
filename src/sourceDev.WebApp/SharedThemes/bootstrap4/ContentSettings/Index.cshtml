@@ -6,6 +6,7 @@
     var uiOptions = uiOptionsAccessor.Value;
     var themeSettings = themeHelper.GetThemeSettings();
     if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
+    ViewData["SideNavVisible"] = true;
 }
 
 <h2>@ViewBag.Title</h2>
