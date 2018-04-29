@@ -26,6 +26,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Views.Bootstrap4\cloudscribe.Core.SimpleContent.Views.Bootstrap4.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.MySQL\cloudscribe.SimpleContent.Storage.EFCore.MySQL.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.pgsql\cloudscribe.SimpleContent.Storage.EFCore.pgsql.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj" />
@@ -36,12 +37,14 @@
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web.Mvc\cloudscribe.SimpleContent.Web.Mvc.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Syndication\cloudscribe.SimpleContent.Syndication.csproj" />
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Mvc\cloudscribe.Core.SimpleContent.Mvc.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Web.Views.Bootstrap4\cloudscribe.SimpleContent.Web.Views.Bootstrap4.csproj" />
   </ItemGroup>
   
   
   <ItemGroup>
     <PackageReference Include="cloudscribe.Core.Web.Mvc" Version="2.1.*" />
     <PackageReference Include="cloudscribe.Core.Web.Views.Bootstrap3" Version="2.1.*" />
+    <PackageReference Include="cloudscribe.Core.Web.Views.Bootstrap4" Version="2.1.*" />
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="2.0.*" />

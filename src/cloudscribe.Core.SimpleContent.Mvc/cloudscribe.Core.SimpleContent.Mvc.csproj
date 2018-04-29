@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Views.Bootstrap3\cloudscribe.Core.SimpleContent.Views.Bootstrap3.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent\cloudscribe.Core.SimpleContent.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />

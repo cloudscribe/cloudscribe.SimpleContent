@@ -1,0 +1,26 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageTreeViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject ICoreThemeHelper coreThemeHelper
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+    var coreThemeSettings = coreThemeHelper.GetThemeSettings();
+    if (coreThemeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
+    ViewData["SideNavVisible"] = true;
+}
+@section Styles {
+    @{await Html.RenderPartialAsync("TreeStylePartial"); }
+}
+
+@{await Html.RenderPartialAsync("TreeMainPartial", Model); }
+
+@section SideNav {
+    @{ await Html.RenderPartialAsync("AdminSideNav"); }
+}
+@section Toolbar{
+    @{ await Html.RenderPartialAsync("AdminSideNavToggle"); }
+}
+@section Scripts {
+    @{ await Html.RenderPartialAsync("AdminSideNavScripts"); }
+    @{await Html.RenderPartialAsync("TreeScriptsPartial"); }
+}

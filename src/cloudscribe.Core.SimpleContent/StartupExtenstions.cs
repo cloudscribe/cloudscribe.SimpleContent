@@ -1,32 +1,28 @@
 ﻿using cloudscribe.Core.SimpleContent;
 using cloudscribe.Core.SimpleContent.Integration;
-using cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.FileProviders;
-using System.Reflection;
 
-namespace cloudscribe.Core.SimpleContent
-{
-    public static class Extensions
-    {
-        public static RazorViewEngineOptions AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration(this RazorViewEngineOptions options)
-        {
-            options.FileProviders.Add(new EmbeddedFileProvider(
-                    typeof(ContentSettingsController).GetTypeInfo().Assembly,
-                    "cloudscribe.Core.SimpleContent"
-                ));
+//namespace cloudscribe.Core.SimpleContent
+//{
+//    public static class Extensions
+//    {
+//        public static RazorViewEngineOptions AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration(this RazorViewEngineOptions options)
+//        {
+//            options.FileProviders.Add(new EmbeddedFileProvider(
+//                    typeof(ContentSettingsController).GetTypeInfo().Assembly,
+//                    "cloudscribe.Core.SimpleContent"
+//                ));
 
-            return options;
-        }
-    }
+//            return options;
+//        }
+//    }
 
-}
+//}
 
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -72,12 +68,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             }
 
-            services.AddMvc()
-                .AddRazorOptions(options =>
-                {
-                    options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();
+            //services.AddMvc()
+            //    .AddRazorOptions(options =>
+            //    {
+            //        options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();
 
-                });
+            //    });
 
             return services;
         }
