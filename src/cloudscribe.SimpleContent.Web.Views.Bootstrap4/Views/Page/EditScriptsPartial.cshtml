@@ -1,0 +1,27 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
+@inject IRoleSelectorProperties roleSelector
+@{ await Html.RenderPartialAsync("DatePickerBs4Scripts"); }
+@{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
+<script src="~/cr/js/jquery.validate.hooks.min.js"></script>
+<script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+@if (Model.ContentType == "markdown")
+{
+    <script src="~/cr/js/simplemde.min.js"></script>
+    <script src="~/cr/js/simplemde-unobtrusive.min.js"></script>
+}
+else
+{
+    await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial");
+}
+@if (roleSelector.RequiredScriptPaths != null)
+{
+    foreach (var s in roleSelector.RequiredScriptPaths)
+    {
+        <script src="@Url.Content(s)"></script>
+    }
+}
+<script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+</script>

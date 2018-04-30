@@ -1,0 +1,19 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
+@{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
+<script src="~/cr/js/jquery.validate.hooks.min.js"></script>
+<script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+@if (Model.ContentType == "markdown")
+{
+    <script src="~/cr/js/simplemde.min.js"></script>
+    <script src="~/cr/js/simplemde-unobtrusive.min.js"></script>
+}
+else
+{
+    await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial");
+}
+@{ await Html.RenderPartialAsync("DatePickerBs4Scripts"); }
+<script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+</script>

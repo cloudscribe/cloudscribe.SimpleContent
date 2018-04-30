@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>2.0.10</VersionPrefix>
-    <AssemblyVersion>2.0.10</AssemblyVersion>
+    <VersionPrefix>2.0.11</VersionPrefix>
+    <AssemblyVersion>2.0.11</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.Core.SimpleContent.Views.Bootstrap3\cloudscribe.Core.SimpleContent.Views.Bootstrap3.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent\cloudscribe.Core.SimpleContent.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
