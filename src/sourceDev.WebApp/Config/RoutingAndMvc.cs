@@ -174,7 +174,8 @@ namespace Microsoft.AspNetCore.Builder
                             options.AddCloudscribeCoreBootstrap4Views();
                             options.AddCloudscribeCoreSimpleContentIntegrationBootstrap4Views();
                             options.AddCloudscribeSimpleContentBootstrap4Views();
-                            
+                            options.AddCloudscribeLoggingBootstrap4Views();
+
                             break;
 
                         case 3:

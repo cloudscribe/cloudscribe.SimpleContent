@@ -18,44 +18,47 @@ body {
     flex: 1 1 auto !important;
 }
 
-/*footer{
-    height:auto;
-}*/
 
-   
-    #newPostLink {
-        position: absolute;
-        top: 70px;
-        right: 0px;
-    }
 
-    #editPostLink {
-        position: absolute;
-        top: 100px;
-        right: 0px;
-    }
+#newPostLink {
+    position: absolute;
+    top: 70px;
+    right: 0px;
+    color: black;
+}
 
-    #pageManagerLink {
-        position: absolute;
-        top: 70px;
-        right: 0px;
-    }
+#editPostLink {
+    position: absolute;
+    top: 100px;
+    right: 0px;
+    color: black;
+}
 
-    #newPageLink {
-        position: absolute;
-        top: 100px;
-        right: 0px;
-    }
+#pageManagerLink {
+    position: absolute;
+    top: 70px;
+    right: 0px;
+    color:black;
+}
 
-    #editPageLink {
-        position: absolute;
-        top: 130px;
-        right: 0px
-    }
+#newPageLink {
+    position: absolute;
+    top: 100px;
+    right: 0px;
+    color: black;
+}
+
+#editPageLink {
+    position: absolute;
+    top: 130px;
+    right: 0px; 
+    color:black;
+}
 #sidenavtoggle {
     position: absolute;
     top: 120px;
     right: 5px;
+    color: black;
 }
 
 /* sticky footer */

@@ -92,5 +92,11 @@
     "inputFiles": [
       "wwwroot/jsdev/editor-ck.js"
     ]
+  },
+  {
+    "outputFileName": "SharedThemes/cyborg/wwwroot/css/site.min.css",
+    "inputFiles": [
+      "SharedThemes/cyborg/wwwroot/css/site.css"
+    ]
   }
 ]

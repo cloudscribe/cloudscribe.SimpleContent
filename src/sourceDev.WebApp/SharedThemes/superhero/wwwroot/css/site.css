@@ -5,7 +5,7 @@
 
 body {
     min-height: 100vh;
-    padding-top: 3.5rem;
+    padding-top: 3.1rem;
     /*margin-bottom: 60px;*/
 }
 
@@ -18,38 +18,34 @@ body {
     flex: 1 1 auto !important;
 }
 
-/*footer{
-    height:auto;
-}*/
 
-   
     #newPostLink {
         position: absolute;
-        top: 70px;
+        top: 110px;
         right: 0px;
     }
 
     #editPostLink {
         position: absolute;
-        top: 100px;
+        top: 140px;
         right: 0px;
     }
 
     #pageManagerLink {
         position: absolute;
-        top: 70px;
+        top: 110px;
         right: 0px;
     }
 
     #newPageLink {
         position: absolute;
-        top: 100px;
+        top: 140px;
         right: 0px;
     }
 
     #editPageLink {
         position: absolute;
-        top: 130px;
+        top: 170px;
         right: 0px
     }
 #sidenavtoggle {
@@ -58,14 +54,7 @@ body {
     right: 5px;
 }
 
-/* sticky footer */
-/*.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    min-height: 60px; 
-    /
-}*/
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

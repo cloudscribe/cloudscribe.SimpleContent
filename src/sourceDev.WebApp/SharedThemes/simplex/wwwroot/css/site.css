@@ -5,7 +5,7 @@
 
 body {
     min-height: 100vh;
-    padding-top: 3.5rem;
+    padding-top: 4.5rem;
     /*margin-bottom: 60px;*/
 }
 
@@ -18,9 +18,7 @@ body {
     flex: 1 1 auto !important;
 }
 
-/*footer{
-    height:auto;
-}*/
+
 
    
     #newPostLink {
@@ -58,14 +56,7 @@ body {
     right: 5px;
 }
 
-/* sticky footer */
-/*.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    min-height: 60px; 
-    /
-}*/
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

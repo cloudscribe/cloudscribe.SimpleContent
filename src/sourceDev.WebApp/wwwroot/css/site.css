@@ -1,159 +1,231 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿html {
+    position: relative;
+    min-height: 100%;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-.readable-theme , 
-.paper-theme {
-    margin-top: 18px;
+body {
+    min-height: 100vh;
+    padding-top: 3.5rem;
+    /*margin-bottom: 60px;*/
 }
 
+/* navbar is 56.5 px tall 
+    http://screensiz.es/
 
-.darkly-theme,
-.flatly-theme {
-    margin-top: 10px;
-}
-
-.sandstone-theme,
-.journal-theme {
-    margin-top: 14px;
-}
-/* Set widths on the form inputs since otherwise they're 100% wide */
-/*
-input,
-select,
-textarea {
-    max-width: 280px;
-}
 */
+
+.flex-fill {
+    flex: 1 1 auto !important;
+}
+
+
+   
+    #newPostLink {
+        position: absolute;
+        top: 110px;
+        right: 0px;
+    }
+
+    #editPostLink {
+        position: absolute;
+        top: 140px;
+        right: 0px;
+    }
+
+    #pageManagerLink {
+        position: absolute;
+        top: 110px;
+        right: 0px;
+    }
+
+    #newPageLink {
+        position: absolute;
+        top: 140px;
+        right: 0px;
+    }
+
+    #editPageLink {
+        position: absolute;
+        top: 170px;
+        right: 0px
+    }
+#sidenavtoggle {
+    position: absolute;
+    top: 120px;
+    right: 5px;
+}
+
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
 
-/* buttons and links extension to use brackets: [ click me ] */
-.btn-bracketed::before {
-    display:inline-block;
-    content: "[";
-    padding-right: 0.5em;
-}
-.btn-bracketed::after {
-    display:inline-block;
-    content: "]";
-    padding-left: 0.5em;
-}
+    /* Hide/rearrange for smaller screens */
+    @media screen and (max-width: 768px) {
+        /* Hide captions */
+        .sidenav-col,
+        .carousel-caption {
+            display: none
+        }
+    }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-  /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
-}
+    @media screen and (max-width: 812px) {
+        #sidenavtoggle,
+        .sidenav-col {
+            display: none;
+        }
+    }
 
-/* make room for gravatar */
-
-header.navbar-fixed-top { min-height:45px;} 
-    
-
-div.navbar-gravatar {
-
-    margin:10px 0 0 0;
-    
-
-}
-    
-    
-
-.navbar-text img {
+    /*.navbar-text img {
   max-height:30px;
   width:auto;
   vertical-align:middle;
   padding:0;
   margin:0;
-}
-
-.mybrand {
-    padding-top:15px;
-    
-}
-
-img, video, iframe {
-    max-width: 100%;
-}
-
-td img, video, iframe {
-    max-width: none;
-}
-
-/*
-article[data-id="0fe39377-57a9-4d42-a9f1-22fc0c5ba18c"] {
-    padding: 0 0 0 0; margin: 0 0 0 0; min-height:0;
-}
-#myCarousel {
-   
-    position:relative; top:-60px;
-    max-height:420px;
-        
-}
-
-    */
-.psetform {
-    min-width:340px;
-    padding: 4px 4px 4px 4px;
-}
+}*/
 
 
-ul.nav li.dropdown:hover>ul.dropdown-menu {
-            display: block;
+    img, video, iframe {
+        max-width: 100%;
+    }
+
+    td img, video, iframe {
+        max-width: none;
+    }
+
+
+
+    .table td, .table th {
+        vertical-align: inherit;
+    }
+
+    /* jquery smartmenu bootstrap 4 */
+    /* Carets in collapsible mode (make them look like +/- buttons) */
+    .navbar-nav.sm-collapsible .sub-arrow {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        margin: -0.7em 0.5em 0 0;
+        border: 1px solid rgba(0, 0, 0, .1);
+        border-radius: .25rem;
+        padding: 0;
+        width: 2em;
+        height: 1.4em;
+        font-size: 1.25rem;
+        line-height: 1.2em;
+        text-align: center;
+    }
+
+        .navbar-nav.sm-collapsible .sub-arrow::before {
+            content: '+';
         }
 
-.dropdown-submenu {
-    position:relative;
-}
-.dropdown-submenu>.dropdown-menu {
-    top:0;
-    left:100%;
-    margin-top:-6px;
-    margin-left:-1px;
-    -webkit-border-radius:0 6px 6px 6px;
-    -moz-border-radius:0 6px 6px 6px;
-    border-radius:0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-    display:block;
-}
-.dropdown-submenu>a:after {
-    display:block;
-    content:" ";
-    float:right;
-    width:0;
-    height:0;
-    border-color:transparent;
-    border-style:solid;
-    border-width:5px 0 5px 5px;
-    border-left-color:#cccccc;
-    margin-top:5px;
-    margin-right:-10px;
-}
-.dropdown-submenu:hover>a:after {
-    border-left-color:#ffffff;
-}
-.dropdown-submenu.pull-left {
-    float:none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-    left:-100%;
-    margin-left:10px;
-    -webkit-border-radius:6px 0 6px 6px;
-    -moz-border-radius:6px 0 6px 6px;
-    border-radius:6px 0 6px 6px;
-}
+    .navbar-nav.sm-collapsible .show > a > .sub-arrow::before {
+        content: '-';
+    }
 
+    .navbar-dark .navbar-nav.sm-collapsible .nav-link .sub-arrow {
+        border-color: rgba(255, 255, 255, .1);
+    }
+    /* make sure there's room for the carets */
+    .navbar-nav.sm-collapsible .has-submenu {
+        padding-right: 3em;
+    }
+    /* keep the carets properly positioned */
+    .navbar-nav.sm-collapsible .nav-link,
+    .navbar-nav.sm-collapsible .dropdown-item {
+        position: relative;
+    }
+
+
+    /* Nav carets in expanded mode */
+    .navbar-nav:not(.sm-collapsible) .nav-link .sub-arrow {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: .255em;
+        vertical-align: .255em;
+        border-top: .3em solid;
+        border-right: .3em solid transparent;
+        border-left: .3em solid transparent;
+    }
+    /* point the arrows up for .fixed-bottom navbars */
+    .fixed-bottom .navbar-nav:not(.sm-collapsible) .nav-link .sub-arrow,
+    .fixed-bottom .navbar-nav:not(.sm-collapsible):not([data-sm-skip]) .dropdown-toggle::after {
+        border-top: 0;
+        border-bottom: .3em solid;
+    }
+
+
+    /* Dropdown carets in expanded mode */
+    .navbar-nav:not(.sm-collapsible) .dropdown-item .sub-arrow,
+    .navbar-nav:not(.sm-collapsible):not([data-sm-skip]) .dropdown-menu .dropdown-toggle::after {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 0;
+        height: 0;
+        margin-top: -.3em;
+        margin-right: 1em;
+        border-top: .3em solid transparent;
+        border-bottom: .3em solid transparent;
+        border-left: .3em solid;
+    }
+    /* make sure there's room for the carets */
+    .navbar-nav:not(.sm-collapsible) .dropdown-item.has-submenu {
+        padding-right: 2em;
+    }
+
+
+    /* Scrolling arrows for tall menus */
+    .navbar-nav .scroll-up,
+    .navbar-nav .scroll-down {
+        position: absolute;
+        display: none;
+        visibility: hidden;
+        height: 20px;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .navbar-nav .scroll-up-arrow,
+    .navbar-nav .scroll-down-arrow {
+        position: absolute;
+        top: -2px;
+        left: 50%;
+        margin-left: -8px;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        border-top: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid;
+        border-left: 7px solid transparent;
+    }
+
+    .navbar-nav .scroll-down-arrow {
+        top: 6px;
+        border-top: 7px solid;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+        border-left: 7px solid transparent;
+    }
+
+
+    /* Add some spacing for 2+ level sub menus in collapsible mode */
+    .navbar-nav.sm-collapsible .dropdown-menu .dropdown-menu {
+        margin: .5em;
+    }
+
+
+    /* Fix SmartMenus sub menus auto width (subMenusMinWidth/subMenusMaxWidth options) */
+    .navbar-nav:not([data-sm-skip]) .dropdown-item {
+        white-space: normal;
+    }
+
+    .navbar-nav:not(.sm-collapsible) .sm-nowrap > li > .dropdown-item {
+        white-space: nowrap;
+    }
+    /* end jquery smart menu bootstrap-4 */
