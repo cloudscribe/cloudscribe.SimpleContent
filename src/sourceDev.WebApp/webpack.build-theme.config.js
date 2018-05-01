@@ -52,7 +52,7 @@ const config = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin(),
         new ExtractTextPlugin({
-            filename: '[name].bundle.css',
+            filename: '[name].css',
             allChunks: true,
         }),
        

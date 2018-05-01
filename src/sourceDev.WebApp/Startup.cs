@@ -64,11 +64,11 @@ namespace sourceDev.WebApp
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
 
-                //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                //{
-                //    HotModuleReplacement = true
-                //    //,ReactHotModuleReplacement = true
-                //});
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                    ,ReactHotModuleReplacement = true
+                });
             }
             else
             {

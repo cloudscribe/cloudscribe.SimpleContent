@@ -3,37 +3,29 @@ import { Link, NavLink } from 'react-router-dom';
 
 export class NavMenu extends React.Component<{}, {}> {
     public render() {
-        return <div className='navbar navbar-inverse'>
-            <div className='container'>
-                <div className='navbar-header'>
-                    <button type='button' className='navbar-toggle' data-toggle='collapse' data-target='.navbar-spa'>
-                        <span className='sr-only'>Toggle navigation</span>
-                        <span className='icon-bar'></span>
-                        <span className='icon-bar'></span>
-                        <span className='icon-bar'></span>
-                    </button>
-                </div>
-                <div className='clearfix'></div>
+        return <div className='navbar navbar-expand-lg navbar-dark bg-dark'>
+                <button type='button' className='navbar-toggler' data-toggle='collapse' data-target='.navbar-spa'>
+                    <span className='navbar-toggler-icon'></span>
+                </button>
                 <div className='navbar-collapse collapse navbar-spa'>
                     <ul className='nav navbar-nav'>
-                        <li>
-                            <NavLink to={ '/' } exact activeClassName='active'>
-                                <span className='glyphicon glyphicon-home'></span> Hello
+                        <li className='nav-item'>
+                            <NavLink to={ '/' } exact className='nav-link' activeClassName='active'>
+                            <span className='fas fa-home'></span> Hello
                             </NavLink>
                         </li>
-                        <li>
-                            <NavLink to={ '/counter' } activeClassName='active'>
-                                <span className='glyphicon glyphicon-education'></span> Counter
+                        <li className='nav-item'>
+                        <NavLink to={'/counter'} className='nav-link' activeClassName='active'>
+                            <span className='fas fa-bolt'></span> Counter
                             </NavLink>
                         </li>
-                        <li>
-                            <NavLink to={ '/fetchdata' } activeClassName='active'>
-                                <span className='glyphicon glyphicon-th-list'></span> Fetch data
+                        <li className='nav-item'>
+                        <NavLink to={'/fetchdata'} className='nav-link' activeClassName='active'>
+                            <span className='fas fa-th-list'></span> Fetch data
                             </NavLink>
                         </li>
                     </ul>
                 </div>
-            </div>
         </div>;
     }
 }
