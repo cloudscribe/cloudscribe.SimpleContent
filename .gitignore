@@ -228,3 +228,9 @@ src/sourceDev.WebApp/nodb_storage/projects/**/userlocation/**
 
 src/sourceDev.WebApp/cloudscribe-dev.db
 src/sourceDev.WebApp/cloudscribe4-dev.db
+**/wwwroot/dist/**
+**/app-react/**/*.js 
+**/app-react/**/*.map
+**/app-react/*.js
+**/app-react/*.map
+
