@@ -22,11 +22,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @RenderSection("Meta", required: false)
     <environment names="Development">
-        <link rel="stylesheet" href="~/dist/mainstyle.bundle.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
+        <link rel="stylesheet" href="~/css/style.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
         
     </environment>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/dist/mainstyle.bundle.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
+        <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
         
     </environment>
     @RenderSection("Styles", required: false)

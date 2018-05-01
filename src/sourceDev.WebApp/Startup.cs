@@ -15,11 +15,13 @@ namespace sourceDev.WebApp
             _configuration = configuration;
             _environment = env;
             _sslIsAvailable = _configuration.GetValue<bool>("AppSettings:UseSsl");
+            _enableWebpackMiddleware = _configuration.GetValue<bool>("DevOptions:EnableWebpackMiddleware");
         }
 
         private IHostingEnvironment _environment;
         private IConfiguration _configuration;
         private bool _sslIsAvailable;
+        private bool _enableWebpackMiddleware;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -63,12 +65,15 @@ namespace sourceDev.WebApp
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
-
-                //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                //{
-                //    HotModuleReplacement = true
-                //    //,ReactHotModuleReplacement = true
-                //});
+                if(_enableWebpackMiddleware)
+                {
+                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                    {
+                        HotModuleReplacement = true
+                        ,ReactHotModuleReplacement = true
+                    });
+                }
+                
             }
             else
             {

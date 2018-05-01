@@ -28,7 +28,7 @@ const overrides = {
             }
         }),
         new ExtractTextPlugin({
-            filename: '[name].bundle.min.css',
+            filename: '[name].min.css',
             allChunks: true,
         }),
         new webpack.LoaderOptionsPlugin({
