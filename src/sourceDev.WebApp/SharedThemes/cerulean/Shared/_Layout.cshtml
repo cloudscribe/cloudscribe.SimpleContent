@@ -1,7 +1,7 @@
 ﻿@inject ISiteContextResolver siteResolver
 @{
     @*
-        These viewstate settings can be set by a main view to show additional columns.
+        These settings can be set by a main view to show additional columns.
         Views that push content into the optional sections SideNav, AsidePrimary, and AsideSecondary
         are obligated to set the needed viewtate property to true to show the section,
         otherwise an error will occur.
@@ -11,7 +11,6 @@
     string sideNavToggleClass = ViewData["SideNavToggle"]?.ToString() ?? "collapse";
     bool asidePrimaryVisible = true.Equals(ViewData["AsidePrimaryVisible"]);
     bool asideSecondaryVisible = true.Equals(ViewData["AsideSecondaryVisible"]);
-
     var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
 }
 <!DOCTYPE html>

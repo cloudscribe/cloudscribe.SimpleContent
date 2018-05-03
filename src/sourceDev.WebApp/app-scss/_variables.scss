@@ -49,7 +49,7 @@ $info: $cyan;
 $warning: $yellow;
 $danger: $red;
 $light: $gray-100;
-$dark: $mybrand;//$gray-800;
+$dark: $mybrand; //$gray-800;
 //$theme-colors: () ;
 //$theme-colors: map-merge(( "primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "dark": $dark ), $theme-colors);
 // stylelint-enable
@@ -439,14 +439,14 @@ $navbar-dark-color: rgba($white, .5);
 $navbar-dark-hover-color: rgba($white, .75) ;
 $navbar-dark-active-color: $white ;
 $navbar-dark-disabled-color: rgba($white, .25) ;
-$navbar-dark-toggler-icon-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-dark-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") ;
+//$navbar-dark-toggler-icon-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-dark-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") ;
 $navbar-dark-toggler-border-color: rgba($white, .1) ;
 
 $navbar-light-color: rgba($black, .5) ;
 $navbar-light-hover-color: rgba($black, .7) ;
 $navbar-light-active-color: rgba($black, .9) ;
 $navbar-light-disabled-color: rgba($black, .3) ;
-$navbar-light-toggler-icon-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-light-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") ;
+//$navbar-light-toggler-icon-bg: str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-light-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"), "#", "%23") ;
 $navbar-light-toggler-border-color: rgba($black, .1) ;
 
 // Pagination

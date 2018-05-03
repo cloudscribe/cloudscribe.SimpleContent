@@ -164,12 +164,13 @@ namespace Microsoft.AspNetCore.Builder
 
                     options.AddCloudscribeCommonEmbeddedViews();
                     
-                    options.AddCloudscribeFileManagerBootstrap3Views();
+                    
 
                     switch(boostrapVersion)
                     {
                         case 4:
 
+                            options.AddCloudscribeFileManagerBootstrap4Views();
                             options.AddCloudscribeNavigationBootstrap4Views();
                             options.AddCloudscribeCoreBootstrap4Views();
                             options.AddCloudscribeCoreSimpleContentIntegrationBootstrap4Views();
@@ -181,6 +182,7 @@ namespace Microsoft.AspNetCore.Builder
                         case 3:
                         default:
 
+                            options.AddCloudscribeFileManagerBootstrap3Views();
                             options.AddCloudscribeNavigationBootstrap3Views();
                             options.AddCloudscribeCoreBootstrap3Views();
                             options.AddCloudscribeCoreSimpleContentIntegrationBootstrap3Views();
