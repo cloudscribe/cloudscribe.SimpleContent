@@ -12,19 +12,21 @@ var gulp = require("gulp"),
 
 var config = {
     srcSassDir: './app-scss',
-    cssOutDir: './sitefiles/s1/themes/custom1/wwwroot/css'
+    cssOutDir: './sitefiles/s1/themes/custom1/wwwroot/css',
+    srcFileWatchPattern: './app-scss/*.scss'
 };
 
-gulp.task('css', function () {
+gulp.task('buildCustom1ThemeCss', function () {
     return gulp.src(config.srcSassDir + '/style.scss')
     .pipe(sourcemaps.init())
     .pipe(sass({
         //outputStyle: 'compressed',
         includePaths: [
-            config.srcSassDir + '/scss/'
+            config.srcSassDir
            
         ],
-    }))
+    }).on('error', sass.logError)
+        )
     .pipe(sourcemaps.write())
         .pipe(gulp.dest(config.cssOutDir))
     .pipe(gp_rename('style.min.css'))
@@ -33,7 +35,8 @@ gulp.task('css', function () {
     ;
 });
 
-
-
-
-gulp.task('default', ['css']);
+// if you run the default task it will watch for changes in files and then run the
+// array of tasks if any files changed. So for scss changes you can just refresh the page to see changes
+gulp.task('default', function () {
+    gulp.watch(config.srcFileWatchPattern, ['buildCustom1ThemeCss']);
+});

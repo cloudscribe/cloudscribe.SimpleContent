@@ -25,12 +25,14 @@
 @using cloudscribe.Web.Common.Models
 @using cloudscribe.Web.Common.Extensions
 
-
-@using cloudscribe.SimpleContent.Models
-@using cloudscribe.Core.SimpleContent
-@using cloudscribe.SimpleContent.Web.TagHelpers
-@using cloudscribe.SimpleContent.Web
-@using cloudscribe.SimpleContent.Web.Design
+@*
+    @using cloudscribe.SimpleContent.Models
+    @using cloudscribe.Core.SimpleContent
+    @using cloudscribe.SimpleContent.Web.TagHelpers
+    @using cloudscribe.SimpleContent.Web
+    @using cloudscribe.SimpleContent.Web.Design
+    @addTagHelper "*, cloudscribe.SimpleContent.Web"
+*@
 
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -39,4 +41,4 @@
 @addTagHelper *, cloudscribe.Web.Navigation
 @addTagHelper "*, cloudscribe.Web.Pagination"
 
-@addTagHelper "*, cloudscribe.SimpleContent.Web"
+
