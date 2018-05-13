@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
-
     <RootNamespace>cloudscribe.SimpleContent.Web</RootNamespace>
+    <RuntimeFrameworkVersion>2.0.7</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>

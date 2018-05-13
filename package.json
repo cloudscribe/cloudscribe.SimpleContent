@@ -1,0 +1,13 @@
+{
+  "name": "approot",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    
+  },
+
+  "scripts": {
+    "postinstall": "cd src/sourceDev.WebApp && npm install"
+  }
+  
+}
