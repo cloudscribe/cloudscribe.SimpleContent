@@ -3,7 +3,7 @@ solution: cloudscribe.SimpleContent.sln
 sudo: false
 dist: trusty
 mono: none
-dotnet: 2.0.0
+dotnet: 2.0.200
 env:
   global:
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -14,6 +14,7 @@ os:
 script:
   - dotnet restore
   - dotnet build -c Release
+  - dotnet test -c Release ./test/cloudscribe.SimpleContent.Web.Tests/cloudscribe.SimpleContent.Web.Tests.csproj
 
 
 branches:
