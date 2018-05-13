@@ -234,3 +234,6 @@ src/sourceDev.WebApp/cloudscribe4-dev.db
 **/app-react/*.js
 **/app-react/*.map
 
+# Cake
+tools/**
+!tools/packages.config
