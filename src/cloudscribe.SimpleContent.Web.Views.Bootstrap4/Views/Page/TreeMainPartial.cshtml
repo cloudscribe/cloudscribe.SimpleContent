@@ -10,25 +10,25 @@
     </h1>
 </header>
 <p>@sr["You can drag and drop page nodes in the treeview below to move them around in the site hierarchy or to change their sort position. Click on a page to show a menu of commands related to that page. Note that changes will not be reflected in the main menu until you refresh the page."]</p>
-<a href="@Model.EditUrl" class="btn btn-default pagecommand"><span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span> @sr["New Root Level Page"]</a>
+<a href="@Model.EditUrl" class="btn btn-primary pagecommand"><span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span> @sr["New Root Level Page"]</a>
 <div id="tree1" class="treecontainer"></div>
 <div id="cmdBar" class="panel panel-default commandPanel" style="display:none;">
     <div id="cmdHeading" class="btn btn-primary btn-block">Panel heading</div>
     <ul id="ulCommands" class="pagecommands">
         <li id="liEdit" class="editcontent">
-            <a id="lnkEdit" class="btn btn-default pagecommand" href="#"><span class="@themeSettings.Icons.Edit" aria-hidden="true"></span> @sr["Edit Page"] (<small class="pubstatus" id="spnPubStatus"></small>)</a>
+            <a id="lnkEdit" class="btn btn-primary pagecommand" href="#"><span class="@themeSettings.Icons.Edit" aria-hidden="true"></span> @sr["Edit Page"] (<small class="pubstatus" id="spnPubStatus"></small>)</a>
         </li>
         <li id="liView" class="viewpage">
-            <a id="lnkView" class="btn btn-default pagecommand" href="#"><span class="@themeSettings.Icons.View" aria-hidden="true"></span> @sr["View"]</a>
+            <a id="lnkView" class="btn btn-primary pagecommand" href="#"><span class="@themeSettings.Icons.View" aria-hidden="true"></span> @sr["View"]</a>
         </li>
         <li id="liSort" class="sortpages">
-            <a id="lnkSort" class="btn btn-default pagecommand" href="#"><span class="@themeSettings.Icons.SortAlpha" aria-hidden="true"></span> @sr["Sort Child Pages Alpha"]</a>
+            <a id="lnkSort" class="btn btn-primary pagecommand" href="#"><span class="@themeSettings.Icons.SortAlpha" aria-hidden="true"></span> @sr["Sort Child Pages Alpha"]</a>
         </li>
         <li id="liNewChild" class="newchild">
-            <a id="lnkNewChild" class="btn btn-default pagecommand" href="#"><span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span> @sr["New Child Page"]</a>
+            <a id="lnkNewChild" class="btn btn-primary pagecommand" href="#"><span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span> @sr["New Child Page"]</a>
         </li>
         <li id="liDelete" class="deletepage">
-            <a id="lnkDeletePage" class="btn btn-default pagecommand" href="#"><span class="@themeSettings.Icons.Delete" aria-hidden="true"></span>  @sr["Delete"]</a>
+            <a id="lnkDeletePage" class="btn btn-primary pagecommand" href="#"><span class="@themeSettings.Icons.Delete" aria-hidden="true"></span>  @sr["Delete"]</a>
         </li>
     </ul>
 </div>
@@ -44,7 +44,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@sr["Cancel"]</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Cancel"]</button>
                 <button id="btnConfirm" type="button" class="btn btn-success btn-ok">@sr["Confirm"]</button>
             </div>
         </div>
@@ -61,7 +61,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">@sr["Cancel"]</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Cancel"]</button>
                 <button id="btnConfirmDelete" type="button" class="btn btn-danger btn-ok">@sr["Delete"]</button>
             </div>
         </div>
