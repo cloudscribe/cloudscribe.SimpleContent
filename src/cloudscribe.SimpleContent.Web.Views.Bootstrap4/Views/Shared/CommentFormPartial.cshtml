@@ -6,7 +6,7 @@
 @{
     var path = Url.Action("AjaxPostComment", "Blog");
     var isAuthenticated = Context.User.Identity.IsAuthenticated;
-    var showRecaptcha = (Model.ProjectSettings.RecaptchaPublicKey.Length > 0) && !isAuthenticated;
+    var showRecaptcha = (!string.IsNullOrWhiteSpace(Model.ProjectSettings.RecaptchaPublicKey)) && !isAuthenticated;
 }
 <form id="commentform" asp-antiforgery="true" class="form-horizontal" data-blog-path="@path">
     <fieldset>
