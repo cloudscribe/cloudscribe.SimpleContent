@@ -2,19 +2,15 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Security.SimpleAuth Class Library</Description>
-    <VersionPrefix>2.0.0</VersionPrefix>
+    <VersionPrefix>3.0.0</VersionPrefix>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <DebugType>portable</DebugType>
-    <AssemblyName>cloudscribe.SimpleContent.Security.SimpleAuth</AssemblyName>
-    <PackageId>cloudscribe.SimpleContent.Security.SimpleAuth</PackageId>
     <PackageTags>cloudscribe;security;blog;cms</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.*" />
   </ItemGroup>
 
+  
 </Project>

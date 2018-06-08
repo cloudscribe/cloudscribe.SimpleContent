@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-04-05
+// Last Modified:           2018-06-08
 // 
 
 
@@ -12,6 +12,7 @@ using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
+using cloudscribe.Web.Common.Recaptcha;
 using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -40,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IAuthorizationService authorizationService,
             IAuthorNameResolver authorNameResolver,
             ITimeZoneHelper timeZoneHelper,
+            IRecaptchaServerSideValidator recaptchaServerSideValidator,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<SimpleContentConfig> configOptionsAccessor,
             ILogger<BlogController> logger
@@ -57,6 +59,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             StringLocalizer = localizer;
             Log = logger;
             ContentOptions = configOptionsAccessor.Value;
+            RecaptchaServerSideValidator = recaptchaServerSideValidator;
         }
 
         protected IProjectService ProjectService { get; private set; }
@@ -70,6 +73,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IAuthorizationService AuthorizationService { get; private set; }
         protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
         protected SimpleContentConfig ContentOptions { get; private set; }
+
+        protected IRecaptchaServerSideValidator RecaptchaServerSideValidator { get; private set; }
 
 
         [HttpGet]
@@ -687,7 +692,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 if(!string.IsNullOrEmpty(project.RecaptchaPublicKey))
                 {
-                    var captchaResponse = await this.ValidateRecaptcha(Request, project.RecaptchaPrivateKey);
+                    var captchaResponse = await RecaptchaServerSideValidator.ValidateRecaptcha(Request, project.RecaptchaPrivateKey);
                     if (!captchaResponse.Success)
                     {
                         Log.LogDebug("returning 403 captcha validation failed");

@@ -64,7 +64,7 @@ namespace sourceDev.WebApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+               
                 if(_enableWebpackMiddleware)
                 {
                     app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions

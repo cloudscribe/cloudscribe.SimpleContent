@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>2.0.24</VersionPrefix>
-    <AssemblyVersion>2.0.24</AssemblyVersion>
+    <VersionPrefix>3.0.0</VersionPrefix>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <DebugType>portable</DebugType>
     <AssemblyName>cloudscribe.SimpleContent.Web</AssemblyName>
     <PackageId>cloudscribe.SimpleContent.Web</PackageId>
     <PackageTags>cloudscribe;blog</PackageTags>
@@ -28,28 +27,25 @@
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.*" />
     <PackageReference Include="cloudscribe.Email.Senders" Version="1.0.*" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.0.*" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.*" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.1.*" />
     <PackageReference Include="cloudscribe.Web.Pagination" Version="2.1.*" />
     <PackageReference Include="cloudscribe.Web.SiteMap" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor" Version="2.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.1.*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.1.*" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.1.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.*" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.1.*" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="2.1.*" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.*" />
     <PackageReference Include="Markdig" Version="0.14.*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
 
 </Project>
