@@ -514,7 +514,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if (!string.IsNullOrEmpty(model.PubDate))
             {
                 var localTime = DateTime.Parse(model.PubDate);
-                page.PubDate = TimeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+                var pubDate = TimeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+                if(pubDate.Date != page.PubDate.Date)
+                {
+                    needToClearCache = true;
+                }
+                page.PubDate = pubDate;
 
             }
             if(page.ProjectId != project.Id)
