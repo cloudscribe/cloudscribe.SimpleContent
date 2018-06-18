@@ -435,7 +435,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             firstImageUrl = ExtractFirstImageUrl(item.Content, fallbackImageUrl);
             pslug = item.Slug;
 
-            if (firstImageUrl == null) return fallbackImageUrl;
+            if (string.IsNullOrWhiteSpace(firstImageUrl)) return fallbackImageUrl;
+            if (firstImageUrl == baseUrl) return fallbackImageUrl;
 
             if (firstImageUrl.StartsWith("http")) return firstImageUrl;
 
