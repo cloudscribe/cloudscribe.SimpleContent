@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>PostgreSql Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <VersionPrefix>3.0.1</VersionPrefix>
-    <AssemblyVersion>3.0.1</AssemblyVersion>
+    <VersionPrefix>3.0.2</VersionPrefix>
+    <AssemblyVersion>3.0.2</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>cloudscribe.SimpleContent.Storage.EFCore.pgsql</AssemblyName>
@@ -21,9 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.*" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.0" />
   </ItemGroup>
 
   

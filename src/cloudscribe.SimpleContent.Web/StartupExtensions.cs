@@ -410,7 +410,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IPageRouteHelper, DefaultPageRouteHelper>();
             services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
-            services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
+            //services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
             services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
 

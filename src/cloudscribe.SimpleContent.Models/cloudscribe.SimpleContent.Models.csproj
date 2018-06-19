@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Models Class Library</Description>
-    <VersionPrefix>3.0.1</VersionPrefix>
-    <AssemblyVersion>3.0.1</AssemblyVersion>
+    <VersionPrefix>3.0.2</VersionPrefix>
+    <AssemblyVersion>3.0.2</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <DebugType>portable</DebugType>
@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Security.Claims" Version="4.3.*" />
+    <PackageReference Include="System.Security.Claims" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
