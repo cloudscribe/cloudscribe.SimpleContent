@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-02-19
+// Last Modified:			2018-06-19
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -151,7 +151,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var query = dbContext.Posts
                // .Include(p => p.Comments) //think this is only used to populate a list in OLW so don't need the comments
                 .Where(p =>
-                p.IsPublished == true
+                p.BlogId == blogId
+                && p.IsPublished == true
                 && p.PubDate <= currentTime)
                 .OrderByDescending(p => p.PubDate)
                 ;
@@ -176,7 +177,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var currentTime = DateTime.UtcNow;
             var query = dbContext.Posts
                 .Where(p =>
-                p.IsPublished
+                p.BlogId == blogId
+                && p.IsPublished
                 && p.IsFeatured
                 && p.PubDate <= currentTime)
                 .OrderByDescending(p => p.PubDate)
@@ -211,8 +213,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             {
                 query = dbContext.Posts
                      .Include(p => p.PostComments)
-                    .Where(
-                x => x.PubDate.Year == year
+                    .Where(x =>
+                     x.BlogId == blogId
+                   &&  x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && x.PubDate.Day == day
                 && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
@@ -224,8 +227,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             {
                 query = dbContext.Posts
                      .Include(p => p.PostComments)
-                    .Where(
-                x => x.PubDate.Year == year
+                    .Where(x =>
+                    x.BlogId == blogId
+                    && x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && (includeUnpublished || (x.IsPublished == true  && x.PubDate <= currentTime))
                 )
@@ -237,8 +241,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             {
                 query = dbContext.Posts
                      .Include(p => p.PostComments)
-                     .Where(
-                x => x.PubDate.Year == year
+                     .Where(x =>
+                     x.BlogId == blogId
+                     && x.PubDate.Year == year
                 ).OrderByDescending(p => p.PubDate)
                 ;
             }
@@ -275,8 +280,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             if (day > 0 && month > 0)
             {
-                query =  dbContext.Posts.Where(
-                x => x.PubDate.Year == year
+                query =  dbContext.Posts.Where(x =>
+                x.BlogId == blogId
+                && x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && x.PubDate.Day == day
                 && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
@@ -285,8 +291,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
             else if (month > 0)
             {
-                query = dbContext.Posts.Where(
-                x => x.PubDate.Year == year
+                query = dbContext.Posts.Where(x =>
+                x.BlogId == blogId
+                && x.PubDate.Year == year
                 && x.PubDate.Month == month
                 && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
                 )
@@ -295,8 +302,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
             else
             {
-                query = dbContext.Posts.Where(
-                x => x.PubDate.Year == year
+                query = dbContext.Posts.Where(x =>
+                x.BlogId == blogId
+                && x.PubDate.Year == year
                 )
                 ;
             }
@@ -351,8 +359,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 result.PreviousPost = await dbContext.Posts
                     .AsNoTracking()
-                    .Where(
-                    p => p.PubDate < cutoff
+                    .Where(p =>
+                    p.BlogId == blogId
+                    && p.PubDate < cutoff
                     && p.IsPublished == true
                     )
                     .OrderByDescending(p => p.PubDate)
@@ -361,8 +370,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 result.NextPost = await dbContext.Posts
                     .AsNoTracking()
-                    .Where(
-                    p => p.PubDate > cutoff
+                    .Where(p =>
+                    p.BlogId == blogId
+                    && p.PubDate > cutoff
                     && p.IsPublished == true
                     )
                     .OrderBy(p => p.PubDate)
