@@ -50,8 +50,7 @@
     <PackageReference Include="cloudscribe.Core.Web" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.0.*" />
     
-    <!--<PackageReference Include="cloudscribe.Core.Web.Views.Bootstrap3" Version="2.1.*" />
-    <PackageReference Include="cloudscribe.Core.Web.Views.Bootstrap4" Version="2.1.*" />-->
+   
     
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="3.0.*" />
@@ -67,22 +66,17 @@
     <PackageReference Include="cloudscribe.Logging.EFCore.pgsql" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Logging.EFCore.SQLite" Version="3.0.*" />
 	
-    
-    
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="2.0.*" />
     <PackageReference Include="cloudscribe.Web.Localization" Version="2.0.*" />
 
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.*" />
-    <!--<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.*" PrivateAssets="All" />-->
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
   </ItemGroup>
   
-  <ItemGroup>
+  <!--<ItemGroup>
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.*" />
     
-    <!--<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" />-->
-  </ItemGroup>
+  </ItemGroup>-->
   
   
   

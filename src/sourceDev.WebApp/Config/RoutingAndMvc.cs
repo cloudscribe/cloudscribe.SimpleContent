@@ -34,6 +34,27 @@ namespace Microsoft.AspNetCore.Builder
                    constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
                 );
 
+                routes.MapRoute(
+                       name: "apifoldersitemap",
+                       template: "{sitefolder}/api/sitemap"
+                       , defaults: new { controller = "FolderSiteMap", action = "Index" }
+                       , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                       );
+
+                routes.MapRoute(
+                       name: "apifoldermetaweblog",
+                       template: "{sitefolder}/api/metaweblog"
+                       , defaults: new { controller = "FolderMetaweblog", action = "Index" }
+                       , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                       );
+
+                routes.MapRoute(
+                       name: "apifolderrss",
+                       template: "{sitefolder}/api/rss"
+                       , defaults: new { controller = "FolderRss", action = "Index" }
+                       , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                       );
+
                 if (useCustomRoutes)
                 {
                     routes.MapRoute(
@@ -47,6 +68,7 @@ namespace Microsoft.AspNetCore.Builder
                 }
                 else
                 {
+                    
                     routes.MapRoute(
                         name: "foldersitemap",
                         template: "{sitefolder}/sitemap"

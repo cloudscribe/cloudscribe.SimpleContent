@@ -110,6 +110,10 @@ namespace cloudscribe.SimpleContent.Syndication
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/Routing/UrlHelper.cs
 
             var indexUrl = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
+            if(indexUrl == null)
+            {
+                indexUrl = urlHelper.Action("Index", "Blog");
+            }
             
             
             if (indexUrl.StartsWith("/"))
