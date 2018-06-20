@@ -46,5 +46,11 @@ namespace cloudscribe.SimpleContent.Models
         /// If true, will display an entire blog post on index/listing views regardless of <see cref="TeaserMode"/> settings.
         /// </summary>
         bool SuppressTeaser { get; set; }
+
+        // new fields 2018-06-20
+        DateTime CreatedUtc { get; set; }
+
+        string CreatedByUser { get; set; }
+        string LastModifiedByUser { get; set; }
     }
 }

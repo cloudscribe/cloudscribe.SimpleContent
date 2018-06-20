@@ -106,10 +106,43 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         //public List<Comment> TheComments { get; set; }
 
 
+        // new fields 2018-06-20
+        [YamlMember(Order = 30)]
+        public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
+
+        [YamlMember(Order = 31)]
+        public string CreatedByUser { get; set; }
+
+        [YamlMember(Order = 32)]
+        public string LastModifiedByUser { get; set; }
+
+        [YamlMember(Order = 33)]
+        public string DraftContent { get; set; }
+
+        [YamlMember(Order = 34)]
+        public string DraftAuthor { get; set; }
+
+        [YamlMember(Order = 35)]
+        public DateTime? DraftPubDate { get; set; }
+
+        [YamlMember(Order = 36)]
+        public string TemplateKey { get; set; }
+
+        [YamlMember(Order = 37)]
+        public string SerializedModel { get; set; }
+
+        [YamlMember(Order = 38)]
+        public string DraftSerializedModel { get; set; }
+
+        [YamlMember(Order = 39)]
+        public string Serializer { get; set; }
+
 
         [YamlIgnore]
         public string Content { get; set; } = string.Empty;
         [YamlIgnore]
         public List<IComment> Comments { get; set; }
+
+
     }
 }

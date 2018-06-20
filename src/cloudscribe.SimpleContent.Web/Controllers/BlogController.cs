@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-06-08
+// Last Modified:           2018-06-20
 // 
 
 
@@ -478,6 +478,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 post.MetaDescription = model.MetaDescription;
                 post.Content = model.Content;
                 post.Categories = categories;
+                post.LastModifiedByUser = User.Identity.Name;
                 if(model.Slug != post.Slug)
                 {
                     // remove any bad chars
@@ -530,7 +531,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     MetaDescription = model.MetaDescription,
                     Content = model.Content,
                     Slug = slug
-                    ,Categories = categories.ToList()
+                    ,Categories = categories.ToList(),
+                    CreatedByUser = User.Identity.Name
                 };
             }
             if(!string.IsNullOrEmpty(model.Author))

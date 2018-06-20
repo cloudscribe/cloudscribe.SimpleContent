@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-04-05
+// Last Modified:           2018-06-20
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -391,6 +391,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 page.Title = model.Title;
                 page.MetaDescription = model.MetaDescription;
                 page.Content = model.Content;
+                page.LastModifiedByUser = User.Identity.Name;
                 if (page.IsPublished != model.IsPublished) needToClearCache = true;
                 if (page.PageOrder != model.PageOrder) needToClearCache = true;
                 if(!string.IsNullOrEmpty(model.Slug))
@@ -453,7 +454,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     MetaDescription = model.MetaDescription,
                     Content = model.Content,
                     Slug = slug,
-                    ParentId = "0"
+                    ParentId = "0",
+                    CreatedByUser = User.Identity.Name
 
                     //,Categories = categories.ToList()
                 };

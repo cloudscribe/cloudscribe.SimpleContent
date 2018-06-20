@@ -66,7 +66,15 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 18, Alias = "Comments")]
         public List<Comment> TheComments { get; set; }
 
-        
+        // new fields 2018-06-20
+        [YamlMember(Order = 19)]
+        public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
+
+        [YamlMember(Order = 20)]
+        public string CreatedByUser { get; set; }
+
+        [YamlMember(Order = 21)]
+        public string LastModifiedByUser { get; set; }
 
 
 

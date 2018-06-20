@@ -20,18 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class StartupExtensions
     {
-        public static IServiceCollection AddSimpleContentMvc(
-            this IServiceCollection services,
-            IConfiguration configuration = null
-            )
-        {
-            services.AddSimpleContentCommon(configuration);
-
-            services.AddScoped<IVersionProvider, ControllerVersionInfo>();
-
-            return services;
-        }
-
+        
 
         public static IRouteBuilder AddStandardRoutesForSimpleContent(this IRouteBuilder routes)
         {
@@ -376,7 +365,18 @@ namespace Microsoft.Extensions.DependencyInjection
             return routes;
         }
 
-        
+
+        public static IServiceCollection AddSimpleContentMvc(
+            this IServiceCollection services,
+            IConfiguration configuration = null
+            )
+        {
+            services.AddSimpleContentCommon(configuration);
+
+            services.AddScoped<IVersionProvider, ControllerVersionInfo>();
+
+            return services;
+        }
 
 
         public static IServiceCollection AddSimpleContentCommon(
@@ -431,7 +431,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Configure<SimpleContentIconConfig>(configuration.GetSection("SimpleContentIconConfig"));
                 services.Configure<SimpleContentThemeConfig>(configuration.GetSection("SimpleContentThemeConfig"));
 
-                
+                services.Configure<ContentTemplateConfig>(configuration.GetSection("ContentTemplateConfig"));
+
+
                 //services.AddScoped<CoreThemeHelper>();
             }
             else
@@ -456,6 +458,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     // not doing anything just configuring the default
                 });
             }
+
+            services.TryAddScoped<IContentTemplateProvider, ConfigContentTemplateProvider>();
 
             services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
 

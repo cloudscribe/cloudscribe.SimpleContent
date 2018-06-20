@@ -77,6 +77,19 @@ namespace cloudscribe.SimpleContent.Models
 
         public string ContentType { get; set; } = "html";
 
+        // new fields 2018-06-20
+        public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
+        public string CreatedByUser { get; set; }
+        public string LastModifiedByUser { get; set; }
+        public string DraftContent { get; set; }
+        public string DraftAuthor { get; set; }
+        public DateTime? DraftPubDate { get; set; }
+
+        public string TemplateKey { get; set; }
+        public string SerializedModel { get; set; }
+        public string DraftSerializedModel { get; set; }
+        public string Serializer { get; set; }
+
         public static Page FromIPage(IPage page)
         {
             var p = new Page();

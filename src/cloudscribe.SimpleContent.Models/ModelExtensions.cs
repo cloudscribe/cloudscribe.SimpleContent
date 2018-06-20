@@ -54,6 +54,10 @@ namespace cloudscribe.SimpleContent.Models
             target.IsFeatured = input.IsFeatured;
             target.TeaserOverride = input.TeaserOverride;
             target.SuppressTeaser = input.SuppressTeaser;
+
+            target.CreatedByUser = input.CreatedByUser;
+            target.CreatedUtc = input.CreatedUtc;
+            target.LastModifiedByUser = input.LastModifiedByUser;
         }
 
         public static void CopyTo(this IPage input, IPage target)
@@ -90,6 +94,20 @@ namespace cloudscribe.SimpleContent.Models
             target.Slug = input.Slug;
             target.Title = input.Title;
             target.ViewRoles = input.ViewRoles;
+
+            //added 2018-06-20
+            target.CreatedUtc = input.CreatedUtc;
+            target.CreatedByUser = input.CreatedByUser;
+            target.LastModifiedByUser = input.LastModifiedByUser;
+            target.DraftAuthor = input.DraftAuthor;
+            target.DraftContent = input.DraftContent;
+            target.DraftPubDate = input.DraftPubDate;
+            target.DraftSerializedModel = input.DraftSerializedModel;
+            target.TemplateKey = input.TemplateKey;
+            target.SerializedModel = input.SerializedModel;
+            target.Serializer = input.Serializer;
+
+
         }
 
         public static void CopyTo(this IProjectSettings input, IProjectSettings target)

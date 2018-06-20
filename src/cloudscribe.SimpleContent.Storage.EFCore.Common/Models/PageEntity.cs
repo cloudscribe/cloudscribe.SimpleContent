@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2017-05-28
+// Last Modified:			2018-06-20
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -165,37 +165,53 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public string ContentType { get; set; } = "html";
 
+        // new fields 2018-06-20
+        public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
+        public string CreatedByUser { get; set; }
+        public string LastModifiedByUser { get; set; }
+        public string DraftContent { get; set; }
+        public string DraftAuthor { get; set; }
+        public DateTime? DraftPubDate { get; set; }
+
+        public string TemplateKey { get; set; }
+        public string SerializedModel { get; set; }
+        public string DraftSerializedModel { get; set; }
+        //public string ModelType { get; set; }
+        public string Serializer { get; set; }
+
         public static PageEntity FromIPage(IPage page)
         {
             var p = new PageEntity();
-            p.Author = page.Author;
-            p.Categories = page.Categories;
-            p.Comments = page.Comments;
-            p.Content = page.Content;
-            p.ContentType = page.ContentType;
-            p.CorrelationKey = page.CorrelationKey;
-            p.DisableEditor = page.DisableEditor;
-            p.ExternalUrl = page.ExternalUrl;
-            p.Id = page.Id;
-            p.IsPublished = page.IsPublished;
-            p.LastModified = page.LastModified;
-            p.MetaDescription = page.MetaDescription;
-            p.PageOrder = page.PageOrder;
-            p.ParentId = page.ParentId;
-            p.ParentSlug = page.ParentSlug;
-            p.ProjectId = page.ProjectId;
-            p.PubDate = page.PubDate;
-            p.ShowCategories = page.ShowCategories;
-            p.ShowComments = page.ShowComments;
-            p.ShowHeading = page.ShowHeading;
-            p.ShowLastModified = page.ShowLastModified;
-            p.ShowPubDate = page.ShowPubDate;
-            p.Slug = page.Slug;
-            p.Title = page.Title;
-            p.ViewRoles = page.ViewRoles;
-            p.MenuOnly = page.MenuOnly;
-            p.ShowMenu = page.ShowMenu;
-            p.MenuFilters = page.MenuFilters;
+            page.CopyTo(p);
+
+            //p.Author = page.Author;
+            //p.Categories = page.Categories;
+            //p.Comments = page.Comments;
+            //p.Content = page.Content;
+            //p.ContentType = page.ContentType;
+            //p.CorrelationKey = page.CorrelationKey;
+            //p.DisableEditor = page.DisableEditor;
+            //p.ExternalUrl = page.ExternalUrl;
+            //p.Id = page.Id;
+            //p.IsPublished = page.IsPublished;
+            //p.LastModified = page.LastModified;
+            //p.MetaDescription = page.MetaDescription;
+            //p.PageOrder = page.PageOrder;
+            //p.ParentId = page.ParentId;
+            //p.ParentSlug = page.ParentSlug;
+            //p.ProjectId = page.ProjectId;
+            //p.PubDate = page.PubDate;
+            //p.ShowCategories = page.ShowCategories;
+            //p.ShowComments = page.ShowComments;
+            //p.ShowHeading = page.ShowHeading;
+            //p.ShowLastModified = page.ShowLastModified;
+            //p.ShowPubDate = page.ShowPubDate;
+            //p.Slug = page.Slug;
+            //p.Title = page.Title;
+            //p.ViewRoles = page.ViewRoles;
+            //p.MenuOnly = page.MenuOnly;
+            //p.ShowMenu = page.ShowMenu;
+            //p.MenuFilters = page.MenuFilters;
             //p.Resources = page.Resources;
 
             return p;

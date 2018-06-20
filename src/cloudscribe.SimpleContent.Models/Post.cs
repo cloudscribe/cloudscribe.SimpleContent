@@ -68,6 +68,13 @@ namespace cloudscribe.SimpleContent.Models
         /// </summary>
         public bool SuppressTeaser { get; set; }
 
+
+        // new fields 2018-06-20
+        public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
+
+        public string CreatedByUser { get; set; }
+        public string LastModifiedByUser { get; set; }
+
         public static Post FromIPost(IPost post)
         {
             var p = new Post();

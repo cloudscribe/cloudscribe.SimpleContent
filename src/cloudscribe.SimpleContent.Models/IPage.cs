@@ -50,6 +50,20 @@ namespace cloudscribe.SimpleContent.Models
 
         List<PageResource> Resources { get; set; }
 
+        // new fields 2018-06-20
+        DateTime CreatedUtc { get; set; }
+        string CreatedByUser { get; set; }
+        string LastModifiedByUser { get; set; }
+        string DraftContent { get; set; }
+        string DraftAuthor { get; set; }
+        DateTime? DraftPubDate { get; set; }
+
+        string TemplateKey { get; set; }
+        string SerializedModel { get; set; }
+        string DraftSerializedModel { get; set; }
         
+        string Serializer { get; set; }
+
+
     }
 }
