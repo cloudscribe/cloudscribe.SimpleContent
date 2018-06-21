@@ -1,4 +1,10 @@
-﻿using cloudscribe.SimpleContent.Models;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Author:                  Joe Audette
+// Created:                 2018-06-20
+// Last Modified:           2018-06-20
+// 
+
+using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;

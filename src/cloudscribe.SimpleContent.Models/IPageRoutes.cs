@@ -8,5 +8,6 @@
 
         string PageDevelopRouteName { get; }
         string PageTreeRouteName { get; }
+        string NewPageRouteName { get; }
     }
 }

@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Created:					2018-06-20
+// Last Modified:			2018-06-21
+// 
+
+using System;
 
 namespace cloudscribe.SimpleContent.Models
 {
     public class ContentHistory
     {
 
-        public string Id { get; set; } 
+        public Guid Id { get; set; } 
 
         public string ContentId { get; set; } 
 
@@ -17,6 +20,7 @@ namespace cloudscribe.SimpleContent.Models
         public string ContentType { get; set; } = "html";
 
         public bool IsDraftHx { get; set; }
+        public bool WasDeleted { get; set; }
         public DateTime ArchivedUtc { get; set; } = DateTime.UtcNow;
         public string ArchivedBy { get; set; }
 

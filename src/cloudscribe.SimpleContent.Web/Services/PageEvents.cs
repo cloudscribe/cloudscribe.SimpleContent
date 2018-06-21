@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-11-25
-// Last Modified:           2018-03-15
+// Last Modified:           2018-06-21
 // 
 
 using System.Collections.Generic;
@@ -22,6 +22,7 @@ namespace cloudscribe.SimpleContent.Services
             IEnumerable<IHandlePagePreDelete> preDeleteHandlers,
             IEnumerable<IHandlePageCreated> createdHandlers,
             IEnumerable<IHandlePageUpdated> updateHandlers,
+            IEnumerable<IHandlePagePublished> publishHandlers,
             ILogger<PageEvents> logger
             )
         {
@@ -29,6 +30,7 @@ namespace cloudscribe.SimpleContent.Services
             _preDeleteHandlers = preDeleteHandlers;
             _createdHandlers = createdHandlers;
             _updateHandlers = updateHandlers;
+            _publishHandlers = publishHandlers;
             _log = logger;
         }
 
@@ -36,6 +38,7 @@ namespace cloudscribe.SimpleContent.Services
         private IEnumerable<IHandlePagePreDelete> _preDeleteHandlers;
         private IEnumerable<IHandlePageCreated> _createdHandlers;
         private IEnumerable<IHandlePageUpdated> _updateHandlers;
+        private IEnumerable<IHandlePagePublished> _publishHandlers;
         private ILogger _log;
 
         public async Task HandlePreUpdate(
@@ -115,6 +118,26 @@ namespace cloudscribe.SimpleContent.Services
                     _log.LogError($"{ex.Message} : {ex.StackTrace}");
                 }
                 
+            }
+        }
+
+        public async Task HandlePublished(
+            string projectId,
+            IPage page,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            foreach (var handler in _publishHandlers)
+            {
+                try
+                {
+                    await handler.Handle(projectId, page, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
+                }
+
             }
         }
 

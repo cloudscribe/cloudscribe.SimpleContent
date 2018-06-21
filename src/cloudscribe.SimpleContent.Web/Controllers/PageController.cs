@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-06-20
+// Last Modified:           2018-06-21
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
@@ -32,12 +33,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
             IAuthorNameResolver authorNameResolver,
+            ContentTemplateService templateService,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
         {
             ProjectService = projectService;
             PageService = blogService;
+            TemplateService = templateService;
             ContentProcessor = contentProcessor;
             AuthorizationService = authorizationService;
             AuthorNameResolver = authorNameResolver;
@@ -50,6 +53,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         protected IProjectService ProjectService { get; private set; }
         protected IPageService PageService { get; private set; }
+        protected ContentTemplateService TemplateService { get; private set; }
         protected IContentProcessor ContentProcessor { get; private set; }
         protected IAuthorizationService AuthorizationService { get; private set; }
         protected IAuthorNameResolver AuthorNameResolver { get; private set; }
@@ -98,20 +102,20 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     {   
                        // not setting the parent slug if the current page is home page
                        // otherwise it would be awkward to create more root level pages
-                        model.NewItemPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug = "" });
+                        model.NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "" });
                     }
                     else
                     {
                         // for non home pages if the use clicks the new link
                         // make it use the current page slug as the parent slug for the new item
-                        model.NewItemPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
+                        model.NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
 
                     }
 
                 }
                 else
                 {
-                    model.NewItemPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug = "" });
+                    model.NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "" });
                    
                 }
 
@@ -219,6 +223,101 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public virtual async Task<IActionResult> NewPage(
+            CancellationToken cancellationToken,
+            string parentSlug = "",
+            string type = ""
+            )
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var templates = await TemplateService.GetAllTemplates(project.Id, cancellationToken);
+            if(templates.Count == 0)
+            {
+                return RedirectToRoute(PageRoutes.PageEditRouteName, new { parentSlug, type });
+            }
+
+            var model = new NewPageViewModel()
+            {
+                ParentSlug = parentSlug,
+                ContentType = type,
+                Templates = templates
+            };
+
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> InitTemplatedPage(NewPageViewModel model)
+        {
+           
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Templates = await TemplateService.GetAllTemplates(project.Id);
+                return View("NewPage", model);
+            }
+
+            //temporary
+            Log.LogWarning($"selected template was {model.SelectedTemplate}");
+
+            return RedirectToRoute(PageRoutes.PageRouteName);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public virtual async Task<IActionResult> EditWithTemplate(
+            string slug = "",
+            string parentSlug = ""
+            )
+        {
+            var projectSettings = await ProjectService.GetCurrentProjectSettings();
+
+            if (projectSettings == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            return View();
+        }
+
 
         [HttpGet]
         [AllowAnonymous]

@@ -21,5 +21,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public List<EditScript> EditScripts { get; set; }
         public List<EditStyle> EditCss { get; set; }
+
+        public string SerializerName { get; set; } = "Json";
     }
 }

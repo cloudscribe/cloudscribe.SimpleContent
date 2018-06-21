@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-03-15
+// Last Modified:           2018-06-21
 // 
 
 
@@ -205,6 +205,10 @@ namespace cloudscribe.SimpleContent.Services
 
             await _pageCommands.Create(projectId, page).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(projectId, page).ConfigureAwait(false);
+            if(publish)
+            {
+                await _eventHandlers.HandlePublished(projectId, page).ConfigureAwait(false);
+            }
         }
 
         public async Task Update(
@@ -266,6 +270,10 @@ namespace cloudscribe.SimpleContent.Services
             await _eventHandlers.HandlePreUpdate(projectId, page.Id).ConfigureAwait(false);
             await _pageCommands.Update(projectId, page).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(projectId, page).ConfigureAwait(false);
+            if (publish)
+            {
+                await _eventHandlers.HandlePublished(projectId, page).ConfigureAwait(false);
+            }
         }
 
         public async Task Create(
@@ -312,6 +320,10 @@ namespace cloudscribe.SimpleContent.Services
 
             await _pageCommands.Create(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(_settings.Id, page).ConfigureAwait(false);
+            if (publish)
+            {
+                await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
+            }
         }
 
         public async Task Update(
@@ -343,6 +355,10 @@ namespace cloudscribe.SimpleContent.Services
             await _eventHandlers.HandlePreUpdate(_settings.Id, page.Id).ConfigureAwait(false);
             await _pageCommands.Update(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, page).ConfigureAwait(false);
+            if (publish)
+            {
+                await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
+            }
         }
 
         public async Task DeletePage(string pageId)

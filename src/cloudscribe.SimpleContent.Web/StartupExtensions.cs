@@ -10,6 +10,7 @@ using cloudscribe.Web.Common.Razor;
 using cloudscribe.Web.Common.Setup;
 using cloudscribe.Web.Navigation;
 using cloudscribe.Web.SiteMap;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -51,6 +52,12 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IRouteBuilder AddDefaultPageRouteForSimpleContent(this IRouteBuilder routes)
         {
             routes.MapRoute(
+               name: ProjectConstants.NewPageRouteName,
+               template: "newpage/{parentSlug?}"
+               , defaults: new { controller = "Page", action = "NewPage" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PageEditRouteName,
                template: "edit/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
@@ -90,6 +97,13 @@ namespace Microsoft.Extensions.DependencyInjection
             IRouteConstraint siteFolderConstraint
             )
         {
+            routes.MapRoute(
+              name: ProjectConstants.FolderNewPageRouteName,
+              template: "{sitefolder}/newpage/{parentSlug?}"
+              , defaults: new { controller = "Page", action = "NewPage" }
+              , constraints: new { name = siteFolderConstraint }
+              );
+
             routes.MapRoute(
               name: ProjectConstants.FolderPageEditRouteName,
               template: "{sitefolder}/edit/{slug?}"
@@ -133,6 +147,12 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IRouteBuilder AddCustomPageRouteForSimpleContent(this IRouteBuilder routes, string prefix)
         {
             routes.MapRoute(
+               name: ProjectConstants.NewPageRouteName,
+               template: prefix + "/newpage/{parentSlug?}"
+               , defaults: new { controller = "Page", action = "NewPage" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PageEditRouteName,
                template: prefix + "/edit/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
@@ -174,6 +194,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
             )
         {
+            routes.MapRoute(
+               name: ProjectConstants.FolderNewPageRouteName,
+               template: "{sitefolder}/" + prefix + "/new/{parentSlug?}"
+               , defaults: new { controller = "Page", action = "NewPage" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
             routes.MapRoute(
                name: ProjectConstants.FolderPageEditRouteName,
                template: "{sitefolder}/" + prefix + "/edit/{slug?}"
@@ -460,8 +487,13 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.TryAddScoped<IContentTemplateProvider, ConfigContentTemplateProvider>();
+            services.AddScoped<ContentTemplateService>();
 
             services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
+
+            services.AddMediatR(typeof(PageService).Assembly);
+
+            services.AddScoped<IModelSerializer, JsonModelSerializer>();
 
             return services;
         }
