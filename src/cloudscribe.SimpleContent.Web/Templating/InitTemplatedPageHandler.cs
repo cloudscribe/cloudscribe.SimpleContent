@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Templating
 {
-    public class InitTemplatedPageHandler : IRequestHandler<InitTemplatedPage, CommandResult<IPage>>
+    public class InitTemplatedPageHandler : IRequestHandler<InitTemplatedPageRequest, CommandResult<IPage>>
     {
         public InitTemplatedPageHandler(
             IPageService pageService,
@@ -42,8 +42,13 @@ namespace cloudscribe.SimpleContent.Web.Templating
 
         }
 
-        public async Task<CommandResult<IPage>> Handle(InitTemplatedPage request, CancellationToken cancellationToken = default(CancellationToken))
+
+        public async Task<CommandResult<IPage>> Handle(InitTemplatedPageRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
+            
+            // initialize an unpublished page based on the template
+
+
             var errors = new List<string>();
             try
             {
@@ -51,17 +56,48 @@ namespace cloudscribe.SimpleContent.Web.Templating
                 var type = Type.GetType(request.Template.ModelType);
                 var model = Activator.CreateInstance(type);
                 var typedModel = Convert.ChangeType(model, type);
-                var page = new Page();
-                page.TemplateKey = request.Template.Key;
-                page.Title = request.ViewModel.PageTitle;
-                page.Serializer = serializer.Name;
-                page.DraftSerializedModel = serializer.Serialize(request.Template.ModelType, model);
-                page.Slug = ContentUtils.CreateSlug(page.Title);
+                var page = new Page
+                {
+                    ProjectId = request.ProjectId,
+                    CreatedByUser = request.CreatedByUserName,
+                    LastModifiedByUser = request.CreatedByUserName,
+                    TemplateKey = request.Template.Key,
+                    Title = request.ViewModel.PageTitle,
+                    Serializer = serializer.Name,
+                    DraftSerializedModel = serializer.Serialize(request.Template.ModelType, model),
+                    ParentSlug = request.ViewModel.ParentSlug,
+                    DraftContent = await _viewRenderer.RenderViewAsString(request.Template.RenderView, model).ConfigureAwait(false),
+                    IsPublished = false
+                };
+                
+                page.Content = page.DraftContent;
 
-                page.DraftContent = await _viewRenderer.RenderViewAsString("EmailTemplates/ConfirmAccountTextEmail", model).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
+                {
+                    var parentPage = await _pageService.GetPageBySlug(request.ViewModel.ParentSlug);
+                    if (parentPage != null)
+                    {
+                        if (parentPage.Id != page.ParentId)
+                        {
+                            page.ParentId = parentPage.Id;
+                            page.ParentSlug = parentPage.Slug;
+                           
+                        }
+
+                    }
+                }
+                else
+                {
+                    // empty means root level
+                    page.ParentSlug = string.Empty;
+                    page.ParentId = "0";
+                }
 
 
-                var result = new CommandResult<IPage>(page, false, new List<string>());
+                await _pageService.Create(page, false);
+                _pageService.ClearNavigationCache();
+
+                var result = new CommandResult<IPage>(page, true, new List<string>());
 
                 return result;
             }

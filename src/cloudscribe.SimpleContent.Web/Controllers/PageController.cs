@@ -7,9 +7,11 @@
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
+using cloudscribe.SimpleContent.Web.Templating;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -26,6 +28,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
     public class PageController : Controller
     {
         public PageController(
+            IMediator mediator,
             IProjectService projectService,
             IPageService blogService,
             IContentProcessor contentProcessor,
@@ -38,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
         {
+            Mediator = mediator;
             ProjectService = projectService;
             PageService = blogService;
             TemplateService = templateService;
@@ -62,6 +66,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IPageRoutes PageRoutes { get; private set; }
         protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
         protected PageEditOptions EditOptions { get; private set; }
+
+        protected IMediator Mediator { get; private set; }
 
         [HttpGet]
         [AllowAnonymous]
@@ -294,8 +300,38 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return View("NewPage", model);
             }
 
-            //temporary
-            Log.LogWarning($"selected template was {model.SelectedTemplate}");
+            var template = await TemplateService.GetTemplate(project.Id, model.SelectedTemplate);
+
+            if (template == null)
+            {
+                Log.LogWarning($"redirecting to index because content template {model.SelectedTemplate} was not found");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var request = new InitTemplatedPageRequest(
+                project.Id,
+                User.Identity.Name,
+                model, 
+                template);
+
+            var response = await Mediator.Send(request);
+            if(response.Succeeded)
+            {
+                Log.LogWarning($"succeeded in initializing a page with template {model.SelectedTemplate}");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
+            }
+            else
+            {
+                if(response.ErrorMessages != null && response.ErrorMessages.Count > 0)
+                {
+                    foreach(var err in response.ErrorMessages)
+                    {
+                        Log.LogError(err);
+                    }
+                }
+            }
+
+            
 
             return RedirectToRoute(PageRoutes.PageRouteName);
         }
