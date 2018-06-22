@@ -58,7 +58,7 @@
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
             </div>
-            @{ Html.RenderPartial("EditCorrelationKeyPartial", Model); }
+            @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
             <div class="form-group">
                 <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
                 <div class="col-md-10">
@@ -66,7 +66,7 @@
                     <span asp-validation-for="MetaDescription" class="text-danger"></span>
                 </div>
             </div>
-            @{ Html.RenderPartial("EditorPartial", Model); }
+            @{ await Html.RenderPartialAsync("EditorPartial", Model); }
             <div class="form-group">
                 <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
                 <div class="col-md-10">

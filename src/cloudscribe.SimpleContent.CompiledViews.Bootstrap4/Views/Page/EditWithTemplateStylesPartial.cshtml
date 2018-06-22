@@ -1,0 +1,15 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditWithTemplateViewModel
+@{ await Html.RenderPartialAsync("DatePickerBs4Css"); }
+<environment names="Development">
+    @foreach (var c in Model.Template.EditCss.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+    {
+        <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
+    }
+
+</environment>
+<environment names="Staging,Production">
+    @foreach (var c in Model.Template.EditCss.Where(x => (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+    {
+        <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
+    }
+</environment>

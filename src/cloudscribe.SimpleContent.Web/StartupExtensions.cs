@@ -6,6 +6,7 @@ using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.Mvc;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
+using cloudscribe.SimpleContent.Web.Templating;
 using cloudscribe.Web.Common.Razor;
 using cloudscribe.Web.Common.Setup;
 using cloudscribe.Web.Navigation;
@@ -64,6 +65,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+               name: ProjectConstants.PageEditWithTemplateRouteName,
+               template: "editwithtemplate/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PageDevelopRouteName,
                template: "development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
@@ -108,6 +115,13 @@ namespace Microsoft.Extensions.DependencyInjection
               name: ProjectConstants.FolderPageEditRouteName,
               template: "{sitefolder}/edit/{slug?}"
               , defaults: new { controller = "Page", action = "Edit" }
+              , constraints: new { name = siteFolderConstraint }
+              );
+
+            routes.MapRoute(
+              name: ProjectConstants.FolderPageEditWithTemplateRouteName,
+              template: "{sitefolder}/editwithtemplate/{slug?}"
+              , defaults: new { controller = "Page", action = "EditWithTemplate" }
               , constraints: new { name = siteFolderConstraint }
               );
 
@@ -159,6 +173,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+               name: ProjectConstants.PageEditWithTemplateRouteName,
+               template: prefix + "/editwithtemplate/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PageDevelopRouteName,
                template: prefix + "/development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
@@ -205,6 +225,13 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.FolderPageEditRouteName,
                template: "{sitefolder}/" + prefix + "/edit/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageEditWithTemplateRouteName,
+               template: "{sitefolder}/" + prefix + "/editwithtemplate/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithTemplate" }
                , constraints: new { name = siteFolderConstraint }
                );
 
@@ -494,6 +521,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMediatR(typeof(PageService).Assembly);
 
             services.AddScoped<IModelSerializer, JsonModelSerializer>();
+            services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
 
             return services;
         }

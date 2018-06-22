@@ -20,14 +20,14 @@
         <environment names="Development">
             @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "css" && (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
             {
-                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))" />
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
             }
             
         </environment>
         <environment names="Staging,Production">
             @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "css" && (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
             {
-                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))" />
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
             }
         </environment>
     }

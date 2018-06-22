@@ -23,5 +23,7 @@ namespace cloudscribe.SimpleContent.Models
         public List<EditStyle> EditCss { get; set; }
 
         public string SerializerName { get; set; } = "Json";
+
+        public string FormParserName { get; set; } = "DefaultModelFormParser";
     }
 }

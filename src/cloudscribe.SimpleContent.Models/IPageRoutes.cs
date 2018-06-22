@@ -4,6 +4,7 @@
     {
         string PageRouteName { get; }
         string PageEditRouteName { get; }
+        string PageEditWithTemplateRouteName { get; }
         string PageDeleteRouteName { get; }
 
         string PageDevelopRouteName { get; }

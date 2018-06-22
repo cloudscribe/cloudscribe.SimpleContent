@@ -317,8 +317,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if(response.Succeeded)
             {
-                Log.LogWarning($"succeeded in initializing a page with template {model.SelectedTemplate}");
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
+                Log.LogDebug($"succeeded in initializing a page with template {model.SelectedTemplate}");
+                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, new { slug = response.Value.Slug });
             }
             else
             {
@@ -326,22 +326,17 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     foreach(var err in response.ErrorMessages)
                     {
-                        Log.LogError(err);
+                        this.AlertDanger(err, true);
                     }
                 }
             }
-
             
-
             return RedirectToRoute(PageRoutes.PageRouteName);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> EditWithTemplate(
-            string slug = "",
-            string parentSlug = ""
-            )
+        public virtual async Task<IActionResult> EditWithTemplate(string slug)
         {
             var projectSettings = await ProjectService.GetCurrentProjectSettings();
 
@@ -351,7 +346,131 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            return View();
+            var canEdit = await User.CanEditPages(projectSettings.Id, AuthorizationService);
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user cannot edit");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var page = await PageService.GetPageBySlug(slug);
+
+            if (page == null)
+            {
+                Log.LogError($"redirecting to index because page was not found for slug {slug}");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
+
+            var template = await TemplateService.GetTemplate(projectSettings.Id, page.TemplateKey);
+            if (template == null)
+            {
+                Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var model = new PageEditWithTemplateViewModel()
+            {
+                ProjectId = projectSettings.Id,
+                DisqusShortname = projectSettings.DisqusShortName,
+                Author = page.Author,
+                Id = page.Id,
+                CorrelationKey = page.CorrelationKey,
+                IsPublished = page.IsPublished,
+                ShowMenu = page.ShowMenu,
+                MetaDescription = page.MetaDescription,
+                PageOrder = page.PageOrder,
+                ParentId = page.ParentId,
+                ParentSlug = page.ParentSlug,
+                PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate, projectSettings.TimeZoneId),
+                ShowHeading = page.ShowHeading,
+                Slug = page.Slug,
+                Title = page.Title,
+                MenuFilters = page.MenuFilters,
+                ViewRoles = page.ViewRoles,
+                ShowComments = page.ShowComments,
+                Template = template,
+                TemplateModel = TemplateService.DesrializeTemplateModel(page, template)
+            };
+
+            if (model.TemplateModel == null)
+            {
+                Log.LogError($"redirecting to index model desrialization failed for page {page.Title}");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> EditWithTemplate(PageEditWithTemplateViewModel model)
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var page = await PageService.GetPage(model.Id);
+            
+            if (page == null)
+            {
+                Log.LogError($"redirecting to index because page was not found for id {model.Id}");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
+
+            var template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
+            if (template == null)
+            {
+                Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            bool shouldPublish = true;
+
+            var request = new UpdateTemplatedPageRequest(
+                project.Id,
+                User.Identity.Name,
+                model,
+                template,
+                page,
+                shouldPublish,
+                Request.Form,
+                ModelState
+                );
+
+            var response = await Mediator.Send(request);
+            if (response.Succeeded)
+            {
+                Log.LogDebug($"succeeded in updating a page with template {template.Key}");
+                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, new { slug = response.Value.Slug });
+            }
+            else
+            {
+                if (response.ErrorMessages != null && response.ErrorMessages.Count > 0)
+                {
+                    foreach (var err in response.ErrorMessages)
+                    {
+                        this.AlertDanger(err, true);
+                    }
+                }
+            }
+            
+            return RedirectToRoute(PageRoutes.PageRouteName, new { slug = page.Slug });
         }
 
 
@@ -391,6 +510,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 page = await PageService.GetPageBySlug(slug);
             }
+
+            if(page != null && !string.IsNullOrWhiteSpace(page.TemplateKey))
+            {
+                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, new { slug });
+            }
+
             if(page == null)
             {
                 ViewData["Title"] = StringLocalizer["New Page"];
@@ -694,9 +819,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = page.Slug });
             }
 
-            //var url = Url.RouteUrl(pageRoutes.PageRouteName, new { slug = page.Slug });
+            
             return RedirectToRoute(PageRoutes.PageRouteName, new { slug = page.Slug });
-            //return Content(url);
+            
 
         }
 
