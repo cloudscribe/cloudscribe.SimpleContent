@@ -522,6 +522,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<IModelSerializer, JsonModelSerializer>();
             services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
+            services.AddScoped<IValidateTemplateModel, DefaultTemplateModelValidator>();
 
             return services;
         }

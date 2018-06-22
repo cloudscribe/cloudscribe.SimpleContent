@@ -51,3 +51,34 @@
     <input asp-for="Biography" class="form-control" />
     <span asp-validation-for="Biography" class="text-danger"></span>
 </div>
+
+<div class="form-group">
+    <label asp-for="JoinDate">JoinDate</label>
+    <input asp-for="JoinDate" type="hidden" />
+    <input type="text" id="JoinDateDisplay" class="form-control"
+           data-bs-datepicker="true"
+           data-bs-datepicker-iso-target-id="JoinDate"
+           data-bs-datepicker-iso-format="YYYY-MM-DDTHH:mm:ss.sss"
+           value='@Model.JoinDate?.ToString("g")'
+           data-bs-datepicker-debug="false"
+           data-bs-datepicker-keepOpen="false"
+           data-bs-datepicker-allowInputToggle="true"
+           data-bs-datepicker-locale="@CultureInfo.CurrentCulture.Name" />
+    <span asp-validation-for="JoinDate" class="invalid-feedback"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="YearsExperience" class="control-label"></label>
+    <input asp-for="YearsExperience" class="form-control" />
+    <span asp-validation-for="YearsExperience" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Salary" class="control-label"></label>
+    <input asp-for="Salary" class="form-control" />
+    <span asp-validation-for="Salary" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="AnnualBonus" class="control-label"></label>
+    <input asp-for="AnnualBonus" class="form-control" />
+    <span asp-validation-for="AnnualBonus" class="text-danger"></span>
+</div>

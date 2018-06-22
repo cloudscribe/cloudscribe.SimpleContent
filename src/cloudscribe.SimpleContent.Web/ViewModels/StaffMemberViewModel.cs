@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -25,5 +26,14 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string Position { get; set; }
 
         public string Biography { get; set; }
+
+        public DateTime? JoinDate { get; set; }
+
+        public int YearsExperience { get; set; }
+
+      
+        public decimal Salary { get; set; }
+
+        public decimal? AnnualBonus { get; set; }
     }
 }

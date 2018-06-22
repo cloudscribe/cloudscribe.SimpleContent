@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Author:                  Joe Audette
+// Created:                 2018-06-20
+// Last Modified:           2018-06-22
+// 
+
+using System.Collections.Generic;
 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -25,5 +31,6 @@ namespace cloudscribe.SimpleContent.Models
         public string SerializerName { get; set; } = "Json";
 
         public string FormParserName { get; set; } = "DefaultModelFormParser";
+        public string ValidatorName { get; set; } = "DefaultTemplateModelValidator";
     }
 }

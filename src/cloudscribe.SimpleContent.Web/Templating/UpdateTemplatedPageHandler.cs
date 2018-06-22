@@ -1,12 +1,18 @@
-﻿using cloudscribe.SimpleContent.Models;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Author:                  Joe Audette
+// Created:                 2018-06-22
+// Last Modified:           2018-06-22
+// 
+
+using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Common.Razor;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +24,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
             IPageService pageService,
             IEnumerable<IModelSerializer> serializers,
             IEnumerable<IParseModelFromForm> formParsers,
+            IEnumerable<IValidateTemplateModel> modelValidators,
             ViewRenderer viewRenderer,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             ILogger<UpdateTemplatedPageHandler> logger
@@ -26,6 +33,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
             _pageService = pageService;
             _serializers = serializers;
             _formParsers = formParsers;
+            _modelValidators = modelValidators;
             _viewRenderer = viewRenderer;
             _localizer = localizer;
             _log = logger;
@@ -34,6 +42,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
         private readonly IPageService _pageService;
         private readonly IEnumerable<IModelSerializer> _serializers;
         private readonly IEnumerable<IParseModelFromForm> _formParsers;
+        private readonly IEnumerable<IValidateTemplateModel> _modelValidators;
         private readonly ViewRenderer _viewRenderer;
         private readonly IStringLocalizer _localizer;
         private readonly ILogger _log;
@@ -58,102 +67,36 @@ namespace cloudscribe.SimpleContent.Web.Templating
             return _formParsers.FirstOrDefault();
         }
 
+        private IValidateTemplateModel GetValidator(string name)
+        {
+            foreach (var s in _modelValidators)
+            {
+                if (s.ValidatorName == name) return s;
+            }
+
+            return _modelValidators.FirstOrDefault();
+        }
+
         public async Task<CommandResult<IPage>> Handle(UpdateTemplatedPageRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var errors = new List<string>();
-            var success = true;
+            var customModelIsValid = true;
             try
             {
                 var page = request.Page;
                 var serializer = GetSerializer(request.Template.SerializerName);
                 var parser = GetFormParser(request.Template.FormParserName);
+                var validator = GetValidator(request.Template.ValidatorName);
                 var type = Type.GetType(request.Template.ModelType);
                 var model = parser.ParseModel(request.Template.ModelType, request.Form);
                 if(model == null)
                 {
                     errors.Add(_localizer["Failed to parse custom tempalte model from form."]);
-                    success = false;
-                }
-
-                if(success)
-                {
-                    //TODO: validate custom model and update model state
-                    var isValid = true;
-
-                    var modelString = serializer.Serialize(request.Template.ModelType, model);
-                    var renderedModel = await _viewRenderer.RenderViewAsString(request.Template.RenderView, model).ConfigureAwait(false);
-
-                    if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                    {
-                        // remove any bad characters
-                        request.ViewModel.Slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
-                        if (request.ViewModel.Slug != page.Slug)
-                        {
-                            var slugIsAvailable = await _pageService.SlugIsAvailable(request.ViewModel.Slug);
-                            if (!slugIsAvailable)
-                            {
-                                errors.Add(_localizer["The page slug was not changed because the requested slug is already in use."]);
-                                success = false;
-                            }
-                        }
-
-                    }
-
-                    if (request.ModelState.IsValid && success)
-                    {
-                        page.Title = request.ViewModel.Title;
-                        page.CorrelationKey = request.ViewModel.CorrelationKey;
-                        page.LastModified = DateTime.UtcNow;
-                        page.LastModifiedByUser = request.ModifiedByUserName;
-                        page.MenuFilters = request.ViewModel.MenuFilters;
-                        page.MetaDescription = request.ViewModel.MetaDescription;
-                        page.PageOrder = request.ViewModel.PageOrder;
-                        if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                        {
-                            page.Slug = request.ViewModel.Slug;
-                        }
-                        page.ViewRoles = request.ViewModel.ViewRoles;
-
-                    }
-
-                    if (isValid && success)
-                    {
-                        if (request.ShouldPublish)
-                        {
-                            page.SerializedModel = modelString;
-                            page.Content = renderedModel;
-                            page.Author = request.ViewModel.Author;
-                            page.PubDate = DateTime.UtcNow;
-                            page.IsPublished = true;
-
-                            page.DraftAuthor = null;
-                            page.DraftContent = null;
-                            page.DraftPubDate = null;
-                        }
-                        else
-                        {
-                            page.DraftSerializedModel = modelString;
-                            page.DraftContent = renderedModel;
-                            page.DraftAuthor = request.ViewModel.Author;
-                            if (request.ViewModel.PubDate.HasValue)
-                            {
-                                page.DraftPubDate = request.ViewModel.PubDate.Value;
-                            }
-                        }
-
-                        await _pageService.Update(page, request.ShouldPublish);
-                        _pageService.ClearNavigationCache();
-                    }
-                    //either way return the parsed model on the viewmodel
-                    request.ViewModel.TemplateModel = model;
-
-                }
-                else
-                {
+                    customModelIsValid = false;
                     //failed to parse model from form
                     // at least return the original model before changes
                     string pageModelString;
-                    if(!string.IsNullOrWhiteSpace(page.DraftSerializedModel))
+                    if (!string.IsNullOrWhiteSpace(page.DraftSerializedModel))
                     {
                         pageModelString = page.DraftSerializedModel;
                     }
@@ -161,16 +104,98 @@ namespace cloudscribe.SimpleContent.Web.Templating
                     {
                         pageModelString = page.SerializedModel;
                     }
-                    if(!string.IsNullOrWhiteSpace(pageModelString))
+                    if (!string.IsNullOrWhiteSpace(pageModelString))
                     {
                         request.ViewModel.TemplateModel = serializer.Deserialize(request.Template.ModelType, pageModelString);
                     }
+                }
 
+                if (customModelIsValid)
+                {
+                    // we are going to return the parsed model either way
+                    request.ViewModel.TemplateModel = model;
+
+                    var validationContext = new ValidationContext(model, serviceProvider: null, items: null);
+                    var validationResults = new List<ValidationResult>();
+
+                    customModelIsValid = validator.IsValid(model, validationContext, validationResults);
+                    if (!customModelIsValid)
+                    {
+                        foreach(var item in validationResults)
+                        {
+                           foreach(var memberName in item.MemberNames)
+                           {
+                                request.ModelState.AddModelError(memberName, item.ErrorMessage);
+
+                           }
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(request.ViewModel.Slug))
+                {
+                    // remove any bad characters
+                    request.ViewModel.Slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
+                    if (request.ViewModel.Slug != page.Slug)
+                    {
+                        var slugIsAvailable = await _pageService.SlugIsAvailable(request.ViewModel.Slug);
+                        if (!slugIsAvailable)
+                        {
+                            errors.Add(_localizer["The page slug was not changed because the requested slug is already in use."]);
+                            request.ModelState.AddModelError("Slug", _localizer["The page slug was not changed because the requested slug is already in use."]);
+                        }
+                    }
                 }
                 
-                var result = new CommandResult<IPage>(page, success, errors);
+                if (request.ModelState.IsValid)
+                {
+                    var modelString = serializer.Serialize(request.Template.ModelType, model);
+                    var renderedModel = await _viewRenderer.RenderViewAsString(request.Template.RenderView, model).ConfigureAwait(false);
+                    
+                    page.Title = request.ViewModel.Title;
+                    page.CorrelationKey = request.ViewModel.CorrelationKey;
+                    page.LastModified = DateTime.UtcNow;
+                    page.LastModifiedByUser = request.ModifiedByUserName;
+                    page.MenuFilters = request.ViewModel.MenuFilters;
+                    page.MetaDescription = request.ViewModel.MetaDescription;
+                    page.PageOrder = request.ViewModel.PageOrder;
+                    if (!string.IsNullOrEmpty(request.ViewModel.Slug))
+                    {
+                        page.Slug = request.ViewModel.Slug;
+                    }
+                    page.ViewRoles = request.ViewModel.ViewRoles;
+                    
+                    
+                    if (request.ShouldPublish)
+                    {
+                        page.SerializedModel = modelString;
+                        page.Content = renderedModel;
+                        page.Author = request.ViewModel.Author;
+                        page.PubDate = DateTime.UtcNow;
+                        page.IsPublished = true;
 
-                return result;
+                        page.DraftAuthor = null;
+                        page.DraftContent = null;
+                        page.DraftPubDate = null;
+                    }
+                    else
+                    {
+                        page.DraftSerializedModel = modelString;
+                        page.DraftContent = renderedModel;
+                        page.DraftAuthor = request.ViewModel.Author;
+                        if (request.ViewModel.PubDate.HasValue)
+                        {
+                            page.DraftPubDate = request.ViewModel.PubDate.Value;
+                        }
+                    }
+
+                    await _pageService.Update(page, request.ShouldPublish);
+                    _pageService.ClearNavigationCache();
+                    
+                }
+                
+                return new CommandResult<IPage>(page, customModelIsValid && request.ModelState.IsValid, errors);
+                
             }
             catch(Exception ex)
             {
@@ -181,10 +206,6 @@ namespace cloudscribe.SimpleContent.Web.Templating
                 return new CommandResult<IPage>(null, false, errors);
             }
 
-
-
         }
-
-
     }
 }

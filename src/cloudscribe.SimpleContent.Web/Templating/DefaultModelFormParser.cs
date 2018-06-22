@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Author:                  Joe Audette
+// Created:                 2018-06-22
+// Last Modified:           2018-06-22
+// 
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace cloudscribe.SimpleContent.Web.Templating
 {
@@ -45,28 +48,47 @@ namespace cloudscribe.SimpleContent.Web.Templating
                     {
                         try
                         {
-                            prop.SetValue(model, Convert.ChangeType(formVal, prop.PropertyType), null);
+                            if(prop.PropertyType == typeof(DateTime?) || prop.PropertyType == typeof(DateTime))
+                            {
+                                prop.SetValue(model, Convert.ToDateTime(formVal), null);
+                            }
+                            else if(prop.PropertyType == typeof(decimal?))
+                            {
+                                prop.SetValue(model, Convert.ToDecimal(formVal), null);
+                            }
+                            else if (prop.PropertyType == typeof(int?))
+                            {
+                                prop.SetValue(model, Convert.ToInt32(formVal), null);
+                            }
+                            else if (prop.PropertyType == typeof(long?))
+                            {
+                                prop.SetValue(model, Convert.ToInt64(formVal), null);
+                            }
+                            else if (prop.PropertyType == typeof(double?))
+                            {
+                                prop.SetValue(model, Convert.ToDouble(formVal), null);
+                            }
+                            else if (prop.PropertyType == typeof(bool?))
+                            {
+                                prop.SetValue(model, Convert.ToBoolean(formVal), null);
+                            }
+                            else
+                            {
+                                prop.SetValue(model, Convert.ChangeType(formVal, prop.PropertyType), null);
+                            }
+
+                            
                         }
                         catch(Exception ex)
                         {
                             Log.LogError($"failed to set property {prop.Name} using {formVal}. error:{ex.Message}:{ex.StackTrace}");
                         }
-
                         
-
-                        //model.GetType().InvokeMember(
-                        //    prop.Name,
-                        //    BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
-                        //   Type.DefaultBinder, 
-                        //   model,
-                        //   formVal
-                        //   );
-
                         Log.LogDebug($"value {formVal} found for {prop.Name}");
                     }
                     else
                     {
-                        Log.LogInformation($"no form value found for {prop.Name}");
+                        Log.LogDebug($"no form value found for {prop.Name}");
                     }
                 }
 

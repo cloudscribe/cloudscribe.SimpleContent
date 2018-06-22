@@ -461,16 +461,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             else
             {
-                if (response.ErrorMessages != null && response.ErrorMessages.Count > 0)
-                {
-                    foreach (var err in response.ErrorMessages)
-                    {
-                        this.AlertDanger(err, true);
-                    }
-                }
+                model.Template = template;
+
+                return View(model);
             }
             
-            return RedirectToRoute(PageRoutes.PageRouteName, new { slug = page.Slug });
         }
 
 
