@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2017-06-18
+// Last Modified:           2018-06-25
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -146,6 +146,7 @@ namespace cloudscribe.SimpleContent.Services
                     {
                         node.NamedRoute = _blogRoutes.BlogIndexRouteName;
                         node.Url = urlHelper.RouteUrl(_blogRoutes.BlogIndexRouteName);
+                        node.ExcludeFromSearchSiteMap = true;
                     }
                     
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
@@ -172,6 +173,7 @@ namespace cloudscribe.SimpleContent.Services
                     {
                         node.NamedRoute = _blogRoutes.BlogIndexRouteName;
                         node.Url = urlHelper.RouteUrl(_blogRoutes.BlogIndexRouteName);
+                        node.ExcludeFromSearchSiteMap = true;
                     }
                     node.ComponentVisibility = project.BlogPageNavComponentVisibility;
                     var blogNode = treeRoot.AddChild(node);

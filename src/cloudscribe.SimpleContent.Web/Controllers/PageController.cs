@@ -254,7 +254,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var templates = await TemplateService.GetAllTemplates(project.Id, cancellationToken);
+            var templates = await TemplateService.GetAllTemplates(project.Id, ProjectConstants.PageFeatureName, cancellationToken);
             if(templates.Count == 0)
             {
                 return RedirectToRoute(PageRoutes.PageEditRouteName, new { parentSlug, type });
@@ -296,7 +296,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (!ModelState.IsValid)
             {
-                model.Templates = await TemplateService.GetAllTemplates(project.Id);
+                model.Templates = await TemplateService.GetAllTemplates(project.Id, ProjectConstants.PageFeatureName);
                 return View("NewPage", model);
             }
 
@@ -311,6 +311,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var request = new InitTemplatedPageRequest(
                 project.Id,
                 User.Identity.Name,
+                await AuthorNameResolver.GetAuthorName(User),
                 model, 
                 template);
 
@@ -441,6 +442,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             bool shouldPublish = true;
+
+            //temp
+            Log.LogWarning($"The save mode was {model.SaveMode}");
 
             var request = new UpdateTemplatedPageRequest(
                 project.Id,

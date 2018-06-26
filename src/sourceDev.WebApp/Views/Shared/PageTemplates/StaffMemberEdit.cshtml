@@ -1,6 +1,63 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.StaffMemberViewModel
+@using Microsoft.AspNetCore.Antiforgery
+@inject IStringLocalizer<SimpleContent> sr
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@{
+
+    var tokens = antiforgery.GetAndStoreTokens(Context);
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+}
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="d-flex align-items-stretch">
+    <div class="cs-crop-container">
+        @if (string.IsNullOrWhiteSpace(Model.ImageUrl))
+        {
+            <img id="dz1Image" src="/cr/images/550x412.png" />
+        }
+        else
+        {
+            <img id="dz1Image" src="@Model.ImageUrl" alt="profile image" />
+        }
+
+    </div>
+    <div class="d-flex flex-column">
+        <div id="dz1" class="cloudscribe-dropzone-standalone"
+             data-dropzone=""
+             data-upload-url="@Url.Action("DropFile", "FileManager")"
+             data-anti-forgery-token="@tokens.RequestToken"
+             data-file-browse-url="@ckOptions.ImageBrowseUrl"
+             data-file-crop-url="@ckOptions.CropFileUrl"
+             data-target-path="/media/images"
+             data-target-fullsize-input-id="imgUrl1"
+             data-target-resized-input-id="imgUrl1Resized"
+             data-target-thumb-input-id="imgUrl1Thumb"
+             data-target-fullsize-image-id="dz1Image"
+             data-target-resized-image-idx="dz1ImageResized"
+             data-enable-browse-server="true"
+             data-enable-crop="true"
+             data-target-thumb-image-idx="dz1ImageThumb"
+             data-resize-width="550"
+             data-resize-height="412"
+             data-create-thumb="false"
+             data-resize-image="true"
+             data-accepted-files="image/*">
+            @sr["Drop file here or click to browse device for file."]
+        </div>
+        <div class="pl-1 pt-1">
+            <div class="d-flex flex-column">
+                <button id="dz1-browse-server" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                <button id="dz1-save-crop" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<input asp-for="ImageFullSizeUrl" class="form-control" id="imgUrl1" type="text" />
+<input asp-for="ImageUrl" class="form-control" id="imgUrl1Resized" type="text" />
+<input asp-for="ImageThumbSizeUrl" class="form-control" id="imgUrl1Thumb" type="text" />
+
 <div class="form-group">
     <label asp-for="FirstName" class="control-label"></label>
     <input asp-for="FirstName" class="form-control" />
@@ -12,6 +69,11 @@
     <span asp-validation-for="LastName" class="text-danger"></span>
 </div>
 <div class="form-group">
+    <label asp-for="Email" class="control-label"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div class="form-group">
     <label asp-for="Phone" class="control-label"></label>
     <input asp-for="Phone" class="form-control" />
     <span asp-validation-for="Phone" class="text-danger"></span>
@@ -21,16 +83,7 @@
     <input asp-for="MobilePhone" class="form-control" />
     <span asp-validation-for="MobilePhone" class="text-danger"></span>
 </div>
-<div class="form-group">
-    <label asp-for="Email" class="control-label"></label>
-    <input asp-for="Email" class="form-control" />
-    <span asp-validation-for="Email" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label asp-for="ImageUrl" class="control-label"></label>
-    <input asp-for="ImageUrl" class="form-control" />
-    <span asp-validation-for="ImageUrl" class="text-danger"></span>
-</div>
+
 <div class="form-group">
     <label asp-for="ProfileUrl" class="control-label"></label>
     <input asp-for="ProfileUrl" class="form-control" />
@@ -48,7 +101,13 @@
 </div>
 <div class="form-group">
     <label asp-for="Biography" class="control-label"></label>
-    <input asp-for="Biography" class="form-control" />
+    <textarea asp-for="Biography" class="form-control"
+              data-ckeditor-unobtrusive=""
+              data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+              data-ckeditor-config-language="@ckOptions.LanguageCode"
+              data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+              data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+              data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
     <span asp-validation-for="Biography" class="text-danger"></span>
 </div>
 
@@ -82,3 +141,4 @@
     <input asp-for="AnnualBonus" class="form-control" />
     <span asp-validation-for="AnnualBonus" class="text-danger"></span>
 </div>
+

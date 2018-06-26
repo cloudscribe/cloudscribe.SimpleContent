@@ -46,5 +46,8 @@
         public const string PageEditPolicy = "PageEditPolicy";
         public const string BlogEditPolicy = "BlogEditPolicy";
 
+        public const string BlogFeatureName = "Blog";
+        public const string PageFeatureName = "Page";
+
     }
 }

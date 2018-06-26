@@ -24,11 +24,12 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         private ContentTemplateConfig _configuredTemplates;
 
-        public Task<List<ContentTemplate>> GetAllTemplates(string projectId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<List<ContentTemplate>> GetAllTemplates(string projectId, string forFeature, CancellationToken cancellationToken = default(CancellationToken))
         {
             var result = _configuredTemplates.Templates
                 .Where(x =>
                   x.ProjectId == "*" || x.ProjectId == projectId
+                  && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
                 ).OrderBy(x => x.Title)
                 .ToList();
 

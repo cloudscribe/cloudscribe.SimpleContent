@@ -18,6 +18,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string Email { get; set; }
 
         public string ImageUrl { get; set; }
+        public string ImageFullSizeUrl { get; set; }
+        public string ImageThumbSizeUrl { get; set; }
 
         public string ProfileUrl { get; set; }
 

@@ -50,5 +50,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         [StringLength(500, ErrorMessage = "The menu filters has a maximun length of 500 characters")]
         public string MenuFilters { get; set; }
+
+        public string SaveMode { get; set; } //SaveDraft, PublishNow, PublishLater
     }
 }

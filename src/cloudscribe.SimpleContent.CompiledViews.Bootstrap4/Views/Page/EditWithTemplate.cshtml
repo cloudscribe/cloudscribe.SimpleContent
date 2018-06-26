@@ -38,19 +38,22 @@
                 <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
                 <span asp-validation-for="MetaDescription" class="text-danger"></span>
             </div>
-            @{await Html.RenderPartialAsync(Model.Template.EditView, Model.TemplateModel); }
             <div class="form-group">
                 <label asp-for="Author">@sr["Author"]</label>
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <fieldset class="border p-2 mb-2">
+                <legend class="w-auto">@sr["Template Fields"]</legend>
+                @{await Html.RenderPartialAsync(Model.Template.EditView, Model.TemplateModel); }
+            </fieldset>
+            @*<div class="form-group">
                 <div class="form-check" data-toggle="tooltip" data-placement="left" title='@sr["A page is visible to the public if the Is Published checkbox is checked and if the Publication Date is before the current moment, and if not protected by roles."]'>
                     <input asp-for="IsPublished" class="form-check-input" />
                     <label asp-for="IsPublished" class="form-check-label">@sr["Is Published"]</label>
                 </div>
-            </div>
-            @{ await Html.RenderPartialAsync("EditWithTemplatePubDate", Model); }
+            </div>*@
+           
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
             <div class="form-group mt-2">
@@ -112,17 +115,34 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <button id="btnSave" name="submit" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
+    <div class="form-inline">
+        <div class="form-group mt-1">
+            <button id="btnSaveDraft" name="SaveMode" value="SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            <button id="btnSavePublish" name="SaveMode" type="submit" value="PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            <button id="btnSavePublishLater" name="SaveMode" value="PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later"]'>@sr["Publish Later"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            @{ await Html.RenderPartialAsync("EditWithTemplatePubDate", Model); }
+        </div>
+        
         @if (!string.IsNullOrEmpty(Model.Id))
         {
+        <div class="form-group ml-4 mt-1">
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
                 @sr["Delete"]
             </button>
+        </div>
+            
         }
         @if (showDev)
         {
+        <div class="form-group ml-1 mt-1">
             <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
+        </div>
         }
     </div>
 </form>
@@ -149,6 +169,16 @@
         </div>
     </form>
 }
+    <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
+            </div>
+        </div>
+    </div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("EditWithTemplateScriptsPartial", Model); }
 }

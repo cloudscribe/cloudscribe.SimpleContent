@@ -77,9 +77,9 @@ namespace cloudscribe.SimpleContent.Web.Services
         }
 
 
-        public async Task<List<ContentTemplate>> GetAllTemplates(string projectId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<List<ContentTemplate>> GetAllTemplates(string projectId, string forFeature, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _templateProvider.GetAllTemplates(projectId, cancellationToken).ConfigureAwait(false);
+            return await _templateProvider.GetAllTemplates(projectId, forFeature, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ContentTemplate> GetTemplate(string projectId, string key, CancellationToken cancellationToken = default(CancellationToken))
