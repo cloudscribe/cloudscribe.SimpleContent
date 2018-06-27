@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace cloudscribe.SimpleContent.Models.Blog
+namespace cloudscribe.SimpleContent.Models
 {
     public class PagedPostResult
     {
