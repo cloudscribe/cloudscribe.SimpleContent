@@ -2,6 +2,7 @@
 @inject IRoleSelectorProperties roleSelector
 @{ await Html.RenderPartialAsync("DatePickerBs4Scripts"); }
 @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
+<script src="~/js/cloudscribe-validation-requiredwhen.js" asp-append-version="true"></script>
 <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
 <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
 @{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }

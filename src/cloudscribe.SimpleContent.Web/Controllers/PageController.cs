@@ -460,8 +460,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if (response.Succeeded)
             {
-                Log.LogDebug($"succeeded in updating a page with template {template.Key}");
-                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, new { slug = response.Value.Slug });
+            
+                this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
             }
             else
             {

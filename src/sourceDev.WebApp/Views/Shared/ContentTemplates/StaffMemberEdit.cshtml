@@ -24,7 +24,7 @@
 
     </div>
     <div class="d-flex flex-column">
-        <div id="dz1" class="cloudscribe-dropzone-standalone"
+        <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
              data-dropzone=""
              data-upload-url="@Url.Action("DropFile", "FileManager")"
              data-anti-forgery-token="@tokens.RequestToken"
@@ -48,15 +48,15 @@
         </div>
         <div class="pl-1 pt-1">
             <div class="d-flex flex-column">
-                <button id="dz1-browse-server" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
-                <button id="dz1-save-crop" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
             </div>
         </div>
     </div>
 </div>
-<input asp-for="ImageFullSizeUrl" class="form-control" id="imgUrl1" type="text" />
-<input asp-for="ImageUrl" class="form-control" id="imgUrl1Resized" type="text" />
-<input asp-for="ImageThumbSizeUrl" class="form-control" id="imgUrl1Thumb" type="text" />
+<input asp-for="ImageFullSizeUrl" id="imgUrl1" type="hidden" />
+<input asp-for="ImageUrl" id="imgUrl1Resized" type="hidden" />
+<input asp-for="ImageThumbSizeUrl" id="imgUrl1Thumb" type="hidden" />
 
 <div class="form-group">
     <label asp-for="FirstName" class="control-label"></label>
@@ -101,13 +101,7 @@
 </div>
 <div class="form-group">
     <label asp-for="Biography" class="control-label"></label>
-    <textarea asp-for="Biography" class="form-control"
-              data-ckeditor-unobtrusive=""
-              data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-              data-ckeditor-config-language="@ckOptions.LanguageCode"
-              data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-              data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-              data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    <textarea asp-for="Biography" class="form-control"></textarea>
     <span asp-validation-for="Biography" class="text-danger"></span>
 </div>
 
@@ -142,3 +136,13 @@
     <span asp-validation-for="AnnualBonus" class="text-danger"></span>
 </div>
 
+<div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
+        </div>
+    </div>
+</div>

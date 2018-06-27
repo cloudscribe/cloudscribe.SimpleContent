@@ -1,4 +1,5 @@
 ﻿using cloudscribe.SimpleContent.Models;
+using cloudscribe.Web.Common.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,7 +36,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string ViewRoles { get; set; } = string.Empty;
 
-        public DateTime? PubDate { get; set; } 
+        public DateTime? PubDate { get; set; }
+
+        [RequiredWhen("SaveMode", "PublishLater", ErrorMessage = "A Date is required to publish later.")]
+        public DateTime? NewPubDate { get; set; }
 
 
         public bool IsPublished { get; set; } = true;

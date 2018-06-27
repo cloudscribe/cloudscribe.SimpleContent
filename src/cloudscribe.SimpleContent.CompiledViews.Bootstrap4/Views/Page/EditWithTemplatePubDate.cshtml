@@ -1,13 +1,13 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditWithTemplateViewModel
 @inject IStringLocalizer<SimpleContent> sr
-<input asp-for="PubDate" type="hidden" />
+<input asp-for="NewPubDate" type="hidden" />
+<span asp-validation-for="NewPubDate" class="text-danger"></span>
 <input type="text" id="PubDateDisplay" class="form-control"
         data-bs-datepicker="true"
-        data-bs-datepicker-iso-target-id="PubDate"
+        data-bs-datepicker-iso-target-id="NewPubDate"
         data-bs-datepicker-iso-format="YYYY-MM-DDTHH:mm:ss.sss"
-        value='@Model.PubDate?.ToString("g")'
+        value='@Model.NewPubDate?.ToString("g")'
         data-bs-datepicker-debug="false"
         data-bs-datepicker-keepOpen="false"
         data-bs-datepicker-allowInputToggle="true"
         data-bs-datepicker-locale="@CultureInfo.CurrentCulture.Name" />
-<span asp-validation-for="PubDate" class="invalid-feedback"></span>

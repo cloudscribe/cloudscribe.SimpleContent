@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Services
+namespace cloudscribe.SimpleContent.Web.Templating
 {
     public class ContentTemplateService
     {

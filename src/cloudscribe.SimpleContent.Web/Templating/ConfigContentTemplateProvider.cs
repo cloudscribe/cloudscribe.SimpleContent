@@ -28,7 +28,8 @@ namespace cloudscribe.SimpleContent.Web.Services
         {
             var result = _configuredTemplates.Templates
                 .Where(x =>
-                  x.ProjectId == "*" || x.ProjectId == projectId
+                  (x.ProjectId == "*" || x.ProjectId == projectId)
+                  && (true.Equals(x.Enabled))
                   && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
                 ).OrderBy(x => x.Title)
                 .ToList();

@@ -7,6 +7,13 @@
     var editOptions = pageEditOptionsAccessor.Value;
     var showDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
+    var legend = sr["Template Fields"].ToString();
+    var legendFormat = sr["Template Fields - {0}"].ToString();
+    if(Model.Template != null)
+    {
+        legend = string.Format(legendFormat, Model.Template.Title);
+
+    }
 
 }
 @section Styles {
@@ -15,6 +22,7 @@
 <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
 <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditWithTemplateRouteName" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <input type="hidden" asp-fore="@Model.IsPublished" />
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
     <ul class="nav nav-tabs" role="tablist">
@@ -44,16 +52,9 @@
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
             <fieldset class="border p-2 mb-2">
-                <legend class="w-auto">@sr["Template Fields"]</legend>
+                <legend class="w-auto">@legend</legend>
                 @{await Html.RenderPartialAsync(Model.Template.EditView, Model.TemplateModel); }
             </fieldset>
-            @*<div class="form-group">
-                <div class="form-check" data-toggle="tooltip" data-placement="left" title='@sr["A page is visible to the public if the Is Published checkbox is checked and if the Publication Date is before the current moment, and if not protected by roles."]'>
-                    <input asp-for="IsPublished" class="form-check-input" />
-                    <label asp-for="IsPublished" class="form-check-label">@sr["Is Published"]</label>
-                </div>
-            </div>*@
-           
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
             <div class="form-group mt-2">
@@ -66,7 +67,7 @@
                 <input asp-for="ParentSlug" class="form-control" data-toggle="tooltip" title='@sr["A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager."]' />
                 <span asp-validation-for="ParentSlug" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <div class="form-check" data-toggle="tooltip" data-placement="left" title='@sr["On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown."]'>
                     <input asp-for="ShowHeading" class="form-check-input" />
@@ -79,8 +80,8 @@
                     <label asp-for="ShowMenu" class="form-check-label">@sr["Show Child Menu"]</label>
                 </div>
             </div>
-            
-            
+
+
             @if (string.IsNullOrEmpty(Model.DisqusShortname))
             {
                 <input asp-for="ShowComments" type="hidden" />
@@ -123,26 +124,26 @@
             <button id="btnSavePublish" name="SaveMode" type="submit" value="PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
         </div>
         <div class="form-group ml-1 mt-1">
-            <button id="btnSavePublishLater" name="SaveMode" value="PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later"]'>@sr["Publish Later"]</button>
+            <button id="SaveMode" name="SaveMode" value="PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
         </div>
         <div class="form-group ml-1 mt-1">
             @{ await Html.RenderPartialAsync("EditWithTemplatePubDate", Model); }
         </div>
-        
+
         @if (!string.IsNullOrEmpty(Model.Id))
         {
-        <div class="form-group ml-4 mt-1">
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
-                @sr["Delete"]
-            </button>
-        </div>
-            
+            <div class="form-group ml-4 mt-1">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                    @sr["Delete"]
+                </button>
+            </div>
+
         }
         @if (showDev)
         {
-        <div class="form-group ml-1 mt-1">
-            <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
-        </div>
+            <div class="form-group ml-1 mt-1">
+                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
+            </div>
         }
     </div>
 </form>
@@ -169,16 +170,7 @@
         </div>
     </form>
 }
-    <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
-            </div>
-        </div>
-    </div>
+    
 @section Scripts {
     @{ await Html.RenderPartialAsync("EditWithTemplateScriptsPartial", Model); }
 }
