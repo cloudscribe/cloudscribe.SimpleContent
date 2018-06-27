@@ -164,32 +164,47 @@ namespace cloudscribe.SimpleContent.Web.Templating
                         page.Slug = request.ViewModel.Slug;
                     }
                     page.ViewRoles = request.ViewModel.ViewRoles;
-                    
-                    
-                    if (request.ShouldPublish)
-                    {
-                        page.SerializedModel = modelString;
-                        page.Content = renderedModel;
-                        page.Author = request.ViewModel.Author;
-                        page.PubDate = DateTime.UtcNow;
-                        page.IsPublished = true;
 
-                        page.DraftAuthor = null;
-                        page.DraftContent = null;
-                        page.DraftPubDate = null;
-                    }
-                    else
+                    var shouldPublish = false;
+                    switch(request.ViewModel.SaveMode)
                     {
-                        page.DraftSerializedModel = modelString;
-                        page.DraftContent = renderedModel;
-                        page.DraftAuthor = request.ViewModel.Author;
-                        if (request.ViewModel.PubDate.HasValue)
-                        {
-                            page.DraftPubDate = request.ViewModel.PubDate.Value;
-                        }
-                    }
+                        case "SaveDraft":
 
-                    await _pageService.Update(page, request.ShouldPublish);
+                            page.DraftSerializedModel = modelString;
+                            page.DraftContent = renderedModel;
+                            page.DraftAuthor = request.ViewModel.Author;
+                            page.DraftPubDate = null;
+                            
+                            break;
+
+                        case "PublishLater":
+                            page.DraftSerializedModel = modelString;
+                            page.DraftContent = renderedModel;
+                            page.DraftAuthor = request.ViewModel.Author;
+                            if (request.ViewModel.NewPubDate.HasValue)
+                            {
+                                page.DraftPubDate = request.ViewModel.NewPubDate.Value;
+                            }
+
+                            break;
+
+                        case "PublishNow":
+
+                            page.SerializedModel = modelString;
+                            page.Content = renderedModel;
+                            page.Author = request.ViewModel.Author;
+                            page.PubDate = DateTime.UtcNow;
+                            page.IsPublished = true;
+                            shouldPublish = true;
+
+                            page.DraftAuthor = null;
+                            page.DraftContent = null;
+                            page.DraftPubDate = null;
+
+                            break;
+                    }
+                    
+                    await _pageService.Update(page, shouldPublish);
                     _pageService.ClearNavigationCache();
                     
                 }

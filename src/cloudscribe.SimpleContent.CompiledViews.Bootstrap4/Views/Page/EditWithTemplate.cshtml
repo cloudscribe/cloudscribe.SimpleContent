@@ -22,7 +22,7 @@
 <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
 <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditWithTemplateRouteName" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="id" name="id" value="@Model.Id" />
-    <input type="hidden" asp-fore="@Model.IsPublished" />
+    <input type="hidden" asp-for="@Model.IsPublished" />
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
     <ul class="nav nav-tabs" role="tablist">
@@ -170,6 +170,24 @@
         </div>
     </form>
 }
+
+    <div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    @sr["To publish later you must enter a date."]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
     
 @section Scripts {
     @{ await Html.RenderPartialAsync("EditWithTemplateScriptsPartial", Model); }

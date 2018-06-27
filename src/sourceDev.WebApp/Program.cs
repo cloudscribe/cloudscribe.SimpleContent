@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using cloudscribe.Logging.Models;
 
 namespace sourceDev.WebApp
 {
@@ -16,10 +17,9 @@ namespace sourceDev.WebApp
         public static void Main(string[] args)
         {
             var host = BuildWebHost(args);
-            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
-            var env = host.Services.GetRequiredService<IHostingEnvironment>();
+            
             var config = host.Services.GetRequiredService<IConfiguration>();
-            ConfigureLogging(env, loggerFactory, host.Services);
+            
 
             using (var scope = host.Services.CreateScope())
             {
@@ -36,6 +36,10 @@ namespace sourceDev.WebApp
                     logger.LogError(ex, "An error occurred while migrating the database.");
                 }
             }
+
+            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+            var env = host.Services.GetRequiredService<IHostingEnvironment>();
+            ConfigureLogging(env, loggerFactory, host.Services, config);
 
             host.Run();
         }
@@ -70,41 +74,60 @@ namespace sourceDev.WebApp
         private static void ConfigureLogging(
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
-            IServiceProvider serviceProvider
+            IServiceProvider serviceProvider,
+            IConfiguration config
             )
         {
+            var dbLoggerConfig = config.GetSection("DbLoggerConfig").Get<DbLoggerConfig>();
             LogLevel minimumLevel;
+            string levelConfig;
             if (env.IsProduction())
             {
-                minimumLevel = LogLevel.Warning;
+                levelConfig = dbLoggerConfig.ProductionLogLevel;
             }
             else
             {
-                minimumLevel = LogLevel.Information;
+                levelConfig = dbLoggerConfig.DevLogLevel;
             }
-            
-            // a customizable filter for logging
-            // add exclusions to remove noise in the logs
-            var excludedLoggers = new List<string>
+            switch (levelConfig)
             {
-                "Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware",
-                "Microsoft.AspNetCore.Hosting.Internal.WebHost",
-            };
+                case "Debug":
+                    minimumLevel = LogLevel.Debug;
+                    break;
 
-            Func<string, LogLevel, bool> logFilter = (string loggerName, LogLevel logLevel) =>
+                case "Information":
+                    minimumLevel = LogLevel.Information;
+                    break;
+
+                case "Trace":
+                    minimumLevel = LogLevel.Trace;
+                    break;
+
+                default:
+                    minimumLevel = LogLevel.Warning;
+                    break;
+            }
+
+            // a customizable filter for logging
+            // add exclusions in appsettings.json to remove noise in the logs
+            bool logFilter(string loggerName, LogLevel logLevel)
             {
+                if (dbLoggerConfig.ExcludedNamesSpaces.Any(f => loggerName.StartsWith(f)))
+                {
+                    return false;
+                }
+
                 if (logLevel < minimumLevel)
                 {
                     return false;
                 }
 
-                if (excludedLoggers.Contains(loggerName))
+                if (dbLoggerConfig.BelowWarningExcludedNamesSpaces.Any(f => loggerName.StartsWith(f)) && logLevel < LogLevel.Warning)
                 {
                     return false;
                 }
-
                 return true;
-            };
+            }
 
             loggerFactory.AddDbLogger(serviceProvider, logFilter);
         }

@@ -2,7 +2,7 @@
 @inject IRoleSelectorProperties roleSelector
 @{ await Html.RenderPartialAsync("DatePickerBs4Scripts"); }
 @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
-<script src="~/js/cloudscribe-validation-requiredwhen.js" asp-append-version="true"></script>
+@*<script src="~/cr/js/cloudscribe-validation-requiredwhen.min.js"></script>*@
 <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
 <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
 @{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }
@@ -29,5 +29,15 @@
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
+    });
+    $(document).ready(function () {
+        $('#SaveMode').click(function () {
+            var newDateVal = $('#NewPubDate').val();
+            if (newDateVal.length == 0) {
+                $('#dateRequired').modal('show')
+                $('#SaveMode').html($('#SaveMode').data("enabled-text"));
+                return false;
+            }    
+        });
     });
 </script>

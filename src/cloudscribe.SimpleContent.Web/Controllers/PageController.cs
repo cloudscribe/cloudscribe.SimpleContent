@@ -6,6 +6,7 @@
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.Templating;
 using cloudscribe.SimpleContent.Web.ViewModels;
@@ -37,6 +38,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             ITimeZoneHelper timeZoneHelper,
             IAuthorNameResolver authorNameResolver,
             ContentTemplateService templateService,
+            IAutoPublishDraftPage autoPublishDraftPage,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
@@ -46,6 +48,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             PageService = blogService;
             TemplateService = templateService;
             ContentProcessor = contentProcessor;
+            AutoPublishDraftPage = autoPublishDraftPage;
             AuthorizationService = authorizationService;
             AuthorNameResolver = authorNameResolver;
             TimeZoneHelper = timeZoneHelper;
@@ -58,6 +61,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IProjectService ProjectService { get; private set; }
         protected IPageService PageService { get; private set; }
         protected ContentTemplateService TemplateService { get; private set; }
+        protected IAutoPublishDraftPage AutoPublishDraftPage { get; private set; }
         protected IContentProcessor ContentProcessor { get; private set; }
         protected IAuthorizationService AuthorizationService { get; private set; }
         protected IAuthorNameResolver AuthorNameResolver { get; private set; }
@@ -86,6 +90,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if(string.IsNullOrEmpty(slug) || slug == "none") { slug = projectSettings.DefaultPageSlug; }
 
             IPage page = await PageService.GetPageBySlug(slug);
+
+            await AutoPublishDraftPage.PublishIfNeeded(page);
 
             var model = new PageViewModel(ContentProcessor)
             {
@@ -394,6 +400,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 TemplateModel = TemplateService.DesrializeTemplateModel(page, template)
             };
 
+            if (!string.IsNullOrWhiteSpace(page.DraftAuthor))
+            {
+                model.Author = page.DraftAuthor;
+            }
+
             if (model.TemplateModel == null)
             {
                 Log.LogError($"redirecting to index model desrialization failed for page {page.Title}");
@@ -440,19 +451,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-
-            bool shouldPublish = true;
-
-            //temp
-            Log.LogWarning($"The save mode was {model.SaveMode}");
-
+            
             var request = new UpdateTemplatedPageRequest(
                 project.Id,
                 User.Identity.Name,
                 model,
                 template,
                 page,
-                shouldPublish,
                 Request.Form,
                 ModelState
                 );

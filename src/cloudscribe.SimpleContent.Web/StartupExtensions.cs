@@ -1,4 +1,5 @@
 ﻿using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Web.Config;
@@ -7,6 +8,7 @@ using cloudscribe.SimpleContent.Web.Mvc;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.SimpleContent.Web.Templating;
+using cloudscribe.SimpleContent.Web.Versioning;
 using cloudscribe.Web.Common.Razor;
 using cloudscribe.Web.Common.Setup;
 using cloudscribe.Web.Navigation;
@@ -523,6 +525,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IModelSerializer, JsonModelSerializer>();
             services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
             services.AddScoped<IValidateTemplateModel, DefaultTemplateModelValidator>();
+
+            services.TryAddScoped<IAutoPublishDraftPage, AutoPublishDraftPage>();
 
             return services;
         }
