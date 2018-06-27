@@ -9,7 +9,7 @@
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
     var legend = sr["Template Fields"].ToString();
     var legendFormat = sr["Template Fields - {0}"].ToString();
-    if(Model.Template != null)
+    if (Model.Template != null)
     {
         legend = string.Format(legendFormat, Model.Template.Title);
 
@@ -118,13 +118,13 @@
     </div>
     <div class="form-inline">
         <div class="form-group mt-1">
-            <button id="btnSaveDraft" name="SaveMode" value="SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+            <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
         </div>
         <div class="form-group ml-1 mt-1">
-            <button id="btnSavePublish" name="SaveMode" type="submit" value="PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+            <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
         </div>
         <div class="form-group ml-1 mt-1">
-            <button id="SaveMode" name="SaveMode" value="PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
+            <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
         </div>
         <div class="form-group ml-1 mt-1">
             @{ await Html.RenderPartialAsync("EditWithTemplatePubDate", Model); }
@@ -147,6 +147,7 @@
         }
     </div>
 </form>
+@{ await Html.RenderPartialAsync("DraftPubDatePartial", Model); }
 @if (!string.IsNullOrEmpty(Model.Id))
 {
     <form id="deleteform" class="form-inline" asp-controller="Page" asp-action="Delete" method="post">
@@ -171,24 +172,24 @@
     </form>
 }
 
-    <div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    @sr["To publish later you must enter a date."]
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
-                    
-                </div>
+<div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                @sr["To publish later you must enter a date."]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
+
             </div>
         </div>
     </div>
-    
+</div>
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("EditWithTemplateScriptsPartial", Model); }
 }

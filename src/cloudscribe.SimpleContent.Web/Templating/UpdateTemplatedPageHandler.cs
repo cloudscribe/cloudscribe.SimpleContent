@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2018-06-22
+// Last Modified:           2018-06-27
 // 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.Web.Common.Razor;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -165,10 +166,40 @@ namespace cloudscribe.SimpleContent.Web.Templating
                     }
                     page.ViewRoles = request.ViewModel.ViewRoles;
 
+                    if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
+                    {
+                        var parentPage = await _pageService.GetPageBySlug(request.ViewModel.ParentSlug);
+                        if (parentPage != null)
+                        {
+                            if (parentPage.Id != page.ParentId)
+                            {
+                                page.ParentId = parentPage.Id;
+                                page.ParentSlug = parentPage.Slug;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // empty means root level
+                        page.ParentSlug = string.Empty;
+                        page.ParentId = "0";
+                    }
+
                     var shouldPublish = false;
                     switch(request.ViewModel.SaveMode)
                     {
-                        case "SaveDraft":
+                        case SaveMode.UnPublish:
+
+                            page.DraftSerializedModel = modelString;
+                            page.DraftContent = renderedModel;
+                            page.DraftAuthor = request.ViewModel.Author;
+                            page.DraftPubDate = null;
+                            page.IsPublished = false;
+                            //page.PubDate = null;
+
+                            break;
+
+                        case SaveMode.SaveDraft:
 
                             page.DraftSerializedModel = modelString;
                             page.DraftContent = renderedModel;
@@ -177,7 +208,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
                             
                             break;
 
-                        case "PublishLater":
+                        case SaveMode.PublishLater:
                             page.DraftSerializedModel = modelString;
                             page.DraftContent = renderedModel;
                             page.DraftAuthor = request.ViewModel.Author;
@@ -188,7 +219,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
 
                             break;
 
-                        case "PublishNow":
+                        case SaveMode.PublishNow:
 
                             page.SerializedModel = modelString;
                             page.Content = renderedModel;

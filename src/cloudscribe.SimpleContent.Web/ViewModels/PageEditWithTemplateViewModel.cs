@@ -41,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         [RequiredWhen("SaveMode", "PublishLater", ErrorMessage = "A Date is required to publish later.")]
         public DateTime? NewPubDate { get; set; }
 
+        public DateTime? DraftPubDate { get; set; }
 
         public bool IsPublished { get; set; } = true;
 

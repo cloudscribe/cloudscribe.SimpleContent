@@ -49,5 +49,9 @@
         public const string BlogFeatureName = "Blog";
         public const string PageFeatureName = "Page";
 
+
     }
+
+    
+
 }

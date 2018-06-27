@@ -1,0 +1,198 @@
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Author:                  Joe Audette
+// Created:                 2018-06-27
+// Last Modified:           2018-06-27
+// 
+
+using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
+using cloudscribe.Web.Common.Razor;
+using MediatR;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace cloudscribe.SimpleContent.Web.Templating
+{
+    public class UpdatePageHandler : IRequestHandler<UpdatePageRequest, CommandResult<IPage>>
+    {
+        public UpdatePageHandler(
+            IPageService pageService,
+            IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
+            ILogger<UpdateTemplatedPageHandler> logger
+            )
+        {
+            _pageService = pageService;
+            _localizer = localizer;
+            _log = logger;
+        }
+
+        private readonly IPageService _pageService;
+        private readonly IStringLocalizer _localizer;
+        private readonly ILogger _log;
+
+        public async Task<CommandResult<IPage>> Handle(UpdatePageRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var errors = new List<string>();
+            
+            try
+            {
+                bool isNew = false;
+                var page = request.Page;
+                if(page == null)
+                {
+                    isNew = true;
+                    page = new Page()
+                    {
+                        ProjectId = request.ProjectId,
+                        ParentId = "0",
+                        CreatedByUser = request.ModifiedByUserName,
+                        Slug = ContentUtils.CreateSlug(request.ViewModel.Title),
+                        ContentType = request.ViewModel.ContentType
+                    };
+                }
+
+                
+                if (!string.IsNullOrEmpty(request.ViewModel.Slug))
+                {
+                    // remove any bad characters
+                    request.ViewModel.Slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
+                    if (request.ViewModel.Slug != page.Slug)
+                    {
+                        var slugIsAvailable = await _pageService.SlugIsAvailable(request.ViewModel.Slug);
+                        if (!slugIsAvailable)
+                        {
+                            errors.Add(_localizer["The page slug was invalid because the requested slug is already in use."]);
+                            request.ModelState.AddModelError("Slug", _localizer["The page slug was not changed because the requested slug is already in use."]);
+                        }
+                    }
+                }
+
+                if (request.ModelState.IsValid)
+                {
+                    page.Title = request.ViewModel.Title;
+                    page.CorrelationKey = request.ViewModel.CorrelationKey;
+                    page.LastModified = DateTime.UtcNow;
+                    page.LastModifiedByUser = request.ModifiedByUserName;
+                    page.MenuFilters = request.ViewModel.MenuFilters;
+                    page.MetaDescription = request.ViewModel.MetaDescription;
+                    page.PageOrder = request.ViewModel.PageOrder;
+
+                    page.ShowHeading = request.ViewModel.ShowHeading;
+                    page.ShowMenu = request.ViewModel.ShowMenu;
+                    page.MenuOnly = request.ViewModel.MenuOnly;
+                    page.DisableEditor = request.ViewModel.DisableEditor;
+                    page.ShowComments = request.ViewModel.ShowComments;
+                    page.MenuFilters = request.ViewModel.MenuFilters;
+                    page.ExternalUrl = request.ViewModel.ExternalUrl;
+                    page.ViewRoles = request.ViewModel.ViewRoles;
+
+
+                    if (!string.IsNullOrEmpty(request.ViewModel.Slug))
+                    {
+                        page.Slug = request.ViewModel.Slug;
+                    }
+                    
+
+                    if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
+                    {
+                        var parentPage = await _pageService.GetPageBySlug(request.ViewModel.ParentSlug);
+                        if (parentPage != null)
+                        {
+                            if (parentPage.Id != page.ParentId)
+                            {
+                                page.ParentId = parentPage.Id;
+                                page.ParentSlug = parentPage.Slug;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // empty means root level
+                        page.ParentSlug = string.Empty;
+                        page.ParentId = "0";
+                    }
+
+
+                    var shouldPublish = false;
+                    switch (request.ViewModel.SaveMode)
+                    {
+                        case SaveMode.UnPublish:
+                            
+                            page.DraftContent = request.ViewModel.Content;
+                            page.DraftAuthor = request.ViewModel.Author;
+                            page.DraftPubDate = null;
+                            page.IsPublished = false;
+                            //page.PubDate = null;
+
+                            break;
+
+                        case SaveMode.SaveDraft:
+                            
+                            page.DraftContent = request.ViewModel.Content;
+                            page.DraftAuthor = request.ViewModel.Author;
+                            page.DraftPubDate = null;
+
+                            break;
+
+                        case SaveMode.PublishLater:
+
+                            page.DraftContent = request.ViewModel.Content;
+                            page.DraftAuthor = request.ViewModel.Author;
+                            if (request.ViewModel.NewPubDate.HasValue)
+                            {
+                                page.DraftPubDate = request.ViewModel.NewPubDate.Value;
+                            }
+
+                            break;
+
+                        case SaveMode.PublishNow:
+
+                            page.Content = request.ViewModel.Content;
+                            page.Author = request.ViewModel.Author;
+                            page.PubDate = DateTime.UtcNow;
+                            page.IsPublished = true;
+                            shouldPublish = true;
+
+                            page.DraftAuthor = null;
+                            page.DraftContent = null;
+                            page.DraftPubDate = null;
+
+                            break;
+                    }
+
+                    if(isNew)
+                    {
+                        await _pageService.Create(page, shouldPublish);
+                    }
+                    else
+                    {
+                        await _pageService.Update(page, shouldPublish);
+                    }
+
+                    
+                    _pageService.ClearNavigationCache();
+
+                }
+
+                return new CommandResult<IPage>(page, request.ModelState.IsValid, errors);
+
+            }
+            catch (Exception ex)
+            {
+                _log.LogError($"{ex.Message}:{ex.StackTrace}");
+
+                errors.Add(_localizer["Updating a page from a content template failed. An error has been logged."]);
+
+                return new CommandResult<IPage>(null, false, errors);
+            }
+
+        }
+
+    }
+}

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using cloudscribe.Web.Common.DataAnnotations;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -35,9 +37,14 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string ViewRoles { get; set; } = string.Empty;
 
-        public string PubDate { get; set; } = string.Empty;
+        public DateTime? PubDate { get; set; }
 
-        
+        [RequiredWhen("SaveMode", "PublishLater", ErrorMessage = "A Date is required to publish later.")]
+        public DateTime? NewPubDate { get; set; }
+
+        public DateTime? DraftPubDate { get; set; }
+
+
         public bool IsPublished { get; set; } = true;
 
         public bool ShowHeading { get; set; } = true;
@@ -58,6 +65,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool DisableEditor { get; set; }
 
         public string ContentType { get; set; } = "html";
+
+        public string SaveMode { get; set; } //SaveDraft, PublishNow, PublishLater buttomn values
 
 
     }

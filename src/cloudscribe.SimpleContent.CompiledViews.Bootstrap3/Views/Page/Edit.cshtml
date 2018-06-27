@@ -35,6 +35,7 @@
 <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <input type="hidden" asp-for="@Model.IsPublished" />
     <input type="hidden" asp-for="ContentType" />
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
@@ -74,17 +75,6 @@
                     <span asp-validation-for="Author" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["A page is visible to the public if the Is Published checkbox is checked and if the Publication Date is before the current moment, and if not protected by roles."]'>
-                        <label>
-                            <input asp-for="IsPublished" /> @sr["Is Published"]
-                        </label>
-                    </div>
-                </div>
-            </div>
-            @{ await Html.RenderPartialAsync("EditPubDate", Model); }
-            
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
             <div class="col-md-12">
@@ -198,20 +188,37 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <button id="btnSave" name="submit" type="submit" class="btn btn-default" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
-            @if (!string.IsNullOrEmpty(Model.Id))
-            {
+    <div class="form-inline">
+
+        <div class="form-group mt-1">
+            <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            @{ await Html.RenderPartialAsync("EditPubDate", Model); }
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Id))
+        {
+            <div class="form-group ml-4 mt-1">
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
                     @sr["Delete"]
                 </button>
-            }
-            @if (showDev)
-            {
-                <a class="btn btn-default" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
-            }
-        </div>
+            </div>
+
+        }
+        @if (showDev)
+        {
+            <div class="form-group ml-1 mt-1">
+                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
+            </div>
+        }
+
+
     </div>
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))
@@ -237,6 +244,25 @@
         </div>
     </form>
 }
+
+    <div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    @sr["To publish later you must enter a date."]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
@@ -261,6 +287,16 @@
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
+        });
+        $(document).ready(function () {
+            $('#SaveMode').click(function () {
+                var newDateVal = $('#NewPubDate').val();
+                if (newDateVal.length == 0) {
+                    $('#dateRequired').modal('show')
+                    $('#SaveMode').html($('#SaveMode').data("enabled-text"));
+                    return false;
+                }
+            });
         });
     </script>
 }
