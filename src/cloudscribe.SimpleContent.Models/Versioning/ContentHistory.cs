@@ -48,6 +48,10 @@ namespace cloudscribe.SimpleContent.Models
         public string DraftSerializedModel { get; set; }
         public string Serializer { get; set; }
 
+        //blog only
+
+        public string TeaserOverride { get; set; }
+
 
 
     }

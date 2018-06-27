@@ -58,6 +58,13 @@ namespace cloudscribe.SimpleContent.Models
             target.CreatedByUser = input.CreatedByUser;
             target.CreatedUtc = input.CreatedUtc;
             target.LastModifiedByUser = input.LastModifiedByUser;
+            target.DraftAuthor = input.DraftAuthor;
+            target.DraftContent = input.DraftContent;
+            target.DraftPubDate = input.DraftPubDate;
+            target.DraftSerializedModel = input.DraftSerializedModel;
+            target.TemplateKey = input.TemplateKey;
+            target.SerializedModel = input.SerializedModel;
+            target.Serializer = input.Serializer;
         }
 
         public static void CopyTo(this IPage input, IPage target)

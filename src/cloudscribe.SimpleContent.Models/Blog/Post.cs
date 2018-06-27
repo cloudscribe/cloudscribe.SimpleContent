@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2017-12-22
+// Last Modified:			2018-06-27
 // 
 using System;
 using System.Collections.Generic;
@@ -74,6 +74,15 @@ namespace cloudscribe.SimpleContent.Models
 
         public string CreatedByUser { get; set; }
         public string LastModifiedByUser { get; set; }
+
+        public string DraftContent { get; set; }
+        public string DraftAuthor { get; set; }
+        public DateTime? DraftPubDate { get; set; }
+
+        public string TemplateKey { get; set; }
+        public string SerializedModel { get; set; }
+        public string DraftSerializedModel { get; set; }
+        public string Serializer { get; set; }
 
         public static Post FromIPost(IPost post)
         {

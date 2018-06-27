@@ -76,6 +76,26 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 21)]
         public string LastModifiedByUser { get; set; }
 
+        [YamlMember(Order = 22)]
+        public string DraftContent { get; set; }
+
+        [YamlMember(Order = 23)]
+        public string DraftAuthor { get; set; }
+
+        [YamlMember(Order = 24)]
+        public DateTime? DraftPubDate { get; set; }
+
+        [YamlMember(Order = 25)]
+        public string TemplateKey { get; set; }
+
+        [YamlMember(Order = 26)]
+        public string SerializedModel { get; set; }
+
+        [YamlMember(Order = 27)]
+        public string DraftSerializedModel { get; set; }
+
+        [YamlMember(Order = 28)]
+        public string Serializer { get; set; }
 
 
 
@@ -84,6 +104,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
         [YamlIgnore]
         public string Content { get; set; }
+
 
         // not currently used but could be later
         public string ImageUrl { get; set; }
