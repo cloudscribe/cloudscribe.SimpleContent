@@ -31,7 +31,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string Content { get; set; }
 
-        public DateTime PubDate { get; set; } = DateTime.UtcNow;
+        public DateTime? PubDate { get; set; }
 
         public DateTime LastModified { get; set; } = DateTime.UtcNow;
 
@@ -46,8 +46,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string SerializedModel { get; set; }
         public string DraftSerializedModel { get; set; }
-        public string Serializer { get; set; }
-
+        
         //blog only
 
         public string TeaserOverride { get; set; }

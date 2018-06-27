@@ -16,8 +16,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
         public static IServiceCollection AddCloudscribeSimpleContentEFStorageCommon(this IServiceCollection services)
         {
             
-            services.TryAddScoped<ISimpleContentTableNames, SimpleContentTableNames>();
-
             services.TryAddScoped<IPageQueries, PageQueries>();
             services.TryAddScoped<IPageCommands, PageCommands>();
 
