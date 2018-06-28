@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2018-02-06
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -151,7 +151,9 @@ namespace cloudscribe.SimpleContent.Syndication
             var items = new List<RssItem>();
             foreach(var post in posts)
             {
-                if(post.PubDate > mostRecentPubDate) { mostRecentPubDate = post.PubDate; }
+                if(!post.PubDate.HasValue) { continue; }
+
+                if(post.PubDate.Value > mostRecentPubDate) { mostRecentPubDate = post.PubDate.Value; }
                 var rssItem = new RssItem();
                 rssItem.Author = post.Author;
 
@@ -199,7 +201,7 @@ namespace cloudscribe.SimpleContent.Syndication
 
                 rssItem.Guid = new RssGuid(postUrl,true);
                 rssItem.Link = new Uri(postUrl);
-                rssItem.PublicationDate = post.PubDate;
+                rssItem.PublicationDate = post.PubDate.Value;
                 //rssItem.Source
                 rssItem.Title = post.Title;
                

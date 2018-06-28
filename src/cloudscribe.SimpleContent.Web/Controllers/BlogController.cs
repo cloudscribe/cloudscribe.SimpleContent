@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-06-20
+// Last Modified:           2018-06-28
 // 
 
 
@@ -265,12 +265,26 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     if(year == 0)
                     {
-                        //TODO: option whether to use permanent redirect
+                        DateTime? pubDate = null;
+                        if(result.Post.PubDate.HasValue)
+                        {
+                            pubDate = result.Post.PubDate;
+                        }
+                        else
+                        {
+                            pubDate = result.Post.DraftPubDate;
+                        }
+
+                        if(!pubDate.HasValue)
+                        {
+                            pubDate = DateTime.UtcNow;
+                        }
+                        
                         return RedirectToRoute(BlogRoutes.PostWithDateRouteName, 
                             new {
-                                year = result.Post.PubDate.Year,
-                                month = result.Post.PubDate.Month.ToString("00"),
-                                day = result.Post.PubDate.Day.ToString("00"),
+                                year = pubDate.Value.Year,
+                                month = pubDate.Value.Month.ToString("00"),
+                                day = pubDate.Value.Day.ToString("00"),
                                 slug = result.Post.Slug
                             });
                     }
@@ -359,7 +373,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ViewData["Title"] = StringLocalizer["New Post"];
                 model.Author = await AuthorNameResolver.GetAuthorName(User);
                 model.IsPublished = true;
-                model.PubDate = TimeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
+                //model.PubDate = TimeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
                 model.CurrentPostUrl = Url.RouteUrl(BlogRoutes.BlogIndexRouteName);
                 model.ContentType = projectSettings.DefaultContentType;
                 if(ContentOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
@@ -380,7 +394,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.CorrelationKey = postResult.Post.CorrelationKey;
                 model.IsPublished = postResult.Post.IsPublished;
                 model.MetaDescription = postResult.Post.MetaDescription;
-                model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate, projectSettings.TimeZoneId).ToString();
+                if(postResult.Post.PubDate.HasValue)
+                {
+                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, projectSettings.TimeZoneId);
+                }
+                
                 model.Slug = postResult.Post.Slug;
                 model.Title = postResult.Post.Title;
                 model.CurrentPostUrl = await BlogService.ResolvePostUrl(postResult.Post).ConfigureAwait(false);
@@ -550,9 +568,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             post.TeaserOverride = model.TeaserOverride;
             post.SuppressTeaser = model.SuppressTeaser;
 
-            if (!string.IsNullOrEmpty(model.PubDate))
+            if (model.PubDate.HasValue)
             {
-                var localTime = DateTime.Parse(model.PubDate);
+                var localTime = model.PubDate.Value;
                 post.PubDate = TimeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
 
             }
@@ -568,12 +586,27 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (project.IncludePubDateInPostUrls)
             {
+                DateTime? pubDate = null;
+                if (post.PubDate.HasValue)
+                {
+                    pubDate = post.PubDate;
+                }
+                else
+                {
+                    pubDate = post.DraftPubDate;
+                }
+
+                if (!pubDate.HasValue)
+                {
+                    pubDate = DateTime.UtcNow;
+                }
+
                 return RedirectToRoute(BlogRoutes.PostWithDateRouteName,
                     new
                     {
-                        year = post.PubDate.Year,
-                        month = post.PubDate.Month.ToString("00"),
-                        day = post.PubDate.Day.ToString("00"),
+                        year = pubDate.Value.Year,
+                        month = pubDate.Value.Month.ToString("00"),
+                        day = pubDate.Value.Day.ToString("00"),
                         slug = post.Slug
                     }); 
             }

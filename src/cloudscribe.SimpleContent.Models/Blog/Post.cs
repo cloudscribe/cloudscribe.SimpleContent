@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2018-06-27
+// Last Modified:			2018-06-28
 // 
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string Content { get; set; }
 
-        public DateTime PubDate { get; set; } = DateTime.UtcNow;
+        public DateTime? PubDate { get; set; } = DateTime.UtcNow;
 
         public DateTime LastModified { get; set; } = DateTime.UtcNow;
 

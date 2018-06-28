@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2018-06-20
+// Last Modified:			2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -49,7 +49,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public string Content { get; set; } = string.Empty;
 
-        public DateTime PubDate { get; set; } = DateTime.UtcNow;
+        public DateTime? PubDate { get; set; } = DateTime.UtcNow;
 
         public DateTime LastModified { get; set; } = DateTime.UtcNow;
 

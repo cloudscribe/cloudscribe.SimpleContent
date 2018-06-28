@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-03-15
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -363,12 +363,17 @@ namespace cloudscribe.SimpleContent.Services
             string postUrl;
             if (_settings.IncludePubDateInPostUrls)
             {
+                DateTime? pubDate = post.PubDate;
+                if(!pubDate.HasValue)
+                {
+                    pubDate = DateTime.UtcNow;
+                }
                 postUrl = urlHelper.RouteUrl(_blogRoutes.PostWithDateRouteName,
                     new
                     {
-                        year = post.PubDate.Year,
-                        month = post.PubDate.Month.ToString("00"),
-                        day = post.PubDate.Day.ToString("00"),
+                        year = pubDate.Value.Year,
+                        month = pubDate.Value.Month.ToString("00"),
+                        day = pubDate.Value.Day.ToString("00"),
                         slug = post.Slug
                     });
             }

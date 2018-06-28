@@ -5,6 +5,8 @@
 // Last Modified:           2018-02-10
 // 
 
+using cloudscribe.Web.Common.DataAnnotations;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
@@ -35,7 +37,12 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string Categories { get; set; }
 
-        public string PubDate { get; set; } = string.Empty;
+        public DateTime? PubDate { get; set; }
+
+        [RequiredWhen("SaveMode", "PublishLater", ErrorMessage = "A Date is required to publish later.")]
+        public DateTime? NewPubDate { get; set; }
+
+        public DateTime? DraftPubDate { get; set; }
 
         public string CurrentPostUrl { get; set; }
 
@@ -53,6 +60,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool SuppressTeaser { get; set; }
 
         public bool TeasersEnabled { get; set; }
+
+        public string SaveMode { get; set; } //SaveDraft, PublishNow, PublishLater buttomn values
 
     }
 }

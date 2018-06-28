@@ -13,6 +13,7 @@
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <input type="hidden" asp-for="@Model.IsPublished" />
     <input type="hidden" asp-for="ContentType" />
     <div asp-validation-summary="All" class="text-danger"></div>
     @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
@@ -53,18 +54,11 @@
     @{ Html.RenderPartial("EditImageUrlPartial", Model); }
     <div class="form-group">
         <div class="form-check">
-            <input asp-for="IsPublished" class="form-check-input" />
-            <label asp-for="IsPublished" class="form-check-label">@sr["Is Published"]</label>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="form-check">
             <input asp-for="IsFeatured" class="form-check-input" />
             <label asp-for="IsFeatured" class="form-check-label">@sr["Is Featured"]</label>
         </div>
     </div>
-    @{ Html.RenderPartial("EditPubDate", Model); }
-    
+  
     @if (Model.TeasersEnabled)
     {
         if (Model.ContentType == "markdown")
@@ -81,14 +75,36 @@
         Html.RenderPartial("EditTeaserDisabledPartial");
     }
 
-    <div class="form-group">
-        <button id="btnSave" name="submit" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
+    <div class="form-inline">
+        <div class="form-group mt-1">
+            <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
+        </div>
+        <div class="form-group ml-1 mt-1">
+            @{ await Html.RenderPartialAsync("EditPubDate", Model); }
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Id))
+        {
+            <div class="form-group ml-4 mt-1">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                    @sr["Delete"]
+                </button>
+            </div>
+
+        }
+
+        @*<button id="btnSave" name="submit" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save"]'>@sr["Save"]</button>
         @if (!string.IsNullOrEmpty(Model.Id))
         {
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
                 @sr["Delete"]
             </button>
-        }
+        }*@
     </div>
 </form>
 @if (!string.IsNullOrEmpty(Model.Id))
@@ -115,6 +131,23 @@
 
     </form>
 }
+    <div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    @sr["To publish later you must enter a date."]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("EditScriptsPartial", Model); }
 }

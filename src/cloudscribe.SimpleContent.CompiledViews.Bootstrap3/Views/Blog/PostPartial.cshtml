@@ -42,12 +42,16 @@
 <article class="post" data-id="@Model.TmpPost.Id" itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
     <header class="jumbotron">
         <h1 itemprop="headline name">
+            @{
+                DateTime? pubDate = Model.TmpPost.PubDate;
+                if (!pubDate.HasValue) { pubDate = DateTime.UtcNow; }
+            }
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
                 <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
-                   asp-route-year="@Model.TmpPost.PubDate.Year"
-                   asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
-                   asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
+                   asp-route-year="@pubDate.Value.Year"
+                   asp-route-month="@pubDate.Value.Month.ToString("00")"
+                   asp-route-day="@pubDate.Value.Day.ToString("00")"
                    asp-route-slug="@Model.TmpPost.Slug"
                    itemprop="url">@Model.TmpPost.Title</a>
             }
@@ -57,13 +61,13 @@
             }
         </h1>
         <div class="bh">
-            <time class="@GetPubDateClass()" datetime='@Model.TmpPost.PubDate.ToString("s")' itemprop="datePublished">@Model.FormatDate(Model.TmpPost.PubDate)</time>
+            <time class="@GetPubDateClass()" datetime='@pubDate.Value.ToString("s")' itemprop="datePublished">@Model.FormatDate(pubDate.Value)</time>
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
                 <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
-                   asp-route-year="@Model.TmpPost.PubDate.Year"
-                   asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
-                   asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
+                   asp-route-year="@pubDate.Value.Year"
+                   asp-route-month="@pubDate.Value.Month.ToString("00")"
+                   asp-route-day="@pubDate.Value.Day.ToString("00")"
                    asp-route-slug="@Model.TmpPost.Slug"
                    asp-fragment="@GetCommentFragment()"
                    itemprop="url"><i class="@icons.Comments"></i>@Html.Raw(GetCommentString(Model.TmpPost))</a>
@@ -85,7 +89,7 @@
         </div>
     </header>
     <div itemprop="articleBody">
-        @{ 
+        @{
             var result = Model.FilterHtmlForList(Model.TmpPost);
         }
         @Html.Raw(result.FilteredContent)
@@ -94,9 +98,9 @@
             @if (Model.ProjectSettings.IncludePubDateInPostUrls)
             {
                 <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
-                   asp-route-year="@Model.TmpPost.PubDate.Year"
-                   asp-route-month="@Model.TmpPost.PubDate.Month.ToString("00")"
-                   asp-route-day="@Model.TmpPost.PubDate.Day.ToString("00")"
+                   asp-route-year="@pubDate.Value.Year"
+                   asp-route-month="@pubDate.Value.Month.ToString("00")"
+                   asp-route-day="@pubDate.Value.Day.ToString("00")"
                    asp-route-slug="@Model.TmpPost.Slug"
                    itemprop="url">@sr["[...Read More]"]</a>
             }
@@ -135,5 +139,9 @@
             </div>
         </div>
     }
-    <schema-org-meta itemprop="dateModified" content="@Model.TmpPost.PubDate.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    @if (Model.TmpPost.PubDate.HasValue)
+    {
+        <schema-org-meta itemprop="dateModified" content="@Model.TmpPost.PubDate.Value.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    }
+
 </article>

@@ -64,8 +64,11 @@
             </div>
         </div>
     }
-    <schema-org-meta itemprop="datePublished" content="@Model.CurrentPage.PubDate.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
-    <schema-org-meta itemprop="dateModified" content="@Model.CurrentPage.LastModified.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    @if (Model.CurrentPage.PubDate.HasValue)
+    {
+        <schema-org-meta itemprop="datePublished" content="@Model.CurrentPage.PubDate.Value.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+        <schema-org-meta itemprop="dateModified" content="@Model.CurrentPage.LastModified.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    }
     @if (Model.CurrentPage != null && Model.CurrentPage.ShowMenu)
     {
         @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })

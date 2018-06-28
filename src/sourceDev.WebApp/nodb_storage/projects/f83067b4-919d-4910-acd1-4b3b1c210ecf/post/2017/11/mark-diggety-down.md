@@ -7,8 +7,8 @@ title: Mark Diggety Down!
 author: Admin
 metaDescription: Developers love markdown
 isPublished: true
-pubDate: 2017-11-21T11:53:00.0000000Z
-lastModified: 2018-02-10T15:41:10.9673086Z
+pubDate: 2017-11-21T06:53:00.0000000-05:00
+lastModified: 2018-06-28T16:10:21.9604059Z
 isFeatured: true
 categories:
 - markdown
@@ -16,6 +16,8 @@ categories:
 - t-shirts
 - foo
 comments: []
+createdUtc: 2018-06-28T16:10:21.9591410Z
+lastModifiedByUser: admin
 ---
 ## Markdown Rocks!
 
@@ -23,6 +25,8 @@ developers love it!
 
 [![](/media/images/img_2008-ws.jpg)](/media/images/img_2008.jpg)
 
-an
+and
 
 ![dudes](/media/images/dudes1-550x412.jpeg)
+
+Say what?

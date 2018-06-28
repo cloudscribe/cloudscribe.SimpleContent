@@ -13,7 +13,7 @@
     {
         if (Model.ProjectSettings.IncludePubDateInPostUrls)
         {
-            return Url.RouteUrl(blogRoutes.PostWithDateRouteName, new { year = post.PubDate.Year, month = post.PubDate.Month.ToString("00"), day = post.PubDate.Day.ToString("00"), slug = post.Slug });
+            return Url.RouteUrl(blogRoutes.PostWithDateRouteName, new { year = post.PubDate.Value.Year, month = post.PubDate.Value.Month.ToString("00"), day = post.PubDate.Value.Day.ToString("00"), slug = post.Slug });
 
         }
 
@@ -27,6 +27,7 @@
     <h3 class="recent-posts">@sr["Recent Posts"]</h3>
     @foreach (var post in Model.Posts)
     {
+        if (!post.PubDate.HasValue) { continue; }
         var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
         <div class="media mb-1">
             @if (!string.IsNullOrWhiteSpace(imgUrl))
@@ -37,7 +38,7 @@
                 <h4 class="media-heading">
                     <a href="@GetUrl(post)">@post.Title</a>
                 </h4>
-                <small>@Model.FormatDate(post.PubDate)</small>
+                <small>@Model.FormatDate(post.PubDate.Value)</small>
             </div>
         </div>
     }

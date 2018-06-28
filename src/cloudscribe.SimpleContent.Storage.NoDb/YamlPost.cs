@@ -47,7 +47,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public bool IsPublished { get; set; }
 
         [YamlMember(Order = 12)]
-        public DateTime PubDate { get; set; } = DateTime.UtcNow;
+        public DateTime? PubDate { get; set; } = DateTime.UtcNow;
 
         [YamlMember(Order = 13)]
         public DateTime LastModified { get; set; } = DateTime.UtcNow;

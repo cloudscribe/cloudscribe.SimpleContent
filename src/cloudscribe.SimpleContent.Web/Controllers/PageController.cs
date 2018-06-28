@@ -389,7 +389,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 PageOrder = page.PageOrder,
                 ParentId = page.ParentId,
                 ParentSlug = page.ParentSlug,
-                PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate, projectSettings.TimeZoneId),
                 ShowHeading = page.ShowHeading,
                 Slug = page.Slug,
                 Title = page.Title,
@@ -399,6 +398,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Template = template,
                 TemplateModel = TemplateService.DesrializeTemplateModel(page, template)
             };
+
+            if(page.PubDate.HasValue)
+            {
+                model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, projectSettings.TimeZoneId);
+            }
 
             if (page.DraftPubDate.HasValue)
             {
@@ -592,7 +596,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ParentId = page.ParentId;
                 model.ParentSlug = page.ParentSlug;
 
-                model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate, projectSettings.TimeZoneId);
+                if(page.PubDate.HasValue)
+                {
+                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, projectSettings.TimeZoneId);
+                }
+                
                 if(page.DraftPubDate.HasValue)
                 {
                     model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, projectSettings.TimeZoneId);

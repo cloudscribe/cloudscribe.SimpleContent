@@ -60,7 +60,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             p.description = post.Content;
             p.excerpt = post.MetaDescription;
             p.link = postUrl;
-            p.postDate = post.PubDate;
+            if(post.PubDate.HasValue)
+            {
+                p.postDate = post.PubDate.Value;
+            }
+            
             p.postId = post.Id;
             p.publish = post.IsPublished;
             p.slug = post.Slug;
@@ -116,8 +120,12 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             p.description = page.Content;
             p.link = postUrl;
             
-            p.pageUtcDate = page.PubDate;
-            p.pageDate = page.PubDate;
+            if(page.PubDate.HasValue)
+            {
+                p.pageUtcDate = page.PubDate.Value;
+                p.pageDate = page.PubDate.Value;
+            }
+            
             p.pageId = page.Id;
             p.pageOrder = page.PageOrder.ToString(CultureInfo.InvariantCulture);
             p.pageParentId = page.ParentId;

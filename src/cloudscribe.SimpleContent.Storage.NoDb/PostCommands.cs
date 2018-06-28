@@ -2,11 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-11-21
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.Logging;
 using NoDb;
 using System;
 using System.Collections.Generic;
@@ -45,12 +44,15 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             DateTime newPubDate,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-
-            if ((post.PubDate.Month == newPubDate.Month) && (post.PubDate.Year == newPubDate.Year))
+            if(post.PubDate.HasValue)
             {
-                // we store posts in /year/month folders, if that didn't change no need to do anything
-                return;
+                if ((post.PubDate.Value.Month == newPubDate.Month) && (post.PubDate.Value.Year == newPubDate.Year))
+                {
+                    // we store posts in /year/month folders, if that didn't change no need to do anything
+                    return;
+                }
             }
+            
 
             // because with the filesystem storage we are storing posts in a year/month folder
             // if the year or month changes we need to delete the old file and save the updated post to the

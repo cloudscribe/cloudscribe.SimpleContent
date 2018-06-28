@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-10-05
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -62,12 +62,14 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             list = list.Where(p =>
                       (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
-                      ).ToList<Post>();
+                      )
+                      .OrderByDescending(p => p.PubDate)
+                      .ToList<Post>();
 
-            if (list.Count > 0)
-            {
-                list.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
-            }
+            //if (list.Count > 0)
+            //{
+            //    list.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
+            //}
 
             var result = new List<IPost>();
             result.AddRange(list);
@@ -124,9 +126,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var data = new List<IPost>();
             data.AddRange(posts);
 
-            var result = new PagedPostResult();
-            result.Data = data;
-            result.TotalItems = totalPosts;
+            var result = new PagedPostResult
+            {
+                Data = data,
+                TotalItems = totalPosts
+            };
 
             return result;
         }
@@ -217,10 +221,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             if (day > 0 && month > 0)
             {
-                posts = posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
-                && x.PubDate.Day == day
+                posts = posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
+                && x.PubDate.Value.Day == day
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
@@ -229,9 +234,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
             else if (month > 0)
             {
-                posts = posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
+                posts = posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
@@ -241,8 +247,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
             else
             {
-                posts = posts.Where(
-                x => x.PubDate.Year == year
+                posts = posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
                 )
                 .OrderByDescending(p => p.PubDate)
                 .ToList<Post>();
@@ -282,10 +289,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             if (day > 0 && month > 0)
             {
-                return posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
-                && x.PubDate.Day == day
+                return posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
+                && x.PubDate.Value.Day == day
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
@@ -293,9 +301,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
             else if (month > 0)
             {
-                return posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
+                return posts.Where(x =>
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
@@ -303,8 +312,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             }
 
-            return posts.Where(
-                x => x.PubDate.Year == year
+            return posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
                 )
                 .Count();
 
@@ -445,7 +455,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     cancellationToken).ConfigureAwait(false);
 
                 var grouped = from p in visiblePosts
-                              group p by new { month = p.PubDate.Month, year = p.PubDate.Year } into d
+                              group p by new { month = p.PubDate.Value.Month, year = p.PubDate.Value.Year } into d
                               select new
                               {
                                   key = d.Key.year.ToString() + "/" + d.Key.month.ToString("00")
