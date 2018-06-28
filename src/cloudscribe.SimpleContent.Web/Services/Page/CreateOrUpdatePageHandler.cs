@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-06-27
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
+using cloudscribe.SimpleContent.Services;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -14,22 +15,25 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Templating
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class CreateOrUpdatePageHandler : IRequestHandler<CreateOrUpdatePageRequest, CommandResult<IPage>>
     {
         public CreateOrUpdatePageHandler(
             IPageService pageService,
+            PageEvents pageEvents,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
-            ILogger<UpdateTemplatedPageHandler> logger
+            ILogger<CreateOrUpdatePageHandler> logger
             )
         {
             _pageService = pageService;
+            _pageEvents = pageEvents;
             _localizer = localizer;
             _log = logger;
         }
 
         private readonly IPageService _pageService;
+        private readonly PageEvents _pageEvents;
         private readonly IStringLocalizer _localizer;
         private readonly ILogger _log;
 
@@ -117,6 +121,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
 
 
                     var shouldPublish = false;
+                    var shouldFireUnPublishEvent = false;
                     switch (request.ViewModel.SaveMode)
                     {
                         case SaveMode.UnPublish:
@@ -125,7 +130,9 @@ namespace cloudscribe.SimpleContent.Web.Templating
                             page.DraftAuthor = request.ViewModel.Author;
                             page.DraftPubDate = null;
                             page.IsPublished = false;
-                            //page.PubDate = null;
+                            page.PubDate = null;
+
+                            shouldFireUnPublishEvent = true;
 
                             break;
 
@@ -133,7 +140,8 @@ namespace cloudscribe.SimpleContent.Web.Templating
                             
                             page.DraftContent = request.ViewModel.Content;
                             page.DraftAuthor = request.ViewModel.Author;
-                            page.DraftPubDate = null;
+                            // should we clear the draft pub date if save draft clicked?
+                            //page.DraftPubDate = null;
 
                             break;
 
@@ -172,7 +180,12 @@ namespace cloudscribe.SimpleContent.Web.Templating
                         await _pageService.Update(page, shouldPublish);
                     }
 
-                    
+                    if (shouldFireUnPublishEvent)
+                    {
+                        await _pageEvents.HandleUnPublished(page.ProjectId, page);
+                    }
+
+
                     _pageService.ClearNavigationCache();
 
                 }
@@ -184,7 +197,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
             {
                 _log.LogError($"{ex.Message}:{ex.StackTrace}");
 
-                errors.Add(_localizer["Updating a page from a content template failed. An error has been logged."]);
+                errors.Add(_localizer["Updating a page failed. An error has been logged."]);
 
                 return new CommandResult<IPage>(null, false, errors);
             }

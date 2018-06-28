@@ -662,8 +662,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 page = await PageService.GetPage(model.Id);
             }
-
-
+            
             var isNew = (page == null);
 
             var request = new CreateOrUpdatePageRequest(

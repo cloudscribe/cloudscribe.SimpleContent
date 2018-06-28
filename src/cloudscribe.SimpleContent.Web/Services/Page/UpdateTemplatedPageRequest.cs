@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace cloudscribe.SimpleContent.Web.Templating
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class UpdateTemplatedPageRequest : IRequest<CommandResult<IPage>>
     {

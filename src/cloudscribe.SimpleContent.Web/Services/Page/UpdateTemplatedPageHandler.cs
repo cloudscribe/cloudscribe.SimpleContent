@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2018-06-27
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
+using cloudscribe.SimpleContent.Web.Templating;
 using cloudscribe.Web.Common.Razor;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -17,7 +18,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Templating
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class UpdateTemplatedPageHandler : IRequestHandler<UpdateTemplatedPageRequest, CommandResult<IPage>>
     {
@@ -204,7 +205,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
                             page.DraftSerializedModel = modelString;
                             page.DraftContent = renderedModel;
                             page.DraftAuthor = request.ViewModel.Author;
-                            page.DraftPubDate = null;
+                            //page.DraftPubDate = null;
                             
                             break;
 

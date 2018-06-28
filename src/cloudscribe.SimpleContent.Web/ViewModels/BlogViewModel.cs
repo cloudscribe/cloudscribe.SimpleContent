@@ -48,6 +48,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public int Month { get; set; } = 0;
         public int Day { get; set; } = 0;
         public bool CanEdit { get; set; } = false;
+        public bool ShowingDraft { get; set; } = false;
         
         public bool ShowComments { get; set; } = true;
         public bool CommentsAreOpen { get; set; } = false;

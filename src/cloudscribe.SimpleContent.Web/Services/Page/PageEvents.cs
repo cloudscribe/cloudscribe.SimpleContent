@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-11-25
-// Last Modified:           2018-06-21
+// Last Modified:           2018-06-28
 // 
 
 using System.Collections.Generic;
@@ -23,6 +23,7 @@ namespace cloudscribe.SimpleContent.Services
             IEnumerable<IHandlePageCreated> createdHandlers,
             IEnumerable<IHandlePageUpdated> updateHandlers,
             IEnumerable<IHandlePagePublished> publishHandlers,
+            IEnumerable<IHandlePageUnPublished> unPublishHandlers,
             ILogger<PageEvents> logger
             )
         {
@@ -31,15 +32,17 @@ namespace cloudscribe.SimpleContent.Services
             _createdHandlers = createdHandlers;
             _updateHandlers = updateHandlers;
             _publishHandlers = publishHandlers;
+            _unPublishHandlers = unPublishHandlers;
             _log = logger;
         }
 
-        private IEnumerable<IHandlePagePreUpdate> _preUpdateHandlers;
-        private IEnumerable<IHandlePagePreDelete> _preDeleteHandlers;
-        private IEnumerable<IHandlePageCreated> _createdHandlers;
-        private IEnumerable<IHandlePageUpdated> _updateHandlers;
-        private IEnumerable<IHandlePagePublished> _publishHandlers;
-        private ILogger _log;
+        private readonly IEnumerable<IHandlePagePreUpdate> _preUpdateHandlers;
+        private readonly IEnumerable<IHandlePagePreDelete> _preDeleteHandlers;
+        private readonly IEnumerable<IHandlePageCreated> _createdHandlers;
+        private readonly IEnumerable<IHandlePageUpdated> _updateHandlers;
+        private readonly IEnumerable<IHandlePagePublished> _publishHandlers;
+        private readonly IEnumerable<IHandlePageUnPublished> _unPublishHandlers;
+        private readonly ILogger _log;
 
         public async Task HandlePreUpdate(
             string projectId,
@@ -128,6 +131,26 @@ namespace cloudscribe.SimpleContent.Services
             )
         {
             foreach (var handler in _publishHandlers)
+            {
+                try
+                {
+                    await handler.Handle(projectId, page, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
+                }
+
+            }
+        }
+
+        public async Task HandleUnPublished(
+            string projectId,
+            IPage page,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            foreach (var handler in _unPublishHandlers)
             {
                 try
                 {

@@ -7,13 +7,16 @@
 
 
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Config;
 using cloudscribe.SimpleContent.Web.Services;
+using cloudscribe.SimpleContent.Web.Services.Blog;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
 using cloudscribe.Web.Common.Recaptcha;
 using cloudscribe.Web.Navigation;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +36,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
     {
 
         public BlogController(
+            IMediator mediator,
             IProjectService projectService,
             IBlogService blogService,
             IBlogRoutes blogRoutes,
@@ -40,6 +44,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IProjectEmailService emailService,
             IAuthorizationService authorizationService,
             IAuthorNameResolver authorNameResolver,
+            IAutoPublishDraftPost autoPublishDraftPost,
             ITimeZoneHelper timeZoneHelper,
             IRecaptchaServerSideValidator recaptchaServerSideValidator,
             IStringLocalizer<SimpleContent> localizer,
@@ -48,11 +53,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
             )
         {
+            Mediator = mediator;
             ProjectService = projectService;
             BlogService = blogService;
             ContentProcessor = contentProcessor;
             BlogRoutes = blogRoutes;
             AuthorNameResolver = authorNameResolver;
+            AutoPublishDraftPost = autoPublishDraftPost;
             EmailService = emailService;
             AuthorizationService = authorizationService;
             TimeZoneHelper = timeZoneHelper;
@@ -62,6 +69,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             RecaptchaServerSideValidator = recaptchaServerSideValidator;
         }
 
+        protected IMediator Mediator { get; private set; }
         protected IProjectService ProjectService { get; private set; }
         protected IBlogService BlogService { get; private set; }
         protected IBlogRoutes BlogRoutes { get; private set; }
@@ -73,6 +81,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IAuthorizationService AuthorizationService { get; private set; }
         protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
         protected SimpleContentConfig ContentOptions { get; private set; }
+        protected IAutoPublishDraftPost AutoPublishDraftPost { get; private set; }
 
         protected IRecaptchaServerSideValidator RecaptchaServerSideValidator { get; private set; }
 
@@ -204,25 +213,19 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         {
             return await Index(category, page);
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> New()
-        //{
-        //    return await Post(0, 0, 0, "", "new");
-        //}
-
+        
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostNoDate")]
-        public virtual async Task<IActionResult> Post(string slug)
+        public virtual async Task<IActionResult> Post(string slug, bool showDraft = false)
         {
-            return await Post(0, 0, 0, slug);
+            return await Post(0, 0, 0, slug, showDraft);
         }
 
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostWithDate")]
-        public virtual async Task<IActionResult> Post(int year , int month, int day, string slug)
+        public virtual async Task<IActionResult> Post(int year , int month, int day, string slug, bool showDraft = false)
         {
             var projectSettings = await ProjectService.GetCurrentProjectSettings();
 
@@ -261,7 +264,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             else
             {
-               if(projectSettings.IncludePubDateInPostUrls)
+                await AutoPublishDraftPost.PublishIfNeeded(result.Post);
+
+                if (projectSettings.IncludePubDateInPostUrls)
                 {
                     if(year == 0)
                     {
@@ -285,7 +290,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                                 year = pubDate.Value.Year,
                                 month = pubDate.Value.Month.ToString("00"),
                                 day = pubDate.Value.Day.ToString("00"),
-                                slug = result.Post.Slug
+                                slug = result.Post.Slug,
+                                showDraft
                             });
                     }
                 }
@@ -293,6 +299,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ViewData["Title"] = result.Post.Title;
             }
 
+            if(showDraft && canEdit)
+            {
+                if(String.IsNullOrEmpty(result.Post.DraftContent))
+                {
+                    // this is not updating the db
+                    result.Post.Content = result.Post.DraftContent;
+                    result.Post.Author = result.Post.DraftAuthor;
+                    model.ShowingDraft = true;
+                }
+            }
             
             model.CurrentPost = result.Post;
             if(result.PreviousPost != null)
@@ -303,9 +319,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 model.NextPostUrl = await BlogService.ResolvePostUrl(result.NextPost);
             }
-
             
-
             var currentUrl = await BlogService.ResolvePostUrl(result.Post);
             var breadCrumbHelper = new TailCrumbUtility(HttpContext);
             breadCrumbHelper.AddTailCrumb(result.Post.Id, result.Post.Title, currentUrl);
@@ -448,8 +462,21 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
             }
 
-            if (!ModelState.IsValid)
+            var post = await BlogService.GetPost(model.Id);
+            var isNew = (post == null);
+
+            var request = new CreateOrUpdatePostRequest(
+                project.Id,
+                User.Identity.Name,
+                model,
+                post,
+                ModelState
+                );
+
+            var response = await Mediator.Send(request);
+            if(!response.Succeeded)
             {
+                
                 if (string.IsNullOrEmpty(model.Id))
                 {
                     ViewData["Title"] = StringLocalizer["New Post"];
@@ -463,147 +490,17 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
                 return View(model);
             }
-            
-            var categories = new List<string>();
-
-            if (!string.IsNullOrEmpty(model.Categories))
-            {
-                if(ContentOptions.ForceLowerCaseCategories)
-                {
-                    categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
-                    .Where(x =>
-                    !string.IsNullOrWhiteSpace(x)
-                    && x != ","
-                    )
-                    .Distinct()
-                    .ToList();
-                }
-                else
-                {
-                    categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim())
-                    .Where(x =>
-                    !string.IsNullOrWhiteSpace(x)
-                    && x != ","
-                    )
-                    .Distinct()
-                    .ToList();
-                }
-                
-            }
-            
-            IPost post = null;
-            if (!string.IsNullOrEmpty(model.Id))
-            {
-                post = await BlogService.GetPost(model.Id);
-            }
-            
-            var isNew = false;
-            bool slugAvailable;
-            string slug;
-            if (post != null)
-            {
-                post.Title = model.Title;
-                post.MetaDescription = model.MetaDescription;
-                post.Content = model.Content;
-                post.Categories = categories;
-                post.LastModifiedByUser = User.Identity.Name;
-                if(model.Slug != post.Slug)
-                {
-                    // remove any bad chars
-                    model.Slug = ContentUtils.CreateSlug(model.Slug);
-                    slugAvailable = await BlogService.SlugIsAvailable(project.Id, model.Slug);
-                    if(slugAvailable)
-                    {
-                        post.Slug = model.Slug;
-                    }
-                    else
-                    {
-                        //log.LogWarning($"slug {model.Slug} was requested but not changed because it is already in use");
-                        this.AlertDanger(StringLocalizer["The post slug was not changed because the requested slug is already in use."], true);
-                    }
-                }
-            }
-            else
-            {
-                isNew = true;
-                if(!string.IsNullOrEmpty(model.Slug))
-                {
-                    // remove any bad chars
-                    model.Slug = ContentUtils.CreateSlug(model.Slug);
-                    slug = model.Slug;
-                    slugAvailable = await BlogService.SlugIsAvailable(project.Id, slug);
-                    if(!slugAvailable)
-                    {
-                        slug = ContentUtils.CreateSlug(model.Title);
-                    }
-                }
-                else
-                {
-                    slug = ContentUtils.CreateSlug(model.Title);
-                }
-                
-                slugAvailable = await BlogService.SlugIsAvailable(project.Id, slug);
-                if (!slugAvailable)
-                {
-                    //log.LogInformation("returning 409 because slug already in use");
-                    ModelState.AddModelError("postediterror", StringLocalizer["slug is already in use."]);
-
-                    return View(model);
-                }
-
-                post = new Post()
-                {
-                    BlogId = project.Id,
-                    Author = await AuthorNameResolver.GetAuthorName(User),
-                    Title = model.Title,
-                    MetaDescription = model.MetaDescription,
-                    Content = model.Content,
-                    Slug = slug
-                    ,Categories = categories.ToList(),
-                    CreatedByUser = User.Identity.Name
-                };
-            }
-            if(!string.IsNullOrEmpty(model.Author))
-            {
-                post.Author = model.Author;
-            }
-            
-            post.IsPublished = model.IsPublished;
-            post.CorrelationKey = model.CorrelationKey;
-            post.ImageUrl = model.ImageUrl;
-            post.ThumbnailUrl = model.ThumbnailUrl;
-            post.IsFeatured = model.IsFeatured;
-            post.ContentType = model.ContentType;
-
-            post.TeaserOverride = model.TeaserOverride;
-            post.SuppressTeaser = model.SuppressTeaser;
-
-            if (model.PubDate.HasValue)
-            {
-                var localTime = model.PubDate.Value;
-                post.PubDate = TimeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
-
-            }
-
-            if (isNew)
-            {
-                await BlogService.Create(post);
-            }
-            else
-            {
-                await BlogService.Update(post);
-            }
 
             if (project.IncludePubDateInPostUrls)
             {
                 DateTime? pubDate = null;
-                if (post.PubDate.HasValue)
+                if (response.Value.PubDate.HasValue)
                 {
-                    pubDate = post.PubDate;
+                    pubDate = response.Value.PubDate;
                 }
                 else
                 {
-                    pubDate = post.DraftPubDate;
+                    pubDate = response.Value.DraftPubDate;
                 }
 
                 if (!pubDate.HasValue)
@@ -618,15 +515,218 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         month = pubDate.Value.Month.ToString("00"),
                         day = pubDate.Value.Day.ToString("00"),
                         slug = post.Slug
-                    }); 
+                    });
             }
             else
             {
                 return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName,
-                    new { slug = post.Slug });  
+                    new { slug = post.Slug });
             }
 
+
         }
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public virtual async Task<IActionResult> Edit(PostEditViewModel model)
+        //{
+        //    var project = await ProjectService.GetCurrentProjectSettings();
+
+        //    if (project == null)
+        //    {
+        //        Log.LogInformation("redirecting to index because project settings not found");
+
+        //        return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+        //    }
+
+        //    var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+        //    if (!canEdit)
+        //    {
+        //        Log.LogInformation("redirecting to index because user is not allowed to edit");
+        //        return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        if (string.IsNullOrEmpty(model.Id))
+        //        {
+        //            ViewData["Title"] = StringLocalizer["New Post"];
+        //        }
+        //        else
+        //        {
+        //            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], model.Title);
+        //        }
+        //        model.ProjectId = project.Id;
+        //        model.TeasersEnabled = project.TeaserMode != TeaserMode.Off;
+
+        //        return View(model);
+        //    }
+
+        //    var categories = new List<string>();
+
+        //    if (!string.IsNullOrEmpty(model.Categories))
+        //    {
+        //        if(ContentOptions.ForceLowerCaseCategories)
+        //        {
+        //            categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
+        //            .Where(x =>
+        //            !string.IsNullOrWhiteSpace(x)
+        //            && x != ","
+        //            )
+        //            .Distinct()
+        //            .ToList();
+        //        }
+        //        else
+        //        {
+        //            categories = model.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim())
+        //            .Where(x =>
+        //            !string.IsNullOrWhiteSpace(x)
+        //            && x != ","
+        //            )
+        //            .Distinct()
+        //            .ToList();
+        //        }
+
+        //    }
+
+        //    IPost post = null;
+        //    if (!string.IsNullOrEmpty(model.Id))
+        //    {
+        //        post = await BlogService.GetPost(model.Id);
+        //    }
+
+        //    var isNew = false;
+        //    bool slugAvailable;
+        //    string slug;
+        //    if (post != null)
+        //    {
+        //        post.Title = model.Title;
+        //        post.MetaDescription = model.MetaDescription;
+        //        post.Content = model.Content;
+        //        post.Categories = categories;
+        //        post.LastModifiedByUser = User.Identity.Name;
+        //        if(model.Slug != post.Slug)
+        //        {
+        //            // remove any bad chars
+        //            model.Slug = ContentUtils.CreateSlug(model.Slug);
+        //            slugAvailable = await BlogService.SlugIsAvailable(project.Id, model.Slug);
+        //            if(slugAvailable)
+        //            {
+        //                post.Slug = model.Slug;
+        //            }
+        //            else
+        //            {
+        //                //log.LogWarning($"slug {model.Slug} was requested but not changed because it is already in use");
+        //                this.AlertDanger(StringLocalizer["The post slug was not changed because the requested slug is already in use."], true);
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        isNew = true;
+        //        if(!string.IsNullOrEmpty(model.Slug))
+        //        {
+        //            // remove any bad chars
+        //            model.Slug = ContentUtils.CreateSlug(model.Slug);
+        //            slug = model.Slug;
+        //            slugAvailable = await BlogService.SlugIsAvailable(project.Id, slug);
+        //            if(!slugAvailable)
+        //            {
+        //                slug = ContentUtils.CreateSlug(model.Title);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            slug = ContentUtils.CreateSlug(model.Title);
+        //        }
+
+        //        slugAvailable = await BlogService.SlugIsAvailable(project.Id, slug);
+        //        if (!slugAvailable)
+        //        {
+        //            //log.LogInformation("returning 409 because slug already in use");
+        //            ModelState.AddModelError("postediterror", StringLocalizer["slug is already in use."]);
+
+        //            return View(model);
+        //        }
+
+        //        post = new Post()
+        //        {
+        //            BlogId = project.Id,
+        //            Author = await AuthorNameResolver.GetAuthorName(User),
+        //            Title = model.Title,
+        //            MetaDescription = model.MetaDescription,
+        //            Content = model.Content,
+        //            Slug = slug
+        //            ,Categories = categories.ToList(),
+        //            CreatedByUser = User.Identity.Name
+        //        };
+        //    }
+        //    if(!string.IsNullOrEmpty(model.Author))
+        //    {
+        //        post.Author = model.Author;
+        //    }
+
+        //    post.IsPublished = model.IsPublished;
+        //    post.CorrelationKey = model.CorrelationKey;
+        //    post.ImageUrl = model.ImageUrl;
+        //    post.ThumbnailUrl = model.ThumbnailUrl;
+        //    post.IsFeatured = model.IsFeatured;
+        //    post.ContentType = model.ContentType;
+
+        //    post.TeaserOverride = model.TeaserOverride;
+        //    post.SuppressTeaser = model.SuppressTeaser;
+
+        //    if (model.PubDate.HasValue)
+        //    {
+        //        var localTime = model.PubDate.Value;
+        //        post.PubDate = TimeZoneHelper.ConvertToUtc(localTime, project.TimeZoneId);
+
+        //    }
+
+        //    if (isNew)
+        //    {
+        //        await BlogService.Create(post);
+        //    }
+        //    else
+        //    {
+        //        await BlogService.Update(post);
+        //    }
+
+        //    if (project.IncludePubDateInPostUrls)
+        //    {
+        //        DateTime? pubDate = null;
+        //        if (post.PubDate.HasValue)
+        //        {
+        //            pubDate = post.PubDate;
+        //        }
+        //        else
+        //        {
+        //            pubDate = post.DraftPubDate;
+        //        }
+
+        //        if (!pubDate.HasValue)
+        //        {
+        //            pubDate = DateTime.UtcNow;
+        //        }
+
+        //        return RedirectToRoute(BlogRoutes.PostWithDateRouteName,
+        //            new
+        //            {
+        //                year = pubDate.Value.Year,
+        //                month = pubDate.Value.Month.ToString("00"),
+        //                day = pubDate.Value.Day.ToString("00"),
+        //                slug = post.Slug
+        //            }); 
+        //    }
+        //    else
+        //    {
+        //        return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName,
+        //            new { slug = post.Slug });  
+        //    }
+
+        //}
 
         [HttpPost]
         [AllowAnonymous]

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-11-25
-// Last Modified:           2016-11-25
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -22,6 +22,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             IEnumerable<IHandlePostPreDelete> preDeleteHandlers,
             IEnumerable<IHandlePostCreated> createdHandlers,
             IEnumerable<IHandlePostUpdated> updateHandlers,
+            IEnumerable<IHandlePostPublished> publishHandlers,
+            IEnumerable<IHandlePostUnPublished> unPublishHandlers,
             ILogger<PostEvents> logger
             )
         {
@@ -29,14 +31,18 @@ namespace cloudscribe.SimpleContent.Web.Services
             _preDeleteHandlers = preDeleteHandlers;
             _createdHandlers = createdHandlers;
             _updateHandlers = updateHandlers;
+            _publishHandlers = publishHandlers;
+            _unPublishHandlers = unPublishHandlers;
             _log = logger;
         }
 
-        private IEnumerable<IHandlePostPreUpdate> _preUpdateHandlers;
-        private IEnumerable<IHandlePostPreDelete> _preDeleteHandlers;
-        private IEnumerable<IHandlePostCreated> _createdHandlers;
-        private IEnumerable<IHandlePostUpdated> _updateHandlers;
-        private ILogger _log;
+        private readonly IEnumerable<IHandlePostPreUpdate> _preUpdateHandlers;
+        private readonly IEnumerable<IHandlePostPreDelete> _preDeleteHandlers;
+        private readonly IEnumerable<IHandlePostCreated> _createdHandlers;
+        private readonly IEnumerable<IHandlePostUpdated> _updateHandlers;
+        private readonly IEnumerable<IHandlePostPublished> _publishHandlers;
+        private readonly IEnumerable<IHandlePostUnPublished> _unPublishHandlers;
+        private readonly ILogger _log;
 
         public async Task HandlePreUpdate(
             string projectId,
@@ -105,6 +111,46 @@ namespace cloudscribe.SimpleContent.Web.Services
             )
         {
             foreach (var handler in _updateHandlers)
+            {
+                try
+                {
+                    await handler.Handle(projectId, post, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
+                }
+
+            }
+        }
+
+        public async Task HandlePublished(
+            string projectId,
+            IPost post,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            foreach (var handler in _publishHandlers)
+            {
+                try
+                {
+                    await handler.Handle(projectId, post, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
+                }
+
+            }
+        }
+
+        public async Task HandleUnPublished(
+            string projectId,
+            IPost post,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            foreach (var handler in _unPublishHandlers)
             {
                 try
                 {

@@ -3,31 +3,31 @@ using cloudscribe.SimpleContent.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace cloudscribe.SimpleContent.Web.Services
+namespace cloudscribe.SimpleContent.Web.Services.Blog
 {
-    public class CreateOrUpdatePageRequest : IRequest<CommandResult<IPage>>
+    public class CreateOrUpdatePostRequest : IRequest<CommandResult<IPost>>
     {
-        public CreateOrUpdatePageRequest(
+        public CreateOrUpdatePostRequest(
             string projectId,
             string modifiedByUserName,
-            PageEditViewModel viewModel,
-            IPage page,
+            PostEditViewModel viewModel,
+            IPost post,
             ModelStateDictionary modelState
             )
         {
             ProjectId = projectId;
             ModifiedByUserName = modifiedByUserName;
             ViewModel = viewModel;
-            Page = page;
+            Post = post;
             ModelState = modelState;
         }
 
         public string ProjectId { get; private set; }
         public string ModifiedByUserName { get; private set; }
 
-        public PageEditViewModel ViewModel { get; private set; }
-      
-        public IPage Page { get; private set; }
+        public PostEditViewModel ViewModel { get; private set; }
+
+        public IPost Post { get; private set; }
 
         public ModelStateDictionary ModelState { get; private set; }
 
