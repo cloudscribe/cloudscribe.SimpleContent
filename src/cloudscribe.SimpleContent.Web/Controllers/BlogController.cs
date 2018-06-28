@@ -388,8 +388,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             else
             {
                 ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], postResult.Post.Title);
-                model.Author = postResult.Post.Author;
-                model.Content = postResult.Post.Content;
+
+                if(string.IsNullOrWhiteSpace(postResult.Post.DraftContent))
+                {
+                    model.Author = postResult.Post.Author;
+                    model.Content = postResult.Post.Content;
+                }
+                else
+                {
+                    model.Author = postResult.Post.DraftAuthor;
+                    model.Content = postResult.Post.DraftContent;
+                }
+                
                 model.Id = postResult.Post.Id;
                 model.CorrelationKey = postResult.Post.CorrelationKey;
                 model.IsPublished = postResult.Post.IsPublished;

@@ -666,7 +666,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var isNew = (page == null);
 
-            var request = new UpdatePageRequest(
+            var request = new CreateOrUpdatePageRequest(
                 project.Id,
                 User.Identity.Name,
                 model,

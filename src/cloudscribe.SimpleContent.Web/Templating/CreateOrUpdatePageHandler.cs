@@ -6,22 +6,19 @@
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
-using cloudscribe.Web.Common.Razor;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Templating
 {
-    public class UpdatePageHandler : IRequestHandler<UpdatePageRequest, CommandResult<IPage>>
+    public class CreateOrUpdatePageHandler : IRequestHandler<CreateOrUpdatePageRequest, CommandResult<IPage>>
     {
-        public UpdatePageHandler(
+        public CreateOrUpdatePageHandler(
             IPageService pageService,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             ILogger<UpdateTemplatedPageHandler> logger
@@ -36,7 +33,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
         private readonly IStringLocalizer _localizer;
         private readonly ILogger _log;
 
-        public async Task<CommandResult<IPage>> Handle(UpdatePageRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<CommandResult<IPage>> Handle(CreateOrUpdatePageRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var errors = new List<string>();
             

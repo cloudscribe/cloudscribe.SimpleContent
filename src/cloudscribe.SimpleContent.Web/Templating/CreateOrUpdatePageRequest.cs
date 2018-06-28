@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace cloudscribe.SimpleContent.Web.Templating
 {
-    public class UpdatePageRequest : IRequest<CommandResult<IPage>>
+    public class CreateOrUpdatePageRequest : IRequest<CommandResult<IPage>>
     {
-        public UpdatePageRequest(
+        public CreateOrUpdatePageRequest(
             string projectId,
             string modifiedByUserName,
             PageEditViewModel viewModel,
