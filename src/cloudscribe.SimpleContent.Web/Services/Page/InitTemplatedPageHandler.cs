@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-21
-// Last Modified:           2018-06-26
+// Last Modified:           2018-06-30
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -15,7 +15,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Templating
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class InitTemplatedPageHandler : IRequestHandler<InitTemplatedPageRequest, CommandResult<IPage>>
     {
@@ -72,6 +72,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
                     Serializer = serializer.Name,
                     SerializedModel = serializer.Serialize(request.Template.ModelType, model),
                     ParentSlug = request.ViewModel.ParentSlug,
+                    PageOrder = request.ViewModel.PageOrder,
                     Content = await _viewRenderer.RenderViewAsString(request.Template.RenderView, model).ConfigureAwait(false),
                     IsPublished = false
                 };
@@ -84,7 +85,8 @@ namespace cloudscribe.SimpleContent.Web.Templating
                         if (parentPage.Id != page.ParentId)
                         {
                             page.ParentId = parentPage.Id;
-                            page.ParentSlug = parentPage.Slug;   
+                            page.ParentSlug = parentPage.Slug;
+                            
                         }
                     }
                 }

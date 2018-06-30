@@ -2,7 +2,7 @@
 using cloudscribe.SimpleContent.Web.ViewModels;
 using MediatR;
 
-namespace cloudscribe.SimpleContent.Web.Templating
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class InitTemplatedPageRequest : IRequest<CommandResult<IPage>>
     {

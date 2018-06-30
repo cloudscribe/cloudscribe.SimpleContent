@@ -1,8 +1,6 @@
 ﻿using cloudscribe.SimpleContent.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -15,6 +13,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
 
         public string ParentSlug { get; set; }
+        public int PageOrder { get; set; } = 3;
         public string ContentType { get; set; }
         public List<ContentTemplate> Templates { get; set; }
 

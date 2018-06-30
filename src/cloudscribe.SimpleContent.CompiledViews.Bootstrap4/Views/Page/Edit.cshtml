@@ -166,7 +166,7 @@
 
     </div>
 </form>
-@{ await Html.RenderPartialAsync("DraftPubDatePartial", Model); }
+@{ await Html.RenderPartialAsync("EditDraftPubDatePartial", Model); }
 @if (!string.IsNullOrEmpty(Model.Id))
 {
     <form id="deleteform" class="form-inline" asp-controller="Page" asp-action="Delete" method="post">

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-06-28
+// Last Modified:           2018-06-30
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -194,8 +194,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     {
                         await _pageEvents.HandleUnPublished(page.ProjectId, page);
                     }
-
-
+                    
                     _pageService.ClearNavigationCache();
 
                 }

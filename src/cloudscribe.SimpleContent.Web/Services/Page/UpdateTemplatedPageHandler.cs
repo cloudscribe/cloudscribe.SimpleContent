@@ -1,12 +1,14 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2018-06-28
+// Last Modified:           2018-06-30
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
+using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web.Templating;
+using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Razor;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -23,7 +25,10 @@ namespace cloudscribe.SimpleContent.Web.Services
     public class UpdateTemplatedPageHandler : IRequestHandler<UpdateTemplatedPageRequest, CommandResult<IPage>>
     {
         public UpdateTemplatedPageHandler(
+            IProjectService projectService,
             IPageService pageService,
+            PageEvents pageEvents,
+            ITimeZoneHelper timeZoneHelper,
             IEnumerable<IModelSerializer> serializers,
             IEnumerable<IParseModelFromForm> formParsers,
             IEnumerable<IValidateTemplateModel> modelValidators,
@@ -32,7 +37,10 @@ namespace cloudscribe.SimpleContent.Web.Services
             ILogger<UpdateTemplatedPageHandler> logger
             )
         {
+            _projectService = projectService;
             _pageService = pageService;
+            _pageEvents = pageEvents;
+            _timeZoneHelper = timeZoneHelper;
             _serializers = serializers;
             _formParsers = formParsers;
             _modelValidators = modelValidators;
@@ -41,7 +49,10 @@ namespace cloudscribe.SimpleContent.Web.Services
             _log = logger;
         }
 
+        private readonly IProjectService _projectService;
         private readonly IPageService _pageService;
+        private readonly PageEvents _pageEvents;
+        private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly IEnumerable<IModelSerializer> _serializers;
         private readonly IEnumerable<IParseModelFromForm> _formParsers;
         private readonly IEnumerable<IValidateTemplateModel> _modelValidators;
@@ -86,6 +97,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             try
             {
                 var page = request.Page;
+                var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var serializer = GetSerializer(request.Template.SerializerName);
                 var parser = GetFormParser(request.Template.FormParserName);
                 var validator = GetValidator(request.Template.ValidatorName);
@@ -187,7 +199,8 @@ namespace cloudscribe.SimpleContent.Web.Services
                     }
 
                     var shouldPublish = false;
-                    switch(request.ViewModel.SaveMode)
+                    var shouldFireUnPublishEvent = false;
+                    switch (request.ViewModel.SaveMode)
                     {
                         case SaveMode.UnPublish:
 
@@ -196,7 +209,9 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftAuthor = request.ViewModel.Author;
                             page.DraftPubDate = null;
                             page.IsPublished = false;
-                            //page.PubDate = null;
+                            page.PubDate = null;
+
+                            shouldFireUnPublishEvent = true;
 
                             break;
 
@@ -206,7 +221,8 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftContent = renderedModel;
                             page.DraftAuthor = request.ViewModel.Author;
                             //page.DraftPubDate = null;
-                            
+                            if (!page.PubDate.HasValue) { page.IsPublished = false; }
+
                             break;
 
                         case SaveMode.PublishLater:
@@ -215,8 +231,9 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                page.DraftPubDate = request.ViewModel.NewPubDate.Value;
+                                page.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, project.TimeZoneId);
                             }
+                            if (!page.PubDate.HasValue) { page.IsPublished = false; }
 
                             break;
 
@@ -237,6 +254,12 @@ namespace cloudscribe.SimpleContent.Web.Services
                     }
                     
                     await _pageService.Update(page, shouldPublish);
+
+                    if (shouldFireUnPublishEvent)
+                    {
+                        await _pageEvents.HandleUnPublished(page.ProjectId, page);
+                    }
+
                     _pageService.ClearNavigationCache();
                     
                 }
