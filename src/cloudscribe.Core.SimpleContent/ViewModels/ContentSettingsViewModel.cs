@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2017-12-22
+// Last Modified:			2018-06-30
 // 
 
 using cloudscribe.Core.Models;
@@ -60,8 +60,10 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
         [Required(ErrorMessage ="Blog Menu Text is required")]
         public string BlogPageText { get; set; } = "Blog";
-        public string BlogPageNavComponentVisibility { get; set; } 
+        public string BlogPageNavComponentVisibility { get; set; }
 
+        public int DefaultFeedItems { get; set; } = 20;
+        public int MaxFeedItems { get; set; } = 1000;
 
         [DataType(DataType.Url)]
         public string RemoteFeedUrl { get; set; } = string.Empty;

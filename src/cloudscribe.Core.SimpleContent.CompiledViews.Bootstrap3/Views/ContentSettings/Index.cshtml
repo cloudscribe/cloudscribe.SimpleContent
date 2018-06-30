@@ -398,6 +398,20 @@
                             <span asp-validation-for="WebmasterEmail" class="text-danger"></span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label asp-for="DefaultFeedItems" class="col-md-2 control-label">@sr["Default Feed Items"]</label>
+                        <div class="col-md-10">
+                            <input asp-for="DefaultFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Number of posts to show in the feed by default."]' />
+                            <span asp-validation-for="DefaultFeedItems" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaxFeedItems" class="col-md-2 control-label">@sr["Max Feed Items"]</label>
+                        <div class="col-md-10">
+                            <input asp-for="MaxFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Maximum number of posts to show in the feed. Used to constrain the query string paramter for feed size."]' />
+                            <span asp-validation-for="MaxFeedItems" class="text-danger"></span>
+                        </div>
+                    </div>
 
                 </fieldset>
 

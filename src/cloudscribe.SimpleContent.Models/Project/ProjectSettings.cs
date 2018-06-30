@@ -117,6 +117,9 @@ namespace cloudscribe.SimpleContent.Models
         public TeaserTruncationMode TeaserTruncationMode { get; set; }
         public int TeaserTruncationLength { get; set; } = 20;   // Default 20 words.
 
+        public int DefaultFeedItems { get; set; } = 20;
+        public int MaxFeedItems { get; set; } = 1000;
+
         public static ProjectSettings FromIProjectSettings(IProjectSettings project)
         {
             var p = new ProjectSettings();

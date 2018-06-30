@@ -31,6 +31,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string Author { get; set; } = string.Empty;
 
         public string Slug { get; set; } = string.Empty;
+        public string ProjectDefaultSlug { get; set; }
 
         public string MetaDescription { get; set; } = string.Empty;
 

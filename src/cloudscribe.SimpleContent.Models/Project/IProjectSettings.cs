@@ -29,6 +29,9 @@ namespace cloudscribe.SimpleContent.Models
         string LanguageCode { get; set; }
         string LocalMediaVirtualPath { get; set; }
         string ManagingEditorEmail { get; set; }
+
+        int DefaultFeedItems { get; set; }
+        int MaxFeedItems { get; set; }
         bool ModerateComments { get; set; }
         int PostsPerPage { get; set; }
         string Publisher { get; set; }

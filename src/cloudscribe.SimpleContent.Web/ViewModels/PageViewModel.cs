@@ -45,6 +45,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public ITimeZoneHelper TimeZoneHelper { get; set; }
         public string TimeZoneId { get; set; } = "GMT";
 
+        public bool HasPublishedVersion { get; set; }
+        public bool HasDraft { get; set; }
+        public bool ShowingDraft { get; set; }
+
         public string FormatDate(DateTime pubDate)
         {
             var localTime = TimeZoneHelper.ConvertToLocalTime(pubDate, TimeZoneId);

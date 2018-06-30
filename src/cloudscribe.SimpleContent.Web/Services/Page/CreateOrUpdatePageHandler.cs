@@ -7,6 +7,7 @@
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Services;
+using cloudscribe.Web.Common;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -20,21 +21,27 @@ namespace cloudscribe.SimpleContent.Web.Services
     public class CreateOrUpdatePageHandler : IRequestHandler<CreateOrUpdatePageRequest, CommandResult<IPage>>
     {
         public CreateOrUpdatePageHandler(
+            IProjectService projectService,
             IPageService pageService,
+            ITimeZoneHelper timeZoneHelper,
             PageEvents pageEvents,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             ILogger<CreateOrUpdatePageHandler> logger
             )
         {
+            _projectService = projectService;
             _pageService = pageService;
             _pageEvents = pageEvents;
+            _timeZoneHelper = timeZoneHelper;
             _localizer = localizer;
             _log = logger;
         }
 
+        private readonly IProjectService _projectService;
         private readonly IPageService _pageService;
         private readonly PageEvents _pageEvents;
         private readonly IStringLocalizer _localizer;
+        private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly ILogger _log;
 
         public async Task<CommandResult<IPage>> Handle(CreateOrUpdatePageRequest request, CancellationToken cancellationToken = default(CancellationToken))
@@ -44,6 +51,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             try
             {
                 bool isNew = false;
+                var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var page = request.Page;
                 if(page == null)
                 {
@@ -142,6 +150,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftAuthor = request.ViewModel.Author;
                             // should we clear the draft pub date if save draft clicked?
                             //page.DraftPubDate = null;
+                            if(!page.PubDate.HasValue) { page.IsPublished = false; }
 
                             break;
 
@@ -151,8 +160,9 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                page.DraftPubDate = request.ViewModel.NewPubDate.Value;
+                                page.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, project.TimeZoneId); 
                             }
+                            if (!page.PubDate.HasValue) { page.IsPublished = false; }
 
                             break;
 

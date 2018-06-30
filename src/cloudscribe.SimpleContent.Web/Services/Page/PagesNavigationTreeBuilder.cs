@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2018-06-25
+// Last Modified:           2018-06-30
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -115,9 +115,7 @@ namespace cloudscribe.SimpleContent.Services
                 
               
             }
-
             
-
             var treeRoot = new TreeNode<NavigationNode>(rootNav);
 
             
@@ -198,7 +196,7 @@ namespace cloudscribe.SimpleContent.Services
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
                 // filter node from view unless user has edit permissions
-                if (!page.IsPublished || page.PubDate > DateTime.UtcNow )
+                if (!page.HasPublishedVersion())
                 {
                     node.CustomData = project.Id;
                 }
@@ -235,7 +233,7 @@ namespace cloudscribe.SimpleContent.Services
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
                 // filter node from view unless user has edit permissions
-                if (!page.IsPublished || page.PubDate > DateTime.UtcNow)
+                if (!page.HasPublishedVersion())
                 {
                     node.CustomData = project.Id;
                 }

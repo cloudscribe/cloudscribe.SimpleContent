@@ -2,12 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2017-12-22
+// Last Modified:			2018-06-30
 // 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -29,6 +27,29 @@ namespace cloudscribe.SimpleContent.Models
         {
             if (page.Comments == null) { return 0; }
             return page.Comments.Where(c => c.IsApproved == true).Count();
+        }
+
+        public static bool HasPublishedVersion(this IPage page)
+        {
+            if(page.IsPublished && page.PubDate.HasValue && page.PubDate.Value < DateTime.UtcNow)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool HasDraftVersion(this IPage page)
+        {
+            return !string.IsNullOrWhiteSpace(page.DraftContent);
+        }
+
+        public static void PromoteDraftTemporarilyForRender(this IPage page)
+        {
+            page.Content = page.DraftContent;
+            page.Author = page.DraftAuthor;
+            page.PubDate = page.DraftPubDate;
+            
         }
 
         public static void CopyTo(this IPost input, IPost target)
@@ -177,6 +198,9 @@ namespace cloudscribe.SimpleContent.Models
             target.TeaserMode = input.TeaserMode;
             target.TeaserTruncationMode = input.TeaserTruncationMode;
             target.TeaserTruncationLength = input.TeaserTruncationLength;
+
+            target.DefaultFeedItems = input.DefaultFeedItems;
+            target.MaxFeedItems = input.MaxFeedItems;
         }
     }
 }

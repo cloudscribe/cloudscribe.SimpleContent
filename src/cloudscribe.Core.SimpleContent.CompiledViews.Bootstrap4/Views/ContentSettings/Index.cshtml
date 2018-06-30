@@ -286,34 +286,46 @@
 
     @if (uiOptions.ShowBlogSettings)
     {
-        <fieldset>
-            <legend>@sr["Feed Settings"]</legend>
-            <div class="form-group">
-                <label asp-for="RemoteFeedUrl">@sr["Feedburner Url"]</label>
-                <input asp-for="RemoteFeedUrl" class="form-control" />
-                <span asp-validation-for="RemoteFeedUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LanguageCode">@sr["Language Code"]</label>
-                <input asp-for="LanguageCode" class="form-control" />
-                <span asp-validation-for="LanguageCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChannelCategoriesCsv">@sr["Comma Separated Channel Categories"]</label>
-                <input asp-for="ChannelCategoriesCsv" class="form-control" />
-                <span asp-validation-for="ChannelCategoriesCsv" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ManagingEditorEmail">@sr["Managing Editor Email"]</label>
-                <input asp-for="ManagingEditorEmail" class="form-control" />
-                <span asp-validation-for="ManagingEditorEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WebmasterEmail">@sr["Webmaster Email"]</label>
-                <input asp-for="WebmasterEmail" class="form-control" />
-                <span asp-validation-for="WebmasterEmail" class="text-danger"></span>
-            </div>
-        </fieldset>
+    <fieldset>
+        <legend>@sr["Feed Settings"]</legend>
+        <div class="form-group">
+            <label asp-for="RemoteFeedUrl">@sr["Feedburner Url"]</label>
+            <input asp-for="RemoteFeedUrl" class="form-control" />
+            <span asp-validation-for="RemoteFeedUrl" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LanguageCode">@sr["Language Code"]</label>
+            <input asp-for="LanguageCode" class="form-control" />
+            <span asp-validation-for="LanguageCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ChannelCategoriesCsv">@sr["Comma Separated Channel Categories"]</label>
+            <input asp-for="ChannelCategoriesCsv" class="form-control" />
+            <span asp-validation-for="ChannelCategoriesCsv" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ManagingEditorEmail">@sr["Managing Editor Email"]</label>
+            <input asp-for="ManagingEditorEmail" class="form-control" />
+            <span asp-validation-for="ManagingEditorEmail" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="WebmasterEmail">@sr["Webmaster Email"]</label>
+            <input asp-for="WebmasterEmail" class="form-control" />
+            <span asp-validation-for="WebmasterEmail" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DefaultFeedItems">@sr["Default Feed Items"]</label>
+            <input asp-for="DefaultFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Number of posts to show in the feed by default."]' />
+            <span asp-validation-for="DefaultFeedItems" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MaxFeedItems">@sr["Max Feed Items"]</label>
+            <input asp-for="MaxFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Maximum number of posts to show in the feed. Used to constrain the query string paramter for feed size."]' />
+            <span asp-validation-for="MaxFeedItems" class="text-danger"></span>
+        </div>
+
+    </fieldset>
 
     }
     else

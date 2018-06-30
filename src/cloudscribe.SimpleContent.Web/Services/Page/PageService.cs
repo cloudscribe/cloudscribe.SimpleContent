@@ -261,11 +261,11 @@ namespace cloudscribe.SimpleContent.Services
             //    post
             //    ).ConfigureAwait(false);
 
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if (page.PubDate == nonPublishedDate)
-            {
-                page.PubDate = DateTime.UtcNow;
-            }
+            //var nonPublishedDate = new DateTime(1, 1, 1);
+            //if (page.PubDate == nonPublishedDate)
+            //{
+            //    page.PubDate = DateTime.UtcNow;
+            //}
 
             await _eventHandlers.HandlePreUpdate(projectId, page.Id).ConfigureAwait(false);
             await _pageCommands.Update(projectId, page).ConfigureAwait(false);
@@ -305,18 +305,11 @@ namespace cloudscribe.SimpleContent.Services
                 imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
             }
             
-            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
-            // but we don't use that anymore. now we have ckeditor and filemanager integration
-            //page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    page.Content
-            //    ).ConfigureAwait(false);
-
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if (page.PubDate == nonPublishedDate)
-            {
-                page.PubDate = DateTime.UtcNow;
-            }
+            //var nonPublishedDate = new DateTime(1, 1, 1);
+            //if (page.PubDate == nonPublishedDate)
+            //{
+            //    page.PubDate = DateTime.UtcNow;
+            //}
 
             await _pageCommands.Create(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(_settings.Id, page).ConfigureAwait(false);
@@ -338,19 +331,12 @@ namespace cloudscribe.SimpleContent.Services
             {
                 imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
             }
-
-            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
-            // but we don't use that anymore. now we have ckeditor and filemanager integration
-            //page.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    page.Content
-            //    ).ConfigureAwait(false);
-
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if (page.PubDate == nonPublishedDate)
-            {
-                page.PubDate = DateTime.UtcNow;
-            }
+            
+            //var nonPublishedDate = new DateTime(1, 1, 1);
+            //if (page.PubDate == nonPublishedDate)
+            //{
+            //    page.PubDate = DateTime.UtcNow;
+            //}
 
             await _eventHandlers.HandlePreUpdate(_settings.Id, page.Id).ConfigureAwait(false);
             await _pageCommands.Update(_settings.Id, page).ConfigureAwait(false);

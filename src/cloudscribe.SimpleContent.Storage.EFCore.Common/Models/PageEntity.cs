@@ -49,11 +49,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public string Content { get; set; } = string.Empty;
 
-        public DateTime? PubDate { get; set; } = DateTime.UtcNow;
+        public DateTime? PubDate { get; set; } 
 
         public DateTime LastModified { get; set; } = DateTime.UtcNow;
 
-        public bool IsPublished { get; set; } = true;
+        public bool IsPublished { get; set; }
 
         public bool MenuOnly { get; set; } = false;
 

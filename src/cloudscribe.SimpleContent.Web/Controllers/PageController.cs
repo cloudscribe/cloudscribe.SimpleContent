@@ -75,42 +75,60 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> Index(string slug = "")
+        public virtual async Task<IActionResult> Index(string slug = "", bool showDraft = false)
         {
-            var projectSettings = await ProjectService.GetCurrentProjectSettings();
+            var project = await ProjectService.GetCurrentProjectSettings();
 
-            if (projectSettings == null)
+            if (project == null)
             {
                 Log.LogError("project settings not found returning 404");
                 return NotFound();
             }
 
-            var canEdit = await User.CanEditPages(projectSettings.Id, AuthorizationService);
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
 
-            if(string.IsNullOrEmpty(slug) || slug == "none") { slug = projectSettings.DefaultPageSlug; }
+            if(string.IsNullOrEmpty(slug) || slug == "none") { slug = project.DefaultPageSlug; }
 
             IPage page = await PageService.GetPageBySlug(slug);
 
             await AutoPublishDraftPage.PublishIfNeeded(page);
 
+            if (!canEdit && page != null)
+            {
+                if (!page.HasPublishedVersion())
+                {
+                    Log.LogWarning($"page {page.Title} is unpublished and user is not editor so returning 404");
+                    return NotFound();
+                }
+            }
+            
             var model = new PageViewModel(ContentProcessor)
             {
                 CurrentPage = page,
-                ProjectSettings = projectSettings,
+                ProjectSettings = project,
                 CanEdit = canEdit,
                 CommentsAreOpen = false,
                 TimeZoneHelper = TimeZoneHelper,
-                TimeZoneId = projectSettings.TimeZoneId,
+                TimeZoneId = project.TimeZoneId,
                 PageTreePath = Url.Action("Tree")
             };
-  
+            
             if (canEdit)
             {
                 if (model.CurrentPage != null)
                 {
+                    model.HasPublishedVersion = page.HasPublishedVersion();
+                    model.HasDraft = model.CurrentPage.HasDraftVersion();
+                    if (canEdit && model.HasDraft && (showDraft || !model.HasPublishedVersion))
+                    {
+                        page.PromoteDraftTemporarilyForRender();
+                        model.ShowingDraft = true;
+                    }
+
+
                     model.EditPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
 
-                    if (model.CurrentPage.Slug == projectSettings.DefaultPageSlug)
+                    if (model.CurrentPage.Slug == project.DefaultPageSlug)
                     {   
                        // not setting the parent slug if the current page is home page
                        // otherwise it would be awkward to create more root level pages
@@ -141,7 +159,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     page = new Page
                     {
-                        ProjectId = projectSettings.Id
+                        ProjectId = project.Id
                     };
                     if (HttpContext.Request.Path == "/")
                     {
@@ -164,7 +182,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     
                     if(rootList.Count > 0)
                     {
-                        if(slug == projectSettings.DefaultPageSlug)
+                        if(slug == project.DefaultPageSlug)
                         {
                             // slug was empty and no matching page found for default slug
                             // but since there exist root level pages we should
@@ -199,14 +217,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     }
                 }
 
-                if (!canEdit)
-                { 
-                    if(!page.IsPublished || page.PubDate > DateTime.UtcNow)
-                    {
-                        Log.LogWarning($"page {page.Title} is unpublished and user is not editor so returning 404");
-                        return NotFound();
-                    }
-                }
+                
                 
                 
                 if(!string.IsNullOrEmpty(page.ExternalUrl))
@@ -345,15 +356,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [AllowAnonymous]
         public virtual async Task<IActionResult> EditWithTemplate(string slug)
         {
-            var projectSettings = await ProjectService.GetCurrentProjectSettings();
+            var project = await ProjectService.GetCurrentProjectSettings();
 
-            if (projectSettings == null)
+            if (project == null)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var canEdit = await User.CanEditPages(projectSettings.Id, AuthorizationService);
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
             if (!canEdit)
             {
                 Log.LogInformation("redirecting to index because user cannot edit");
@@ -369,7 +380,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
 
-            var template = await TemplateService.GetTemplate(projectSettings.Id, page.TemplateKey);
+            var template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
             if (template == null)
             {
                 Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
@@ -378,8 +389,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var model = new PageEditWithTemplateViewModel()
             {
-                ProjectId = projectSettings.Id,
-                DisqusShortname = projectSettings.DisqusShortName,
+                ProjectId = project.Id,
+                DisqusShortname = project.DisqusShortName,
                 Author = page.Author,
                 Id = page.Id,
                 CorrelationKey = page.CorrelationKey,
@@ -396,17 +407,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ViewRoles = page.ViewRoles,
                 ShowComments = page.ShowComments,
                 Template = template,
-                TemplateModel = TemplateService.DesrializeTemplateModel(page, template)
+                TemplateModel = TemplateService.DesrializeTemplateModel(page, template),
+                ProjectDefaultSlug = project.DefaultPageSlug
             };
 
             if(page.PubDate.HasValue)
             {
-                model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, projectSettings.TimeZoneId);
+                model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
             }
 
             if (page.DraftPubDate.HasValue)
             {
-                model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, projectSettings.TimeZoneId);
+                model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
             }
 
             if (!string.IsNullOrWhiteSpace(page.DraftAuthor))
@@ -481,6 +493,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             else
             {
                 model.Template = template;
+                model.ProjectDefaultSlug = project.DefaultPageSlug;
 
                 return View(model);
             }
@@ -496,15 +509,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             string type =""
             )
         {
-            var projectSettings = await ProjectService.GetCurrentProjectSettings();
+            var project = await ProjectService.GetCurrentProjectSettings();
 
-            if (projectSettings == null)
+            if (project == null)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var canEdit = await User.CanEditPages(projectSettings.Id, AuthorizationService);
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
             if(!canEdit)
             {
                 Log.LogInformation("redirecting to index because user cannot edit");
@@ -515,8 +528,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var model = new PageEditViewModel
             {
-                ProjectId = projectSettings.Id,
-                DisqusShortname = projectSettings.DisqusShortName
+                ProjectId = project.Id,
+                DisqusShortname = project.DisqusShortName,
+                ProjectDefaultSlug = project.DefaultPageSlug
             };
 
             IPage page = null;
@@ -536,7 +550,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.Slug = slug;
                 model.ParentSlug = parentSlug;
                 model.PageOrder = await PageService.GetNextChildPageOrder(parentSlug);
-                model.ContentType = projectSettings.DefaultContentType;
+                model.ContentType = project.DefaultContentType;
+                
                 if (EditOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
                 {
                     model.ContentType = "markdown";
@@ -583,6 +598,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     model.Author = page.DraftAuthor;
                     model.Content = page.DraftContent;
+                    
                 }
 
                 
@@ -598,12 +614,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
                 if(page.PubDate.HasValue)
                 {
-                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, projectSettings.TimeZoneId);
+                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
                 }
                 
                 if(page.DraftPubDate.HasValue)
                 {
-                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, projectSettings.TimeZoneId);
+                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
                 }
 
                 model.ShowHeading = page.ShowHeading;
@@ -696,6 +712,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             else
             {
                 model.DisqusShortname = project.DisqusShortName;
+                model.ProjectDefaultSlug = project.DefaultPageSlug;
 
                 return View(model);
             }
@@ -925,15 +942,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [AllowAnonymous]
         public virtual async Task<IActionResult> Development(string slug)
         {
-            var projectSettings = await ProjectService.GetCurrentProjectSettings();
+            var project = await ProjectService.GetCurrentProjectSettings();
 
-            if (projectSettings == null)
+            if (project == null)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var canEdit = await User.CanEditPages(projectSettings.Id, AuthorizationService);
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
             if (!canEdit)
             {
                 Log.LogInformation("redirecting to index because user cannot edit");

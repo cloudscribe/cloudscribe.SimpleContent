@@ -7,12 +7,14 @@
     var editOptions = pageEditOptionsAccessor.Value;
     var showDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
+    var slug = Model.Slug;
+    if(Model.Slug == Model.ProjectDefaultSlug) { slug = string.Empty; }
 
 }
 @section Styles {
     @{ await Html.RenderPartialAsync("EditStylesPartial", Model); }
 }
-<h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
+<h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug })">@sr["Cancel"]</a></small></h2>
 <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />
