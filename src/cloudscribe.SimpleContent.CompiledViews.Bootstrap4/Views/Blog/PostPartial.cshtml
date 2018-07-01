@@ -6,30 +6,30 @@
 }
 @functions{
 
-    public string GetPubDateClass()
-    {
+        public string GetPubDateClass()
+{
         if (Model.TmpPost != null && Model.TmpPost.PubDate > DateTime.UtcNow) return "lead text-danger";
 
         return null;
-    }
-    public string GetCommentString(IPost post)
-    {
+}
+public string GetCommentString(IPost post)
+{
         if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
         {
             return post.ApprovedCommentCount() + " " + sr["Comments"];
 
         }
         return "<span class=\"disqus-comment-count\" data-disqus-identifier=\"" + Model.TmpPost.Id + "\"></span>";
-    }
-    public string GetCommentFragment()
-    {
+}
+public string GetCommentFragment()
+{
         if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
         {
             return "comments";
 
         }
         return "disqus_thread";
-    }
+}
 }
 <article class="post" data-id="@Model.TmpPost.Id" itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
     <header class="jumbotron">
@@ -82,58 +82,66 @@
         </div>
     </header>
     <div itemprop="articleBody">
-        @{
-            var result = Model.FilterHtmlForList(Model.TmpPost);
+        @if (!Model.TmpPost.IsPublished)
+        {
+            <div class="alert alert-info" role="alert">
+                @sr["This is an unpublished draft."]
+            </div>
         }
+        else if (Model.CanEdit && Model.TmpPost.HasDraftVersion())
+        {
+          <div class="alert alert-info" role="alert">
+            @sr["This is the published version, but this post has an unpublished draft."]
+         </div>
+        }
+        @{ var result = Model.FilterHtmlForList(Model.TmpPost); }
         @Html.Raw(result.FilteredContent)
         @if (!result.IsFullContent)
-        {
-            @if (Model.ProjectSettings.IncludePubDateInPostUrls)
-            {
-                <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
-                   asp-route-year="@pubDate.Value.Year"
-                   asp-route-month="@pubDate.Value.Month.ToString("00")"
-                   asp-route-day="@pubDate.Value.Day.ToString("00")"
-                   asp-route-slug="@Model.TmpPost.Slug"
-                   itemprop="url">@sr["[...Read More]"]</a>
-            }
-            else
-            {
-                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@sr["[...Read More]"]</a>
-            }
-        }
+                {@if (Model.ProjectSettings.IncludePubDateInPostUrls)
+                    {<a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
+                        asp-route-year="@pubDate.Value.Year"
+                        asp-route-month="@pubDate.Value.Month.ToString("00")"
+                        asp-route-day="@pubDate.Value.Day.ToString("00")"
+                        asp-route-slug="@Model.TmpPost.Slug"
+                        itemprop="url">@sr["[...Read More]"]</a>
+                                    }
+                                    else
+                                    {
+                        <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" itemprop="url">@sr["[...Read More]"]</a>
+                                    }
+                    }
     </div>
     @{
-        var imageUrl = Model.ExtractFirstImageUrl(Model.TmpPost, Url);
-        var imageSize = Model.ExtractFirstImageDimensions(Model.TmpPost);
+                var imageUrl = Model.ExtractFirstImageUrl(Model.TmpPost, Url);
+var imageSize = Model.ExtractFirstImageDimensions(Model.TmpPost);
     }
     @if (!string.IsNullOrEmpty(imageUrl))
-    {
-        <div class="collapse" aria-hidden="true" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
-            <schema-org-meta itemprop="url" content="@imageUrl"></schema-org-meta>
-            <schema-org-meta itemprop="width" content="@imageSize.Width"></schema-org-meta>
-            <schema-org-meta itemprop="height" content="@imageSize.Height"></schema-org-meta>
-        </div>
-    }
+        {
+    <div class="collapse" aria-hidden="true" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+        <schema-org-meta itemprop="url" content="@imageUrl"></schema-org-meta>
+        <schema-org-meta itemprop="width" content="@imageSize.Width"></schema-org-meta>
+        <schema-org-meta itemprop="height" content="@imageSize.Height"></schema-org-meta>
+    </div>
+        }
     @if (!string.IsNullOrEmpty(Model.TmpPost.Author))
-    {
-        <div class="collapse" aria-hidden="true" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            <schema-org-meta itemprop="name" content="@Model.TmpPost.Author"></schema-org-meta>
-        </div>
-    }
+        {
+    <div class="collapse" aria-hidden="true" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <schema-org-meta itemprop="name" content="@Model.TmpPost.Author"></schema-org-meta>
+    </div>
+        }
     @if (!string.IsNullOrEmpty(Model.ProjectSettings.Publisher))
-    {
-        <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/@Model.ProjectSettings.PublisherEntityType">
-            <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
-            <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-                <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
-                <schema-org-meta itemprop="width" content="@Model.ProjectSettings.PublisherLogoWidth"></schema-org-meta>
-                <schema-org-meta itemprop="height" content="@Model.ProjectSettings.PublisherLogoHeight"></schema-org-meta>
-            </div>
+        {
+    <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/@Model.ProjectSettings.PublisherEntityType">
+        <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
+        <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+            <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
+            <schema-org-meta itemprop="width" content="@Model.ProjectSettings.PublisherLogoWidth"></schema-org-meta>
+            <schema-org-meta itemprop="height" content="@Model.ProjectSettings.PublisherLogoHeight"></schema-org-meta>
         </div>
-    }
+    </div>
+        }
     @if (Model.TmpPost.PubDate.HasValue)
-    {
-        <schema-org-meta itemprop="dateModified" content="@Model.TmpPost.PubDate.Value.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
-    }
+        {
+    <schema-org-meta itemprop="dateModified" content="@Model.TmpPost.PubDate.Value.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+        }
 </article>

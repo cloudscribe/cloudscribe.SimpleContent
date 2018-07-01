@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-06-28
+// Last Modified:           2018-07-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -43,6 +43,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 post.Author = post.DraftAuthor;
                 post.PubDate = post.DraftPubDate.Value;
                 post.SerializedModel = post.DraftSerializedModel;
+                post.IsPublished = true;
 
                 post.DraftAuthor = null;
                 post.DraftContent = null;

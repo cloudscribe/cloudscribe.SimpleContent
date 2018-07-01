@@ -184,7 +184,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     if (post.ContentType == "markdown")
                     {
                         var html = MapImageUrlsToCdn(
-                            ConvertMarkdownToHtml(post.Content),
+                            ConvertMarkdownToHtml(post.CoalesceContentToDraftContent()),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
 
@@ -200,7 +200,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     else
                     {
                         var html = MapImageUrlsToCdn(
-                            post.Content,
+                            post.CoalesceContentToDraftContent(),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
 
@@ -226,14 +226,14 @@ namespace cloudscribe.SimpleContent.Web.Services
                 if (post.ContentType == "markdown")
                 {
                     result.FilteredContent = MapImageUrlsToCdn(
-                            ConvertMarkdownToHtml(post.Content),
+                            ConvertMarkdownToHtml(post.CoalesceContentToDraftContent()),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
                 }
                 else
                 {
                     result.FilteredContent = MapImageUrlsToCdn(
-                            post.Content,
+                            post.CoalesceContentToDraftContent(),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
                 }

@@ -63,7 +63,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             list = list.Where(p =>
                       (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
                       )
-                      .OrderByDescending(p => p.PubDate)
+                      .OrderByDescending(p => p.PubDate ?? p.LastModified)
                       .ToList<Post>();
 
             //if (list.Count > 0)
@@ -96,7 +96,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                      && p.Categories.Any(
                         c => string.Equals(c, category, StringComparison.OrdinalIgnoreCase))
                         )
-                        .OrderByDescending(p => p.PubDate)
+                        .OrderByDescending(p => p.PubDate ?? p.LastModified)
                         .ToList<Post>();
 
                 totalPosts = posts.Count;
@@ -107,7 +107,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 posts = posts.Where(p =>
                     (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
                         )
-                        .OrderByDescending(p => p.PubDate)
+                        .OrderByDescending(p => p.PubDate ?? p.LastModified)
                         .ToList<Post>();
 
                 //posts = posts.OrderByDescending(p => p.PubDate).ToList<Post>();
@@ -229,7 +229,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
-                .OrderByDescending(p => p.PubDate)
+                .OrderByDescending(p => p.PubDate ?? p.LastModified)
                 .ToList<Post>();
             }
             else if (month > 0)
@@ -241,7 +241,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
-                .OrderByDescending(p => p.PubDate)
+                .OrderByDescending(p => p.PubDate ?? p.LastModified)
                 .ToList<Post>();
 
             }
@@ -251,7 +251,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 x.PubDate.HasValue
                 && x.PubDate.Value.Year == year
                 )
-                .OrderByDescending(p => p.PubDate)
+                .OrderByDescending(p => p.PubDate ?? p.LastModified)
                 .ToList<Post>();
             }
 
@@ -351,7 +351,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     p => p.PubDate < cutoff
                     && p.IsPublished == true
                     )
-                    .OrderByDescending(p => p.PubDate)
+                    .OrderByDescending(p => p.PubDate ?? p.LastModified)
                     .Take(1)
                     .FirstOrDefault();
                 
@@ -360,7 +360,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     p => p.PubDate > cutoff
                     && p.IsPublished == true
                     )
-                    .OrderBy(p => p.PubDate)
+                    .OrderBy(p => p.PubDate ?? p.LastModified)
                     .Take(1)
                     .FirstOrDefault();
 
@@ -455,7 +455,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     cancellationToken).ConfigureAwait(false);
 
                 var grouped = from p in visiblePosts
-                              group p by new { month = p.PubDate.Value.Month, year = p.PubDate.Value.Year } into d
+                              group p by new { month = p.PubDate?.Month ?? p.LastModified.Month, year = p.PubDate?.Year ?? p.LastModified.Year } into d
                               select new
                               {
                                   key = d.Key.year.ToString() + "/" + d.Key.month.ToString("00")

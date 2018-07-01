@@ -23,6 +23,40 @@ namespace cloudscribe.SimpleContent.Models
             return post.Comments.Count();
         }
 
+        public static string CoalesceContentToDraftContent(this IPost post)
+        {
+            if (string.IsNullOrWhiteSpace(post.Content))
+            {
+                return post.DraftContent;
+            }
+
+            return post.Content;
+        }
+
+        public static bool HasPublishedVersion(this IPost post)
+        {
+            if (post.IsPublished && post.PubDate.HasValue && post.PubDate.Value < DateTime.UtcNow)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool HasDraftVersion(this IPost post)
+        {
+            return !string.IsNullOrWhiteSpace(post.DraftContent);
+        }
+
+        public static void PromoteDraftTemporarilyForRender(this IPost post)
+        {
+            post.Content = post.DraftContent;
+            post.Author = post.DraftAuthor;
+            post.PubDate = post.DraftPubDate;
+
+        }
+
+
         public static int ApprovedCommentCount(this IPage page)
         {
             if (page.Comments == null) { return 0; }
@@ -38,6 +72,8 @@ namespace cloudscribe.SimpleContent.Models
 
             return false;
         }
+
+        
 
         public static bool HasDraftVersion(this IPage page)
         {

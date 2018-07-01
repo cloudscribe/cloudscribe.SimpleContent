@@ -7,6 +7,7 @@
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Config;
+using cloudscribe.Web.Common;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -22,22 +23,28 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
     public class CreateOrUpdatePostHandler : IRequestHandler<CreateOrUpdatePostRequest, CommandResult<IPost>>
     {
         public CreateOrUpdatePostHandler(
+            IProjectService projectService,
             IBlogService blogService,
             PostEvents postEvents,
+            ITimeZoneHelper timeZoneHelper,
             IOptions<SimpleContentConfig> configOptionsAccessor,
             IStringLocalizer<SimpleContent> localizer,
             ILogger<CreateOrUpdatePostHandler> logger
             )
         {
+            _projectService = projectService;
             _blogService = blogService;
             _postEvents = postEvents;
+            _timeZoneHelper = timeZoneHelper;
             _contentOptions = configOptionsAccessor.Value;
             _localizer = localizer;
             _log = logger;
         }
 
+        private readonly IProjectService _projectService;
         private readonly IBlogService _blogService;
         private readonly PostEvents _postEvents;
+        private ITimeZoneHelper _timeZoneHelper;
         private readonly SimpleContentConfig _contentOptions;
         private readonly IStringLocalizer _localizer;
         private readonly ILogger _log;
@@ -49,6 +56,7 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
             try
             {
                 bool isNew = false;
+                var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var post = request.Post;
                 if(post == null)
                 {
@@ -153,8 +161,9 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
                             post.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                post.DraftPubDate = request.ViewModel.NewPubDate.Value;
+                                post.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, project.TimeZoneId);
                             }
+                            if (!post.PubDate.HasValue) { post.IsPublished = false; }
 
                             break;
 

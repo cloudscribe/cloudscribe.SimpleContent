@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-02-05
+// Last Modified:           2018-07-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -33,6 +33,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
 
+        public bool HasPublishedVersion { get; set; }
+        public bool HasDraft { get; set; }
+        public bool ShowingDraft { get; set; }
+
         public string CurrentCategory { get; set; } = string.Empty;
 
         public string ListRouteName { get; set; } 
@@ -48,7 +52,6 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public int Month { get; set; } = 0;
         public int Day { get; set; } = 0;
         public bool CanEdit { get; set; } = false;
-        public bool ShowingDraft { get; set; } = false;
         
         public bool ShowComments { get; set; } = true;
         public bool CommentsAreOpen { get; set; } = false;

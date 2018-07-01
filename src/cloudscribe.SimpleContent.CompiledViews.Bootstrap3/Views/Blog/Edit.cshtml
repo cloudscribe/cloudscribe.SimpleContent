@@ -42,8 +42,8 @@
             <span asp-validation-for="Title" class="text-danger"></span>
         </div>
     </div>
-    @{ Html.RenderPartial("EditCorrelationKeyPartial", Model); }
-    @{ Html.RenderPartial("EditSlugPartial", Model); }
+    @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
+    @{ await Html.RenderPartialAsync("EditSlugPartial", Model); }
     <div class="form-group">
         <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
         <div class="col-md-10">
@@ -56,11 +56,11 @@
         <div class="col-md-10">
             @if (Model.ContentType == "markdown")
             {
-                Html.RenderPartial("EditContentMarkdownPartial", Model);
+                await Html.RenderPartialAsync("EditContentMarkdownPartial", Model);
             }
             else
             {
-                Html.RenderPartial("EditContentHtmlPartial", Model);
+                await Html.RenderPartialAsync("EditContentHtmlPartial", Model);
             }
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
@@ -79,7 +79,7 @@
             <span asp-validation-for="Author" class="text-danger"></span>
         </div>
     </div>
-    @{ Html.RenderPartial("EditImageUrlPartial", Model); }
+    @{ await Html.RenderPartialAsync("EditImageUrlPartial", Model); }
     <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
@@ -98,22 +98,22 @@
             </div>
         </div>
     </div>
-    @{ Html.RenderPartial("EditPubDate", Model); }
+    @{ await Html.RenderPartialAsync("EditPubDate", Model); }
     
     @if (Model.TeasersEnabled)
     {
         if (Model.ContentType == "markdown")
         {
-            Html.RenderPartial("EditTeaserMarkdownPartial", Model);
+            await Html.RenderPartialAsync("EditTeaserMarkdownPartial", Model);
         }
         else
         {
-            Html.RenderPartial("EditTeaserHtmlPartial", Model);
+            await Html.RenderPartialAsync("EditTeaserHtmlPartial", Model);
         }
     }
     else
     {
-        Html.RenderPartial("EditTeaserDisabledPartial");
+        await Html.RenderPartialAsync("EditTeaserDisabledPartial");
     }
 
     <div class="form-group">

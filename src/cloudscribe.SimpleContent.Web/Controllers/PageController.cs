@@ -118,7 +118,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 if (model.CurrentPage != null)
                 {
                     model.HasPublishedVersion = page.HasPublishedVersion();
-                    model.HasDraft = model.CurrentPage.HasDraftVersion();
+                    model.HasDraft = page.HasDraftVersion();
                     if (canEdit && model.HasDraft && (showDraft || !model.HasPublishedVersion))
                     {
                         page.PromoteDraftTemporarilyForRender();

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-06-27
+// Last Modified:           2018-07-01
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -40,6 +40,7 @@ namespace cloudscribe.SimpleContent.Web.Versioning
                 page.Author = page.DraftAuthor;
                 page.PubDate = page.DraftPubDate.Value;
                 page.SerializedModel = page.DraftSerializedModel;
+                page.IsPublished = true;
 
                 page.DraftAuthor = null;
                 page.DraftContent = null;

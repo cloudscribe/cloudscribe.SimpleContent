@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>second-draft</id>
+  <title>Second Draft</title>
+  <slug>second-draft</slug>
+  <correlationkey />
+  <author />
+  <pubDate />
+  <lastModified>2018-07-01T15:33:46</lastModified>
+  <excerpt>another draft</excerpt>
+  <content />
+  <contentType>html</contentType>
+  <imageUrl />
+  <thumbnailUrl />
+  <createdUtc>2018-07-01T15:33:46</createdUtc>
+  <createdByUser>admin</createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor>Admin</draftAuthor>
+  <draftContent>&lt;p&gt;This one is a winner!&lt;/p&gt;
+</draftContent>
+  <draftPubDate />
+  <templateKey />
+  <serializedModel />
+  <draftSerializedModel />
+  <serializer />
+  <ispublished>false</ispublished>
+  <isFeatured>false</isFeatured>
+  <teaserOverride />
+  <suppressTeaser>false</suppressTeaser>
+  <categories>
+    <category>weather</category>
+    <category>sports</category>
+  </categories>
+  <comments></comments>
+</post>
