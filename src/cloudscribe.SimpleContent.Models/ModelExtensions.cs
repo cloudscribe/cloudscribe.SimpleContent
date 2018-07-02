@@ -56,6 +56,73 @@ namespace cloudscribe.SimpleContent.Models
 
         }
 
+        public static ContentHistory CreateHistory(this IPost post, string currentUser, bool forDelete = false)
+        {
+            var hx = new ContentHistory()
+            {
+                ArchivedBy = currentUser,
+                Author = post.Author,
+                ArchivedUtc = DateTime.UtcNow,
+                Content = post.Content,
+                ContentSource = ContentSource.Blog,
+                ContentId = post.Id,
+                ContentType = post.ContentType,
+                CorrelationKey = post.CorrelationKey,
+                CreatedByUser = post.CreatedByUser,
+                CreatedUtc = post.CreatedUtc,
+                DraftAuthor = post.DraftAuthor,
+                DraftContent = post.DraftContent,
+                DraftPubDate = post.DraftPubDate,
+                DraftSerializedModel = post.DraftSerializedModel,
+                IsDraftHx = post.HasDraftVersion(),
+                IsPublished = post.IsPublished,
+                LastModified = post.LastModified,
+                LastModifiedByUser = post.LastModifiedByUser,
+                ProjectId = post.BlogId,
+                PubDate = post.PubDate,
+                SerializedModel = post.SerializedModel,
+                TeaserOverride = post.TeaserOverride,
+                Title = post.Title,
+                WasDeleted = forDelete
+                
+            };
+
+            return hx;
+        }
+
+        public static ContentHistory CreateHistory(this IPage page, string currentUser, bool forDelete = false)
+        {
+            var hx = new ContentHistory()
+            {
+                ArchivedBy = currentUser,
+                Author = page.Author,
+                ArchivedUtc = DateTime.UtcNow,
+                Content = page.Content,
+                ContentSource = ContentSource.Page,
+                ContentId = page.Id,
+                ContentType = page.ContentType,
+                CorrelationKey = page.CorrelationKey,
+                CreatedByUser = page.CreatedByUser,
+                CreatedUtc = page.CreatedUtc,
+                DraftAuthor = page.DraftAuthor,
+                DraftContent = page.DraftContent,
+                DraftPubDate = page.DraftPubDate,
+                DraftSerializedModel = page.DraftSerializedModel,
+                IsDraftHx = page.HasDraftVersion(),
+                IsPublished = page.IsPublished,
+                LastModified = page.LastModified,
+                LastModifiedByUser = page.LastModifiedByUser,
+                ProjectId = page.ProjectId,
+                PubDate = page.PubDate,
+                SerializedModel = page.SerializedModel,
+                Title = page.Title,
+                WasDeleted = forDelete
+
+            };
+
+            return hx;
+        }
+
 
         public static int ApprovedCommentCount(this IPage page)
         {

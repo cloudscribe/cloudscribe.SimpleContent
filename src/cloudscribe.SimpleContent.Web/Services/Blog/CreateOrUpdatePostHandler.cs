@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-06-28
+// Last Modified:           2018-07-02
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -26,6 +26,7 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
             IProjectService projectService,
             IBlogService blogService,
             PostEvents postEvents,
+            IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             IOptions<SimpleContentConfig> configOptionsAccessor,
             IStringLocalizer<SimpleContent> localizer,
@@ -35,6 +36,7 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
             _projectService = projectService;
             _blogService = blogService;
             _postEvents = postEvents;
+            _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _contentOptions = configOptionsAccessor.Value;
             _localizer = localizer;
@@ -44,6 +46,7 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
         private readonly IProjectService _projectService;
         private readonly IBlogService _blogService;
         private readonly PostEvents _postEvents;
+        private readonly IContentHistoryCommands _historyCommands;
         private ITimeZoneHelper _timeZoneHelper;
         private readonly SimpleContentConfig _contentOptions;
         private readonly IStringLocalizer _localizer;
@@ -58,7 +61,8 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
                 bool isNew = false;
                 var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var post = request.Post;
-                if(post == null)
+                ContentHistory history = null;
+                if (post == null)
                 {
                     isNew = true;
                     post = new Post()
@@ -67,8 +71,12 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
                         Title = request.ViewModel.Title,
                         MetaDescription = request.ViewModel.MetaDescription,                  
                         Slug = ContentUtils.CreateSlug(request.ViewModel.Title),
-                        CreatedByUser = request.ModifiedByUserName
+                        CreatedByUser = request.UserName
                     };
+                }
+                else
+                {
+                    history = post.CreateHistory(request.UserName);
                 }
 
                 if (!string.IsNullOrEmpty(request.ViewModel.Slug))
@@ -95,7 +103,7 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
                     post.TeaserOverride = request.ViewModel.TeaserOverride;
                     post.SuppressTeaser = request.ViewModel.SuppressTeaser;
                     post.LastModified = DateTime.UtcNow;
-                    post.LastModifiedByUser = request.ModifiedByUserName;
+                    post.LastModifiedByUser = request.UserName;
 
                     if (!string.IsNullOrEmpty(request.ViewModel.Slug))
                     {
@@ -189,7 +197,12 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
 
                             break;
                     }
-                    
+
+                    if (history != null)
+                    {
+                        await _historyCommands.Create(request.ProjectId, history).ConfigureAwait(false);
+                    }
+
                     if (isNew)
                     {
                         await _blogService.Create(post);

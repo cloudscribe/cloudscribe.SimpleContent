@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Created:					2018-06-20
-// Last Modified:			2018-06-21
+// Last Modified:			2018-07-02
 // 
 
 using System;
@@ -9,6 +9,10 @@ namespace cloudscribe.SimpleContent.Models
 {
     public class ContentHistory
     {
+        public ContentHistory()
+        {
+            Id = Guid.NewGuid();
+        }
 
         public Guid Id { get; set; } 
 

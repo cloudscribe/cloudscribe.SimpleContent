@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-11-20
+// Last Modified:           2018-07-02
 // 
 
 
@@ -24,6 +24,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddNoDbPostStorage();
             services.AddNoDbPageStorage();
             services.AddScoped<IStorageInfo, StorageInfo>();
+
+            services.TryAddScoped<IContentHistoryCommands, ContentHistoryCommands>();
+            services.TryAddScoped<IContentHistoryQueries, ContentHistoryQueries>();
 
             return services;
         }

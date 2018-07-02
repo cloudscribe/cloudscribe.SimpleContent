@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2016-11-09
+// Last Modified:			2018-07-02
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,6 +24,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
 
             services.TryAddScoped<IProjectQueries, ProjectQueries>();
             services.TryAddScoped<IProjectCommands, ProjectCommands>();
+
+            services.TryAddScoped<IContentHistoryCommands, ContentHistoryCommands>();
+            services.TryAddScoped<IContentHistoryQueries, ContentHistoryQueries>();
             
 
             return services;

@@ -14,7 +14,13 @@ namespace cloudscribe.SimpleContent.Models
 
         Task Delete(
             string projectId,
-            Guid levelId,
+            Guid id,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
+        Task DeleteByContent(
+            string projectId,
+            string contentId,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 

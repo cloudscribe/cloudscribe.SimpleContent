@@ -430,6 +430,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 .HasMaxLength(255)
                 .IsRequired();
 
+                entity.HasIndex(p => p.Title);
+
                 entity.Property(p => p.Author)
                 .HasMaxLength(255);
 
@@ -444,8 +446,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.Property(p => p.CreatedByUser)
                   .HasMaxLength(100);
 
+                entity.HasIndex(p => p.CreatedByUser);
+
                 entity.Property(p => p.LastModifiedByUser)
                   .HasMaxLength(100);
+
+                entity.HasIndex(p => p.LastModifiedByUser);
 
                 entity.Property(p => p.DraftAuthor)
                 .HasMaxLength(255);

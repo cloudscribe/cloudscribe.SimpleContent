@@ -25,6 +25,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             IPageService pageService,
             ITimeZoneHelper timeZoneHelper,
             PageEvents pageEvents,
+            IContentHistoryCommands historyCommands,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             ILogger<CreateOrUpdatePageHandler> logger
             )
@@ -32,6 +33,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             _projectService = projectService;
             _pageService = pageService;
             _pageEvents = pageEvents;
+            _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _localizer = localizer;
             _log = logger;
@@ -40,6 +42,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IProjectService _projectService;
         private readonly IPageService _pageService;
         private readonly PageEvents _pageEvents;
+        private readonly IContentHistoryCommands _historyCommands;
         private readonly IStringLocalizer _localizer;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly ILogger _log;
@@ -53,6 +56,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 bool isNew = false;
                 var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var page = request.Page;
+                ContentHistory history = null;
                 if(page == null)
                 {
                     isNew = true;
@@ -64,6 +68,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                         Slug = ContentUtils.CreateSlug(request.ViewModel.Title),
                         ContentType = request.ViewModel.ContentType
                     };
+                }
+                else
+                {
+                    history = page.CreateHistory(request.UserName);
                 }
 
                 
@@ -179,6 +187,11 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftPubDate = null;
 
                             break;
+                    }
+
+                    if(history != null)
+                    {
+                        await _historyCommands.Create(request.ProjectId, history).ConfigureAwait(false);
                     }
 
                     if(isNew)

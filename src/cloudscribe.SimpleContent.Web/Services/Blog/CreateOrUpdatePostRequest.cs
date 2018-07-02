@@ -9,21 +9,21 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
     {
         public CreateOrUpdatePostRequest(
             string projectId,
-            string modifiedByUserName,
+            string userName,
             PostEditViewModel viewModel,
             IPost post,
             ModelStateDictionary modelState
             )
         {
             ProjectId = projectId;
-            ModifiedByUserName = modifiedByUserName;
+            UserName = userName;
             ViewModel = viewModel;
             Post = post;
             ModelState = modelState;
         }
 
         public string ProjectId { get; private set; }
-        public string ModifiedByUserName { get; private set; }
+        public string UserName { get; private set; }
 
         public PostEditViewModel ViewModel { get; private set; }
 

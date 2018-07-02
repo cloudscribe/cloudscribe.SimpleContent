@@ -28,6 +28,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             IProjectService projectService,
             IPageService pageService,
             PageEvents pageEvents,
+            IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             IEnumerable<IModelSerializer> serializers,
             IEnumerable<IParseModelFromForm> formParsers,
@@ -40,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             _projectService = projectService;
             _pageService = pageService;
             _pageEvents = pageEvents;
+            _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _serializers = serializers;
             _formParsers = formParsers;
@@ -52,6 +54,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IProjectService _projectService;
         private readonly IPageService _pageService;
         private readonly PageEvents _pageEvents;
+        private readonly IContentHistoryCommands _historyCommands;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly IEnumerable<IModelSerializer> _serializers;
         private readonly IEnumerable<IParseModelFromForm> _formParsers;
@@ -97,6 +100,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             try
             {
                 var page = request.Page;
+                var history = page.CreateHistory(request.UserName);
                 var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var serializer = GetSerializer(request.Template.SerializerName);
                 var parser = GetFormParser(request.Template.FormParserName);
@@ -252,6 +256,8 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                             break;
                     }
+
+                    await _historyCommands.Create(request.ProjectId, history).ConfigureAwait(false);
                     
                     await _pageService.Update(page);
 

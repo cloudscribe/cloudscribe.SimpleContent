@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2018-06-27
+// Last Modified:			2018-07-02
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -655,6 +655,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 .HasMaxLength(255)
                 .IsRequired();
 
+                entity.HasIndex(p => p.Title);
+
                 entity.Property(p => p.Author)
                 .HasMaxLength(255);
 
@@ -669,8 +671,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.CreatedByUser)
                   .HasMaxLength(100);
 
+                entity.HasIndex(p => p.CreatedByUser);
+
                 entity.Property(p => p.LastModifiedByUser)
                   .HasMaxLength(100);
+
+                entity.HasIndex(p => p.LastModifiedByUser);
 
                 entity.Property(p => p.DraftAuthor)
                 .HasMaxLength(255);
