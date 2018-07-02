@@ -317,23 +317,23 @@ namespace cloudscribe.SimpleContent.Services
             //    post.Content
             //    ).ConfigureAwait(false);
 
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if (post.PubDate == nonPublishedDate)
-            {
-                post.PubDate = DateTime.UtcNow;
-            }
+            //var nonPublishedDate = new DateTime(1, 1, 1);
+            //if (post.PubDate == nonPublishedDate)
+            //{
+            //    post.PubDate = DateTime.UtcNow;
+            //}
 
             await _eventHandlers.HandlePreUpdate(_settings.Id, post.Id).ConfigureAwait(false);
             await _postCommands.Update(_settings.Id, post).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, post).ConfigureAwait(false);
         }
 
-        public async Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
-        {
-            await EnsureBlogSettings().ConfigureAwait(false);
+        //public async Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
+        //{
+        //    await EnsureBlogSettings().ConfigureAwait(false);
 
-            await _postCommands.HandlePubDateAboutToChange(_settings.Id, post, newPubDate);
-        }
+        //    await _postCommands.HandlePubDateAboutToChange(_settings.Id, post, newPubDate);
+        //}
 
         private async Task InitializeNewPosts(string projectId, IPost post, bool publish)
         {

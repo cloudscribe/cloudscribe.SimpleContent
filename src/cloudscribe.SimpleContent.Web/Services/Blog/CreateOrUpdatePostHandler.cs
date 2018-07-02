@@ -171,7 +171,15 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
 
                             post.Content = request.ViewModel.Content;
                             post.Author = request.ViewModel.Author;
-                            post.PubDate = DateTime.UtcNow;
+                            if(!post.PubDate.HasValue)
+                            {
+                                post.PubDate = DateTime.UtcNow;
+                            }
+                            else if (post.PubDate > DateTime.UtcNow)
+                            {
+                                post.PubDate = DateTime.UtcNow;
+                            }
+                            
                             post.IsPublished = true;
                             shouldFirePublishEvent = true;
 

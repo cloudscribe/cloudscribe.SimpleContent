@@ -419,16 +419,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.CorrelationKey = postResult.Post.CorrelationKey;
                 model.IsPublished = postResult.Post.IsPublished;
                 model.MetaDescription = postResult.Post.MetaDescription;
-                if(postResult.Post.PubDate.HasValue)
-                {
-                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, project.TimeZoneId);
-                }
-
-                if (postResult.Post.DraftPubDate.HasValue)
-                {
-                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, project.TimeZoneId);
-                }
-
                 model.Slug = postResult.Post.Slug;
                 model.Title = postResult.Post.Title;
                 model.CurrentPostUrl = await BlogService.ResolvePostUrl(postResult.Post).ConfigureAwait(false);
@@ -440,6 +430,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ContentType = postResult.Post.ContentType;
                 model.TeaserOverride = postResult.Post.TeaserOverride;
                 model.SuppressTeaser = postResult.Post.SuppressTeaser;
+                if (postResult.Post.PubDate.HasValue)
+                {
+                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, project.TimeZoneId);
+                }
+
+                if (postResult.Post.DraftPubDate.HasValue)
+                {
+                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, project.TimeZoneId);
+                }
             }
 
 

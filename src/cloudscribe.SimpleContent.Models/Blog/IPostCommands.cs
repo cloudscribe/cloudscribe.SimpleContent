@@ -21,11 +21,11 @@ namespace cloudscribe.SimpleContent.Models
             IPost post,
             CancellationToken cancellationToken = default(CancellationToken));
 
-        Task HandlePubDateAboutToChange(
-            string projectId,
-            IPost post, 
-            DateTime newPubDate, 
-            CancellationToken cancellationToken = default(CancellationToken));
+        //Task HandlePubDateAboutToChange(
+        //    string projectId,
+        //    IPost post, 
+        //    DateTime newPubDate, 
+        //    CancellationToken cancellationToken = default(CancellationToken));
 
     }
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-06-21
+// Last Modified:           2018-07-02
 // 
 
 
@@ -62,20 +62,21 @@ namespace cloudscribe.SimpleContent.Services
 
         private readonly HttpContext _context;
         private CancellationToken CancellationToken => _context?.RequestAborted ?? CancellationToken.None;
-        private IUrlHelperFactory _urlHelperFactory;
-        private IActionContextAccessor _actionContextAccesor;
-        private IProjectSecurityResolver _security;
-        private IPageQueries _pageQueries;
-        private IPageCommands _pageCommands;
-        private IMediaProcessor _mediaProcessor;
-        private IProjectService _projectService;
+        private readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly IActionContextAccessor _actionContextAccesor;
+        private readonly IProjectSecurityResolver _security;
+        private readonly IPageQueries _pageQueries;
+        private readonly IPageCommands _pageCommands;
+        private readonly IMediaProcessor _mediaProcessor;
+        private readonly IProjectService _projectService;
+        private readonly IContentProcessor _contentProcessor;
+        private readonly IMemoryCache _cache;
+        private readonly IPageNavigationCacheKeys _cacheKeys;
+        private readonly PageEvents _eventHandlers;
+        private readonly IPageRoutes _pageRoutes;
+        private readonly IStringLocalizer _sr;
+
         private IProjectSettings _settings = null;
-        private IContentProcessor _contentProcessor;
-        private IMemoryCache _cache;
-        private IPageNavigationCacheKeys _cacheKeys;
-        private PageEvents _eventHandlers;
-        private IPageRoutes _pageRoutes;
-        private IStringLocalizer _sr;
 
         private async Task EnsureProjectSettings()
         {
@@ -93,34 +94,12 @@ namespace cloudscribe.SimpleContent.Services
 
         public Task<string> ResolvePageUrl(IPage page)
         {
-            //await EnsureBlogSettings().ConfigureAwait(false);
             var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-       
             var result = urlHelper.Action("Index", "Page", new { slug = page.Slug });
-
             return Task.FromResult(result);
         }
 
-        //public async Task<bool> PageSlugIsAvailable(string slug)
-        //{
-        //    await EnsureProjectSettings().ConfigureAwait(false);
-
-        //    return await pageQueries.SlugIsAvailable(
-        //        settings.Id,
-        //        slug,
-        //        CancellationToken)
-        //        .ConfigureAwait(false);
-        //}
-
-        //public async Task<bool> PageSlugIsAvailable(string projectId, string slug)
-        //{
-        //    return await pageQueries.SlugIsAvailable(
-        //        projectId,
-        //        slug,
-        //        CancellationToken)
-        //        .ConfigureAwait(false);
-        //}
-
+       
         public async Task<bool> SlugIsAvailable(string slug)
         {
             await EnsureProjectSettings();
@@ -276,16 +255,14 @@ namespace cloudscribe.SimpleContent.Services
             }
         }
 
-        public async Task Create(
-            IPage page,
-            bool publish)
+        public async Task Create(IPage page)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
             
-            if (publish)
-            {
-                page.PubDate = DateTime.UtcNow;
-            }
+            //if (publish)
+            //{
+            //    page.PubDate = DateTime.UtcNow;
+            //}
 
             if (string.IsNullOrEmpty(page.Slug))
             {
@@ -313,15 +290,13 @@ namespace cloudscribe.SimpleContent.Services
 
             await _pageCommands.Create(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(_settings.Id, page).ConfigureAwait(false);
-            if (publish)
-            {
-                await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
-            }
+            //if (publish)
+            //{
+            //    await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
+            //}
         }
 
-        public async Task Update(
-            IPage page,
-            bool publish)
+        public async Task Update(IPage page)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
             
@@ -341,10 +316,10 @@ namespace cloudscribe.SimpleContent.Services
             await _eventHandlers.HandlePreUpdate(_settings.Id, page.Id).ConfigureAwait(false);
             await _pageCommands.Update(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, page).ConfigureAwait(false);
-            if (publish)
-            {
-                await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
-            }
+            //if (publish)
+            //{
+            //    await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
+            //}
         }
 
         public async Task DeletePage(string pageId)

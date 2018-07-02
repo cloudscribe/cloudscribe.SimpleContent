@@ -8,7 +8,7 @@ author: Admin
 metaDescription: Developers love markdown
 isPublished: true
 pubDate: 2017-11-21T06:53:00.0000000-05:00
-lastModified: 2018-06-28T16:10:21.9604059Z
+lastModified: 2018-07-02T12:56:42.2687943Z
 isFeatured: true
 categories:
 - markdown
@@ -16,16 +16,12 @@ categories:
 - t-shirts
 - foo
 comments: []
-createdUtc: 2018-06-28T16:10:21.9591410Z
+createdUtc: 2018-06-28T12:10:21.9591410-04:00
 lastModifiedByUser: admin
 ---
 ## Markdown Rocks!
 
 developers love it!
-
-[![](/media/images/img_2008-ws.jpg)](/media/images/img_2008.jpg)
-
-and
 
 ![dudes](/media/images/dudes1-550x412.jpeg)
 

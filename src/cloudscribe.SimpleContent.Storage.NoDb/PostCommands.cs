@@ -22,47 +22,20 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             IBasicCommands<Post> postCommands,
             IBasicQueries<Post> postQueries,
             IKeyGenerator keyGenerator
-            //,ILogger<PostCommands> logger
             )
         {
-            this.cache = cache;
-            commands = postCommands;
-            query = postQueries;
+            _cache = cache;
+            _commands = postCommands;
+            _query = postQueries;
             _keyGenerator = keyGenerator;
-           // log = logger;
         }
 
-        private PostCache cache;
-        private IBasicCommands<Post> commands;
-        private IBasicQueries<Post> query;
+        private PostCache _cache;
+        private IBasicCommands<Post> _commands;
+        private IBasicQueries<Post> _query;
         private IKeyGenerator _keyGenerator;
-       // private ILogger log;
-
-        public async Task HandlePubDateAboutToChange(
-            string projectId,
-            IPost post, 
-            DateTime newPubDate,
-            CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if(post.PubDate.HasValue)
-            {
-                if ((post.PubDate.Value.Month == newPubDate.Month) && (post.PubDate.Value.Year == newPubDate.Year))
-                {
-                    // we store posts in /year/month folders, if that didn't change no need to do anything
-                    return;
-                }
-            }
-            
-
-            // because with the filesystem storage we are storing posts in a year/month folder
-            // if the year or month changes we need to delete the old file and save the updated post to the
-            // new year/month folder
-            var p = Post.FromIPost(post);
-
-            await commands.DeleteAsync(projectId, p.Id).ConfigureAwait(false);
-            p.PubDate = newPubDate;
-            await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
-        }
+       
+        
 
         public async Task Create(
             string projectId,
@@ -75,11 +48,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             p.LastModified = DateTime.UtcNow;
 
             p.Id = _keyGenerator.GenerateKey(p);
-
-            //if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
             
-            await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
-            cache.ClearListCache(projectId);
+            await _commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
+            _cache.ClearListCache(projectId);
         }
 
         public async Task Update(
@@ -89,13 +60,50 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
            )
         {
             var p = Post.FromIPost(post);
-
             p.LastModified = DateTime.UtcNow;
-            
-            await commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
-            cache.ClearListCache(projectId);
+
+            //since we store posts in year month folders we need to check if pubdate changed and move the file if needed by delete and re-reate.
+            var currentVersion = await _query.FetchAsync(projectId, p.Id);
+            if(currentVersion.PubDate != p.PubDate)
+            {
+                await _commands.DeleteAsync(projectId, p.Id).ConfigureAwait(false);
+                await _commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
+            }
+            else
+            {
+                await _commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
+            }
+           
+            _cache.ClearListCache(projectId);
 
         }
+
+        //private async Task HandlePubDateAboutToChange(
+        //    string projectId,
+        //    IPost post,
+        //    DateTime newPubDate,
+        //    CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    if (post.PubDate.HasValue)
+        //    {
+        //        if ((post.PubDate.Value.Month == newPubDate.Month) && (post.PubDate.Value.Year == newPubDate.Year))
+        //        {
+        //            // we store posts in /year/month folders, if that didn't change no need to do anything
+        //            return;
+        //        }
+        //    }
+
+
+        //    // because with the filesystem storage we are storing posts in a year/month folder
+        //    // if the year or month changes we need to delete the old file and save the updated post to the
+        //    // new year/month folder
+        //    var p = Post.FromIPost(post);
+
+        //    await _commands.DeleteAsync(projectId, p.Id).ConfigureAwait(false);
+        //    p.PubDate = newPubDate;
+        //    await _commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
+        //}
+
 
         public async Task Delete(
             string projectId, 
@@ -103,14 +111,14 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var post = await query.FetchAsync(projectId, postId, cancellationToken).ConfigureAwait(false);
+            var post = await _query.FetchAsync(projectId, postId, cancellationToken).ConfigureAwait(false);
             if (post != null)
             {
                 //var allPosts = await GetAllPosts(projectId, CancellationToken.None).ConfigureAwait(false);
-                await commands.DeleteAsync(projectId, postId).ConfigureAwait(false);
+                await _commands.DeleteAsync(projectId, postId).ConfigureAwait(false);
                 //allPosts.Remove(post);
 
-                cache.ClearListCache(projectId);
+                _cache.ClearListCache(projectId);
             }
             
         }
@@ -120,12 +128,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken)
         {
 
-            var list = cache.GetAllPosts(projectId);
+            var list = _cache.GetAllPosts(projectId);
             if (list != null) return list;
 
-            var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
+            var l = await _query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
             list = l.ToList();
-            cache.AddToCache(list, projectId);
+            _cache.AddToCache(list, projectId);
 
             return list;
             

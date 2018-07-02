@@ -9,21 +9,21 @@ namespace cloudscribe.SimpleContent.Web.Services
     {
         public CreateOrUpdatePageRequest(
             string projectId,
-            string modifiedByUserName,
+            string userName,
             PageEditViewModel viewModel,
             IPage page,
             ModelStateDictionary modelState
             )
         {
             ProjectId = projectId;
-            ModifiedByUserName = modifiedByUserName;
+            UserName = userName;
             ViewModel = viewModel;
             Page = page;
             ModelState = modelState;
         }
 
         public string ProjectId { get; private set; }
-        public string ModifiedByUserName { get; private set; }
+        public string UserName { get; private set; }
 
         public PageEditViewModel ViewModel { get; private set; }
       

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-06-30
+// Last Modified:           2018-07-02
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -216,9 +216,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         return NotFound();
                     }
                 }
-
-                
-                
                 
                 if(!string.IsNullOrEmpty(page.ExternalUrl))
                 {
@@ -600,10 +597,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 else
                 {
                     model.Author = page.DraftAuthor;
-                    model.Content = page.DraftContent;
-                    
+                    model.Content = page.DraftContent; 
                 }
-
                 
                 model.Id = page.Id;
                 model.CorrelationKey = page.CorrelationKey;
@@ -614,17 +609,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.PageOrder = page.PageOrder;
                 model.ParentId = page.ParentId;
                 model.ParentSlug = page.ParentSlug;
-
-                if(page.PubDate.HasValue)
-                {
-                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
-                }
-                
-                if(page.DraftPubDate.HasValue)
-                {
-                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
-                }
-
                 model.ShowHeading = page.ShowHeading;
                 model.Slug = page.Slug;
                 model.ExternalUrl = page.ExternalUrl;
@@ -634,6 +618,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ShowComments = page.ShowComments;
                 model.DisableEditor = page.DisableEditor;
                 model.ContentType = page.ContentType;
+                if (page.PubDate.HasValue)
+                {
+                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
+                }
+
+                if (page.DraftPubDate.HasValue)
+                {
+                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
+                }
 
             }
 
@@ -1069,7 +1062,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
 
 
-            await PageService.Update(page, page.IsPublished);
+            await PageService.Update(page);
 
             return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = page.Slug });
 
@@ -1137,7 +1130,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 // needed so the ef entity shadow copy of resources gets synced
                 page.Resources = copyOfResources;
-                await PageService.Update(page, page.IsPublished);
+                await PageService.Update(page);
             }
             else
             {

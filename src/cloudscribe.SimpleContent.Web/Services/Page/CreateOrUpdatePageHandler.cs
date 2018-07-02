@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-06-30
+// Last Modified:           2018-07-02
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -60,7 +60,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     {
                         ProjectId = request.ProjectId,
                         ParentId = "0",
-                        CreatedByUser = request.ModifiedByUserName,
+                        CreatedByUser = request.UserName,
                         Slug = ContentUtils.CreateSlug(request.ViewModel.Title),
                         ContentType = request.ViewModel.ContentType
                     };
@@ -87,7 +87,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     page.Title = request.ViewModel.Title;
                     page.CorrelationKey = request.ViewModel.CorrelationKey;
                     page.LastModified = DateTime.UtcNow;
-                    page.LastModifiedByUser = request.ModifiedByUserName;
+                    page.LastModifiedByUser = request.UserName;
                     page.MenuFilters = request.ViewModel.MenuFilters;
                     page.MetaDescription = request.ViewModel.MetaDescription;
                     page.PageOrder = request.ViewModel.PageOrder;
@@ -128,7 +128,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     }
 
 
-                    var shouldPublish = false;
+                    var shouldFirePublishEvent = false;
                     var shouldFireUnPublishEvent = false;
                     switch (request.ViewModel.SaveMode)
                     {
@@ -172,7 +172,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.Author = request.ViewModel.Author;
                             page.PubDate = DateTime.UtcNow;
                             page.IsPublished = true;
-                            shouldPublish = true;
+                            shouldFirePublishEvent = true;
 
                             page.DraftAuthor = null;
                             page.DraftContent = null;
@@ -183,11 +183,16 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                     if(isNew)
                     {
-                        await _pageService.Create(page, shouldPublish);
+                        await _pageService.Create(page);
                     }
                     else
                     {
-                        await _pageService.Update(page, shouldPublish);
+                        await _pageService.Update(page);
+                    }
+
+                    if(shouldFirePublishEvent)
+                    {
+                        await _pageEvents.HandlePublished(project.Id, page).ConfigureAwait(false);
                     }
 
                     if (shouldFireUnPublishEvent)

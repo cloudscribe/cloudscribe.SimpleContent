@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -68,12 +67,12 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task Create(IPage page, bool publish)
+        public Task Create(IPage page)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(IPage page, bool publish)
+        public Task Update(IPage page)
         {
             throw new NotImplementedException();
         }

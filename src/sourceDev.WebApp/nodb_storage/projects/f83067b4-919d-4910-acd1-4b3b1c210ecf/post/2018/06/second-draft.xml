@@ -4,11 +4,12 @@
   <title>Second Draft</title>
   <slug>second-draft</slug>
   <correlationkey />
-  <author />
-  <pubDate />
-  <lastModified>2018-07-01T15:33:46</lastModified>
+  <author>Admin</author>
+  <pubDate>2018-06-08T12:57:45.4545000Z</pubDate>
+  <lastModified>2018-07-02T12:58:58</lastModified>
   <excerpt>another draft</excerpt>
-  <content />
+  <content>&lt;p&gt;This one is a winner!&lt;/p&gt;
+</content>
   <contentType>html</contentType>
   <imageUrl />
   <thumbnailUrl />
@@ -16,14 +17,14 @@
   <createdByUser>admin</createdByUser>
   <lastModifiedByUser>admin</lastModifiedByUser>
   <draftAuthor>Admin</draftAuthor>
-  <draftContent>&lt;p&gt;This one is a winner!&lt;/p&gt;
+  <draftContent>&lt;p&gt;This one is a winner! Edited to re-publish in July&lt;/p&gt;
 </draftContent>
-  <draftPubDate />
-  <templateKey />
-  <serializedModel />
-  <draftSerializedModel />
-  <serializer />
-  <ispublished>false</ispublished>
+  <draftPubDate>2018-07-02T13:11:46.4646000Z</draftPubDate>
+  <templateKey></templateKey>
+  <serializedModel></serializedModel>
+  <draftSerializedModel></draftSerializedModel>
+  <serializer></serializer>
+  <ispublished>true</ispublished>
   <isFeatured>false</isFeatured>
   <teaserOverride />
   <suppressTeaser>false</suppressTeaser>

@@ -122,10 +122,10 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<string> ResolveBlogUrl(IProjectSettings blog)
         {

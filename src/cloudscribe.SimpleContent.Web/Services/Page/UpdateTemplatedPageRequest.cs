@@ -10,7 +10,7 @@ namespace cloudscribe.SimpleContent.Web.Services
     {
         public UpdateTemplatedPageRequest(
             string projectId,
-            string modifiedByUserName,
+            string userName,
             PageEditWithTemplateViewModel viewModel,
             ContentTemplate template,
             IPage page,
@@ -19,7 +19,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             )
         {
             ProjectId = projectId;
-            ModifiedByUserName = modifiedByUserName;
+            UserName = userName;
             ViewModel = viewModel;
             Template = template;
             Page = page;
@@ -29,7 +29,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         }
 
         public string ProjectId { get; private set; }
-        public string ModifiedByUserName { get; private set; }
+        public string UserName { get; private set; }
 
         public PageEditWithTemplateViewModel ViewModel { get; private set; }
         public ContentTemplate Template { get; private set; }

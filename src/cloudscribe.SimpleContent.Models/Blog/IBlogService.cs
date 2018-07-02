@@ -101,6 +101,6 @@ namespace cloudscribe.SimpleContent.Models
             byte[] bytes, 
             string fileName);
 
-        Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate);
+        //Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate);
     }
 }
