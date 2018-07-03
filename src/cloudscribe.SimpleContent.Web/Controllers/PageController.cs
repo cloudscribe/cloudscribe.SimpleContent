@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-07-02
+// Last Modified:           2018-07-03
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -39,6 +39,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IAuthorNameResolver authorNameResolver,
             ContentTemplateService templateService,
             IAutoPublishDraftPage autoPublishDraftPage,
+            IContentHistoryCommands historyCommands,
+            IContentHistoryQueries historyQueries,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
@@ -51,6 +53,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             AutoPublishDraftPage = autoPublishDraftPage;
             AuthorizationService = authorizationService;
             AuthorNameResolver = authorNameResolver;
+            HistoryCommands = historyCommands;
+            HistoryQueries = historyQueries;
             TimeZoneHelper = timeZoneHelper;
             PageRoutes = pageRoutes;
             EditOptions = pageEditOptionsAccessor.Value;
@@ -70,6 +74,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IPageRoutes PageRoutes { get; private set; }
         protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
         protected PageEditOptions EditOptions { get; private set; }
+        protected IContentHistoryCommands HistoryCommands { get; private set; }
+        protected IContentHistoryQueries HistoryQueries { get; private set; }
 
         protected IMediator Mediator { get; private set; }
 
@@ -1148,11 +1154,21 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Delete(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                Log.LogInformation("postid not provided, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+
+            }
+
             var project = await ProjectService.GetCurrentProjectSettings();
 
             if (project == null)
             {
-                
                 Log.LogInformation("project not found, redirecting/rejecting");
                 if (Request.IsAjaxRequest())
                 {
@@ -1172,18 +1188,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
-
-            if (string.IsNullOrEmpty(id))
-            {
-                Log.LogInformation("postid not provided, redirecting/rejecting");
-                if (Request.IsAjaxRequest())
-                {
-                    return BadRequest();
-                }
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
-
-            }
-
+            
             var page = await PageService.GetPage(id);
 
             if (page == null)
@@ -1215,8 +1220,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
+            var history = page.CreateHistory(User.Identity.Name, true);
+            await HistoryCommands.Create(project.Id, history);
             
-
             await PageService.DeletePage(page.Id);
             PageService.ClearNavigationCache();
 

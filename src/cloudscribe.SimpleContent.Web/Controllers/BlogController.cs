@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-01
+// Last Modified:           2018-07-03
 // 
 
 
@@ -13,7 +13,6 @@ using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.Services.Blog;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
-using cloudscribe.Web.Common.Extensions;
 using cloudscribe.Web.Common.Recaptcha;
 using cloudscribe.Web.Navigation;
 using MediatR;
@@ -25,7 +24,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,6 +43,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IAuthorizationService authorizationService,
             IAuthorNameResolver authorNameResolver,
             IAutoPublishDraftPost autoPublishDraftPost,
+            IContentHistoryCommands historyCommands,
+            IContentHistoryQueries historyQueries,
             ITimeZoneHelper timeZoneHelper,
             IRecaptchaServerSideValidator recaptchaServerSideValidator,
             IStringLocalizer<SimpleContent> localizer,
@@ -60,6 +60,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             BlogRoutes = blogRoutes;
             AuthorNameResolver = authorNameResolver;
             AutoPublishDraftPost = autoPublishDraftPost;
+            HistoryCommands = historyCommands;
+            HistoryQueries = historyQueries;
             EmailService = emailService;
             AuthorizationService = authorizationService;
             TimeZoneHelper = timeZoneHelper;
@@ -82,6 +84,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
         protected SimpleContentConfig ContentOptions { get; private set; }
         protected IAutoPublishDraftPost AutoPublishDraftPost { get; private set; }
+        protected IContentHistoryCommands HistoryCommands { get; private set; }
+        protected IContentHistoryQueries HistoryQueries { get; private set; }
 
         protected IRecaptchaServerSideValidator RecaptchaServerSideValidator { get; private set; }
 
@@ -743,6 +747,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Delete(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                Log.LogInformation("postid not provided, redirecting");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
             var project = await ProjectService.GetCurrentProjectSettings();
 
             if (project == null)
@@ -759,13 +769,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
                 return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
             }
-
-            if (string.IsNullOrEmpty(id))
-            {
-                Log.LogInformation("postid not provided, redirecting");
-                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
-            }
-
+            
             var post = await BlogService.GetPost(id);
 
             if (post == null)
@@ -774,10 +778,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
                 return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
             }
-            Log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
+            
+            var history = post.CreateHistory(User.Identity.Name, true);
+            await HistoryCommands.Create(project.Id, history);
 
             await BlogService.Delete(post.Id);
-            
+
+            Log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
+
             return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
 
         }

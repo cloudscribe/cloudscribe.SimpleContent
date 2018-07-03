@@ -288,20 +288,6 @@ namespace cloudscribe.SimpleContent.Services
         public async Task Create(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-
-            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
-            // but we don't use that anymore. now we have ckeditor and filemanager integration
-            //post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    post.Content
-            //    ).ConfigureAwait(false);
-
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if(post.PubDate == nonPublishedDate)
-            {
-                post.PubDate = DateTime.UtcNow;
-            }
-
             await _postCommands.Create(_settings.Id, post).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(_settings.Id, post).ConfigureAwait(false);
         }
@@ -309,32 +295,11 @@ namespace cloudscribe.SimpleContent.Services
         public async Task Update(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
-
-            //this is no longer needed, we once used bootstrapwysiwyg which passed images as base64 content
-            // but we don't use that anymore. now we have ckeditor and filemanager integration
-            //post.Content = await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    post.Content
-            //    ).ConfigureAwait(false);
-
-            //var nonPublishedDate = new DateTime(1, 1, 1);
-            //if (post.PubDate == nonPublishedDate)
-            //{
-            //    post.PubDate = DateTime.UtcNow;
-            //}
-
             await _eventHandlers.HandlePreUpdate(_settings.Id, post.Id).ConfigureAwait(false);
             await _postCommands.Update(_settings.Id, post).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, post).ConfigureAwait(false);
         }
-
-        //public async Task HandlePubDateAboutToChange(IPost post, DateTime newPubDate)
-        //{
-        //    await EnsureBlogSettings().ConfigureAwait(false);
-
-        //    await _postCommands.HandlePubDateAboutToChange(_settings.Id, post, newPubDate);
-        //}
-
+        
         private async Task InitializeNewPosts(string projectId, IPost post, bool publish)
         {
             if(publish)
@@ -350,7 +315,6 @@ namespace cloudscribe.SimpleContent.Services
                 {
                     post.Slug = slug;
                 }
-
             }
         }
 

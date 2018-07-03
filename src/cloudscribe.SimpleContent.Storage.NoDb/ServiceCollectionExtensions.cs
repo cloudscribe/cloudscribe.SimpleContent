@@ -25,6 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddNoDbPageStorage();
             services.AddScoped<IStorageInfo, StorageInfo>();
 
+            services.AddNoDb<ContentHistory>();
             services.TryAddScoped<IContentHistoryCommands, ContentHistoryCommands>();
             services.TryAddScoped<IContentHistoryQueries, ContentHistoryQueries>();
 
