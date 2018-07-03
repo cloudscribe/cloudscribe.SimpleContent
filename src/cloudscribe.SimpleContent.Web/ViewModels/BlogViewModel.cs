@@ -37,6 +37,9 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool HasDraft { get; set; }
         public bool ShowingDraft { get; set; }
 
+        public Guid? HistoryId { get; set; }
+        public DateTime? HistoryArchiveDate { get; set; }
+
         public string CurrentCategory { get; set; } = string.Empty;
 
         public string ListRouteName { get; set; } 

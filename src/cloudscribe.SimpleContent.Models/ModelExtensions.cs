@@ -81,6 +81,7 @@ namespace cloudscribe.SimpleContent.Models
                 ProjectId = post.BlogId,
                 PubDate = post.PubDate,
                 SerializedModel = post.SerializedModel,
+                Slug = post.Slug,
                 TeaserOverride = post.TeaserOverride,
                 Title = post.Title,
                 WasDeleted = forDelete
@@ -115,6 +116,7 @@ namespace cloudscribe.SimpleContent.Models
                 ProjectId = page.ProjectId,
                 PubDate = page.PubDate,
                 SerializedModel = page.SerializedModel,
+                Slug = page.Slug,
                 Title = page.Title,
                 WasDeleted = forDelete
 

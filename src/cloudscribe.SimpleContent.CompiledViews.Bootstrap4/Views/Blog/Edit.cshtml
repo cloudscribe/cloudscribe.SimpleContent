@@ -1,6 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
 @inject IStringLocalizer<SimpleContent> sr
 @inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IBlogRoutes  blogRoutes
 @{
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
@@ -10,6 +11,10 @@
     @{ await Html.RenderPartialAsync("EditStylesPartial", Model); }
 }
 <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
+@if (!string.IsNullOrEmpty(Model.Id))
+{
+    <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(blogRoutes.PostHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
+}
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />

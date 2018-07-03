@@ -1,11 +1,15 @@
-﻿using cloudscribe.SimpleContent.Models;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+// Author:                  Joe Audette
+// Created:                 2018-07-03
+// Last Modified:           2018-07-03
+// 
+
+using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -61,8 +65,6 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 SortMode = sortMode
             };
             
-
-
             return View(model);
         }
 

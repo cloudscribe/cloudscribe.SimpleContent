@@ -81,7 +81,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> Index(string slug = "", bool showDraft = false)
+        public virtual async Task<IActionResult> Index(
+            string slug = "", 
+            bool showDraft = false,
+            Guid? historyId = null
+            )
         {
             var project = await ProjectService.GetCurrentProjectSettings();
 
@@ -121,15 +125,41 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
             if (canEdit)
             {
-                if (model.CurrentPage != null)
+                if (page != null)
                 {
                     model.HasPublishedVersion = page.HasPublishedVersion();
                     model.HasDraft = page.HasDraftVersion();
-                    if (canEdit && model.HasDraft && (showDraft || !model.HasPublishedVersion))
+                    if (model.HasDraft && (showDraft || !model.HasPublishedVersion))
                     {
-                        page.PromoteDraftTemporarilyForRender();
+                        var pageCopy = new Page();
+                        page.CopyTo(pageCopy);
+                        pageCopy.PromoteDraftTemporarilyForRender();
+                        model.CurrentPage = pageCopy;
                         model.ShowingDraft = true;
                     }
+                    else if(historyId.HasValue)
+                    {
+                        var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                        if(history != null)
+                        {
+                            var pageCopy = new Page();
+                            page.CopyTo(pageCopy);
+                            if(history.IsDraftHx)
+                            {
+                                pageCopy.Content = history.DraftContent;
+                                pageCopy.Author = history.DraftAuthor;
+                            }
+                            else
+                            {
+                                pageCopy.Content = history.Content;
+                                pageCopy.Author = history.Author;
+                            }
+                            model.HistoryId = history.Id;
+                            model.HistoryArchiveDate = history.ArchivedUtc;
+                            model.CurrentPage = pageCopy;
+                        }
+                    }
+
 
 
                     model.EditPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
@@ -250,6 +280,48 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Authorize(Policy = "ViewContentHistoryPolicy")]
+        public virtual async Task<IActionResult> History(
+             CancellationToken cancellationToken,
+            string slug,
+            int pageNumber = 1,
+            int pageSize = 20
+            )
+        {
+
+            var project = await ProjectService.GetCurrentProjectSettings();
+            if (project == null)
+            {
+                Log.LogError("project settings not found returning 404");
+                return NotFound();
+            }
+
+            var page = await PageService.GetPageBySlug(slug);
+
+            if (page == null)
+            {
+                Log.LogWarning("page not found for slug " + slug + ", so redirecting to index");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            var model = new ContentHistoryViewModel()
+            {
+                History = await HistoryQueries.GetByContent(
+                project.Id,
+                page.Id,
+                pageNumber,
+                pageSize,
+                cancellationToken),
+                ContentTitle = page.Title,
+                CanEditPages = await User.CanEditPages(project.Id, AuthorizationService)
+        };
+
+            return View(model);
+
+
+        }
+        
         [HttpGet]
         [AllowAnonymous]
         public virtual async Task<IActionResult> NewPage(

@@ -20,12 +20,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
@@ -221,15 +223,22 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostNoDate")]
-        public virtual async Task<IActionResult> Post(string slug, bool showDraft = false)
+        public virtual async Task<IActionResult> Post(string slug, bool showDraft = false, Guid? historyId = null)
         {
-            return await Post(0, 0, 0, slug, showDraft);
+            return await Post(0, 0, 0, slug, showDraft, historyId);
         }
 
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostWithDate")]
-        public virtual async Task<IActionResult> Post(int year , int month, int day, string slug, bool showDraft = false)
+        public virtual async Task<IActionResult> Post(
+            int year , 
+            int month, 
+            int day, 
+            string slug, 
+            bool showDraft = false,
+            Guid? historyId = null
+            )
         {
             var project = await ProjectService.GetCurrentProjectSettings();
 
@@ -296,15 +305,24 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     {
                         pubDate = DateTime.UtcNow;
                     }
-                        
-                    return RedirectToRoute(BlogRoutes.PostWithDateRouteName, 
-                        new {
-                            year = pubDate.Value.Year,
-                            month = pubDate.Value.Month.ToString("00"),
-                            day = pubDate.Value.Day.ToString("00"),
-                            slug = result.Post.Slug,
-                            showDraft
-                        });
+                    var routeVals = new RouteValueDictionary
+                    {
+                        { "year", pubDate.Value.Year },
+                        { "month", pubDate.Value.Month.ToString("00") },
+                        { "day", pubDate.Value.Day.ToString("00") },
+                        { "slug", result.Post.Slug }
+                    };
+
+                    if (showDraft)
+                    {
+                        routeVals.Add("showDraft", true);
+                    }
+                    if(historyId.HasValue)
+                    {
+                        routeVals.Add("historyId", historyId.Value);
+                    }
+                    
+                    return RedirectToRoute(BlogRoutes.PostWithDateRouteName, routeVals);
                 }
             }
 
@@ -322,7 +340,29 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 result.Post = postCopy;
                 model.ShowingDraft = true;
             }
-            
+            else if (canEdit && historyId.HasValue)
+            {
+                var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                if (history != null)
+                {
+                    var postCopy = new Post();
+                    result.Post.CopyTo(postCopy);
+                    if (history.IsDraftHx)
+                    {
+                        postCopy.Content = history.DraftContent;
+                        postCopy.Author = history.DraftAuthor;
+                    }
+                    else
+                    {
+                        postCopy.Content = history.Content;
+                        postCopy.Author = history.Author;
+                    }
+                    model.HistoryId = history.Id;
+                    model.HistoryArchiveDate = history.ArchivedUtc;
+                    result.Post = postCopy;
+                }
+            }
+
             model.CurrentPost = result.Post;
             if(result.PreviousPost != null)
             {
@@ -352,6 +392,48 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
             return View("Post", model);
             
+
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "ViewContentHistoryPolicy")]
+        public virtual async Task<IActionResult> History(
+             CancellationToken cancellationToken,
+            string slug,
+            int pageNumber = 1,
+            int pageSize = 20
+            )
+        {
+
+            var project = await ProjectService.GetCurrentProjectSettings();
+            if (project == null)
+            {
+                Log.LogError("project settings not found returning 404");
+                return NotFound();
+            }
+
+            var result = await BlogService.GetPostBySlug(slug);
+
+            if ((result == null) || (result.Post == null))
+            {
+                Log.LogWarning("post not found for slug " + slug + ", so redirecting to index");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var model = new ContentHistoryViewModel()
+            {
+                History = await HistoryQueries.GetByContent(
+                    project.Id,
+                    result.Post.Id,
+                    pageNumber,
+                    pageSize,
+                    cancellationToken),
+                ContentTitle = result.Post.Title,
+                CanEditPosts = await User.CanEditBlog(project.Id, AuthorizationService)
+        };
+
+            return View(model);
+
 
         }
 

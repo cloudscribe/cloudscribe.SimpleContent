@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-25
-// Last Modified:           2018-07-01
+// Last Modified:           2018-07-03
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -56,6 +56,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                                 new XElement("serializedModel", post.SerializedModel),
                                 new XElement("draftSerializedModel", post.DraftSerializedModel),
                                 new XElement("serializer", post.Serializer),
+                                new XElement("blogId", post.BlogId),
 
 
                                 new XElement("ispublished", post.IsPublished),
@@ -124,6 +125,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             Post post = new Post()
             {
                 Id = key,
+                BlogId = ReadValue(doc.Root, "blogId"),
                 Title = ReadValue(doc.Root, "title"),
                 Author = ReadValue(doc.Root, "author"),
                 CorrelationKey = ReadValue(doc.Root, "correlationkey"),

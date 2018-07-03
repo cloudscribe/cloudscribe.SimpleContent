@@ -1,0 +1,15 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IBlogRoutes blogRoutes
+@if (Model.HistoryId.HasValue && Model.HistoryArchiveDate.HasValue)
+{
+    <div class="alert alert-warning" role="alert">
+        @sr["You are currently viewing a previous version of this post that was archived"]&nbsp;@Model.FormatDateForEdit(Model.HistoryArchiveDate.Value)
+        @if (Model.HasPublishedVersion)
+        {
+            <a class="btn btn-link" href="@Url.RouteUrl(blogRoutes.PostWithoutDateRouteName, new { slug = Model.CurrentPost.Slug })">@sr["View published version."]</a>
+        }
+        <a class="btn btn-primary" href="@Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = Model.CurrentPost.Slug, historyId = Model.HistoryId.Value })">@sr["Restore this version to editor"]</a>
+    </div>
+
+}

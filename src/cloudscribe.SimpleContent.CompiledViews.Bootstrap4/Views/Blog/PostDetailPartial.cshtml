@@ -43,6 +43,7 @@
          data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Blog")"
          itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
     @{await Html.RenderPartialAsync("DraftInfoPartial", Model); }
+    @{await Html.RenderPartialAsync("HistoryInfoPartial", Model); }
     <header class="jumbotron">
         <h1 itemprop="headline name">@Model.CurrentPost.Title</h1>
         <div class="bh">

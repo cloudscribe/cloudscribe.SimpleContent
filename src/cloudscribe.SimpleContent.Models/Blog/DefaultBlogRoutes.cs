@@ -40,5 +40,7 @@ namespace cloudscribe.SimpleContent.Models
             get { return ProjectConstants.PostDeleteRouteName; }
         }
 
+        public string PostHistoryRouteName { get; } = ProjectConstants.PostHistoryRouteName;
+
     }
 }

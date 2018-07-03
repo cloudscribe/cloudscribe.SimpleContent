@@ -33,6 +33,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            if(string.IsNullOrWhiteSpace(contentHistory.ProjectId))
+            {
+                contentHistory.ProjectId = projectId;
+            }
             await _commands.CreateAsync(
                 projectId,
                 contentHistory.Id.ToString(),

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Created:					2018-06-20
-// Last Modified:			2018-07-02
+// Last Modified:			2018-07-03
 // 
 
 using System;
@@ -22,6 +22,8 @@ namespace cloudscribe.SimpleContent.Models
 
         public string ContentSource { get; set; } = "Page";
         public string ContentType { get; set; } = "html";
+
+        public string Slug { get; set; }
 
         public bool IsDraftHx { get; set; }
         public bool WasDeleted { get; set; }

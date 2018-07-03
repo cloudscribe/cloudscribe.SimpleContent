@@ -1,0 +1,98 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.ContentHistoryViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IBlogRoutes  blogRoutes
+@inject IPageRoutes pageRoutes
+@functions{
+    public string GetPreviewUrl(ContentHistory history)
+    {
+        switch (history.ContentSource)
+        {
+            case ContentSource.Blog:
+                return Url.RouteUrl(blogRoutes.PostWithoutDateRouteName, new { slug = history.Slug, historyId = history.Id });
+
+            case ContentSource.Page:
+            default:
+                return Url.RouteUrl(pageRoutes.PageRouteName, new { slug = history.Slug, historyId = history.Id });
+        }
+
+
+    }
+    public string GetRestoreUrl(ContentHistory history)
+    {
+        switch (history.ContentSource)
+        {
+            case ContentSource.Blog:
+                return Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = history.Slug, historyId = history.Id });
+
+            case ContentSource.Page:
+            default:
+                return Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = history.Slug, historyId = history.Id });
+        }
+
+
+    }
+}
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                @sr["Archived Date"]
+            </th>
+            <th>
+                @sr["Archived By"]
+            </th>
+            <th>
+                @sr["Source"]
+            </th>
+            <th>
+                @sr["Title"]
+            </th>
+            <th>
+                @sr["Is Draft"]
+            </th>
+            <th>
+                @sr["Created By"]
+            </th>
+            <th>
+                @sr["Last Modified By"]
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.History.Data)
+        {
+            <tr>
+                <td>
+                    @if (Model.CanEditPages && item.ContentSource == ContentSource.Page || Model.CanEditPosts && item.ContentSource == ContentSource.Blog)
+                    {
+                        <a href="@GetPreviewUrl(item)" target="_blank">@sr["View"]</a>
+                    }
+                </td>
+                <td>
+                    @item.ArchivedUtc
+                </td>
+                <td>
+                    @item.ArchivedBy
+                </td>
+                <td>
+                    @item.ContentSource
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.IsDraftHx
+                </td>
+                <td>
+                    @item.CreatedByUser
+                </td>
+                <td>
+                    @item.LastModifiedByUser
+                </td>
+            </tr>
+
+        }
+    </tbody>
+
+</table>

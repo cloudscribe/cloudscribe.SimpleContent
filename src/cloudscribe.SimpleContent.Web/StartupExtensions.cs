@@ -91,6 +91,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+               name: ProjectConstants.PageHistoryRouteName,
+               template: "history/{slug?}"
+               , defaults: new { controller = "Page", action = "History" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PageIndexRouteName,
                template: "{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
@@ -149,6 +155,13 @@ namespace Microsoft.Extensions.DependencyInjection
               );
 
             routes.MapRoute(
+               name: ProjectConstants.FolderPageHistoryRouteName,
+               template: "{sitefolder}/history/{slug?}"
+               , defaults: new { controller = "Page", action = "History" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.FolderPageIndexRouteName,
                template: "{sitefolder}/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
@@ -196,6 +209,12 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.PageDeleteRouteName,
                template: prefix + "/delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageHistoryRouteName,
+               template: prefix + "/history/{slug?}"
+               , defaults: new { controller = "Page", action = "History" }
                );
 
             routes.MapRoute(
@@ -255,6 +274,13 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.FolderPageDeleteRouteName,
                template: "{sitefolder}/" + prefix + "/delete/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageHistoryRouteName,
+               template: "{sitefolder}/" +  prefix + "/history/{slug?}"
+               , defaults: new { controller = "Page", action = "History" }
                , constraints: new { name = siteFolderConstraint }
                );
 
@@ -332,6 +358,12 @@ namespace Microsoft.Extensions.DependencyInjection
               );
 
             routes.MapRoute(
+               name: ProjectConstants.PostHistoryRouteName,
+               template: firstSegment + "history/{slug?}"
+               , defaults: new { controller = "Blog", action = "History" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PostWithoutDateRouteName,
                template: firstSegment + "{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
@@ -402,6 +434,13 @@ namespace Microsoft.Extensions.DependencyInjection
               , defaults: new { controller = "Blog", action = "MostRecent" }
               , constraints: new { name = siteFolderConstraint }
               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPostHistoryRouteName,
+               template: "{sitefolder}/" + firstSegment + "history/{slug?}"
+               , defaults: new { controller = "Blog", action = "History" }
+               , constraints: new { name = siteFolderConstraint }
+               );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPostWithoutDateRouteName,
