@@ -406,7 +406,7 @@ readers do not read off random characters that represent icons */
 //.#{$fa-css-prefix}-heartbeat:before { content: fa-content($fa-var-heartbeat); }
 //.#{$fa-css-prefix}-hips:before { content: fa-content($fa-var-hips); }
 //.#{$fa-css-prefix}-hire-a-helper:before { content: fa-content($fa-var-hire-a-helper); }
-//.#{$fa-css-prefix}-history:before { content: fa-content($fa-var-history); }
+.#{$fa-css-prefix}-history:before { content: fa-content($fa-var-history); }
 //.#{$fa-css-prefix}-hockey-puck:before { content: fa-content($fa-var-hockey-puck); }
 .#{$fa-css-prefix}-home:before { content: fa-content($fa-var-home); }
 //.#{$fa-css-prefix}-hooli:before { content: fa-content($fa-var-hooli); }

@@ -108,6 +108,14 @@ namespace Microsoft.Extensions.DependencyInjection
                     authBuilder.RequireRole("Administrators", "Content Administrators");
                 });
 
+            options.AddPolicy(
+                    "ViewContentHistoryPolicy",
+                    authBuilder =>
+                    {
+                        authBuilder.RequireRole("Administrators", "Content Administrators");
+                    }
+                 );
+
             return options;
         }
 
