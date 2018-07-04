@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-07-02
+// Last Modified:			2018-07-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -160,9 +160,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             bool saveChanges,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            //ThrowIfDisposed();
-            cancellationToken.ThrowIfCancellationRequested();
-
             var query = from l in dbContext.PostCategories
                         where (
                         l.ProjectId == projectId
@@ -175,10 +172,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             {
                 int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
-
             }
-
-
         }
 
         private async Task DeleteCommentsByPost(
@@ -187,9 +181,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             bool saveChanges,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            //ThrowIfDisposed();
-            cancellationToken.ThrowIfCancellationRequested();
-
             var query = from l in dbContext.Comments
                         where (
                         l.ProjectId == projectId
@@ -202,10 +193,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             {
                 int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
-
             }
-
-
         }
 
         public async Task Delete(

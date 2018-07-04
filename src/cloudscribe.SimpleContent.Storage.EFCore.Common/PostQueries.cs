@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-06-28
+// Last Modified:			2018-07-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -21,10 +21,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
     {
         public PostQueries(ISimpleContentDbContext dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
-        private ISimpleContentDbContext dbContext;
+        private readonly ISimpleContentDbContext _dbContext;
 
         private const string PostContentType = "Post";
 
@@ -41,13 +41,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var currentTime = DateTime.UtcNow;
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                 .Where(p =>
                     p.BlogId == blogId
                     &&  (includeUnpublished || (p.IsPublished == true && p.PubDate <= currentTime))
                       )
-                      .OrderByDescending(p => p.PubDate);
+                      .OrderByDescending(p => p.PubDate ?? p.LastModified);
 
             var list = await query
                 .AsNoTracking()
@@ -65,7 +67,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             int offset = (pageSize * pageNumber) - pageSize;
@@ -73,14 +74,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var result = new PagedPostResult();
 
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                 .Include(p => p.PostComments)
                 .Where(x =>
                 x.BlogId == blogId
                 && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
                 && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category)) 
                 )
-                .OrderByDescending(x => x.PubDate)
+                .OrderByDescending(x => x.PubDate ?? x.LastModified)
                 ;
 
             var posts = await query
@@ -105,14 +106,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var currentTime = DateTime.UtcNow;
 
             if(includeUnpublished)
             {
-                return await dbContext.Posts
+                return await _dbContext.Posts
                 .CountAsync<PostEntity>(x =>
                 x.BlogId == blogId
                 && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category))
@@ -120,22 +120,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
             else
             {
-                return await dbContext.Posts
+                return await _dbContext.Posts
                 .CountAsync<PostEntity>(x =>
                 x.BlogId == blogId
                 && (x.IsPublished == true && x.PubDate <= currentTime)
                 && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category))
                 );
             }
-
-            //var count = await dbContext.Posts
-            //    .CountAsync(x =>
-            //    x.BlogId == blogId
-            //    && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
-            //    && (string.IsNullOrEmpty(category) || x.CategoriesCsv.Contains(category)) 
-            //    );
             
-            //return count;
         }
 
         public async Task<List<IPost>> GetRecentPosts(
@@ -144,11 +136,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
             var currentTime = DateTime.UtcNow;
             
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                // .Include(p => p.Comments) //think this is only used to populate a list in OLW so don't need the comments
                 .Where(p =>
                 p.BlogId == blogId
@@ -171,11 +162,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var currentTime = DateTime.UtcNow;
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                 .Where(p =>
                 p.BlogId == blogId
                 && p.IsPublished
@@ -203,7 +193,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
             
             IQueryable<PostEntity> query;
@@ -211,7 +200,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             
             if (day > 0 && month > 0)
             {
-                query = dbContext.Posts
+                query = _dbContext.Posts
                      .Include(p => p.PostComments)
                     .Where(x =>
                      x.BlogId == blogId
@@ -221,12 +210,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                      && x.PubDate.Value.Day == day
                      && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
                 )
-                .OrderByDescending(p => p.PubDate)
+                .OrderByDescending(p => p.PubDate ?? p.LastModified)
                 ;
             }
             else if (month > 0)
             {
-                query = dbContext.Posts
+                query = _dbContext.Posts
                      .Include(p => p.PostComments)
                      .Where(x =>
                         x.BlogId == blogId
@@ -235,19 +224,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                         && x.PubDate.Value.Month == month
                         && (includeUnpublished || (x.IsPublished == true  && x.PubDate <= currentTime))
                        )
-                      .OrderByDescending(p => p.PubDate)
+                      .OrderByDescending(p => p.PubDate ?? p.LastModified)
                       ;
 
             }
             else
             {
-                query = dbContext.Posts
+                query = _dbContext.Posts
                      .Include(p => p.PostComments)
                      .Where(x =>
                          x.BlogId == blogId
                          && x.PubDate.HasValue
                          && x.PubDate.Value.Year == year
-                       ).OrderByDescending(p => p.PubDate)
+                       ).OrderByDescending(p => p.PubDate ?? p.LastModified)
                        ;
             }
             
@@ -275,7 +264,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             IQueryable<PostEntity> query;
@@ -283,7 +271,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             if (day > 0 && month > 0)
             {
-                query =  dbContext.Posts.Where(x =>
+                query =  _dbContext.Posts.Where(x =>
                     x.BlogId == blogId
                     && x.PubDate.HasValue
                     && x.PubDate.Value.Year == year
@@ -295,7 +283,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
             else if (month > 0)
             {
-                query = dbContext.Posts.Where(x =>
+                query = _dbContext.Posts.Where(x =>
                     x.BlogId == blogId
                     && x.PubDate.HasValue
                     && x.PubDate.Value.Year == year
@@ -307,7 +295,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
             else
             {
-                query = dbContext.Posts.Where(x =>
+                query = _dbContext.Posts.Where(x =>
                     x.BlogId == blogId
                     && x.PubDate.HasValue
                     && x.PubDate.Value.Year == year
@@ -326,10 +314,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                      .Include(p => p.PostComments)
                      .Where(p => p.Id == postId && p.BlogId == blogId)
                      ;
@@ -345,12 +332,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var result = new PostResult();
 
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                      .Include(p => p.PostComments)
                      .Where(p => p.Slug == slug && p.BlogId == blogId)
                      ;
@@ -363,25 +349,25 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             {
                 var cutoff = result.Post.PubDate;
 
-                result.PreviousPost = await dbContext.Posts
+                result.PreviousPost = await _dbContext.Posts
                     .AsNoTracking()
                     .Where(p =>
                     p.BlogId == blogId
                     && p.PubDate < cutoff
                     && p.IsPublished == true
                     )
-                    .OrderByDescending(p => p.PubDate)
+                    .OrderByDescending(p => p.PubDate ?? p.LastModified)
                     .Take(1)
                     .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
 
-                result.NextPost = await dbContext.Posts
+                result.NextPost = await _dbContext.Posts
                     .AsNoTracking()
                     .Where(p =>
                     p.BlogId == blogId
                     && p.PubDate > cutoff
                     && p.IsPublished == true
                     )
-                    .OrderBy(p => p.PubDate)
+                    .OrderBy(p => p.PubDate ?? p.LastModified)
                     .Take(1)
                     .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
 
@@ -396,10 +382,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                      .Include(p => p.PostComments)
                      .Where(p => p.CorrelationKey == correlationKey && p.BlogId == blogId)
                      ;
@@ -415,10 +400,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
             
-            var isInUse = await dbContext.Posts.AnyAsync(
+            var isInUse = await _dbContext.Posts.AnyAsync(
                 p => p.Slug == slug && p.BlogId == blogId, 
                 cancellationToken
                 ).ConfigureAwait(false);
@@ -433,14 +417,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var result = new Dictionary<string, int>();
 
             var currentTime = DateTime.UtcNow;
 
-            var posts = await dbContext.Posts
+            var posts = await _dbContext.Posts
                 .AsNoTracking()
                 .Where(x =>
                     (x.BlogId.Equals(blogId))
@@ -449,7 +432,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                             
                     .ToListAsync(cancellationToken);
 
-            var categories = await dbContext.PostCategories
+            var categories = await _dbContext.PostCategories
                 .AsNoTracking()
                 .Where(x =>
                     (x.ProjectId.Equals(blogId))
@@ -457,22 +440,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     )
                             
                     .ToListAsync(cancellationToken);
-
-            //var query = from x in dbContext.PostCategories
-            //            join y in dbContext.Posts
-            //            on x.PostEntityId equals y.Id
-            //            where (
-            //                (x.ProjectId.Equals(blogId))
-            //                && (includeUnpublished || (y.IsPublished && y.PubDate <= DateTime.UtcNow))
-            //                )
-            //            select x
-            //            ;
-
-            //var list = await query
-            //    .AsNoTracking()
-            //   .ToListAsync(cancellationToken)
-            //   .ConfigureAwait(false);
-
+            
             var list = from y in posts
                         join x in categories
                         on y.Id equals x.PostEntityId
@@ -511,14 +479,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var currentTime = DateTime.UtcNow;
 
             var result = new Dictionary<string, int>();
 
-            var query = dbContext.Posts
+            var query = _dbContext.Posts
                         .Where(x =>
                             (x.BlogId.Equals(blogId))
                             && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
@@ -533,7 +500,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
 
             var grouped = from p in list
-                          group p by new { month = p.PubDate.Value.Month, year = p.PubDate.Value.Year } into d
+                          group p by new { month = p.PubDate?.Month ?? p.LastModified.Month, year = p.PubDate?.Year ?? p.LastModified.Year } into d
                           select new
                           {
                               key = d.Key.year.ToString() + "/" + d.Key.month.ToString("00")
@@ -541,8 +508,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                               count = d.Count()
                           };
 
-            //var grouped = query2.ToList();
-
+           
             foreach (var item in grouped)
             {
                 result.Add(item.key, item.count);
@@ -553,47 +519,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             return sorted.OrderByDescending(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
   
         }
-
-
-        #region IDisposable Support
-
-        private void ThrowIfDisposed()
-        {
-            if (disposedValue)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-        }
-
-        private bool disposedValue = false; // To detect redundant calls
-
-        void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-
-        #endregion
-
+        
     }
 }

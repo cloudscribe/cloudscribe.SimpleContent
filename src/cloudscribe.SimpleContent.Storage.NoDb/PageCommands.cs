@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-11-21
+// Last Modified:           2018-07-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,16 +24,16 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             //,ILogger<PageCommands> logger
             )
         {
-            commands = pageCommands;
-            query = pageQueries;
+            _commands = pageCommands;
+            _query = pageQueries;
             _keyGenerator = keyGenerator;
-            //log = logger;
+            //_log = logger;
         }
 
-        private IBasicCommands<Page> commands;
-        private IBasicQueries<Page> query;
+        private IBasicCommands<Page> _commands;
+        private IBasicQueries<Page> _query;
         private IKeyGenerator _keyGenerator;
-        //private ILogger log;
+        //private ILogger _log;
 
 
         public async Task Create(
@@ -42,14 +42,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            //if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
-
             var p = Page.FromIPage(page);
             p.Id = _keyGenerator.GenerateKey(p);
             p.LastModified = DateTime.UtcNow;
-            p.PubDate = DateTime.UtcNow;
-  
-            await commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
+           
+            await _commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
            
         }
 
@@ -59,11 +56,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            //if (string.IsNullOrEmpty(page.Id)) { page.Id = Guid.NewGuid().ToString(); }
             var p = Page.FromIPage(page);
             p.LastModified = DateTime.UtcNow;
             
-            await commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
+            await _commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
             
         }
 
@@ -73,27 +69,21 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-
-            var page = await query.FetchAsync(projectId, pageId, CancellationToken.None);
+            var page = await _query.FetchAsync(projectId, pageId, CancellationToken.None);
             if (page != null)
             {
                 var pages = await GetAllPages(projectId, CancellationToken.None).ConfigureAwait(false);
-                await commands.DeleteAsync(projectId, pageId).ConfigureAwait(false);
+                await _commands.DeleteAsync(projectId, pageId).ConfigureAwait(false);
                 pages.Remove(page);
-
             }
-
-
         }
 
         private async Task<List<Page>> GetAllPages(
             string projectId,
             CancellationToken cancellationToken)
         {
-
-            var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
+            var l = await _query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
             var list = l.ToList();
-            
             return list;
         }
 
