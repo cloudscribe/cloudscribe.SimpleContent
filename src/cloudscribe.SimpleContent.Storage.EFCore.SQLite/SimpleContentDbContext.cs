@@ -432,12 +432,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.HasIndex(p => p.Title);
 
+                entity.Property(p => p.Slug)
+                .HasMaxLength(255);
+
                 entity.Property(p => p.Author)
                 .HasMaxLength(255);
 
                 entity.Property(p => p.IsPublished)
-                .IsRequired()
-                .HasColumnType("bit");
+                .IsRequired();
 
                 entity.Property(p => p.ContentType)
                    .HasMaxLength(50)
