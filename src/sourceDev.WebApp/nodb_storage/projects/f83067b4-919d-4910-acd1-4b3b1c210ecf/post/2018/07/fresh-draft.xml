@@ -6,7 +6,7 @@
   <correlationkey />
   <author>Admin</author>
   <pubDate>2018-07-02T12:14:46.4646000Z</pubDate>
-  <lastModified>2018-07-03T18:33:09</lastModified>
+  <lastModified>2018-07-04T13:02:27</lastModified>
   <excerpt>A fresh draft of a new post</excerpt>
   <content>&lt;p&gt;This will be a post some day, once it gets all polished up.&lt;/p&gt;
 
@@ -22,13 +22,19 @@
   <createdUtc>2018-07-01T13:34:47</createdUtc>
   <createdByUser>admin</createdByUser>
   <lastModifiedByUser>admin</lastModifiedByUser>
-  <draftAuthor />
-  <draftContent />
+  <draftAuthor>Admin</draftAuthor>
+  <draftContent>&lt;p&gt;This will be a post some day, once it gets all polished up.&lt;/p&gt;
+
+&lt;p&gt;It might be a bit drafty until then, but don't worry, we will review it and fix any problems.&lt;/p&gt;
+
+&lt;p&gt;Edit 1 save draft&lt;/p&gt;
+</draftContent>
   <draftPubDate />
   <templateKey></templateKey>
   <serializedModel></serializedModel>
   <draftSerializedModel></draftSerializedModel>
   <serializer></serializer>
+  <blogId></blogId>
   <ispublished>true</ispublished>
   <isFeatured>false</isFeatured>
   <teaserOverride />

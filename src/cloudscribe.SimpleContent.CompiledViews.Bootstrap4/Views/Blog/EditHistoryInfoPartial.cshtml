@@ -1,0 +1,8 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@if (Model.HistoryId.HasValue && Model.DidReplaceDraft)
+{
+    <div class="alert alert-warning" role="alert">
+        @sr["A previous verion of this post has been restored to the editor replacing the current draft version. If this is not intended, click cancel."]
+    </div>
+}

@@ -117,7 +117,7 @@
     {
         <schema-org-meta itemprop="dateModified" content="@Model.CurrentPost.PubDate.Value.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
     }
-    @if (Model.CurrentPost.IsPublished && !Model.ShowingDraft)
+    @if (Model.CurrentPost.IsPublished && !Model.ShowingDraft && !Model.HistoryId.HasValue)
     {
         @if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
         {

@@ -15,6 +15,7 @@ using cloudscribe.Web.Common.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -432,7 +433,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> EditWithTemplate(string slug)
+        public virtual async Task<IActionResult> EditWithTemplate(
+            string slug,
+            Guid? historyId = null
+            )
         {
             var project = await ProjectService.GetCurrentProjectSettings();
 
@@ -464,7 +468,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-
+            
             var model = new PageEditWithTemplateViewModel()
             {
                 ProjectId = project.Id,
@@ -489,7 +493,35 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ProjectDefaultSlug = project.DefaultPageSlug
             };
 
-            if(page.PubDate.HasValue)
+            if (historyId.HasValue)
+            {
+                var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                if (history != null)
+                {
+                    var pageCopy = new Page();
+                    page.CopyTo(pageCopy);
+                    if (history.IsDraftHx)
+                    {
+                        pageCopy.DraftAuthor = history.DraftAuthor;
+                        pageCopy.DraftContent = history.DraftContent;
+                        pageCopy.DraftSerializedModel = history.DraftSerializedModel;
+                    }
+                    else
+                    {
+                        pageCopy.DraftAuthor = history.Author;
+                        pageCopy.DraftContent = history.Content;
+                        pageCopy.DraftSerializedModel = history.SerializedModel;
+                    }
+
+                    model.HistoryArchiveDate = history.ArchivedUtc;
+                    model.HistoryId = history.Id;
+                    model.TemplateModel = TemplateService.DesrializeTemplateModel(pageCopy, template);
+                    model.DidReplaceDraft = page.HasDraftVersion();
+                }
+                
+            }
+            
+            if (page.PubDate.HasValue)
             {
                 model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
             }
@@ -584,7 +616,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         public virtual async Task<IActionResult> Edit(
             string slug = "",
             string parentSlug = "",
-            string type =""
+            string type ="",
+            Guid? historyId = null
             )
         {
             var project = await ProjectService.GetCurrentProjectSettings();
@@ -619,7 +652,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if(page != null && !string.IsNullOrWhiteSpace(page.TemplateKey))
             {
-                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, new { slug });
+                var routeVals = new RouteValueDictionary
+                {
+                    { "slug", slug }
+                };
+                if (historyId.HasValue)
+                {
+                    routeVals.Add("historyId", historyId.Value);
+                }
+
+                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, routeVals);
             }
 
             if(page == null)
@@ -677,7 +719,29 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     model.Author = page.DraftAuthor;
                     model.Content = page.DraftContent; 
                 }
-                
+
+                if (historyId.HasValue)
+                {
+                    var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                    if (history != null)
+                    {
+                        if (history.IsDraftHx)
+                        {
+                            model.Author = history.DraftAuthor;
+                            model.Content = history.DraftContent;
+                        }
+                        else
+                        {
+                            model.Author = history.Author;
+                            model.Content = history.Content;
+                        }
+
+                        model.HistoryArchiveDate = history.ArchivedUtc;
+                        model.HistoryId = history.Id;
+                        model.DidReplaceDraft = page.HasDraftVersion();
+                    }
+                }
+
                 model.Id = page.Id;
                 model.CorrelationKey = page.CorrelationKey;
                 model.IsPublished = page.IsPublished;

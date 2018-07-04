@@ -70,6 +70,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string SaveMode { get; set; } //SaveDraft, PublishNow, PublishLater buttomn values
 
+        public Guid? HistoryId { get; set; }
+        public DateTime? HistoryArchiveDate { get; set; }
+        public bool DidReplaceDraft { get; set; }
+
 
     }
 }

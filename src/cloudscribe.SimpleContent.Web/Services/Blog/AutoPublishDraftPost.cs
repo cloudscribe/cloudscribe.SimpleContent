@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-07-01
+// Last Modified:           2018-07-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -17,16 +17,19 @@ namespace cloudscribe.SimpleContent.Web.Services
         public AutoPublishDraftPost(
             IBlogService blogService,
             PostEvents postEvents,
+            IContentHistoryCommands historyCommands,
             ILogger<AutoPublishDraftPost> logger
             )
         {
             _blogService = blogService;
             _postEvents = postEvents;
+            _historyCommands = historyCommands;
             _log = logger;
         }
 
         private readonly IBlogService _blogService;
         private readonly PostEvents _postEvents;
+        private readonly IContentHistoryCommands _historyCommands;
         private readonly ILogger _log;
 
         public async Task PublishIfNeeded(IPost post)
@@ -52,7 +55,8 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                 await _blogService.Update(post);
 
-                await _postEvents.HandlePublished(post.BlogId, post);
+                await _postEvents.HandlePublished(post.BlogId, post).ConfigureAwait(false);
+                await _historyCommands.DeleteDraftHistory(post.BlogId, post.Id).ConfigureAwait(false);
 
                 _log.LogDebug($"auto published draft for post {post.Title}");
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2018-07-03
-// Last Modified:           2018-07-03
+// Last Modified:           2018-07-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -20,16 +20,19 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public ContentHistoryController(
             IProjectService projectService,
             IContentHistoryQueries historyQueries,
+            IAuthorizationService authorizationService,
             ILogger<ContentHistoryController> logger
             )
         {
             ProjectService = projectService;
             HistoryQueries = historyQueries;
+            AuthorizationService = authorizationService;
             Log = logger;
         }
 
         protected IProjectService ProjectService { get; private set; }
         protected IContentHistoryQueries HistoryQueries { get; private set; }
+        protected IAuthorizationService AuthorizationService { get; private set; }
         protected ILogger Log { get; private set; }
 
         [Authorize(Policy = "ViewContentHistoryPolicy")]
@@ -62,7 +65,9 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                 cancellationToken),
                 ContentSource = contentSource,
                 Editor = editor,
-                SortMode = sortMode
+                SortMode = sortMode,
+                CanEditPages = await User.CanEditPages(project.Id, AuthorizationService),
+                CanEditPosts = await User.CanEditBlog(project.Id, AuthorizationService)
             };
             
             return View(model);

@@ -214,7 +214,8 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
 
                     if(shouldFirePublishEvent)
                     {
-                        await _postEvents.HandlePublished(post.BlogId, post);
+                        await _postEvents.HandlePublished(request.ProjectId, post);
+                        await _historyCommands.DeleteDraftHistory(request.ProjectId, post.Id).ConfigureAwait(false);
                     }
                     else if(shouldFireUnPublishEvent)
                     {

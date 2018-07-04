@@ -439,7 +439,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> Edit(string slug = "", string type="")
+        public virtual async Task<IActionResult> Edit(
+            string slug = "", 
+            string type="",
+            Guid? historyId = null
+            )
         {
             var project = await ProjectService.GetCurrentProjectSettings();
 
@@ -499,6 +503,28 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     model.Author = postResult.Post.DraftAuthor;
                     model.Content = postResult.Post.DraftContent;
+                }
+
+                if(historyId.HasValue)
+                {
+                    var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                    if(history != null)
+                    {
+                        if(history.IsDraftHx)
+                        {
+                            model.Author = history.DraftAuthor;
+                            model.Content = history.DraftContent;
+                        }
+                        else
+                        {
+                            model.Author = history.Author;
+                            model.Content = history.Content;
+                        }
+
+                        model.HistoryArchiveDate = history.ArchivedUtc;
+                        model.HistoryId = history.Id;
+                        model.DidReplaceDraft = postResult.Post.HasDraftVersion();
+                    }
                 }
                 
                 model.Id = postResult.Post.Id;

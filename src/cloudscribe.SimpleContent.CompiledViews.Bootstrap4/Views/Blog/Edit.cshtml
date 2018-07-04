@@ -15,6 +15,7 @@
 {
     <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(blogRoutes.PostHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
 }
+@{ await Html.RenderPartialAsync("EditHistoryInfoPartial", Model); }
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
     <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
     <input type="hidden" id="id" name="id" value="@Model.Id" />

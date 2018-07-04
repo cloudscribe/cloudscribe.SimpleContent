@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-07-01
+// Last Modified:           2018-07-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -18,16 +18,19 @@ namespace cloudscribe.SimpleContent.Web.Versioning
         public AutoPublishDraftPage(
             IPageService pageService,
             PageEvents pageEvents,
+            IContentHistoryCommands historyCommands,
             ILogger<AutoPublishDraftPage> logger
             )
         {
             _pageService = pageService;
             _pageEvents = pageEvents;
+            _historyCommands = historyCommands;
             _log = logger;
         }
 
         private readonly IPageService _pageService;
         private readonly PageEvents _pageEvents;
+        private readonly IContentHistoryCommands _historyCommands;
         private readonly ILogger _log;
 
         public async Task PublishIfNeeded(IPage page)
@@ -54,6 +57,7 @@ namespace cloudscribe.SimpleContent.Web.Versioning
                 await _pageService.Update(page);
 
                 await _pageEvents.HandlePublished(page.ProjectId, page).ConfigureAwait(false);
+                await _historyCommands.DeleteDraftHistory(page.ProjectId, page.Id).ConfigureAwait(false);
 
                 _log.LogDebug($"auto published draft for page {page.Title}");
 

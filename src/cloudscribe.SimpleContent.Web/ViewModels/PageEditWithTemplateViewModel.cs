@@ -1,9 +1,7 @@
 ﻿using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Common.DataAnnotations;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
@@ -58,5 +56,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string MenuFilters { get; set; }
 
         public string SaveMode { get; set; } //SaveDraft, PublishNow, PublishLater buttomn values
+
+        public Guid? HistoryId { get; set; }
+        public DateTime? HistoryArchiveDate { get; set; }
+        public bool DidReplaceDraft { get; set; }
+
     }
 }
