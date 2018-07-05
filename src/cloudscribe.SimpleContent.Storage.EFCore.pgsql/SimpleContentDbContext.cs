@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2018-07-04
+// Last Modified:			2018-07-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -477,6 +477,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.Property(p => p.ArchivedBy)
                 .HasMaxLength(255);
+
+                entity.Property(p => p.ParentSlug).HasMaxLength(255);
+                entity.Property(p => p.ParentId).HasMaxLength(255);
+                entity.Property(p => p.TemplateKey).HasMaxLength(255);
+                entity.Property(p => p.Serializer).HasMaxLength(50);
 
 
             });

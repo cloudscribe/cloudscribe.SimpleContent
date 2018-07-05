@@ -52,6 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                    }));
 
+            services.AddScoped<ISimpleContentDbContextFactory, SimpleContentDbContextFactory>();
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 
             services.AddCloudscribeSimpleContentEFStorageCommon();

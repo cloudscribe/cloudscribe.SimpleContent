@@ -78,11 +78,16 @@ namespace cloudscribe.SimpleContent.Models
                 IsPublished = post.IsPublished,
                 LastModified = post.LastModified,
                 LastModifiedByUser = post.LastModifiedByUser,
+                MetaDescription = post.MetaDescription,
+                MetaHtml = post.MetaHtml,
+                MetaJson = post.MetaJson,
                 ProjectId = post.BlogId,
                 PubDate = post.PubDate,
                 SerializedModel = post.SerializedModel,
+                Serializer = post.Serializer,
                 Slug = post.Slug,
                 TeaserOverride = post.TeaserOverride,
+                TemplateKey = post.TemplateKey,
                 Title = post.Title,
                 WasDeleted = forDelete
                 
@@ -113,11 +118,20 @@ namespace cloudscribe.SimpleContent.Models
                 IsPublished = page.IsPublished,
                 LastModified = page.LastModified,
                 LastModifiedByUser = page.LastModifiedByUser,
+                MetaDescription = page.MetaDescription,
+                MetaHtml = page.MetaHtml,
+                MetaJson = page.MetaJson,
+                PageOrder = page.PageOrder,
+                ParentId = page.ParentId,
+                ParentSlug = page.ParentSlug,
                 ProjectId = page.ProjectId,
                 PubDate = page.PubDate,
                 SerializedModel = page.SerializedModel,
+                Serializer = page.Serializer,
                 Slug = page.Slug,
+                TemplateKey = page.TemplateKey,
                 Title = page.Title,
+                ViewRoles = page.ViewRoles,
                 WasDeleted = forDelete
 
             };
@@ -193,6 +207,48 @@ namespace cloudscribe.SimpleContent.Models
             target.Serializer = input.Serializer;
         }
 
+        /// <summary>
+        /// this would only be used to restore a deleted post,
+        /// categories and comments would be lost as they are not kept in content history
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="target"></param>
+        public static void CopyTo(this ContentHistory input, IPost target)
+        {
+            target.Author = input.Author;
+            target.BlogId = input.ProjectId;
+            //target.Categories = input.Categories;
+            //target.Comments = input.Comments;
+            target.Content = input.Content;
+            target.ContentType = input.ContentType;
+            target.Id = input.ContentId;
+            target.IsPublished = input.IsPublished;
+            target.LastModified = input.LastModified;
+            target.MetaDescription = input.MetaDescription;
+            target.MetaHtml = input.MetaHtml;
+            target.MetaJson = input.MetaJson;
+            target.PubDate = input.PubDate;
+            target.Slug = input.Slug;
+            target.Title = input.Title;
+            target.CorrelationKey = input.CorrelationKey;
+            //target.ImageUrl = input.ImageUrl;
+            //target.ThumbnailUrl = input.ThumbnailUrl;
+            //target.IsFeatured = input.IsFeatured;
+            //target.TeaserOverride = input.TeaserOverride;
+            //target.SuppressTeaser = input.SuppressTeaser;
+
+            target.CreatedByUser = input.CreatedByUser;
+            target.CreatedUtc = input.CreatedUtc;
+            target.LastModifiedByUser = input.LastModifiedByUser;
+            target.DraftAuthor = input.DraftAuthor;
+            target.DraftContent = input.DraftContent;
+            target.DraftPubDate = input.DraftPubDate;
+            target.DraftSerializedModel = input.DraftSerializedModel;
+            target.TemplateKey = input.TemplateKey;
+            target.SerializedModel = input.SerializedModel;
+            target.Serializer = input.Serializer;
+        }
+
         public static void CopyTo(this IPage input, IPage target)
         {
  
@@ -229,6 +285,61 @@ namespace cloudscribe.SimpleContent.Models
             target.ViewRoles = input.ViewRoles;
 
             //added 2018-06-20
+            target.CreatedUtc = input.CreatedUtc;
+            target.CreatedByUser = input.CreatedByUser;
+            target.LastModifiedByUser = input.LastModifiedByUser;
+            target.DraftAuthor = input.DraftAuthor;
+            target.DraftContent = input.DraftContent;
+            target.DraftPubDate = input.DraftPubDate;
+            target.DraftSerializedModel = input.DraftSerializedModel;
+            target.TemplateKey = input.TemplateKey;
+            target.SerializedModel = input.SerializedModel;
+            target.Serializer = input.Serializer;
+
+
+        }
+
+        /// <summary>
+        /// this would only be used to restore a deleted page
+        /// not all page properties would be restored but main content would
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="target"></param>
+        public static void CopyTo(this ContentHistory input, IPage target)
+        {
+
+            target.Author = input.Author;
+            //target.Categories = input.Categories;
+            //target.Comments = input.Comments;
+            target.CorrelationKey = input.CorrelationKey;
+            target.Content = input.Content;
+            target.ContentType = input.ContentType;
+            //target.DisableEditor = input.DisableEditor;
+            //target.ExternalUrl = input.ExternalUrl;
+            target.Id = input.ContentId;
+            target.IsPublished = input.IsPublished;
+            target.LastModified = input.LastModified;
+            //target.MenuFilters = input.MenuFilters;
+            //target.MenuOnly = input.MenuOnly;
+            target.MetaDescription = input.MetaDescription;
+            target.MetaHtml = input.MetaHtml;
+            target.MetaJson = input.MetaJson;
+            target.PageOrder = input.PageOrder;
+            target.ParentId = input.ParentId;
+            target.ParentSlug = input.ParentSlug;
+            target.ProjectId = input.ProjectId;
+            target.PubDate = input.PubDate;
+            //target.Resources = input.Resources;
+            //target.ShowCategories = input.ShowCategories;
+            //target.ShowComments = input.ShowComments;
+            //target.ShowHeading = input.ShowHeading;
+            //target.ShowMenu = input.ShowMenu;
+            //target.ShowLastModified = input.ShowLastModified;
+            //target.ShowPubDate = input.ShowPubDate;
+            target.Slug = input.Slug;
+            target.Title = input.Title;
+            target.ViewRoles = input.ViewRoles;
+
             target.CreatedUtc = input.CreatedUtc;
             target.CreatedByUser = input.CreatedByUser;
             target.LastModifiedByUser = input.LastModifiedByUser;

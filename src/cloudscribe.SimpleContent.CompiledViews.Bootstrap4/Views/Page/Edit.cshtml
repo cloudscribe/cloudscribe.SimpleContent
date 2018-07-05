@@ -19,7 +19,7 @@
 </h2>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
-    <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(pageRoutes.PageHistoryRouteName, new { slug })">@sr["Version History"]</a>
+    <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(pageRoutes.PageHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
 }
 @{ await Html.RenderPartialAsync("EditHistoryInfoPartial", Model); }
 <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true" data-submit-once="true">

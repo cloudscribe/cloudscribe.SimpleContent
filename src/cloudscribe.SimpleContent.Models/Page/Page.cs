@@ -48,7 +48,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string Content { get; set; } = string.Empty;
 
-        public DateTime? PubDate { get; set; } = DateTime.UtcNow;
+        public DateTime? PubDate { get; set; } 
 
         public DateTime LastModified { get; set; } = DateTime.UtcNow;
 

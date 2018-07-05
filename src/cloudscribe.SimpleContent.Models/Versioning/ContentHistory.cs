@@ -52,7 +52,24 @@ namespace cloudscribe.SimpleContent.Models
 
         public string SerializedModel { get; set; }
         public string DraftSerializedModel { get; set; }
-        
+
+        public string MetaDescription { get; set; }
+
+        public string MetaJson { get; set; }
+        public string MetaHtml { get; set; }
+
+        public string TemplateKey { get; set; }
+        public string Serializer { get; set; }
+
+        //page only
+
+        public string ParentId { get; set; } = string.Empty;
+
+        public string ParentSlug { get; set; } = string.Empty;
+
+        public int PageOrder { get; set; } = 3;
+        public string ViewRoles { get; set; }
+
         //blog only
 
         public string TeaserOverride { get; set; }

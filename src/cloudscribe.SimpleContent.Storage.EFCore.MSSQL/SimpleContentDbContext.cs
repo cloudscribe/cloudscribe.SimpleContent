@@ -565,6 +565,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.Slug)
                 .HasMaxLength(255);
 
+                entity.Property(p => p.ParentSlug).HasMaxLength(255);
+                entity.Property(p => p.ParentId).HasMaxLength(255);
+                entity.Property(p => p.TemplateKey).HasMaxLength(255);
+                entity.Property(p => p.Serializer).HasMaxLength(50);
+
                 entity.Property(p => p.IsPublished)
                 .IsRequired()
                 .HasColumnType("bit");

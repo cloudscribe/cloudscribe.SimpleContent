@@ -72,20 +72,42 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     b.Property<string>("LastModifiedByUser")
                         .HasMaxLength(100);
 
+                    b.Property<string>("MetaDescription");
+
+                    b.Property<string>("MetaHtml");
+
+                    b.Property<string>("MetaJson");
+
+                    b.Property<int>("PageOrder");
+
+                    b.Property<string>("ParentId")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ParentSlug")
+                        .HasMaxLength(255);
+
                     b.Property<string>("ProjectId");
 
                     b.Property<DateTime?>("PubDate");
 
                     b.Property<string>("SerializedModel");
 
+                    b.Property<string>("Serializer")
+                        .HasMaxLength(50);
+
                     b.Property<string>("Slug")
                         .HasMaxLength(255);
 
                     b.Property<string>("TeaserOverride");
 
+                    b.Property<string>("TemplateKey")
+                        .HasMaxLength(255);
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255);
+
+                    b.Property<string>("ViewRoles");
 
                     b.Property<bool>("WasDeleted");
 

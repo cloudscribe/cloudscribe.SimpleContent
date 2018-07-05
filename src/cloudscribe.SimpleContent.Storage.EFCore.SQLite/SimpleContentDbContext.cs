@@ -470,6 +470,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.Property(p => p.ArchivedBy)
                 .HasMaxLength(255);
 
+                entity.Property(p => p.ParentSlug).HasMaxLength(255);
+                entity.Property(p => p.ParentId).HasMaxLength(255);
+                entity.Property(p => p.TemplateKey).HasMaxLength(255);
+                entity.Property(p => p.Serializer).HasMaxLength(50);
+
 
             });
 

@@ -190,6 +190,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (page == null)
             { 
+                
                 var rootList = await PageService.GetRootPages().ConfigureAwait(false);
                 // a site starts out with no pages 
                 if (canEdit && rootList.Count == 0)
@@ -1356,8 +1357,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            var history = page.CreateHistory(User.Identity.Name, true);
-            await HistoryCommands.Create(project.Id, history);
+            if(string.IsNullOrWhiteSpace(page.ExternalUrl) && !page.MenuOnly)
+            {
+                //don't create history for deleted page that was just a menu item with an external url
+                var history = page.CreateHistory(User.Identity.Name, true);
+                await HistoryCommands.Create(project.Id, history);
+            }
+            
             
             await PageService.DeletePage(page.Id);
             PageService.ClearNavigationCache();

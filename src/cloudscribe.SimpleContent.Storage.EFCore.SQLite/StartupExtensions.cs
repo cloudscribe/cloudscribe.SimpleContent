@@ -14,7 +14,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddDbContext<SimpleContentDbContext>(options =>
                     options.UseSqlite(connectionString));
-            
+
+            services.AddScoped<ISimpleContentDbContextFactory, SimpleContentDbContextFactory>();
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 
             services.AddCloudscribeSimpleContentEFStorageCommon();

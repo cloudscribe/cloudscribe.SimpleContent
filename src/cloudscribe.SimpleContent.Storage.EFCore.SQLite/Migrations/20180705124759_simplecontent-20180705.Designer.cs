@@ -2,23 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Storage.EFCore.pgsql;
+using cloudscribe.SimpleContent.Storage.EFCore.SQLite;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
+namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180705124759_simplecontent-20180705")]
+    partial class simplecontent20180705
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ContentHistory", b =>
                 {
