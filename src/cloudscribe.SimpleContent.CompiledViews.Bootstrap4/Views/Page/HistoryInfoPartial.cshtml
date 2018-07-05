@@ -9,7 +9,7 @@
         {
             <a class="btn btn-link" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = Model.CurrentPage.Slug })">@sr["View published version."]</a>
         }
-       <a class="btn btn-primary" href="@Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = Model.CurrentPage.Slug, historyId = Model.HistoryId.Value })">@sr["Restore this version to editor"]</a>
+       <a class="btn btn-primary btn-sm" href="@Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = Model.CurrentPage.Slug, historyId = Model.HistoryId.Value })">@sr["Restore this version to editor"]</a>
     </div>
 
 }

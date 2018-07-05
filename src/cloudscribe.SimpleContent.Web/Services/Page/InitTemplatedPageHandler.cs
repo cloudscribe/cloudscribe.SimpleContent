@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-21
-// Last Modified:           2018-07-02
+// Last Modified:           2018-07-05
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -65,12 +65,12 @@ namespace cloudscribe.SimpleContent.Web.Services
                 {
                     ProjectId = request.ProjectId,
                     CreatedByUser = request.CreatedByUserName,
-                    Author = request.Author,
+                    DraftAuthor = request.Author,
                     LastModifiedByUser = request.CreatedByUserName,
                     TemplateKey = request.Template.Key,
                     Title = request.ViewModel.PageTitle,
                     Serializer = serializer.Name,
-                    SerializedModel = serializer.Serialize(request.Template.ModelType, model),
+                    DraftSerializedModel = serializer.Serialize(request.Template.ModelType, model),
                     ParentSlug = request.ViewModel.ParentSlug,
                     PageOrder = request.ViewModel.PageOrder,
                     Content = await _viewRenderer.RenderViewAsString(request.Template.RenderView, model).ConfigureAwait(false),

@@ -10,6 +10,7 @@ using cloudscribe.SimpleContent.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,18 +21,21 @@ namespace cloudscribe.SimpleContent.Web.Controllers
         public ContentHistoryController(
             IProjectService projectService,
             IContentHistoryQueries historyQueries,
+            IContentHistoryCommands historyCommands,
             IAuthorizationService authorizationService,
             ILogger<ContentHistoryController> logger
             )
         {
             ProjectService = projectService;
             HistoryQueries = historyQueries;
+            HistoryCommands = historyCommands;
             AuthorizationService = authorizationService;
             Log = logger;
         }
 
         protected IProjectService ProjectService { get; private set; }
         protected IContentHistoryQueries HistoryQueries { get; private set; }
+        protected IContentHistoryCommands HistoryCommands { get; private set; }
         protected IAuthorizationService AuthorizationService { get; private set; }
         protected ILogger Log { get; private set; }
 
@@ -71,6 +75,45 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             };
             
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteHistory(Guid id)
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+            if (project == null)
+            {
+                Log.LogError("project settings not found");
+                return RedirectToAction("Index");
+            }
+
+            var hx = await HistoryQueries.Fetch(project.Id, id).ConfigureAwait(false);
+            if(hx != null)
+            {
+                switch(hx.ContentSource)
+                {
+                    case ContentSource.Blog:
+                        var canEditPosts = await User.CanEditPages(project.Id, AuthorizationService);
+                        if(canEditPosts)
+                        {
+                            await HistoryCommands.Delete(project.Id, id).ConfigureAwait(false);
+                        }
+
+                        break;
+
+                    case ContentSource.Page:
+                        var canEditPages = await User.CanEditPages(project.Id, AuthorizationService);
+                        if(canEditPages)
+                        {
+                            await HistoryCommands.Delete(project.Id, id).ConfigureAwait(false);
+                        }
+
+                        break;
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
     }
