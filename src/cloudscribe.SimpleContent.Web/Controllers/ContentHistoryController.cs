@@ -77,6 +77,7 @@ namespace cloudscribe.SimpleContent.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "ViewContentHistoryPolicy")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteHistory(Guid id)
@@ -112,6 +113,41 @@ namespace cloudscribe.SimpleContent.Web.Controllers
                         break;
                 }
             }
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Policy = "ViewContentHistoryPolicy")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteOlderThan(int days)
+        {
+            if(days < 0)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var project = await ProjectService.GetCurrentProjectSettings();
+            if (project == null)
+            {
+                Log.LogError("project settings not found");
+                return RedirectToAction("Index");
+            }
+
+            var cutoffUtc = DateTime.UtcNow.AddDays(-days);
+            var canEditPosts = await User.CanEditPages(project.Id, AuthorizationService);
+            var canEditPages = await User.CanEditPages(project.Id, AuthorizationService);
+            if(canEditPages && canEditPosts)
+            {
+                await HistoryCommands.DeleteOlderThan(project.Id, cutoffUtc).ConfigureAwait(false);
+            }
+            else
+            {
+                Log.LogWarning($"rejected request to delete content history older than {days} for user {User.Identity.Name} because this is only allowed if users can edit both pages and posts.");
+            }
+
+
+
 
             return RedirectToAction("Index");
         }

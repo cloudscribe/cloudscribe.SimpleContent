@@ -60,6 +60,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public Guid? HistoryId { get; set; }
         public DateTime? HistoryArchiveDate { get; set; }
         public bool DidReplaceDraft { get; set; }
+        public bool DidRestoreDeleted { get; set; }
 
     }
 }

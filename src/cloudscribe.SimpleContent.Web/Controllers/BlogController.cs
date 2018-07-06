@@ -473,6 +473,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 postResult = await BlogService.GetPostBySlug(slug);
             }
+
+            var didRestoreDeleted = false;
+
             if (postResult== null || postResult.Post == null)
             {
                 ViewData["Title"] = StringLocalizer["New Post"];

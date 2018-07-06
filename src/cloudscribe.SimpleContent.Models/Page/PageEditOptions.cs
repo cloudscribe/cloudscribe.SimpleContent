@@ -7,5 +7,6 @@
 
         public bool ShowDisableEditorOption { get; set; }
         public bool AllowMarkdown { get; set; } = true;
+        public bool AllowDeleteDefaultPage { get; set; } = true;
     }
 }

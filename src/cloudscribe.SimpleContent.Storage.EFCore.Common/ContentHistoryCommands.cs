@@ -1,4 +1,10 @@
-﻿using cloudscribe.SimpleContent.Models;
+﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
+// Author:                  Joe Audette
+// Created:					2018-07-04
+// Last Modified:			2018-07-06
+// 
+
+using cloudscribe.SimpleContent.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -58,6 +64,21 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
             }
         }
 
+        public async Task DeleteByContent(
+            string projectId,
+            string contentId,
+            DateTime cutoffDate,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            using (var _db = _contextFactory.CreateContext())
+            {
+                var itemsToRemove = _db.ContentHistory.Where(x => x.ProjectId == projectId && x.ContentId == contentId && x.ArchivedUtc < cutoffDate);
+                _db.ContentHistory.RemoveRange(itemsToRemove);
+                int rowsAffected = await _db.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
         public async Task DeleteByProject(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -66,6 +87,20 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
             using (var _db = _contextFactory.CreateContext())
             {
                 var itemsToRemove = _db.ContentHistory.Where(x => x.ProjectId == projectId);
+                _db.ContentHistory.RemoveRange(itemsToRemove);
+                int rowsAffected = await _db.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
+        public async Task DeleteOlderThan(
+            string projectId,
+            DateTime cutoffDate,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            using (var _db = _contextFactory.CreateContext())
+            {
+                var itemsToRemove = _db.ContentHistory.Where(x => x.ProjectId == projectId && x.ArchivedUtc < cutoffDate);
                 _db.ContentHistory.RemoveRange(itemsToRemove);
                 int rowsAffected = await _db.SaveChangesAsync().ConfigureAwait(false);
             }

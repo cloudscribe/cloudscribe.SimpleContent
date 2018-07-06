@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:					2018-07-02
-// Last Modified:			2018-07-02
+// Last Modified:			2018-07-06
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -72,6 +72,26 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
         }
 
+        public async Task DeleteByContent(
+            string projectId,
+            string contentId,
+            DateTime cutoffDate,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            var items = await _queries.GetAllAsync(projectId).ConfigureAwait(false);
+            var query = items.ToList().AsQueryable();
+            var filtered = query.Where(x => x.ContentId == contentId && x.ProjectId == projectId && x.ArchivedUtc < cutoffDate);
+
+            foreach (var item in filtered)
+            {
+                await _commands.DeleteAsync(
+                    projectId,
+                    item.Id.ToString(),
+                    cancellationToken).ConfigureAwait(false);
+            }
+        }
+
         public async Task DeleteDraftHistory(
             string projectId,
             string contentId,
@@ -99,6 +119,25 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var items = await _queries.GetAllAsync(projectId).ConfigureAwait(false);
             var query = items.ToList().AsQueryable();
             var filtered = query.Where(x => x.ProjectId == projectId);
+
+            foreach (var item in filtered)
+            {
+                await _commands.DeleteAsync(
+                    projectId,
+                    item.Id.ToString(),
+                    cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        public async Task DeleteOlderThan(
+            string projectId,
+            DateTime cutoffDate,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            var items = await _queries.GetAllAsync(projectId).ConfigureAwait(false);
+            var query = items.ToList().AsQueryable();
+            var filtered = query.Where(x => x.ProjectId == projectId && x.ArchivedUtc < cutoffDate);
 
             foreach (var item in filtered)
             {

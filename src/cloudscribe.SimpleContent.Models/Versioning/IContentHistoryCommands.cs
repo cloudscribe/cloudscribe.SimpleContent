@@ -24,10 +24,24 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
+        Task DeleteByContent(
+            string projectId,
+            string contentId,
+            DateTime cutoffDate,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
         Task DeleteByProject(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             );
+
+        Task DeleteOlderThan(
+            string projectId,
+            DateTime cutoffDate,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
 
         /// <summary>
         /// we keep draft history of pages until published

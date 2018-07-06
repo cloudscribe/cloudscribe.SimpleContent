@@ -2,6 +2,11 @@
 @inject IStringLocalizer<SimpleContent> sr
 @inject IBlogRoutes  blogRoutes
 @inject IPageRoutes pageRoutes
+@inject ITimeZoneHelper tzHelper
+@inject ITimeZoneIdResolver tzResolver
+@{ 
+    var timeZoneId = await tzResolver.GetUserTimeZoneId();
+}
 @functions{
     public string GetPreviewUrl(ContentHistory history)
     {
@@ -65,62 +70,62 @@
     <tbody>
         @foreach (var item in Model.History.Data)
         {
-        <tr>
-            <td>
-                @if (Model.CanEditPages && item.ContentSource == ContentSource.Page || Model.CanEditPosts && item.ContentSource == ContentSource.Blog)
-                {
-                    <a href="@GetPreviewUrl(item)" target="_blank">@sr["View"]</a>
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="@("#confirmDeleteModal" + item.Id)">
-                        @sr["Delete"]
-                    </button>
-                    <form asp-controller="ContentHistory" asp-action="DeleteHistory">
-                        <input type="hidden" name="id" value="@item.Id" />
-                        <div class="modal fade" id="@("confirmDeleteModal" + item.Id)" tabindex="-1" role="dialog" aria-labelledby="@("confirmDeleteHeading" + item.Id)">
-                            <div class="modal-dialog modal-sm" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="@("confirmDeleteHeading" + item.Id)">@sr["Confirm Delete"]</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        @sr["Are you sure you want to delete this history item?"]
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Cancel"]</button>
-                                        <input type="submit" value='@sr["Delete"]' class="btn btn-danger btn-ok" />
+            <tr>
+                <td>
+                    @if (Model.CanEditPages && item.ContentSource == ContentSource.Page || Model.CanEditPosts && item.ContentSource == ContentSource.Blog)
+                    {
+                        <a href="@GetPreviewUrl(item)" target="_blank">@sr["View"]</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="@("#confirmDeleteModal" + item.Id)">
+                            @sr["Delete"]
+                        </button>
+                        <form asp-controller="ContentHistory" asp-action="DeleteHistory">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <div class="modal fade" id="@("confirmDeleteModal" + item.Id)" tabindex="-1" role="dialog" aria-labelledby="@("confirmDeleteHeading" + item.Id)">
+                                <div class="modal-dialog modal-sm" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="@("confirmDeleteHeading" + item.Id)">@sr["Confirm Delete"]</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @sr["Are you sure you want to delete this history item?"]
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Cancel"]</button>
+                                            <input type="submit" value='@sr["Delete"]' class="btn btn-danger btn-ok" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
 
-                }
-            </td>
-            <td>
-                @item.ArchivedUtc
-            </td>
-            <td>
-                @item.ArchivedBy
-            </td>
-            <td>
-                @item.ContentSource
-            </td>
-            <td>
-                @item.Title
-            </td>
-            <td>
-                @item.IsDraftHx
-            </td>
-            <td>
-                @item.WasDeleted
-            </td>
-            <td>
-                @item.CreatedByUser
-            </td>
-            <td>
-                @item.LastModifiedByUser
-            </td>
-        </tr>
+                    }
+                </td>
+                <td>
+                    @tzHelper.ConvertToLocalTime(item.ArchivedUtc, timeZoneId).ToString()
+                </td>
+                <td>
+                    @item.ArchivedBy
+                </td>
+                <td>
+                    @item.ContentSource
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.IsDraftHx
+                </td>
+                <td>
+                    @item.WasDeleted
+                </td>
+                <td>
+                    @item.CreatedByUser
+                </td>
+                <td>
+                    @item.LastModifiedByUser
+                </td>
+            </tr>
 
         }
     </tbody>

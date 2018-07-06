@@ -144,6 +144,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                             pageCopy.Content = history.Content;
                             pageCopy.Author = history.Author;
                         }
+
+                        page = pageCopy;
                     }         
                 } 
             }
@@ -531,9 +533,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var page = await PageService.GetPageBySlug(slug);
             ContentHistory history = null;
-            bool didReplaceDraft = false;
+            var didReplaceDraft = false;
+            var didRestoreDeleted = false;
 
-            if(historyId.HasValue)
+            if (historyId.HasValue)
             {
                 history = await HistoryQueries.Fetch(project.Id, historyId.Value).ConfigureAwait(false);
                 if(history != null)
@@ -546,6 +549,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         {
                             page.PromoteDraftTemporarilyForRender();
                         }
+                        didRestoreDeleted = true;
                     }
                     else
                     {
@@ -566,6 +570,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         }
 
                         page = pageCopy;
+                        
 
                     }
 
@@ -609,7 +614,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Template = template,
                 TemplateModel = TemplateService.DesrializeTemplateModel(page, template),
                 ProjectDefaultSlug = project.DefaultPageSlug,
-                DidReplaceDraft = didReplaceDraft
+                DidReplaceDraft = didReplaceDraft,
+                DidRestoreDeleted = didRestoreDeleted
             };
 
             if(history != null)
@@ -693,7 +699,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             var page = await PageService.GetPage(model.Id);
-
+            
             if(page == null && model.HistoryId.HasValue) // restore a deleted page from history
             {
                 var history = await HistoryQueries.Fetch(project.Id, model.HistoryId.Value).ConfigureAwait(false);
@@ -802,8 +808,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             ContentHistory history = null;
-            bool didReplaceDraft = false;
-            
+            var didReplaceDraft = false;
+            var didRestoreDeleted = false;
 
             if (historyId.HasValue)
             {
@@ -823,6 +829,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         {
                             page.PromoteDraftTemporarilyForRender();
                         }
+                        didRestoreDeleted = true;
                     }
                     else
                     {
@@ -840,12 +847,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                             pageCopy.DraftContent = history.Content;
                         }
                         page = pageCopy;
+                        
 
                     }
 
                     model.HistoryArchiveDate = history.ArchivedUtc;
                     model.HistoryId = history.Id;
                     model.DidReplaceDraft = didReplaceDraft;
+                    model.DidRestoreDeleted = didRestoreDeleted;
 
                 }
             }
@@ -853,7 +862,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if (page == null) // new page
             {
                 ViewData["Title"] = StringLocalizer["New Page"];
-                model.Slug = slug;
                 model.ParentSlug = parentSlug;
                 model.PageOrder = await PageService.GetNextChildPageOrder(parentSlug);
                 model.ContentType = project.DefaultContentType;
@@ -868,19 +876,24 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
 
                 var rootList = await PageService.GetRootPages().ConfigureAwait(false);
-                if(rootList.Count == 0)
+                if(rootList.Count == 0) // expected if home page doesn't exist yet
                 {
                     var rootPagePath = Url.RouteUrl(PageRoutes.PageRouteName);
-                    // expected if home page doesn't exist yet
-                    if(slug == "home" && rootPagePath == "/home")
+                    if(string.IsNullOrWhiteSpace(slug))
                     {
+                        slug = project.DefaultPageSlug;
                         model.Title = StringLocalizer["Home"];
                     }
+                    
+                    //if(slug == "home" && rootPagePath == "/home")
+                    //{
+                    //    model.Title = StringLocalizer["Home"];
+                    //}
 
                 }
                 model.Author = await AuthorNameResolver.GetAuthorName(User);
                 //model.PubDate = TimeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId);
-
+                model.Slug = slug;
             }
             else // page not null
             {
@@ -905,29 +918,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     model.Author = page.DraftAuthor;
                     model.Content = page.DraftContent; 
                 }
-
-                //if (historyId.HasValue)
-                //{
-                //    var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
-                //    if (history != null)
-                //    {
-                //        if (history.IsDraftHx)
-                //        {
-                //            model.Author = history.DraftAuthor;
-                //            model.Content = history.DraftContent;
-                //        }
-                //        else
-                //        {
-                //            model.Author = history.Author;
-                //            model.Content = history.Content;
-                //        }
-
-                //        model.HistoryArchiveDate = history.ArchivedUtc;
-                //        model.HistoryId = history.Id;
-                //        model.DidReplaceDraft = page.HasDraftVersion();
-                //    }
-                //}
-
+                
                 model.Id = page.Id;
                 model.CorrelationKey = page.CorrelationKey;
                 model.IsPublished = page.IsPublished;
@@ -957,7 +948,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
 
             }
-
             
             return View(model);
         }
@@ -1491,7 +1481,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (project == null)
             {
-                Log.LogInformation("project not found, redirecting/rejecting");
+                Log.LogWarning("project not found, redirecting/rejecting");
                 if (Request.IsAjaxRequest())
                 {
                     return BadRequest();
@@ -1503,7 +1493,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (!canEdit)
             {
-                Log.LogInformation("user is not allowed to edit, redirecting/rejecting");
+                Log.LogWarning("user is not allowed to edit, redirecting/rejecting");
                 if (Request.IsAjaxRequest())
                 {
                     return BadRequest();
@@ -1532,17 +1522,22 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
             }
 
-            if (page.Slug == project.DefaultPageSlug) // don't allow delete the home/default page from the ui
+            if(!EditOptions.AllowDeleteDefaultPage)
             {
-                Log.LogWarning($"Rejecting/redirecting, user {User.Identity.Name} tried to delete the default page {page.Slug}");
-                if (Request.IsAjaxRequest())
+                if (page.Slug == project.DefaultPageSlug) // don't allow delete the home/default page from the ui
                 {
-                    return BadRequest();
+                    Log.LogError($"Rejecting/redirecting, user {User.Identity.Name} tried to delete the default page {page.Title}");
+                    if (Request.IsAjaxRequest())
+                    {
+                        return BadRequest();
+                    }
+                    this.AlertWarning(StringLocalizer["Sorry, deleting the default page is not allowed by configuration."], true);
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if(string.IsNullOrWhiteSpace(page.ExternalUrl) && !page.MenuOnly)
+
+            if (string.IsNullOrWhiteSpace(page.ExternalUrl) && !page.MenuOnly)
             {
                 //don't create history for deleted page that was just a menu item with an external url
                 var history = page.CreateHistory(User.Identity.Name, true);
@@ -1553,7 +1548,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             await PageService.DeletePage(page.Id);
             PageService.ClearNavigationCache();
 
-            Log.LogWarning($"user {User.Identity.Name} deleted page {page.Slug}");
+            Log.LogWarning($"user {User.Identity.Name} deleted page {page.Title}");
 
             if (Request.IsAjaxRequest())
             {
