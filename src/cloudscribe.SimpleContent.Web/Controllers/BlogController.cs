@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-03
+// Last Modified:           2018-07-06
 // 
 
 
@@ -263,6 +263,57 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 result = await BlogService.GetPostBySlug(slug);
             }
+            ContentHistory history = null;
+            var postWasDeleted = false;
+            var hasDraft = false;
+            var hasPublishedVersion = false;
+            if (result != null && result.Post != null)
+            {
+                hasDraft = result.Post.HasDraftVersion();
+                hasPublishedVersion = result.Post.HasPublishedVersion();
+            }
+
+            if (canEdit && historyId.HasValue)
+            {
+                history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                if (history != null)
+                {
+                    if (result == null || result.Post == null) //page must have been deleted, restore from hx
+                    {
+                        var post = new Post();
+                        history.CopyTo(post);
+                        if (history.IsDraftHx)
+                        {
+                            post.PromoteDraftTemporarilyForRender();
+                        }
+                        postWasDeleted = true;
+                        if(result == null)
+                        {
+                            result = new PostResult();
+                        }
+                        result.Post = post;
+                    }
+                    else
+                    {
+                        var postCopy = new Post();
+                        result.Post.CopyTo(postCopy);
+                        if (history.IsDraftHx)
+                        {
+                            postCopy.Content = history.DraftContent;
+                            postCopy.Author = history.DraftAuthor;
+                        }
+                        else
+                        {
+                            postCopy.Content = history.Content;
+                            postCopy.Author = history.Author;
+                        }
+
+                        result.Post = postCopy;
+                    }
+                }
+            }
+
+
 
             if ((result == null) || (result.Post == null))
             {
@@ -281,8 +332,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var model = new BlogViewModel(ContentProcessor)
             {
-                CanEdit = canEdit
+                CanEdit = canEdit,
+                ShowingDeleted = postWasDeleted,
+                HasDraft = hasDraft,
+                HasPublishedVersion = hasPublishedVersion
+               
             };
+
+            if(history != null)
+            {
+                model.HistoryId = history.Id;
+                model.HistoryArchiveDate = history.ArchivedUtc;
+            }
 
             
             await AutoPublishDraftPost.PublishIfNeeded(result.Post);
@@ -327,42 +388,21 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             ViewData["Title"] = result.Post.Title;
-
-
-            model.HasPublishedVersion = result.Post.HasPublishedVersion();
-            model.HasDraft = result.Post.HasDraftVersion();
-            if (canEdit && model.HasDraft && (showDraft || !model.HasPublishedVersion))
+            
+            if(history == null)
             {
-                // we can't update the actual post here since it is cached
-                var postCopy = new Post();
-                result.Post.CopyTo(postCopy);
-                postCopy.PromoteDraftTemporarilyForRender();
-                result.Post = postCopy;
-                model.ShowingDraft = true;
-            }
-            else if (canEdit && historyId.HasValue)
-            {
-                var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
-                if (history != null)
+                if (canEdit && model.HasDraft && (showDraft || !model.HasPublishedVersion))
                 {
+                    // we can't update the actual post here since it is cached
                     var postCopy = new Post();
                     result.Post.CopyTo(postCopy);
-                    if (history.IsDraftHx)
-                    {
-                        postCopy.Content = history.DraftContent;
-                        postCopy.Author = history.DraftAuthor;
-                    }
-                    else
-                    {
-                        postCopy.Content = history.Content;
-                        postCopy.Author = history.Author;
-                    }
-                    model.HistoryId = history.Id;
-                    model.HistoryArchiveDate = history.ArchivedUtc;
+                    postCopy.PromoteDraftTemporarilyForRender();
                     result.Post = postCopy;
+                    model.ShowingDraft = true;
                 }
             }
-
+           
+            
             model.CurrentPost = result.Post;
             if(result.PreviousPost != null)
             {
@@ -395,47 +435,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         }
 
-        [HttpGet]
-        [Authorize(Policy = "ViewContentHistoryPolicy")]
-        public virtual async Task<IActionResult> History(
-             CancellationToken cancellationToken,
-            string slug,
-            int pageNumber = 1,
-            int pageSize = 20
-            )
-        {
-
-            var project = await ProjectService.GetCurrentProjectSettings();
-            if (project == null)
-            {
-                Log.LogError("project settings not found returning 404");
-                return NotFound();
-            }
-
-            var result = await BlogService.GetPostBySlug(slug);
-
-            if ((result == null) || (result.Post == null))
-            {
-                Log.LogWarning("post not found for slug " + slug + ", so redirecting to index");
-                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
-            }
-
-            var model = new ContentHistoryViewModel()
-            {
-                History = await HistoryQueries.GetByContent(
-                    project.Id,
-                    result.Post.Id,
-                    pageNumber,
-                    pageSize,
-                    cancellationToken),
-                ContentTitle = result.Post.Title,
-                CanEditPosts = await User.CanEditBlog(project.Id, AuthorizationService)
-        };
-
-            return View(model);
-
-
-        }
+        
 
         [HttpGet]
         [AllowAnonymous]
@@ -474,14 +474,62 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 postResult = await BlogService.GetPostBySlug(slug);
             }
 
-            var didRestoreDeleted = false;
+            var routeVals = new RouteValueDictionary
+            {
+                { "slug", slug }
+            };
+            if (historyId.HasValue)
+            {
+                routeVals.Add("historyId", historyId.Value);
+            }
 
-            if (postResult== null || postResult.Post == null)
+            ContentHistory history = null;
+            var hasDraft = false;
+            var hasPublishedVersion = false;
+            if(postResult != null && postResult.Post != null)
+            {
+                hasDraft = postResult.Post.HasDraftVersion();
+                hasPublishedVersion = postResult.Post.HasPublishedVersion();
+            }
+
+            if (historyId.HasValue)
+            {
+                history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                if (history != null)
+                {
+                    if(postResult == null || postResult.Post == null)
+                    {
+                        var post = new Post();
+                        history.CopyTo(post);
+                        if(postResult == null)
+                        {
+                            postResult = new PostResult();
+                        }
+                        postResult.Post = post;
+                        model.DidRestoreDeleted = true;
+                    }
+
+                    if (history.IsDraftHx)
+                    {
+                        model.Author = history.DraftAuthor;
+                        model.Content = history.DraftContent;
+                    }
+                    else
+                    {
+                        model.Author = history.Author;
+                        model.Content = history.Content;
+                    }
+
+                    model.HistoryArchiveDate = history.ArchivedUtc;
+                    model.HistoryId = history.Id;
+                    model.DidReplaceDraft = hasDraft;
+                }
+            }
+
+            if (postResult == null || postResult.Post == null)
             {
                 ViewData["Title"] = StringLocalizer["New Post"];
                 model.Author = await AuthorNameResolver.GetAuthorName(User);
-                model.IsPublished = true;
-                //model.PubDate = TimeZoneHelper.ConvertToLocalTime(DateTime.UtcNow, projectSettings.TimeZoneId).ToString();
                 model.CurrentPostUrl = Url.RouteUrl(BlogRoutes.BlogIndexRouteName);
                 model.ContentType = project.DefaultContentType;
                 if(ContentOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
@@ -496,37 +544,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             else
             {
                 ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], postResult.Post.Title);
-
-                if(string.IsNullOrWhiteSpace(postResult.Post.DraftContent))
+                
+                if(history == null)
                 {
-                    model.Author = postResult.Post.Author;
-                    model.Content = postResult.Post.Content;
-                }
-                else
-                {
-                    model.Author = postResult.Post.DraftAuthor;
-                    model.Content = postResult.Post.DraftContent;
-                }
-
-                if(historyId.HasValue)
-                {
-                    var history = await HistoryQueries.Fetch(project.Id, historyId.Value);
-                    if(history != null)
+                    if (string.IsNullOrWhiteSpace(postResult.Post.DraftContent))
                     {
-                        if(history.IsDraftHx)
-                        {
-                            model.Author = history.DraftAuthor;
-                            model.Content = history.DraftContent;
-                        }
-                        else
-                        {
-                            model.Author = history.Author;
-                            model.Content = history.Content;
-                        }
-
-                        model.HistoryArchiveDate = history.ArchivedUtc;
-                        model.HistoryId = history.Id;
-                        model.DidReplaceDraft = postResult.Post.HasDraftVersion();
+                        model.Author = postResult.Post.Author;
+                        model.Content = postResult.Post.Content;
+                    }
+                    else
+                    {
+                        model.Author = postResult.Post.DraftAuthor;
+                        model.Content = postResult.Post.DraftContent;
                     }
                 }
                 
@@ -555,8 +584,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, project.TimeZoneId);
                 }
             }
-
-
+            
             return View(model);
         }
 
@@ -587,7 +615,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 post = await BlogService.GetPost(model.Id);
             }
-            
+
+            if (post == null && model.HistoryId.HasValue) // restore a deleted post from history
+            {
+                var history = await HistoryQueries.Fetch(project.Id, model.HistoryId.Value).ConfigureAwait(false);
+                if (history != null)
+                {
+                    post = new Post();
+                    history.CopyTo(post);
+                    await BlogService.Create(post); // re-create post here so it gets the previous id and keeps previous history
+                }
+            }
+
             var isNew = (post == null);
 
             var request = new CreateOrUpdatePostRequest(
@@ -901,7 +940,90 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         }
 
-        
+        [Authorize(Policy = "ViewContentHistoryPolicy")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteHistoryOlderThan(string id, int days)
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogWarning("project not found, redirecting/rejecting");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogWarning("user is not allowed to edit, redirecting/rejecting");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var post = await BlogService.GetPost(id);
+
+            if (post == null)
+            {
+                Log.LogInformation($"page not found for {id}, redirecting/rejecting");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            if (days < 0) //delete all history
+            {
+                await HistoryCommands.DeleteByContent(project.Id, id).ConfigureAwait(false);
+            }
+            else
+            {
+                var cutoffUtc = DateTime.UtcNow.AddDays(-days);
+                await HistoryCommands.DeleteByContent(project.Id, id, cutoffUtc).ConfigureAwait(false);
+            }
+
+            return RedirectToRoute(BlogRoutes.PostHistoryRouteName, new { slug = post.Slug });
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "ViewContentHistoryPolicy")]
+        public virtual async Task<IActionResult> History(
+             CancellationToken cancellationToken,
+            string slug,
+            int pageNumber = 1,
+            int pageSize = 20
+            )
+        {
+
+            var project = await ProjectService.GetCurrentProjectSettings();
+            if (project == null)
+            {
+                Log.LogError("project settings not found returning 404");
+                return NotFound();
+            }
+
+            var result = await BlogService.GetPostBySlug(slug);
+
+            if ((result == null) || (result.Post == null))
+            {
+                Log.LogWarning("post not found for slug " + slug + ", so redirecting to index");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var model = new ContentHistoryViewModel()
+            {
+                History = await HistoryQueries.GetByContent(
+                    project.Id,
+                    result.Post.Id,
+                    pageNumber,
+                    pageSize,
+                    cancellationToken),
+                ContentId = result.Post.Id,
+                ContentTitle = result.Post.Title,
+                CanEditPosts = await User.CanEditBlog(project.Id, AuthorizationService)
+            };
+
+            return View(model);
+        }
+
+
 
         [HttpPost]
         [Authorize(Policy = "BlogViewPolicy")]

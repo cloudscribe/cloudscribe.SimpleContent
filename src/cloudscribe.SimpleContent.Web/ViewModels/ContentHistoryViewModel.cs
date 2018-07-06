@@ -13,6 +13,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public PagedResult<ContentHistory> History { get; set; }
 
         public int SortMode { get; set; } = 0;
+        public string ContentId { get; set; }
         public string ContentSource { get; set; }
 
         public string Editor { get; set; }

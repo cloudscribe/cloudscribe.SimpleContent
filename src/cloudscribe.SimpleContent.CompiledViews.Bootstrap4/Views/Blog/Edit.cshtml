@@ -16,96 +16,97 @@
     <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(blogRoutes.PostHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
 }
 @{ await Html.RenderPartialAsync("EditHistoryInfoPartial", Model); }
-<form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
-    <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
-    <input type="hidden" id="id" name="id" value="@Model.Id" />
-    <input type="hidden" asp-for="@Model.IsPublished" />
-    <input type="hidden" asp-for="ContentType" />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
-    <div class="form-group">
-        <label asp-for="Title">@sr["Title"]</label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-    @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
-    @{ await Html.RenderPartialAsync("EditSlugPartial", Model); }
-    <div class="form-group">
-        <label asp-for="MetaDescription">@sr["Meta Description"]</label>
-        <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
-        <span asp-validation-for="MetaDescription" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Content">@sr["Content"]</label>
-        @if (Model.ContentType == "markdown")
-        {
-            await Html.RenderPartialAsync("EditContentMarkdownPartial", Model);
-        }
-        else
-        {
-            await Html.RenderPartialAsync("EditContentHtmlPartial", Model);
-        }
-        <span asp-validation-for="Content" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Categories">@sr["Categories"]</label>
-        <input asp-for="Categories" class="form-control" />
-        <span asp-validation-for="Categories" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Author">@sr["Author"]</label>
-        <input asp-for="Author" class="form-control" />
-        <span asp-validation-for="Author" class="text-danger"></span>
-    </div>
-    @{ await Html.RenderPartialAsync("EditImageUrlPartial", Model); }
-    <div class="form-group">
-        <div class="form-check">
-            <input asp-for="IsFeatured" class="form-check-input" />
-            <label asp-for="IsFeatured" class="form-check-label">@sr["Is Featured"]</label>
+    <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
+        <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
+        <input type="hidden" id="id" name="id" value="@Model.Id" />
+        <input type="hidden" asp-for="@Model.IsPublished" />
+        <input type="hidden" asp-for="@Model.HistoryId" />
+        <input type="hidden" asp-for="ContentType" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
+        <div class="form-group">
+            <label asp-for="Title">@sr["Title"]</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
-    </div>
-
-    @if (Model.TeasersEnabled)
-    {
-        if (Model.ContentType == "markdown")
-        {
-            await Html.RenderPartialAsync("EditTeaserMarkdownPartial", Model);
-        }
-        else
-        {
-            await Html.RenderPartialAsync("EditTeaserHtmlPartial", Model);
-        }
-    }
-    else
-    {
-        await Html.RenderPartialAsync("EditTeaserDisabledPartial");
-    }
-
-    <div class="form-inline">
-        <div class="form-group mt-1">
-            <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+        @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
+        @{ await Html.RenderPartialAsync("EditSlugPartial", Model); }
+        <div class="form-group">
+            <label asp-for="MetaDescription">@sr["Meta Description"]</label>
+            <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
+            <span asp-validation-for="MetaDescription" class="text-danger"></span>
         </div>
-        <div class="form-group ml-1 mt-1">
-            <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+        <div class="form-group">
+            <label asp-for="Content">@sr["Content"]</label>
+            @if (Model.ContentType == "markdown")
+            {
+                await Html.RenderPartialAsync("EditContentMarkdownPartial", Model);
+            }
+            else
+            {
+                await Html.RenderPartialAsync("EditContentHtmlPartial", Model);
+            }
+            <span asp-validation-for="Content" class="text-danger"></span>
         </div>
-        <div class="form-group ml-1 mt-1">
-            <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
+        <div class="form-group">
+            <label asp-for="Categories">@sr["Categories"]</label>
+            <input asp-for="Categories" class="form-control" />
+            <span asp-validation-for="Categories" class="text-danger"></span>
         </div>
-        <div class="form-group ml-1 mt-1">
-            @{ await Html.RenderPartialAsync("EditPubDate", Model); }
+        <div class="form-group">
+            <label asp-for="Author">@sr["Author"]</label>
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
         </div>
-        @if (!string.IsNullOrEmpty(Model.Id))
-        {
-            <div class="form-group ml-4 mt-1">
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
-                    @sr["Delete"]
-                </button>
+        @{ await Html.RenderPartialAsync("EditImageUrlPartial", Model); }
+        <div class="form-group">
+            <div class="form-check">
+                <input asp-for="IsFeatured" class="form-check-input" />
+                <label asp-for="IsFeatured" class="form-check-label">@sr["Is Featured"]</label>
             </div>
+        </div>
 
+        @if (Model.TeasersEnabled)
+        {
+            if (Model.ContentType == "markdown")
+            {
+                await Html.RenderPartialAsync("EditTeaserMarkdownPartial", Model);
+            }
+            else
+            {
+                await Html.RenderPartialAsync("EditTeaserHtmlPartial", Model);
+            }
+        }
+        else
+        {
+            await Html.RenderPartialAsync("EditTeaserDisabledPartial");
         }
 
-    </div>
-</form>
+        <div class="form-inline">
+            <div class="form-group mt-1">
+                <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+            </div>
+            <div class="form-group ml-1 mt-1">
+                <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+            </div>
+            <div class="form-group ml-1 mt-1">
+                <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
+            </div>
+            <div class="form-group ml-1 mt-1">
+                @{ await Html.RenderPartialAsync("EditPubDate", Model); }
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Id))
+            {
+                <div class="form-group ml-4 mt-1">
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                        @sr["Delete"]
+                    </button>
+                </div>
+
+            }
+
+        </div>
+    </form>
 @{ await Html.RenderPartialAsync("EditDraftPubDatePartial", Model); }
 @if (!string.IsNullOrEmpty(Model.Id))
 {

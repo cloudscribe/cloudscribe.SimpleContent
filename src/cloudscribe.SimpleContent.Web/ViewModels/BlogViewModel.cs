@@ -36,6 +36,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool HasPublishedVersion { get; set; }
         public bool HasDraft { get; set; }
         public bool ShowingDraft { get; set; }
+        public bool ShowingDeleted { get; set; }
 
         public Guid? HistoryId { get; set; }
         public DateTime? HistoryArchiveDate { get; set; }
