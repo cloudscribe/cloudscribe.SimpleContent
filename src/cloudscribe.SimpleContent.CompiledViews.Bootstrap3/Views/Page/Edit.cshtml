@@ -17,7 +17,7 @@
     var editOptions = pageEditOptionsAccessor.Value;
     var showDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
-    
+
 }
 @section Styles {
     @{ await Html.RenderPartialAsync("_DatePickerCssPartial"); }
@@ -32,195 +32,191 @@
     }
 }
 <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
-<form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true" data-submit-once="true">
-    <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
-    <input type="hidden" id="id" name="id" value="@Model.Id" />
-    <input type="hidden" asp-for="@Model.IsPublished" />
-    <input type="hidden" asp-for="ContentType" />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
-    <ul class="nav nav-tabs" role="tablist">
-        <li id="tab1" role="tab" class="active">
-            <a href="#tabContent" data-toggle="tab">@sr["Content"]</a>
-        </li>
-        <li id="tab2" role="tab">
-            <a href="#tabSettings" data-toggle="tab">@sr["Settings"]</a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tabContent" role="tabpanel" aria-labelledby="tab1">
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
-                <div class="col-md-10">
-                    <input asp-for="Title" class="form-control" data-toggle="tooltip" title='@sr["This is the heading and title of the page. For new pages the url slug will be generated based on the title."]' />
-                    <span asp-validation-for="Title" class="text-danger"></span>
+@if (!string.IsNullOrEmpty(Model.Id))
+{
+    <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(pageRoutes.PageHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
+}
+@{ await Html.RenderPartialAsync("EditHistoryInfoPartial", Model); }
+    <form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true" data-submit-once="true">
+        <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
+        <input type="hidden" id="id" name="id" value="@Model.Id" />
+        <input type="hidden" asp-for="@Model.IsPublished" />
+        <input type="hidden" asp-for="ContentType" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
+        <ul class="nav nav-tabs" role="tablist">
+            <li id="tab1" role="tab" class="active">
+                <a href="#tabContent" data-toggle="tab">@sr["Content"]</a>
+            </li>
+            <li id="tab2" role="tab">
+                <a href="#tabSettings" data-toggle="tab">@sr["Settings"]</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tabContent" role="tabpanel" aria-labelledby="tab1">
+                <div class="col-md-12">
+                    &nbsp;
                 </div>
-            </div>
-            @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
-            <div class="form-group">
-                <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
-                <div class="col-md-10">
-                    <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
-                    <span asp-validation-for="MetaDescription" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Title" class="col-md-2 control-label">@sr["Page Heading"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="Title" class="form-control" data-toggle="tooltip" title='@sr["This is the heading and title of the page. For new pages the url slug will be generated based on the title."]' />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
-            @{ await Html.RenderPartialAsync("EditorPartial", Model); }
-            <div class="form-group">
-                <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
-                <div class="col-md-10">
-                    <input asp-for="Author" class="form-control" />
-                    <span asp-validation-for="Author" class="text-danger"></span>
+                @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
+                <div class="form-group">
+                    <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
+                        <span asp-validation-for="MetaDescription" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
-            <div class="col-md-12">
-                &nbsp;
-            </div>
-            <div class="form-group">
-                <label asp-for="Slug" class="col-md-2 control-label">@sr["Slug"]</label>
-                <div class="col-md-10">
-                    <input asp-for="Slug" class="form-control" data-toggle="tooltip" title='@sr["The slug is the url segment that will be used to link to this page. It is recommended to leave the slug blank when creating new pages, the slug will be generated based on the Page Heading. Slugs should be lower case and any characters that are not allowed in urls will be automatically removed."]' />
-                    <span asp-validation-for="Slug" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="ParentSlug" class="col-md-2 control-label">@sr["Parent Slug"]</label>
-                <div class="col-md-10">
-                    <input asp-for="ParentSlug" class="form-control" data-toggle="tooltip" title='@sr["A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager."]' />
-                    <span asp-validation-for="ParentSlug" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExternalUrl" class="col-md-2 control-label">@sr["Override Url"]</label>
-                <div class="col-md-10">
-                    <input asp-for="ExternalUrl" class="form-control" data-toggle="tooltip" title='@sr["If you populate this field with an url then the page is used only as a means to add the url as a menu item. The page content in that case is not used or visible to users. You can use a relative url or a fully qualified url so it can link to external sites. Use this with caution and note that once populated the only way to edit the page is from the link in Page Manager."]' />
-                    <span asp-validation-for="ExternalUrl" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown."]'>
-                        <label>
-                            <input asp-for="ShowHeading" /> @sr["Show Heading"]
-                        </label>
+                @{ await Html.RenderPartialAsync("EditorPartial", Model); }
+                <div class="form-group">
+                    <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="Author" class="form-control" />
+                        <span asp-validation-for="Author" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If the page is a parent of other pages, you check this box to make it show a menu of links to the child pages."]'>
-                        <label>
-                            <input asp-for="ShowMenu" /> @sr["Show Child Menu"]
-                        </label>
+            <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
+                <div class="col-md-12">
+                    &nbsp;
+                </div>
+                <div class="form-group">
+                    <label asp-for="Slug" class="col-md-2 control-label">@sr["Slug"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="Slug" class="form-control" data-toggle="tooltip" title='@sr["The slug is the url segment that will be used to link to this page. It is recommended to leave the slug blank when creating new pages, the slug will be generated based on the Page Heading. Slugs should be lower case and any characters that are not allowed in urls will be automatically removed."]' />
+                        <span asp-validation-for="Slug" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
-            @if (editOptions.ShowDisableEditorOption)
-            {
+                <div class="form-group">
+                    <label asp-for="ParentSlug" class="col-md-2 control-label">@sr["Parent Slug"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="ParentSlug" class="form-control" data-toggle="tooltip" title='@sr["A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager."]' />
+                        <span asp-validation-for="ParentSlug" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExternalUrl" class="col-md-2 control-label">@sr["Override Url"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="ExternalUrl" class="form-control" data-toggle="tooltip" title='@sr["If you populate this field with an url then the page is used only as a means to add the url as a menu item. The page content in that case is not used or visible to users. You can use a relative url or a fully qualified url so it can link to external sites. Use this with caution and note that once populated the only way to edit the page is from the link in Page Manager."]' />
+                        <span asp-validation-for="ExternalUrl" class="text-danger"></span>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If you don't want to use the HTML WYSIWYG editor check this box. This would be useful if you are embedding javascript and application style markup."]'>
+                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown."]'>
                             <label>
-                                <input asp-for="DisableEditor" /> @sr["Disable HTML Editor"]
+                                <input asp-for="ShowHeading" /> @sr["Show Heading"]
                             </label>
                         </div>
                     </div>
                 </div>
-
-            }
-            else
-            {
-                <input type="hidden" id="DisableEditor" name="DisableEditor" value="false" />
-            }
-            <div class="form-group">
-                <div class="col-md-10 col-md-offset-2">
-                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["Check this box if the current page is only meant as a parent container for other pages and has no content of it's own."]'>
-                        <label>
-                            <input asp-for="MenuOnly" /> @sr["No Content Only Show Child Menu"]
-                        </label>
-                    </div>
-                </div>
-            </div>
-            @if (string.IsNullOrEmpty(Model.DisqusShortname))
-            {
-                <input asp-for="ShowComments" type="hidden" />
-            }
-            else
-            {
                 <div class="form-group">
                     <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox">
+                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If the page is a parent of other pages, you check this box to make it show a menu of links to the child pages."]'>
                             <label>
-                                <input asp-for="ShowComments" /> @sr["Enable Comments"]
+                                <input asp-for="ShowMenu" /> @sr["Show Child Menu"]
                             </label>
                         </div>
                     </div>
                 </div>
-            }
-            <div class="form-group">
-                <label asp-for="PageOrder" class="col-md-2 control-label">@sr["Page Order"]</label>
-                <div class="col-md-10">
-                    <input asp-for="PageOrder" class="form-control" data-toggle="tooltip" title='@sr["This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order."]' />
-                    <span asp-validation-for="PageOrder" class="text-danger"></span>
+                @if (editOptions.ShowDisableEditorOption)
+                {
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-2">
+                            <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If you don't want to use the HTML WYSIWYG editor check this box. This would be useful if you are embedding javascript and application style markup."]'>
+                                <label>
+                                    <input asp-for="DisableEditor" /> @sr["Disable HTML Editor"]
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <input type="hidden" id="DisableEditor" name="DisableEditor" value="false" />
+                }
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["Check this box if the current page is only meant as a parent container for other pages and has no content of it's own."]'>
+                            <label>
+                                <input asp-for="MenuOnly" /> @sr["No Content Only Show Child Menu"]
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                @if (string.IsNullOrEmpty(Model.DisqusShortname))
+                {
+                    <input asp-for="ShowComments" type="hidden" />
+                }
+                else
+                {
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-2">
+                            <div class="checkbox">
+                                <label>
+                                    <input asp-for="ShowComments" /> @sr["Enable Comments"]
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="PageOrder" class="col-md-2 control-label">@sr["Page Order"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="PageOrder" class="form-control" data-toggle="tooltip" title='@sr["This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order."]' />
+                        <span asp-validation-for="PageOrder" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MenuFilters" class="col-md-2 control-label">@sr["Menu Filters"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="MenuFilters" class="form-control" data-toggle="tooltip" title='@sr["Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree"]' />
+                        <span asp-validation-for="MenuFilters" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
+                    <div class="form-inline col-md-10">
+                        <input asp-for="ViewRoles" class="form-control" style="width:80%;" data-toggle="tooltip" title='@sr["Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members."]' />
+                        <a class="btn btn-default"
+                           csc-role-selector="@roleSelector"
+                           csc-projectId="@Model.ProjectId"
+                           csc-target-id="ViewRoles">@sr["Select Roles"]</a>
+                        <span asp-validation-for="ViewRoles" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MenuFilters" class="col-md-2 control-label">@sr["Menu Filters"]</label>
-                <div class="col-md-10">
-                    <input asp-for="MenuFilters" class="form-control" data-toggle="tooltip" title='@sr["Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree"]' />
-                    <span asp-validation-for="MenuFilters" class="text-danger"></span>
+        </div>
+        <div class="col-md-offset-2 col-md-10" style="padding-left:0;">
+            <div class="form-inline">
+                <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+                <button id="btnSavePublish" style="margin-left:2px;" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+                <button id="SaveMode" style="margin-left:2px;" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
+                
+                <div class="form-group ml-1 mt-1" style="margin-left:2px;margin-right:10px;">
+                    @{ await Html.RenderPartialAsync("EditPubDate", Model); }
                 </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="ViewRoles" class="col-md-2 control-label">@sr["View Roles"]</label>
-                <div class="form-inline col-md-10">
-                    <input asp-for="ViewRoles" class="form-control" style="width:80%;" data-toggle="tooltip" title='@sr["Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members."]' />
-                    <a class="btn btn-default"
-                       csc-role-selector="@roleSelector"
-                       csc-projectId="@Model.ProjectId"
-                       csc-target-id="ViewRoles">@sr["Select Roles"]</a>
-                    <span asp-validation-for="ViewRoles" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="form-inline">
+                @if (!string.IsNullOrEmpty(Model.Id))
+                {
+                    <button type="button" style="margin-left:10px;" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                        @sr["Delete"]
+                    </button> 
+                }
+                @if (showDev)
+                {
+                    <a class="btn btn-primary" style="margin-left:2px;" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a> 
+                }
 
-        <div class="form-group mt-1">
-            <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
-        </div>
-        <div class="form-group ml-1 mt-1">
-            <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
-        </div>
-        <div class="form-group ml-1 mt-1">
-            <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
-        </div>
-        <div class="form-group ml-1 mt-1">
-            @{ await Html.RenderPartialAsync("EditPubDate", Model); }
-        </div>
-        @if (!string.IsNullOrEmpty(Model.Id))
-        {
-            <div class="form-group ml-4 mt-1">
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
-                    @sr["Delete"]
-                </button>
             </div>
-
-        }
-        @if (showDev)
-        {
-            <div class="form-group ml-1 mt-1">
-                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
-            </div>
-        }
-
-
-    </div>
-</form>
+        </div>
+    
+    </form>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
     <form id="deleteform" class="form-inline" asp-controller="Page" asp-action="Delete" method="post">
@@ -245,23 +241,23 @@
     </form>
 }
 
-    <div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    @sr["To publish later you must enter a date."]
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
+<div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                @sr["To publish later you must enter a date."]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
 
-                </div>
             </div>
         </div>
     </div>
+</div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }

@@ -59,54 +59,54 @@
 <input asp-for="ImageThumbSizeUrl" id="imgUrl1Thumb" type="hidden" />
 
 <div class="form-group">
-    <label asp-for="FirstName" class="control-label"></label>
+    <label asp-for="FirstName" class="control-label">@sr["First Name"]</label>
     <input asp-for="FirstName" class="form-control" />
     <span asp-validation-for="FirstName" class="text-danger"></span>
 </div>
 <div class="form-group">
-    <label asp-for="LastName" class="control-label"></label>
+    <label asp-for="LastName" class="control-label">@sr["Last Name"]</label>
     <input asp-for="LastName" class="form-control" />
     <span asp-validation-for="LastName" class="text-danger"></span>
 </div>
 <div class="form-group">
-    <label asp-for="Email" class="control-label"></label>
+    <label asp-for="Email" class="control-label">@sr["Email"]</label>
     <input asp-for="Email" class="form-control" />
     <span asp-validation-for="Email" class="text-danger"></span>
 </div>
 <div class="form-group">
-    <label asp-for="Phone" class="control-label"></label>
+    <label asp-for="Phone" class="control-label">@sr["Phone"]</label>
     <input asp-for="Phone" class="form-control" />
     <span asp-validation-for="Phone" class="text-danger"></span>
 </div>
 <div class="form-group">
-    <label asp-for="MobilePhone" class="control-label"></label>
+    <label asp-for="MobilePhone" class="control-label">@sr["Mobile Phone"]</label>
     <input asp-for="MobilePhone" class="form-control" />
     <span asp-validation-for="MobilePhone" class="text-danger"></span>
 </div>
 
 <div class="form-group">
-    <label asp-for="ProfileUrl" class="control-label"></label>
+    <label asp-for="ProfileUrl" class="control-label">@sr["Profile Url"]</label>
     <input asp-for="ProfileUrl" class="form-control" />
     <span asp-validation-for="ProfileUrl" class="text-danger"></span>
 </div>
 <div class="form-group">
-    <label asp-for="Department" class="control-label"></label>
+    <label asp-for="Department" class="control-label">@sr["Department"]</label>
     <input asp-for="Department" class="form-control" />
     <span asp-validation-for="Department" class="text-danger"></span>
 </div>
 <div class="form-group">
-    <label asp-for="Position" class="control-label"></label>
+    <label asp-for="Position" class="control-label">@sr["Position"]</label>
     <input asp-for="Position" class="form-control" />
     <span asp-validation-for="Position" class="text-danger"></span>
 </div>
 <div class="form-group">
-    <label asp-for="Biography" class="control-label"></label>
+    <label asp-for="Biography" class="control-label">@sr["Biography"]</label>
     <textarea asp-for="Biography" class="form-control"></textarea>
     <span asp-validation-for="Biography" class="text-danger"></span>
 </div>
 
 <div class="form-group">
-    <label asp-for="JoinDate">JoinDate</label>
+    <label asp-for="JoinDate">@sr["Jojn Date"]</label>
     <input asp-for="JoinDate" type="hidden" />
     <input type="text" id="JoinDateDisplay" class="form-control"
            data-bs-datepicker="true"
@@ -118,22 +118,6 @@
            data-bs-datepicker-allowInputToggle="true"
            data-bs-datepicker-locale="@CultureInfo.CurrentCulture.Name" />
     <span asp-validation-for="JoinDate" class="invalid-feedback"></span>
-</div>
-
-<div class="form-group">
-    <label asp-for="YearsExperience" class="control-label"></label>
-    <input asp-for="YearsExperience" class="form-control" />
-    <span asp-validation-for="YearsExperience" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label asp-for="Salary" class="control-label"></label>
-    <input asp-for="Salary" class="form-control" />
-    <span asp-validation-for="Salary" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label asp-for="AnnualBonus" class="control-label"></label>
-    <input asp-for="AnnualBonus" class="form-control" />
-    <span asp-validation-for="AnnualBonus" class="text-danger"></span>
 </div>
 
 <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">

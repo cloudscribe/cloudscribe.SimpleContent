@@ -29,6 +29,8 @@
          data-approve-comment-url="@Url.Action("AjaxApproveComment", "Page")"
          data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Page")"
          itemscope itemtype="http://schema.org/Article">
+    @{await Html.RenderPartialAsync("DraftInfoPartial", Model); }
+    @{await Html.RenderPartialAsync("HistoryInfoPartial", Model); }
     @if (Model.CurrentPage.ShowHeading)
     {
         <header class="">
