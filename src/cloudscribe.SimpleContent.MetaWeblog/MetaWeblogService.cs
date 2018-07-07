@@ -624,12 +624,20 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             PageStruct page, 
             bool publish)
         {
-            var existing = await _pageService.GetPage(
-                blogId, 
-                pageId,
+            var permission = await _security.ValidatePermissions(
+                blogId,
                 userName,
-                password
+                password,
+                CancellationToken.None
                 ).ConfigureAwait(false);
+
+            if (!permission.CanEditPages)
+            {
+                _log.LogWarning($"user {userName} cannot edit pages");
+                return false;
+            }
+
+            var existing = await _pageService.GetPage(pageId).ConfigureAwait(false);
             if(existing == null) { return false; }
 
             var update = _mapper.GetPageFromStruct(page);

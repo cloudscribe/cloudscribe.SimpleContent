@@ -355,31 +355,31 @@ namespace cloudscribe.SimpleContent.Services
             }
         }
 
-        public async Task<IPage> GetPage(
-            string projectId, 
-            string pageId,
-            string userName,
-            string password)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
+        //public async Task<IPage> GetPage(
+        //    string projectId, 
+        //    string pageId,
+        //    string userName,
+        //    string password)
+        //{
+        //    var permission = await _security.ValidatePermissions(
+        //        projectId,
+        //        userName,
+        //        password,
+        //        CancellationToken
+        //        ).ConfigureAwait(false);
 
-            if (!permission.CanEditPosts)
-            {
-                return null;
-            }
+        //    if (!permission.CanEditPosts)
+        //    {
+        //        return null;
+        //    }
 
-            return await _pageQueries.GetPage(
-                projectId,
-                pageId,
-                CancellationToken)
-                .ConfigureAwait(false);
+        //    return await _pageQueries.GetPage(
+        //        projectId,
+        //        pageId,
+        //        CancellationToken)
+        //        .ConfigureAwait(false);
 
-        }
+        //}
 
         public async Task<IPage> GetPage(string pageId)
         {

@@ -38,10 +38,10 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<IPage> GetPage(string projectId, string pageId, string userName, string password)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<IPage> GetPage(string projectId, string pageId, string userName, string password)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<IPage> GetPageBySlug(string slug)
         {
