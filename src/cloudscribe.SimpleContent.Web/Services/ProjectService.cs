@@ -2,13 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-04-17
+// Last Modified:           2018-07-07
 // 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,8 +21,8 @@ namespace cloudscribe.SimpleContent.Services
             IProjectQueries projectQueries,
             IProjectCommands projectCommands,
             IMemoryCache cache,
-            IPageNavigationCacheKeys cacheKeys,
-            IHttpContextAccessor contextAccessor = null)
+            IPageNavigationCacheKeys cacheKeys
+            )
         {
             _security = security;
             _projectQueries = projectQueries;
@@ -32,11 +30,11 @@ namespace cloudscribe.SimpleContent.Services
             _settingsResolver = settingsResolver;
             _cacheKeys = cacheKeys;
             _cache = cache;
-            _context = contextAccessor?.HttpContext;
+           // _context = contextAccessor?.HttpContext;
         }
 
-        private readonly HttpContext _context;
-        private CancellationToken CancellationToken => _context?.RequestAborted ?? CancellationToken.None;
+        //private readonly HttpContext _context;
+        //private CancellationToken CancellationToken => _context?.RequestAborted ?? CancellationToken.None;
         private IProjectSecurityResolver _security;
         private IProjectQueries _projectQueries;
         private IProjectCommands _projectCommands;
@@ -55,7 +53,7 @@ namespace cloudscribe.SimpleContent.Services
         private async Task<bool> EnsureSettings()
         {
             if (_currentSettings != null) { return true; }
-            _currentSettings = await _settingsResolver.GetCurrentProjectSettings(CancellationToken);
+            _currentSettings = await _settingsResolver.GetCurrentProjectSettings(CancellationToken.None);
             if (_currentSettings != null)
             {
                 //if (context.User.Identity.IsAuthenticated)
@@ -92,35 +90,35 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<IProjectSettings> GetProjectSettings(string projectId)
         {
             
-            return await _projectQueries.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
+            return await _projectQueries.GetProjectSettings(projectId, CancellationToken.None).ConfigureAwait(false);
         }
 
-        public async Task<List<IProjectSettings>> GetUserProjects(string userName, string password)
-        {
-            var permission = await _security.ValidatePermissions(
-                string.Empty,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
+        //public async Task<List<IProjectSettings>> GetUserProjects(string userName, string password)
+        //{
+        //    var permission = await _security.ValidatePermissions(
+        //        string.Empty,
+        //        userName,
+        //        password,
+        //        CancellationToken
+        //        ).ConfigureAwait(false);
 
-            var result = new List<IProjectSettings>(); //empty
+        //    var result = new List<IProjectSettings>(); //empty
 
-            if (!permission.CanEditPosts)
-            {
-                return result; //empty
-            }
+        //    if (!permission.CanEditPosts)
+        //    {
+        //        return result; //empty
+        //    }
 
-            var project = await _projectQueries.GetProjectSettings(permission.ProjectId, CancellationToken);
-            if(project != null)
-            {
-                result.Add(project);
-                return result;
-            }
+        //    var project = await _projectQueries.GetProjectSettings(permission.ProjectId, CancellationToken);
+        //    if(project != null)
+        //    {
+        //        result.Add(project);
+        //        return result;
+        //    }
             
-            //await EnsureBlogSettings().ConfigureAwait(false);
-            //return settings;
-            return await _projectQueries.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);
-        }
+        //    //await EnsureBlogSettings().ConfigureAwait(false);
+        //    //return settings;
+        //    return await _projectQueries.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);
+        //}
     }
 }

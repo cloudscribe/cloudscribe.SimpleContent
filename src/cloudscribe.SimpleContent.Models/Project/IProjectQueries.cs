@@ -2,13 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-09-08
+// Last Modified:           2018-07-07
 // 
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,9 +28,9 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
-        Task<List<IProjectSettings>> GetProjectSettingsByUser(
-            string userName,
-            CancellationToken cancellationToken = default(CancellationToken)
-            );
+        //Task<List<IProjectSettings>> GetProjectSettingsByUser(
+        //    string userName,
+        //    CancellationToken cancellationToken = default(CancellationToken)
+        //    );
     }
 }

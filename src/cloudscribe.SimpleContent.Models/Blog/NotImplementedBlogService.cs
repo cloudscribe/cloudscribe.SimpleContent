@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
@@ -22,15 +23,15 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task Delete(string blogId, string postId)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task Delete(string blogId, string postId)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task Delete(string projectId, string postId, string userName, string password)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task Delete(string projectId, string postId, string userName, string password)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<Dictionary<string, int>> GetArchives(bool includeUnpublished)
         {
@@ -42,15 +43,15 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<Dictionary<string, int>> GetCategories(string blogId, bool includeUnpublished)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Dictionary<string, int>> GetCategories(string blogId, bool includeUnpublished)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<Dictionary<string, int>> GetCategories(string projectId, string userName, string password)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Dictionary<string, int>> GetCategories(string projectId, string userName, string password)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<int> GetCount(string category, bool includeUnpublished)
         {
@@ -67,15 +68,15 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<IPost> GetPost(string blogId, string postId)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<IPost> GetPost(string blogId, string postId)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<IPost> GetPost(string projectId, string postId, string userName, string password)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<IPost> GetPost(string projectId, string postId, string userName, string password)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<PostResult> GetPostBySlug(string slug)
         {
@@ -102,15 +103,15 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<List<IPost>> GetRecentPosts(string blogId, int numberToGet)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<List<IPost>> GetRecentPosts(string blogId, int numberToGet)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<List<IPost>> GetRecentPosts(string projectId, string userName, string password, int numberToGet)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<List<IPost>> GetRecentPosts(string projectId, string userName, string password, int numberToGet)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<List<IPost>> GetPosts(bool includeUnpublished)
         {
@@ -142,12 +143,12 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task Create(IPost post)
+        public Task Create(IPost post, bool convertToRelativeUrls = false)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(IPost post)
+        public Task Update(IPost post, bool convertToRelativeUrls = false)
         {
             throw new NotImplementedException();
         }
@@ -162,25 +163,25 @@ namespace cloudscribe.SimpleContent.Models
         //    throw new NotImplementedException();
         //}
 
-        public Task Create(string projectId, string userName, string password, IPost post, bool publish)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task Create(string projectId, string userName, string password, IPost post, bool publish)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task Update(string projectId, string userName, string password, IPost post, bool publish)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task Update(string projectId, string userName, string password, IPost post, bool publish)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task SaveMedia(string blogId, byte[] bytes, string fileName)
         {
             throw new NotImplementedException();
         }
 
-        public Task SaveMedia(string projectId, string userName, string password, byte[] bytes, string fileName)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task SaveMedia(string projectId, string userName, string password, byte[] bytes, string fileName)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public Task<bool> SlugIsAvailable(string slug)
         {
@@ -192,6 +193,12 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
+        public Task FirePublishEvent(
+            IPost post,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

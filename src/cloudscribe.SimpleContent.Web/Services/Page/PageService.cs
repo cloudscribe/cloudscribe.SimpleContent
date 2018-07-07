@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-02
+// Last Modified:           2018-07-07
 // 
 
 
@@ -403,23 +403,8 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<IPage>> GetAllPages(
-            string projectId,
-            string userName,
-            string password)
+        public async Task<List<IPage>> GetAllPages(string projectId)
         {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return new List<IPage>(); // empty
-            }
-
             return await _pageQueries.GetAllPages(
                 projectId,
                 CancellationToken)
@@ -669,6 +654,14 @@ namespace cloudscribe.SimpleContent.Services
             if (page.PubDate > DateTime.UtcNow) return _sr["Future Published"];
             if (string.IsNullOrEmpty(page.ViewRoles) || page.ViewRoles.Contains("All Users")) return _sr["Public"];
             return _sr["Protected"];
+        }
+
+        public async Task FirePublishEvent(
+            IPage page,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            await _eventHandlers.HandlePublished(page.ProjectId, page);
         }
 
         private string ResolveUrl(IPage page, IUrlHelper urlHelper)

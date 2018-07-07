@@ -10,7 +10,7 @@ namespace cloudscribe.SimpleContent.Models
         Task Update(IProjectSettings project);
         Task<IProjectSettings> GetCurrentProjectSettings();
         Task<IProjectSettings> GetProjectSettings(string projectId);
-        Task<List<IProjectSettings>> GetUserProjects(string userName, string password);
+        
 
         void ClearNavigationCache();
     }

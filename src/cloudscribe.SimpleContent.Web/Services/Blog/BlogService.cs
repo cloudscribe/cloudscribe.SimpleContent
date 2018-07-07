@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-06-28
+// Last Modified:           2018-07-07
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -28,7 +28,6 @@ namespace cloudscribe.SimpleContent.Services
             IPostCommands postCommands,
             IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
-            //IHtmlProcessor htmlProcessor,
             IBlogRoutes blogRoutes,
             PostEvents eventHandlers,
             IUrlHelperFactory urlHelperFactory,
@@ -147,33 +146,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken)
                 .ConfigureAwait(false);
         }
-
-        public async Task<List<IPost>> GetRecentPosts(
-            string projectId, 
-            string userName,
-            string password,
-            int numberToGet)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if(!permission.CanEditPosts)
-            {
-                return new List<IPost>(); // empty
-            }
-
-            
-            return await _postQueries.GetRecentPosts(
-                projectId,
-                numberToGet,
-                CancellationToken)
-                .ConfigureAwait(false);
-        }
-
+        
         public async Task<PagedPostResult> GetPosts(
             string projectId, 
             int year, 
@@ -186,116 +159,79 @@ namespace cloudscribe.SimpleContent.Services
             return await _postQueries.GetPosts(projectId, year, month, day, pageNumber, pageSize, includeUnpublished).ConfigureAwait(false);
         }
 
-        public async Task Create(
-            string projectId, 
-            string userName,
-            string password,
-            IPost post, 
-            bool publish)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return; 
-            }
-
-            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-            
-            await InitializeNewPosts(projectId, post, publish);
-
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if(context != null)
-            {
-                imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
-            }
-
-            // open live writer passes in posts with absolute urls
-            // we want to change them to relative to keep the files portable
-            // to a different root url
-            post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
-                settings.LocalMediaVirtualPath,
-                imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
-                post.Content);
-            // olw also adds hard coded style to images
-            post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
-
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if (post.PubDate == nonPublishedDate)
-            {
-                post.PubDate = DateTime.UtcNow;
-            }
-
-            await _postCommands.Create(settings.Id, post).ConfigureAwait(false);
-            await _eventHandlers.HandleCreated(settings.Id, post).ConfigureAwait(false);
-        }
-
-        public async Task Update(
-            string projectId,
-            string userName,
-            string password,
+        public async Task FirePublishEvent(
             IPost post,
-            bool publish)
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
+            await _eventHandlers.HandlePublished(post.BlogId, post);
 
-            if (!permission.CanEditPosts)
-            {
-                return;
-            }
-
-            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-            
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if (context != null)
-            {
-                imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
-            }
-
-            // open live writer passes in posts with absolute urls
-            // we want to change them to relative to keep the files portable
-            // to a different root url
-            post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
-                settings.LocalMediaVirtualPath,
-                imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
-                post.Content);
-            // olw also adds hard coded style to images
-            post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
-            
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if (post.PubDate == nonPublishedDate)
-            {
-                post.PubDate = DateTime.UtcNow;
-            }
-
-            await _eventHandlers.HandlePreUpdate(settings.Id, post.Id).ConfigureAwait(false);
-            await _postCommands.Update(settings.Id, post).ConfigureAwait(false);
-            await _eventHandlers.HandleUpdated(settings.Id, post).ConfigureAwait(false);
         }
-
-        public async Task Create(IPost post)
+        
+        public async Task Create(IPost post, bool convertToRelativeUrls = false)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
+
+            if(convertToRelativeUrls)
+            {
+                var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
+                var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
+                if (context != null)
+                {
+                    imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
+                }
+
+                // open live writer passes in posts with absolute urls
+                // we want to change them to relative to keep the files portable
+                // to a different root url
+                post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
+                    _settings.LocalMediaVirtualPath,
+                    imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
+                    post.Content);
+                // olw also adds hard coded style to images
+                post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
+            }
+
+            if (string.IsNullOrEmpty(post.Slug))
+            {
+                var slug = CreateSlug(post.Title);
+                var available = await SlugIsAvailable(slug);
+                if (available)
+                {
+                    post.Slug = slug;
+                }
+            }
+
             await _postCommands.Create(_settings.Id, post).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(_settings.Id, post).ConfigureAwait(false);
         }
-
-        public async Task Update(IPost post)
+        
+        public async Task Update(IPost post, bool convertToRelativeUrls = false)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
             await _eventHandlers.HandlePreUpdate(_settings.Id, post.Id).ConfigureAwait(false);
+
+            if (convertToRelativeUrls)
+            {
+                var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
+                var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
+                if (context != null)
+                {
+                    imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
+                }
+
+                // open live writer passes in posts with absolute urls
+                // we want to change them to relative to keep the files portable
+                // to a different root url
+                post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
+                    _settings.LocalMediaVirtualPath,
+                    imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
+                    post.Content);
+                // olw also adds hard coded style to images
+                post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
+            }
+
+
             await _postCommands.Update(_settings.Id, post).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, post).ConfigureAwait(false);
         }
@@ -375,35 +311,7 @@ namespace cloudscribe.SimpleContent.Services
                 .ConfigureAwait(false);
 
         }
-
-        public async Task<IPost> GetPost(
-            string projectId, 
-            string postId,
-            string userName,
-            string password
-            )
-        {
-
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return null;
-            }
-            
-            return await _postQueries.GetPost(
-                projectId,
-                postId,
-                CancellationToken)
-                .ConfigureAwait(false);
-
-        }
-
+        
         public async Task<PostResult> GetPostBySlug(string slug)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
@@ -451,30 +359,7 @@ namespace cloudscribe.SimpleContent.Services
             await _postCommands.Delete(_settings.Id, postId).ConfigureAwait(false);
 
         }
-
-        public async Task Delete(
-            string projectId, 
-            string postId,
-            string userName,
-            string password)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return; //TODO: exception here?
-            }
-
-            await _eventHandlers.HandlePreDelete(projectId, postId).ConfigureAwait(false);
-            await _postCommands.Delete(projectId, postId).ConfigureAwait(false);
-
-        }
-
+        
         public async Task<Dictionary<string, int>> GetCategories(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
@@ -485,32 +370,7 @@ namespace cloudscribe.SimpleContent.Services
                 CancellationToken)
                 .ConfigureAwait(false);
         }
-
-        public async Task<Dictionary<string, int>> GetCategories(
-            string projectId, 
-            string userName,
-            string password)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return new Dictionary<string, int>(); //empty
-            }
-            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-
-            return await _postQueries.GetCategories(
-                settings.Id,
-                permission.CanEditPosts,
-                CancellationToken)
-                .ConfigureAwait(false);
-        }
-
+        
         public async Task<Dictionary<string, int>> GetArchives(bool includeUnpublished)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
@@ -550,32 +410,15 @@ namespace cloudscribe.SimpleContent.Services
         /// this is only used for processing images added via metaweblog api
         /// </summary>
         /// <param name="projectId"></param>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
         /// <param name="bytes"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
         public async Task SaveMedia(
             string projectId, 
-            string userName,
-            string password,
             byte[] bytes, string 
             fileName)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return;
-            }
-
+        {          
             var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-
             await _mediaProcessor.SaveMedia(settings.LocalMediaVirtualPath, fileName, bytes).ConfigureAwait(false);
         }
 

@@ -52,6 +52,9 @@
         public const string BlogFeatureName = "Blog";
         public const string PageFeatureName = "Page";
 
+        public const string HtmlContentType = "html";
+        public const string MarkdownContentType = "markdown";
+
 
     }
 

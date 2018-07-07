@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -8,13 +9,10 @@ namespace cloudscribe.SimpleContent.Models
     public interface IPageService
     {
         Task DeletePage(string pageId);
-        Task<List<IPage>> GetAllPages(
-            string projectId,
-            string userName,
-            string password);
+        Task<List<IPage>> GetAllPages(string projectId);
         Task<List<IPage>> GetRootPages();
         Task<List<IPage>> GetChildPages(string pageId);
-        Task<IPage> GetPage(string projectId, string pageId, string userName, string password);
+        //Task<IPage> GetPage(string projectId, string pageId, string userName, string password);
         Task<IPage> GetPage(string pageId);
 
         Task<IPage> GetPageBySlug(string slug);
@@ -53,5 +51,9 @@ namespace cloudscribe.SimpleContent.Models
         Task<PageActionResult> SortChildPagesAlpha(string pageId);
 
         Task<int> GetNextChildPageOrder(string pageId);
+
+        Task FirePublishEvent(
+            IPage page,
+            CancellationToken cancellationToken = default(CancellationToken));
     }
 }

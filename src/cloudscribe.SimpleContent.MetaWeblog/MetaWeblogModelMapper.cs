@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2016-09-08
+// Last Modified:           2018-07-07
 // 
 
 
@@ -74,12 +74,14 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             return p;
         }
 
-        public BlogInfoStruct GetStructFromBlog(ProjectSettings blog, string blogUrl)
+        public BlogInfoStruct GetStructFromBlog(IProjectSettings blog, string blogUrl)
         {
-            BlogInfoStruct b = new BlogInfoStruct();
-            b.blogId = blog.Id;
-            b.blogName = blog.Title;
-            b.url = blogUrl;
+            BlogInfoStruct b = new BlogInfoStruct
+            {
+                blogId = blog.Id,
+                blogName = blog.Title,
+                url = blogUrl
+            };
 
             return b;
 

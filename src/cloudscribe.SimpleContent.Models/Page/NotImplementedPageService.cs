@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
@@ -22,7 +23,7 @@ namespace cloudscribe.SimpleContent.Models
         //    throw new NotImplementedException();
         //}
 
-        public Task<List<IPage>> GetAllPages(string projectId, string userName, string password)
+        public Task<List<IPage>> GetAllPages(string projectId)
         {
             throw new NotImplementedException();
         }
@@ -108,6 +109,14 @@ namespace cloudscribe.SimpleContent.Models
         }
 
         public Task<int> GetNextChildPageOrder(string pageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task FirePublishEvent(
+            IPage page,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             throw new NotImplementedException();
         }
