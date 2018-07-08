@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-07-02
+// Last Modified:           2018-07-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -25,7 +25,6 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
         public CreateOrUpdatePostHandler(
             IProjectService projectService,
             IBlogService blogService,
-            PostEvents postEvents,
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             IOptions<SimpleContentConfig> configOptionsAccessor,
@@ -35,7 +34,6 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
         {
             _projectService = projectService;
             _blogService = blogService;
-            _postEvents = postEvents;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _contentOptions = configOptionsAccessor.Value;
@@ -45,7 +43,6 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
 
         private readonly IProjectService _projectService;
         private readonly IBlogService _blogService;
-        private readonly PostEvents _postEvents;
         private readonly IContentHistoryCommands _historyCommands;
         private ITimeZoneHelper _timeZoneHelper;
         private readonly SimpleContentConfig _contentOptions;
@@ -214,12 +211,12 @@ namespace cloudscribe.SimpleContent.Web.Services.Blog
 
                     if(shouldFirePublishEvent)
                     {
-                        await _postEvents.HandlePublished(request.ProjectId, post);
+                        await _blogService.FirePublishEvent(post);
                         await _historyCommands.DeleteDraftHistory(request.ProjectId, post.Id).ConfigureAwait(false);
                     }
                     else if(shouldFireUnPublishEvent)
                     {
-                        await _postEvents.HandleUnPublished(post.BlogId, post);
+                        await _blogService.FireUnPublishEvent(post);
                     }
 
                     

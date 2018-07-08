@@ -61,6 +61,7 @@ namespace cloudscribe.SimpleContent.Models
             string fileName);
         
         Task FirePublishEvent(IPost post);
+        Task FireUnPublishEvent(IPost post);
 
     }
 }

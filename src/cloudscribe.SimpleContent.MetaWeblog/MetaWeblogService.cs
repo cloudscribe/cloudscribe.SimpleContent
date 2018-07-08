@@ -90,6 +90,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 post.DraftAuthor = post.Author;
                 post.DraftContent = post.Content;
                 post.Content = null;
+                post.PubDate = null;
             }
             
             var convertToRelativeUrls = true;
@@ -203,6 +204,10 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             if(publish)
             {
                 await _blogService.FirePublishEvent(existing);
+                await _contentHistoryCommands.DeleteDraftHistory(
+                    blogId,
+                    history.ContentId
+                    );
             }
 
             return true;
@@ -439,6 +444,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             var url = await _blogUrlResolver.ResolveBlogUrl(project).ConfigureAwait(false);
             var b = _mapper.GetStructFromBlog(project, url);
+            result.Add(b);
             
             return result;
         }
@@ -613,9 +619,10 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             page.ProjectId = blogId;
             page.Id = Guid.NewGuid().ToString();
+            page.CreatedByUser = userName;
             if(publish)
             {
-                page.IsPublished = publish;
+                page.IsPublished = true;
                 page.PubDate = DateTime.UtcNow;
             }
             else
@@ -623,18 +630,15 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 page.DraftAuthor = page.Author;
                 page.DraftContent = page.Content;
                 page.Content = null;
-                if(page.PubDate.HasValue)
-                {
-                    page.DraftPubDate = page.PubDate;
-                    page.PubDate = null;
-                }
-
+                page.IsPublished = false;
+                page.PubDate = null;
             }
 
             var convertToRelativeUrls = true;
 
             await _pageService.Create(page, convertToRelativeUrls).ConfigureAwait(false);
-            if(publish)
+            _pageService.ClearNavigationCache();
+            if (publish)
             {
                 await _pageService.FirePublishEvent(page);
             }
@@ -720,13 +724,17 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             existing.PageOrder = update.PageOrder;
             existing.ParentId = update.ParentId;
             existing.Title = update.Title;
+            existing.LastModifiedByUser = userName;
+
+            await _contentHistoryCommands.Create(blogId, history);
 
             var convertToRelativeUrls = true;
-
             await _pageService.Update(existing, convertToRelativeUrls).ConfigureAwait(false);
+            _pageService.ClearNavigationCache();
             if (publish)
             {
                 await _pageService.FirePublishEvent(existing);
+                await _contentHistoryCommands.DeleteDraftHistory(blogId, history.ContentId);
             }
 
             return true;

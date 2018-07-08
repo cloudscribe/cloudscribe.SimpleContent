@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2018-07-04
+// Last Modified:           2018-07-08
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
-using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web.Templating;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Razor;
@@ -27,7 +26,6 @@ namespace cloudscribe.SimpleContent.Web.Services
         public UpdateTemplatedPageHandler(
             IProjectService projectService,
             IPageService pageService,
-            PageEvents pageEvents,
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             IEnumerable<IModelSerializer> serializers,
@@ -40,7 +38,6 @@ namespace cloudscribe.SimpleContent.Web.Services
         {
             _projectService = projectService;
             _pageService = pageService;
-            _pageEvents = pageEvents;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _serializers = serializers;
@@ -53,7 +50,6 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         private readonly IProjectService _projectService;
         private readonly IPageService _pageService;
-        private readonly PageEvents _pageEvents;
         private readonly IContentHistoryCommands _historyCommands;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly IEnumerable<IModelSerializer> _serializers;
@@ -269,7 +265,7 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                     if (shouldFireUnPublishEvent)
                     {
-                        await _pageEvents.HandleUnPublished(page.ProjectId, page).ConfigureAwait(false);
+                        await _pageService.FireUnPublishEvent(page).ConfigureAwait(false);
                     }
 
                     _pageService.ClearNavigationCache();

@@ -6,7 +6,6 @@
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
-using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Common;
 using MediatR;
 using Microsoft.Extensions.Localization;

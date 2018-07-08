@@ -127,5 +127,10 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
+        public Task FireUnPublishEvent(IPost post)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

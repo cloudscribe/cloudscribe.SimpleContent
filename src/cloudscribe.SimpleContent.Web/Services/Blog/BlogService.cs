@@ -152,7 +152,12 @@ namespace cloudscribe.SimpleContent.Services
         {
             await _eventHandlers.HandlePublished(post.BlogId, post);
         }
-        
+
+        public async Task FireUnPublishEvent(IPost post)
+        {
+            await _eventHandlers.HandleUnPublished(post.BlogId, post);
+        }
+
         public async Task Create(IPost post, bool convertToRelativeUrls = false)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
