@@ -151,7 +151,6 @@ namespace cloudscribe.SimpleContent.Services
         public async Task FirePublishEvent(IPost post)
         {
             await _eventHandlers.HandlePublished(post.BlogId, post);
-
         }
         
         public async Task Create(IPost post, bool convertToRelativeUrls = false)
@@ -218,7 +217,6 @@ namespace cloudscribe.SimpleContent.Services
                 postId,
                 cancellationToken)
                 .ConfigureAwait(false);
-
         }
         
         public async Task<PostResult> GetPostBySlug(string slug, CancellationToken cancellationToken = default(CancellationToken))
@@ -230,7 +228,6 @@ namespace cloudscribe.SimpleContent.Services
                 slug,
                 cancellationToken)
                 .ConfigureAwait(false);
-
         }
 
         public string CreateSlug(string title)
@@ -250,8 +247,7 @@ namespace cloudscribe.SimpleContent.Services
         }
         
         public async Task<bool> SlugIsAvailable(string projectId, string slug)
-        {
-            
+        { 
             return await _postQueries.SlugIsAvailable(
                 projectId,
                 slug,

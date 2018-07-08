@@ -229,8 +229,7 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<PageActionResult> Move(PageMoveModel model)
         {
             PageActionResult result;
-
-
+            
             if (string.IsNullOrEmpty(model.MovedNode) || string.IsNullOrEmpty(model.TargetNode) || (model.MovedNode == "-1") || (model.TargetNode == "-1") || (string.IsNullOrEmpty(model.Position)))
             {
                 result = new PageActionResult(false, "bad request, failed to move page");
@@ -352,7 +351,6 @@ namespace cloudscribe.SimpleContent.Services
         {
             await EnsureProjectSettings();
             
-
             List<IPage> list;
             if(node == "root")
             {
@@ -435,28 +433,19 @@ namespace cloudscribe.SimpleContent.Services
             await _eventHandlers.HandlePublished(page.ProjectId, page);
         }
 
-        //private string ResolveUrl(IPage page, IUrlHelper urlHelper)
-        //{
-        //    if(page.Slug == this._settings.DefaultPageSlug)
-        //    {
-        //        return urlHelper.RouteUrl(_pageRoutes.PageRouteName);
-        //    }
-
-        //    return urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = page.Slug });
-        //}
+        public async Task FireUnPublishEvent(IPage page)
+        {
+            await _eventHandlers.HandleUnPublished(page.ProjectId, page);
+        }
 
         private string Encode(string input)
         {
-
-            //return JsonEscape(HttpUtility.HtmlDecode(input));
             return JsonEscape(input);
-
         }
 
         private static string JsonEscape(string s)
         {
             StringBuilder sb = new StringBuilder();
-            //sb.Append("\"");
             foreach (char c in s)
             {
                 switch (c)
@@ -495,7 +484,6 @@ namespace cloudscribe.SimpleContent.Services
                         break;
                 }
             }
-            //sb.Append("\"");
 
             return sb.ToString();
         }

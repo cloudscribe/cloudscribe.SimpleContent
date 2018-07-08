@@ -263,7 +263,7 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                     if (shouldFirePublishEvent)
                     {
-                        await _pageEvents.HandlePublished(project.Id, page).ConfigureAwait(false);
+                        await _pageService.FirePublishEvent(page).ConfigureAwait(false);
                         await _historyCommands.DeleteDraftHistory(project.Id, page.Id).ConfigureAwait(false);
                     }
 

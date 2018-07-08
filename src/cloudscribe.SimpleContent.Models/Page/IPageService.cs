@@ -32,5 +32,6 @@ namespace cloudscribe.SimpleContent.Models
         Task<int> GetNextChildPageOrder(string pageId, CancellationToken cancellationToken = default(CancellationToken));
 
         Task FirePublishEvent(IPage page);
+        Task FireUnPublishEvent(IPage page);
     }
 }

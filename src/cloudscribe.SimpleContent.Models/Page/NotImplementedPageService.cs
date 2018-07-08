@@ -83,5 +83,10 @@ namespace cloudscribe.SimpleContent.Models
         {
             throw new NotImplementedException();
         }
+
+        public Task FireUnPublishEvent(IPage page)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

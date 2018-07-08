@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-07-04
+// Last Modified:           2018-07-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,7 +24,6 @@ namespace cloudscribe.SimpleContent.Web.Services
             IProjectService projectService,
             IPageService pageService,
             ITimeZoneHelper timeZoneHelper,
-            PageEvents pageEvents,
             IContentHistoryCommands historyCommands,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             ILogger<CreateOrUpdatePageHandler> logger
@@ -32,7 +31,6 @@ namespace cloudscribe.SimpleContent.Web.Services
         {
             _projectService = projectService;
             _pageService = pageService;
-            _pageEvents = pageEvents;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _localizer = localizer;
@@ -41,7 +39,6 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         private readonly IProjectService _projectService;
         private readonly IPageService _pageService;
-        private readonly PageEvents _pageEvents;
         private readonly IContentHistoryCommands _historyCommands;
         private readonly IStringLocalizer _localizer;
         private readonly ITimeZoneHelper _timeZoneHelper;
@@ -205,13 +202,13 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                     if(shouldFirePublishEvent)
                     {
-                        await _pageEvents.HandlePublished(project.Id, page).ConfigureAwait(false);
+                        await _pageService.FirePublishEvent(page).ConfigureAwait(false);
                         await _historyCommands.DeleteDraftHistory(project.Id, page.Id).ConfigureAwait(false);
                     }
 
                     if (shouldFireUnPublishEvent)
                     {
-                        await _pageEvents.HandleUnPublished(page.ProjectId, page).ConfigureAwait(false);
+                        await _pageService.FireUnPublishEvent(page).ConfigureAwait(false);
                     }
                     
                     _pageService.ClearNavigationCache();
