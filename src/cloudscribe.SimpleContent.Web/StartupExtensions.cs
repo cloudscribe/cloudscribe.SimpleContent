@@ -567,6 +567,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<IAutoPublishDraftPage, AutoPublishDraftPage>();
             services.TryAddScoped<IAutoPublishDraftPost, AutoPublishDraftPost>();
+            services.TryAddScoped<IPageUrlResolver, PageUrlResolver>();
+            services.TryAddScoped<IBlogUrlResolver, BlogUrlResolver>();
 
             return services;
         }

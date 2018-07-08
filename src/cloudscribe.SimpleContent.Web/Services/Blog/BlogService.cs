@@ -2,15 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-07
+// Last Modified:           2018-07-08
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -28,38 +24,33 @@ namespace cloudscribe.SimpleContent.Services
             IPostCommands postCommands,
             IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
+            IBlogUrlResolver blogUrlResolver,
             IBlogRoutes blogRoutes,
-            PostEvents eventHandlers,
-            IUrlHelperFactory urlHelperFactory,
-            IActionContextAccessor actionContextAccesor,
-            IHttpContextAccessor contextAccessor = null)
+            PostEvents eventHandlers
+           )
         {
             _security = security;
             _postQueries = postQueries;
             _postCommands = postCommands;
-            context = contextAccessor?.HttpContext;
             _mediaProcessor = mediaProcessor;
-            _urlHelperFactory = urlHelperFactory;
-            _actionContextAccesor = actionContextAccesor;
             _projectService = projectService;
             _contentProcessor = contentProcessor;
+            _blogUrlResolver = blogUrlResolver;
             _blogRoutes = blogRoutes;
             _eventHandlers = eventHandlers;
         }
 
-        private IProjectService _projectService;
-        private IProjectSecurityResolver _security;
-        private readonly HttpContext context;
-        private CancellationToken CancellationToken => context?.RequestAborted ?? CancellationToken.None;
-        private IUrlHelperFactory _urlHelperFactory;
-        private IActionContextAccessor _actionContextAccesor;
-        private IPostQueries _postQueries;
-        private IPostCommands _postCommands;
-        private IMediaProcessor _mediaProcessor;
+        private readonly IProjectService _projectService;
+        private readonly IProjectSecurityResolver _security;
+        
+        private readonly IPostQueries _postQueries;
+        private readonly IPostCommands _postCommands;
+        private readonly IMediaProcessor _mediaProcessor;
         private IProjectSettings _settings = null;
-        private IContentProcessor _contentProcessor;
+        private readonly IContentProcessor _contentProcessor;
+        private readonly IBlogUrlResolver _blogUrlResolver;
         private IBlogRoutes _blogRoutes;
-        private PostEvents _eventHandlers;
+        private readonly PostEvents _eventHandlers;
 
         private async Task EnsureBlogSettings()
         {
@@ -67,21 +58,23 @@ namespace cloudscribe.SimpleContent.Services
             _settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);    
         }
         
-        public async Task<List<IPost>> GetPosts(bool includeUnpublished)
+        public async Task<List<IPost>> GetPosts(bool includeUnpublished, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await _postQueries.GetPosts(
                 _settings.Id,
                 includeUnpublished,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
         public async Task<PagedPostResult> GetPosts(
             string category,
             int pageNumber,
-            bool includeUnpublished)
+            bool includeUnpublished,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -91,11 +84,11 @@ namespace cloudscribe.SimpleContent.Services
                 includeUnpublished,
                 pageNumber,
                 _settings.PostsPerPage,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<int> GetCount(string category, bool includeUnpublished)
+        public async Task<int> GetCount(string category, bool includeUnpublished, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
@@ -103,7 +96,7 @@ namespace cloudscribe.SimpleContent.Services
                 _settings.Id,
                 category,
                 includeUnpublished,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -112,7 +105,8 @@ namespace cloudscribe.SimpleContent.Services
             int year,
             int month = 0,
             int day = 0,
-            bool includeUnpublished = false
+            bool includeUnpublished = false,
+            CancellationToken cancellationToken = default(CancellationToken)
             )
         {
             return await _postQueries.GetCount(
@@ -121,29 +115,29 @@ namespace cloudscribe.SimpleContent.Services
                 month,
                 day,
                 includeUnpublished,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<IPost>> GetRecentPosts(int numberToGet)
+        public async Task<List<IPost>> GetRecentPosts(int numberToGet, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await _postQueries.GetRecentPosts(
                 _settings.Id,
                 numberToGet,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<IPost>> GetFeaturedPosts(int numberToGet)
+        public async Task<List<IPost>> GetFeaturedPosts(int numberToGet, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await _postQueries.GetFeaturedPosts(
                 _settings.Id,
                 numberToGet,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
         
@@ -154,15 +148,14 @@ namespace cloudscribe.SimpleContent.Services
             int day = 0, 
             int pageNumber = 1, 
             int pageSize = 10,
-            bool includeUnpublished = false)
-        {
-            return await _postQueries.GetPosts(projectId, year, month, day, pageNumber, pageSize, includeUnpublished).ConfigureAwait(false);
-        }
-
-        public async Task FirePublishEvent(
-            IPost post,
+            bool includeUnpublished = false,
             CancellationToken cancellationToken = default(CancellationToken)
             )
+        {
+            return await _postQueries.GetPosts(projectId, year, month, day, pageNumber, pageSize, includeUnpublished, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task FirePublishEvent(IPost post)
         {
             await _eventHandlers.HandlePublished(post.BlogId, post);
 
@@ -174,22 +167,7 @@ namespace cloudscribe.SimpleContent.Services
 
             if(convertToRelativeUrls)
             {
-                var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-                var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
-                if (context != null)
-                {
-                    imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
-                }
-
-                // open live writer passes in posts with absolute urls
-                // we want to change them to relative to keep the files portable
-                // to a different root url
-                post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
-                    _settings.LocalMediaVirtualPath,
-                    imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
-                    post.Content);
-                // olw also adds hard coded style to images
-                post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
+                await _blogUrlResolver.ConvertToRelativeUrls(post, _settings).ConfigureAwait(false);
             }
 
             if (string.IsNullOrEmpty(post.Slug))
@@ -213,24 +191,8 @@ namespace cloudscribe.SimpleContent.Services
 
             if (convertToRelativeUrls)
             {
-                var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-                var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
-                if (context != null)
-                {
-                    imageAbsoluteBaseUrl = context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
-                }
-
-                // open live writer passes in posts with absolute urls
-                // we want to change them to relative to keep the files portable
-                // to a different root url
-                post.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
-                    _settings.LocalMediaVirtualPath,
-                    imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
-                    post.Content);
-                // olw also adds hard coded style to images
-                post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
+                await _blogUrlResolver.ConvertToRelativeUrls(post, _settings).ConfigureAwait(false);
             }
-
 
             await _postCommands.Update(_settings.Id, post).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, post).ConfigureAwait(false);
@@ -253,73 +215,27 @@ namespace cloudscribe.SimpleContent.Services
                 }
             }
         }
-
         
-
-        public async Task<string> ResolvePostUrl(IPost post)
-        {
-            await EnsureBlogSettings().ConfigureAwait(false);
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            string postUrl;
-            if (_settings.IncludePubDateInPostUrls)
-            {
-                DateTime? pubDate = post.PubDate;
-                if(!pubDate.HasValue)
-                {
-                    pubDate = DateTime.UtcNow;
-                }
-                postUrl = urlHelper.RouteUrl(_blogRoutes.PostWithDateRouteName,
-                    new
-                    {
-                        year = pubDate.Value.Year,
-                        month = pubDate.Value.Month.ToString("00"),
-                        day = pubDate.Value.Day.ToString("00"),
-                        slug = post.Slug
-                    });
-            }
-            else
-            {
-                postUrl = urlHelper.RouteUrl(_blogRoutes.PostWithoutDateRouteName,
-                    new { slug = post.Slug });
-            }
-
-            return postUrl;
-            
-        }
-
-        
-
-        public Task<string> ResolveBlogUrl(IProjectSettings blog)
-        {
-            //await EnsureBlogSettings().ConfigureAwait(false);
-
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var result = urlHelper.Action("Index", "Blog");
-
-            return Task.FromResult(result);
-        }
-
-
-        public async Task<IPost> GetPost(string postId)
+        public async Task<IPost> GetPost(string postId, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await _postQueries.GetPost(
                 _settings.Id,
                 postId,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
 
         }
         
-        public async Task<PostResult> GetPostBySlug(string slug)
+        public async Task<PostResult> GetPostBySlug(string slug, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await _postQueries.GetPostBySlug(
                 _settings.Id,
                 slug,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
 
         }
@@ -336,7 +252,7 @@ namespace cloudscribe.SimpleContent.Services
             return await _postQueries.SlugIsAvailable(
                 _settings.Id,
                 slug,
-                CancellationToken)
+                CancellationToken.None)
                 .ConfigureAwait(false);
         }
         
@@ -346,7 +262,7 @@ namespace cloudscribe.SimpleContent.Services
             return await _postQueries.SlugIsAvailable(
                 projectId,
                 slug,
-                CancellationToken)
+                CancellationToken.None)
                 .ConfigureAwait(false);
         }
 
@@ -360,25 +276,25 @@ namespace cloudscribe.SimpleContent.Services
 
         }
         
-        public async Task<Dictionary<string, int>> GetCategories(bool includeUnpublished)
+        public async Task<Dictionary<string, int>> GetCategories(bool includeUnpublished, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
             return await _postQueries.GetCategories(
                 _settings.Id,
                 includeUnpublished,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
         
-        public async Task<Dictionary<string, int>> GetArchives(bool includeUnpublished)
+        public async Task<Dictionary<string, int>> GetArchives(bool includeUnpublished, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);
             
             return await _postQueries.GetArchives(
                 _settings.Id,
                 includeUnpublished,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 

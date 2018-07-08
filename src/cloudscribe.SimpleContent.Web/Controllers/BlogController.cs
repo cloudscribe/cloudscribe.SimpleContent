@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-06
+// Last Modified:           2018-07-08
 // 
 
 
@@ -39,6 +39,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IMediator mediator,
             IProjectService projectService,
             IBlogService blogService,
+            IBlogUrlResolver blogUrlResolver,
             IBlogRoutes blogRoutes,
             IContentProcessor contentProcessor,
             IProjectEmailService emailService,
@@ -58,6 +59,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Mediator = mediator;
             ProjectService = projectService;
             BlogService = blogService;
+            BlogUrlResolver = blogUrlResolver;
             ContentProcessor = contentProcessor;
             BlogRoutes = blogRoutes;
             AuthorNameResolver = authorNameResolver;
@@ -76,6 +78,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IMediator Mediator { get; private set; }
         protected IProjectService ProjectService { get; private set; }
         protected IBlogService BlogService { get; private set; }
+        protected IBlogUrlResolver BlogUrlResolver { get; private set; }
         protected IBlogRoutes BlogRoutes { get; private set; }
         protected IAuthorNameResolver AuthorNameResolver { get; private set; }
         protected IProjectEmailService EmailService { get; private set; }
@@ -156,7 +159,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if ((result != null) && (result.Count > 0))
             {
                 var post = result[0];
-                var url = await BlogService.ResolvePostUrl(post);
+                var url = await BlogUrlResolver.ResolvePostUrl(post, project);
                 return Redirect(url);
 
             }
@@ -406,14 +409,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.CurrentPost = result.Post;
             if(result.PreviousPost != null)
             {
-                model.PreviousPostUrl = await BlogService.ResolvePostUrl(result.PreviousPost);
+                model.PreviousPostUrl = await BlogUrlResolver.ResolvePostUrl(result.PreviousPost, project);
             }
             if (result.NextPost != null)
             {
-                model.NextPostUrl = await BlogService.ResolvePostUrl(result.NextPost);
+                model.NextPostUrl = await BlogUrlResolver.ResolvePostUrl(result.NextPost, project);
             }
             
-            var currentUrl = await BlogService.ResolvePostUrl(result.Post);
+            var currentUrl = await BlogUrlResolver.ResolvePostUrl(result.Post, project);
             var breadCrumbHelper = new TailCrumbUtility(HttpContext);
             breadCrumbHelper.AddTailCrumb(result.Post.Id, result.Post.Title, currentUrl);
 
@@ -565,7 +568,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.MetaDescription = postResult.Post.MetaDescription;
                 model.Slug = postResult.Post.Slug;
                 model.Title = postResult.Post.Title;
-                model.CurrentPostUrl = await BlogService.ResolvePostUrl(postResult.Post).ConfigureAwait(false);
+                model.CurrentPostUrl = await BlogUrlResolver.ResolvePostUrl(postResult.Post, project).ConfigureAwait(false);
                 model.DeletePostRouteName = BlogRoutes.PostDeleteRouteName;
                 model.Categories = string.Join(",", postResult.Post.Categories);
                 model.ImageUrl = postResult.Post.ImageUrl;
@@ -1132,7 +1135,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
        
             if(shouldSendEmail)
             {
-                var postUrl = await BlogService.ResolvePostUrl(blogPost);
+                var postUrl = await BlogUrlResolver.ResolvePostUrl(blogPost, project);
                 var baseUrl = string.Concat(HttpContext.Request.Scheme,
                         "://",
                         HttpContext.Request.Host.ToUriComponent());

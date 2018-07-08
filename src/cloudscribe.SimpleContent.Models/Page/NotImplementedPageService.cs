@@ -17,73 +17,39 @@ namespace cloudscribe.SimpleContent.Models
         {
             throw new NotImplementedException();
         }
-
-        //public Task<List<IPage>> GetAllPages(string blogId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public Task<List<IPage>> GetAllPages(string projectId)
+        
+        public Task<List<IPage>> GetAllPages(string projectId, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<IPage>> GetChildPages(string pageId)
+        public Task<List<IPage>> GetChildPages(string pageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public Task<IPage> GetPage(string pageId)
+        public Task<IPage> GetPage(string pageId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+        
+        public Task<IPage> GetPageBySlug(string slug, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        //public Task<IPage> GetPage(string projectId, string pageId, string userName, string password)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public Task<IPage> GetPageBySlug(string slug)
+        public Task<List<IPage>> GetRootPages(CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<IPage>> GetRootPages()
+        
+        public Task Create(IPage page, bool convertToRelativeUrls = false)
         {
             throw new NotImplementedException();
         }
 
-        //public Task<bool> PageSlugIsAvailable(string slug)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<bool> PageSlugIsAvailable(string blogId, string slug)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public Task<string> ResolvePageUrl(IPage page)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Create(IPage page)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Update(IPage page)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Create(string projectId, string userName, string password, IPage page, bool publish)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Update(string projectId, string userName, string password, IPage page, bool publish)
+        public Task Update(IPage page, bool convertToRelativeUrls = false)
         {
             throw new NotImplementedException();
         }
@@ -93,7 +59,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<string> GetPageTreeJson(ClaimsPrincipal user,string node = "root")
+        public Task<string> GetPageTreeJson(ClaimsPrincipal user, Func<IPage, string> urlResolver, string node = "root", CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
@@ -108,15 +74,12 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
-        public Task<int> GetNextChildPageOrder(string pageId)
+        public Task<int> GetNextChildPageOrder(string pageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public Task FirePublishEvent(
-            IPage page,
-            CancellationToken cancellationToken = default(CancellationToken)
-            )
+        public Task FirePublishEvent(IPage page)
         {
             throw new NotImplementedException();
         }

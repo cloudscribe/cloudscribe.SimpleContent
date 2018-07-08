@@ -2,17 +2,13 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-07
+// Last Modified:           2018-07-08
 // 
 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Web.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using System;
@@ -35,35 +31,26 @@ namespace cloudscribe.SimpleContent.Services
             PageEvents eventHandlers,
             IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
-            IUrlHelperFactory urlHelperFactory,
-            IPageRoutes pageRoutes,
+            IPageUrlResolver pageUrlResolver,
             IMemoryCache cache,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
-            IPageNavigationCacheKeys cacheKeys,
-            IActionContextAccessor actionContextAccesor,
-            IHttpContextAccessor contextAccessor = null)
+            IPageNavigationCacheKeys cacheKeys
+            )
         {
 
             _projectService = projectService;
             _security = security;
             _pageQueries = pageQueries;
             _pageCommands = pageCommands;
-            _context = contextAccessor?.HttpContext;
             _mediaProcessor = mediaProcessor;
-            _urlHelperFactory = urlHelperFactory;
-            _actionContextAccesor = actionContextAccesor;
-            _pageRoutes = pageRoutes;
+            _pageUrlResolver = pageUrlResolver;
             _contentProcessor = contentProcessor;
             _cache = cache;
             _cacheKeys = cacheKeys;
             _eventHandlers = eventHandlers;
             _sr = localizer;
         }
-
-        private readonly HttpContext _context;
-        private CancellationToken CancellationToken => _context?.RequestAborted ?? CancellationToken.None;
-        private readonly IUrlHelperFactory _urlHelperFactory;
-        private readonly IActionContextAccessor _actionContextAccesor;
+        
         private readonly IProjectSecurityResolver _security;
         private readonly IPageQueries _pageQueries;
         private readonly IPageCommands _pageCommands;
@@ -73,7 +60,7 @@ namespace cloudscribe.SimpleContent.Services
         private readonly IMemoryCache _cache;
         private readonly IPageNavigationCacheKeys _cacheKeys;
         private readonly PageEvents _eventHandlers;
-        private readonly IPageRoutes _pageRoutes;
+        private readonly IPageUrlResolver _pageUrlResolver;
         private readonly IStringLocalizer _sr;
 
         private IProjectSettings _settings = null;
@@ -91,179 +78,21 @@ namespace cloudscribe.SimpleContent.Services
             _cache.Remove(_cacheKeys.XmlTreeCacheKey);
             _cache.Remove(_cacheKeys.JsonTreeCacheKey);
         }
-
-        public Task<string> ResolvePageUrl(IPage page)
-        {
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var result = urlHelper.Action("Index", "Page", new { slug = page.Slug });
-            return Task.FromResult(result);
-        }
-
-       
+        
         public async Task<bool> SlugIsAvailable(string slug)
         {
             await EnsureProjectSettings();
             return await _pageQueries.SlugIsAvailable(
                 _settings.Id,
                 slug,
-                CancellationToken
+                CancellationToken.None
                 ).ConfigureAwait(false);
         }
-
-        public async Task Create(
-            string projectId,
-            string userName,
-            string password,
-            IPage page,
-            bool publish)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return; 
-            }
-
-            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-            
-            if (publish)
-            {
-                page.PubDate = DateTime.UtcNow;
-            }
-
-            if (string.IsNullOrEmpty(page.Slug))
-            {
-                var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await SlugIsAvailable(slug);
-                if (available)
-                {
-                    page.Slug = slug;
-                }
-
-            }
-            
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if (_context != null)
-            {
-                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
-            }
-
-            // open live writer passes in posts with absolute urls
-            // we want to change them to relative to keep the files portable
-            // to a different root url
-            page.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
-                settings.LocalMediaVirtualPath,
-                imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
-                page.Content);
-
-            // olw also adds hard coded style to images
-            page.Content = _contentProcessor.RemoveImageStyleAttribute(page.Content);
-
-            // here we need to process any base64 embedded images
-            // save them under wwwroot
-            // and update the src in the post with the new url
-            // since this overload of Save is only called from metaweblog
-            // and metaweblog does not base64 encode the images like the browser client
-            // this call may not be needed here
-            //await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    post
-            //    ).ConfigureAwait(false);
-
-            var nonPublishedDate = new DateTime(1, 1, 1);
-            if (page.PubDate == nonPublishedDate)
-            {
-                page.PubDate = DateTime.UtcNow;
-            }
-
-            await _pageCommands.Create(projectId, page).ConfigureAwait(false);
-            await _eventHandlers.HandleCreated(projectId, page).ConfigureAwait(false);
-            if(publish)
-            {
-                await _eventHandlers.HandlePublished(projectId, page).ConfigureAwait(false);
-            }
-        }
-
-        public async Task Update(
-            string projectId,
-            string userName,
-            string password,
-            IPage page,
-            bool publish)
-        {
-            var permission = await _security.ValidatePermissions(
-                projectId,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            if (!permission.CanEditPosts)
-            {
-                return;
-            }
-
-            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-            
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + settings.LocalMediaVirtualPath);
-            if (_context != null)
-            {
-                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + settings.LocalMediaVirtualPath;
-            }
-
-            // open live writer passes in posts with absolute urls
-            // we want to change them to relative to keep the files portable
-            // to a different root url
-            page.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
-                settings.LocalMediaVirtualPath,
-                imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
-                page.Content);
-
-            // olw also adds hard coded style to images
-            page.Content = _contentProcessor.RemoveImageStyleAttribute(page.Content);
-
-            // here we need to process any base64 embedded images
-            // save them under wwwroot
-            // and update the src in the post with the new url
-            // since this overload of Save is only called from metaweblog
-            // and metaweblog does not base64 encode the images like the browser client
-            // this call may not be needed here
-            //await mediaProcessor.ConvertBase64EmbeddedImagesToFilesWithUrls(
-            //    settings.LocalMediaVirtualPath,
-            //    post
-            //    ).ConfigureAwait(false);
-
-            //var nonPublishedDate = new DateTime(1, 1, 1);
-            //if (page.PubDate == nonPublishedDate)
-            //{
-            //    page.PubDate = DateTime.UtcNow;
-            //}
-
-            await _eventHandlers.HandlePreUpdate(projectId, page.Id).ConfigureAwait(false);
-            await _pageCommands.Update(projectId, page).ConfigureAwait(false);
-            await _eventHandlers.HandleUpdated(projectId, page).ConfigureAwait(false);
-            if (publish)
-            {
-                await _eventHandlers.HandlePublished(projectId, page).ConfigureAwait(false);
-            }
-        }
-
-        public async Task Create(IPage page)
+        
+        public async Task Create(IPage page, bool convertToRelativeUrls = false)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
             
-            //if (publish)
-            //{
-            //    page.PubDate = DateTime.UtcNow;
-            //}
-
             if (string.IsNullOrEmpty(page.Slug))
             {
                 var slug = ContentUtils.CreateSlug(page.Title);
@@ -272,54 +101,30 @@ namespace cloudscribe.SimpleContent.Services
                 {
                     page.Slug = slug;
                 }
-
             }
-            
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
-            if (_context != null)
+
+            if(convertToRelativeUrls)
             {
-                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
+                await _pageUrlResolver.ConvertToRelativeUrls(page, _settings).ConfigureAwait(false);
             }
             
-            //var nonPublishedDate = new DateTime(1, 1, 1);
-            //if (page.PubDate == nonPublishedDate)
-            //{
-            //    page.PubDate = DateTime.UtcNow;
-            //}
-
             await _pageCommands.Create(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(_settings.Id, page).ConfigureAwait(false);
-            //if (publish)
-            //{
-            //    await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
-            //}
+           
         }
 
-        public async Task Update(IPage page)
+        public async Task Update(IPage page, bool convertToRelativeUrls = false)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
-            
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + _settings.LocalMediaVirtualPath);
-            if (_context != null)
+
+            if (convertToRelativeUrls)
             {
-                imageAbsoluteBaseUrl = _context.Request.AppBaseUrl() + _settings.LocalMediaVirtualPath;
+                await _pageUrlResolver.ConvertToRelativeUrls(page, _settings).ConfigureAwait(false);
             }
-            
-            //var nonPublishedDate = new DateTime(1, 1, 1);
-            //if (page.PubDate == nonPublishedDate)
-            //{
-            //    page.PubDate = DateTime.UtcNow;
-            //}
 
             await _eventHandlers.HandlePreUpdate(_settings.Id, page.Id).ConfigureAwait(false);
             await _pageCommands.Update(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, page).ConfigureAwait(false);
-            //if (publish)
-            //{
-            //    await _eventHandlers.HandlePublished(_settings.Id, page).ConfigureAwait(false);
-            //}
         }
 
         public async Task DeletePage(string pageId)
@@ -354,83 +159,57 @@ namespace cloudscribe.SimpleContent.Services
                 await _pageCommands.Update(_settings.Id, c).ConfigureAwait(false);
             }
         }
-
-        //public async Task<IPage> GetPage(
-        //    string projectId, 
-        //    string pageId,
-        //    string userName,
-        //    string password)
-        //{
-        //    var permission = await _security.ValidatePermissions(
-        //        projectId,
-        //        userName,
-        //        password,
-        //        CancellationToken
-        //        ).ConfigureAwait(false);
-
-        //    if (!permission.CanEditPosts)
-        //    {
-        //        return null;
-        //    }
-
-        //    return await _pageQueries.GetPage(
-        //        projectId,
-        //        pageId,
-        //        CancellationToken)
-        //        .ConfigureAwait(false);
-
-        //}
-
-        public async Task<IPage> GetPage(string pageId)
+        
+        public async Task<IPage> GetPage(string pageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
             return await _pageQueries.GetPage(
                 _settings.Id,
                 pageId,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<IPage> GetPageBySlug(string slug)
+        public async Task<IPage> GetPageBySlug(string slug, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureProjectSettings().ConfigureAwait(false);
 
             return await _pageQueries.GetPageBySlug(
                 _settings.Id,
                 slug,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<IPage>> GetAllPages(string projectId)
+        public async Task<List<IPage>> GetAllPages(string projectId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _pageQueries.GetAllPages(
                 projectId,
-                CancellationToken)
+                cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<List<IPage>> GetRootPages()
+        public async Task<List<IPage>> GetRootPages(CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureProjectSettings();
             return await _pageQueries.GetRootPages(
                 _settings.Id,
-                CancellationToken
+                cancellationToken
                 ).ConfigureAwait(false);
         }
 
-        public async Task<List<IPage>> GetChildPages(string pageId)
+        public async Task<List<IPage>> GetChildPages(string pageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureProjectSettings();
             return await _pageQueries.GetChildPages(
                 _settings.Id,
                 pageId,
-                CancellationToken
+                cancellationToken
                 ).ConfigureAwait(false);
         }
 
-        public async Task<int> GetNextChildPageOrder(string pageSlug)
+        public async Task<int> GetNextChildPageOrder(string pageSlug, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureProjectSettings();
             var pageId = "0"; // root level pages have this parent id
@@ -444,7 +223,7 @@ namespace cloudscribe.SimpleContent.Services
                 _settings.Id,
                 pageId,
                 true,
-                CancellationToken
+                cancellationToken
                 ).ConfigureAwait(false);
 
             return (countOfChildren * 3) + 2;
@@ -572,7 +351,7 @@ namespace cloudscribe.SimpleContent.Services
 
         }
 
-        public async Task<string> GetPageTreeJson(ClaimsPrincipal user, string node = "root")
+        public async Task<string> GetPageTreeJson(ClaimsPrincipal user, Func<IPage, string> urlResolver, string node = "root", CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureProjectSettings();
             
@@ -586,16 +365,14 @@ namespace cloudscribe.SimpleContent.Services
             {
                 list = await GetChildPages(node);
             }
-
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-
+            
             var comma = string.Empty;
             var sb = new StringBuilder();
             sb.Append("[");
             foreach (var p in list)
             {
                 sb.Append(comma);
-                await BuildPageJson(user, sb, p, urlHelper);
+                await BuildPageJson(user, sb, p, urlResolver, cancellationToken);
                 comma = ",";
             }
             sb.Append("]");
@@ -603,14 +380,14 @@ namespace cloudscribe.SimpleContent.Services
             return sb.ToString();
         }
 
-        private async Task BuildPageJson(ClaimsPrincipal user, StringBuilder script, IPage page, IUrlHelper urlHelper)
+        private async Task BuildPageJson(ClaimsPrincipal user, StringBuilder script, IPage page, Func<IPage, string> urlResolver, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var childPagesCount = await _pageQueries.GetChildPageCount(page.ProjectId, page.Id, true, CancellationToken); 
+            var childPagesCount = await _pageQueries.GetChildPageCount(page.ProjectId, page.Id, true, cancellationToken); 
             script.Append("{");
             script.Append("\"id\":" + "\"" + page.Id + "\"");
             script.Append(",\"slug\":" + "\"" + page.Slug + "\"");
             script.Append(",\"label\":\"" + Encode(page.Title) + "\"");
-            script.Append(",\"url\":\"" + ResolveUrl(page, urlHelper) + "\"");
+            script.Append(",\"url\":\"" + urlResolver(page) + "\"");
             script.Append(",\"parentId\":" + "\"" + page.ParentId + "\"");
             script.Append(",\"childcount\":" + childPagesCount.ToString());
             script.Append(",\"children\":[");
@@ -656,23 +433,20 @@ namespace cloudscribe.SimpleContent.Services
             return _sr["Protected"];
         }
 
-        public async Task FirePublishEvent(
-            IPage page,
-            CancellationToken cancellationToken = default(CancellationToken)
-            )
+        public async Task FirePublishEvent(IPage page)
         {
             await _eventHandlers.HandlePublished(page.ProjectId, page);
         }
 
-        private string ResolveUrl(IPage page, IUrlHelper urlHelper)
-        {
-            if(page.Slug == this._settings.DefaultPageSlug)
-            {
-                return urlHelper.RouteUrl(_pageRoutes.PageRouteName);
-            }
+        //private string ResolveUrl(IPage page, IUrlHelper urlHelper)
+        //{
+        //    if(page.Slug == this._settings.DefaultPageSlug)
+        //    {
+        //        return urlHelper.RouteUrl(_pageRoutes.PageRouteName);
+        //    }
 
-            return urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = page.Slug });
-        }
+        //    return urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = page.Slug });
+        //}
 
         private string Encode(string input)
         {

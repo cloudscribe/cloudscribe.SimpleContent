@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-07-06
+// Last Modified:           2018-07-08
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -83,6 +83,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [AllowAnonymous]
         public virtual async Task<IActionResult> Index(
+            CancellationToken cancellationToken,
             string slug = "", 
             bool showDraft = false,
             Guid? historyId = null
@@ -100,7 +101,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if(string.IsNullOrEmpty(slug) || slug == "none") { slug = project.DefaultPageSlug; }
 
-            IPage page = await PageService.GetPageBySlug(slug);
+            IPage page = await PageService.GetPageBySlug(slug, cancellationToken);
 
             await AutoPublishDraftPage.PublishIfNeeded(page);
 
@@ -160,7 +161,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             else if(page == null)
             {
-                var rootList = await PageService.GetRootPages().ConfigureAwait(false);
+                var rootList = await PageService.GetRootPages(cancellationToken).ConfigureAwait(false);
                 if (canEdit && rootList.Count == 0)
                 {
                     page = new Page
@@ -408,6 +409,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [AllowAnonymous]
         public virtual async Task<IActionResult> EditWithTemplate(
+            CancellationToken cancellationToken,
             string slug,
             Guid? historyId = null
             )
@@ -427,7 +429,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var page = await PageService.GetPageBySlug(slug);
+            var page = await PageService.GetPageBySlug(slug, cancellationToken);
             ContentHistory history = null;
             var didReplaceDraft = false;
             var didRestoreDeleted = false;
@@ -620,6 +622,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [AllowAnonymous]
         public virtual async Task<IActionResult> Edit(
+            CancellationToken cancellationToken,
             string slug = "",
             string parentSlug = "",
             string type ="",
@@ -653,7 +656,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {
-                page = await PageService.GetPageBySlug(slug);
+                page = await PageService.GetPageBySlug(slug, cancellationToken);
             }
 
             var routeVals = new RouteValueDictionary
@@ -723,7 +726,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 ViewData["Title"] = StringLocalizer["New Page"];
                 model.ParentSlug = parentSlug;
-                model.PageOrder = await PageService.GetNextChildPageOrder(parentSlug);
+                model.PageOrder = await PageService.GetNextChildPageOrder(parentSlug, cancellationToken);
                 model.ContentType = project.DefaultContentType;
                 
                 if (EditOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
@@ -735,7 +738,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     model.ContentType = "html";
                 }
 
-                var rootList = await PageService.GetRootPages().ConfigureAwait(false);
+                var rootList = await PageService.GetRootPages(cancellationToken).ConfigureAwait(false);
                 if(rootList.Count == 0) // expected if home page doesn't exist yet
                 {
                     var rootPagePath = Url.RouteUrl(PageRoutes.PageRouteName);
@@ -899,7 +902,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> Development(string slug)
+        public virtual async Task<IActionResult> Development(
+            CancellationToken cancellationToken,
+            string slug)
         {
             var project = await ProjectService.GetCurrentProjectSettings();
 
@@ -927,7 +932,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IPage page = null;
             if (!string.IsNullOrEmpty(slug))
             {
-                page = await PageService.GetPageBySlug(slug);
+                page = await PageService.GetPageBySlug(slug, cancellationToken);
             }
             if (page == null)
             {
@@ -1280,7 +1285,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> TreeJson(string node = "root")
+        public virtual async Task<IActionResult> TreeJson(CancellationToken cancellationToken, string node = "root")
         {
             var project = await ProjectService.GetCurrentProjectSettings();
 
@@ -1298,7 +1303,17 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return BadRequest();
             }
 
-            var result = await PageService.GetPageTreeJson(User, node);
+            string resolveUrl(IPage page)
+            {
+                if (page.Slug == project.DefaultPageSlug)
+                {
+                    return Url.RouteUrl(PageRoutes.PageRouteName);
+                }
+
+                return Url.RouteUrl(PageRoutes.PageRouteName, new { slug = page.Slug });
+            };
+
+            var result = await PageService.GetPageTreeJson(User, resolveUrl, node, cancellationToken);
 
             return new ContentResult
             {
@@ -1386,7 +1401,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return NotFound();
             }
 
-            var page = await PageService.GetPageBySlug(slug);
+            var page = await PageService.GetPageBySlug(slug, cancellationToken);
 
             if (page == null)
             {

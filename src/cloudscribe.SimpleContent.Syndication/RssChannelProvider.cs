@@ -25,6 +25,7 @@ namespace cloudscribe.SimpleContent.Syndication
         public RssChannelProvider(
             IProjectService projectService,
             IBlogService blogService,
+            IBlogUrlResolver blogUrlResolver,
             IBlogRoutes blogRoutes,
             IHttpContextAccessor contextAccessor,
             IUrlHelperFactory urlHelperFactory,
@@ -34,6 +35,7 @@ namespace cloudscribe.SimpleContent.Syndication
         {
             ProjectService = projectService;
             BlogService = blogService;
+            BlogUrlResolver = blogUrlResolver;
             ContextAccessor = contextAccessor;
             UrlHelperFactory = urlHelperFactory;
             ActionContextAccesor = actionContextAccesor;
@@ -48,7 +50,9 @@ namespace cloudscribe.SimpleContent.Syndication
         protected IBlogService BlogService { get; private set; }
         protected IBlogRoutes BlogRoutes { get; private set; }
         protected IContentProcessor ContentProcessor { get; private set; }
-        
+        protected IBlogUrlResolver BlogUrlResolver { get; private set; }
+
+
         public string Name { get; } = "cloudscribe.SimpleContent.Syndication.RssChannelProvider";
 
         public virtual async Task<RssChannel> GetChannel(CancellationToken cancellationToken = default(CancellationToken))
@@ -173,7 +177,7 @@ namespace cloudscribe.SimpleContent.Syndication
                     }
                 }
 
-                var postUrl = await BlogService.ResolvePostUrl(post);
+                var postUrl = await BlogUrlResolver.ResolvePostUrl(post, project).ConfigureAwait(false);
 
                 if (string.IsNullOrEmpty(postUrl))
                 {

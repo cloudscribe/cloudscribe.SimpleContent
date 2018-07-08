@@ -313,7 +313,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             string absoluteBaseMediaUrl,
             string htmlInput)
         {
-            if (string.IsNullOrEmpty(htmlInput)) { return Task.FromResult(""); }
+            if (string.IsNullOrEmpty(htmlInput)) { return Task.FromResult(htmlInput); }
 
             var htmlOutput = htmlInput;
             // convert any fully qualified image urls to relative urls
