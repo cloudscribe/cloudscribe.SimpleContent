@@ -19,37 +19,30 @@ namespace cloudscribe.SimpleContent.Services
     {
         public BlogService(
             IProjectService projectService,
-            IProjectSecurityResolver security,
             IPostQueries postQueries,
             IPostCommands postCommands,
             IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
             IBlogUrlResolver blogUrlResolver,
-            IBlogRoutes blogRoutes,
             PostEvents eventHandlers
            )
         {
-            _security = security;
             _postQueries = postQueries;
             _postCommands = postCommands;
             _mediaProcessor = mediaProcessor;
             _projectService = projectService;
             _contentProcessor = contentProcessor;
             _blogUrlResolver = blogUrlResolver;
-            _blogRoutes = blogRoutes;
             _eventHandlers = eventHandlers;
         }
 
         private readonly IProjectService _projectService;
-        private readonly IProjectSecurityResolver _security;
-        
         private readonly IPostQueries _postQueries;
         private readonly IPostCommands _postCommands;
         private readonly IMediaProcessor _mediaProcessor;
         private IProjectSettings _settings = null;
         private readonly IContentProcessor _contentProcessor;
         private readonly IBlogUrlResolver _blogUrlResolver;
-        private IBlogRoutes _blogRoutes;
         private readonly PostEvents _eventHandlers;
 
         private async Task EnsureBlogSettings()

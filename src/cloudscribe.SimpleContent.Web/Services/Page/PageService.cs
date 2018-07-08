@@ -25,7 +25,6 @@ namespace cloudscribe.SimpleContent.Services
     {
         public PageService(
             IProjectService projectService,
-            IProjectSecurityResolver security,
             IPageQueries pageQueries,
             IPageCommands pageCommands,
             PageEvents eventHandlers,
@@ -39,7 +38,6 @@ namespace cloudscribe.SimpleContent.Services
         {
 
             _projectService = projectService;
-            _security = security;
             _pageQueries = pageQueries;
             _pageCommands = pageCommands;
             _mediaProcessor = mediaProcessor;
@@ -51,7 +49,6 @@ namespace cloudscribe.SimpleContent.Services
             _sr = localizer;
         }
         
-        private readonly IProjectSecurityResolver _security;
         private readonly IPageQueries _pageQueries;
         private readonly IPageCommands _pageCommands;
         private readonly IMediaProcessor _mediaProcessor;

@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Services
@@ -74,9 +72,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             return Task.FromResult(postUrl);
 
         }
-
-
-
+        
         public async Task ConvertToRelativeUrls(IPost post, IProjectSettings projectSettings)
         {
             var httpContext = _contextAccessor.HttpContext;
@@ -104,7 +100,6 @@ namespace cloudscribe.SimpleContent.Web.Services
 
             post.Content = _contentProcessor.RemoveImageStyleAttribute(post.Content);
         }
-
-
+        
     }
 }
