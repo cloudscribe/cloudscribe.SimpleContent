@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.SimpleContent.CompiledViews.Bootstrap4.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.MySQL\cloudscribe.SimpleContent.Storage.EFCore.MySQL.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.pgsql\cloudscribe.SimpleContent.Storage.EFCore.pgsql.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj" />

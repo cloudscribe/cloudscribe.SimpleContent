@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace cloudscribe.SimpleContent.Web.ViewModels
+namespace sourceDev.WebApp.ViewModels
 {
     public class StaffMemberViewModel
     {

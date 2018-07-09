@@ -65,7 +65,8 @@ namespace cloudscribe.SimpleContent.Web.Templating
 
             try
             {
-                return serializer.Deserialize(template.ModelType, modelString);
+                var result = serializer.Deserialize(template.ModelType, modelString);
+                return result;
             }
             catch(Exception ex)
             {

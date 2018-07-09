@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-09
 // 
 
 using cloudscribe.SimpleContent.Models;
