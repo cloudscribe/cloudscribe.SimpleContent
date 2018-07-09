@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -79,6 +79,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             post.BlogId = blogId;
             post.Id = Guid.NewGuid().ToString();
             post.Author = authorDisplayName;
+            post.CreatedByUser = permission.DisplayName;
             if(publish)
             {
                 post.IsPublished = true;
@@ -86,7 +87,6 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             }
             else
             {
-                //new draft
                 post.DraftAuthor = post.Author;
                 post.DraftContent = post.Content;
                 post.Content = null;
@@ -150,6 +150,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             existing.Title = update.Title;
             existing.MetaDescription = update.MetaDescription;
+            existing.LastModified = DateTime.UtcNow;
+            existing.LastModifiedByUser = permission.DisplayName;
            
             if (!string.Equals(existing.Slug, update.Slug, StringComparison.OrdinalIgnoreCase))
             {
@@ -165,49 +167,31 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                
             existing.Categories = update.Categories;
             
-            if(existing.HasPublishedVersion())
+            if(publish)
             {
-                if(publish)
+                existing.Content = update.Content;
+                existing.IsPublished = true;
+                if(!existing.PubDate.HasValue)
                 {
-                    existing.Content = update.Content;
+                    existing.PubDate = DateTime.UtcNow;
                 }
-                else
-                {
-                    //new draft
-                    existing.DraftContent = update.Content;
-                }
+                existing.DraftAuthor = null;
+                existing.DraftContent = null;
+                existing.DraftPubDate = null;
             }
             else
             {
-                if(publish)
-                {
-                    existing.Content = update.Content;
-                    existing.IsPublished = true;
-                    if(!existing.PubDate.HasValue)
-                    {
-                        existing.PubDate = DateTime.UtcNow;
-                    }
-                    existing.DraftAuthor = null;
-                    existing.DraftContent = null;
-                    existing.DraftPubDate = null;
-                }
-                else
-                {
-                    existing.DraftContent = update.Content;
-                }  
-            }
-
+                existing.DraftContent = update.Content;
+            }  
+            
             var convertToRelativeUrls = true;
-
             await _blogService.Update(existing, convertToRelativeUrls).ConfigureAwait(false);
             await _contentHistoryCommands.Create(blogId, history);
+
             if(publish)
             {
                 await _blogService.FirePublishEvent(existing);
-                await _contentHistoryCommands.DeleteDraftHistory(
-                    blogId,
-                    history.ContentId
-                    );
+                await _contentHistoryCommands.DeleteDraftHistory(blogId, history.ContentId);
             }
 
             return true;
@@ -245,17 +229,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 return new PostStruct();
             }
             var postUrl = await _blogUrlResolver.ResolvePostUrl(existing, project);
-            
             var postStruct = _mapper.GetStructFromPost(existing,postUrl, commentsOpen);
-            // OLW/WLW need the image urls to be fully qualified - actually not sure this is true
-            // I seem to remember that being the case with WLW
-            // but when I open a recent post in olw that orignated from the web client
-            // it shows the image correctly in olw
-            // we persist them as relative so we need to convert them back
-            // before passing posts back to metaweblogapi
-
             return postStruct;
-
         }
 
         public async Task<List<CategoryStruct>> GetCategories(
@@ -276,7 +251,6 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             if(permission.CanEditPosts)
             {
                 var cats = await _blogService.GetCategories(permission.CanEditPosts, cancellationToken).ConfigureAwait(false);
-                
                 foreach (var c in cats)
                 {
                     CategoryStruct s = new CategoryStruct { title = c.Key };
@@ -288,7 +262,6 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 _log.LogWarning($"user {userName} cannot edit posts");
             }
             
-
             return output;
         }
 
@@ -322,16 +295,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 {
                     var commentsOpen = await _blogService.CommentsAreOpen(p, false);
                     var postUrl = await _blogUrlResolver.ResolvePostUrl(p, project);
-
                     var s = _mapper.GetStructFromPost(p, postUrl, commentsOpen);
-
-                    // OLW/WLW need the image urls to be fully qualified - actually not sure this is true
-                    // I seem to remember that being the case with WLW
-                    // but when I open a recent post in olw that orignated from the web client
-                    // it shows the image correctly in olw
-                    // we persist them as relative so we need to convert them back
-                    // before passing posts back to metaweblogapi
-
                     structs.Add(s);
                 }
             }
@@ -363,7 +327,6 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             }
 
             string extension = Path.GetExtension(mediaObject.name);
-            //string fileName = Guid.NewGuid().ToString() + extension;
             string fileName = Path.GetFileName(mediaObject.name).ToLowerInvariant().Replace("_thumb", "-wlw");
 
             await _blogService.SaveMedia(
@@ -486,25 +449,11 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             foreach (var p in pages)
             {
-                //var commentsOpen = await blogService.CommentsAreOpen(p, false);
                 var pageUrl = await _pageUrlResolver.ResolvePageUrl(p);
-
                 var s = _mapper.GetStructFromPage(p, pageUrl, false);
-
-                // OLW/WLW need the image urls to be fully qualified - actually not sure this is true
-                // I seem to remember that being the case with WLW
-                // but when I open a recent post in olw that orignated from the web client
-                // it shows the image correctly in olw
-                // we persist them as relative so we need to convert them back
-                // before passing posts back to metaweblogapi
-
                 list.Add(s);
             }
-
-            //return structs;
-
-            //var list = new List<PageStruct>();
-
+            
             return list;
         }
 
@@ -533,27 +482,12 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             
             foreach (var p in pages)
             {
-                //var commentsOpen = await blogService.CommentsAreOpen(p, false);
                 var pageUrl = await _pageUrlResolver.ResolvePageUrl(p);
-
                 var s = _mapper.GetStructFromPage(p, pageUrl, false);
-
-                // OLW/WLW need the image urls to be fully qualified - actually not sure this is true
-                // I seem to remember that being the case with WLW
-                // but when I open a recent post in olw that orignated from the web client
-                // it shows the image correctly in olw
-                // we persist them as relative so we need to convert them back
-                // before passing posts back to metaweblogapi
-
                 list.Add(s);
             }
-
-            //return structs;
-
-            //var list = new List<PageStruct>();
-
-            return list;
             
+            return list;
         }
 
         public async Task<PageStruct> GetPage(
@@ -580,18 +514,9 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             if (existing == null) { return new PageStruct(); }
 
-            //var commentsOpen = await blogService.CommentsAreOpen(existing, false);
             var commentsOpen = false;
             var pageUrl = await _pageUrlResolver.ResolvePageUrl(existing);
-
             var pageStruct = _mapper.GetStructFromPage(existing, pageUrl, commentsOpen);
-            // OLW/WLW need the image urls to be fully qualified - actually not sure this is true
-            // I seem to remember that being the case with WLW
-            // but when I open a recent post in olw that orignated from the web client
-            // it shows the image correctly in olw
-            // we persist them as relative so we need to convert them back
-            // before passing posts back to metaweblogapi
-
             return pageStruct;
         }
 
@@ -619,7 +544,21 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             page.ProjectId = blogId;
             page.Id = Guid.NewGuid().ToString();
-            page.CreatedByUser = userName;
+            page.CreatedByUser = permission.DisplayName;
+            page.LastModifiedByUser = permission.DisplayName;
+            if(!string.IsNullOrWhiteSpace(page.ParentId))
+            {
+                var parent = await _pageService.GetPage(page.ParentId);
+                if(parent != null)
+                {
+                    page.ParentSlug = parent.Slug;
+                }
+            }
+            else
+            {
+                page.ParentSlug = null;
+            }
+
             if(publish)
             {
                 page.IsPublished = true;
@@ -652,7 +591,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             string pageId,
             string userName,
             string password,
-            PageStruct page, 
+            PageStruct pageStruct, 
             bool publish)
         {
             var permission = await _security.ValidatePermissions(
@@ -668,72 +607,69 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 return false;
             }
 
-            var existing = await _pageService.GetPage(pageId).ConfigureAwait(false);
-            if (existing == null)
+            var page = await _pageService.GetPage(pageId).ConfigureAwait(false);
+            if (page == null)
             {
                 _log.LogError($"page not found for id {pageId}");
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(existing.TemplateKey))
+            if (!string.IsNullOrWhiteSpace(page.TemplateKey))
             {
                 _log.LogError($"page {pageId} uses a content template and cannot be edited via metaweblog api");
                 return false;
             }
-            if (existing.ContentType != ProjectConstants.HtmlContentType)
+            if (page.ContentType != ProjectConstants.HtmlContentType)
             {
-                _log.LogError($"page {pageId} uses a content type {existing.ContentType} and cannot be edited via metaweblog api");
+                _log.LogError($"page {pageId} uses a content type {page.ContentType} and cannot be edited via metaweblog api");
                 return false;
             }
 
-            var history = existing.CreateHistory(userName);
-            var update = _mapper.GetPageFromStruct(page);
-
-            if (existing.HasPublishedVersion())
+            var history = page.CreateHistory(permission.DisplayName);
+            var update = _mapper.GetPageFromStruct(pageStruct);
+            
+            if (publish)
             {
-                if (publish)
+                page.Content = update.Content;
+                page.IsPublished = true;
+                if (!page.PubDate.HasValue)
                 {
-                    existing.Content = update.Content;
+                    page.PubDate = DateTime.UtcNow;
                 }
-                else
+                page.DraftAuthor = null;
+                page.DraftContent = null;
+                page.DraftPubDate = null;
+            }
+            else
+            {
+                page.DraftContent = update.Content;
+            }
+            
+            page.PageOrder = update.PageOrder;
+            page.ParentId = update.ParentId;
+            if (!string.IsNullOrWhiteSpace(page.ParentId))
+            {
+                var parent = await _pageService.GetPage(page.ParentId);
+                if (parent != null)
                 {
-                    //new draft
-                    existing.DraftContent = update.Content;
+                    page.ParentSlug = parent.Slug;
                 }
             }
             else
             {
-                if (publish)
-                {
-                    existing.Content = update.Content;
-                    existing.IsPublished = true;
-                    if (!existing.PubDate.HasValue)
-                    {
-                        existing.PubDate = DateTime.UtcNow;
-                    }
-                    existing.DraftAuthor = null;
-                    existing.DraftContent = null;
-                    existing.DraftPubDate = null;
-                }
-                else
-                {
-                    existing.DraftContent = update.Content;
-                }
+                page.ParentSlug = null;
             }
-            
-            existing.PageOrder = update.PageOrder;
-            existing.ParentId = update.ParentId;
-            existing.Title = update.Title;
-            existing.LastModifiedByUser = userName;
+            page.Title = update.Title;
+            page.LastModifiedByUser = permission.DisplayName;
 
             await _contentHistoryCommands.Create(blogId, history);
 
             var convertToRelativeUrls = true;
-            await _pageService.Update(existing, convertToRelativeUrls).ConfigureAwait(false);
+            await _pageService.Update(page, convertToRelativeUrls).ConfigureAwait(false);
             _pageService.ClearNavigationCache();
             if (publish)
             {
-                await _pageService.FirePublishEvent(existing);
+                await _pageService.FirePublishEvent(page);
                 await _contentHistoryCommands.DeleteDraftHistory(blogId, history.ContentId);
             }
 

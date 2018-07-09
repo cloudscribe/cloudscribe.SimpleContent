@@ -1390,7 +1390,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             CancellationToken cancellationToken,
             string slug,
             int pageNumber = 1,
-            int pageSize = 20
+            int pageSize = 10
             )
         {
 
@@ -1412,13 +1412,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var model = new ContentHistoryViewModel()
             {
                 History = await HistoryQueries.GetByContent(
-                project.Id,
-                page.Id,
-                pageNumber,
-                pageSize,
-                cancellationToken),
+                    project.Id,
+                    page.Id,
+                    pageNumber,
+                    pageSize,
+                    cancellationToken),
+
                 ContentId = page.Id,
                 ContentTitle = page.Title,
+                ContentSlug = page.Slug,
+                ContentSource = ContentSource.Page,
                 CanEditPages = await User.CanEditPages(project.Id, AuthorizationService)
             };
 

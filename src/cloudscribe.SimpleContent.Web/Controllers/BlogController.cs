@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-09
 // 
 
 
@@ -988,10 +988,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [Authorize(Policy = "ViewContentHistoryPolicy")]
         public virtual async Task<IActionResult> History(
-             CancellationToken cancellationToken,
+            CancellationToken cancellationToken,
             string slug,
             int pageNumber = 1,
-            int pageSize = 20
+            int pageSize = 10
             )
         {
 
@@ -1019,7 +1019,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     pageSize,
                     cancellationToken),
                 ContentId = result.Post.Id,
+                ContentSource = ContentSource.Blog,
                 ContentTitle = result.Post.Title,
+                ContentSlug = result.Post.Slug,
                 CanEditPosts = await User.CanEditBlog(project.Id, AuthorizationService)
             };
 

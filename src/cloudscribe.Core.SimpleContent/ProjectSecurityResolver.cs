@@ -73,7 +73,8 @@ namespace cloudscribe.Core.SimpleContent.Integration
                     canEditPages = await claimsPrincipal.CanEditPages(projectId, authorizationService);     
                 }
 
-                displayName = claimsPrincipal.GetDisplayName();
+                //displayName = claimsPrincipal.GetDisplayName();
+                displayName = claimsPrincipal.Identity.Name;
             }
 
             var blogSecurity = new ProjectSecurityResult(displayName, projectId, isAuthenticated, canEditPosts, canEditPages);

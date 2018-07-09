@@ -1,5 +1,6 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.ContentHistoryViewModel
 @inject IStringLocalizer<SimpleContent> sr
+@inject IPageRoutes  pageRoutes
 @{
     var format = sr["{0} - Content Edit History"].ToString();
     ViewData["Title"] = string.Format(format, Model.ContentTitle);
@@ -7,12 +8,11 @@
 <h1>@ViewData["Title"]</h1>
 @{ await Html.RenderPartialAsync("HistoryGridPartial", Model); }
 
-<cs-pager asp-action="History"
-          asp-controller="Page"
-          asp-route-contentsource="@Model.ContentSource"
-          asp-route-editor="@Model.Editor"
+<cs-pager asp-route="@pageRoutes.PageHistoryRouteName"
+          asp-route-slug="@Model.ContentSlug"
           asp-route-sortmode="@Model.SortMode"
           asp-route-pagesize="@Model.History.PageSize"
+          cs-paging-pagesize="@Model.History.PageSize"
           cs-paging-pagenumber="@Model.History.PageNumber"
           cs-paging-totalitems="@Model.History.TotalItems"
           cs-pager-ul-class="pagination d-flex flex-wrap"
@@ -27,19 +27,19 @@
           cs-next-page-title='@sr["Next page"]'></cs-pager>
 @if (Model.CanEditPages)
 {
-<form role="form" class="form-inline" asp-controller="Page" asp-action="DeleteHistoryOlderThan">
-    <input type="hidden" name="id" value="@Model.ContentId" />
-    <input type="submit" value='@sr["Delete Older Than"]' class="btn btn-sm btn-danger " />
-    <select class="form-control ml-1 mr-1" name="days" id="days">
-        <option value="-1">All</option>
-        <option>10</option>
-        <option>20</option>
-        <option>30</option>
-        <option>60</option>
-        <option>90</option>
-        <option>120</option>
-    </select>
-    @sr["Days"]
-</form>
+    <form role="form" class="form-inline" asp-controller="Page" asp-action="DeleteHistoryOlderThan">
+        <input type="hidden" name="id" value="@Model.ContentId" />
+        <input type="submit" value='@sr["Delete Older Than"]' class="btn btn-sm btn-danger " />
+        <select class="form-control ml-1 mr-1" name="days" id="days">
+            <option value="-1">All</option>
+            <option>10</option>
+            <option>20</option>
+            <option>30</option>
+            <option>60</option>
+            <option>90</option>
+            <option>120</option>
+        </select>
+        @sr["Days"]
+    </form>
 
 }

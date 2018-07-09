@@ -19,6 +19,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public string Editor { get; set; }
 
         public string ContentTitle { get; set; }
+        public string ContentSlug { get; set; }
 
         public bool CanEditPages { get; set; }
         public bool CanEditPosts { get; set; }

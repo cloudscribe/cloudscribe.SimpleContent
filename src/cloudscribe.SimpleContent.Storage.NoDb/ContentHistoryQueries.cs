@@ -45,7 +45,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             string projectId,
             string contentId,
             int pageNumber = 1,
-            int pageSize = 20,
+            int pageSize = 10,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -89,7 +89,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             string contentSource = null,
             string editorQuery = null,
             int pageNumber = 1,
-            int pageSize = 20,
+            int pageSize = 10,
             int sortMode = 0, 
             CancellationToken cancellationToken = default(CancellationToken)
             )

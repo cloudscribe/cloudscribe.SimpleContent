@@ -2,15 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2018-07-07
+// Last Modified:           2018-07-09
 // 
-
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.MetaWeblog.Models;
 using System;
 using System.Globalization;
-
 
 namespace cloudscribe.SimpleContent.MetaWeblog
 {
@@ -18,12 +16,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
     {
         public MetaWeblogModelMapper()
         {
-            //this.commentPolicy = commentPolicy;
-           // this.urlResolver = urlResolver;
+           
         }
-
-        //private IPostCommentPolicyResolver commentPolicy;
-        //private IPostUrlResolver urlResolver;
         
         public Post GetPostFromStruct(PostStruct postStruct)
         {
@@ -43,7 +37,6 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             p.Title = postStruct.title;
           
             return p;
-
         }
 
         public PostStruct GetStructFromPost(
@@ -57,7 +50,15 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             p.author = post.Author;
             p.categories = post.Categories;
             p.commentPolicy = commentsOpen ? "1" : "0";
-            p.description = post.Content;
+            if(!string.IsNullOrWhiteSpace(post.DraftContent))
+            {
+                p.description = post.DraftContent;
+            }
+            else
+            {
+                p.description = post.Content;
+            }
+            
             p.excerpt = post.MetaDescription;
             p.link = postUrl;
             if(post.PubDate.HasValue)
@@ -119,7 +120,16 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             var p = new PageStruct();
 
             p.commentPolicy = commentsOpen ? "1" : "0";
-            p.description = page.Content;
+
+            if(!string.IsNullOrWhiteSpace(page.DraftContent))
+            {
+                p.description = page.DraftContent;
+            }
+            else
+            {
+                p.description = page.Content;
+            }
+            
             p.link = postUrl;
             
             if(page.PubDate.HasValue)
@@ -133,8 +143,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             p.pageParentId = page.ParentId;
             p.title = page.Title;
             p.parentTitle = page.ParentSlug;
-
-
+            
             return p;
         }
 

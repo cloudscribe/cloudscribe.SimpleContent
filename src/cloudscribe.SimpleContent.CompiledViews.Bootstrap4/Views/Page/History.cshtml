@@ -1,5 +1,6 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.ContentHistoryViewModel
 @inject IStringLocalizer<SimpleContent> sr
+@inject IPageRoutes  pageRoutes
 @{
     var format = sr["{0} - Content Edit History"].ToString();
     ViewData["Title"] = string.Format(format, Model.ContentTitle);
@@ -7,12 +8,10 @@
 <h1>@ViewData["Title"]</h1>
 @{ await Html.RenderPartialAsync("HistoryGridPartial", Model); }
 
-<cs-pager asp-action="History"
-          asp-controller="Page"
-          asp-route-contentsource="@Model.ContentSource"
-          asp-route-editor="@Model.Editor"
-          asp-route-sortmode="@Model.SortMode"
+<cs-pager asp-route="@pageRoutes.PageHistoryRouteName"
+          asp-route-slug="@Model.ContentSlug"
           asp-route-pagesize="@Model.History.PageSize"
+          cs-paging-pagesize="@Model.History.PageSize"
           cs-paging-pagenumber="@Model.History.PageNumber"
           cs-paging-totalitems="@Model.History.TotalItems"
           cs-pager-ul-class="pagination d-flex flex-wrap"
