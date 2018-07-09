@@ -239,9 +239,10 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                         case SaveMode.PublishNow:
 
-                            page.SerializedModel = modelString;
-                            page.Content = renderedModel;
                             page.Author = request.ViewModel.Author;
+                            page.Content = renderedModel;
+                            page.SerializedModel = modelString;
+
                             page.PubDate = DateTime.UtcNow;
                             page.IsPublished = true;
                             shouldFirePublishEvent = true;
@@ -249,6 +250,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftAuthor = null;
                             page.DraftContent = null;
                             page.DraftPubDate = null;
+                            page.DraftSerializedModel = null;
 
                             break;
                     }
