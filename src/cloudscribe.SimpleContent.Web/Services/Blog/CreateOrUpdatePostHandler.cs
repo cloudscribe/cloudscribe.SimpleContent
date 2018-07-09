@@ -18,7 +18,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Services.Blog
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class CreateOrUpdatePostHandler : IRequestHandler<CreateOrUpdatePostRequest, CommandResult<IPost>>
     {

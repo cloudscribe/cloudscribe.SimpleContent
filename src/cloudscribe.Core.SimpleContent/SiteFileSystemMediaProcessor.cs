@@ -2,10 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2017-05-28
-// Last Modified:           2017-05-28
+// Last Modified:           2018-07-09
 // 
 
 
+using cloudscribe.Core.Models;
 using cloudscribe.FileManager.Web.Models;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
@@ -20,21 +21,24 @@ namespace cloudscribe.Core.SimpleContent.Integration
     public class SiteFileSystemMediaProcessor : FileSystemMediaProcessor, IMediaProcessor
     {
         public SiteFileSystemMediaProcessor(
+            SiteContext currentSite,
             IMediaPathResolver mediaPathResolver,
             ILogger<FileSystemMediaProcessor> logger,
             IHostingEnvironment env
             ):base(logger, env)
         {
-            this.mediaPathResolver = mediaPathResolver;
+            _currentSite = currentSite;
+            _mediaPathResolver = mediaPathResolver;
         }
 
-        private IMediaPathResolver mediaPathResolver;
+        private readonly SiteContext _currentSite;
+        private IMediaPathResolver _mediaPathResolver;
         private MediaRootPathInfo rootPath;
 
         private async Task EnsurePathInfo()
         {
             if (rootPath != null) { return; }
-            rootPath = await mediaPathResolver.Resolve().ConfigureAwait(false);
+            rootPath = await _mediaPathResolver.Resolve().ConfigureAwait(false);
             if (rootPath != null) { return; }
         }
 
@@ -50,9 +54,15 @@ namespace cloudscribe.Core.SimpleContent.Integration
 
         }
 
-        public override Task<string> ResolveMediaUrl(string mediaVirtualPath, string fileName)
+        public override async Task<string> ResolveMediaUrl(string mediaVirtualPath, string fileName)
         {
-            return base.ResolveMediaUrl(mediaVirtualPath, fileName);
+            var result = await base.ResolveMediaUrl(mediaVirtualPath, fileName);
+            if(!string.IsNullOrWhiteSpace(_currentSite.SiteFolderName))
+            {
+                return  "/" + _currentSite.SiteFolderName + result;
+            }
+
+            return result;
         }
         
         public override async Task SaveMedia(string mediaVirtualPath, string fileName, byte[] bytes)

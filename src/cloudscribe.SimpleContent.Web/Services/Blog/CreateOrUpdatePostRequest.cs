@@ -3,7 +3,7 @@ using cloudscribe.SimpleContent.Web.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace cloudscribe.SimpleContent.Web.Services.Blog
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class CreateOrUpdatePostRequest : IRequest<CommandResult<IPost>>
     {

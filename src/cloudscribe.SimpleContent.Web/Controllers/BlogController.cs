@@ -10,7 +10,6 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Config;
 using cloudscribe.SimpleContent.Web.Services;
-using cloudscribe.SimpleContent.Web.Services.Blog;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Recaptcha;

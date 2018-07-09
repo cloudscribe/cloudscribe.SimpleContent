@@ -30,7 +30,7 @@ namespace cloudscribe.SimpleContent.Models
         Task<List<IPost>> GetPosts(bool includeUnpublished, CancellationToken cancellationToken = default(CancellationToken));
         Task<PagedPostResult> GetPosts(string category, int pageNumber, bool includeUnpublished, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<string> ResolveMediaUrl(string fileName);
+        //Task<string> ResolveMediaUrl(string fileName);
         
         Task<PagedPostResult> GetPosts(
             string projectId,

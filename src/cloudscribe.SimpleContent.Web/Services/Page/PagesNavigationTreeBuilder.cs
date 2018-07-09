@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2018-06-30
+// Last Modified:           2018-07-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,7 +24,7 @@ namespace cloudscribe.SimpleContent.Services
             IPageService pageService,
             INodeUrlPrefixProvider prefixProvider,
             IUrlHelperFactory urlHelperFactory,
-            IPageRouteHelper pageRouteHelper,
+            IPageRoutes pageRoutes,
             IBlogRoutes blogRoutes,
             IActionContextAccessor actionContextAccesor
             )
@@ -34,7 +34,7 @@ namespace cloudscribe.SimpleContent.Services
             _prefixProvider = prefixProvider;
             _urlHelperFactory = urlHelperFactory;
             _actionContextAccesor = actionContextAccesor;
-            _pageRouteHelper = pageRouteHelper;
+            _pageRoutes = pageRoutes;
             _blogRoutes = blogRoutes;
         }
 
@@ -42,7 +42,7 @@ namespace cloudscribe.SimpleContent.Services
         private IPageService _pageService;
         private INodeUrlPrefixProvider _prefixProvider;
         private IUrlHelperFactory _urlHelperFactory;
-        private IPageRouteHelper _pageRouteHelper;
+        private IPageRoutes _pageRoutes;
         private IBlogRoutes _blogRoutes;
         private IActionContextAccessor _actionContextAccesor;
         private TreeNode<NavigationNode> _rootNode = null;
@@ -86,14 +86,14 @@ namespace cloudscribe.SimpleContent.Services
             var rootListCount = rootList.Count();
 
             var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var folderPrefix = _prefixProvider.GetPrefix();
+            //var folderPrefix = _prefixProvider.GetPrefix();
             if ((homePage != null) && project.UseDefaultPageAsRootNode)
             {
                 rootNav = new NavigationNode
                 {
                     Key = homePage.Id,
                     Text = homePage.Title,
-                    Url = _pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix) // urlHelper.Content("~/" + folderPrefix);
+                    Url = urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = "" }) //_pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix) // urlHelper.Content("~/" + folderPrefix);
                 };
             }
             else
@@ -102,18 +102,10 @@ namespace cloudscribe.SimpleContent.Services
                 {
                     Key = "pagesRoot",
                     Title = "Home",
-                    Text = "Home"
+                    Text = "Home",
+                    Url = urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = "" })
                 };
-                if (string.IsNullOrEmpty(folderPrefix))
-                {
-                    rootNav.Url = urlHelper.RouteUrl(_pageRouteHelper.PageIndexRouteName);
-                }
-                else
-                {
-                    rootNav.Url = urlHelper.Content("~/" + folderPrefix);
-                }
                 
-              
             }
             
             var treeRoot = new TreeNode<NavigationNode>(rootNav);
@@ -182,7 +174,7 @@ namespace cloudscribe.SimpleContent.Services
                 if (project.UseDefaultPageAsRootNode && (homePage != null && homePage.Id == page.Id))
                 {
                     rootPosition += 1;
-                    await AddChildNodes(treeRoot, project, folderPrefix).ConfigureAwait(false);
+                    await AddChildNodes(treeRoot, project, urlHelper).ConfigureAwait(false);
                     continue;
                 }
                 
@@ -191,7 +183,7 @@ namespace cloudscribe.SimpleContent.Services
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
                 node.ComponentVisibility = page.MenuFilters;
-                SetUrl(node, page, folderPrefix, urlHelper);
+                SetUrl(node, page, urlHelper);
                 
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
@@ -202,7 +194,7 @@ namespace cloudscribe.SimpleContent.Services
                 }
 
                 var treeNode = treeRoot.AddChild(node);
-                await AddChildNodes(treeNode, project, folderPrefix).ConfigureAwait(false);
+                await AddChildNodes(treeNode, project, urlHelper).ConfigureAwait(false);
                 rootPosition += 1;
             }
 
@@ -214,11 +206,11 @@ namespace cloudscribe.SimpleContent.Services
         private async Task AddChildNodes(
             TreeNode<NavigationNode> treeNode,
             IProjectSettings project,
-            string folderPrefix
+            IUrlHelper urlHelper
             )
         {
             var childList = await _pageService.GetChildPages(treeNode.Value.Key).ConfigureAwait(false);
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
+            //var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             foreach (var page in childList)
             {
                 var node = new NavigationNode
@@ -228,7 +220,7 @@ namespace cloudscribe.SimpleContent.Services
                     ViewRoles = page.ViewRoles,
                     ComponentVisibility = page.MenuFilters
                 };
-                SetUrl(node, page, folderPrefix, urlHelper);
+                SetUrl(node, page, urlHelper);
 
                 // for unpublished pages PagesNavigationNodePermissionResolver
                 // will look for projectid in CustomData and if it exists
@@ -239,11 +231,11 @@ namespace cloudscribe.SimpleContent.Services
                 }
 
                 var childNode = treeNode.AddChild(node);
-                await AddChildNodes(childNode, project, folderPrefix).ConfigureAwait(false); //recurse
+                await AddChildNodes(childNode, project, urlHelper).ConfigureAwait(false); //recurse
             }
         }
 
-        private void SetUrl(NavigationNode node, IPage page, string folderPrefix, IUrlHelper urlHelper)
+        private void SetUrl(NavigationNode node, IPage page, IUrlHelper urlHelper)
         {
             if (!string.IsNullOrEmpty(page.ExternalUrl))
             {
@@ -256,14 +248,7 @@ namespace cloudscribe.SimpleContent.Services
             }
             else
             {
-                if (string.IsNullOrEmpty(folderPrefix))
-                {
-                    node.Url = urlHelper.RouteUrl(_pageRouteHelper.PageIndexRouteName, new { slug = page.Slug });
-                }
-                else
-                {
-                    node.Url = urlHelper.RouteUrl(_pageRouteHelper.FolderPageIndexRouteName, new { slug = page.Slug });
-                }
+                node.Url = urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = page.Slug });
             }
         }
 

@@ -26,6 +26,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             IContentHistoryCommands contentHistoryCommands,
             IPageUrlResolver pageUrlResolver,
             IBlogUrlResolver blogUrlResolver,
+            IMediaProcessor mediaProcessor,
             ILogger<MetaWeblogService> logger,
             IBlogService blogService = null,
             IPageService pageService = null
@@ -38,6 +39,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             _blogUrlResolver = blogUrlResolver;
             _blogService = blogService ?? new NotImplementedBlogService();
             _pageService = pageService ?? new NotImplementedPageService();
+            _mediaProcessor = mediaProcessor;
             _mapper = new MetaWeblogModelMapper();
             _log = logger;
             
@@ -47,6 +49,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         private readonly IProjectSecurityResolver _security;
         private readonly IPageUrlResolver _pageUrlResolver;
         private readonly IBlogUrlResolver _blogUrlResolver;
+        private readonly IMediaProcessor _mediaProcessor;
         private readonly IContentHistoryCommands _contentHistoryCommands;
         private readonly IBlogService _blogService;
         private readonly IPageService _pageService;
@@ -328,6 +331,12 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             string extension = Path.GetExtension(mediaObject.name);
             string fileName = Path.GetFileName(mediaObject.name).ToLowerInvariant().Replace("_thumb", "-wlw");
+            var project = await _projectService.GetCurrentProjectSettings();
+            if(project == null)
+            {
+                _log.LogError("failed to resolve proejct settings");
+                return new MediaInfoStruct();
+            }
 
             await _blogService.SaveMedia(
                 blogId, 
@@ -335,7 +344,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 fileName
                 ).ConfigureAwait(false);
 
-            var mediaUrl = await _blogService.ResolveMediaUrl(fileName); ;
+            var mediaUrl = await _mediaProcessor.ResolveMediaUrl(project.LocalMediaVirtualPath, fileName); ;
             var result = new MediaInfoStruct() { url = mediaUrl };
 
             return result;
@@ -552,14 +561,18 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 if(parent != null)
                 {
                     page.ParentSlug = parent.Slug;
-                }
+                } 
             }
             else
             {
                 page.ParentSlug = null;
             }
+            if (string.IsNullOrWhiteSpace(newPage.pageOrder))
+            {
+                page.PageOrder = await _pageService.GetNextChildPageOrder(page.ParentSlug).ConfigureAwait(false);
+            }
 
-            if(publish)
+            if (publish)
             {
                 page.IsPublished = true;
                 page.PubDate = DateTime.UtcNow;

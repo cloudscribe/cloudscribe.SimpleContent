@@ -29,7 +29,7 @@ namespace cloudscribe.SimpleContent.Models
 
         Task<PageActionResult> SortChildPagesAlpha(string pageId);
 
-        Task<int> GetNextChildPageOrder(string pageId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<int> GetNextChildPageOrder(string pageSlug, CancellationToken cancellationToken = default(CancellationToken));
 
         Task FirePublishEvent(IPage page);
         Task FireUnPublishEvent(IPage page);

@@ -8,7 +8,6 @@ using cloudscribe.SimpleContent.Web.Mvc;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.SimpleContent.Web.Templating;
-using cloudscribe.SimpleContent.Web.Versioning;
 using cloudscribe.Web.Common.Razor;
 using cloudscribe.Web.Common.Setup;
 using cloudscribe.Web.Navigation;
@@ -502,7 +501,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
 
-            services.TryAddScoped<IPageRouteHelper, DefaultPageRouteHelper>();
+            
             services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
             //services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();

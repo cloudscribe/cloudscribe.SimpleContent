@@ -304,18 +304,7 @@ namespace cloudscribe.SimpleContent.Services
             var result = post.PubDate > DateTime.UtcNow.AddDays(-_settings.DaysToComment);
             return result;
         }
-
-        /// <summary>
-        /// this is only used for processing images added via metaweblog api
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public async Task<string> ResolveMediaUrl(string fileName)
-        {
-            await EnsureBlogSettings().ConfigureAwait(false);
-            return await _mediaProcessor.ResolveMediaUrl(_settings.LocalMediaVirtualPath, fileName).ConfigureAwait(false);
-        }
-
+        
         /// <summary>
         /// this is only used for processing images added via metaweblog api
         /// </summary>

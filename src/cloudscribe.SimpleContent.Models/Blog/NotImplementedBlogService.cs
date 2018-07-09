@@ -92,11 +92,7 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
         
-        public Task<string> ResolveMediaUrl(string fileName)
-        {
-            throw new NotImplementedException();
-        }
-        
+       
         public Task Create(IPost post, bool convertToRelativeUrls = false)
         {
             throw new NotImplementedException();
