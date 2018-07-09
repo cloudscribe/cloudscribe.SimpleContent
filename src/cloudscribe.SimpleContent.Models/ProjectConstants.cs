@@ -1,5 +1,19 @@
 ﻿namespace cloudscribe.SimpleContent.Models
 {
+    public sealed class ContentSource
+    {
+        public const string Blog = "Blog";
+        public const string Page = "Page";
+    }
+
+    public sealed class EnvironmentTarget
+    {
+        public const string Any = "any";
+        public const string Development = "dev";
+        public const string Production = "prod";
+    }
+
+
     public static class ProjectConstants
     {
         public const string PostWithDateRouteName = "postwithdate";
