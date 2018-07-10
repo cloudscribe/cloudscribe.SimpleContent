@@ -16,3 +16,9 @@
         <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
     </a>
 }
+@if (Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
+{ 
+    <a id="unpublishPageLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:160px;right:0px;" data-toggle="modal" data-target="#confirmUnpublishModal">
+        <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>
+    </a>
+}

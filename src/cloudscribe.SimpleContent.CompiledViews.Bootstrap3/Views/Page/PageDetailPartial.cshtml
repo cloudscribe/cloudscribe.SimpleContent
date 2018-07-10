@@ -15,7 +15,7 @@
 
     public string GetFooterClass()
     {
-       
+
         return "bh";
     }
     public string GetEditTitle()
@@ -88,3 +88,26 @@
         await Html.RenderPartialAsync("DisqusCommentsPartial", Model);
     }
 </article>
+@if (Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
+{
+    <form id="unpubform" class="form-inline" asp-controller="Page" asp-action="UnPublish" method="post">
+        <input name="id" value="@Model.CurrentPage.Id" type="hidden" />
+        <div class="modal fade" id="confirmUnpublishModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnpublishHeading">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="confirmUnpublishHeading">@sr["Confirm Unpublish"]</h4>
+                    </div>
+                    <div class="modal-body">
+                        @string.Format(sr["Are you sure you want to unpublish the page {0}?"], Model.CurrentPage.Title)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Cancel"]</button>
+                        <input type="submit" value='@sr["Unpublish"]' class="btn btn-danger btn-ok" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}

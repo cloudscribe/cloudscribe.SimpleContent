@@ -199,21 +199,21 @@ namespace cloudscribe.SimpleContent.Web.Services
                     }
 
                     var shouldFirePublishEvent = false;
-                    var shouldFireUnPublishEvent = false;
+                    //var shouldFireUnPublishEvent = false;
                     switch (request.ViewModel.SaveMode)
                     {
-                        case SaveMode.UnPublish:
+                        //case SaveMode.UnPublish:
 
-                            page.DraftSerializedModel = modelString;
-                            page.DraftContent = renderedModel;
-                            page.DraftAuthor = request.ViewModel.Author;
-                            page.DraftPubDate = null;
-                            page.IsPublished = false;
-                            page.PubDate = null;
+                        //    page.DraftSerializedModel = modelString;
+                        //    page.DraftContent = renderedModel;
+                        //    page.DraftAuthor = request.ViewModel.Author;
+                        //    page.DraftPubDate = null;
+                        //    page.IsPublished = false;
+                        //    page.PubDate = null;
 
-                            shouldFireUnPublishEvent = true;
+                        //    shouldFireUnPublishEvent = true;
 
-                            break;
+                        //    break;
 
                         case SaveMode.SaveDraft:
 
@@ -265,10 +265,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                         await _historyCommands.DeleteDraftHistory(project.Id, page.Id).ConfigureAwait(false);
                     }
 
-                    if (shouldFireUnPublishEvent)
-                    {
-                        await _pageService.FireUnPublishEvent(page).ConfigureAwait(false);
-                    }
+                    //if (shouldFireUnPublishEvent)
+                    //{
+                    //    await _pageService.FireUnPublishEvent(page).ConfigureAwait(false);
+                    //}
 
                     _pageService.ClearNavigationCache();
                     

@@ -12,7 +12,7 @@
     var icons = iconClassesAccessor.Value;
 }
 @functions{
-   
+
     public string GetPubDateClass()
     {
         if (Model.CurrentPost != null && Model.CurrentPost.PubDate > DateTime.UtcNow) return "lead text-danger";
@@ -21,7 +21,7 @@
     }
     public string GetCommentString()
     {
-        if(string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
         {
             return Model.CurrentPost.ApprovedCommentCount() + " " + sr["Comments"];
 
@@ -62,7 +62,7 @@
                    asp-route-day="@pubDate.Value.Day.ToString("00")"
                    asp-route-slug="@Model.CurrentPost.Slug"
                    asp-fragment="@GetCommentFragment()"
-                   itemprop="url"><i class="@icons.Comments"></i> @Html.Raw(GetCommentString())</a>
+                   itemprop="url"><i class="@icons.Comments"></i>@Html.Raw(GetCommentString())</a>
             }
             else
             {
@@ -130,3 +130,26 @@
     }
 
 </article>
+@if (Model.CurrentPost != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPost.IsPublished)
+{
+    <form id="unpubform" class="form-inline" asp-controller="Blog" asp-action="UnPublish" method="post">
+        <input name="id" value="@Model.CurrentPost.Id" type="hidden" />
+        <div class="modal fade" id="confirmUnpublishModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnpublishHeading">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="confirmUnpublishHeading">@sr["Confirm Unpublish"]</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        @string.Format(sr["Are you sure you want to unpublish the post {0}?"], Model.CurrentPost.Title)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Cancel"]</button>
+                        <input type="submit" value='@sr["Unpublish"]' class="btn btn-danger btn-ok" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}

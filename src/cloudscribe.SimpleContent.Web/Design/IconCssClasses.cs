@@ -41,6 +41,8 @@
 
         public string Delete { get; set; } = "glyphicon glyphicon-trash";
 
+        public string Unpublish { get; set; } = "glyphicon glyphicon-eye-close";
+
 
 
 

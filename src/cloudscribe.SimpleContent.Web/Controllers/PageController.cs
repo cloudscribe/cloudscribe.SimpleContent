@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-10
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -1198,6 +1198,93 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> UnPublish(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                Log.LogInformation("pageId not provided, redirecting/rejecting");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogWarning("project not found, redirecting/rejecting");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogWarning("user is not allowed to edit, redirecting/rejecting");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            var page = await PageService.GetPage(id);
+
+            if (page == null)
+            {
+                Log.LogInformation($"page not found for {id}, redirecting/rejecting");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            {
+                if (!User.IsInRoles(page.ViewRoles))
+                {
+                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(PageRoutes.PageRouteName);
+                }
+            }
+            
+            if (string.IsNullOrWhiteSpace(page.ExternalUrl) && !page.MenuOnly)
+            {
+                //don't create history for deleted page that was just a menu item with an external url
+                var history = page.CreateHistory(User.Identity.Name, true);
+                await HistoryCommands.Create(project.Id, history);
+            }
+
+            if (!string.IsNullOrWhiteSpace(page.ExternalUrl))
+            {
+                //don't unpublish links just delete
+                await PageService.DeletePage(page.Id);
+            }
+            else
+            {
+                if(page.HasPublishedVersion())
+                {
+                    await PageService.FireUnPublishEvent(page);
+
+                    page.DraftAuthor = page.Author;
+                    page.DraftContent = page.Content;
+                    page.DraftSerializedModel = page.SerializedModel;
+                    page.Content = null;
+                    page.SerializedModel = null;  
+                }
+                
+                page.DraftPubDate = null;
+                page.PubDate = null;
+                page.IsPublished = false;
+                await PageService.Update(page);
+                
+            }
+            
+            PageService.ClearNavigationCache();
+
+            Log.LogWarning($"user {User.Identity.Name} unpublished page {page.Title}");
+
+            var slug = page.Slug;
+            if(slug == project.DefaultPageSlug) { slug = string.Empty; }
+
+            return RedirectToRoute(PageRoutes.PageRouteName, new { slug = slug });
 
         }
 

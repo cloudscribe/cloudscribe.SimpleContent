@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-09
+// Last Modified:           2018-07-10
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -723,6 +723,67 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Log.LogWarning("user " + User.Identity.Name + " deleted post " + post.Slug);
 
             return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> UnPublish(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                Log.LogInformation("postid not provided, redirecting");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("project settings not found, redirecting");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            bool canEdit = await User.CanEditBlog(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogInformation("user is not allowed to edit, redicrecting");
+
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var post = await BlogService.GetPost(id);
+
+            if (post == null)
+            {
+                Log.LogInformation("post not found, redirecting");
+
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var history = post.CreateHistory(User.Identity.Name, true);
+            await HistoryCommands.Create(project.Id, history);
+            if(post.HasPublishedVersion())
+            {
+                await BlogService.FireUnPublishEvent(post);
+                post.DraftAuthor = post.Author;
+                post.DraftContent = post.Content;
+                post.DraftSerializedModel = post.SerializedModel;
+                post.Content = null;
+                post.SerializedModel = null;
+            }
+            
+            post.DraftPubDate = null;
+            post.PubDate = null;
+            post.IsPublished = false;
+
+            await BlogService.Update(post);
+
+            Log.LogWarning("user " + User.Identity.Name + " unpublished post " + post.Title);
+
+            return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName, new { slug = post.Slug });
 
         }
 

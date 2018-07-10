@@ -63,6 +63,7 @@ namespace cloudscribe.SimpleContent.Models
                 ArchivedBy = currentUser,
                 Author = post.Author,
                 ArchivedUtc = DateTime.UtcNow,
+                CategoriesCsv = string.Join(",", post.Categories.Distinct(StringComparer.OrdinalIgnoreCase)),
                 Content = post.Content,
                 ContentSource = ContentSource.Blog,
                 ContentId = post.Id,
@@ -217,7 +218,14 @@ namespace cloudscribe.SimpleContent.Models
         {
             target.Author = input.Author;
             target.BlogId = input.ProjectId;
-            //target.Categories = input.Categories;
+
+            var catList = input.CategoriesCsv.Split(new char[] { ',' },
+                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim())
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .ToList();
+            target.Categories.AddRange(catList.Where(p2 =>
+                  target.Categories.All(p1 => p1 != p2)));
+            
             //target.Comments = input.Comments;
             target.Content = input.Content;
             target.ContentType = input.ContentType;

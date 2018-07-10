@@ -137,19 +137,19 @@ namespace cloudscribe.SimpleContent.Web.Services
 
 
                     var shouldFirePublishEvent = false;
-                    var shouldFireUnPublishEvent = false;
+                    //var shouldFireUnPublishEvent = false;
                     switch (request.ViewModel.SaveMode)
                     {
-                        case SaveMode.UnPublish:
+                        //case SaveMode.UnPublish:
 
-                            post.DraftContent = request.ViewModel.Content;
-                            post.DraftAuthor = request.ViewModel.Author;
-                            post.DraftPubDate = null;
-                            post.IsPublished = false;
-                            post.PubDate = null;
-                            shouldFireUnPublishEvent = true;
+                        //    post.DraftContent = request.ViewModel.Content;
+                        //    post.DraftAuthor = request.ViewModel.Author;
+                        //    post.DraftPubDate = null;
+                        //    post.IsPublished = false;
+                        //    post.PubDate = null;
+                        //    shouldFireUnPublishEvent = true;
 
-                            break;
+                        //    break;
 
                         case SaveMode.SaveDraft:
 
@@ -214,10 +214,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                         await _blogService.FirePublishEvent(post);
                         await _historyCommands.DeleteDraftHistory(request.ProjectId, post.Id).ConfigureAwait(false);
                     }
-                    else if(shouldFireUnPublishEvent)
-                    {
-                        await _blogService.FireUnPublishEvent(post);
-                    }
+                    //else if(shouldFireUnPublishEvent)
+                    //{
+                    //    await _blogService.FireUnPublishEvent(post);
+                    //}
 
                     
                 }
