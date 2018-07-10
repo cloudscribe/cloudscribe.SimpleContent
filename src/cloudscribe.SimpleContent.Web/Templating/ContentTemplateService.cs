@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-21
-// Last Modified:           2018-06-21
+// Last Modified:           2018-07-10
 // 
 
+using cloudscribe.Pagination.Models;
 using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,22 +18,34 @@ namespace cloudscribe.SimpleContent.Web.Templating
     public class ContentTemplateService
     {
         public ContentTemplateService(
-            IContentTemplateProvider templateProvider,
-            IPageService pageService,
+            IEnumerable<IContentTemplateProvider> templateProviders,
             IEnumerable<IModelSerializer> serializers,
             ILogger<ContentTemplateService> logger
              )
         {
-            _templateProvider = templateProvider;
-            _pageService = pageService;
+            _templateProviders = templateProviders;
             _serializers = serializers;
             _log = logger;
+            
         }
 
-        private readonly IContentTemplateProvider _templateProvider;
-        private readonly IPageService _pageService;
+        private readonly IEnumerable<IContentTemplateProvider> _templateProviders;
         private readonly IEnumerable<IModelSerializer> _serializers;
         private readonly ILogger _log;
+
+        private List<ContentTemplate> _aggregateTemplates = null;
+
+        private async Task EnsureAggregateTemplates()
+        {
+            if(_aggregateTemplates != null) { return; }
+
+            _aggregateTemplates = new List<ContentTemplate>();
+            foreach (var provider in _templateProviders)
+            {
+                var templates = await provider.GetAllTemplates().ConfigureAwait(false);
+                _aggregateTemplates.AddRange(templates);
+            }
+        }
 
         private IModelSerializer GetSerializer(string name)
         {
@@ -78,14 +90,57 @@ namespace cloudscribe.SimpleContent.Web.Templating
         }
 
 
-        public async Task<List<ContentTemplate>> GetAllTemplates(string projectId, string forFeature, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<PagedResult<ContentTemplate>> GetTemplates(
+            string projectId, 
+            string forFeature, 
+            string query,
+            int pageNumber,
+            int pageSize,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
-            return await _templateProvider.GetAllTemplates(projectId, forFeature, cancellationToken).ConfigureAwait(false);
+            await EnsureAggregateTemplates();
+
+            int offset = (pageSize * pageNumber) - pageSize;
+
+            var result = new PagedResult<ContentTemplate>()
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+
+            var list = _aggregateTemplates.Where(x =>
+                 (x.ProjectId == "*" || x.ProjectId == projectId)
+                  && (true.Equals(x.Enabled))
+                  && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
+                  && ((query == null) || x.Title.Contains(query))
+                )
+                .ToList();
+
+            result.TotalItems = list.Count;
+            result.Data = list.OrderBy(x => x.Title)
+                .Skip(offset)
+                .Take(pageSize)
+                .ToList()
+                ;
+
+
+            return result;
+
         }
 
-        public async Task<ContentTemplate> GetTemplate(string projectId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ContentTemplate> GetTemplate(
+            string projectId, 
+            string key, 
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _templateProvider.GetTemplate(projectId, key, cancellationToken).ConfigureAwait(false);
+            await EnsureAggregateTemplates();
+            
+            return _aggregateTemplates.Where(x => 
+                    (x.ProjectId == "*" || x.ProjectId == projectId) 
+                    && x.Key == key
+                )
+                .FirstOrDefault();
         }
     }
 }

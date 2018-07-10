@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-20
-// Last Modified:           2018-06-20
+// Last Modified:           2018-07-10
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -15,38 +15,30 @@ namespace cloudscribe.SimpleContent.Web.Services
 {
     public class ConfigContentTemplateProvider : IContentTemplateProvider
     {
-        public ConfigContentTemplateProvider(
-            IOptions<ContentTemplateConfig> configAccessor
-            )
+        public ConfigContentTemplateProvider(IOptions<ContentTemplateConfig> configAccessor)
         {
             _configuredTemplates = configAccessor.Value;
         }
 
         private ContentTemplateConfig _configuredTemplates;
 
-        public Task<List<ContentTemplate>> GetAllTemplates(string projectId, string forFeature, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<List<ContentTemplate>> GetAllTemplates()
         {
-            var result = _configuredTemplates.Templates
-                .Where(x =>
-                  (x.ProjectId == "*" || x.ProjectId == projectId)
-                  && (true.Equals(x.Enabled))
-                  && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
-                ).OrderBy(x => x.Title)
-                .ToList();
+            var result = _configuredTemplates.Templates.ToList();
 
             return Task.FromResult(result);
 
         }
 
-        public Task<ContentTemplate> GetTemplate(string projectId, string key, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var result = _configuredTemplates.Templates
-                .Where(x =>
-                  (x.ProjectId == "*" || x.ProjectId == projectId)
-                  && x.Key == key
-                ).FirstOrDefault();
+        //public Task<ContentTemplate> GetTemplate(string projectId, string key, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    var result = _configuredTemplates.Templates
+        //        .Where(x =>
+        //          (x.ProjectId == "*" || x.ProjectId == projectId)
+        //          && x.Key == key
+        //        ).FirstOrDefault();
 
-            return Task.FromResult(result);
-        }
+        //    return Task.FromResult(result);
+        //}
     }
 }

@@ -100,6 +100,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //services.AddScoped<ITeaserService, cloudscribe.SimpleContent.Web.Services.TeaserServiceDisabled>();
 
             services.AddSimpleContentMvc(config);
+            services.AddContentTemplatesForSimpleContent(config);
 
             services.AddMetaWeblogForSimpleContent(config.GetSection("MetaWeblogApiOptions"));
 

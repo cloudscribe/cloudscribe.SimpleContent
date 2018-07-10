@@ -5,19 +5,22 @@
     ViewData["Title"] = sr["Create a New Page"];
 }
 <h2>@ViewData["Title"]</h2>
-<a class="btn btn-primary" asp-route="@pageRoutes.PageEditRouteName" asp-route-parentslug="@Model.ParentSlug" asp-route-type="@Model.ContentType">@sr["New Page with Standard Content Editor"]</a>
-@if (Model.Templates.Count > 0)
+<a class="btn btn-link" asp-route="@pageRoutes.PageEditRouteName" asp-route-parentslug="@Model.ParentSlug" asp-route-type="@Model.ContentType">@sr["New Page with Standard Content Editor"]</a>
+@if (Model.Templates.TotalItems > 0)
 {
     <h3>@sr["Create Page From Template"]</h3>
+
+
     <form asp-action="InitTemplatedPage" data-submit-once="true">
         <input type="hidden" asp-for="@Model.ParentSlug" />
         <input type="hidden" asp-for="@Model.PageOrder" />
-        <div class="form-group mt-2">
-            <label asp-for="PageTitle">@sr["Page Heading"]</label>
-            <input asp-for="PageTitle" class="form-control" data-toggle="tooltip" title='@sr["This is the heading and title of the page. The url slug will be generated based on the title."]' />
+        <div class="form-inline mt-2 mb-3">
+            <label asp-for="PageTitle" class="mr-1">@sr["Page Heading"]</label>
+            <input asp-for="PageTitle" class="form-control w-auto" data-toggle="tooltip" title='@sr["This is the heading and title of the page. The url slug will be generated based on the title."]' />
             <span asp-validation-for="PageTitle" class="invalid-feedback"></span>
+            <button id="btnSave" name="submit" type="submit" class="btn btn-primary ml-1" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Create Page From Template"]'>@sr["Create Page From Template"]</button>
         </div>
-        @foreach (var template in Model.Templates)
+        @foreach (var template in Model.Templates.Data)
         {
             <div class="form-check">
                 <input class="form-check-input" type="radio" asp-for="SelectedTemplate" value="@template.Key" id="@(template.Key)" />
@@ -28,8 +31,26 @@
             </div>
         }
         <span asp-validation-for="SelectedTemplate" class="text-danger"></span>
-        <button id="btnSave" name="submit" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Create Page From Template"]'>@sr["Create Page From Template"]</button>
+        
     </form>
+    <div class="mt-2">
+        <cs-pager asp-route="@pageRoutes.NewPageRouteName"
+                  asp-route-pagesize="@Model.Templates.PageSize"
+                  cs-paging-pagesize="@Model.Templates.PageSize"
+                  cs-paging-pagenumber="@Model.Templates.PageNumber"
+                  cs-paging-totalitems="@Model.Templates.TotalItems"
+                  cs-pager-ul-class="pagination d-flex flex-wrap"
+                  cs-pager-li-current-class="page-item active"
+                  cs-pager-li-other-class="page-item"
+                  cs-pager-li-non-active-class="page-item disabled"
+                  cs-pager-link-current-class="page-link"
+                  cs-pager-link-other-class="page-link"
+                  cs-first-page-title='@sr["First Page"]'
+                  cs-last-page-title='@sr["Last Page"]'
+                  cs-previous-page-title='@sr["Previous page"]'
+                  cs-next-page-title='@sr["Next page"]'></cs-pager>
+    </div>
+    
 }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }

@@ -304,7 +304,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         public virtual async Task<IActionResult> NewPage(
             CancellationToken cancellationToken,
             string parentSlug = "",
-            string type = ""
+            string type = null,
+            string query = null,
+            int pageNumber = 1,
+            int pageSize = 2
             )
         {
             var project = await ProjectService.GetCurrentProjectSettings();
@@ -323,8 +326,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var templates = await TemplateService.GetAllTemplates(project.Id, ProjectConstants.PageFeatureName, cancellationToken);
-            if(templates.Count == 0)
+            var templates = await TemplateService.GetTemplates(
+                project.Id, 
+                ProjectConstants.PageFeatureName, 
+                query,
+                pageNumber,
+                pageSize,
+                cancellationToken);
+
+            if(templates.TotalItems == 0)
             {
                 return RedirectToRoute(PageRoutes.PageEditRouteName, new { parentSlug, type });
             }
@@ -333,7 +343,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 ParentSlug = parentSlug,
                 ContentType = type,
-                Templates = templates
+                Templates = templates,
+                PageNumber = pageNumber,
+                PageSize = pageSize
             };
 
             if(!string.IsNullOrWhiteSpace(parentSlug))
@@ -367,7 +379,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (!ModelState.IsValid)
             {
-                model.Templates = await TemplateService.GetAllTemplates(project.Id, ProjectConstants.PageFeatureName);
+                model.Templates = await TemplateService.GetTemplates(
+                    project.Id, 
+                    ProjectConstants.PageFeatureName,
+                    model.Query,
+                    model.PageNumber,
+                    model.PageSize
+
+                    );
                 return View("NewPage", model);
             }
 

@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using cloudscribe.SimpleContent.ContentTemplates.Services;
+using cloudscribe.SimpleContent.Models;
+using Microsoft.Extensions.Configuration;
 
-namespace cloudscribe.SimpleContent.ContentTemplates.Bootstrap4
+namespace Microsoft.Extensions.DependencyInjection
 {
-    class StartupExtensions
+    public static class StartupExtensions
     {
+        public static IServiceCollection AddContentTemplatesForSimpleContent(
+           this IServiceCollection services,
+           IConfiguration configuration
+           )
+        {
+            services.AddSingleton<IContentTemplateProvider, ContentTemplateProvider>();
+
+            return services;
+        }
     }
 }

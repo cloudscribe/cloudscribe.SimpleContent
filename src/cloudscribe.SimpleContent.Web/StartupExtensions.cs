@@ -25,6 +25,126 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         
 
+        
+
+        public static IServiceCollection AddSimpleContentMvc(
+            this IServiceCollection services,
+            IConfiguration configuration = null
+            )
+        {
+            //TODO: eventually move the code from this obsolete method into this one
+            services.AddSimpleContentCommon(configuration);
+
+            
+
+            return services;
+        }
+
+        [Obsolete("this method is deprecated, please use services.AddSimpleContentMvc instead.")]
+        public static IServiceCollection AddSimpleContentCommon(
+            this IServiceCollection services,
+            IConfiguration configuration = null
+            )
+        {
+            services.TryAddScoped<IPageRoutes, DefaultPageRoutes>();
+            services.TryAddScoped<IBlogRoutes, DefaultBlogRoutes>();
+            services.TryAddScoped<IBlogService, BlogService>();
+            services.TryAddScoped<IAuthorNameResolver, DefaultAuthorNameResolver>();
+            services.TryAddScoped<PageEvents, PageEvents>();
+            services.TryAddScoped<PostEvents, PostEvents>();
+
+            services.TryAddScoped<IPageService, PageService>();
+            services.TryAddScoped<IProjectService, ProjectService>();
+            services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
+            services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
+
+            //services.TryAddScoped<IHtmlProcessor, HtmlProcessor>();
+            services.TryAddScoped<IMarkdownProcessor, MarkdownProcessor>();
+            services.TryAddScoped<IContentProcessor, ContentProcessor>();
+
+            services.TryAddScoped<TeaserCache>();
+            services.TryAddScoped<ITeaserService, TeaserService>();
+
+            
+            services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
+            services.TryAddScoped<ViewRenderer, ViewRenderer>();
+
+            
+            services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
+            services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
+            //services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
+            services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
+            services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
+
+            services.TryAddScoped<IRoleSelectorProperties, NotImplementedRoleSelectorProperties>();
+
+            services.AddScoped<IVersionProvider, VersionInfo>();
+            services.AddScoped<IVersionProvider, DataStorageVersionInfo>();
+
+            // registering an IOptions<IconCssClasses> that canbe injected into views
+            if (configuration != null)
+            {
+                // To override the css icon classes create a json config section representing the IconCssClass
+                services.Configure<IconCssClasses>(configuration.GetSection("IconCssClasses"));
+
+                services.Configure<PageEditOptions>(configuration.GetSection("PageEditOptions"));
+                services.Configure<SimpleContentConfig>(configuration.GetSection("SimpleContentConfig"));
+
+                services.Configure<SimpleContentIconConfig>(configuration.GetSection("SimpleContentIconConfig"));
+                services.Configure<SimpleContentThemeConfig>(configuration.GetSection("SimpleContentThemeConfig"));
+
+                services.Configure<ContentTemplateConfig>(configuration.GetSection("ContentTemplateConfig"));
+
+
+                //services.AddScoped<CoreThemeHelper>();
+            }
+            else
+            {
+                services.Configure<PageEditOptions>(c =>
+                {
+                    // not doing anything just configuring the default
+                });
+
+                services.Configure<IconCssClasses>(c =>
+                {
+                    // not doing anything just configuring the default
+                });
+
+                services.Configure<SimpleContentIconConfig>(c =>
+                {
+                    // not doing anything just configuring the default
+                });
+
+                services.Configure<SimpleContentThemeConfig>(c =>
+                {
+                    // not doing anything just configuring the default
+                });
+            }
+            
+            services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
+
+            services.AddScoped<IVersionProvider, ControllerVersionInfo>();
+
+            services.AddMediatR(typeof(PageService).Assembly);
+
+            
+            services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
+            services.AddScoped<IValidateTemplateModel, DefaultTemplateModelValidator>();
+
+            services.TryAddScoped<IAutoPublishDraftPage, AutoPublishDraftPage>();
+            services.TryAddScoped<IAutoPublishDraftPost, AutoPublishDraftPost>();
+            services.TryAddScoped<IPageUrlResolver, PageUrlResolver>();
+            services.TryAddScoped<IBlogUrlResolver, BlogUrlResolver>();
+
+            services.AddSingleton<IModelSerializer, JsonModelSerializer>();
+            services.AddSingleton<IContentTemplateProvider, ConfigContentTemplateProvider>();
+            services.AddSingleton<ContentTemplateService>();
+
+            return services;
+        }
+
+        
+
         public static IRouteBuilder AddStandardRoutesForSimpleContent(this IRouteBuilder routes)
         {
             routes.AddBlogRoutesForSimpleContent();
@@ -278,7 +398,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.PageHistoryRouteName,
-               template: "{sitefolder}/" +  prefix + "/history/{slug?}"
+               template: "{sitefolder}/" + prefix + "/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { name = siteFolderConstraint }
                );
@@ -460,130 +580,5 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
 
-        public static IServiceCollection AddSimpleContentMvc(
-            this IServiceCollection services,
-            IConfiguration configuration = null
-            )
-        {
-            services.AddSimpleContentCommon(configuration);
-
-            services.AddScoped<IVersionProvider, ControllerVersionInfo>();
-
-            return services;
-        }
-
-
-        public static IServiceCollection AddSimpleContentCommon(
-            this IServiceCollection services,
-            IConfiguration configuration = null
-            )
-        {
-            services.TryAddScoped<IPageRoutes, DefaultPageRoutes>();
-            services.TryAddScoped<IBlogRoutes, DefaultBlogRoutes>();
-            services.TryAddScoped<IBlogService, BlogService>();
-            services.TryAddScoped<IAuthorNameResolver, DefaultAuthorNameResolver>();
-            services.TryAddScoped<PageEvents, PageEvents>();
-            services.TryAddScoped<PostEvents, PostEvents>();
-
-            services.TryAddScoped<IPageService, PageService>();
-            services.TryAddScoped<IProjectService, ProjectService>();
-            services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
-            services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
-
-            //services.TryAddScoped<IHtmlProcessor, HtmlProcessor>();
-            services.TryAddScoped<IMarkdownProcessor, MarkdownProcessor>();
-            services.TryAddScoped<IContentProcessor, ContentProcessor>();
-
-            services.TryAddScoped<TeaserCache>();
-            services.TryAddScoped<ITeaserService, TeaserService>();
-
-            
-            services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
-            services.TryAddScoped<ViewRenderer, ViewRenderer>();
-
-            
-            services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
-            services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
-            //services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
-            services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
-            services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
-
-            services.TryAddScoped<IRoleSelectorProperties, NotImplementedRoleSelectorProperties>();
-
-            services.AddScoped<IVersionProvider, VersionInfo>();
-            services.AddScoped<IVersionProvider, DataStorageVersionInfo>();
-
-            // registering an IOptions<IconCssClasses> that canbe injected into views
-            if (configuration != null)
-            {
-                // To override the css icon classes create a json config section representing the IconCssClass
-                services.Configure<IconCssClasses>(configuration.GetSection("IconCssClasses"));
-
-                services.Configure<PageEditOptions>(configuration.GetSection("PageEditOptions"));
-                services.Configure<SimpleContentConfig>(configuration.GetSection("SimpleContentConfig"));
-
-                services.Configure<SimpleContentIconConfig>(configuration.GetSection("SimpleContentIconConfig"));
-                services.Configure<SimpleContentThemeConfig>(configuration.GetSection("SimpleContentThemeConfig"));
-
-                services.Configure<ContentTemplateConfig>(configuration.GetSection("ContentTemplateConfig"));
-
-
-                //services.AddScoped<CoreThemeHelper>();
-            }
-            else
-            {
-                services.Configure<PageEditOptions>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-
-                services.Configure<IconCssClasses>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-
-                services.Configure<SimpleContentIconConfig>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-
-                services.Configure<SimpleContentThemeConfig>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-            }
-
-            services.TryAddScoped<IContentTemplateProvider, ConfigContentTemplateProvider>();
-            services.AddScoped<ContentTemplateService>();
-
-            services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
-
-            services.AddMediatR(typeof(PageService).Assembly);
-
-            services.AddScoped<IModelSerializer, JsonModelSerializer>();
-            services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
-            services.AddScoped<IValidateTemplateModel, DefaultTemplateModelValidator>();
-
-            services.TryAddScoped<IAutoPublishDraftPage, AutoPublishDraftPage>();
-            services.TryAddScoped<IAutoPublishDraftPost, AutoPublishDraftPost>();
-            services.TryAddScoped<IPageUrlResolver, PageUrlResolver>();
-            services.TryAddScoped<IBlogUrlResolver, BlogUrlResolver>();
-
-            return services;
-        }
-
-        [Obsolete("this method is deprecated, please use services.AddSimpleContentMvc instead.")]
-        public static IServiceCollection AddSimpleContent(
-            this IServiceCollection services,
-            IConfiguration configuration = null
-            )
-        {
-
-            services.AddSimpleContentCommon(configuration);
-
-            return services;
-        }
-
-       
     }
 }
