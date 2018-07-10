@@ -20,6 +20,6 @@
 @if (Model.CurrentPost != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPost.IsPublished)
 {
     <a id="unpublishPostLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:130px;right:0px;" data-toggle="modal" data-target="#confirmUnpublishModal">
-        <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>
+        <span class="@icons.Unpublish" aria-hidden="true"></span>
     </a>
 }
