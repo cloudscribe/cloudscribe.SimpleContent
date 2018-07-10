@@ -32,6 +32,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("Author")
                         .HasMaxLength(255);
 
+                    b.Property<string>("CategoriesCsv");
+
                     b.Property<string>("Content");
 
                     b.Property<string>("ContentId")

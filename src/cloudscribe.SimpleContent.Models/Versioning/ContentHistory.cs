@@ -36,6 +36,7 @@ namespace cloudscribe.SimpleContent.Models
         public string CorrelationKey { get; set; }
 
         public string Content { get; set; }
+        public string CategoriesCsv { get; set; }
 
         public DateTime? PubDate { get; set; }
 
