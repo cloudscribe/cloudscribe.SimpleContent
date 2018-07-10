@@ -8,7 +8,6 @@ using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Services
@@ -29,16 +28,6 @@ namespace cloudscribe.SimpleContent.Web.Services
             return Task.FromResult(result);
 
         }
-
-        //public Task<ContentTemplate> GetTemplate(string projectId, string key, CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    var result = _configuredTemplates.Templates
-        //        .Where(x =>
-        //          (x.ProjectId == "*" || x.ProjectId == projectId)
-        //          && x.Key == key
-        //        ).FirstOrDefault();
-
-        //    return Task.FromResult(result);
-        //}
+        
     }
 }

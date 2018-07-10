@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.ViewModels
+namespace cloudscribe.SimpleContent.ContentTemplates.ViewModels
 {
-    class BasicGalleryViewModel
+    public class BasicGalleryViewModel
     {
     }
 }

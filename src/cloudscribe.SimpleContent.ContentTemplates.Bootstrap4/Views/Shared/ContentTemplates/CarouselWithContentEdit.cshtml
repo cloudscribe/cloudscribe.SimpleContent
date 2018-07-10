@@ -1,0 +1,50 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.CarouselWithContent
+@using cloudscribe.SimpleContent.ContentTemplates
+@using Microsoft.AspNetCore.Antiforgery
+@inject IStringLocalizer<ContentTemplateResources> sr
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@{
+
+    var tokens = antiforgery.GetAndStoreTokens(Context);
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+}
+
+<div class="d-flex align-items-stretch">
+    <div class="cs-crop-container">
+        <img id="dz1Image" src="/cr/images/550x412.png" />
+    </div>
+    <div class="d-flex flex-column">
+        <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+             data-dropzone=""
+             data-upload-url="@Url.Action("DropFile", "FileManager")"
+             data-anti-forgery-token="@tokens.RequestToken"
+             data-file-browse-url="@ckOptions.ImageBrowseUrl"
+             data-file-crop-url="@ckOptions.CropFileUrl"
+             data-target-path="/media/images"
+             data-target-fullsize-input-id="imgUrlFull"
+             data-target-resized-input-id="imgUrlResized"
+             data-target-fullsize-image-id="dz1Image"
+             data-target-resized-image-idx="dz1ImageResized"
+             data-enable-browse-server="true"
+             data-enable-crop="true"
+             data-target-thumb-image-idx="dz1ImageThumb"
+             data-resize-width="550"
+             data-resize-height="412"
+             data-create-thumb="false"
+             data-resize-image="true"
+             data-accepted-files="image/*"
+             data-placeholder-image-url="/cr/images/550x412.png"
+             >
+            @sr["Drop file here or click to browse device for file."]
+        </div>
+        <div class="pl-1 pt-1">
+            <div class="d-flex flex-column">
+                <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<input  id="imgUrlFull" type="hidden" />
+<input  id="imgUrlResized" type="hidden" />

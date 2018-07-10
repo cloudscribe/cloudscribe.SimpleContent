@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Templating
 {
-    public class ContentTemplateService
+    public class ContentTemplateService : IContentTemplateService
     {
         public ContentTemplateService(
             IEnumerable<IContentTemplateProvider> templateProviders,
@@ -90,6 +90,22 @@ namespace cloudscribe.SimpleContent.Web.Templating
         }
 
 
+        public async Task<int> GetCountOfTemplates(
+            string projectId,
+            string forFeature
+            )
+        {
+            await EnsureAggregateTemplates();
+
+            return _aggregateTemplates.Where(x =>
+                 (x.ProjectId == "*" || x.ProjectId == projectId)
+                  && (true.Equals(x.Enabled))
+                  && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
+                  )
+                .Count();
+        }
+
+
         public async Task<PagedResult<ContentTemplate>> GetTemplates(
             string projectId, 
             string forFeature, 
@@ -113,7 +129,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
                  (x.ProjectId == "*" || x.ProjectId == projectId)
                   && (true.Equals(x.Enabled))
                   && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
-                  && ((query == null) || x.Title.Contains(query))
+                  && ((query == null) || x.Title.ToUpper().Contains(query.ToUpper()))
                 )
                 .ToList();
 

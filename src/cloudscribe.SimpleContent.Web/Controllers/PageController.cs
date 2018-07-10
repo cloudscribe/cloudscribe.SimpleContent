@@ -38,7 +38,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IAuthorizationService authorizationService,
             ITimeZoneHelper timeZoneHelper,
             IAuthorNameResolver authorNameResolver,
-            ContentTemplateService templateService,
+            IContentTemplateService templateService,
             IAutoPublishDraftPage autoPublishDraftPage,
             IContentHistoryCommands historyCommands,
             IContentHistoryQueries historyQueries,
@@ -65,7 +65,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         protected IProjectService ProjectService { get; private set; }
         protected IPageService PageService { get; private set; }
-        protected ContentTemplateService TemplateService { get; private set; }
+        protected IContentTemplateService TemplateService { get; private set; }
         protected IAutoPublishDraftPage AutoPublishDraftPage { get; private set; }
         protected IContentProcessor ContentProcessor { get; private set; }
         protected IAuthorizationService AuthorizationService { get; private set; }
@@ -304,10 +304,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         public virtual async Task<IActionResult> NewPage(
             CancellationToken cancellationToken,
             string parentSlug = "",
-            string type = null,
             string query = null,
             int pageNumber = 1,
-            int pageSize = 2
+            int pageSize = 10
             )
         {
             var project = await ProjectService.GetCurrentProjectSettings();
@@ -326,6 +325,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
+            var templateCount = await TemplateService.GetCountOfTemplates(project.Id, ProjectConstants.PageFeatureName);
+            if (templateCount == 0)
+            {
+                return RedirectToRoute(PageRoutes.PageEditRouteName, new { parentSlug });
+            }
+
             var templates = await TemplateService.GetTemplates(
                 project.Id, 
                 ProjectConstants.PageFeatureName, 
@@ -334,18 +339,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 pageSize,
                 cancellationToken);
 
-            if(templates.TotalItems == 0)
-            {
-                return RedirectToRoute(PageRoutes.PageEditRouteName, new { parentSlug, type });
-            }
-
+            
             var model = new NewPageViewModel()
             {
                 ParentSlug = parentSlug,
-                ContentType = type,
                 Templates = templates,
+                Query = query,
                 PageNumber = pageNumber,
-                PageSize = pageSize
+                PageSize = pageSize,
+                CountOfTemplates = templateCount
             };
 
             if(!string.IsNullOrWhiteSpace(parentSlug))

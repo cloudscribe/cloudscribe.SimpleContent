@@ -26,6 +26,8 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
 
+        public int CountOfTemplates { get; set; }
+
 
     }
 }

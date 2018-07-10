@@ -138,7 +138,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<IModelSerializer, JsonModelSerializer>();
             services.AddSingleton<IContentTemplateProvider, ConfigContentTemplateProvider>();
-            services.AddSingleton<ContentTemplateService>();
+            services.TryAddSingleton<IContentTemplateService, ContentTemplateService>();
 
             return services;
         }
