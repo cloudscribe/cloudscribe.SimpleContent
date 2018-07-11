@@ -7,6 +7,16 @@ namespace cloudscribe.SimpleContent.ContentTemplates.ViewModels
         public CarouselWithContent()
         {
             Items = new List<CarouselItem>();
+
+            //Items.Add(new CarouselItem()
+            //{
+            //    SizedImageUrl = "/media/images/dudes1-550x412.jpeg",
+            //    FullSizeImageUrl = "/media/images/dudes1.jpeg",
+            //    Caption = "Starsky and Hutch!",
+            //    Description = "Some dudes on bikes in Mexico"
+            //}
+            //);
+            
         }
 
         public string ContentAbove { get; set; }

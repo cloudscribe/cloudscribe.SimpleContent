@@ -23,10 +23,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class StartupExtensions
     {
-        
-
-        
-
         public static IServiceCollection AddSimpleContentMvc(
             this IServiceCollection services,
             IConfiguration configuration = null

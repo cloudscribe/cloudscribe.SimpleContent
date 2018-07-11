@@ -84,9 +84,21 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     },
                     new EditScript()
                     {
-                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
+                        Url = "/js/cloudscribe-unobtrusive-file-drop.js",
                         Environment = "any",
                         Sort = 3
+                    },
+                    new EditScript()
+                    {
+                        Url = "/js/knockout-3.4.2.js",
+                        Environment = "any",
+                        Sort = 4
+                    },
+                    new EditScript()
+                    {
+                        Url = "/js/cst-carousel.js",
+                        Environment = "any",
+                        Sort = 5
                     }
                 },
                 EditView = "ContentTemplates/CarouselWithContentEdit",

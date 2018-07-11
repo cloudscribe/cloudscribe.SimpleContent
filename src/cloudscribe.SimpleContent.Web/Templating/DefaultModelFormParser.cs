@@ -1,12 +1,16 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2018-06-22
+// Last Modified:           2018-07-10
 // 
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Net;
 
 namespace cloudscribe.SimpleContent.Web.Templating
 {
@@ -44,52 +48,96 @@ namespace cloudscribe.SimpleContent.Web.Templating
                 foreach(var prop in modelProps)
                 {
                     var formVal = form[prop.Name].ToString();
-                    if(!string.IsNullOrWhiteSpace(formVal))
+                    if(string.IsNullOrWhiteSpace(formVal))
+                    { 
+                        Log.LogDebug($"no form value found for {prop.Name}");
+                    }
+                    
+                    try
                     {
-                        try
+                        if(prop.PropertyType == typeof(DateTime?) || prop.PropertyType == typeof(DateTime))
                         {
-                            if(prop.PropertyType == typeof(DateTime?) || prop.PropertyType == typeof(DateTime))
+                            if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToDateTime(formVal), null);
                             }
-                            else if(prop.PropertyType == typeof(decimal?))
+                                    
+                        }
+                        else if(prop.PropertyType == typeof(decimal?))
+                        {
+                            if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToDecimal(formVal), null);
-                            }
-                            else if (prop.PropertyType == typeof(int?))
+                            }    
+                        }
+                        else if (prop.PropertyType == typeof(int?))
+                        {
+                            if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToInt32(formVal), null);
-                            }
-                            else if (prop.PropertyType == typeof(long?))
+                            }     
+                        }
+                        else if (prop.PropertyType == typeof(long?))
+                        {
+                            if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToInt64(formVal), null);
-                            }
-                            else if (prop.PropertyType == typeof(double?))
+                            }       
+                        }
+                        else if (prop.PropertyType == typeof(double?))
+                        {
+                            if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToDouble(formVal), null);
-                            }
-                            else if (prop.PropertyType == typeof(bool?))
+                            }     
+                        }
+                        else if (prop.PropertyType == typeof(bool?))
+                        {
+                            if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToBoolean(formVal), null);
-                            }
-                            else
+                            }      
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ChangeType(formVal, prop.PropertyType), null);
+                            } 
+                            else
+                            {
+                                foreach(Type interfaceType in prop.PropertyType.GetInterfaces())
+                                {
+                                    if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IList<>))
+                                    {
+                                        Type itemType = prop.PropertyType.GetGenericArguments()[0];
+                                        Log.LogDebug($"found Ilist {prop.Name}");
+                                        var jsonVal = WebUtility.UrlDecode(form[prop.Name + "Json"].ToString());
+                                        if (!string.IsNullOrWhiteSpace(jsonVal))
+                                        {
+                                            Log.LogDebug($"found json for {prop.Name}");
+                                            var jsonSettings = new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include };
+                                            var obj = JsonConvert.DeserializeObject(jsonVal, prop.PropertyType, jsonSettings);
+                                            prop.SetValue(model, obj, null);
+
+                                        }
+
+                                        break;
+                                    }
+                                }
                             }
+                        }
 
                             
-                        }
-                        catch(Exception ex)
-                        {
-                            Log.LogError($"failed to set property {prop.Name} using {formVal}. error:{ex.Message}:{ex.StackTrace}");
-                        }
-                        
-                        Log.LogDebug($"value {formVal} found for {prop.Name}");
                     }
-                    else
+                    catch(Exception ex)
                     {
-                        Log.LogDebug($"no form value found for {prop.Name}");
+                        Log.LogError($"failed to set property {prop.Name} using {formVal}. error:{ex.Message}:{ex.StackTrace}");
                     }
+                        
+                    Log.LogDebug($"value {formVal} found for {prop.Name}");
+                    
+                    
                 }
 
                 return model;
