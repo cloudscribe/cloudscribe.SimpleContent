@@ -4,13 +4,14 @@
 function ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
     var self = this;
 
-    self.Title = ko.observable(title);
-    self.Description = ko.observable(description);
+    self.Title = ko.observable(decodeEncodedJson(title));
+    self.Description = ko.observable(decodeEncodedJson(description));
     self.FullSizeUrl = ko.observable(fullSizeUrl);
     self.ResizedUrl = ko.observable(resizedUrl);
     self.ThumbnailUrl = ko.observable(thumbnailUrl);
     self.LinkUrl = ko.observable(linkUrl);
     self.Sort = ko.observable(sort);
+    
 }
 function ItemListViewModel(initialData) {
     var self = this;
@@ -29,10 +30,22 @@ function ItemListViewModel(initialData) {
         self.addItem('Fungus', 'Fungus amoung us', '/media/images/img_1150.jpg', '/media/images/img_1150-ws.jpg', '', '', 9);
     }
 
+    self.currentListState = ko.computed(function () {
+        return encodeURIComponent(ko.toJSON(self.Items));
+    });
+
+   
+
 
 }
 
-var initialData = JSON.parse(decodeURIComponent(document.getElementById("ItemsInitialData").value));
+function decodeEncodedJson(encodedJson) {
+    var x = encodedJson.replace(/\+/g, " ");
+    return decodeURIComponent(x);
+}
+
+//var initialData = JSON.parse(decodeURIComponent(document.getElementById("ItemsInitialData").value));
+var initialData = JSON.parse(decodeEncodedJson(document.getElementById("ItemsInitialData").value));
 //console.log(initialData);
 
 ko.applyBindings(new ItemListViewModel(initialData));

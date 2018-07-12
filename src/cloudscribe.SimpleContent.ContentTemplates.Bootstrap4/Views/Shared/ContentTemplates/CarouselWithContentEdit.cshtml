@@ -29,9 +29,9 @@
 <div class="tab-content">
     <div class="tab-pane pt-2 active" id="tabCarousel" role="tabpanel" aria-labelledby="cedit-tab1">
         <input id="ItemsInitialData" type="hidden" name="ItemsInitialData" value="@itemsJson" />
-        <input id="ItemsJson" type="hidden" name="ItemsJson"  />
+        <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()"  />
 
-        <div id="carouselEdit" class="carousel slide carousel-fade border" style="width:550px;" data-ride="carousel" dat-interval="3000" data-pause="hover">
+        <div id="carouselEdit" class="carousel slide carousel-fade border" style="max-width:550px;" data-ride="carousel" dat-interval="3000" data-pause="hover">
             <div class="carousel-inner" data-bind="foreach: Items">
                 <div class="carousel-item" data-bind="css: { 'active': $index() == 0 }">
                     <img class="d-block " data-bind="attr: { src: ResizedUrl, alt: Description }" />
@@ -48,6 +48,20 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">@sr["Next"]</span>
             </a>
+        </div>
+        
+
+        <div style="max-width:550px" data-bind="foreach: Items">
+            <div class="row">
+                <div class="col-2">
+                    <img  style="max-width:100px;max-height:75px;" data-bind="attr: { src: ResizedUrl }, visible: ThumbnailUrl !== undefined" />
+                    <img  data-bind="attr: { src: ThumbnailUrl }, visible: ThumbnailUrl" />
+                </div>
+                <div class="col-10">
+                    <input class="form-control" title="@sr["Title"]" data-bind="value: Title" />
+                    <input class="form-control" title="@sr["Description"]" data-bind="value: Description" />
+                </div>  
+            </div>
         </div>
 
         <button data-bind="click: test">Test Add</button>
@@ -72,7 +86,7 @@
                      data-target-thumb-image-idx="dz1ImageThumb"
                      data-resize-width="550"
                      data-resize-height="412"
-                     data-create-thumb="false"
+                     data-create-thumb="true"
                      data-resize-image="true"
                      data-accepted-files="image/*"
                      data-placeholder-image-url="/cr/images/550x412.png">
