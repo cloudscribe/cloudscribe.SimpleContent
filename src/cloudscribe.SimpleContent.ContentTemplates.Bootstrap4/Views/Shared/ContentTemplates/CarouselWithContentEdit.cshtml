@@ -29,7 +29,7 @@
 <div class="tab-content">
     <div class="tab-pane pt-2 active" id="tabCarousel" role="tabpanel" aria-labelledby="cedit-tab1">
         <input id="ItemsInitialData" type="hidden" name="ItemsInitialData" value="@itemsJson" />
-        <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()"  />
+        <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
 
         <div id="carouselEdit" class="carousel slide carousel-fade border" style="max-width:550px;" data-ride="carousel" dat-interval="3000" data-pause="hover">
             <div class="carousel-inner" data-bind="foreach: Items">
@@ -49,22 +49,28 @@
                 <span class="sr-only">@sr["Next"]</span>
             </a>
         </div>
-        
 
-        <div style="max-width:550px" data-bind="foreach: Items">
+
+        <div style="max-width:775px" data-bind="foreach: Items">
             <div class="row">
-                <div class="col-2">
-                    <img  style="max-width:100px;max-height:75px;" data-bind="attr: { src: ResizedUrl }, visible: ThumbnailUrl !== undefined" />
-                    <img  data-bind="attr: { src: ThumbnailUrl }, visible: ThumbnailUrl" />
+                <div class="col-3">
+                    <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }, visible: ThumbnailUrl !== undefined" />
+                    <img data-bind="attr: { src: ThumbnailUrl }, visible: ThumbnailUrl" />
                 </div>
-                <div class="col-10">
+                <div class="col-8">
                     <input class="form-control" title="@sr["Title"]" data-bind="value: Title" />
-                    <input class="form-control" title="@sr["Description"]" data-bind="value: Description" />
-                </div>  
+                    <textarea class="form-control" title="@sr["Description"]" data-bind="value: Description"></textarea>
+                    <input class="form-control" title="@sr["Sort"]" data-bind="value: Sort, event: {change: $root.sort}" />
+                </div>
+                <div class="col-1">
+                    <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt"></i></a>
+                </div>
             </div>
         </div>
 
         <button data-bind="click: test">Test Add</button>
+        <button data-bind="click: sortItems">Sort</button>
+    
         <div class="d-flex align-items-stretch">
             @*<div class="cs-crop-container">
                 <img id="dz1Image" src="/cr/images/550x412.png" />

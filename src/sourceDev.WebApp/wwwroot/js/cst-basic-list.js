@@ -26,6 +26,8 @@ function ItemListViewModel(initialData) {
         self.Items.push(new ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort))
     }
 
+    self.removeItem = function (item) { self.Items.remove(item) }
+
     self.test = function () {
         self.addItem('Fungus', 'Fungus amoung us', '/media/images/img_1150.jpg', '/media/images/img_1150-ws.jpg', '', '', 9);
     }
@@ -33,7 +35,21 @@ function ItemListViewModel(initialData) {
     self.currentListState = ko.computed(function () {
         return encodeURIComponent(ko.toJSON(self.Items));
     });
+    self.sortItems = function () {
+        self.Items.sort(function (a, b) {
+            if (a.Sort < b.Sort) { return -1; }
+            if (a.Sort > b.Sort) { return 1; }
+            return 0;
+        })
+    }
 
+    self.sortedItems = ko.computed(function () {
+        return self.Items.sort(function (a, b) {
+            if (a.Sort < b.Sort) { return -1; }
+            if (a.Sort > b.Sort) { return 1; }
+            return 0;
+        })
+    });
    
 
 
