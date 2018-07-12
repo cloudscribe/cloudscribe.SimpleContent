@@ -4,9 +4,11 @@
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
 @inject IOptions<IconCssClasses> iconClassesAccessor
+@inject IOptions<PageEditOptions> editOptionsAccessor
 @inject IStringLocalizer<SimpleContent> sr
 @{
     var icons = iconClassesAccessor.Value;
+    var editOptions = editOptionsAccessor.Value;
 }
 <a id="pageManagerLink" href="@Model.PageTreePath" title="@sr["Manage Page Hierarchy"]" class="btn btn-sm content-tree" style="position:absolute;top:70px;right:0px;">
     <span class="@icons.PageTree" aria-hidden="true"></span>
@@ -20,7 +22,7 @@
         <span class="@icons.ShowEditToolbar" aria-hidden="true"></span>
     </a>
 }
-@if (Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
+@if (!editOptions.HideUnpublishButton && Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
 {
     <a id="unpublishPageLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:160px;right:0px;" data-toggle="modal" data-target="#confirmUnpublishModal">
         <span class="@icons.Unpublish" aria-hidden="true"></span>

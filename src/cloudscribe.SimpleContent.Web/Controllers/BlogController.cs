@@ -2,12 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-10
+// Last Modified:           2018-07-12
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
-using cloudscribe.SimpleContent.Web.Config;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
@@ -49,7 +48,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             ITimeZoneHelper timeZoneHelper,
             IRecaptchaServerSideValidator recaptchaServerSideValidator,
             IStringLocalizer<SimpleContent> localizer,
-            IOptions<SimpleContentConfig> configOptionsAccessor,
+            IOptions<BlogEditOptions> configOptionsAccessor,
             ILogger<BlogController> logger
             
             )
@@ -69,7 +68,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             TimeZoneHelper = timeZoneHelper;
             StringLocalizer = localizer;
             Log = logger;
-            ContentOptions = configOptionsAccessor.Value;
+            EditOptions = configOptionsAccessor.Value;
             RecaptchaServerSideValidator = recaptchaServerSideValidator;
         }
 
@@ -85,7 +84,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected ITimeZoneHelper TimeZoneHelper { get; private set; }
         protected IAuthorizationService AuthorizationService { get; private set; }
         protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
-        protected SimpleContentConfig ContentOptions { get; private set; }
+        protected BlogEditOptions EditOptions { get; private set; }
         protected IAutoPublishDraftPost AutoPublishDraftPost { get; private set; }
         protected IContentHistoryCommands HistoryCommands { get; private set; }
         protected IContentHistoryQueries HistoryQueries { get; private set; }
@@ -520,7 +519,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.Author = await AuthorNameResolver.GetAuthorName(User);
                 model.CurrentPostUrl = Url.RouteUrl(BlogRoutes.BlogIndexRouteName);
                 model.ContentType = project.DefaultContentType;
-                if(ContentOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
+                if(EditOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
                 {
                     model.ContentType = "markdown";  
                 }

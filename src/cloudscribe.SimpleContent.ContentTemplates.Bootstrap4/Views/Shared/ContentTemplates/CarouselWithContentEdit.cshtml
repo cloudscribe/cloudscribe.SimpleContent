@@ -1,4 +1,4 @@
-﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.CarouselWithContent
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
 @using cloudscribe.SimpleContent.ContentTemplates
 @using Microsoft.AspNetCore.Antiforgery
 @using Newtonsoft.Json;
@@ -28,14 +28,15 @@
 </ul>
 <div class="tab-content">
     <div class="tab-pane pt-2 active" id="tabCarousel" role="tabpanel" aria-labelledby="cedit-tab1">
-        <input id="ItemsJson" type="hidden" name="ItemsJson" value="@itemsJson" />
+        <input id="ItemsInitialData" type="hidden" name="ItemsInitialData" value="@itemsJson" />
+        <input id="ItemsJson" type="hidden" name="ItemsJson"  />
 
         <div id="carouselEdit" class="carousel slide carousel-fade border" style="width:550px;" data-ride="carousel" dat-interval="3000" data-pause="hover">
             <div class="carousel-inner" data-bind="foreach: Items">
                 <div class="carousel-item" data-bind="css: { 'active': $index() == 0 }">
-                    <img class="d-block " data-bind="attr: { src: SizedImageUrl, alt: Description }" />
+                    <img class="d-block " data-bind="attr: { src: ResizedUrl, alt: Description }" />
                     <div class="carousel-caption d-none d-md-block">
-                        <h5 data-bind="text: Caption"></h5>
+                        <h5 data-bind="text: Title"></h5>
                     </div>
                 </div>
             </div>

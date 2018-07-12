@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-12
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
-using cloudscribe.SimpleContent.Web.Config;
 using cloudscribe.Web.Common;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -27,7 +26,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             IBlogService blogService,
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
-            IOptions<SimpleContentConfig> configOptionsAccessor,
+            IOptions<BlogEditOptions> configOptionsAccessor,
             IStringLocalizer<SimpleContent> localizer,
             ILogger<CreateOrUpdatePostHandler> logger
             )
@@ -36,7 +35,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             _blogService = blogService;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
-            _contentOptions = configOptionsAccessor.Value;
+            _editOptions = configOptionsAccessor.Value;
             _localizer = localizer;
             _log = logger;
         }
@@ -45,7 +44,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IBlogService _blogService;
         private readonly IContentHistoryCommands _historyCommands;
         private ITimeZoneHelper _timeZoneHelper;
-        private readonly SimpleContentConfig _contentOptions;
+        private readonly BlogEditOptions _editOptions;
         private readonly IStringLocalizer _localizer;
         private readonly ILogger _log;
 
@@ -112,7 +111,7 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                     if (!string.IsNullOrEmpty(request.ViewModel.Categories))
                     {
-                        if (_contentOptions.ForceLowerCaseCategories)
+                        if (_editOptions.ForceLowerCaseCategories)
                         {
                             categories = request.ViewModel.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
                             .Where(x =>

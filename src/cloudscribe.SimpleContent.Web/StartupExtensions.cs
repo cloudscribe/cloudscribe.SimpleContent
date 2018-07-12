@@ -2,7 +2,6 @@
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web;
-using cloudscribe.SimpleContent.Web.Config;
 using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.Mvc;
 using cloudscribe.SimpleContent.Web.Services;
@@ -17,29 +16,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class StartupExtensions
     {
+       
         public static IServiceCollection AddSimpleContentMvc(
             this IServiceCollection services,
-            IConfiguration configuration = null
-            )
-        {
-            //TODO: eventually move the code from this obsolete method into this one
-            services.AddSimpleContentCommon(configuration);
-
-            
-
-            return services;
-        }
-
-        [Obsolete("this method is deprecated, please use services.AddSimpleContentMvc instead.")]
-        public static IServiceCollection AddSimpleContentCommon(
-            this IServiceCollection services,
-            IConfiguration configuration = null
+            IConfiguration configuration
             )
         {
             services.TryAddScoped<IPageRoutes, DefaultPageRoutes>();
@@ -54,21 +39,17 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
             services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
 
-            //services.TryAddScoped<IHtmlProcessor, HtmlProcessor>();
             services.TryAddScoped<IMarkdownProcessor, MarkdownProcessor>();
             services.TryAddScoped<IContentProcessor, ContentProcessor>();
 
             services.TryAddScoped<TeaserCache>();
             services.TryAddScoped<ITeaserService, TeaserService>();
-
             
             services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
-
             
             services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
-            //services.AddScoped<ISiteMapNodeService, NavigationTreeSiteMapNodeService>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
             services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();
 
@@ -77,44 +58,24 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IVersionProvider, VersionInfo>();
             services.AddScoped<IVersionProvider, DataStorageVersionInfo>();
 
-            // registering an IOptions<IconCssClasses> that canbe injected into views
             if (configuration != null)
-            {
-                // To override the css icon classes create a json config section representing the IconCssClass
+            {   
                 services.Configure<IconCssClasses>(configuration.GetSection("IconCssClasses"));
-
                 services.Configure<PageEditOptions>(configuration.GetSection("PageEditOptions"));
-                services.Configure<SimpleContentConfig>(configuration.GetSection("SimpleContentConfig"));
-
+                services.Configure<BlogEditOptions>(configuration.GetSection("BlogEditOptions"));
                 services.Configure<SimpleContentIconConfig>(configuration.GetSection("SimpleContentIconConfig"));
                 services.Configure<SimpleContentThemeConfig>(configuration.GetSection("SimpleContentThemeConfig"));
-
                 services.Configure<ContentTemplateConfig>(configuration.GetSection("ContentTemplateConfig"));
-
-
-                //services.AddScoped<CoreThemeHelper>();
             }
             else
             {
-                services.Configure<PageEditOptions>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-
-                services.Configure<IconCssClasses>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-
-                services.Configure<SimpleContentIconConfig>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
-
-                services.Configure<SimpleContentThemeConfig>(c =>
-                {
-                    // not doing anything just configuring the default
-                });
+                // not doing anything just configuring the default
+                services.Configure<IconCssClasses>(c => {  });
+                services.Configure<PageEditOptions>(c => { });
+                services.Configure<BlogEditOptions>(c => { });
+                services.Configure<SimpleContentIconConfig>(c => { });
+                services.Configure<SimpleContentThemeConfig>(c => {  });
+                services.Configure<ContentTemplateConfig>(c => { });
             }
             
             services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
@@ -122,7 +83,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IVersionProvider, ControllerVersionInfo>();
 
             services.AddMediatR(typeof(PageService).Assembly);
-
             
             services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
             services.AddScoped<IValidateTemplateModel, DefaultTemplateModelValidator>();

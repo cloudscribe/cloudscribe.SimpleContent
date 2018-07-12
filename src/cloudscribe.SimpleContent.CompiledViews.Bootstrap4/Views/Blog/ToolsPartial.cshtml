@@ -1,8 +1,10 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject ISimpleContentThemeHelper themeHelper
 @inject IStringLocalizer<SimpleContent> sr
+@inject IOptions<BlogEditOptions> editOptionsAccessor
 @{
     var themeSettings = themeHelper.GetThemeSettings();
+    var editOptions = editOptionsAccessor.Value;
 }
 <a id="newPostLink" href="@Model.NewItemPath" title="@sr["New Post"]" class="btn btn-sm content-new">
     <span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span>
@@ -13,7 +15,7 @@
         <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
     </a>
 }
-@if (Model.CurrentPost != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPost.IsPublished)
+@if (!editOptions.HideUnpublishButton && Model.CurrentPost != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPost.IsPublished)
 {
     <a id="unpublishPostLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:130px;right:0px;" data-toggle="modal" data-target="#confirmUnpublishModal">
         <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>

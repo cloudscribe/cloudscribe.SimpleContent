@@ -96,7 +96,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     },
                     new EditScript()
                     {
-                        Url = "/js/cst-carousel.js",
+                        Url = "/js/cst-basic-list.js",
                         Environment = "any",
                         Sort = 5
                     }
@@ -105,7 +105,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 Enabled = true,
                 Key = "sct-CarouselWithContent",
                 FormParserName = "DefaultModelFormParser",
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.CarouselWithContent, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
                 ProjectId = "*",
                 RenderCss = new List<EditStyle>()
                 {

@@ -1,8 +1,10 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @inject IStringLocalizer<SimpleContent> sr
 @inject ISimpleContentThemeHelper themeHelper
+@inject IOptions<PageEditOptions> editOptionsAccessor
 @{
     var themeSettings = themeHelper.GetThemeSettings();
+    var editOptions = editOptionsAccessor.Value;
 }
 <a id="pageManagerLink" href="@Model.PageTreePath" title="@sr["Manage Page Hierarchy"]" class="btn btn-sm content-tree">
     <span class="@themeSettings.Icons.PageTree" aria-hidden="true"></span>
@@ -16,8 +18,8 @@
         <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
     </a>
 }
-@if (Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
-{ 
+@if (!editOptions.HideUnpublishButton && Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
+{
     <a id="unpublishPageLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:160px;right:0px;" data-toggle="modal" data-target="#confirmUnpublishModal">
         <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>
     </a>
