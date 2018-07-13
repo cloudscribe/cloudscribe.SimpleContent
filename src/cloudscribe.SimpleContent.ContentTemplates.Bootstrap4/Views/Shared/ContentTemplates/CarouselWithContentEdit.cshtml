@@ -62,8 +62,8 @@
                     <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }, visible: ThumbnailUrl !== undefined" />
                 </div>
                 <div class="col-8">
-                    <input class="form-control" title="@sr["Title"]" data-bind="value: Title" />
-                    <textarea class="form-control" style="height:110px;" title="@sr["Description"]" data-bind="value: Description"></textarea>
+                    <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
+                    <textarea class="form-control" style="height:110px;" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
                 </div>
                 <div class="col-1">
                     <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
