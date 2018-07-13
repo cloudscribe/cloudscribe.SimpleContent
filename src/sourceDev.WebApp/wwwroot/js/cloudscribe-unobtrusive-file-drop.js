@@ -124,6 +124,9 @@
                                 this.destroyCropper();
                                 this.fullSizeImage.src = cropResult.resizedUrl;
                                 this.resizedInput.value = cropResult.resizedUrl;
+                                if (window.HandleCropResult) {
+                                    window.HandleCropResult(cropResult.resizedUrl);
+                                }
                             },
 
                             serverFileSelected: function (url) {
@@ -145,6 +148,10 @@
                                 if (this.dropZoneDiv.dataset.targetResizedInputId) {
                                     this.resizedInput = document.getElementById(this.dropZoneDiv.dataset.targetResizedInputId);
                                     this.resizedInput.value = url;
+                                }
+
+                                if (window.ServerFileSelected) {
+                                    window.ServerFileSelected(url);
                                 }
 
                                 cloudscribeDropAndCrop.closeServerBrowser();

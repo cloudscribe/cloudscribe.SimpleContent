@@ -1,5 +1,4 @@
 ﻿
-//console.log('hello world');
 //class to represent a list item
 function ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
     var self = this;
@@ -11,29 +10,23 @@ function ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, li
     self.ThumbnailUrl = ko.observable(thumbnailUrl);
     self.LinkUrl = ko.observable(linkUrl);
     self.Sort = ko.observable(sort);
+
+    self.incrementSort = function () {
+        self.Sort(self.Sort() + 3);
+    }
+    self.decrementSort = function () {
+        self.Sort(self.Sort() - 3);
+    }
     
 }
+
 function ItemListViewModel(initialData) {
     var self = this;
     self.hiddenField = document.getElementById("ItemsJson");
 
     self.handleSortItemChanged = function (sortVal) {
-        console.log(sortVal);
-        self.sortItems();
-        //ko.cleanNode(document.getElementById("itemsEditList"))
-        //ko.applyBindings(self.Items, document.getElementById("itemsEditList"))
-
-        //self.Items.valueHasMutated();
-        //self.sortItems();
-        //var tmp = self.Items();
-        //self.Items([]);
-        //tmp.sort(function (a, b) {
-        //    if (a.Sort < b.Sort) { return -1; }
-        //    if (a.Sort > b.Sort) { return 1; }
-        //    return 0;
-        //});
-        //self.Items(tmp);
-
+        //console.log(sortVal);
+        self.sortItems();   
     }
     
     self.Items = ko.observableArray(ko.utils.arrayMap(initialData, function (item) {
@@ -42,64 +35,86 @@ function ItemListViewModel(initialData) {
         item.Sort.subscribe(self.handleSortItemChanged);
         return item;
     }));
-
+    
     self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
         var item = new ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort);
         item.Sort.subscribe(self.handleSortItemChanged);
         self.Items.push(item)
     }
 
+    self.newItemTitle = ko.observable(null);
+    self.newItemDescription = ko.observable(null);
     self.newItemFullSizeUrl = ko.observable(null);
     self.newItemResizedUrl = ko.observable(null);
     self.newItemThumbnailUrl = ko.observable(null);
-    //self.hasNewItem = ko.computed(function () {
-    //    return document.getElementById("imgUrlResized").value.length > 0;
-    //});
-
+    self.newItemLinkUrl = ko.observable(null);
+    self.newItemSort = ko.observable(3);
+   
     self.addNewItem = function () {
-        self.addItem('', '', self.newItemFullSizeUrl(), self.newItemResizedUrl(), self.newItemThumbnailUrl())
+        self.addItem(self.newItemTitle(), self.newItemDescription(), self.newItemFullSizeUrl(), self.newItemResizedUrl(), self.newItemThumbnailUrl(), self.newItemLinkUrl(), self.newItemSort());
+        self.newItemTitle(null);
+        self.newItemDescription(null);
+        self.newItemFullSizeUrl(null);
+        self.newItemResizedUrl(null);
+        self.newItemThumbnailUrl(null);
+        self.newItemLinkUrl(null);
+        self.newItemSort(3);
     }
 
     self.removeItem = function (item) { self.Items.remove(item) }
 
-    self.test = function () {
-        self.addItem('Fungus', 'Fungus amoung us', '/media/images/img_1150.jpg', '/media/images/img_1150-ws.jpg', '', '', 9);
+    self.getCssClass = function (index) {
+        if (index === 0) { return "carousel-item active"; }
+        return "carousel-item";
+    }
+    
+    self.dropZoneSuccess = function (file, serverResponse) {
+        //console.log(serverResponse);
+        self.newItemFullSizeUrl(serverResponse[0].originalUrl);
+        self.newItemResizedUrl(serverResponse[0].resizedUrl);
+        self.newItemThumbnailUrl(serverResponse[0].thumbUrl)
     }
 
-    self.test2 = function () {
-        console.log(self.newItemResizedUrl());
-    }
+    window.DropZoneSuccessHandler = self.dropZoneSuccess;
 
+    self.handleCropSave = function (resizedUrl) {
+        self.newItemResizedUrl(resizedUrl);
+    }
+    window.HandleCropResult = self.handleCropSave;
+
+    self.serverFileSelected = function (url) {
+        self.newItemResizedUrl(url);
+    }
+    window.ServerFileSelected = self.serverFileSelected;
+    
     self.currentListState = ko.computed(function () {
         return encodeURIComponent(ko.toJSON(self.Items));
     });
     self.sortItems = function () {
         self.Items.sort(function (a, b) {
-            if (a.Sort < b.Sort) { return -1; }
-            if (a.Sort > b.Sort) { return 1; }
+            if (a.Sort() < b.Sort()) { return -1; }
+            if (a.Sort() > b.Sort()) { return 1; }
             return 0;
         })
     }
-
-    self.sortedItems = ko.computed(function () {
-        return self.Items.sort(function (a, b) {
-            if (a.Sort < b.Sort) { return -1; }
-            if (a.Sort > b.Sort) { return 1; }
-            return 0;
-        })
-    });
-   
-
-
 }
 
 function decodeEncodedJson(encodedJson) {
+    if (encodedJson === null) { return encodedJson; }
+    if (encodedJson === undefined) { return encodedJson; }
     var x = encodedJson.replace(/\+/g, " ");
     return decodeURIComponent(x);
 }
 
-//var initialData = JSON.parse(decodeURIComponent(document.getElementById("ItemsInitialData").value));
-var initialData = JSON.parse(decodeEncodedJson(document.getElementById("ItemsInitialData").value));
-//console.log(initialData);
+document.addEventListener("DOMContentLoaded", function () {
+    var configElement = document.getElementById("ItemsConfig");
+    var initialData = JSON.parse(decodeEncodedJson(configElement.value));
+    //console.log(initialData);
 
-ko.applyBindings(new ItemListViewModel(initialData));
+    ko.applyBindings(new ItemListViewModel(initialData));
+
+});
+
+
+
+
