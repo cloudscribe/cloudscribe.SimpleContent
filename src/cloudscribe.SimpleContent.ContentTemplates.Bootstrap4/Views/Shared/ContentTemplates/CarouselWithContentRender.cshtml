@@ -1,6 +1,38 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
-
-@{
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+@functions{
+    public string GetItemClass(int index)
+    {
+        if (index == 0) { return "carousel-item active"; }
+        return "carousel-item";
+    }
 }
 
-TODO implement render
+<div>
+    @Html.Raw(Model.ContentAbove)
+</div>
+<div id="carouselRender" class="carousel slide carousel-fade border" style="max-width:550px;" data-ride="carousel" dat-interval="3000" data-pause="hover">
+    <div class="carousel-inner" data-bind="foreach: Items">
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+            <div class="@GetItemClass(i)">
+                <img class="d-block " src="@Model.Items[i].ResizedUrl" alt="@Model.Items[i].Description" />
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>@Model.Items[i].Title</h5>
+                </div>
+            </div>
+        }
+    </div>
+    <a class="carousel-control-prev" href="#carouselEdit" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">@sr["Previous"]</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselEdit" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">@sr["Next"]</span>
+    </a>
+</div>
+<div>
+    @Html.Raw(Model.ContentBelow)
+</div>
