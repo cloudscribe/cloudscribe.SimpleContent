@@ -430,7 +430,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.CommentsAreOpen = await BlogService.CommentsAreOpen(result.Post, canEdit);
             model.TimeZoneHelper = TimeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
-            
+
+            if (!string.IsNullOrWhiteSpace(model.CurrentPost.TemplateKey))
+            {
+                model.Template = await TemplateService.GetTemplate(project.Id, model.CurrentPost.TemplateKey);
+            }
+
             return View("Post", model);
             
         }

@@ -32,6 +32,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         
         public IProjectSettings ProjectSettings { get; set; }
         public IPost CurrentPost { get; set; } = null;
+        public ContentTemplate Template { get; set; } = null;
 
         public bool HasPublishedVersion { get; set; }
         public bool HasDraft { get; set; }

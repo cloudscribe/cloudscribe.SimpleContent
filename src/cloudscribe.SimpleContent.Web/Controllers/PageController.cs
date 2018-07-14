@@ -284,7 +284,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 // for non home pages if the user clicks the new link
                 // make it use the current page slug as the parent slug for the new item
                 model.NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
-
+            }
+            if(!string.IsNullOrWhiteSpace(page.TemplateKey))
+            {
+                model.Template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
             }
             
             ViewData["Title"] = page.Title;

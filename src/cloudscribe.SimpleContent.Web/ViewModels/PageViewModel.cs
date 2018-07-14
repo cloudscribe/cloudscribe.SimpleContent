@@ -26,6 +26,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         
         public IProjectSettings ProjectSettings { get; set; }
         public IPage CurrentPage { get; set; } = null;
+        public ContentTemplate Template { get; set; } = null;
 
         public string EditPath { get; set; } = string.Empty;
         public string NewItemPath { get; set; } = string.Empty;
