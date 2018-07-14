@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-21
-// Last Modified:           2018-07-10
+// Last Modified:           2018-07-14
 // 
 
 using cloudscribe.Pagination.Models;
@@ -87,6 +87,38 @@ namespace cloudscribe.SimpleContent.Web.Templating
             }
             
             
+        }
+
+        public object DesrializeTemplateModel(IPost post, ContentTemplate template)
+        {
+            string modelString;
+            if (!string.IsNullOrWhiteSpace(post.DraftSerializedModel))
+            {
+                modelString = post.DraftSerializedModel;
+            }
+            else
+            {
+                modelString = post.SerializedModel;
+            }
+            if (string.IsNullOrWhiteSpace(modelString))
+            {
+                _log.LogError($"could not deserialize model from empty string on page {post.Title}");
+                return null;
+            }
+            var serializer = GetSerializer(template.SerializerName);
+
+            try
+            {
+                var result = serializer.Deserialize(template.ModelType, modelString);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _log.LogError($"Failed to deserialize model for page {post.Title} returning null. Exception was {ex.Message}:{ex.StackTrace}");
+                return null;
+            }
+
+
         }
 
 

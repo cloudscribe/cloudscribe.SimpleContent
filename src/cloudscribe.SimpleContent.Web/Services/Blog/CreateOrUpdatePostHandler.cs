@@ -136,27 +136,13 @@ namespace cloudscribe.SimpleContent.Web.Services
 
 
                     var shouldFirePublishEvent = false;
-                    //var shouldFireUnPublishEvent = false;
                     switch (request.ViewModel.SaveMode)
                     {
-                        //case SaveMode.UnPublish:
-
-                        //    post.DraftContent = request.ViewModel.Content;
-                        //    post.DraftAuthor = request.ViewModel.Author;
-                        //    post.DraftPubDate = null;
-                        //    post.IsPublished = false;
-                        //    post.PubDate = null;
-                        //    shouldFireUnPublishEvent = true;
-
-                        //    break;
-
                         case SaveMode.SaveDraft:
 
                             post.DraftContent = request.ViewModel.Content;
                             post.DraftAuthor = request.ViewModel.Author;
-                            // should we clear the draft pub date if save draft clicked?
-                            //post.DraftPubDate = null;
-
+                            
                             break;
 
                         case SaveMode.PublishLater:
@@ -213,12 +199,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                         await _blogService.FirePublishEvent(post);
                         await _historyCommands.DeleteDraftHistory(request.ProjectId, post.Id).ConfigureAwait(false);
                     }
-                    //else if(shouldFireUnPublishEvent)
-                    //{
-                    //    await _blogService.FireUnPublishEvent(post);
-                    //}
-
-                    
+                   
                 }
 
                 return new CommandResult<IPost>(post, request.ModelState.IsValid, errors);

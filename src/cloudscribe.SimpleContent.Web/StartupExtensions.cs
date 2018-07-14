@@ -421,6 +421,12 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
+               name: ProjectConstants.PostEditWithTemplateRouteName,
+               template: firstSegment + "editwithtemplate/{slug}"
+               , defaults: new { controller = "Blog", action = "EditWithTemplate" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PostEditRouteName,
                template: firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
@@ -492,6 +498,13 @@ namespace Microsoft.Extensions.DependencyInjection
                name: ProjectConstants.FolderNewPostRouteName,
                template: "{sitefolder}/" + firstSegment + "newpost"
                , defaults: new { controller = "Blog", action = "NewPost" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPostEditWithTemplateRouteName,
+               template: "{sitefolder}/" + firstSegment + "editwithtemplate/{slug}"
+               , defaults: new { controller = "Blog", action = "EditWithTemplate" }
                , constraints: new { name = siteFolderConstraint }
                );
 

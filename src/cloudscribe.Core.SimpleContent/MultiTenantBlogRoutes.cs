@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-08-06
-// Last Modified:           2018-07-03
+// Last Modified:           2018-07-14
 
 using cloudscribe.Core.Models;
 using cloudscribe.SimpleContent.Models;
@@ -144,6 +144,21 @@ namespace cloudscribe.Core.SimpleContent.Integration
                     }
                 }
                 return ProjectConstants.PostEditRouteName;
+            }
+        }
+
+        public string PostEditWithTemplateRouteName
+        {
+            get
+            {
+                if (multiTenantOptions.Mode == MultiTenantMode.FolderName)
+                {
+                    if (!string.IsNullOrEmpty(currentSite.SiteFolderName))
+                    {
+                        return ProjectConstants.FolderPostEditWithTemplateRouteName;
+                    }
+                }
+                return ProjectConstants.PostEditWithTemplateRouteName;
             }
         }
 

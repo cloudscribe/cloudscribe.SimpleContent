@@ -24,6 +24,7 @@
         public const string NewPostRouteName = "newpost";
         public const string MostRecentPostRouteName = "mostrecentpost";
         public const string PostEditRouteName = "postedit";
+        public const string PostEditWithTemplateRouteName = "posteditwithtemplate";
         public const string PostDeleteRouteName = "postdelete";
         public const string PostHistoryRouteName = "posthistory";
 
@@ -35,6 +36,7 @@
         public const string FolderNewPostRouteName = "foldernewpost";
         public const string FolderMostRecentPostRouteName = "foldermostrecentpost";
         public const string FolderPostEditRouteName = "folderpostedit";
+        public const string FolderPostEditWithTemplateRouteName = "folderposteditwithtemplate";
         public const string FolderPostDeleteRouteName = "folderpostdelete";
         public const string FolderPostHistoryRouteName = "folderposthistory";
 

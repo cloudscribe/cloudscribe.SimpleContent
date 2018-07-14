@@ -35,6 +35,11 @@ namespace cloudscribe.SimpleContent.Models
             get { return ProjectConstants.PostEditRouteName; }
         }
 
+        public string PostEditWithTemplateRouteName
+        {
+            get { return ProjectConstants.PostEditWithTemplateRouteName; }
+        }
+
         public string PostDeleteRouteName
         {
             get { return ProjectConstants.PostDeleteRouteName; }

@@ -10,6 +10,7 @@ using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
+using cloudscribe.Web.Common.Extensions;
 using cloudscribe.Web.Common.Recaptcha;
 using cloudscribe.Web.Navigation;
 using MediatR;
@@ -98,6 +99,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         public virtual async Task<IActionResult> Index(
+            CancellationToken cancellationToken,
             string category = "",
             int page = 1)
         {
@@ -128,10 +130,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             ViewData["Title"] = model.ProjectSettings.Title;
-            var result = await BlogService.GetPosts(category, page, model.CanEdit);
+            var result = await BlogService.GetPosts(category, page, model.CanEdit, cancellationToken);
             model.Posts = result.Data;
-            model.Categories = await BlogService.GetCategories(model.CanEdit);
-            model.Archives = await BlogService.GetArchives(model.CanEdit);
+            model.Categories = await BlogService.GetCategories(model.CanEdit, cancellationToken);
+            model.Archives = await BlogService.GetArchives(model.CanEdit, cancellationToken);
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = result.TotalItems; 
@@ -145,7 +147,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
        
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
-        public virtual async Task<IActionResult> MostRecent()
+        public virtual async Task<IActionResult> MostRecent(CancellationToken cancellationToken)
         {
             var project = await ProjectService.GetCurrentProjectSettings();
             if (project == null)
@@ -153,7 +155,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            var result = await BlogService.GetRecentPosts(1);
+            var result = await BlogService.GetRecentPosts(1, cancellationToken);
             if ((result != null) && (result.Count > 0))
             {
                 var post = result[0];
@@ -167,6 +169,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         public virtual async Task<IActionResult> Archive(
+            CancellationToken cancellationToken,
             int year,
             int month = 0,
             int day = 0,
@@ -189,12 +192,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 day,
                 page,
                 model.ProjectSettings.PostsPerPage,
-                model.CanEdit
+                model.CanEdit,
+                cancellationToken
                 );
 
             model.Posts = result.Data;
-            model.Categories = await BlogService.GetCategories(model.CanEdit);
-            model.Archives = await BlogService.GetArchives(model.CanEdit);
+            model.Categories = await BlogService.GetCategories(model.CanEdit, cancellationToken);
+            model.Archives = await BlogService.GetArchives(model.CanEdit, cancellationToken);
             model.Paging.ItemsPerPage = model.ProjectSettings.PostsPerPage;
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = result.TotalItems;
@@ -211,24 +215,30 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         public virtual async Task<IActionResult> Category(
+            CancellationToken cancellationToken,
             string category = "",
             int page = 1)
         {
-            return await Index(category, page);
+            return await Index(cancellationToken, category, page);
         }
         
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostNoDate")]
-        public virtual async Task<IActionResult> Post(string slug, bool showDraft = false, Guid? historyId = null)
+        public virtual async Task<IActionResult> Post(
+             CancellationToken cancellationToken,
+            string slug, 
+            bool showDraft = false, 
+            Guid? historyId = null)
         {
-            return await Post(0, 0, 0, slug, showDraft, historyId);
+            return await Post(cancellationToken, 0, 0, 0, slug, showDraft, historyId);
         }
 
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostWithDate")]
         public virtual async Task<IActionResult> Post(
+            CancellationToken cancellationToken,
             int year , 
             int month, 
             int day, 
@@ -257,7 +267,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             PostResult result = null;
             if(!string.IsNullOrEmpty(slug))
             {
-                result = await BlogService.GetPostBySlug(slug);
+                result = await BlogService.GetPostBySlug(slug, cancellationToken);
             }
             ContentHistory history = null;
             var postWasDeleted = false;
@@ -271,7 +281,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (canEdit && historyId.HasValue)
             {
-                history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                history = await HistoryQueries.Fetch(project.Id, historyId.Value, cancellationToken);
                 if (history != null)
                 {
                     if (result == null || result.Post == null) //page must have been deleted, restore from hx
@@ -414,8 +424,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             model.ProjectSettings = project;
             model.BlogRoutes = BlogRoutes;
-            model.Categories = await BlogService.GetCategories(model.CanEdit);
-            model.Archives = await BlogService.GetArchives(model.CanEdit);
+            model.Categories = await BlogService.GetCategories(model.CanEdit, cancellationToken);
+            model.Archives = await BlogService.GetArchives(model.CanEdit, cancellationToken);
             model.ShowComments = true; //mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = await BlogService.CommentsAreOpen(result.Post, canEdit);
             model.TimeZoneHelper = TimeZoneHelper;
@@ -463,8 +473,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 pageNumber,
                 pageSize,
                 cancellationToken);
-
-
+            
             var model = new NewContentViewModel()
             {
                 Templates = templates,
@@ -475,8 +484,205 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 SearchRouteName = BlogRoutes.NewPostRouteName,
                 PostActionName = "InitTemplatedPost"
             };
-
             
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> InitTemplatedPost(NewContentViewModel model)
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Templates = await TemplateService.GetTemplates(
+                    project.Id,
+                    ProjectConstants.BlogFeatureName,
+                    model.Query,
+                    model.PageNumber,
+                    model.PageSize
+
+                    );
+                model.SearchRouteName = BlogRoutes.NewPostRouteName;
+                model.PostActionName = "InitTemplatedPost";
+
+                return View("NewPost", model);
+            }
+
+            var template = await TemplateService.GetTemplate(project.Id, model.SelectedTemplate);
+
+            if (template == null)
+            {
+                Log.LogWarning($"redirecting to index because content template {model.SelectedTemplate} was not found");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var request = new InitTemplatedPostRequest(
+                project.Id,
+                User.Identity.Name,
+                await AuthorNameResolver.GetAuthorName(User),
+                model,
+                template);
+
+            var response = await Mediator.Send(request);
+            if (response.Succeeded)
+            {
+                Log.LogDebug($"succeeded in initializing a page with template {model.SelectedTemplate}");
+                return RedirectToRoute(BlogRoutes.PostEditWithTemplateRouteName, new { slug = response.Value.Slug });
+            }
+            else
+            {
+                if (response.ErrorMessages != null && response.ErrorMessages.Count > 0)
+                {
+                    foreach (var err in response.ErrorMessages)
+                    {
+                        this.AlertDanger(err, true);
+                    }
+                }
+            }
+
+            return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public virtual async Task<IActionResult> EditWithTemplate(
+            CancellationToken cancellationToken,
+            string slug,
+            Guid? historyId = null
+            )
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user cannot edit");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var postResult = await BlogService.GetPostBySlug(slug, cancellationToken);
+            ContentHistory history = null;
+            var didReplaceDraft = false;
+            var didRestoreDeleted = false;
+            Post post = null;
+
+            if (historyId.HasValue)
+            {
+                history = await HistoryQueries.Fetch(project.Id, historyId.Value).ConfigureAwait(false);
+                if (history != null)
+                {
+                    if (postResult == null || postResult.Post == null) // page was deleted, restore it from history
+                    {
+                        post = new Post();
+                        history.CopyTo(post);
+                        if (history.IsDraftHx)
+                        {
+                            post.PromoteDraftTemporarilyForRender();
+                        }
+                        didRestoreDeleted = true;
+                    }
+                    else
+                    {
+                        didReplaceDraft = post.HasDraftVersion();
+                        var postCopy = new Post();
+                        post.CopyTo(postCopy);
+                        if (history.IsDraftHx)
+                        {
+                            postCopy.DraftAuthor = history.DraftAuthor;
+                            postCopy.DraftContent = history.DraftContent;
+                            postCopy.DraftSerializedModel = history.DraftSerializedModel;
+                        }
+                        else
+                        {
+                            postCopy.DraftAuthor = history.Author;
+                            postCopy.DraftContent = history.Content;
+                            postCopy.DraftSerializedModel = history.SerializedModel;
+                        }
+                        if(postResult == null) { postResult = new PostResult(); }
+                        postResult.Post = postCopy;
+                    }
+                }
+            }
+
+            if (postResult == null)
+            {
+                Log.LogError($"redirecting to index because page was not found for slug {slug}");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], postResult.Post.Title);
+
+            var template = await TemplateService.GetTemplate(project.Id, postResult.Post.TemplateKey);
+            if (template == null)
+            {
+                Log.LogError($"redirecting to index because content template {postResult.Post.TemplateKey} was not found");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var model = new PostEditWithTemplateViewModel()
+            {
+                ProjectId = project.Id,
+                Author = postResult.Post.Author,
+                Id = postResult.Post.Id,
+                CorrelationKey = postResult.Post.CorrelationKey,
+                IsPublished = postResult.Post.IsPublished,
+                MetaDescription = postResult.Post.MetaDescription,
+                Slug = postResult.Post.Slug,
+                Title = postResult.Post.Title,
+                Template = template,
+                TemplateModel = TemplateService.DesrializeTemplateModel(postResult.Post, template),
+                DidReplaceDraft = didReplaceDraft,
+                DidRestoreDeleted = didRestoreDeleted
+            };
+
+            if (history != null)
+            {
+                model.HistoryArchiveDate = history.ArchivedUtc;
+                model.HistoryId = history.Id;
+            }
+
+            if (postResult.Post.PubDate.HasValue)
+            {
+                model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, project.TimeZoneId);
+            }
+
+            if (postResult.Post.DraftPubDate.HasValue)
+            {
+                model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, project.TimeZoneId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(postResult.Post.DraftAuthor))
+            {
+                model.Author = postResult.Post.DraftAuthor;
+            }
+
+            if (model.TemplateModel == null)
+            {
+                Log.LogError($"redirecting to index model desrialization failed for page {postResult.Post.Title}");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
 
             return View(model);
         }
@@ -486,6 +692,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpGet]
         [AllowAnonymous]
         public virtual async Task<IActionResult> Edit(
+            CancellationToken cancellationToken,
             string slug = "", 
             string type="",
             Guid? historyId = null
@@ -517,7 +724,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             PostResult postResult = null;
             if (!string.IsNullOrEmpty(slug))
             {
-                postResult = await BlogService.GetPostBySlug(slug);
+                postResult = await BlogService.GetPostBySlug(slug, cancellationToken);
             }
 
             var routeVals = new RouteValueDictionary
@@ -540,7 +747,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (historyId.HasValue)
             {
-                history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+                history = await HistoryQueries.Fetch(project.Id, historyId.Value, cancellationToken);
                 if (history != null)
                 {
                     if(postResult == null || postResult.Post == null)

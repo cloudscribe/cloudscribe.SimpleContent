@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
-// Created:                 2018-06-22
-// Last Modified:           2018-07-09
+// Created:                 2018-07-14
+// Last Modified:           2018-07-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -12,6 +12,7 @@ using cloudscribe.Web.Common.Razor;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,13 +20,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Services
+namespace cloudscribe.SimpleContent.Web.Services.Blog
 {
-    public class UpdateTemplatedPageHandler : IRequestHandler<UpdateTemplatedPageRequest, CommandResult<IPage>>
+    public class UpdateTemplatedPostHandler : IRequestHandler<UpdateTemplatedPostRequest, CommandResult<IPost>>
     {
-        public UpdateTemplatedPageHandler(
+        public UpdateTemplatedPostHandler(
             IProjectService projectService,
-            IPageService pageService,
+            IBlogService blogService,
+            IOptions<BlogEditOptions> configOptionsAccessor,
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             IEnumerable<IModelSerializer> serializers,
@@ -33,11 +35,12 @@ namespace cloudscribe.SimpleContent.Web.Services
             IEnumerable<IValidateTemplateModel> modelValidators,
             ViewRenderer viewRenderer,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
-            ILogger<UpdateTemplatedPageHandler> logger
+            ILogger<UpdateTemplatedPostHandler> logger
             )
         {
             _projectService = projectService;
-            _pageService = pageService;
+            _blogService = blogService;
+            _editOptions = configOptionsAccessor.Value;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _serializers = serializers;
@@ -49,7 +52,8 @@ namespace cloudscribe.SimpleContent.Web.Services
         }
 
         private readonly IProjectService _projectService;
-        private readonly IPageService _pageService;
+        private readonly IBlogService _blogService;
+        private readonly BlogEditOptions _editOptions;
         private readonly IContentHistoryCommands _historyCommands;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly IEnumerable<IModelSerializer> _serializers;
@@ -89,34 +93,34 @@ namespace cloudscribe.SimpleContent.Web.Services
             return _modelValidators.FirstOrDefault();
         }
 
-        public async Task<CommandResult<IPage>> Handle(UpdateTemplatedPageRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<CommandResult<IPost>> Handle(UpdateTemplatedPostRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var errors = new List<string>();
             var customModelIsValid = true;
             try
             {
-                var page = request.Page;
-                var history = page.CreateHistory(request.UserName);
+                var post = request.Post;
+                var history = post.CreateHistory(request.UserName);
                 var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var serializer = GetSerializer(request.Template.SerializerName);
                 var parser = GetFormParser(request.Template.FormParserName);
                 var validator = GetValidator(request.Template.ValidatorName);
                 var type = Type.GetType(request.Template.ModelType);
                 var model = parser.ParseModel(request.Template.ModelType, request.Form);
-                if(model == null)
+                if (model == null)
                 {
                     errors.Add(_localizer["Failed to parse custom template model from form."]);
                     customModelIsValid = false;
                     //failed to parse model from form
                     // at least return the original model before changes
                     string pageModelString;
-                    if (!string.IsNullOrWhiteSpace(page.DraftSerializedModel))
+                    if (!string.IsNullOrWhiteSpace(post.DraftSerializedModel))
                     {
-                        pageModelString = page.DraftSerializedModel;
+                        pageModelString = post.DraftSerializedModel;
                     }
                     else
                     {
-                        pageModelString = page.SerializedModel;
+                        pageModelString = post.SerializedModel;
                     }
                     if (!string.IsNullOrWhiteSpace(pageModelString))
                     {
@@ -135,13 +139,13 @@ namespace cloudscribe.SimpleContent.Web.Services
                     customModelIsValid = validator.IsValid(model, validationContext, validationResults);
                     if (!customModelIsValid)
                     {
-                        foreach(var item in validationResults)
+                        foreach (var item in validationResults)
                         {
-                           foreach(var memberName in item.MemberNames)
-                           {
+                            foreach (var memberName in item.MemberNames)
+                            {
                                 request.ModelState.AddModelError(memberName, item.ErrorMessage);
 
-                           }
+                            }
                         }
                     }
                 }
@@ -150,120 +154,128 @@ namespace cloudscribe.SimpleContent.Web.Services
                 {
                     // remove any bad characters
                     request.ViewModel.Slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
-                    if (request.ViewModel.Slug != page.Slug)
+                    if (request.ViewModel.Slug != post.Slug)
                     {
-                        var slugIsAvailable = await _pageService.SlugIsAvailable(request.ViewModel.Slug);
+                        var slugIsAvailable = await _blogService.SlugIsAvailable(request.ViewModel.Slug);
                         if (!slugIsAvailable)
                         {
-                            errors.Add(_localizer["The page slug was not changed because the requested slug is already in use."]);
-                            request.ModelState.AddModelError("Slug", _localizer["The page slug was not changed because the requested slug is already in use."]);
+                            errors.Add(_localizer["The post slug was not changed because the requested slug is already in use."]);
+                            request.ModelState.AddModelError("Slug", _localizer["The post slug was not changed because the requested slug is already in use."]);
                         }
                     }
                 }
-                
+
                 if (request.ModelState.IsValid)
                 {
                     var modelString = serializer.Serialize(request.Template.ModelType, model);
                     var renderedModel = await _viewRenderer.RenderViewAsString(request.Template.RenderView, model).ConfigureAwait(false);
-                    
-                    page.Title = request.ViewModel.Title;
-                    page.CorrelationKey = request.ViewModel.CorrelationKey;
-                    page.LastModified = DateTime.UtcNow;
-                    page.LastModifiedByUser = request.UserName;
-                    page.MenuFilters = request.ViewModel.MenuFilters;
-                    page.MetaDescription = request.ViewModel.MetaDescription;
-                    page.PageOrder = request.ViewModel.PageOrder;
+
+                    post.Title = request.ViewModel.Title;
+                    post.CorrelationKey = request.ViewModel.CorrelationKey;
+                    post.ImageUrl = request.ViewModel.ImageUrl;
+                    post.ThumbnailUrl = request.ViewModel.ThumbnailUrl;
+                    post.IsFeatured = request.ViewModel.IsFeatured;
+                    post.TeaserOverride = request.ViewModel.TeaserOverride;
+                    post.SuppressTeaser = request.ViewModel.SuppressTeaser;
+                    post.LastModified = DateTime.UtcNow;
+                    post.LastModifiedByUser = request.UserName;
+                    post.MetaDescription = request.ViewModel.MetaDescription;
                     if (!string.IsNullOrEmpty(request.ViewModel.Slug))
                     {
-                        page.Slug = request.ViewModel.Slug;
+                        post.Slug = request.ViewModel.Slug;
                     }
-                    page.ViewRoles = request.ViewModel.ViewRoles;
 
-                    if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
+                    var categories = new List<string>();
+                    if (!string.IsNullOrEmpty(request.ViewModel.Categories))
                     {
-                        var parentPage = await _pageService.GetPageBySlug(request.ViewModel.ParentSlug);
-                        if (parentPage != null)
+                        if (_editOptions.ForceLowerCaseCategories)
                         {
-                            if (parentPage.Id != page.ParentId)
-                            {
-                                page.ParentId = parentPage.Id;
-                                page.ParentSlug = parentPage.Slug;
-                            }
+                            categories = request.ViewModel.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim().ToLower())
+                            .Where(x =>
+                            !string.IsNullOrWhiteSpace(x)
+                            && x != ","
+                            )
+                            .Distinct()
+                            .ToList();
+                        }
+                        else
+                        {
+                            categories = request.ViewModel.Categories.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim())
+                            .Where(x =>
+                            !string.IsNullOrWhiteSpace(x)
+                            && x != ","
+                            )
+                            .Distinct()
+                            .ToList();
                         }
                     }
-                    else
-                    {
-                        // empty means root level
-                        page.ParentSlug = string.Empty;
-                        page.ParentId = "0";
-                    }
+                    post.Categories = categories;
 
                     var shouldFirePublishEvent = false;
                     switch (request.ViewModel.SaveMode)
-                    {   
+                    {
                         case SaveMode.SaveDraft:
 
-                            page.DraftSerializedModel = modelString;
-                            page.DraftContent = renderedModel;
-                            page.DraftAuthor = request.ViewModel.Author;
-                            if (!page.PubDate.HasValue) { page.IsPublished = false; }
+                            post.DraftSerializedModel = modelString;
+                            post.DraftContent = renderedModel;
+                            post.DraftAuthor = request.ViewModel.Author;
+                            if (!post.PubDate.HasValue) { post.IsPublished = false; }
 
                             break;
 
                         case SaveMode.PublishLater:
-                            page.DraftSerializedModel = modelString;
-                            page.DraftContent = renderedModel;
-                            page.DraftAuthor = request.ViewModel.Author;
+                            post.DraftSerializedModel = modelString;
+                            post.DraftContent = renderedModel;
+                            post.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                page.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, project.TimeZoneId);
+                                post.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, project.TimeZoneId);
                             }
-                            if (!page.PubDate.HasValue) { page.IsPublished = false; }
+                            if (!post.PubDate.HasValue) { post.IsPublished = false; }
 
                             break;
 
                         case SaveMode.PublishNow:
 
-                            page.Author = request.ViewModel.Author;
-                            page.Content = renderedModel;
-                            page.SerializedModel = modelString;
+                            post.Author = request.ViewModel.Author;
+                            post.Content = renderedModel;
+                            post.SerializedModel = modelString;
 
-                            page.PubDate = DateTime.UtcNow;
-                            page.IsPublished = true;
+                            post.PubDate = DateTime.UtcNow;
+                            post.IsPublished = true;
                             shouldFirePublishEvent = true;
 
-                            page.DraftAuthor = null;
-                            page.DraftContent = null;
-                            page.DraftPubDate = null;
-                            page.DraftSerializedModel = null;
+                            post.DraftAuthor = null;
+                            post.DraftContent = null;
+                            post.DraftPubDate = null;
+                            post.DraftSerializedModel = null;
 
                             break;
                     }
 
                     await _historyCommands.Create(request.ProjectId, history).ConfigureAwait(false);
-                    
-                    await _pageService.Update(page);
+
+                    await _blogService.Update(post);
 
                     if (shouldFirePublishEvent)
                     {
-                        await _pageService.FirePublishEvent(page).ConfigureAwait(false);
-                        await _historyCommands.DeleteDraftHistory(project.Id, page.Id).ConfigureAwait(false);
+                        await _blogService.FirePublishEvent(post).ConfigureAwait(false);
+                        await _historyCommands.DeleteDraftHistory(project.Id, post.Id).ConfigureAwait(false);
                     }
-                    
-                    _pageService.ClearNavigationCache();
-                    
+
+                   
                 }
-                
-                return new CommandResult<IPage>(page, customModelIsValid && request.ModelState.IsValid, errors);
-                
+
+                return new CommandResult<IPost>(post, customModelIsValid && request.ModelState.IsValid, errors);
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _log.LogError($"{ex.Message}:{ex.StackTrace}");
 
-                errors.Add(_localizer["Updating a page from a content template failed. An error has been logged."]);
+                errors.Add(_localizer["Updating a post from a content template failed. An error has been logged."]);
 
-                return new CommandResult<IPage>(null, false, errors);
+                return new CommandResult<IPost>(null, false, errors);
             }
 
         }
