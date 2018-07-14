@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace cloudscribe.SimpleContent.Web.Services.Blog
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class UpdateTemplatedPostRequest : IRequest<CommandResult<IPost>>
     {

@@ -20,7 +20,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web.Services.Blog
+namespace cloudscribe.SimpleContent.Web.Services
 {
     public class UpdateTemplatedPostHandler : IRequestHandler<UpdateTemplatedPostRequest, CommandResult<IPost>>
     {

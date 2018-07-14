@@ -452,7 +452,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
             }
 
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+            var canEdit = await User.CanEditBlog(project.Id, AuthorizationService);
 
             if (!canEdit)
             {
@@ -460,7 +460,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
             }
 
-            var templateCount = await TemplateService.GetCountOfTemplates(project.Id, ProjectConstants.PageFeatureName);
+            var templateCount = await TemplateService.GetCountOfTemplates(project.Id, ProjectConstants.BlogFeatureName);
             if (templateCount == 0)
             {
                 return RedirectToRoute(BlogRoutes.PostEditRouteName);
@@ -468,7 +468,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             var templates = await TemplateService.GetTemplates(
                 project.Id,
-                ProjectConstants.PageFeatureName,
+                ProjectConstants.BlogFeatureName,
                 query,
                 pageNumber,
                 pageSize,
@@ -501,7 +501,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
             }
 
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+            var canEdit = await User.CanEditBlog(project.Id, AuthorizationService);
 
             if (!canEdit)
             {
@@ -576,7 +576,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
             }
 
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+            var canEdit = await User.CanEditBlog(project.Id, AuthorizationService);
             if (!canEdit)
             {
                 Log.LogInformation("redirecting to index because user cannot edit");
@@ -646,17 +646,26 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ProjectId = project.Id,
                 Author = postResult.Post.Author,
                 Id = postResult.Post.Id,
+                Categories = string.Join(",", postResult.Post.Categories),
+                ContentType = postResult.Post.ContentType,
                 CorrelationKey = postResult.Post.CorrelationKey,
+                CurrentPostUrl = await BlogUrlResolver.ResolvePostUrl(postResult.Post, project).ConfigureAwait(false),
+                DeletePostRouteName = BlogRoutes.PostDeleteRouteName,
+                ImageUrl = postResult.Post.ImageUrl,
+                ThumbnailUrl = postResult.Post.ThumbnailUrl,
+                IsFeatured = postResult.Post.IsFeatured,
                 IsPublished = postResult.Post.IsPublished,
                 MetaDescription = postResult.Post.MetaDescription,
                 Slug = postResult.Post.Slug,
                 Title = postResult.Post.Title,
+                TeaserOverride = postResult.Post.TeaserOverride,
+                SuppressTeaser = postResult.Post.SuppressTeaser,
                 Template = template,
                 TemplateModel = TemplateService.DesrializeTemplateModel(postResult.Post, template),
                 DidReplaceDraft = didReplaceDraft,
                 DidRestoreDeleted = didRestoreDeleted
             };
-
+            
             if (history != null)
             {
                 model.HistoryArchiveDate = history.ArchivedUtc;
@@ -685,6 +694,81 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> EditWithTemplate(PostEditWithTemplateViewModel model)
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var canEdit = await User.CanEditBlog(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var post = await BlogService.GetPost(model.Id);
+
+            if (post == null && model.HistoryId.HasValue) // restore a deleted page from history
+            {
+                var history = await HistoryQueries.Fetch(project.Id, model.HistoryId.Value).ConfigureAwait(false);
+                if (history != null)
+                {
+                    post = new Post();
+                    history.CopyTo(post);
+                    await BlogService.Create(post); // re-create post here because handler expects existing page and only updates
+                }
+            }
+
+            if (post == null)
+            {
+                Log.LogError($"redirecting to index because post was not found for id {model.Id}");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], post.Title);
+
+            var template = await TemplateService.GetTemplate(project.Id, post.TemplateKey);
+            if (template == null)
+            {
+                Log.LogError($"redirecting to index because content template {post.TemplateKey} was not found");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var request = new UpdateTemplatedPostRequest(
+                project.Id,
+                User.Identity.Name,
+                model,
+                template,
+                post,
+                Request.Form,
+                ModelState
+                );
+
+            var response = await Mediator.Send(request);
+            if (response.Succeeded)
+            {
+
+                this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
+                return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName, new { slug = response.Value.Slug });
+            }
+            else
+            {
+                model.Template = template;
+                
+                return View(model);
+            }
+
         }
 
 
@@ -734,6 +818,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if (historyId.HasValue)
             {
                 routeVals.Add("historyId", historyId.Value);
+            }
+
+            if (postResult != null && postResult.Post != null && !string.IsNullOrWhiteSpace(postResult.Post.TemplateKey))
+            {
+                return RedirectToRoute(BlogRoutes.PostEditWithTemplateRouteName, routeVals);
             }
 
             ContentHistory history = null;
