@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-12
+// Last Modified:           2018-07-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -43,6 +43,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IAuthorizationService authorizationService,
             IAuthorNameResolver authorNameResolver,
             IAutoPublishDraftPost autoPublishDraftPost,
+            IContentTemplateService templateService,
             IContentHistoryCommands historyCommands,
             IContentHistoryQueries historyQueries,
             ITimeZoneHelper timeZoneHelper,
@@ -58,6 +59,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             BlogService = blogService;
             BlogUrlResolver = blogUrlResolver;
             ContentProcessor = contentProcessor;
+            TemplateService = templateService;
             BlogRoutes = blogRoutes;
             AuthorNameResolver = authorNameResolver;
             AutoPublishDraftPost = autoPublishDraftPost;
@@ -77,6 +79,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IBlogService BlogService { get; private set; }
         protected IBlogUrlResolver BlogUrlResolver { get; private set; }
         protected IBlogRoutes BlogRoutes { get; private set; }
+        protected IContentTemplateService TemplateService { get; private set; }
         protected IAuthorNameResolver AuthorNameResolver { get; private set; }
         protected IProjectEmailService EmailService { get; private set; }
         protected IContentProcessor ContentProcessor { get; private set; }
@@ -134,7 +137,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.Paging.TotalItems = result.TotalItems; 
             model.TimeZoneHelper = TimeZoneHelper;
             model.TimeZoneId = model.ProjectSettings.TimeZoneId;
-            model.NewItemPath = Url.RouteUrl(BlogRoutes.PostEditRouteName, new { slug = "" });
+            model.NewItemPath = Url.RouteUrl(BlogRoutes.NewPostRouteName);
 
             return View("Index", model);
         }
@@ -175,7 +178,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 BlogRoutes = BlogRoutes
             };
             model.CanEdit = await User.CanEditBlog(model.ProjectSettings.Id, AuthorizationService);
-            model.NewItemPath = Url.RouteUrl(BlogRoutes.PostEditRouteName, new { slug = "" });
+            model.NewItemPath = Url.RouteUrl(BlogRoutes.NewPostRouteName);
 
             ViewData["Title"] = model.ProjectSettings.Title;
 
@@ -406,7 +409,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var breadCrumbHelper = new TailCrumbUtility(HttpContext);
             breadCrumbHelper.AddTailCrumb(result.Post.Id, result.Post.Title, currentUrl);
 
-            model.NewItemPath = Url.RouteUrl(BlogRoutes.PostEditRouteName, new { slug = "" });
+            model.NewItemPath = Url.RouteUrl(BlogRoutes.NewPostRouteName);
             model.EditPath = Url.RouteUrl(BlogRoutes.PostEditRouteName, new { slug = result.Post.Slug });
 
             model.ProjectSettings = project;
@@ -422,7 +425,63 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
         }
 
-        
+        [HttpGet]
+        [AllowAnonymous]
+        public virtual async Task<IActionResult> NewPost(
+            CancellationToken cancellationToken,
+            string query = null,
+            int pageNumber = 1,
+            int pageSize = 10
+            )
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+
+            if (project == null)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            if (!canEdit)
+            {
+                Log.LogInformation("redirecting to index because user is not allowed to edit");
+                return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
+            }
+
+            var templateCount = await TemplateService.GetCountOfTemplates(project.Id, ProjectConstants.PageFeatureName);
+            if (templateCount == 0)
+            {
+                return RedirectToRoute(BlogRoutes.PostEditRouteName);
+            }
+
+            var templates = await TemplateService.GetTemplates(
+                project.Id,
+                ProjectConstants.PageFeatureName,
+                query,
+                pageNumber,
+                pageSize,
+                cancellationToken);
+
+
+            var model = new NewContentViewModel()
+            {
+                Templates = templates,
+                Query = query,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                CountOfTemplates = templateCount,
+                SearchRouteName = BlogRoutes.NewPostRouteName,
+                PostActionName = "InitTemplatedPost"
+            };
+
+            
+
+            return View(model);
+        }
+
+
 
         [HttpGet]
         [AllowAnonymous]

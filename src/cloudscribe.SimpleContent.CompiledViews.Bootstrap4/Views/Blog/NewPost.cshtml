@@ -1,15 +1,15 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.NewContentViewModel
 @inject IStringLocalizer<SimpleContent> sr
-@inject IPageRoutes  pageRoutes
+@inject IBlogRoutes  blogRoutes
 @{
-    ViewData["Title"] = sr["Create a New Page"];
+    ViewData["Title"] = sr["Create a New Post"];
 }
 <h2>@ViewData["Title"]</h2>
-<a class="btn btn-link" asp-route="@pageRoutes.PageEditRouteName" asp-route-parentslug="@Model.ParentSlug">@sr["New Page with Standard Content Editor"]</a>
+<a class="btn btn-link" asp-route="@blogRoutes.PostEditRouteName" asp-route-type="@Model.ContentType">@sr["New Post with Standard Content Editor"]</a>
 @if (Model.CountOfTemplates > 0)
 {
-    <h3>@sr["Create Page From Template"]</h3>
-     await Html.RenderPartialAsync("NewContentPartial", Model); 
+    <h3>@sr["Create Post From Template"]</h3>
+    await Html.RenderPartialAsync("NewContentPartial", Model); 
 }
 @section Scripts {
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }

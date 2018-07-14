@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-21
-// Last Modified:           2018-07-05
+// Last Modified:           2018-07-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -68,7 +68,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     DraftAuthor = request.Author,
                     LastModifiedByUser = request.CreatedByUserName,
                     TemplateKey = request.Template.Key,
-                    Title = request.ViewModel.PageTitle,
+                    Title = request.ViewModel.Title,
                     Serializer = serializer.Name,
                     DraftSerializedModel = serializer.Serialize(request.Template.ModelType, model),
                     ParentSlug = request.ViewModel.ParentSlug,

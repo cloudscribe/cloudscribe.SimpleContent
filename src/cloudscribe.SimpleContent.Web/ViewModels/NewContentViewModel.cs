@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
-    public class NewPageViewModel
+    public class NewContentViewModel
     {
-        public NewPageViewModel()
+        public NewContentViewModel()
         {
             Templates = new PagedResult<ContentTemplate>();
         }
@@ -20,14 +20,16 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         [Required (ErrorMessage = "Template is required")]
         public string SelectedTemplate { get; set; }
 
-        [Required(ErrorMessage = "Page heading is required")]
-        public string PageTitle { get; set; }
+        [Required(ErrorMessage = "Title is required")]
+        public string Title { get; set; }
 
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
 
         public int CountOfTemplates { get; set; }
 
+        public string SearchRouteName { get; set; }
+        public string PostActionName { get; set; }
 
     }
 }

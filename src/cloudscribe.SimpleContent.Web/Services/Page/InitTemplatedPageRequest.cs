@@ -10,7 +10,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             string projectId,
             string createdByUserName,
             string author,
-            NewPageViewModel model, 
+            NewContentViewModel model, 
             ContentTemplate template
             )
         {
@@ -26,7 +26,7 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         public string Author { get; private set; }
 
-        public NewPageViewModel ViewModel { get; private set; }
+        public NewContentViewModel ViewModel { get; private set; }
         public ContentTemplate Template { get; private set; }
     }
 }

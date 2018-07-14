@@ -1,0 +1,51 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.NewContentViewModel
+@inject IStringLocalizer<SimpleContent> sr
+<form class="form-inline mb-3" asp-route="@Model.SearchRouteName" method="get" data-submit-once="true" asp-antiforgery="false">
+    <input type="hidden" asp-for="@Model.ParentSlug" />
+    <input name="query" value="@Model.Query" class="form-control mr-1 mb-1" placeholder="@sr["Search Term"]" />
+    <button id="btnSave" type="submit" class="btn btn-primary mr-1 mb-1" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Search Templates"]'>@sr["Search Templates"]</button>
+    <a asp-route="@Model.SearchRouteName" asp-route-parentslug="@Model.ParentSlug">@sr["Clear/Reset Search"]</a>
+</form>
+
+<form asp-action="@Model.PostActionName" data-submit-once="true">
+    <input type="hidden" asp-for="@Model.ParentSlug" />
+    <input type="hidden" asp-for="@Model.PageOrder" />
+    <div class="row mt-2 mb-3">
+        <div class="col-md-12">
+            <label asp-for="Title" class="mr-1">@sr["Title"]</label>
+            <input asp-for="Title" class="form-control mb-1" data-toggle="tooltip" />
+            <span asp-validation-for="Title" class="invalid-feedback"></span>
+            <button id="btnSave" name="submit" type="submit" class="btn btn-primary ml-1" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Create From Template"]'>@sr["Create From Template"]</button>
+        </div>
+    </div>
+    @foreach (var template in Model.Templates.Data)
+    {
+        <div class="form-check">
+            <input class="form-check-input" type="radio" asp-for="SelectedTemplate" value="@template.Key" id="@(template.Key)" />
+            <label class="form-check-label" for="@(template.Key)">
+                @template.Title
+            </label>
+            <p>@template.Description</p>
+        </div>
+    }
+    <span asp-validation-for="SelectedTemplate" class="text-danger"></span>
+
+</form>
+<div class="mt-2">
+    <cs-pager asp-route="@Model.SearchRouteName"
+              asp-route-query="@Model.Query"
+              asp-route-pagesize="@Model.Templates.PageSize"
+              cs-paging-pagesize="@Model.Templates.PageSize"
+              cs-paging-pagenumber="@Model.Templates.PageNumber"
+              cs-paging-totalitems="@Model.Templates.TotalItems"
+              cs-pager-ul-class="pagination d-flex flex-wrap"
+              cs-pager-li-current-class="page-item active"
+              cs-pager-li-other-class="page-item"
+              cs-pager-li-non-active-class="page-item disabled"
+              cs-pager-link-current-class="page-link"
+              cs-pager-link-other-class="page-link"
+              cs-first-page-title='@sr["First Page"]'
+              cs-last-page-title='@sr["Last Page"]'
+              cs-previous-page-title='@sr["Previous page"]'
+              cs-next-page-title='@sr["Next page"]'></cs-pager>
+</div>

@@ -415,6 +415,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 );
 
             routes.MapRoute(
+               name: ProjectConstants.NewPostRouteName,
+               template: firstSegment + "newpost"
+               , defaults: new { controller = "Blog", action = "NewPost" }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.PostEditRouteName,
                template: firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
@@ -483,6 +489,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 );
 
             routes.MapRoute(
+               name: ProjectConstants.FolderNewPostRouteName,
+               template: "{sitefolder}/" + firstSegment + "newpost"
+               , defaults: new { controller = "Blog", action = "NewPost" }
+               , constraints: new { name = siteFolderConstraint }
+               );
+
+            routes.MapRoute(
                name: ProjectConstants.FolderPostEditRouteName,
                template: "{sitefolder}/" + firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
@@ -495,14 +508,7 @@ namespace Microsoft.Extensions.DependencyInjection
                , defaults: new { controller = "Blog", action = "Delete" }
                , constraints: new { name = siteFolderConstraint }
                );
-
-            routes.MapRoute(
-               name: ProjectConstants.FolderNewPostRouteName,
-               template: "{sitefolder}/" + firstSegment + "new"
-               , defaults: new { controller = "Blog", action = "New" }
-               , constraints: new { name = siteFolderConstraint }
-               );
-
+            
             routes.MapRoute(
               name: ProjectConstants.FolderMostRecentPostRouteName,
               template: "{sitefolder}/" + firstSegment + "mostrecent"

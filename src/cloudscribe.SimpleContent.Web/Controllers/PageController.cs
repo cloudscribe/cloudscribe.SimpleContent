@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-07-10
+// Last Modified:           2018-07-14
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -340,14 +340,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 cancellationToken);
 
             
-            var model = new NewPageViewModel()
+            var model = new NewContentViewModel()
             {
                 ParentSlug = parentSlug,
                 Templates = templates,
                 Query = query,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                CountOfTemplates = templateCount
+                CountOfTemplates = templateCount,
+                SearchRouteName = PageRoutes.NewPageRouteName,
+                PostActionName = "InitTemplatedPage"
             };
 
             if(!string.IsNullOrWhiteSpace(parentSlug))
@@ -361,7 +363,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> InitTemplatedPage(NewPageViewModel model)
+        public virtual async Task<IActionResult> InitTemplatedPage(NewContentViewModel model)
         {
             var project = await ProjectService.GetCurrentProjectSettings();
 
@@ -389,6 +391,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     model.PageSize
 
                     );
+                model.SearchRouteName = PageRoutes.NewPageRouteName;
+                model.PostActionName = "InitTemplatedPage";
+
                 return View("NewPage", model);
             }
 
