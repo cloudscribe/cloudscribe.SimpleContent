@@ -1,7 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
 @using cloudscribe.SimpleContent.ContentTemplates
 @inject IStringLocalizer<ContentTemplateResources> sr
-@{ 
+@{
     Layout = "_LayoutEmpty";
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
 }
@@ -16,12 +16,12 @@
 <div>
     @Html.Raw(Model.ContentAbove)
 </div>
-<div id="carouselRender" class="carousel slide carousel-fade border" data-ride="carousel" dat-interval="3000" data-pause="hover">
+<div id="carouselRender" class="carousel slide carousel-fade border" style="max-width:550px;" data-ride="carousel" dat-interval="3000" data-pause="hover">
     <div class="carousel-inner" data-bind="foreach: Items">
         @for (int i = 0; i < Model.Items.Count; i++)
         {
             <div class="@GetItemClass(i)">
-                <img class="d-block w-100" src="@sorted[i].ResizedUrl" alt="@sorted[i].Description" />
+                <img class="d-block " src="@sorted[i].ResizedUrl" alt="@sorted[i].Description" />
                 <div class="carousel-caption d-none d-md-block">
                     <h5>@sorted[i].Title</h5>
                 </div>

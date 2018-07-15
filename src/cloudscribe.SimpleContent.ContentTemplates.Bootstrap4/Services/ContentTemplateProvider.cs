@@ -28,6 +28,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             _list = new List<ContentTemplate>();
             _list.Add(BuildTwoColumnWithImage());
             _list.Add(BuildCarouselWithContent());
+            _list.Add(BuildGalleryWithContent());
 
         }
 
@@ -41,12 +42,24 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             return Task.FromResult(_list);
         }
 
-        private ContentTemplate BuildCarouselWithContent()
+        private ContentTemplate BuildGalleryWithContent()
         {
             var template = new ContentTemplate()
             {
-                AvailbleForFeature = "*",
+                Key = "sct-GalleryWithContent",
+                Title = "Image gallery with content above and below",
                 Description = "",
+                EditView = "ContentTemplates/GalleryWithContentEdit",
+                RenderView = "ContentTemplates/GalleryWithContentRender",
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+
                 EditCss = new List<EditStyle>()
                 {
                     new EditStyle
@@ -101,12 +114,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                         Sort = 5
                     }
                 },
-                EditView = "ContentTemplates/CarouselWithContentEdit",
-                Enabled = true,
-                Key = "sct-CarouselWithContent",
-                FormParserName = "DefaultModelFormParser",
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
-                ProjectId = "*",
+                
                 RenderCss = new List<EditStyle>()
                 {
 
@@ -114,13 +122,96 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 RenderScripts = new List<EditScript>()
                 {
 
-                },
+                }
+                
+            };
+
+            return template;
+
+        }
+
+        private ContentTemplate BuildCarouselWithContent()
+        {
+            var template = new ContentTemplate()
+            {
+                Key = "sct-CarouselWithContent",
+                Title = "A carousel of images with content above and below",
+                Description = "",
+                EditView = "ContentTemplates/CarouselWithContentEdit",
                 RenderView = "ContentTemplates/CarouselWithContentRender",
                 ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
-                Title = "A carousel of images with content above and below",
-                ValidatorName = "DefaultTemplateModelValidator"
+                ValidatorName = "DefaultTemplateModelValidator",
 
+                EditCss = new List<EditStyle>()
+                {
+                    new EditStyle
+                    {
+                        Url = "/cr/css/dropzone.min.css",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new EditStyle
+                    {
+                        Url = "/cr/css/croppie.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new EditStyle
+                    {
+                        Url = "/cr/css/croppie-cloudscribe.css",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                },
+                EditScripts = new List<EditScript>()
+                {
+                    new EditScript()
+                    {
+                        Url = "/cr/js/dropzone.min.js",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new EditScript()
+                    {
+                        Url = "/cr/js/croppie.min.js",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new EditScript()
+                    {
+                        Url = "/js/cloudscribe-unobtrusive-file-drop.js",
+                        Environment = "any",
+                        Sort = 3
+                    },
+                    new EditScript()
+                    {
+                        Url = "/js/knockout-3.4.2.js",
+                        Environment = "any",
+                        Sort = 4
+                    },
+                    new EditScript()
+                    {
+                        Url = "/js/cst-basic-list.js",
+                        Environment = "any",
+                        Sort = 5
+                    }
+                },
+                
+                RenderCss = new List<EditStyle>()
+                {
+
+                },
+                RenderScripts = new List<EditScript>()
+                {
+
+                }
+                
             };
 
             return template;
@@ -132,8 +223,20 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
         {
             var template = new ContentTemplate()
             {
-                AvailbleForFeature = "*",
+                Key = "TwoColumnWithImage",
+                Title = "Two ColumnsWith Image Above",
                 Description = "A two column layout with an image above.",
+                EditView = "ContentTemplates/TwoColumnWithImageEdit",
+                RenderView = "ContentTemplates/TwoColumnWithImageRender",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.TwoColumnWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+
                 EditCss = new List<EditStyle>()
                 {
                     new EditStyle
@@ -176,12 +279,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                         Sort = 3
                     }
                 },
-                EditView = "ContentTemplates/TwoColumnWithImageEdit",
-                Enabled = true,
-                Key = "TwoColumnWithImage",
-                FormParserName = "DefaultModelFormParser",
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.TwoColumnWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
-                ProjectId = "*",
+                
                 RenderCss = new List<EditStyle>()
                 {
 
@@ -189,13 +287,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 RenderScripts = new List<EditScript>()
                 {
 
-                },
-                RenderView = "ContentTemplates/TwoColumnWithImageRender",
-                ScreenshotUrl = "",
-                SerializerName = "Json",
-                Title = "Two ColumnsWith Image Above",
-                ValidatorName = "DefaultTemplateModelValidator"
-
+                }
+                
             };
 
             return template;

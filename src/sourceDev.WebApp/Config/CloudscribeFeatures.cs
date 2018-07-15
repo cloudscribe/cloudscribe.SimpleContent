@@ -104,6 +104,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddMetaWeblogForSimpleContent(config.GetSection("MetaWeblogApiOptions"));
 
+            services.Configure<cloudscribe.FileManager.Web.Models.AutomaticUploadOptions>(config.GetSection("AutomaticUploadOptions"));
+
             services.AddSimpleContentRssSyndiction();
 
             return services;

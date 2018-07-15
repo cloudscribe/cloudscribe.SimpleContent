@@ -1,0 +1,123 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@using Microsoft.AspNetCore.Antiforgery
+@using Newtonsoft.Json;
+@using System.Net
+@inject IStringLocalizer<ContentTemplateResources> sr
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@{
+
+    var tokens = antiforgery.GetAndStoreTokens(Context);
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var itemsJson = WebUtility.UrlEncode(JsonConvert.SerializeObject(Model.Items.OrderBy(x => x.Sort).ToList(), Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include, }));
+
+
+}
+
+<ul class="nav nav-tabs" role="tablist">
+    <li id="cedit-tab1" class="nav-item">
+        <a class="nav-link active" href="#tabCarousel" data-toggle="tab">@sr["Carousel"]</a>
+    </li>
+    <li id="cedit-tab2" class="nav-item">
+        <a class="nav-link" href="#tabTopContent" data-toggle="tab">@sr["Top Content"]</a>
+    </li>
+    <li id="cedit-tab3" class="nav-item">
+        <a class="nav-link" href="#tabBottomContent" data-toggle="tab">@sr["Bottom Content"]</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane pt-2 active" id="tabCarousel" role="tabpanel" aria-labelledby="cedit-tab1">
+        <input id="ItemsConfig" type="hidden" value="@itemsJson"
+               data-placeholder-image-url="/cr/images/550x412.png" />
+
+        <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
+
+        <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">
+            <div class="row">
+                <div class="col-3">
+                    <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }, visible: ThumbnailUrl !== undefined" />
+                </div>
+                <div class="col-8">
+                    <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
+                    <textarea class="form-control" style="height:110px;" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
+                </div>
+                <div class="col-1">
+                    <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
+                    <a href="#" data-bind="click: decrementSort" title="@sr["Move Up"]"><i class="fas fa-sort-up fa-2x"></i></a>
+                    <a href="#" data-bind="click: incrementSort" title="@sr["Move Down"]"><i class="fas fa-sort-down fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz1Image" style="max-width:690px;" src="/cr/images/550x412.png" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="/media/testimages"
+                     data-target-fullsize-input-id="imgUrlFull"
+                     data-target-resized-input-id="imgUrlResized"
+                     data-target-thumb-input-id="imgUrlThumb"
+                     data-target-fullsize-image-id="dz1Image"
+                     data-target-resized-image-idx="dz1ImageResized"
+                     data-enable-browse-server="true"
+                     data-enable-crop="true"
+                     data-target-thumb-image-idx="dz1ImageThumb"
+                     data-resize-width="1500"
+                     data-resize-height="900"
+                     data-crop-area-width="690px"
+                     data-crop-area-height="517px"
+                     data-create-thumb="false"
+                     data-resize-image="true"
+                     data-accepted-files="image/*"
+                     >
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="pl-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                        <button data-bind="click: addNewItem, visible: newItemResizedUrl() !== null" type="button" class="mb-1 btn btn-primary">@sr["Add To Carousel"] <i class="fas fa-plus" aria-hidden="true"></i></button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input id="imgUrlFull" type="hidden" />
+        <input id="imgUrlResized" type="hidden" />
+        <input id="imgUrlThumb" type="hidden" />
+
+
+
+
+    </div>
+    <div class="tab-pane pt-2" id="tabTopContent" role="tabpanel" aria-labelledby="cedit-tab2">
+        <textarea asp-for="ContentAbove" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+    </div>
+    <div class="tab-pane pt-2" id="tabBottomContent" role="tabpanel" aria-labelledby="cedit-tab3">
+        <textarea asp-for="ContentBelow" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    </div>
+</div>
+
+
