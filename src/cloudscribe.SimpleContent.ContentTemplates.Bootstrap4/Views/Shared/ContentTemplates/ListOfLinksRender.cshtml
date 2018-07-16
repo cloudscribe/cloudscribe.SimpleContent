@@ -1,0 +1,7 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+@{
+    Layout = "_LayoutEmpty";
+    var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
+}

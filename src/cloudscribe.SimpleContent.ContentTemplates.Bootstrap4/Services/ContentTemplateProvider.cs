@@ -29,6 +29,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             _list.Add(BuildTwoColumnWithImage());
             //_list.Add(BuildCarouselWithContent());
             _list.Add(BuildGalleryWithContent());
+            //_list.Add(BuildListOfLinks());
+            _list.Add(BuildGoogleMap());
 
         }
 
@@ -152,15 +154,15 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
         }
 
-        private ContentTemplate BuildCarouselWithContent()
+        private ContentTemplate BuildListOfLinks()
         {
             var template = new ContentTemplate()
             {
-                Key = "sct-CarouselWithContent",
-                Title = "A carousel of images with content above and below",
+                Key = "sct-ListOfLinks",
+                Title = "A list of links with optional thumbnail per link and content above and below",
                 Description = "",
-                EditView = "ContentTemplates/CarouselWithContentEdit",
-                RenderView = "ContentTemplates/CarouselWithContentRender",
+                EditView = "ContentTemplates/ListOfLinksEdit",
+                RenderView = "ContentTemplates/ListOfLinksRender",
                 ScreenshotUrl = "",
                 ProjectId = "*",
                 AvailbleForFeature = "*",
@@ -246,8 +248,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             var template = new ContentTemplate()
             {
                 Key = "TwoColumnWithImage",
-                Title = "Two ColumnsWith Image Above",
-                Description = "A two column layout with an image above.",
+                Title = "Two Columns With Images",
+                Description = "A two column layout with an image at the top of each column.",
                 EditView = "ContentTemplates/TwoColumnWithImageEdit",
                 RenderView = "ContentTemplates/TwoColumnWithImageRender",
                 ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.TwoColumnWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
@@ -311,6 +313,76 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
                 }
                 
+            };
+
+            return template;
+
+        }
+
+
+        private ContentTemplate BuildGoogleMap()
+        {
+            var template = new ContentTemplate()
+            {
+                Key = "sct-googlemap",
+                Title = "Google Map with content above and below",
+                Description = "",
+                EditView = "ContentTemplates/GoogleMapEdit",
+                RenderView = "ContentTemplates/GoogleMapRender",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.GoogleMapViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+
+                EditCss = new List<CssFile>()
+                {
+                    //new CssFile
+                    //{
+                    //    Url = "/cr/css/dropzone.min.css",
+                    //    Environment = "any",
+                    //    Sort = 1
+                    //},
+                    //new CssFile
+                    //{
+                    //    Url = "/cr/css/croppie.min.css",
+                    //    Environment = "any",
+                    //    Sort = 2
+                    //},
+                    //new CssFile
+                    //{
+                    //    Url = "/cr/css/croppie-cloudscribe.css",
+                    //    Environment = "any",
+                    //    Sort = 3
+                    //}
+                },
+                EditScripts = new List<ScriptFile>()
+                {
+                    new ScriptFile()
+                    {
+                        Url = "/js/simple-googlemap-edit.js",
+                        Environment = "any",
+                        Sort = 1
+                    }
+                },
+
+                RenderCss = new List<CssFile>()
+                {
+
+                },
+                RenderScripts = new List<ScriptFile>()
+                {
+                    new ScriptFile()
+                    {
+                        Url = "/js/simple-googlemap-render.js",
+                        Environment = "any",
+                        Sort = 1
+                    }
+                }
+
             };
 
             return template;
