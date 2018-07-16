@@ -15,10 +15,20 @@ function ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, li
         self.Sort(self.Sort() + 3);
     }
     self.decrementSort = function () {
-        self.Sort(self.Sort() - 3);
+        var newSort = self.Sort() - 3;
+        if (newSort < 0) { newSort = 0; }
+        self.Sort(newSort);
     }
     
 }
+
+ko.observable.fn.silentUpdate = function (value) {
+    this.notifySubscribers = function () { };
+    this(value);
+    this.notifySubscribers = function () {
+        ko.subscribable.fn.notifySubscribers.apply(this, arguments);
+    };
+};
 
 function ItemListViewModel(initialData) {
     var self = this;
@@ -26,12 +36,21 @@ function ItemListViewModel(initialData) {
 
     self.handleSortItemChanged = function (sortVal) {
         //console.log(sortVal);
-        self.sortItems();   
+        self.sortItems(); 
+        var sort = 1;
+        for (i = 0; i < self.Items().length; i++) {
+            //console.log(sort);
+            var item = self.Items()[i];
+            item.Sort.silentUpdate(sort); //avoid infinite loop of subscription by silent update
+            sort += 2;
+           
+        }
+        self.sortItems(); 
     }
     
     self.Items = ko.observableArray(ko.utils.arrayMap(initialData, function (item) {
         //console.log(item);
-        var item = new ImageItem(item.Title, item.Description, item.ResizedUrl, item.FullSizeUrl, item.ThumbnailUrl, item.LinkUrl, item.Sort);
+        var item = new ImageItem(item.Title, item.Description, item.FullSizeUrl, item.ResizedUrl, item.ThumbnailUrl, item.LinkUrl, item.Sort);
         item.Sort.subscribe(self.handleSortItemChanged);
         return item;
     }));
@@ -48,9 +67,20 @@ function ItemListViewModel(initialData) {
     self.newItemResizedUrl = ko.observable(null);
     self.newItemThumbnailUrl = ko.observable(null);
     self.newItemLinkUrl = ko.observable(null);
-    self.newItemSort = ko.observable(3);
+    //self.newItemSort = ko.observable(3);
+    self.newItemSort = function () {
+        var result = Math.max.apply(Math, self.Items().map(function (o) { return o.Sort(); }))
+        //var result = ko.utils.arrayFirst(self.Items, function (item) {
+        //    return item.Sort === Math.max.apply(null, ko.utils.arrayMap(self.Items, function (e) {
+        //        return e.Sort;
+        //    }));
+
+        //});
+        return result + 2;
+    }
    
     self.addNewItem = function () {
+        console.log(self.newItemSort());
         self.addItem(self.newItemTitle(), self.newItemDescription(), self.newItemFullSizeUrl(), self.newItemResizedUrl(), self.newItemThumbnailUrl(), self.newItemLinkUrl(), self.newItemSort());
         self.newItemTitle(null);
         self.newItemDescription(null);
@@ -58,7 +88,7 @@ function ItemListViewModel(initialData) {
         self.newItemResizedUrl(null);
         self.newItemThumbnailUrl(null);
         self.newItemLinkUrl(null);
-        self.newItemSort(3);
+        //self.newItemSort(3);
         window.cloudscribeDropAndCrop.clearAllItems();
     }
 

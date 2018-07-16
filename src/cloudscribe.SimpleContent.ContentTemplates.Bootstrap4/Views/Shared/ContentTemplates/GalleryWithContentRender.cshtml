@@ -5,18 +5,9 @@
     Layout = "_LayoutEmpty";
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
 }
-@functions{
-    public string GetItemClass(int index)
-    {
-        if (index == 0) { return "carousel-item active"; }
-        return "carousel-item";
-    }
-}
-
 <div class="content-top">
     @Html.Raw(Model.ContentAbove)
 </div>
-
 @if (Model.Theme == "cards")
 {
     <div class="row gallery-block cards-gallery simple-gallery">
@@ -35,7 +26,6 @@
             </div>
         }
     </div>
-
 }
 @if (Model.Theme == "compact")
 {
@@ -53,7 +43,6 @@
             </div>
         }
     </div>
-
 }
 @if (Model.Theme == "grid")
 {
@@ -66,10 +55,8 @@
                 </a>
             </div>  
         }
-    </div>
-        
+    </div>     
 }
-
 <div class="content-botton">
     @Html.Raw(Model.ContentBelow)
 </div>
