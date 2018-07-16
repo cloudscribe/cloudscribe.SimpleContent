@@ -12,7 +12,7 @@
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
     int i = 1;
-    foreach(var item in sorted)
+    foreach (var item in sorted)
     {
         item.Sort = i;
         i += 2;
@@ -22,7 +22,7 @@
 
 <ul class="nav nav-tabs" role="tablist">
     <li id="cedit-tab1" class="nav-item">
-        <a class="nav-link active" href="#tabCarousel" data-toggle="tab">@sr["Carousel"]</a>
+        <a class="nav-link active" href="#tabCarousel" data-toggle="tab">@sr["Gallery"]</a>
     </li>
     <li id="cedit-tab2" class="nav-item">
         <a class="nav-link" href="#tabTopContent" data-toggle="tab">@sr["Top Content"]</a>
@@ -35,13 +35,18 @@
     <div class="tab-pane pt-2 active" id="tabCarousel" role="tabpanel" aria-labelledby="cedit-tab1">
         <input id="ItemsConfig" type="hidden" value="@itemsJson" />
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
-        <div class="form-group">
-            <label asp-for="Theme" class="control-label">@sr["Theme"]</label>
-            <select asp-for="Theme" class="form-control">
-                <option value="compact">@sr["Compact"]</option>
-                <option value="cards">@sr["Cards"]</option>
-                <option value="grid">@sr["Grid"]</option>
-            </select>
+        <div class="form-group row">
+            <label asp-for="Theme" class="control-label col-md-1 pl-5">@sr["Layout"]</label>
+            <div class="col-md-11">
+                <select asp-for="Theme" class="form-control">
+                    <option value="cards">@sr["Cards"]</option>
+                    <option value="compact">@sr["Compact"]</option>
+                    <option value="grid">@sr["Grid"]</option>
+                    <option value="carousel">@sr["Carousel - Full Width"]</option>
+                    <option value="carousel-wrap-left">@sr["Carousel on Left With Wrapped Top Content"]</option>
+                    <option value="carousel-wrap-right">@sr["Carousel on Right With Wrapped Top Content"]</option>
+                </select>
+            </div>
         </div>
 
         <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">

@@ -27,7 +27,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
             _list = new List<ContentTemplate>();
             _list.Add(BuildTwoColumnWithImage());
-            _list.Add(BuildCarouselWithContent());
+            //_list.Add(BuildCarouselWithContent());
             _list.Add(BuildGalleryWithContent());
 
         }

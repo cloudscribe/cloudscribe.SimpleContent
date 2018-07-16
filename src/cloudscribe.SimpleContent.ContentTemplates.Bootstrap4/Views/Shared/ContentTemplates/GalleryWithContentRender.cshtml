@@ -5,9 +5,70 @@
     Layout = "_LayoutEmpty";
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
 }
-<div class="content-top">
+@functions{
+    public string GetItemClass(int index)
+    {
+        if (index == 0) { return "carousel-item active"; }
+        return "carousel-item";
+    }
+}
+@if (Model.Theme == "carousel-wrap-left")
+{
+    <div id="carouselRender" class="carousel slide carousel-fade simple-gallery float-md-left mr-2 simple-gallery-side-carousel" data-ride="carousel" dat-interval="3000" data-pause="hover">
+        <div class="carousel-inner" data-bind="foreach: Items">
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <div class="@GetItemClass(i)">
+                    <img class="d-block w-100" src="@sorted[i].ResizedUrl" alt="@sorted[i].Description" />
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@sorted[i].Title</h5>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#carouselRender" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">@sr["Previous"]</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselRender" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">@sr["Next"]</span>
+        </a>
+    </div>
     @Html.Raw(Model.ContentAbove)
-</div>
+}
+else if (Model.Theme == "carousel-wrap-right")
+{
+    <div id="carouselRender" class="carousel slide carousel-fade simple-gallery float-md-right ml-2 simple-gallery-side-carousel" data-ride="carousel" dat-interval="3000" data-pause="hover">
+        <div class="carousel-inner" data-bind="foreach: Items">
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <div class="@GetItemClass(i)">
+                    <img class="d-block w-100" src="@sorted[i].ResizedUrl" alt="@sorted[i].Description" />
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@sorted[i].Title</h5>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#carouselRender" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">@sr["Previous"]</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselRender" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">@sr["Next"]</span>
+        </a>
+    </div>
+    @Html.Raw(Model.ContentAbove)
+}
+else
+{
+    <div class="content-top">
+        @Html.Raw(Model.ContentAbove)
+    </div>
+}
+
 @if (Model.Theme == "cards")
 {
     <div class="row gallery-block cards-gallery simple-gallery">
@@ -53,9 +114,33 @@
                 <a class="lightbox" href="@sorted[i].ResizedUrl">
                     <img class="img-fluid image scale-on-hover" src="@sorted[i].ResizedUrl" title="@sorted[i].Title" alt="@sorted[i].Description">
                 </a>
-            </div>  
+            </div>
         }
-    </div>     
+    </div>
+}
+@if (Model.Theme == "carousel")
+{
+    <div id="carouselRender" class="carousel slide carousel-fade simple-gallery" data-ride="carousel" dat-interval="3000" data-pause="hover">
+        <div class="carousel-inner" data-bind="foreach: Items">
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <div class="@GetItemClass(i)">
+                    <img class="d-block w-100" src="@sorted[i].ResizedUrl" alt="@sorted[i].Description" />
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@sorted[i].Title</h5>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#carouselRender" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">@sr["Previous"]</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselRender" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">@sr["Next"]</span>
+        </a>
+    </div>
 }
 <div class="content-botton">
     @Html.Raw(Model.ContentBelow)
