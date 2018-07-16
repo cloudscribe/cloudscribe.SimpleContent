@@ -54,9 +54,9 @@
                                             var cropHeight = y2 - y1;
                                             var finalWidth = new Number(that.dropZoneDiv.dataset.resizeWidth);
                                             var finalHeight = new Number(that.dropZoneDiv.dataset.resizeHeight);
-                                            if (that.dropZoneDiv.dataset.cropHeightRatio) {
-                                                var heightRatio = new Number(that.dropZoneDiv.dataset.cropHeightRatio)
-                                                finalHeight = Math.round(finalWidth / heightRatio);
+                                            if (that.dropZoneDiv.dataset.cropWidthRatio) {
+                                                var widthRatio = new Number(that.dropZoneDiv.dataset.cropWidthRatio)
+                                                finalHeight = Math.round(finalWidth / widthRatio);
                                             }
                                             
                                             var formData = new FormData();

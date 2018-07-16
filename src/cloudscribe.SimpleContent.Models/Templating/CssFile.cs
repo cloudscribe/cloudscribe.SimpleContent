@@ -1,6 +1,6 @@
 ﻿namespace cloudscribe.SimpleContent.Models
 {
-    public class EditStyle
+    public class CssFile
     {
         public string Url { get; set; }
         public string Environment { get; set; }

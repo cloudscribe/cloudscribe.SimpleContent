@@ -12,10 +12,10 @@ namespace cloudscribe.SimpleContent.Models
     {
         public ContentTemplate()
         {
-            EditScripts = new List<EditScript>();
-            EditCss = new List<EditStyle>();
-            RenderScripts = new List<EditScript>();
-            RenderCss = new List<EditStyle>();
+            EditScripts = new List<ScriptFile>();
+            EditCss = new List<CssFile>();
+            RenderScripts = new List<ScriptFile>();
+            RenderCss = new List<CssFile>();
 
         }
 
@@ -30,11 +30,11 @@ namespace cloudscribe.SimpleContent.Models
         public string RenderView { get; set; }
         public string ScreenshotUrl { get; set; }
 
-        public List<EditScript> EditScripts { get; set; }
-        public List<EditStyle> EditCss { get; set; }
+        public List<ScriptFile> EditScripts { get; set; }
+        public List<CssFile> EditCss { get; set; }
 
-        public List<EditScript> RenderScripts { get; set; }
-        public List<EditStyle> RenderCss { get; set; }
+        public List<ScriptFile> RenderScripts { get; set; }
+        public List<CssFile> RenderCss { get; set; }
 
         public string SerializerName { get; set; } = "Json";
 

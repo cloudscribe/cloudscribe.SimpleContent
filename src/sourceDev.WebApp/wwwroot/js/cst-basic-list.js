@@ -59,6 +59,7 @@ function ItemListViewModel(initialData) {
         self.newItemThumbnailUrl(null);
         self.newItemLinkUrl(null);
         self.newItemSort(3);
+        window.cloudscribeDropAndCrop.clearAllItems();
     }
 
     self.removeItem = function (item) { self.Items.remove(item) }

@@ -14,7 +14,11 @@
       "enabled": true,
       "renameLocals": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/css/simple-gallery.min.css",
+    "inputFiles": [
+      "wwwroot/css/simple-gallery.css"
+    ]
   }
-
-
 ]

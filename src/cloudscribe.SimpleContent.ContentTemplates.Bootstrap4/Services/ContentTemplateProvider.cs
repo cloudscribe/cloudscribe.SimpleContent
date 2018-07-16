@@ -55,59 +55,59 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 ProjectId = "*",
                 AvailbleForFeature = "*",
                 Enabled = true,
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.SimpleGalleryViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
 
-                EditCss = new List<EditStyle>()
+                EditCss = new List<CssFile>()
                 {
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/dropzone.min.css",
                         Environment = "any",
                         Sort = 1
                     },
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/croppie.min.css",
                         Environment = "any",
                         Sort = 2
                     },
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/croppie-cloudscribe.css",
                         Environment = "any",
                         Sort = 3
                     }
                 },
-                EditScripts = new List<EditScript>()
+                EditScripts = new List<ScriptFile>()
                 {
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/cr/js/dropzone.min.js",
                         Environment = "any",
                         Sort = 1
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/cr/js/croppie.min.js",
                         Environment = "any",
                         Sort = 2
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/js/cloudscribe-unobtrusive-file-drop.js",
                         Environment = "any",
                         Sort = 3
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/js/knockout-3.4.2.js",
                         Environment = "any",
                         Sort = 4
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/js/cst-basic-list.js",
                         Environment = "any",
@@ -115,13 +115,35 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     }
                 },
                 
-                RenderCss = new List<EditStyle>()
+                RenderCss = new List<CssFile>()
                 {
-
+                    new CssFile
+                    {
+                        Url = "/cr/css/baguetteBox.min.css",
+                        Environment = "any",
+                        Sort = 3
+                    },
+                    new CssFile
+                    {
+                        Url = "/sctr/css/simple-gallery.min.css",
+                        Environment = "any",
+                        Sort = 4
+                    }
                 },
-                RenderScripts = new List<EditScript>()
+                RenderScripts = new List<ScriptFile>()
                 {
-
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/baguetteBox.min.js",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/sctr/js/simple-gallery.js",
+                        Environment = "any",
+                        Sort = 3
+                    }
                 }
                 
             };
@@ -148,54 +170,54 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
 
-                EditCss = new List<EditStyle>()
+                EditCss = new List<CssFile>()
                 {
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/dropzone.min.css",
                         Environment = "any",
                         Sort = 1
                     },
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/croppie.min.css",
                         Environment = "any",
                         Sort = 2
                     },
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/croppie-cloudscribe.css",
                         Environment = "any",
                         Sort = 3
                     }
                 },
-                EditScripts = new List<EditScript>()
+                EditScripts = new List<ScriptFile>()
                 {
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/cr/js/dropzone.min.js",
                         Environment = "any",
                         Sort = 1
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/cr/js/croppie.min.js",
                         Environment = "any",
                         Sort = 2
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/js/cloudscribe-unobtrusive-file-drop.js",
                         Environment = "any",
                         Sort = 3
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/js/knockout-3.4.2.js",
                         Environment = "any",
                         Sort = 4
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/js/cst-basic-list.js",
                         Environment = "any",
@@ -203,11 +225,11 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     }
                 },
                 
-                RenderCss = new List<EditStyle>()
+                RenderCss = new List<CssFile>()
                 {
 
                 },
-                RenderScripts = new List<EditScript>()
+                RenderScripts = new List<ScriptFile>()
                 {
 
                 }
@@ -237,42 +259,42 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
 
-                EditCss = new List<EditStyle>()
+                EditCss = new List<CssFile>()
                 {
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/dropzone.min.css",
                         Environment = "any",
                         Sort = 1
                     },
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/croppie.min.css",
                         Environment = "any",
                         Sort = 2
                     },
-                    new EditStyle
+                    new CssFile
                     {
                         Url = "/cr/css/croppie-cloudscribe.css",
                         Environment = "any",
                         Sort = 3
                     }
                 },
-                EditScripts = new List<EditScript>()
+                EditScripts = new List<ScriptFile>()
                 {
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/cr/js/dropzone.min.js",
                         Environment = "any",
                         Sort = 1
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/cr/js/croppie.min.js",
                         Environment = "any",
                         Sort = 2
                     },
-                    new EditScript()
+                    new ScriptFile()
                     {
                         Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
                         Environment = "any",
@@ -280,11 +302,11 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     }
                 },
                 
-                RenderCss = new List<EditStyle>()
+                RenderCss = new List<CssFile>()
                 {
 
                 },
-                RenderScripts = new List<EditScript>()
+                RenderScripts = new List<ScriptFile>()
                 {
 
                 }
