@@ -1,4 +1,35 @@
 ﻿
+ko.observable.fn.silentUpdate = function (value) {
+    this.notifySubscribers = function () { };
+    this(value);
+    this.notifySubscribers = function () {
+        ko.subscribable.fn.notifySubscribers.apply(this, arguments);
+    };
+};
+
+// http://knockoutjs.com/documentation/extenders.html
+ko.extenders.required = function (target, overrideMessage) {
+    //add some sub-observables to our observable
+    target.hasError = ko.observable();
+    target.validationMessage = ko.observable();
+
+    //define a function to do validation
+    function validate(newValue) {
+        target.hasError(newValue ? false : true);
+        target.validationMessage(newValue ? "" : overrideMessage || "This field is required");
+    }
+
+    //initial validation
+    validate(target());
+
+    //validate whenever the value changes
+    target.subscribe(validate);
+
+    //return the original observable
+    return target;
+};
+
+
 //class to represent a list item
 function ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
     var self = this;
@@ -19,16 +50,28 @@ function ImageItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, li
         if (newSort < 0) { newSort = 0; }
         self.Sort(newSort);
     }
+    self._testEle = null;
+
+    self.isValidLink = function () {
+        if (self.LinkUrl() === null) { return false; }
+        if (self.LinkUrl() === undefined) { return false; }
+        if (self.LinkUrl().length === 0) { return false; }
+        if (self.Title() === null) { return false; }
+        if (self.Title() === undefined) { return false; }
+        if (self.Title().length === 0) { return false; }
+
+        if (!self._testEle) {
+            self._testEle = document.createElement('input');
+            self._testEle.setAttribute('type', 'url');
+        }
+        self._testEle.value = self.LinkUrl();
+        return self._testEle.validity.valid;
+    }
+
     
 }
 
-ko.observable.fn.silentUpdate = function (value) {
-    this.notifySubscribers = function () { };
-    this(value);
-    this.notifySubscribers = function () {
-        ko.subscribable.fn.notifySubscribers.apply(this, arguments);
-    };
-};
+
 
 function ItemListViewModel(initialData) {
     var self = this;
@@ -67,15 +110,10 @@ function ItemListViewModel(initialData) {
     self.newItemResizedUrl = ko.observable(null);
     self.newItemThumbnailUrl = ko.observable(null);
     self.newItemLinkUrl = ko.observable(null);
-    //self.newItemSort = ko.observable(3);
-    self.newItemSort = function () {
-        var result = Math.max.apply(Math, self.Items().map(function (o) { return o.Sort(); }))
-        //var result = ko.utils.arrayFirst(self.Items, function (item) {
-        //    return item.Sort === Math.max.apply(null, ko.utils.arrayMap(self.Items, function (e) {
-        //        return e.Sort;
-        //    }));
 
-        //});
+    self.newItemSort = function () {
+        if (self.Items().length === 0) { return 1; }
+        var result = Math.max.apply(Math, self.Items().map(function (o) { return o.Sort(); }))
         return result + 2;
     }
    
@@ -128,6 +166,25 @@ function ItemListViewModel(initialData) {
             return 0;
         })
     }
+
+    self._testEle = null;
+
+    self.isValidNewItemLink = ko.computed(function () {
+        if (self.newItemLinkUrl() === null) { return false; }
+        if (self.newItemLinkUrl() === undefined) { return false; }
+        if (self.newItemLinkUrl().length === 0) { return false; }
+        if (self.newItemTitle() === null) { return false; }
+        if (self.newItemTitle() === undefined) { return false; }
+        if (self.newItemTitle().length === 0) { return false; }
+
+        if (!self._testEle) {
+            self._testEle = document.createElement('input');
+            self._testEle.setAttribute('type', 'url');
+        }
+        self._testEle.value = self.newItemLinkUrl();
+        return self._testEle.validity.valid;
+    });
+
 }
 
 function decodeEncodedJson(encodedJson) {

@@ -5,3 +5,17 @@
     Layout = "_LayoutEmpty";
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
 }
+@for (int i = 0; i < Model.Items.Count; i++)
+{
+    <div class="">
+        <div class="">
+            <a class="" href="@sorted[i].ResizedUrl">
+                <img src="@sorted[i].ResizedUrl" alt="@sorted[i].Description" class="">
+            </a>
+            <div class="">
+                <h6><a href="#">@sorted[i].Title</a></h6>
+                <p class="">@sorted[i].Description</p>
+            </div>
+        </div>
+    </div>
+}

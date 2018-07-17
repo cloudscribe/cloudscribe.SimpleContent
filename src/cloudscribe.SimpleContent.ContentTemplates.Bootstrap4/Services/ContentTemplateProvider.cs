@@ -33,7 +33,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             _list.Add(BuildColumnWithImages());
             _list.Add(BuildImageWithContent());
             _list.Add(BuildGalleryWithContent());
-            //_list.Add(BuildListOfLinks());
+            _list.Add(BuildListOfLinks());
             //_list.Add(BuildGoogleMap());
 
         }

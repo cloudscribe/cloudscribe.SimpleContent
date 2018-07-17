@@ -20,14 +20,14 @@
     var itemsJson = WebUtility.UrlEncode(JsonConvert.SerializeObject(sorted, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include, }));
 }
 <ul class="nav nav-tabs" role="tablist">
-    <li id="cedit-tab1" class="nav-item">
-        <a class="nav-link active" href="#tabMain" data-toggle="tab">@sr["Links"]</a>
+    <li class="nav-item">
+        <a id="cedit-tab1" class="nav-link active" href="#tabMain" data-toggle="tab" role="tab" aria-controls="tabMain" aria-selected="true">@sr["Links"]</a>
     </li>
-    <li id="cedit-tab2" class="nav-item">
-        <a class="nav-link" href="#tabTopContent" data-toggle="tab">@sr["Top Content"]</a>
+    <li class="nav-item">
+        <a id="cedit-tab2" class="nav-link" href="#tabTopContent" data-toggle="tab" role="tab" aria-controls="tabTopContent" aria-selected="false">@sr["Top Content"]</a>
     </li>
-    <li id="cedit-tab3" class="nav-item">
-        <a class="nav-link" href="#tabBottomContent" data-toggle="tab">@sr["Bottom Content"]</a>
+    <li class="nav-item">
+        <a id="cedit-tab3" class="nav-link" href="#tabBottomContent" data-toggle="tab" role="tab" aria-controls="tabBottomContent" aria-selected="false">@sr["Bottom Content"]</a>
     </li>
 </ul>
 <div class="tab-content">
@@ -37,12 +37,13 @@
 
         <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">
             <div class="row">
-                <div class="col-3">
-                    <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }, visible: ThumbnailUrl !== undefined" />
+                <div class="col-3" data-bind="attr: { visible: ResizedUrl !== undefined }">
+                    <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }" />
                 </div>
                 <div class="col-8">
                     <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
-                    <textarea class="form-control" style="height:110px;" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
+                    <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
+                    <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
                 </div>
                 <div class="col-1">
                     <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
@@ -50,16 +51,6 @@
                     <a href="#" data-bind="click: incrementSort" title="@sr["Move Down"]"><i class="fas fa-sort-down fa-2x"></i></a>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label for="newTitle">@sr["Title"]</label>
-            <input id="newTitle" class="form-control" />
-            
-        </div>
-        <div class="form-group">
-            <label for="newDescription">@sr["Description"]</label>
-            <input id="newDescription" class="form-control"  />
         </div>
         <div class="d-flex align-items-stretch">
             <div class="cs-crop-container">
@@ -98,15 +89,28 @@
                     <div class="d-flex flex-column">
                         <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
                         <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
-                        <button data-bind="click: addNewItem, visible: newItemResizedUrl() !== null" type="button" class="mb-1 btn btn-primary">@sr["Add To Gallery"] <i class="fas fa-plus" aria-hidden="true"></i></button>
+
                     </div>
                 </div>
             </div>
         </div>
         <input id="imgUrlFull" type="hidden" />
         <input id="imgUrlResized" type="hidden" />
-        <input id="imgUrlThumb" type="hidden" />
+        <div class="form-group">
+            <label for="NewTitle">@sr["Link Title"]</label>
+            <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
+        </div>
+        <div class="form-group">
+            <label for="NewUrl">@sr["Link Url"]</label>
+            <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
+        </div>
+        <div class="form-group">
+            <label for="NewDescription">@sr["Link Description"]</label>
+            <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
+        </div>
 
+        <button data-bind="click: addNewItem, enable: isValidNewItemLink()" type="button" class="mb-1 btn btn-primary">@sr["Add Link"] <i class="fas fa-plus" aria-hidden="true"></i></button>
+        <span class="text-danger" data-bind="css: { collapse: isValidNewItemLink() } ">@sr["A link must have a title and a valid url."]</span>
     </div>
     <div class="tab-pane pt-2" id="tabTopContent" role="tabpanel" aria-labelledby="cedit-tab2">
         <textarea asp-for="ContentAbove" class="form-control"
