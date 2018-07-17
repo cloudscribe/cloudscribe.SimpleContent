@@ -42,7 +42,9 @@
                 </div>
                 <div class="col-8">
                     <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
+                    <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
                     <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
+                    <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
                     <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
                 </div>
                 <div class="col-1">
@@ -99,10 +101,12 @@
         <div class="form-group">
             <label for="NewTitle">@sr["Link Title"]</label>
             <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
+            <span class="text-danger" data-bind='visible: newItemTitle.hasError, text: newItemTitle.validationMessage'> </span>
         </div>
         <div class="form-group">
             <label for="NewUrl">@sr["Link Url"]</label>
             <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
+            <span class="text-danger" data-bind='visible: newItemLinkUrl.hasError, text: newItemLinkUrl.validationMessage'> </span>
         </div>
         <div class="form-group">
             <label for="NewDescription">@sr["Link Description"]</label>

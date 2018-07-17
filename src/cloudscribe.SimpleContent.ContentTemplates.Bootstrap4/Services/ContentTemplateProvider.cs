@@ -163,8 +163,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             var template = new ContentTemplate()
             {
                 Key = "sct-ListOfLinks",
-                Title = _sr["A list of links with optional thumbnail per link and content above and below"],
-                Description = "",
+                Title = _sr["A list of links with optional thumbnail per link and content above and below."],
+                Description = _sr["This is a simple non-paginated list, suitable for modestly sized lists that can fit on a single page."],
                 EditView = "ContentTemplates/ListOfLinksEdit",
                 RenderView = "ContentTemplates/ListOfLinksRender",
                 ScreenshotUrl = "",
@@ -225,7 +225,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     },
                     new ScriptFile()
                     {
-                        Url = "/js/cst-basic-list.js",
+                        Url = "/js/cst-link-list.js",
                         Environment = "any",
                         Sort = 5
                     }

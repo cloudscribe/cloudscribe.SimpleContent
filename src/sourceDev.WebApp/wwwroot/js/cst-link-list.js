@@ -7,16 +7,67 @@ ko.observable.fn.silentUpdate = function (value) {
     };
 };
 
+// http://knockoutjs.com/documentation/extenders.html
+ko.extenders.required = function (target, overrideMessage) {
+    target.hasError = ko.observable();
+    target.validationMessage = ko.observable();
+    function validate(newValue) {
+        target.hasError(newValue ? false : true);
+        target.validationMessage(newValue ? "" : overrideMessage || "This field is required");
+    }
+    validate(target());
+    target.subscribe(validate);
+    return target;
+};
+
+ko.extenders.isValidUrl = function(target, overrideMessage) {
+    target.hasError = ko.observable();
+    target.validationMessage = ko.observable();
+    var _testEle = null;
+    function validate(newValue) {
+        if (newValue) {
+
+            if (!self._testEle) {
+                _testEle = document.createElement('input');
+                _testEle.setAttribute('type', 'url');
+            }
+            _testEle.value = newValue;
+            var isValid = _testEle.validity.valid;
+            console.log(isValid);
+            if (isValid) {
+                target.hasError(false);
+                target.validationMessage("");
+                //console.log('url valid');
+            }
+            else {
+                //console.log('url invalid');
+                target.hasError(true);
+                target.validationMessage("Must be a valid url");
+            }
+        }
+        else {
+            target.hasError(newValue ? false : true);
+            target.validationMessage(newValue ? "" : "Url is required");
+        }
+        
+    }
+    validate(target());
+    target.subscribe(validate);
+    //return the original observable
+    return target;
+};
+
+
 //class to represent a list item
 function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
     var self = this;
 
-    self.Title = ko.observable(decodeEncodedJson(title));
+    self.Title = ko.observable(decodeEncodedJson(title)).extend({ required: "Title is required" });
     self.Description = ko.observable(decodeEncodedJson(description));
     self.FullSizeUrl = ko.observable(fullSizeUrl);
     self.ResizedUrl = ko.observable(resizedUrl);
     self.ThumbnailUrl = ko.observable(thumbnailUrl);
-    self.LinkUrl = ko.observable(linkUrl);
+    self.LinkUrl = ko.observable(linkUrl).extend({ required: "Link Url is required", isValidUrl: "Must be a valid url" });
     self.Sort = ko.observable(sort);
 
     self.incrementSort = function () {
@@ -27,12 +78,26 @@ function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, lin
         if (newSort < 0) { newSort = 0; }
         self.Sort(newSort);
     }
-    
+    self._testEle = null;
+
+    self.isValidLink = function () {
+        if (self.LinkUrl() === null) { return false; }
+        if (self.LinkUrl() === undefined) { return false; }
+        if (self.LinkUrl().length === 0) { return false; }
+        if (self.Title() === null) { return false; }
+        if (self.Title() === undefined) { return false; }
+        if (self.Title().length === 0) { return false; }
+
+        if (!self._testEle) {
+            self._testEle = document.createElement('input');
+            self._testEle.setAttribute('type', 'url');
+        }
+        self._testEle.value = self.LinkUrl();
+        return self._testEle.validity.valid;
+    }
 
     
 }
-
-
 
 function ItemListViewModel(initialData) {
     var self = this;
@@ -65,12 +130,12 @@ function ItemListViewModel(initialData) {
         self.Items.push(item)
     }
 
-    self.newItemTitle = ko.observable(null);
+    self.newItemTitle = ko.observable(null).extend({ required: "Title is required" });
     self.newItemDescription = ko.observable(null);
     self.newItemFullSizeUrl = ko.observable(null);
     self.newItemResizedUrl = ko.observable(null);
     self.newItemThumbnailUrl = ko.observable(null);
-    self.newItemLinkUrl = ko.observable(null);
+    self.newItemLinkUrl = ko.observable(null).extend({ isValidUrl: null });
 
     self.newItemSort = function () {
         if (self.Items().length === 0) { return 1; }
@@ -127,6 +192,15 @@ function ItemListViewModel(initialData) {
             return 0;
         })
     }
+
+    self._testEle = null;
+
+    self.isValidNewItemLink = ko.computed(function() {
+        if (self.newItemTitle.hasError()) { return false; }
+        if (self.newItemLinkUrl.hasError()) { return false; }
+        return true;
+    });
+
 }
 
 function decodeEncodedJson(encodedJson) {
@@ -142,9 +216,4 @@ document.addEventListener("DOMContentLoaded", function () {
     //console.log(initialData);
 
     ko.applyBindings(new ItemListViewModel(initialData));
-
 });
-
-
-
-
