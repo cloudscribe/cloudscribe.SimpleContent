@@ -36,9 +36,9 @@
         <input id="ItemsConfig" type="hidden" value="@itemsJson" />
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
         <div class="form-group row">
-            <label asp-for="Theme" class="control-label col-md-1 pl-5">@sr["Layout"]</label>
+            <label asp-for="Layout" class="control-label col-md-1 pl-5">@sr["Layout"]</label>
             <div class="col-md-11">
-                <select asp-for="Theme" class="form-control">
+                <select asp-for="Layout" class="form-control">
                     <option value="cards">@sr["Cards"]</option>
                     <option value="compact">@sr["Compact"]</option>
                     <option value="grid">@sr["Grid"]</option>

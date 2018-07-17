@@ -12,7 +12,7 @@
         return "carousel-item";
     }
 }
-@if (Model.Theme == "carousel-wrap-left")
+@if (Model.Layout == "carousel-wrap-left")
 {
     <div id="carouselRender" class="carousel slide carousel-fade simple-gallery float-md-left mr-2 simple-gallery-side-carousel" data-ride="carousel" dat-interval="3000" data-pause="hover">
         <div class="carousel-inner" data-bind="foreach: Items">
@@ -37,7 +37,7 @@
     </div>
     @Html.Raw(Model.ContentAbove)
 }
-else if (Model.Theme == "carousel-wrap-right")
+else if (Model.Layout == "carousel-wrap-right")
 {
     <div id="carouselRender" class="carousel slide carousel-fade simple-gallery float-md-right ml-2 simple-gallery-side-carousel" data-ride="carousel" dat-interval="3000" data-pause="hover">
         <div class="carousel-inner" data-bind="foreach: Items">
@@ -69,7 +69,7 @@ else
     </div>
 }
 
-@if (Model.Theme == "cards")
+@if (Model.Layout == "cards")
 {
     <div class="row gallery-block cards-gallery simple-gallery">
         @for (int i = 0; i < Model.Items.Count; i++)
@@ -88,7 +88,7 @@ else
         }
     </div>
 }
-@if (Model.Theme == "compact")
+@if (Model.Layout == "compact")
 {
     <div class="row no-gutters gallery-block compact-gallery simple-gallery">
         @for (int i = 0; i < Model.Items.Count; i++)
@@ -105,7 +105,7 @@ else
         }
     </div>
 }
-@if (Model.Theme == "grid")
+@if (Model.Layout == "grid")
 {
     <div class="row gallery-block grid-gallery simple-gallery">
         @for (int i = 0; i < Model.Items.Count; i++)
@@ -118,7 +118,7 @@ else
         }
     </div>
 }
-@if (Model.Theme == "carousel")
+@if (Model.Layout == "carousel")
 {
     <div id="carouselRender" class="carousel slide carousel-fade simple-gallery" data-ride="carousel" dat-interval="3000" data-pause="hover">
         <div class="carousel-inner" data-bind="foreach: Items">

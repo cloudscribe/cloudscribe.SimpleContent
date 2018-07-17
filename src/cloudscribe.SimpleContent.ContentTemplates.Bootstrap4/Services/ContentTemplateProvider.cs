@@ -26,7 +26,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             if(_list != null) { return; }
 
             _list = new List<ContentTemplate>();
-            _list.Add(BuildTwoColumnWithImage());
+            _list.Add(BuildColumnWithImages());
             //_list.Add(BuildCarouselWithContent());
             _list.Add(BuildGalleryWithContent());
             //_list.Add(BuildListOfLinks());
@@ -243,16 +243,16 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
         }
 
 
-        private ContentTemplate BuildTwoColumnWithImage()
+        private ContentTemplate BuildColumnWithImages()
         {
             var template = new ContentTemplate()
             {
-                Key = "TwoColumnWithImage",
-                Title = "Two Columns With Images",
-                Description = "A two column layout with an image at the top of each column.",
-                EditView = "ContentTemplates/TwoColumnWithImageEdit",
-                RenderView = "ContentTemplates/TwoColumnWithImageRender",
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.TwoColumnWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                Key = "sct-ColumnsWithImages",
+                Title = "Columns with optional top images",
+                Description = "One to four column layout with an optional image at the top of each column.",
+                EditView = "ContentTemplates/ColumnWithImageEdit",
+                RenderView = "ContentTemplates/ColumnWithImageRender",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ColumnsWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
                 ScreenshotUrl = "",
                 ProjectId = "*",
                 AvailbleForFeature = "*",

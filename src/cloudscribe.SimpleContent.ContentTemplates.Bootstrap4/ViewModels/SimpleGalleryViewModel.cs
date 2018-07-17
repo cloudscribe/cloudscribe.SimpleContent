@@ -6,6 +6,6 @@ namespace cloudscribe.SimpleContent.ContentTemplates.ViewModels
 {
     public class SimpleGalleryViewModel : ListWithContentModel
     {
-        public string Theme { get; set; } = "cards";
+        public string Layout { get; set; } = "cards";
     }
 }
