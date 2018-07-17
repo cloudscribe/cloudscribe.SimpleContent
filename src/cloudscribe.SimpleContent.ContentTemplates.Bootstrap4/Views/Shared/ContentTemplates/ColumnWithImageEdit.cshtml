@@ -16,6 +16,7 @@
         return "/cr/images/550x412.png";
     }
 }
+<p>@sr["Columns with no content body will not be shown even if they have images."]</p>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
         <a id="cedit-tab1" class="nav-link active" href="#tabCol1" data-toggle="tab" role="tab" aria-controls="tabCol1" aria-selected="true">@sr["Column 1"]</a>
@@ -80,8 +81,7 @@
             <label asp-for="ColumnOneAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnOneAltText" class="form-control" />
         </div>
-
-
+        <label asp-for="ColumnOneContent">@sr["Column 1 Content"]</label>
         <textarea asp-for="ColumnOneContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -139,6 +139,7 @@
             <label asp-for="ColumnTwoAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnTwoAltText" class="form-control" />
         </div>
+        <label asp-for="ColumnTwoContent">@sr["Column 2 Content"]</label>
         <textarea asp-for="ColumnTwoContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -197,7 +198,7 @@
             <label asp-for="ColumnThreeAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnThreeAltText" class="form-control" />
         </div>
-
+        <label asp-for="ColumnThreeContent">@sr["Column 3 Content"]</label>
         <textarea asp-for="ColumnThreeContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -255,7 +256,7 @@
             <label asp-for="ColumnFourAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnFourAltText" class="form-control" />
         </div>
-
+        <label asp-for="ColumnFourContent">@sr["Column 4 Content"]</label>
         <textarea asp-for="ColumnFourContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"

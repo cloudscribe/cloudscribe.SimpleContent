@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-10
-// Last Modified:           2018-07-10
+// Last Modified:           2018-07-17
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -27,7 +27,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
             _list = new List<ContentTemplate>();
             _list.Add(BuildColumnWithImages());
-            //_list.Add(BuildCarouselWithContent());
+            _list.Add(BuildImageWithContent());
             _list.Add(BuildGalleryWithContent());
             //_list.Add(BuildListOfLinks());
             _list.Add(BuildGoogleMap());
@@ -49,8 +49,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             var template = new ContentTemplate()
             {
                 Key = "sct-GalleryWithContent",
-                Title = "Image gallery with content above and below",
-                Description = "",
+                Title = "Simple image gallery with optional content above and below",
+                Description = "The gallery has 6 layouts to choose from: cards, compact, grid, carousel full width, carousel left with wrapped content, and carousel right with wrapped content.",
                 EditView = "ContentTemplates/GalleryWithContentEdit",
                 RenderView = "ContentTemplates/GalleryWithContentRender",
                 ScreenshotUrl = "",
@@ -313,6 +313,87 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
                 }
                 
+            };
+
+            return template;
+
+        }
+
+        private ContentTemplate BuildImageWithContent()
+        {
+            var template = new ContentTemplate()
+            {
+                Key = "sct-ImageWithContent",
+                Title = "Image with wrapped content",
+                Description = "A simple image floated left or right so that content wraps around it.",
+                EditView = "ContentTemplates/ImageWithContentEdit",
+                RenderView = "ContentTemplates/ImageWithContentRender",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ImageWithContentViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+
+                EditCss = new List<CssFile>()
+                {
+                    new CssFile
+                    {
+                        Url = "/cr/css/dropzone.min.css",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie-cloudscribe.css",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                },
+                EditScripts = new List<ScriptFile>()
+                {
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/dropzone.min.js",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/croppie.min.js",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                },
+
+                RenderCss = new List<CssFile>()
+                {
+                    new CssFile
+                    {
+                        Url = "/sctr/css/simple-image.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    }
+                },
+                RenderScripts = new List<ScriptFile>()
+                {
+
+                }
+
             };
 
             return template;

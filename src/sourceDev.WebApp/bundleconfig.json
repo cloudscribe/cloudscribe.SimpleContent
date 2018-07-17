@@ -20,5 +20,11 @@
     "inputFiles": [
       "wwwroot/css/simple-gallery.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/css/simple-image.min.css",
+    "inputFiles": [
+      "wwwroot/css/simple-image.css"
+    ]
   }
 ]
