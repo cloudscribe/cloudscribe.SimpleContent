@@ -1,11 +1,14 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.NewContentViewModel
 @inject IStringLocalizer<SimpleContent> sr
-<form class="form-inline mb-3" asp-route="@Model.SearchRouteName" method="get" data-submit-once="true" asp-antiforgery="false">
-    <input type="hidden" asp-for="@Model.ParentSlug" />
-    <input name="query" value="@Model.Query" class="form-control mr-1 mb-1" placeholder="@sr["Search Term"]" />
-    <button id="btnSave" type="submit" class="btn btn-primary mr-1 mb-1" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Search Templates"]'>@sr["Search Templates"]</button>
-    <a asp-route="@Model.SearchRouteName" asp-route-parentslug="@Model.ParentSlug">@sr["Clear/Reset Search"]</a>
-</form>
+@if (Model.CountOfTemplates > Model.PageSize)
+{
+    <form class="form-inline mb-3" asp-route="@Model.SearchRouteName" method="get" data-submit-once="true" asp-antiforgery="false">
+        <input type="hidden" asp-for="@Model.ParentSlug" />
+        <input name="query" value="@Model.Query" class="form-control mr-1 mb-1" placeholder="@sr["Search Term"]" />
+        <button id="btnSave" type="submit" class="btn btn-primary mr-1 mb-1" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Search Templates"]'>@sr["Search Templates"]</button>
+        <a asp-route="@Model.SearchRouteName" asp-route-parentslug="@Model.ParentSlug">@sr["Clear/Reset Search"]</a>
+    </form>
+}
 
 <form asp-action="@Model.PostActionName" data-submit-once="true">
     <input type="hidden" asp-for="@Model.ParentSlug" />
