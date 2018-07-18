@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-10
-// Last Modified:           2018-07-17
+// Last Modified:           2018-07-18
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -103,19 +103,19 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     },
                     new ScriptFile()
                     {
-                        Url = "/js/cloudscribe-unobtrusive-file-drop.js",
+                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
                         Environment = "any",
                         Sort = 3
                     },
                     new ScriptFile()
                     {
-                        Url = "/js/knockout-3.4.2.js",
+                        Url = "/cr/js/knockout-3.4.2.js",
                         Environment = "any",
                         Sort = 4
                     },
                     new ScriptFile()
                     {
-                        Url = "/js/cst-basic-list.js",
+                        Url = "/sctr/js/cst-basic-list.min.js",
                         Environment = "any",
                         Sort = 5
                     }
@@ -213,19 +213,19 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     },
                     new ScriptFile()
                     {
-                        Url = "/js/cloudscribe-unobtrusive-file-drop.js",
+                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
                         Environment = "any",
                         Sort = 3
                     },
                     new ScriptFile()
                     {
-                        Url = "/js/knockout-3.4.2.js",
+                        Url = "/cr/js/knockout-3.4.2.js",
                         Environment = "any",
                         Sort = 4
                     },
                     new ScriptFile()
                     {
-                        Url = "/js/cst-link-list.js",
+                        Url = "/sctr/js/cst-link-list.min.js",
                         Environment = "any",
                         Sort = 5
                     }

@@ -15,11 +15,11 @@
     <div class="cs-crop-container">
         @if (string.IsNullOrWhiteSpace(Model.ImageUrl))
         {
-            <img id="dz1Image" src="/cr/images/550x412.png" />
+            <img id="dz1Image" style="max-width:690px;" src="/cr/images/690x517-placeholder.png" />
         }
         else
         {
-            <img id="dz1Image" src="@Model.ImageUrl" alt="profile image" />
+            <img id="dz1Image" style="max-width:690px;" src="@Model.ImageUrl" alt="profile image" />
         }
 
     </div>
@@ -30,20 +30,28 @@
              data-anti-forgery-token="@tokens.RequestToken"
              data-file-browse-url="@ckOptions.ImageBrowseUrl"
              data-file-crop-url="@ckOptions.CropFileUrl"
-             data-target-path="/media/images"
+             data-target-path="/media/testimages"
+             data-create-thumb="false"
+             data-resize-image="true"
+             data-accepted-files="image/*"
+             data-enable-browse-server="true"
+             data-enable-crop="true"
+
              data-target-fullsize-input-id="imgUrl1"
              data-target-resized-input-id="imgUrl1Resized"
              data-target-thumb-input-id="imgUrl1Thumb"
+
              data-target-fullsize-image-id="dz1Image"
              data-target-resized-image-idx="dz1ImageResized"
-             data-enable-browse-server="true"
-             data-enable-crop="true"
              data-target-thumb-image-idx="dz1ImageThumb"
-             data-resize-width="550"
-             data-resize-height="412"
-             data-create-thumb="false"
-             data-resize-image="true"
-             data-accepted-files="image/*">
+
+             data-resize-width="1500"
+             data-resize-height="1500"
+             data-crop-area-width="690"
+             data-crop-area-height="517"
+             data-crop-width-ratio="1.33378"
+             
+             >
             @sr["Drop file here or click to browse device for file."]
         </div>
         <div class="pl-1 pt-1">

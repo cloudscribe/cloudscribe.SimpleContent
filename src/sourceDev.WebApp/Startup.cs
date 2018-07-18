@@ -82,7 +82,8 @@ namespace sourceDev.WebApp
 
             app.UseForwardedHeaders();
             app.UseStaticFiles();
-            
+            app.UseCloudscribeCommonStaticFiles();
+
             //app.UseSession();
 
             app.UseRequestLocalization(localizationOptionsAccessor.Value);

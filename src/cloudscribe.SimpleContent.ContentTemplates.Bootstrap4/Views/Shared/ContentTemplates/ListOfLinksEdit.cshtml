@@ -44,7 +44,7 @@
                     <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
                     <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
                     <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
-                    <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
+                    <span class="text-danger" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
                     <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
                 </div>
                 <div class="col-1">
@@ -56,7 +56,7 @@
         </div>
         <div class="d-flex align-items-stretch">
             <div class="cs-crop-container">
-                <img id="dz1Image" style="max-width:350px;" src="/cr/images/350x250.png" />
+                <img id="dz1Image" style="max-width:350px;" src="/cr/images/350x250-placeholder.png" />
             </div>
             <div class="d-flex flex-column">
                 <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
@@ -68,6 +68,7 @@
                      data-target-path="/media/images"
                      data-create-thumb="false"
                      data-resize-image="true"
+                     data-keep-original="false"
                      data-enable-browse-server="true"
                      data-enable-crop="true"
                      data-accepted-files="image/*"
@@ -77,7 +78,7 @@
                      data-target-fullsize-image-id="dz1Image"
                      data-target-resized-image-id=""
                      data-target-thumb-image-id=""
-                     data-fullsize-placeholder-image="/cr/images/350x250.png"
+                     data-fullsize-placeholder-image="/cr/images/350x250-placeholder.png"
                      data-resized-placeholder-image=""
                      data-thumb-placeholder-image=""
                      data-resize-width="500"
