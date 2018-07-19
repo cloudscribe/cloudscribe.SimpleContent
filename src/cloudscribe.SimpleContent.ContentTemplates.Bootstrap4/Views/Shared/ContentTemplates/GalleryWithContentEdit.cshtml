@@ -1,11 +1,13 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SimpleGalleryViewModel
 @using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
 @using Microsoft.AspNetCore.Antiforgery
 @using Newtonsoft.Json;
 @using System.Net
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject IAntiforgery antiforgery
 @inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IGalleryOptionsProvider galleryOptionsProvider
 @{
 
     var tokens = antiforgery.GetAndStoreTokens(Context);
@@ -18,6 +20,7 @@
         i += 2;
     }
     var itemsJson = WebUtility.UrlEncode(JsonConvert.SerializeObject(sorted, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include, }));
+    var options = await galleryOptionsProvider.ResolveGalleryOptions(Context.Request.Host.Host, Context.Request.Path);
 }
 
 <ul class="nav nav-tabs" role="tablist">
@@ -68,7 +71,7 @@
 
         <div class="d-flex align-items-stretch">
             <div class="cs-crop-container">
-                <img id="dz1Image" style="max-width:690px;" src="/cr/images/690x517-placeholder.png" />
+                <img id="dz1Image" style="max-width:690px;" src="@options.PlaceholderImageUrl" />
             </div>
             <div class="d-flex flex-column">
                 <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
@@ -77,12 +80,12 @@
                      data-anti-forgery-token="@tokens.RequestToken"
                      data-file-browse-url="@ckOptions.ImageBrowseUrl"
                      data-file-crop-url="@ckOptions.CropFileUrl"
-                     data-target-path="/media/images"
-                     data-create-thumb="false"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails"
                      data-resize-image="true"
-                     data-keep-original="false"
-                     data-enable-browse-server="true"
-                     data-enable-crop="true"
+                     data-keep-original="@options.KeepOriginalSizeImages"
+                     data-enable-browse-server="@options.EnableBrowseServer"
+                     data-enable-crop="@options.EnableCropping"
                      data-accepted-files="image/*"
                      data-target-fullsize-input-id="imgUrlFull"
                      data-target-resized-input-id=""
@@ -90,14 +93,14 @@
                      data-target-fullsize-image-id="dz1Image"
                      data-target-resized-image-id=""
                      data-target-thumb-image-id=""
-                     data-fullsize-placeholder-image="/cr/images/690x517-placeholder.png"
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
                      data-resized-placeholder-image=""
                      data-thumb-placeholder-image=""
-                     data-resize-width="1500"
-                     data-resize-height="1500"
-                     data-crop-area-width="690"
-                     data-crop-area-height="517"
-                     data-crop-width-ratio="1.33378">
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight"
+                     >
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">
