@@ -18,6 +18,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<GalleryOptions>(configuration.GetSection("ContentTemplateSettings:GalleryOptions"));
             services.TryAddScoped<IGalleryOptionsProvider, ConfigGalleryOptionsProvider>();
 
+            services.Configure<LinkListOptions>(configuration.GetSection("ContentTemplateSettings:LinkListOptions"));
+            services.TryAddScoped<ILinkListOptionsProvider, ConfigLinkListOptionsProvider>();
+
 
             return services;
         }

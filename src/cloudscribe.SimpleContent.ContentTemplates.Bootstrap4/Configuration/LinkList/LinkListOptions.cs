@@ -1,10 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace cloudscribe.SimpleContent.ContentTemplates.Configuration
+﻿namespace cloudscribe.SimpleContent.ContentTemplates.Configuration
 {
-    class LinkListOptions
+    public class LinkListOptions
     {
+        /// <summary>
+        /// must be a folder starting with /media
+        /// </summary>
+        public string NewImagePath { get; set; } = "/media/linklists";
+
+        /// <summary>
+        /// thumbnails are not needed for the gallery and just use extra disk space.
+        /// The gallery uses the same images for both thumbnail and full view
+        /// </summary>
+        public bool CreateThumbnails { get; set; } = false;
+
+        /// <summary>
+        /// the default value 1500 is recommended, even if the image is rendered smaller this ensures it looks good on retina displays
+        /// The resisizing still makes the image file sizes significantly smaller.
+        /// </summary>
+        public int ResizeMaxWidth { get; set; } = 500;
+
+        /// <summary>
+        /// the default value 1500 is recommended, even if the image is rendered smaller this ensures it looks good on retina displays
+        /// The resisizing still makes the image file sizes significantly smaller.
+        /// </summary>
+        public int ResizeMaxHeight { get; set; } = 500;
+
+        /// <summary>
+        /// the max height in pixels to render link images
+        /// </summary>
+        public int ImageRenderMaxHeight { get; set; } = 150;
+
+        /// <summary>
+        /// original size images from modern cameras are quite large and not useful on the web so this defaults to false
+        /// </summary>
+        public bool KeepOriginalSizeImages { get; set; } = false;
+
+        /// <summary>
+        /// ability to browse files on the server is still subject to permissions of the user and file browse policy
+        /// this just controls visibility of the button for browsing the server
+        /// </summary>
+        public bool EnableBrowseServer { get; set; } = true;
+
+        /// <summary>
+        /// allow the user to crop newly dropped/uploaded images
+        /// </summary>
+        public bool EnableCropping { get; set; } = true;
+
+        /// <summary>
+        /// in pixels
+        /// </summary>
+        public int CropAreaWidth { get; set; } = 350;
+
+        /// <summary>
+        /// in pixels
+        /// </summary>
+        public int CropAreaHeight { get; set; } = 250;
+
+        /// <summary>
+        /// the image shown before user uploads or selects a file from the server
+        /// </summary>
+        public string PlaceholderImageUrl { get; set; } = "/cr/images/350x250-placeholder.png";
+
     }
 }

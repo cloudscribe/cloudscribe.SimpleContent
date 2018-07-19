@@ -1,9 +1,13 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
 @using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
 @inject IStringLocalizer<ContentTemplateResources> sr
+@inject ILinkListOptionsProvider optionsProvider
 @{
     Layout = "_LayoutEmpty";
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
+    var options = await optionsProvider.ResolveLinkListOptions(Context.Request.Host.Host, Context.Request.Path);
+    var imageStyle = "height:" + options.ImageRenderMaxHeight.ToString() + "px;";
 }
 <div class="content-top">
     @Html.Raw(Model.ContentAbove)
@@ -16,12 +20,12 @@
             <a class="" target="_blank" href="@sorted[i].LinkUrl">
                 @if (!string.IsNullOrWhiteSpace(sorted[i].ResizedUrl))
                 {
-                    <img class="float-left mr-2" src="@sorted[i].ResizedUrl" style="height:150px;" alt="@sorted[i].Description" />
+                    <img class="float-left mr-2" src="@sorted[i].ResizedUrl" style="@imageStyle" alt="@sorted[i].Description" />
 
                 }
             </a>
             <p class="">@sorted[i].Description</p>
-        </div>     
+        </div>
     }
 </div>
 <div class="mt-3 content-bottom">
