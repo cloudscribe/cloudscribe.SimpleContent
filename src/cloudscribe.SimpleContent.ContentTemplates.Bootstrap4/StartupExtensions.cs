@@ -21,6 +21,11 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<LinkListOptions>(configuration.GetSection("ContentTemplateSettings:LinkListOptions"));
             services.TryAddScoped<ILinkListOptionsProvider, ConfigLinkListOptionsProvider>();
 
+            services.Configure<ColumnTemplateOptions>(configuration.GetSection("ContentTemplateSettings:ColumnTemplateOptions"));
+            services.TryAddScoped<IColumnTemplateOptionsProvider, ConfigColumnTemplateOptionsProvider>();
+
+            
+
 
             return services;
         }

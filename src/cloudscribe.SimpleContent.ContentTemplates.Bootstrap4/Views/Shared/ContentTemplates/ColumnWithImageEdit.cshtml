@@ -1,18 +1,21 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ColumnsWithImageViewModel
 @using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
 @using Microsoft.AspNetCore.Antiforgery
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject IAntiforgery antiforgery
 @inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IColumnTemplateOptionsProvider optionsProvider
 @{
 
     var tokens = antiforgery.GetAndStoreTokens(Context);
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var options = await optionsProvider.ResolveColumnTemplateOptions(Context.Request.Host.Host, Context.Request.Path);
 }
 @functions{
     public string GetImageUrl(string imageUrl)
     {
-        if(!string.IsNullOrWhiteSpace(imageUrl)) { return imageUrl; }
+        if (!string.IsNullOrWhiteSpace(imageUrl)) { return imageUrl; }
         return "/cr/images/690x517-placeholder.png";
     }
 }
@@ -45,12 +48,12 @@
                      data-anti-forgery-token="@tokens.RequestToken"
                      data-file-browse-url="@ckOptions.ImageBrowseUrl"
                      data-file-crop-url="@ckOptions.CropFileUrl"
-                     data-target-path="/media/images"
-                     data-create-thumb="false"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
-                     data-keep-original="false"
-                     data-enable-browse-server="true"
-                     data-enable-crop="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
                      data-target-fullsize-input-id="ColumnOneFullSizeUrl"
                      data-target-resized-input-id="ColumnOneResizedUrl"
@@ -58,14 +61,13 @@
                      data-target-fullsize-image-id="dz1Image"
                      data-target-resized-image-id=""
                      data-target-thumb-image-id=""
-                     data-fullsize-placeholder-image="/cr/images/690x517-placeholder.png"
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
                      data-resized-placeholder-image=""
                      data-thumb-placeholder-image=""
-                     data-resize-width="1500"
-                     data-resize-height="1500"
-                     data-crop-area-width="690"
-                     data-crop-area-height="517"
-                     data-crop-width-ratio="1.33378">
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">
@@ -82,7 +84,7 @@
             <label asp-for="ColumnOneAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnOneAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnOneContent">@sr["Column 1 Content"]</label>
+        <label asp-for="ColumnOneContent">@sr["Section 1 Content"]</label>
         <textarea asp-for="ColumnOneContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -104,11 +106,12 @@
                      data-anti-forgery-token="@tokens.RequestToken"
                      data-file-browse-url="@ckOptions.ImageBrowseUrl"
                      data-file-crop-url="@ckOptions.CropFileUrl"
-                     data-target-path="/media/testimages"
-                     data-create-thumb="false"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
-                     data-enable-browse-server="true"
-                     data-enable-crop="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
                      data-target-fullsize-input-id="ColumnTwoFullSizeUrl"
                      data-target-resized-input-id="ColumnTwoResizedUrl"
@@ -116,14 +119,14 @@
                      data-target-fullsize-image-id="dz2Image"
                      data-target-resized-image-id=""
                      data-target-thumb-image-id=""
-                     data-fullsize-placeholder-image="/cr/images/690x517-placeholder.png"
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
                      data-resized-placeholder-image=""
                      data-thumb-placeholder-image=""
-                     data-resize-width="1500"
-                     data-resize-height="1500"
-                     data-crop-area-width="690"
-                     data-crop-area-height="517"
-                     data-crop-width-ratio="1.33378">
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight"
+                     >
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">
@@ -140,7 +143,7 @@
             <label asp-for="ColumnTwoAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnTwoAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnTwoContent">@sr["Column 2 Content"]</label>
+        <label asp-for="ColumnTwoContent">@sr["Section 2 Content"]</label>
         <textarea asp-for="ColumnTwoContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -163,11 +166,12 @@
                      data-anti-forgery-token="@tokens.RequestToken"
                      data-file-browse-url="@ckOptions.ImageBrowseUrl"
                      data-file-crop-url="@ckOptions.CropFileUrl"
-                     data-target-path="/media/testimages"
-                     data-create-thumb="false"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
-                     data-enable-browse-server="true"
-                     data-enable-crop="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
                      data-target-fullsize-input-id="ColumnThreeFullSizeUrl"
                      data-target-resized-input-id="ColumnThreeResizedUrl"
@@ -175,14 +179,14 @@
                      data-target-fullsize-image-id="dz3Image"
                      data-target-resized-image-id=""
                      data-target-thumb-image-id=""
-                     data-fullsize-placeholder-image="/cr/images/690x517-placeholder.png"
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
                      data-resized-placeholder-image=""
                      data-thumb-placeholder-image=""
-                     data-resize-width="1500"
-                     data-resize-height="1500"
-                     data-crop-area-width="690"
-                     data-crop-area-height="517"
-                     data-crop-width-ratio="1.33378">
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight"
+                     >
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">
@@ -199,7 +203,7 @@
             <label asp-for="ColumnThreeAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnThreeAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnThreeContent">@sr["Column 3 Content"]</label>
+        <label asp-for="ColumnThreeContent">@sr["Section 3 Content"]</label>
         <textarea asp-for="ColumnThreeContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
@@ -221,11 +225,12 @@
                      data-anti-forgery-token="@tokens.RequestToken"
                      data-file-browse-url="@ckOptions.ImageBrowseUrl"
                      data-file-crop-url="@ckOptions.CropFileUrl"
-                     data-target-path="/media/testimages"
-                     data-create-thumb="false"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
-                     data-enable-browse-server="true"
-                     data-enable-crop="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
                      data-target-fullsize-input-id="ColumnFourFullSizeUrl"
                      data-target-resized-input-id="ColumnFourResizedUrl"
@@ -233,14 +238,14 @@
                      data-target-fullsize-image-id="dz4Image"
                      data-target-resized-image-id=""
                      data-target-thumb-image-id=""
-                     data-fullsize-placeholder-image="/cr/images/690x517-placeholder.png"
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
                      data-resized-placeholder-image=""
                      data-thumb-placeholder-image=""
-                     data-resize-width="1500"
-                     data-resize-height="1500"
-                     data-crop-area-width="690"
-                     data-crop-area-height="517"
-                     data-crop-width-ratio="1.33378">
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight"
+                     >
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">
@@ -257,7 +262,7 @@
             <label asp-for="ColumnFourAltText">@sr["Image Description"]</label>
             <input asp-for="ColumnFourAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnFourContent">@sr["Column 4 Content"]</label>
+        <label asp-for="ColumnFourContent">@sr["Section 4 Content"]</label>
         <textarea asp-for="ColumnFourContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
