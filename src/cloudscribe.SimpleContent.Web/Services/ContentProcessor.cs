@@ -184,7 +184,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     if (post.ContentType == "markdown")
                     {
                         var html = MapImageUrlsToCdn(
-                            ConvertMarkdownToHtml(post.Content),
+                            ConvertMarkdownToHtml(post.CoalesceContentToDraftContent()),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
 
@@ -200,7 +200,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     else
                     {
                         var html = MapImageUrlsToCdn(
-                            post.Content,
+                            post.CoalesceContentToDraftContent(),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
 
@@ -226,14 +226,14 @@ namespace cloudscribe.SimpleContent.Web.Services
                 if (post.ContentType == "markdown")
                 {
                     result.FilteredContent = MapImageUrlsToCdn(
-                            ConvertMarkdownToHtml(post.Content),
+                            ConvertMarkdownToHtml(post.CoalesceContentToDraftContent()),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
                 }
                 else
                 {
                     result.FilteredContent = MapImageUrlsToCdn(
-                            post.Content,
+                            post.CoalesceContentToDraftContent(),
                             settings.CdnUrl,
                             settings.LocalMediaVirtualPath);
                 }
@@ -313,7 +313,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             string absoluteBaseMediaUrl,
             string htmlInput)
         {
-            if (string.IsNullOrEmpty(htmlInput)) { return Task.FromResult(""); }
+            if (string.IsNullOrEmpty(htmlInput)) { return Task.FromResult(htmlInput); }
 
             var htmlOutput = htmlInput;
             // convert any fully qualified image urls to relative urls

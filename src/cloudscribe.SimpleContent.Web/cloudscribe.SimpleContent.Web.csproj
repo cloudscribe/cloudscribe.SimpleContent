@@ -2,13 +2,11 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>3.0.4</VersionPrefix>
-    <AssemblyVersion>3.0.4</AssemblyVersion>
+    <VersionPrefix>4.0.0</VersionPrefix>
+    <AssemblyVersion>4.0.0</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <AssemblyName>cloudscribe.SimpleContent.Web</AssemblyName>
-    <PackageId>cloudscribe.SimpleContent.Web</PackageId>
-    <PackageTags>cloudscribe;blog</PackageTags>
+    <PackageTags>cloudscribe;blog,content</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
@@ -47,6 +45,10 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0" />
     
     <PackageReference Include="Markdig" Version="0.14.*" />
+
+    <PackageReference Include="MediatR" Version="5.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
+    
   </ItemGroup>
 
 

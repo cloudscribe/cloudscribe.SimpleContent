@@ -2,14 +2,21 @@
 
   <PropertyGroup>
     <Description>Bootstrap 4 pre-compiled views for cloudscribe Core and SimpleContent integration</Description>
-    <VersionPrefix>3.0.2</VersionPrefix>
-    <AssemblyVersion>3.0.2</AssemblyVersion>
+    <VersionPrefix>4.0.0</VersionPrefix>
+    <AssemblyVersion>4.0.0</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;SimpleContent;Bootstrap4</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;0436</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;0436</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-04-23
+// Last Modified:           2018-07-04
 // 
 
 
@@ -19,19 +19,17 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     public class PageQueries : IPageQueries
     {
         public PageQueries(
-           // IBasicCommands<Page> pageCommands,
             IBasicQueries<Page> pageQueries
             //,ILogger<PageQueries> logger
             )
         {
-            //commands = pageCommands;
-            query = pageQueries;
-            //log = logger;
+            _query = pageQueries;
+            //_log = logger;
         }
 
         //private IBasicCommands<Page> commands;
-        private IBasicQueries<Page> query;
-        //private ILogger log;
+        private IBasicQueries<Page> _query;
+        //private ILogger _log;
 
         
 
@@ -40,8 +38,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            
-            var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var l = await _query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
             var list = l.ToList();
             var result = new List<IPage>();
             result.AddRange(list);
@@ -56,9 +55,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
             return allPages.FirstOrDefault(p => p.Id == pageId);
-
         }
 
         public async Task<List<IPage>> GetRootPages(
@@ -66,10 +66,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
             return allPages.Where(p => p.ParentId == "0")
                 .OrderBy(p => p.PageOrder).ToList();
-
         }
 
         public async Task<List<IPage>> GetChildPages(
@@ -78,10 +79,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
             return allPages.Where(p => p.ParentId == pageId)
                 .OrderBy(p => p.PageOrder).ToList();
-
         }
 
         public async Task<IPage> GetPageBySlug(
@@ -90,6 +92,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
 
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
             return allPages.FirstOrDefault(p => p.Slug == slug);
@@ -101,6 +104,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
 
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
             return allPages.FirstOrDefault(p => p.CorrelationKey == correlationKey);
@@ -112,14 +116,14 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
 
             var isInUse = allPages.Any(
                 p => string.Equals(p.Slug, slug, StringComparison.OrdinalIgnoreCase));
 
             return !isInUse;
-
-
         }
 
         public async Task<int> GetChildPageCount(
@@ -129,6 +133,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var list = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
 
             list = list.Where(p =>

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-11-20
+// Last Modified:           2018-06-28
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -185,8 +185,14 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 Directory.CreateDirectory(typeFolderPath);
             }
 
-            var yearFolderName = post.PubDate.Year.ToString(CultureInfo.InvariantCulture);
-            var monthFolderName = post.PubDate.Month.ToString("00", CultureInfo.InvariantCulture);
+            var pubDate = post.PubDate;
+            if(!pubDate.HasValue)
+            {
+                pubDate = DateTime.UtcNow;
+            }
+
+            var yearFolderName = pubDate.Value.Year.ToString(CultureInfo.InvariantCulture);
+            var monthFolderName = pubDate.Value.Month.ToString("00", CultureInfo.InvariantCulture);
 
             var yearPath = Path.Combine(typeFolderPath, yearFolderName);
 

@@ -237,3 +237,6 @@ src/sourceDev.WebApp/cloudscribe4-dev.db
 # Cake
 tools/**
 !tools/packages.config
+src/sourceDev.WebApp/sitefiles/s1/wwwroot/media/images/img_3646.jpg
+src/sourceDev.WebApp/sitefiles/s1/wwwroot/media/images/img_3646-ws.jpg
+src/sourceDev.WebApp/sitefiles/s1/wwwroot/media/testimages/**

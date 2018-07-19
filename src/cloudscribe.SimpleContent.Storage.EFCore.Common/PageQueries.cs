@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2017-04-23
+// Last Modified:			2018-07-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -30,10 +30,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var query = from x in dbContext.Pages
+                        where x.ProjectId == projectId
                         select x;
 
             var items = await query
@@ -51,7 +51,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
@@ -68,7 +67,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
@@ -91,7 +89,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
@@ -112,7 +109,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
@@ -131,7 +127,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             return await dbContext.Pages
@@ -149,7 +144,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var isInUse = await dbContext.Pages.AnyAsync(
@@ -168,7 +162,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
 
             var currentTime = DateTime.UtcNow;
@@ -207,45 +200,5 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         //    return Task.FromResult(result);
         //}
 
-
-        #region IDisposable Support
-
-        private void ThrowIfDisposed()
-        {
-            if (disposedValue)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-        }
-
-        private bool disposedValue = false; // To detect redundant calls
-
-        void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

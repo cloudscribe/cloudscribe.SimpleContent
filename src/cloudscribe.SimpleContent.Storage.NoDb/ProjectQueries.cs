@@ -2,13 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2016-09-08
+// Last Modified:           2018-07-07
 // 
 
 using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Options;
 using NoDb;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    
+
     public class ProjectQueries : IProjectQueries
     {
 
@@ -44,24 +43,6 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             result = await queries.FetchAsync(projectId, projectId, cancellationToken);
             return result;
         }
-
-        public async Task<List<IProjectSettings>> GetProjectSettingsByUser(
-            string userName,
-            CancellationToken cancellationToken
-            )
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            var result = new List<IProjectSettings>();
-            var defaultProject = await GetProjectSettings("default", cancellationToken).ConfigureAwait(false);
-            if(defaultProject != null)
-            {
-                result.Add(defaultProject);
-            }
-            
-            return result;
-        }
-
-
         
     }
 }

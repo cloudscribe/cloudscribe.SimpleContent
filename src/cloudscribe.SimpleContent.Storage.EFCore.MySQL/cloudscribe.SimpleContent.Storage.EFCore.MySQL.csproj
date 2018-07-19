@@ -2,12 +2,10 @@
 
   <PropertyGroup>
     <Description>MySQL Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <VersionPrefix>3.0.3</VersionPrefix>
-    <AssemblyVersion>3.0.3</AssemblyVersion>
+    <VersionPrefix>4.0.0</VersionPrefix>
+    <AssemblyVersion>4.0.0</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>cloudscribe.SimpleContent.Storage.EFCore.MySQL</AssemblyName>
-    <PackageId>cloudscribe.SimpleContent.Storage.EFCore.MySQL</PackageId>
     <PackageTags>cloudscribe;commands;queries;ef</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
@@ -24,7 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.0" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.0-*" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.0-rc1-final" />
   </ItemGroup>
 
 </Project>

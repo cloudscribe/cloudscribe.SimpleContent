@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +26,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
         DbSet<PageCategory> PageCategories { get; set; }
 
         DbSet<PageResourceEntity> PageResources { get; set; }
+
+        DbSet<ContentHistory> ContentHistory { get; set; }
 
         ChangeTracker ChangeTracker { get; }
 

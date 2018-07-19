@@ -2,13 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2017-04-17
+// Last Modified:           2018-07-08
 // 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,31 +17,26 @@ namespace cloudscribe.SimpleContent.Services
 
         public ProjectService(
             IProjectSettingsResolver settingsResolver,
-            IProjectSecurityResolver security,
             IProjectQueries projectQueries,
             IProjectCommands projectCommands,
             IMemoryCache cache,
-            IPageNavigationCacheKeys cacheKeys,
-            IHttpContextAccessor contextAccessor = null)
+            IPageNavigationCacheKeys cacheKeys
+            )
         {
-            _security = security;
             _projectQueries = projectQueries;
             _projectCommands = projectCommands;
             _settingsResolver = settingsResolver;
             _cacheKeys = cacheKeys;
             _cache = cache;
-            _context = contextAccessor?.HttpContext;
+           
         }
-
-        private readonly HttpContext _context;
-        private CancellationToken CancellationToken => _context?.RequestAborted ?? CancellationToken.None;
-        private IProjectSecurityResolver _security;
-        private IProjectQueries _projectQueries;
-        private IProjectCommands _projectCommands;
-        private IProjectSettingsResolver _settingsResolver;
+        
+        private readonly IProjectQueries _projectQueries;
+        private readonly IProjectCommands _projectCommands;
+        private readonly IProjectSettingsResolver _settingsResolver;
+        private readonly IPageNavigationCacheKeys _cacheKeys;
+        private readonly IMemoryCache _cache;
         private IProjectSettings _currentSettings = null;
-        private IPageNavigationCacheKeys _cacheKeys;
-        private IMemoryCache _cache;
 
         public void ClearNavigationCache()
         {
@@ -55,19 +48,9 @@ namespace cloudscribe.SimpleContent.Services
         private async Task<bool> EnsureSettings()
         {
             if (_currentSettings != null) { return true; }
-            _currentSettings = await _settingsResolver.GetCurrentProjectSettings(CancellationToken);
+            _currentSettings = await _settingsResolver.GetCurrentProjectSettings(CancellationToken.None);
             if (_currentSettings != null)
             {
-                //if (context.User.Identity.IsAuthenticated)
-                //{
-                //    var userBlog = context.User.GetBlogId();
-                //    if (!string.IsNullOrEmpty(userBlog))
-                //    {
-                //        if (currentSettings.ProjectId == userBlog) { userIsBlogOwner = true; }
-
-                //    }
-                //}
-
                 return true;
             }
             return false;
@@ -92,35 +75,8 @@ namespace cloudscribe.SimpleContent.Services
         public async Task<IProjectSettings> GetProjectSettings(string projectId)
         {
             
-            return await _projectQueries.GetProjectSettings(projectId, CancellationToken).ConfigureAwait(false);
+            return await _projectQueries.GetProjectSettings(projectId, CancellationToken.None).ConfigureAwait(false);
         }
 
-        public async Task<List<IProjectSettings>> GetUserProjects(string userName, string password)
-        {
-            var permission = await _security.ValidatePermissions(
-                string.Empty,
-                userName,
-                password,
-                CancellationToken
-                ).ConfigureAwait(false);
-
-            var result = new List<IProjectSettings>(); //empty
-
-            if (!permission.CanEditPosts)
-            {
-                return result; //empty
-            }
-
-            var project = await _projectQueries.GetProjectSettings(permission.ProjectId, CancellationToken);
-            if(project != null)
-            {
-                result.Add(project);
-                return result;
-            }
-            
-            //await EnsureBlogSettings().ConfigureAwait(false);
-            //return settings;
-            return await _projectQueries.GetProjectSettingsByUser(userName, CancellationToken).ConfigureAwait(false);
-        }
     }
 }

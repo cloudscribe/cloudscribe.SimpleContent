@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-02
-// Last Modified:           2018-02-06
+// Last Modified:           2018-06-30
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -25,6 +25,7 @@ namespace cloudscribe.SimpleContent.Syndication
         public RssChannelProvider(
             IProjectService projectService,
             IBlogService blogService,
+            IBlogUrlResolver blogUrlResolver,
             IBlogRoutes blogRoutes,
             IHttpContextAccessor contextAccessor,
             IUrlHelperFactory urlHelperFactory,
@@ -32,37 +33,54 @@ namespace cloudscribe.SimpleContent.Syndication
             IContentProcessor contentProcessor
             )
         {
-            this.projectService = projectService;
-            this.blogService = blogService;
-            this.contextAccessor = contextAccessor;
-            this.urlHelperFactory = urlHelperFactory;
-            this.actionContextAccesor = actionContextAccesor;
-            _contentProcessor = contentProcessor;
-            this.blogRoutes = blogRoutes;
+            ProjectService = projectService;
+            BlogService = blogService;
+            BlogUrlResolver = blogUrlResolver;
+            ContextAccessor = contextAccessor;
+            UrlHelperFactory = urlHelperFactory;
+            ActionContextAccesor = actionContextAccesor;
+            ContentProcessor = contentProcessor;
+            BlogRoutes = blogRoutes;
         }
 
-        private IUrlHelperFactory urlHelperFactory;
-        private IActionContextAccessor actionContextAccesor;
-        private IHttpContextAccessor contextAccessor;
-        private IProjectService projectService;
-        private IBlogService blogService;
-        private IBlogRoutes blogRoutes;
-        private IContentProcessor _contentProcessor;
-       
-        private int maxFeedItems = 20;
+        protected IUrlHelperFactory UrlHelperFactory { get; private set; }
+        protected IActionContextAccessor ActionContextAccesor { get; private set; }
+        protected IHttpContextAccessor ContextAccessor { get; private set; }
+        protected IProjectService ProjectService { get; private set; }
+        protected IBlogService BlogService { get; private set; }
+        protected IBlogRoutes BlogRoutes { get; private set; }
+        protected IContentProcessor ContentProcessor { get; private set; }
+        protected IBlogUrlResolver BlogUrlResolver { get; private set; }
+
 
         public string Name { get; } = "cloudscribe.SimpleContent.Syndication.RssChannelProvider";
 
-        public async Task<RssChannel> GetChannel(CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<RssChannel> GetChannel(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var project = await projectService.GetCurrentProjectSettings();
+
+            var project = await ProjectService.GetCurrentProjectSettings();
             if(project == null) { return null; }
-            var posts = await blogService.GetRecentPosts(maxFeedItems);
+
+            var itemsToGet = project.DefaultFeedItems;
+            var requestedFeedItems = ContextAccessor.HttpContext?.Request.Query["maxItems"].ToString();
+            if(!string.IsNullOrWhiteSpace(requestedFeedItems))
+            {
+                int.TryParse(requestedFeedItems, out itemsToGet);
+                if(itemsToGet > project.MaxFeedItems) { itemsToGet = project.MaxFeedItems; }
+            }
+            
+            var posts = await BlogService.GetRecentPosts(itemsToGet);
             if(posts == null) { return null; }
 
-            var channel = new RssChannel();
-            channel.Title = project.Title;
-            if(!string.IsNullOrEmpty(project.Description))
+            var channel = new RssChannel
+            {
+                Title = project.Title,
+                Copyright = project.CopyrightNotice,
+                Generator = Name,
+                RemoteFeedUrl = project.RemoteFeedUrl,
+                RemoteFeedProcessorUseAgentFragment = project.RemoteFeedProcessorUseAgentFragment
+            };
+            if (!string.IsNullOrEmpty(project.Description))
             {
                 channel.Description = project.Description;
             }
@@ -72,7 +90,6 @@ namespace cloudscribe.SimpleContent.Syndication
                 channel.Description = "Welcome to my blog";
             }
             
-            channel.Copyright = project.CopyrightNotice;
             if(!string.IsNullOrEmpty(project.ChannelCategoriesCsv))
             {
                 var channelCats = project.ChannelCategoriesCsv.Split(',');
@@ -82,12 +99,7 @@ namespace cloudscribe.SimpleContent.Syndication
                 }
             }
             
-            channel.Generator = Name;
-            channel.RemoteFeedUrl = project.RemoteFeedUrl;
-            channel.RemoteFeedProcessorUseAgentFragment = project.RemoteFeedProcessorUseAgentFragment;
-
-
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
+            var urlHelper = UrlHelperFactory.GetUrlHelper(ActionContextAccesor.ActionContext);
 
             if (!string.IsNullOrEmpty(project.Image))
             {
@@ -99,9 +111,9 @@ namespace cloudscribe.SimpleContent.Syndication
             }
 
             var baseUrl = string.Concat(
-                        contextAccessor.HttpContext.Request.Scheme,
+                        ContextAccessor.HttpContext.Request.Scheme,
                         "://",
-                        contextAccessor.HttpContext.Request.Host.ToUriComponent()
+                        ContextAccessor.HttpContext.Request.Host.ToUriComponent()
                         );
 
             // asp.net bug? the comments for this method say it returns an absolute fully qualified url but it returns relative
@@ -109,12 +121,11 @@ namespace cloudscribe.SimpleContent.Syndication
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/UrlHelperExtensions.cs
             //https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.Core/Routing/UrlHelper.cs
 
-            var indexUrl = urlHelper.RouteUrl(blogRoutes.BlogIndexRouteName);
+            var indexUrl = urlHelper.RouteUrl(BlogRoutes.BlogIndexRouteName);
             if(indexUrl == null)
             {
                 indexUrl = urlHelper.Action("Index", "Blog");
             }
-            
             
             if (indexUrl.StartsWith("/"))
             {
@@ -131,16 +142,15 @@ namespace cloudscribe.SimpleContent.Syndication
                 channel.Rating = project.ChannelRating;
             }
             
-            
             var feedUrl = string.Concat(
-                        contextAccessor.HttpContext.Request.Scheme,
+                        ContextAccessor.HttpContext.Request.Scheme,
                         "://",
-                        contextAccessor.HttpContext.Request.Host.ToUriComponent(),
-                        contextAccessor.HttpContext.Request.PathBase.ToUriComponent(),
-                        contextAccessor.HttpContext.Request.Path.ToUriComponent(),
-                        contextAccessor.HttpContext.Request.QueryString.ToUriComponent());
+                        ContextAccessor.HttpContext.Request.Host.ToUriComponent(),
+                        ContextAccessor.HttpContext.Request.PathBase.ToUriComponent(),
+                        ContextAccessor.HttpContext.Request.Path.ToUriComponent(),
+                        ContextAccessor.HttpContext.Request.QueryString.ToUriComponent());
             channel.SelfLink = new Uri(feedUrl);
-            //channel.TextInput = 
+
             channel.TimeToLive = project.ChannelTimeToLive;
             if(!string.IsNullOrEmpty(project.WebmasterEmail))
             {
@@ -151,11 +161,15 @@ namespace cloudscribe.SimpleContent.Syndication
             var items = new List<RssItem>();
             foreach(var post in posts)
             {
-                if(post.PubDate > mostRecentPubDate) { mostRecentPubDate = post.PubDate; }
-                var rssItem = new RssItem();
-                rssItem.Author = post.Author;
+                if(!post.PubDate.HasValue) { continue; }
 
-                if(post.Categories.Count > 0)
+                if(post.PubDate.Value > mostRecentPubDate) { mostRecentPubDate = post.PubDate.Value; }
+                var rssItem = new RssItem
+                {
+                    Author = post.Author
+                };
+
+                if (post.Categories.Count > 0)
                 {
                     foreach(var c in post.Categories)
                     {
@@ -163,7 +177,7 @@ namespace cloudscribe.SimpleContent.Syndication
                     }
                 }
 
-                var postUrl = await blogService.ResolvePostUrl(post);
+                var postUrl = await BlogUrlResolver.ResolvePostUrl(post, project).ConfigureAwait(false);
 
                 if (string.IsNullOrEmpty(postUrl))
                 {
@@ -175,13 +189,13 @@ namespace cloudscribe.SimpleContent.Syndication
                 {
                     //postUrl = urlHelper.Content(postUrl);
                     postUrl = string.Concat(
-                        contextAccessor.HttpContext.Request.Scheme,
+                        ContextAccessor.HttpContext.Request.Scheme,
                         "://",
-                        contextAccessor.HttpContext.Request.Host.ToUriComponent(),
+                        ContextAccessor.HttpContext.Request.Host.ToUriComponent(),
                         postUrl);
                 }
 
-                var filteredResult = _contentProcessor.FilterHtmlForRss(post, project, baseUrl);
+                var filteredResult = ContentProcessor.FilterHtmlForRss(post, project, baseUrl);
                 rssItem.Description = filteredResult.FilteredContent;
                 if(!filteredResult.IsFullContent)
                 {
@@ -191,15 +205,10 @@ namespace cloudscribe.SimpleContent.Syndication
                 }
                 
                 //rssItem.Enclosures
-
                 
-
-                
-                
-
                 rssItem.Guid = new RssGuid(postUrl,true);
                 rssItem.Link = new Uri(postUrl);
-                rssItem.PublicationDate = post.PubDate;
+                rssItem.PublicationDate = post.PubDate.Value;
                 //rssItem.Source
                 rssItem.Title = post.Title;
                

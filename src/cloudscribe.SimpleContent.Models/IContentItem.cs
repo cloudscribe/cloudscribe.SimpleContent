@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -11,7 +9,7 @@ namespace cloudscribe.SimpleContent.Models
         string Slug { get; set; }
         string Title { get; set; }
         string Content { get; set; }
-        DateTime PubDate { get; set; }
+        DateTime? PubDate { get; set; }
         string MetaDescription { get; set; }
 
     }

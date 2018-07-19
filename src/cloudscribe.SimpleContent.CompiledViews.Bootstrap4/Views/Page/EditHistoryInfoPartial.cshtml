@@ -1,0 +1,19 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@if (Model.HistoryId.HasValue)
+{
+<div class="alert alert-warning" role="alert">
+    @if (Model.DidReplaceDraft)
+    {
+        @sr["A previous verion of this page has been restored to the editor replacing the current draft version. If this is not intended, click cancel."]
+    }
+    @if (Model.DidRestoreDeleted)
+    {
+        @sr["You've just restored a previously deleted page to the editor, click save to re-create the page. If this is not intended, click cancel."]
+    }
+    @if (!Model.DidReplaceDraft && !Model.DidRestoreDeleted)
+    {
+        @sr["A previous verion of this page has been restored to the editor. If this is not intended, click cancel."]
+    }
+</div>
+}

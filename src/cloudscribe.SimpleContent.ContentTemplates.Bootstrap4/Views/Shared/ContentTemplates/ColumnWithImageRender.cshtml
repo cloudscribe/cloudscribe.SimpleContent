@@ -1,0 +1,77 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ColumnsWithImageViewModel
+@{
+    Layout = "_LayoutEmpty";
+    var columnCount = 0;
+    if (!string.IsNullOrWhiteSpace(Model.ColumnOneContent)) { columnCount += 1; }
+    if (!string.IsNullOrWhiteSpace(Model.ColumnTwoContent)) { columnCount += 1; }
+    if (!string.IsNullOrWhiteSpace(Model.ColumnThreeContent)) { columnCount += 1; }
+    if (!string.IsNullOrWhiteSpace(Model.ColumnFourContent)) { columnCount += 1; }
+
+}
+@functions{
+    public string GetCssClass(int columnCount)
+    {
+        switch(columnCount)
+        {
+            case 4:
+                return "col-12 col-md-6 col-lg-3";
+            case 3:
+                return "col-12 col-md-6 col-lg-4";
+            case 2:
+                return "col-12 col-md-6 col-lg-6";
+
+            case 1:
+            default:
+                return "col";
+               
+        }
+
+        
+    }
+}
+
+<div class="row">
+    @if (!string.IsNullOrWhiteSpace(Model.ColumnOneContent))
+    {
+        <div class="@GetCssClass(columnCount)">
+            @if (!string.IsNullOrWhiteSpace(Model.ColumnOneResizedUrl))
+            {
+                <img src="@Model.ColumnOneResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnOneAltText" />
+            }
+            @Html.Raw(Model.ColumnOneContent)
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ColumnTwoContent))
+    {
+        <div class="@GetCssClass(columnCount)">
+            @if (!string.IsNullOrWhiteSpace(Model.ColumnTwoResizedUrl))
+            {
+                <img src="@Model.ColumnTwoResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnTwoAltText" />
+            }
+            @Html.Raw(Model.ColumnTwoContent)
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ColumnThreeContent))
+    {
+        <div class="@GetCssClass(columnCount)">
+            @if (!string.IsNullOrWhiteSpace(Model.ColumnThreeResizedUrl))
+            {
+                <img src="@Model.ColumnThreeResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnThreeAltText" />
+            }
+            @Html.Raw(Model.ColumnThreeContent)
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ColumnFourContent))
+    {
+        <div class="@GetCssClass(columnCount)">
+            @if (!string.IsNullOrWhiteSpace(Model.ColumnFourResizedUrl))
+            {
+                <img src="@Model.ColumnFourResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnFourAltText" />
+            }
+            @Html.Raw(Model.ColumnFourContent)
+        </div>
+    }
+
+
+
+</div>

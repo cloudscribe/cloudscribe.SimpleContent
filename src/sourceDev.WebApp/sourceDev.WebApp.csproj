@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.SimpleContent.CompiledViews.Bootstrap4.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.MySQL\cloudscribe.SimpleContent.Storage.EFCore.MySQL.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.pgsql\cloudscribe.SimpleContent.Storage.EFCore.pgsql.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj" />
@@ -47,9 +48,9 @@
   
   
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Web" Version="3.0.*" />
-    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.0.*" />
-    
+    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.*" />
+    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.*" />
+    <PackageReference Include="cloudscribe.Web.StaticFiles" Version="1.0.*" />
    
     
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="3.0.*" />

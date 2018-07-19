@@ -7,7 +7,7 @@
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
 @using System.Linq
-@{ 
+@{
 
 }
 @section Meta {
@@ -20,14 +20,29 @@
         <environment names="Development">
             @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "css" && (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
             {
-                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))" />
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
             }
-            
+
         </environment>
         <environment names="Staging,Production">
             @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "css" && (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
             {
-                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/?"))" />
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
+            }
+        </environment>
+    }
+    @if (Model.Template != null)
+    {
+        <environment names="Development">
+            @foreach (var c in Model.Template.RenderCss.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
+            }
+        </environment>
+        <environment names="Staging,Production">
+            @foreach (var c in Model.Template.RenderCss.Where(x => (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <link rel="stylesheet" href="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))" />
             }
         </environment>
     }
@@ -35,7 +50,7 @@
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("ToolsPartial", Model);  
+        await Html.RenderPartialAsync("ToolsPartial", Model);
     }
 }
 @{await Html.RenderPartialAsync("PageDetailPartial", Model); }
@@ -48,20 +63,35 @@
     @await Component.InvokeAsync("FeaturedPosts", new { viewName = "FeaturedPosts", numberToShow = 3 })
 }
 @section Scripts {
-   @if (Model.CurrentPage != null)
-   {
-    <environment names="Development">
-        @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
-        {
-            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
-        }
-    </environment>
-    <environment names="Staging,Production">
-        @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
-        {
-            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
-        }
-    </environment>
-   }
-@{await Html.RenderPartialAsync("PageScriptsPartial", Model); }
+    @if (Model.CurrentPage != null)
+    {
+        <environment names="Development">
+            @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+            }
+        </environment>
+        <environment names="Staging,Production">
+            @foreach (var c in Model.CurrentPage.Resources.Where(x => x.Type == "js" && (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+            }
+        </environment>
+    }
+    @{await Html.RenderPartialAsync("PageScriptsPartial", Model); }
+    @if (Model.Template != null)
+    {
+        <environment names="Development">
+            @foreach (var c in Model.Template.RenderScripts.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+            }
+        </environment>
+        <environment names="Staging,Production">
+            @foreach (var c in Model.Template.RenderScripts.Where(x => (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+            {
+                <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+            }
+        </environment>
+    }
 }

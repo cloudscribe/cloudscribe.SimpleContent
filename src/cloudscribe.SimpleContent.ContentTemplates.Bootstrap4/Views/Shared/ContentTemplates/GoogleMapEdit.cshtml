@@ -1,0 +1,57 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.GoogleMapViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@{
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions(); 
+}
+
+
+<ul class="nav nav-tabs" role="tablist">
+    <li id="cedit-tab1" class="nav-item">
+        <a class="nav-link active" href="#tabMain" data-toggle="tab">@sr["Map"]</a>
+    </li>
+    <li id="cedit-tab2" class="nav-item">
+        <a class="nav-link" href="#tabTopContent" data-toggle="tab">@sr["Top Content"]</a>
+    </li>
+    <li id="cedit-tab3" class="nav-item">
+        <a class="nav-link" href="#tabBottomContent" data-toggle="tab">@sr["Bottom Content"]</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane pt-2 active" id="tabMain" role="tabpanel" aria-labelledby="cedit-tab1">
+
+        <div id="editMap"></div>
+
+
+    </div>
+    <div class="tab-pane pt-2" id="tabTopContent" role="tabpanel" aria-labelledby="cedit-tab2">
+        <textarea asp-for="ContentAbove" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+    </div>
+    <div class="tab-pane pt-2" id="tabBottomContent" role="tabpanel" aria-labelledby="cedit-tab3">
+        <textarea asp-for="ContentBelow" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    </div>
+</div>
+<div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
+        </div>
+    </div>
+</div>

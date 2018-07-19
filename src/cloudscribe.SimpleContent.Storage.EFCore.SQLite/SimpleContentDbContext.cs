@@ -17,12 +17,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            var tableNames = new SimpleContentTableNames();
-
+            
             modelBuilder.Entity<ProjectSettings>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.ProjectTableName);
+                entity.ToTable("cs_ContentProject");
 
                 entity.HasKey(p => p.Id);
 
@@ -137,7 +135,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
             modelBuilder.Entity<PostEntity>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.PostTableName);
+                entity.ToTable("cs_Post");
 
                 entity.HasKey(p => p.Id);
 
@@ -180,15 +178,29 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.Property(p => p.ContentType)
                 .HasMaxLength(50)
-                .HasDefaultValue("html")
-                ;
+                .HasDefaultValue("html");
+
+                entity.Property(p => p.TemplateKey)
+                  .HasMaxLength(255);
+
+                entity.Property(p => p.Serializer)
+                  .HasMaxLength(50);
+
+                entity.Property(p => p.CreatedByUser)
+                  .HasMaxLength(100);
+
+                entity.Property(p => p.LastModifiedByUser)
+                  .HasMaxLength(100);
+
+                entity.Property(p => p.DraftAuthor)
+                .HasMaxLength(255);
 
 
             });
 
             modelBuilder.Entity<PostComment>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.PostCommentTableName);
+                entity.ToTable("cs_PostComment");
 
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
@@ -216,7 +228,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
             modelBuilder.Entity<PostCategory>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.PostCategoryTableName);
+                entity.ToTable("cs_PostCategory");
 
                 entity.HasKey(p => new { p.Value, p.PostEntityId });
 
@@ -235,7 +247,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
             modelBuilder.Entity<PageEntity>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.PageTableName);
+                entity.ToTable("cs_Page");
 
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
@@ -304,14 +316,28 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.Property(p => p.ContentType)
                .HasMaxLength(50)
-               .HasDefaultValue("html")
-               ;
+               .HasDefaultValue("html");
+
+                entity.Property(p => p.TemplateKey)
+                  .HasMaxLength(255);
+
+                entity.Property(p => p.Serializer)
+                  .HasMaxLength(50);
+
+                entity.Property(p => p.CreatedByUser)
+                  .HasMaxLength(100);
+
+                entity.Property(p => p.LastModifiedByUser)
+                  .HasMaxLength(100);
+
+                entity.Property(p => p.DraftAuthor)
+                .HasMaxLength(255);
 
             });
 
             modelBuilder.Entity<PageComment>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.PageCommentTableName);
+                entity.ToTable("cs_PageComment");
 
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
@@ -340,7 +366,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
             modelBuilder.Entity<PageCategory>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.PageCategoryTableName);
+                entity.ToTable("cs_PageCategory");
 
                 entity.HasKey(p => new { p.Value, p.PageEntityId });
 
@@ -359,7 +385,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
             modelBuilder.Entity<PageResourceEntity>(entity =>
             {
-                entity.ToTable(tableNames.TablePrefix + tableNames.PageResourceTableName);
+                entity.ToTable("cs_PageResource");
 
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
@@ -378,6 +404,76 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.Property(p => p.Type).HasMaxLength(10).IsRequired();
 
                 entity.Property(p => p.Url).HasMaxLength(255).IsRequired();
+
+
+            });
+
+            modelBuilder.Entity<ContentHistory>(entity =>
+            {
+                entity.ToTable("cs_ContentHistory");
+
+                entity.HasKey(p => p.Id);
+
+                entity.Property(p => p.Id).HasMaxLength(36);
+
+                entity.Property(p => p.CorrelationKey).HasMaxLength(255);
+
+                entity.HasIndex(p => p.CorrelationKey);
+
+                entity.Property(p => p.ContentId)
+                .HasMaxLength(36)
+                .IsRequired();
+
+                entity.HasIndex(p => p.ContentId);
+
+                entity.Property(p => p.Title)
+                .HasMaxLength(255)
+                .IsRequired();
+
+                entity.HasIndex(p => p.Title);
+
+                entity.Property(p => p.Slug)
+                .HasMaxLength(255);
+
+                entity.Property(p => p.Author)
+                .HasMaxLength(255);
+
+                entity.Property(p => p.IsPublished)
+                .IsRequired();
+
+                entity.Property(p => p.ContentType)
+                   .HasMaxLength(50)
+                   .HasDefaultValue("html");
+
+                entity.Property(p => p.CreatedByUser)
+                  .HasMaxLength(100);
+
+                entity.HasIndex(p => p.CreatedByUser);
+
+                entity.Property(p => p.LastModifiedByUser)
+                  .HasMaxLength(100);
+
+                entity.HasIndex(p => p.LastModifiedByUser);
+
+                entity.Property(p => p.DraftAuthor)
+                .HasMaxLength(255);
+
+                entity.Property(p => p.ContentSource)
+                .HasMaxLength(50)
+                .IsRequired();
+
+                entity.HasIndex(p => p.ContentSource);
+
+                entity.Property(p => p.DraftAuthor)
+                .HasMaxLength(255);
+
+                entity.Property(p => p.ArchivedBy)
+                .HasMaxLength(255);
+
+                entity.Property(p => p.ParentSlug).HasMaxLength(255);
+                entity.Property(p => p.ParentId).HasMaxLength(255);
+                entity.Property(p => p.TemplateKey).HasMaxLength(255);
+                entity.Property(p => p.Serializer).HasMaxLength(50);
 
 
             });

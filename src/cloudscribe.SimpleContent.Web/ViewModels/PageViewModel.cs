@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2017-11-21
+// Last Modified:           2018-07-03
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -26,6 +26,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         
         public IProjectSettings ProjectSettings { get; set; }
         public IPage CurrentPage { get; set; } = null;
+        public ContentTemplate Template { get; set; } = null;
 
         public string EditPath { get; set; } = string.Empty;
         public string NewItemPath { get; set; } = string.Empty;
@@ -44,6 +45,14 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public IComment TmpComment { get; set; } = null;
         public ITimeZoneHelper TimeZoneHelper { get; set; }
         public string TimeZoneId { get; set; } = "GMT";
+
+        public bool HasPublishedVersion { get; set; }
+        public bool HasDraft { get; set; }
+        public bool ShowingDraft { get; set; }
+        public bool ShowingDeleted { get; set; }
+
+        public Guid? HistoryId { get; set; }
+        public DateTime? HistoryArchiveDate { get; set; }
 
         public string FormatDate(DateTime pubDate)
         {

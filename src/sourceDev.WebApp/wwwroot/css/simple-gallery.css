@@ -1,0 +1,139 @@
+﻿
+.gallery-block.cards-gallery h6 {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.gallery-block.cards-gallery .card {
+    transition: 0.4s ease;
+}
+
+.gallery-block.cards-gallery .card img {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-block.cards-gallery .card-body {
+text-align: center;
+}
+
+.gallery-block.cards-gallery .card-body p {
+    font-size: 15px;
+}
+
+.gallery-block.cards-gallery a {
+color: #212529;
+}
+
+.gallery-block.cards-gallery a:hover {
+    text-decoration: none;
+}
+
+.gallery-block.cards-gallery .card {
+margin-bottom: 30px;
+box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* compact */
+.gallery-block.compact-gallery .item {
+overflow: hidden;
+margin-bottom: 0;
+background: black;
+opacity: 1;
+}
+
+.gallery-block.compact-gallery .item .image {
+    transition: 0.8s ease;
+}
+
+.gallery-block.compact-gallery .item .info {
+    position: relative;
+    display: inline-block;
+}
+
+.gallery-block.compact-gallery .item .description {
+    display: grid;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    padding: 10px;
+    font-size: 17px;
+    line-height: 18px;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    opacity: 1;
+    color: #fff;
+    transition: 0.8s ease;
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.39));
+}
+
+    .gallery-block.compact-gallery .item .description .description-heading {
+        font-size: 1em;
+        font-weight: bold;
+    }
+
+    .gallery-block.compact-gallery .item .description .description-body {
+        font-size: 0.8em;
+        margin-top: 10px;
+        font-weight: 300;
+    }
+
+/* grid */
+.gallery-block.grid-gallery .heading {
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+    .gallery-block.grid-gallery .heading h2 {
+        font-weight: bold;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+    }
+
+.gallery-block.grid-gallery a:hover {
+    opacity: 0.8;
+}
+
+.gallery-block.grid-gallery .item img {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+    transition: 0.4s;
+}
+
+.gallery-block.grid-gallery .item {
+    margin-bottom: 20px;
+}
+
+@media (min-width: 576px) {
+
+    .gallery-block .transform-on-hover:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .gallery-block.compact-gallery .item .description {
+        opacity: 0;
+    }
+
+    .gallery-block.compact-gallery .item a:hover .description {
+        opacity: 1;
+    }
+
+    .gallery-block.compact-gallery .zoom-on-hover:hover .image {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
+    .gallery-block.grid-gallery .scale-on-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
+    }
+}
+
+@media (min-width: 690px) {
+    .simple-gallery-side-carousel {
+        width: 690px;
+    }
+}
+

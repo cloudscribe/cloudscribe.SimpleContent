@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2017-10-05
+// Last Modified:           2018-07-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -19,34 +19,34 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     {
         public PostQueries(
             PostCache cache,
-           // IBasicCommands<Post> postCommands,
             IBasicQueries<Post> postQueries
             //,ILogger<PostQueries> logger
             )
         {
-            this.cache = cache;
-           // commands = postCommands;
-            query = postQueries;
+            _cache = cache;
+            _query = postQueries;
            // log = logger;
         }
 
-        private PostCache cache;
+        private readonly PostCache _cache;
        // private IBasicCommands<Post> commands;
-        private IBasicQueries<Post> query;
+        private readonly IBasicQueries<Post> _query;
        // private ILogger log;
         
         
-        public async Task<List<Post>> GetAllPosts(
+        private async Task<List<Post>> GetAllPosts(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var list = cache.GetAllPosts(projectId);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var list = _cache.GetAllPosts(projectId);
             if (list != null) return list;
 
-            var l = await query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
+            var l = await _query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
             list = l.ToList();
-            cache.AddToCache(list, projectId);
+            _cache.AddToCache(list, projectId);
             
             return list;
 
@@ -58,17 +58,16 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var list = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
             list = list.Where(p =>
                       (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
-                      ).ToList<Post>();
-
-            if (list.Count > 0)
-            {
-                list.Sort((p1, p2) => p2.PubDate.CompareTo(p1.PubDate));
-            }
-
+                      )
+                      .OrderByDescending(p => p.PubDate ?? p.LastModified)
+                      .ToList<Post>();
+            
             var result = new List<IPost>();
             result.AddRange(list);
 
@@ -84,6 +83,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
             var totalPosts = posts.Count;
 
@@ -94,7 +95,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                      && p.Categories.Any(
                         c => string.Equals(c, category, StringComparison.OrdinalIgnoreCase))
                         )
-                        .OrderByDescending(p => p.PubDate)
+                        .OrderByDescending(p => p.PubDate ?? p.LastModified)
                         .ToList<Post>();
 
                 totalPosts = posts.Count;
@@ -105,10 +106,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 posts = posts.Where(p =>
                     (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
                         )
-                        .OrderByDescending(p => p.PubDate)
+                        .OrderByDescending(p => p.PubDate ?? p.LastModified)
                         .ToList<Post>();
-
-                //posts = posts.OrderByDescending(p => p.PubDate).ToList<Post>();
+                
             }
 
             if (pageSize > 0)
@@ -124,9 +124,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var data = new List<IPost>();
             data.AddRange(posts);
 
-            var result = new PagedPostResult();
-            result.Data = data;
-            result.TotalItems = totalPosts;
+            var result = new PagedPostResult
+            {
+                Data = data,
+                TotalItems = totalPosts
+            };
 
             return result;
         }
@@ -138,6 +140,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var list = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
             list = list.Where(p =>
@@ -217,34 +221,37 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             if (day > 0 && month > 0)
             {
-                posts = posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
-                && x.PubDate.Day == day
+                posts = posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
+                && x.PubDate.Value.Day == day
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
-                .OrderByDescending(p => p.PubDate)
+                .OrderByDescending(p => p.PubDate ?? p.LastModified)
                 .ToList<Post>();
             }
             else if (month > 0)
             {
-                posts = posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
+                posts = posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
-                .OrderByDescending(p => p.PubDate)
+                .OrderByDescending(p => p.PubDate ?? p.LastModified)
                 .ToList<Post>();
 
             }
             else
             {
-                posts = posts.Where(
-                x => x.PubDate.Year == year
+                posts = posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
                 )
-                .OrderByDescending(p => p.PubDate)
+                .OrderByDescending(p => p.PubDate ?? p.LastModified)
                 .ToList<Post>();
             }
 
@@ -282,10 +289,11 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             if (day > 0 && month > 0)
             {
-                return posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
-                && x.PubDate.Day == day
+                return posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
+                && x.PubDate.Value.Day == day
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
@@ -293,9 +301,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
             else if (month > 0)
             {
-                return posts.Where(
-                x => x.PubDate.Year == year
-                && x.PubDate.Month == month
+                return posts.Where(x =>
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
+                && x.PubDate.Value.Month == month
                 && (includeUnpublished || (x.IsPublished
                 && x.PubDate <= DateTime.UtcNow))
                 )
@@ -303,8 +312,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             }
 
-            return posts.Where(
-                x => x.PubDate.Year == year
+            return posts.Where(x => 
+                x.PubDate.HasValue
+                && x.PubDate.Value.Year == year
                 )
                 .Count();
 
@@ -316,7 +326,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            return await query.FetchAsync(blogId, postId, cancellationToken).ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return await _query.FetchAsync(blogId, postId, cancellationToken).ConfigureAwait(false);
             //var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
             //return allPosts.FirstOrDefault(p => p.Id == postId);
 
@@ -328,6 +340,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var result = new PostResult();
             var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
             result.Post = allPosts.FirstOrDefault(p => p.Slug == slug);
@@ -341,7 +355,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     p => p.PubDate < cutoff
                     && p.IsPublished == true
                     )
-                    .OrderByDescending(p => p.PubDate)
+                    .OrderByDescending(p => p.PubDate ?? p.LastModified)
                     .Take(1)
                     .FirstOrDefault();
                 
@@ -350,7 +364,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     p => p.PubDate > cutoff
                     && p.IsPublished == true
                     )
-                    .OrderBy(p => p.PubDate)
+                    .OrderBy(p => p.PubDate ?? p.LastModified)
                     .Take(1)
                     .FirstOrDefault();
 
@@ -365,6 +379,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
             return allPosts.FirstOrDefault(p => p.CorrelationKey == correlationKey);
 
@@ -376,6 +392,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var allPosts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
 
             var isInUse = allPosts.Any(
@@ -390,7 +408,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var list = cache.GetCategories(projectId, includeUnpublished);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var list = _cache.GetCategories(projectId, includeUnpublished);
             if(list == null)
             {
                 var dict = new Dictionary<string, int>();
@@ -413,7 +433,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
                 var sorted = new SortedDictionary<string, int>(dict);
                 list = sorted.OrderBy(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
-                cache.AddCategoriesToCache(list, projectId, includeUnpublished);
+                _cache.AddCategoriesToCache(list, projectId, includeUnpublished);
             
             }
             return list;
@@ -426,7 +446,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var list = cache.GetArchiveList(projectId, includeUnpublished);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var list = _cache.GetArchiveList(projectId, includeUnpublished);
             if(list == null)
             {
                 var result = new Dictionary<string, int>();
@@ -445,7 +467,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                     cancellationToken).ConfigureAwait(false);
 
                 var grouped = from p in visiblePosts
-                              group p by new { month = p.PubDate.Month, year = p.PubDate.Year } into d
+                              group p by new { month = p.PubDate?.Month ?? p.LastModified.Month, year = p.PubDate?.Year ?? p.LastModified.Year } into d
                               select new
                               {
                                   key = d.Key.year.ToString() + "/" + d.Key.month.ToString("00")
@@ -459,7 +481,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 }
 
                 list = result;
-                cache.AddArchiveListToCache(list, projectId, includeUnpublished);
+                _cache.AddArchiveListToCache(list, projectId, includeUnpublished);
 
             }
             return list;

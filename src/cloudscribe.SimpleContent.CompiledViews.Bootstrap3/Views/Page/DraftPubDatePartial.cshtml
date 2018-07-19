@@ -1,0 +1,15 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@{ 
+    var message = "";
+    if(Model.DraftPubDate.HasValue)
+    {
+        var format = sr["This content is scheduled to be published {0}."].ToString();
+        message = string.Format(format, Model.DraftPubDate.Value);
+    }
+
+}
+@if (Model.DraftPubDate.HasValue)
+{
+    <p class="text-success">@message</p>
+}

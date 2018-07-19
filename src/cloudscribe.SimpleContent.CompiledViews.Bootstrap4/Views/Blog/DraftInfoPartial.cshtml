@@ -1,0 +1,53 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IBlogRoutes blogRoutes
+@{
+    DateTime? pubDate = Model.CurrentPost.PubDate;
+    if (!pubDate.HasValue) { pubDate = DateTime.UtcNow; }
+}
+@if (Model.ShowingDraft && Model.CanEdit)
+{
+    <div class="alert alert-info" role="alert">
+        @sr["You are currently viewing a draft version of this post."]
+        @if (Model.CurrentPost.PubDate.HasValue)
+        {
+            <em>
+                @sr["Scheduled Publish Date:"]&nbsp;@Model.FormatDateForEdit(Model.CurrentPost.PubDate.Value)
+            </em>
+        }
+        @if (Model.HasPublishedVersion)
+        {
+            @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+            {
+                <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
+                   asp-route-year="@pubDate.Value.Year"
+                   asp-route-month="@pubDate.Value.Month.ToString("00")"
+                   asp-route-day="@pubDate.Value.Day.ToString("00")"
+                   asp-route-slug="@Model.CurrentPost.Slug"
+                   itemprop="url">@sr["View published version."]</a>
+            }
+            else
+            {
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" itemprop="url">@sr["View published version."]</a>
+            }
+        }
+    </div>
+}
+else if (Model.HasDraft && Model.CanEdit)
+{
+    @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+    {
+    <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
+       asp-route-year="@pubDate.Value.Year"
+       asp-route-month="@pubDate.Value.Month.ToString("00")"
+       asp-route-day="@pubDate.Value.Day.ToString("00")"
+       asp-route-slug="@Model.CurrentPost.Slug"
+       asp-route-showdraft="true"
+       itemprop="url">@sr["View current draft."]</a>
+    }
+    else
+    {
+        <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-route-showdraft="true" itemprop="url">@sr["View current draft."]</a>
+    }
+
+}

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2017-12-22
+// Last Modified:			2018-07-01
 // 
 
 
@@ -41,7 +41,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
         public string Content { get; set; }
 
-        public DateTime PubDate { get; set; } = DateTime.UtcNow;
+        public DateTime? PubDate { get; set; } 
 
         public DateTime LastModified { get; set; } = DateTime.UtcNow;
 
@@ -112,29 +112,24 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         // Teaser.
         public string TeaserOverride { get; set; }
         public bool SuppressTeaser { get; set; }
-        
+
+        // new fields 2018-06-20
+        public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
+        public string CreatedByUser { get; set; }
+        public string LastModifiedByUser { get; set; }
+        public string DraftContent { get; set; }
+        public string DraftAuthor { get; set; }
+        public DateTime? DraftPubDate { get; set; }
+
+        public string TemplateKey { get; set; }
+        public string SerializedModel { get; set; }
+        public string DraftSerializedModel { get; set; }
+        public string Serializer { get; set; }
+
         public static PostEntity FromIPost(IPost post)
         {
             var p = new PostEntity();
-            p.Author = post.Author;
-            p.BlogId = post.BlogId;
-            p.Categories = post.Categories;
-            //p.Comments = post.Comments;
-            p.Content = post.Content;
-            p.ContentType = post.ContentType;
-            p.Id = post.Id;
-            p.IsPublished = post.IsPublished;
-            p.LastModified = post.LastModified;
-            p.MetaDescription = post.MetaDescription;
-            p.PubDate = post.PubDate;
-            p.Slug = post.Slug;
-            p.Title = post.Title;
-            p.CorrelationKey = post.CorrelationKey;
-            p.ImageUrl = post.ImageUrl;
-            p.ThumbnailUrl = post.ThumbnailUrl;
-            p.IsFeatured = post.IsFeatured;
-            p.TeaserOverride = post.TeaserOverride;
-            p.SuppressTeaser = post.SuppressTeaser;
+            post.CopyTo(p);
             return p;
         }
 

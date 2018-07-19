@@ -1,0 +1,23 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ImageWithContentViewModel
+@{
+    Layout = "_LayoutEmpty";
+}
+@if (!string.IsNullOrWhiteSpace(Model.ResizedUrl))
+{
+    if (Model.Layout == "ImageOnLeft")
+    {
+        <div class="float-md-left simple-side-image mr-md-2">
+            <img class="image-responsive" src="@Model.ResizedUrl" alt="@Model.AltText" />
+        </div>
+
+    }
+    if (Model.Layout == "ImageOnRight")
+    {
+        <div class="float-md-right simple-side-image ml-md-2">
+            <img class="image-responsive" src="@Model.ResizedUrl" alt="@Model.AltText" />
+        </div>
+
+    }
+
+}
+@Html.Raw(Model.Content)

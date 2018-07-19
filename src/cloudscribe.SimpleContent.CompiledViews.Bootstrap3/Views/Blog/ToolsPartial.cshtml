@@ -4,9 +4,11 @@
 @using Microsoft.Extensions.Options
 @using Microsoft.Extensions.Localization
 @inject IOptions<IconCssClasses> iconClassesAccessor
+@inject IOptions<BlogEditOptions> editOptionsAccessor
 @inject IStringLocalizer<SimpleContent> sr
 @{
     var icons = iconClassesAccessor.Value;
+    var editOptions = editOptionsAccessor.Value;
 }
 <a id="newPostLink" href="@Model.NewItemPath" title="@sr["New Post"]" class="btn btn-sm content-new" style="position:absolute;top:70px;right:0px;">
     <span class="@icons.NewItem" aria-hidden="true"></span>
@@ -15,5 +17,11 @@
 {
     <a id="editPostLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit" style="position:absolute;top:100px;right:0px;">
         <span class="@icons.ShowEditToolbar" aria-hidden="true"></span>
+    </a>
+}
+@if (!editOptions.HideUnpublishButton && Model.CurrentPost != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPost.IsPublished)
+{
+    <a id="unpublishPostLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:130px;right:0px;" data-toggle="modal" data-target="#confirmUnpublishModal">
+        <span class="@icons.Unpublish" aria-hidden="true"></span>
     </a>
 }

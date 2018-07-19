@@ -1,0 +1,91 @@
+﻿@model sourceDev.WebApp.ViewModels.StaffMemberViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@{
+    Layout = "_LayoutEmpty";
+}
+<div>
+    <a href="@Model.ImageFullSizeUrl"><img src="@Model.ImageUrl" alt="@Model.FirstName" /></a>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @sr["Name"]
+        </dt>
+        <dd class="col-sm-10">
+            @Model.FirstName @Model.LastName
+        </dd>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Email))
+        {
+            <dt class="col-sm-2">
+                @sr["Email"]
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Email
+            </dd>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Phone))
+        {
+            <dt class="col-sm-2">
+                @sr["Phone"]
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Phone
+            </dd>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.MobilePhone))
+        {
+            <dt class="col-sm-2">
+                @sr["Mobile Phone"]
+            </dt>
+            <dd class="col-sm-10">
+                @Model.MobilePhone
+            </dd>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ProfileUrl))
+        {
+            <dt class="col-sm-2">
+                @sr["Profile Url"]
+            </dt>
+            <dd class="col-sm-10">
+                <a href="@Model.ProfileUrl">@sr["Profile"]</a>
+            </dd>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Department))
+        {
+            <dt class="col-sm-2">
+                @sr["Department"]
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Department
+            </dd>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Position))
+        {
+            <dt class="col-sm-2">
+                @sr["Position"]
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Position
+            </dd>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.Biography))
+        {
+            <dt class="col-sm-2">
+                @sr["Biography"]
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Biography
+            </dd>
+        }
+        @if (Model.JoinDate.HasValue)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.JoinDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.JoinDate.Value.ToShortDateString())
+            </dd>
+        }
+
+    </dl>
+</div>
+

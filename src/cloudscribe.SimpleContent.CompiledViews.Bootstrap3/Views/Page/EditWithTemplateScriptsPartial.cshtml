@@ -1,0 +1,43 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditWithTemplateViewModel
+@inject IRoleSelectorProperties roleSelector
+@{ await Html.RenderPartialAsync("DatePickerBs4Scripts"); }
+@{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
+@*<script src="~/cr/js/cloudscribe-validation-requiredwhen.min.js"></script>*@
+<script src="~/cr/js/jquery.validate.hooks.min.js"></script>
+<script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+@{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }
+<environment names="Development">
+    @foreach (var c in Model.Template.EditScripts.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+    {
+        <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+    }
+</environment>
+<environment names="Staging,Production">
+    @foreach (var c in Model.Template.EditScripts.Where(x => (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+    {
+        <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+    }
+</environment>
+
+@if (roleSelector.RequiredScriptPaths != null)
+{
+    foreach (var s in roleSelector.RequiredScriptPaths)
+    {
+        <script src="@Url.Content(s)"></script>
+    }
+}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+    $(document).ready(function () {
+        $('#SaveMode').click(function () {
+            var newDateVal = $('#NewPubDate').val();
+            if (newDateVal.length == 0) {
+                $('#dateRequired').modal('show')
+                $('#SaveMode').html($('#SaveMode').data("enabled-text"));
+                return false;
+            }    
+        });
+    });
+</script>

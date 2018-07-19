@@ -13,7 +13,7 @@
     {
         if (Model.ProjectSettings.IncludePubDateInPostUrls)
         {
-            return Url.RouteUrl(blogRoutes.PostWithDateRouteName, new { year = post.PubDate.Year, month = post.PubDate.Month.ToString("00"), day = post.PubDate.Day.ToString("00"), slug = post.Slug });
+            return Url.RouteUrl(blogRoutes.PostWithDateRouteName, new { year = post.PubDate.Value.Year, month = post.PubDate.Value.Month.ToString("00"), day = post.PubDate.Value.Day.ToString("00"), slug = post.Slug });
 
         }
 
@@ -27,17 +27,18 @@
     <h3 class="featured-posts">@sr["Featured Posts"]</h3>
     @foreach (var post in Model.Posts)
     {
+        if(!post.PubDate.HasValue) { continue; }
         var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
         <div class="media mb-1">
         @if (!string.IsNullOrWhiteSpace(imgUrl))
         {
-            <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" height="75" alt="image"></a>
+            <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" alt="@post.Title"></a>
         }
         <div class="media-body pl-1">
             <h4 class="media-heading">
                 <a href="@GetUrl(post)">@post.Title</a>
             </h4>
-            <small>@Model.FormatDate(post.PubDate)</small>
+            <small>@Model.FormatDate(post.PubDate.Value)</small>
         </div>  
         </div>
     }
