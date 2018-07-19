@@ -24,7 +24,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<ColumnTemplateOptions>(configuration.GetSection("ContentTemplateSettings:ColumnTemplateOptions"));
             services.TryAddScoped<IColumnTemplateOptionsProvider, ConfigColumnTemplateOptionsProvider>();
 
-            
+            services.Configure<ImageWithContentOptions>(configuration.GetSection("ContentTemplateSettings:ImageWithContentOptions"));
+            services.TryAddScoped<IImageWithContentOptionsProvider, ConfigImageWithContentOptionsProvider>();
+
+
 
 
             return services;

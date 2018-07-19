@@ -1,15 +1,18 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ImageWithContentViewModel
 @using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
 @using Microsoft.AspNetCore.Antiforgery
 @using Newtonsoft.Json;
 @using System.Net
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject IAntiforgery antiforgery
 @inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IImageWithContentOptionsProvider optionsProvider
 @{
 
     var tokens = antiforgery.GetAndStoreTokens(Context);
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var options = await optionsProvider.ResolveImageWithContentOptions(Context.Request.Host.Host, Context.Request.Path);
 
 }
 @functions{
@@ -30,12 +33,12 @@
              data-anti-forgery-token="@tokens.RequestToken"
              data-file-browse-url="@ckOptions.ImageBrowseUrl"
              data-file-crop-url="@ckOptions.CropFileUrl"
-             data-target-path="/media/images"
-             data-create-thumb="false"
+             data-target-path="@options.NewImagePath"
+             data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
              data-resize-image="true"
-             data-keep-original="false"
-             data-enable-browse-server="true"
-             data-enable-crop="true"
+             data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+             data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+             data-enable-crop="@options.EnableCropping.ToString().ToLower()"
              data-accepted-files="image/*"
              data-target-fullsize-input-id="FullSizeUrl"
              data-target-resized-input-id="ResizedUrl"
@@ -43,14 +46,14 @@
              data-target-fullsize-image-id="dz1Image"
              data-target-resized-image-id=""
              data-target-thumb-image-id=""
-             data-fullsize-placeholder-image="/cr/images/690x517-placeholder.png"
+             data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
              data-resized-placeholder-image=""
              data-thumb-placeholder-image=""
-             data-resize-width="1500"
-             data-resize-height="1500"
-             data-crop-area-width="690"
-             data-crop-area-height="517"
-             data-crop-width-ratio="1.33378">
+             data-resize-width="@options.ResizeMaxWidth"
+             data-resize-height="@options.ResizeMaxHeight"
+             data-crop-area-width="@options.CropAreaWidth"
+             data-crop-area-height="@options.CropAreaHeight"
+             >
             @sr["Drop file here or click to browse device for file."]
         </div>
         <div class="pl-1 pt-1">

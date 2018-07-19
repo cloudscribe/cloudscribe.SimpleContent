@@ -30,8 +30,4 @@
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Configuration\Image\" />
-  </ItemGroup>
 </Project>
