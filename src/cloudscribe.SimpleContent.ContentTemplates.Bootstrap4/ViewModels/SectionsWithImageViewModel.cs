@@ -1,7 +1,9 @@
 ﻿namespace cloudscribe.SimpleContent.ContentTemplates.ViewModels
 {
-    public class ColumnsWithImageViewModel
+    public class SectionsWithImageViewModel
     {
+        public string Layout { get; set; }
+
         public string ColumnOneContent { get; set; }
         public string ColumnOneResizedUrl { get; set; }
         public string ColumnOneFullSizeUrl { get; set; }

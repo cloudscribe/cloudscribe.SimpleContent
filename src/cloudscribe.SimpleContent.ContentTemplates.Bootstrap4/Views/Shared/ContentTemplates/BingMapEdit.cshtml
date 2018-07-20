@@ -1,4 +1,4 @@
-﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.GoogleMapViewModel
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.BingMapViewModel
 @using cloudscribe.SimpleContent.ContentTemplates
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject ICkeditorOptionsResolver editorOptionsResolver
@@ -21,7 +21,21 @@
 <div class="tab-content">
     <div class="tab-pane pt-2 active" id="tabMain" role="tabpanel" aria-labelledby="cedit-tab1">
 
-        <div id="editMap"></div>
+        <div class="form-group">
+            <label asp-for="LocationName" class="control-label">@sr["Location Name"]</label>
+            <input asp-for="LocationName" class="form-control" />
+            <span asp-validation-for="LocationName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LocationAddress" class="control-label">@sr["Location Address"]</label>
+            <input asp-for="LocationAddress" class="form-control" />
+            <span asp-validation-for="LocationAddress" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ApiKey" class="control-label">@sr["Bing Map Api Key"]</label>
+            <input asp-for="ApiKey" class="form-control" />
+            <span asp-validation-for="ApiKey" class="text-danger"></span>
+        </div>
 
 
     </div>

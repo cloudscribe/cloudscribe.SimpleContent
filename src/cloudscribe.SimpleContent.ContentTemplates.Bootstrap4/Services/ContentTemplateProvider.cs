@@ -30,11 +30,11 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             if(_list != null) { return; }
 
             _list = new List<ContentTemplate>();
-            _list.Add(BuildColumnWithImages());
+            _list.Add(BuildSectionsWithImages());
             _list.Add(BuildImageWithContent());
             _list.Add(BuildGalleryWithContent());
             _list.Add(BuildListOfLinks());
-            //_list.Add(BuildGoogleMap());
+            _list.Add(BuildBingLocationMap());
 
         }
 
@@ -247,16 +247,16 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
         }
 
 
-        private ContentTemplate BuildColumnWithImages()
+        private ContentTemplate BuildSectionsWithImages()
         {
             var template = new ContentTemplate()
             {
                 Key = "sct-ColumnsWithImages",
                 Title = _sr["Columns with optional top images"],
                 Description = _sr["One to four column responsive layout with an optional image at the top of each column."],
-                EditView = "ContentTemplates/ColumnWithImageEdit",
-                RenderView = "ContentTemplates/ColumnWithImageRender",
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ColumnsWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                EditView = "ContentTemplates/SectionsWithImageEdit",
+                RenderView = "ContentTemplates/SectionsWithImageRender",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
                 ScreenshotUrl = "",
                 ProjectId = "*",
                 AvailbleForFeature = "*",
@@ -405,16 +405,16 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
         }
 
 
-        private ContentTemplate BuildGoogleMap()
+        private ContentTemplate BuildBingLocationMap()
         {
             var template = new ContentTemplate()
             {
-                Key = "sct-googlemap",
-                Title = _sr["Google Map with content above and below"],
-                Description = "",
-                EditView = "ContentTemplates/GoogleMapEdit",
-                RenderView = "ContentTemplates/GoogleMapRender",
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.GoogleMapViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                Key = "sct-bing-location-map",
+                Title = _sr["Bing address location map with content above and below"],
+                Description = _sr["The map will be centered on the address you provide and users can get directions to the location. Optional content can be provided above and below the map. Requires a Bing Maps API key."],
+                EditView = "ContentTemplates/BingMapEdit",
+                RenderView = "ContentTemplates/BingMapRender",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.BingMapViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
                 ScreenshotUrl = "",
                 ProjectId = "*",
                 AvailbleForFeature = "*",
@@ -446,12 +446,12 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 },
                 EditScripts = new List<ScriptFile>()
                 {
-                    new ScriptFile()
-                    {
-                        Url = "/js/simple-googlemap-edit.js",
-                        Environment = "any",
-                        Sort = 1
-                    }
+                    //new ScriptFile()
+                    //{
+                    //    Url = "/js/simple-googlemap-edit.js",
+                    //    Environment = "any",
+                    //    Sort = 1
+                    //}
                 },
 
                 RenderCss = new List<CssFile>()
@@ -462,7 +462,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 {
                     new ScriptFile()
                     {
-                        Url = "/js/simple-googlemap-render.js",
+                        Url = "/cr/js/cloudscribe-unobtrusive-bing-location-map.min.js",
                         Environment = "any",
                         Sort = 1
                     }
