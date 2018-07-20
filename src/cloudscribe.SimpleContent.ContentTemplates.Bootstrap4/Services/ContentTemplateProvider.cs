@@ -252,8 +252,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             var template = new ContentTemplate()
             {
                 Key = "sct-ColumnsWithImages",
-                Title = _sr["Columns with optional top images"],
-                Description = _sr["One to four column responsive layout with an optional image at the top of each column."],
+                Title = _sr["One to four sections with an optional image per section"],
+                Description = _sr["There are 2 layouts to choose from, responsive columns with images on top, or images floated to alternate sides per section to wrap content around the images."],
                 EditView = "ContentTemplates/SectionsWithImageEdit",
                 RenderView = "ContentTemplates/SectionsWithImageRender",
                 ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
@@ -305,12 +305,24 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                         Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
                         Environment = "any",
                         Sort = 3
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/unsaved-changes-prompt.min.js",
+                        Environment = "any",
+                        Sort = 4
                     }
+
                 },
                 
                 RenderCss = new List<CssFile>()
                 {
-
+                    new CssFile
+                    {
+                        Url = "/sctr/css/simple-image.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    }
                 },
                 RenderScripts = new List<ScriptFile>()
                 {

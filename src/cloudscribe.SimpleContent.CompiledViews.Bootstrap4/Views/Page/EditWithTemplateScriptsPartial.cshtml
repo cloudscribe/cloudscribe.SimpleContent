@@ -5,6 +5,7 @@
 @*<script src="~/cr/js/cloudscribe-validation-requiredwhen.min.js"></script>*@
 <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
 <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+<script src="/cr/js/unsaved-changes-prompt.min.js"></script>
 @{ await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial"); }
 <environment names="Development">
     @foreach (var c in Model.Template.EditScripts.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())

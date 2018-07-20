@@ -20,6 +20,7 @@
     }
 }
 <p>@sr["Sections with no content body will not be shown even if they have images."]</p>
+@{ await Html.RenderPartialAsync("SectionsWithImageEditLayoutSelector", Model);}
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
         <a id="cedit-tab1" class="nav-link active" href="#tabCol1" data-toggle="tab" role="tab" aria-controls="tabCol1" aria-selected="true">@sr["Section 1"]</a>
@@ -125,8 +126,7 @@
                      data-resize-width="@options.ResizeMaxWidth"
                      data-resize-height="@options.ResizeMaxHeight"
                      data-crop-area-width="@options.CropAreaWidth"
-                     data-crop-area-height="@options.CropAreaHeight"
-                     >
+                     data-crop-area-height="@options.CropAreaHeight">
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">
@@ -185,8 +185,7 @@
                      data-resize-width="@options.ResizeMaxWidth"
                      data-resize-height="@options.ResizeMaxHeight"
                      data-crop-area-width="@options.CropAreaWidth"
-                     data-crop-area-height="@options.CropAreaHeight"
-                     >
+                     data-crop-area-height="@options.CropAreaHeight">
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">
@@ -244,8 +243,7 @@
                      data-resize-width="@options.ResizeMaxWidth"
                      data-resize-height="@options.ResizeMaxHeight"
                      data-crop-area-width="@options.CropAreaWidth"
-                     data-crop-area-height="@options.CropAreaHeight"
-                     >
+                     data-crop-area-height="@options.CropAreaHeight">
                     @sr["Drop file here or click to browse device for file."]
                 </div>
                 <div class="pl-1 pt-1">

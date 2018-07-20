@@ -4,6 +4,7 @@
 @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
 <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
 <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+<script src="/cr/js/unsaved-changes-prompt.min.js"></script>
 @if (Model.ContentType == "markdown")
 {
     <script src="~/cr/js/simplemde.min.js"></script>
