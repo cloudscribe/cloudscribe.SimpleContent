@@ -35,106 +35,106 @@
     <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(blogRoutes.PostHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
 }
 @{ await Html.RenderPartialAsync("EditHistoryInfoPartial", Model); }
-    <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
-        <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
-        <input type="hidden" id="id" name="id" value="@Model.Id" />
-        <input type="hidden" asp-for="@Model.IsPublished" />
-        <input type="hidden" asp-for="@Model.HistoryId" />
-        <input type="hidden" asp-for="ContentType" />
-        <div asp-validation-summary="All" class="text-danger"></div>
-        @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
-        <div class="form-group">
-            <label asp-for="Title" class="col-md-2 control-label">@sr["Title"]</label>
-            <div class="col-md-10">
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
+<form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
+    <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
+    <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <input type="hidden" asp-for="@Model.IsPublished" />
+    <input type="hidden" asp-for="@Model.HistoryId" />
+    <input type="hidden" asp-for="ContentType" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    @Html.ValidationMessage("postediterror", new { @class = "text-danger" })
+    <div class="form-group">
+        <label asp-for="Title" class="col-md-2 control-label">@sr["Title"]</label>
+        <div class="col-md-10">
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
-        @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
-        @{ await Html.RenderPartialAsync("EditSlugPartial", Model); }
-        <div class="form-group">
-            <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
-            <div class="col-md-10">
-                <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
-                <span asp-validation-for="MetaDescription" class="text-danger"></span>
-            </div>
+    </div>
+    @{ await Html.RenderPartialAsync("EditCorrelationKeyPartial", Model); }
+    @{ await Html.RenderPartialAsync("EditSlugPartial", Model); }
+    <div class="form-group">
+        <label asp-for="MetaDescription" class="col-md-2 control-label">@sr["Meta Description"]</label>
+        <div class="col-md-10">
+            <input asp-for="MetaDescription" class="form-control" data-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
+            <span asp-validation-for="MetaDescription" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
-            <div class="col-md-10">
-                @if (Model.ContentType == "markdown")
-                {
-                    await Html.RenderPartialAsync("EditContentMarkdownPartial", Model);
-                }
-                else
-                {
-                    await Html.RenderPartialAsync("EditContentHtmlPartial", Model);
-                }
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Categories" class="col-md-2 control-label">@sr["Categories"]</label>
-            <div class="col-md-10">
-                <input asp-for="Categories" class="form-control" />
-                <span asp-validation-for="Categories" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
-            <div class="col-md-10">
-                <input asp-for="Author" class="form-control" />
-                <span asp-validation-for="Author" class="text-danger"></span>
-            </div>
-        </div>
-        @{ await Html.RenderPartialAsync("EditImageUrlPartial", Model); }
-        <div class="form-group">
-            <div class="col-md-10 col-md-offset-2">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="IsFeatured" /> @sr["Is Featured"]
-                    </label>
-                </div>
-            </div>
-        </div>
-        
-        @if (Model.TeasersEnabled)
-        {
-            if (Model.ContentType == "markdown")
+    </div>
+    <div class="form-group">
+        <label asp-for="Content" class="col-md-2 control-label">@sr["Content"]</label>
+        <div class="col-md-10">
+            @if (Model.ContentType == "markdown")
             {
-                await Html.RenderPartialAsync("EditTeaserMarkdownPartial", Model);
+                await Html.RenderPartialAsync("EditContentMarkdownPartial", Model);
             }
             else
             {
-                await Html.RenderPartialAsync("EditTeaserHtmlPartial", Model);
+                await Html.RenderPartialAsync("EditContentHtmlPartial", Model);
             }
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Categories" class="col-md-2 control-label">@sr["Categories"]</label>
+        <div class="col-md-10">
+            <input asp-for="Categories" class="form-control" />
+            <span asp-validation-for="Categories" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Author" class="col-md-2 control-label">@sr["Author"]</label>
+        <div class="col-md-10">
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+    </div>
+    @{ await Html.RenderPartialAsync("EditImageUrlPartial", Model); }
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox">
+                <label>
+                    <input asp-for="IsFeatured" /> @sr["Is Featured"]
+                </label>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.TeasersEnabled)
+    {
+        if (Model.ContentType == "markdown")
+        {
+            await Html.RenderPartialAsync("EditTeaserMarkdownPartial", Model);
         }
         else
         {
-            await Html.RenderPartialAsync("EditTeaserDisabledPartial");
+            await Html.RenderPartialAsync("EditTeaserHtmlPartial", Model);
         }
+    }
+    else
+    {
+        await Html.RenderPartialAsync("EditTeaserDisabledPartial");
+    }
 
-        
-        <div class="col-md-offset-2 col-md-10" style="padding-left:0;">
-            <div class="form-inline">
-                    <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
-                    <button id="btnSavePublish" style="margin-left:2px;" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
-                    <button id="SaveMode" style="margin-left:2px;" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
-                
-                <div class="form-group ml-1 mt-1" style="margin-left:2px;margin-right:10px;">
-                    @{ await Html.RenderPartialAsync("EditPubDate", Model); }
-                </div>
-                @if (!string.IsNullOrEmpty(Model.Id))
-                {
-                    <button type="button" style="margin-left:10px;" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
-                        @sr["Delete"]
-                    </button>
-                }
 
+    <div class="col-md-offset-2 col-md-10" style="padding-left:0;">
+        <div class="form-inline">
+            <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+            <button id="btnSavePublish" style="margin-left:2px;" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+            <button id="SaveMode" style="margin-left:2px;" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Later:"]'>@sr["Publish Later:"]</button>
+
+            <div class="form-group ml-1 mt-1" style="margin-left:2px;margin-right:10px;">
+                @{ await Html.RenderPartialAsync("EditPubDate", Model); }
             </div>
+            @if (!string.IsNullOrEmpty(Model.Id))
+            {
+                <button type="button" style="margin-left:10px;" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                    @sr["Delete"]
+                </button>
+            }
+
         </div>
-        
-    </form>
+    </div>
+
+</form>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
     <form id="deleteform" class="form-inline" asp-route="@Model.DeletePostRouteName">
@@ -159,27 +159,28 @@
 
     </form>
 }
-    <div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
-                </div>
-                <div class="modal-body">
-                    @sr["To publish later you must enter a date."]
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
+<div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
+            </div>
+            <div class="modal-body">
+                @sr["To publish later you must enter a date."]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Ok"]</button>
 
-                </div>
             </div>
         </div>
     </div>
+</div>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
     <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+    <script src="/cr/js/unsaved-changes-prompt.min.js"></script>
     @if (Model.ContentType == "markdown")
     {
         <script src="~/cr/js/simplemde.min.js"></script>

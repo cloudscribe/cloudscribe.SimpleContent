@@ -1,0 +1,33 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel
+@if (!string.IsNullOrWhiteSpace(Model.ColumnOneContent))
+{
+    <div class="float-md-right simple-side-image ml-md-2">
+        <img class="image-responsive" src="@Model.ColumnOneResizedUrl" alt="@Model.ColumnOneAltText" />
+    </div>
+    @Html.Raw(Model.ColumnOneContent)
+     await Html.RenderPartialAsync("AdSpacePartial");
+}
+@if (!string.IsNullOrWhiteSpace(Model.ColumnTwoContent))
+{
+    <div class="float-md-left simple-side-image mr-md-2">
+        <img class="image-responsive" src="@Model.ColumnTwoResizedUrl" alt="@Model.ColumnTwoAltText" />
+    </div>
+    @Html.Raw(Model.ColumnTwoContent)
+    await Html.RenderPartialAsync("AdSpacePartial");
+}
+@if (!string.IsNullOrWhiteSpace(Model.ColumnThreeContent))
+{
+    <div class="float-md-right simple-side-image ml-md-2">
+        <img class="image-responsive" src="@Model.ColumnThreeResizedUrl" alt="@Model.ColumnThreeAltText" />
+    </div>
+    @Html.Raw(Model.ColumnThreeContent)
+    await Html.RenderPartialAsync("AdSpacePartial");
+}
+@if (!string.IsNullOrWhiteSpace(Model.ColumnFourContent))
+{
+    <div class="float-md-left simple-side-image mr-md-2">
+        <img class="image-responsive" src="@Model.ColumnFourResizedUrl" alt="@Model.ColumnFourAltText" />
+    </div>
+    @Html.Raw(Model.ColumnFourContent)
+    await Html.RenderPartialAsync("AdSpacePartial");
+}
