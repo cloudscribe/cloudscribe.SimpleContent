@@ -14,6 +14,8 @@ bool asideSecondaryVisible = true.Equals(ViewData["AsideSecondaryVisible"]);
 var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
 var siteRoot = "";
 if (!string.IsNullOrWhiteSpace(Tenant.SiteFolderName)) { siteRoot = "/" + Tenant.SiteFolderName; }
+var isIE = Context.Request.Headers["User-Agent"].ToString().Contains("Trident");
+var ieBodyClass = isIE ? "IE" : "";
 
 }
 <!DOCTYPE html>
@@ -35,7 +37,7 @@ if (!string.IsNullOrWhiteSpace(Tenant.SiteFolderName)) { siteRoot = "/" + Tenant
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
     <base href="@Context.Request.Path" />
 </head>
-<body class="d-flex flex-column @ViewData["BodyClass"]">
+<body class="d-flex flex-column @ViewData["BodyClass"]  @ieBodyClass">
     <header>
         <a id="skippy" class="sr-only sr-only-focusable" href="#content">
             <div class="container">
