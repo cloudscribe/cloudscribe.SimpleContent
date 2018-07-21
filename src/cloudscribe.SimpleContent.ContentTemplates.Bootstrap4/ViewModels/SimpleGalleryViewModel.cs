@@ -2,6 +2,6 @@
 {
     public class SimpleGalleryViewModel : ListWithContentModel
     {
-        public string Layout { get; set; } = "cards";
+        public string Layout { get; set; } = "GalleryWithContentRenderCardsPartial";
     }
 }

@@ -37,10 +37,9 @@
 </ul>
 <div id="myTabContent" class="tab-content">
     <div class="tab-pane active" id="tabCol1" role="tabpanel" aria-labelledby="cedit-tab1">
-
         <div class="d-flex align-items-stretch">
             <div class="cs-crop-container">
-                <img id="dz1Image" style="max-width:690px;" src="@GetImageUrl(Model.ColumnOneResizedUrl)" />
+                <img id="dz1Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionOneResizedUrl)" />
             </div>
             <div class="d-flex flex-column">
                 <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
@@ -56,8 +55,8 @@
                      data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
                      data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
-                     data-target-fullsize-input-id="ColumnOneFullSizeUrl"
-                     data-target-resized-input-id="ColumnOneResizedUrl"
+                     data-target-fullsize-input-id="SectionOneFullSizeUrl"
+                     data-target-resized-input-id="SectionOneResizedUrl"
                      data-target-thumb-input-id=""
                      data-target-fullsize-image-id="dz1Image"
                      data-target-resized-image-id=""
@@ -79,14 +78,18 @@
                 </div>
             </div>
         </div>
-        <input asp-for="ColumnOneFullSizeUrl" type="hidden" />
-        <input asp-for="ColumnOneResizedUrl" type="hidden" />
+        <input asp-for="SectionOneFullSizeUrl" type="hidden" />
+        <input asp-for="SectionOneResizedUrl" type="hidden" />
         <div class="form-group">
-            <label asp-for="ColumnOneAltText">@sr["Image Description"]</label>
-            <input asp-for="ColumnOneAltText" class="form-control" />
+            <label asp-for="SectionOneAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionOneAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnOneContent">@sr["Section 1 Content"]</label>
-        <textarea asp-for="ColumnOneContent" class="form-control"
+        <div class="form-group">
+            <label asp-for="SectionOneHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionOneHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionOneContent">@sr["Section 1 Content"]</label>
+        <textarea asp-for="SectionOneContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
                   data-ckeditor-config-language="@ckOptions.LanguageCode"
@@ -98,7 +101,7 @@
     <div class="tab-pane" id="tabCol2" role="tabpanel" aria-labelledby="cedit-tab2">
         <div class="d-flex align-items-stretch">
             <div class="cs-crop-container">
-                <img id="dz2Image" style="max-width:690px;" src="@GetImageUrl(Model.ColumnTwoResizedUrl)" />
+                <img id="dz2Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionTwoResizedUrl)" />
             </div>
             <div class="d-flex flex-column">
                 <div id="dz2" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
@@ -114,8 +117,8 @@
                      data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
                      data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
-                     data-target-fullsize-input-id="ColumnTwoFullSizeUrl"
-                     data-target-resized-input-id="ColumnTwoResizedUrl"
+                     data-target-fullsize-input-id="SectionTwoFullSizeUrl"
+                     data-target-resized-input-id="SectionTwoResizedUrl"
                      data-target-thumb-input-id=""
                      data-target-fullsize-image-id="dz2Image"
                      data-target-resized-image-id=""
@@ -137,14 +140,18 @@
                 </div>
             </div>
         </div>
-        <input asp-for="ColumnTwoFullSizeUrl" type="hidden" />
-        <input asp-for="ColumnTwoResizedUrl" type="hidden" />
+        <input asp-for="SectionTwoFullSizeUrl" type="hidden" />
+        <input asp-for="SectionTwoResizedUrl" type="hidden" />
         <div class="form-group">
-            <label asp-for="ColumnTwoAltText">@sr["Image Description"]</label>
-            <input asp-for="ColumnTwoAltText" class="form-control" />
+            <label asp-for="SectionTwoAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionTwoAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnTwoContent">@sr["Section 2 Content"]</label>
-        <textarea asp-for="ColumnTwoContent" class="form-control"
+        <div class="form-group">
+            <label asp-for="SectionTwoHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionTwoHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionTwoContent">@sr["Section 2 Content"]</label>
+        <textarea asp-for="SectionTwoContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
                   data-ckeditor-config-language="@ckOptions.LanguageCode"
@@ -157,7 +164,7 @@
 
         <div class="d-flex align-items-stretch">
             <div class="cs-crop-container">
-                <img id="dz3Image" style="max-width:690px;" src="@GetImageUrl(Model.ColumnThreeResizedUrl)" />
+                <img id="dz3Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionThreeResizedUrl)" />
             </div>
             <div class="d-flex flex-column">
                 <div id="dz3" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
@@ -173,8 +180,8 @@
                      data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
                      data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
-                     data-target-fullsize-input-id="ColumnThreeFullSizeUrl"
-                     data-target-resized-input-id="ColumnThreeResizedUrl"
+                     data-target-fullsize-input-id="SectionThreeFullSizeUrl"
+                     data-target-resized-input-id="SectionThreeResizedUrl"
                      data-target-thumb-input-id=""
                      data-target-fullsize-image-id="dz3Image"
                      data-target-resized-image-id=""
@@ -196,14 +203,18 @@
                 </div>
             </div>
         </div>
-        <input asp-for="ColumnThreeFullSizeUrl" type="hidden" />
-        <input asp-for="ColumnThreeResizedUrl" type="hidden" />
+        <input asp-for="SectionThreeFullSizeUrl" type="hidden" />
+        <input asp-for="SectionThreeResizedUrl" type="hidden" />
         <div class="form-group">
-            <label asp-for="ColumnThreeAltText">@sr["Image Description"]</label>
-            <input asp-for="ColumnThreeAltText" class="form-control" />
+            <label asp-for="SectionThreeAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionThreeAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnThreeContent">@sr["Section 3 Content"]</label>
-        <textarea asp-for="ColumnThreeContent" class="form-control"
+        <div class="form-group">
+            <label asp-for="SectionThreeHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionThreeHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionThreeContent">@sr["Section 3 Content"]</label>
+        <textarea asp-for="SectionThreeContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
                   data-ckeditor-config-language="@ckOptions.LanguageCode"
@@ -215,7 +226,7 @@
 
         <div class="d-flex align-items-stretch">
             <div class="cs-crop-container">
-                <img id="dz4Image" style="max-width:690px;" src="@GetImageUrl(Model.ColumnFourResizedUrl)" />
+                <img id="dz4Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionFourResizedUrl)" />
             </div>
             <div class="d-flex flex-column">
                 <div id="dz4" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
@@ -231,8 +242,8 @@
                      data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
                      data-enable-crop="@options.EnableCropping.ToString().ToLower()"
                      data-accepted-files="image/*"
-                     data-target-fullsize-input-id="ColumnFourFullSizeUrl"
-                     data-target-resized-input-id="ColumnFourResizedUrl"
+                     data-target-fullsize-input-id="SectionFourFullSizeUrl"
+                     data-target-resized-input-id="SectionFourResizedUrl"
                      data-target-thumb-input-id=""
                      data-target-fullsize-image-id="dz4Image"
                      data-target-resized-image-id=""
@@ -254,14 +265,18 @@
                 </div>
             </div>
         </div>
-        <input asp-for="ColumnFourFullSizeUrl" type="hidden" />
-        <input asp-for="ColumnFourResizedUrl" type="hidden" />
+        <input asp-for="SectionFourFullSizeUrl" type="hidden" />
+        <input asp-for="SectionFourResizedUrl" type="hidden" />
         <div class="form-group">
-            <label asp-for="ColumnFourAltText">@sr["Image Description"]</label>
-            <input asp-for="ColumnFourAltText" class="form-control" />
+            <label asp-for="SectionFourAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionFourAltText" class="form-control" />
         </div>
-        <label asp-for="ColumnFourContent">@sr["Section 4 Content"]</label>
-        <textarea asp-for="ColumnFourContent" class="form-control"
+        <div class="form-group">
+            <label asp-for="SectionFourHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionFourHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionFourContent">@sr["Section 4 Content"]</label>
+        <textarea asp-for="SectionFourContent" class="form-control"
                   data-ckeditor-unobtrusive=""
                   data-ckeditor-config-url="@ckOptions.CustomConfigPath"
                   data-ckeditor-config-language="@ckOptions.LanguageCode"

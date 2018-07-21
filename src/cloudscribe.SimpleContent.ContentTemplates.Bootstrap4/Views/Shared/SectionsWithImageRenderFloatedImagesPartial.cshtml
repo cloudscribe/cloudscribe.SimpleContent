@@ -1,33 +1,57 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel
-@if (!string.IsNullOrWhiteSpace(Model.ColumnOneContent))
+@if (!string.IsNullOrWhiteSpace(Model.SectionOneContent))
 {
-    <div class="float-md-right simple-side-image ml-md-2">
-        <img class="image-responsive" src="@Model.ColumnOneResizedUrl" alt="@Model.ColumnOneAltText" />
+    <div class="clearfix">
+        @if (!string.IsNullOrWhiteSpace(Model.SectionOneHeading))
+        {
+            <h3>@Model.SectionOneHeading</h3>
+        }
+        <div class="float-md-right simple-side-image ml-md-2">
+            <img class="image-responsive" src="@Model.SectionOneResizedUrl" alt="@Model.SectionOneAltText" />
+        </div>
+        @Html.Raw(Model.SectionOneContent)
     </div>
-    @Html.Raw(Model.ColumnOneContent)
-     await Html.RenderPartialAsync("AdSpacePartial");
-}
-@if (!string.IsNullOrWhiteSpace(Model.ColumnTwoContent))
-{
-    <div class="float-md-left simple-side-image mr-md-2">
-        <img class="image-responsive" src="@Model.ColumnTwoResizedUrl" alt="@Model.ColumnTwoAltText" />
-    </div>
-    @Html.Raw(Model.ColumnTwoContent)
     await Html.RenderPartialAsync("AdSpacePartial");
 }
-@if (!string.IsNullOrWhiteSpace(Model.ColumnThreeContent))
+@if (!string.IsNullOrWhiteSpace(Model.SectionTwoContent))
 {
-    <div class="float-md-right simple-side-image ml-md-2">
-        <img class="image-responsive" src="@Model.ColumnThreeResizedUrl" alt="@Model.ColumnThreeAltText" />
+    <div class="clearfix">
+        @if (!string.IsNullOrWhiteSpace(Model.SectionTwoHeading))
+        {
+            <h3>@Model.SectionTwoHeading</h3>
+        }
+        <div class="float-md-left simple-side-image mr-md-2">
+            <img class="image-responsive" src="@Model.SectionTwoResizedUrl" alt="@Model.SectionTwoAltText" />
+        </div>
+        @Html.Raw(Model.SectionTwoContent)
     </div>
-    @Html.Raw(Model.ColumnThreeContent)
     await Html.RenderPartialAsync("AdSpacePartial");
 }
-@if (!string.IsNullOrWhiteSpace(Model.ColumnFourContent))
+@if (!string.IsNullOrWhiteSpace(Model.SectionThreeContent))
 {
-    <div class="float-md-left simple-side-image mr-md-2">
-        <img class="image-responsive" src="@Model.ColumnFourResizedUrl" alt="@Model.ColumnFourAltText" />
+    <div class="clearfix">
+        @if (!string.IsNullOrWhiteSpace(Model.SectionThreeHeading))
+        {
+            <h3>@Model.SectionThreeHeading</h3>
+        }
+        <div class="float-md-right simple-side-image ml-md-2">
+            <img class="image-responsive" src="@Model.SectionThreeResizedUrl" alt="@Model.SectionThreeAltText" />
+        </div>
+        @Html.Raw(Model.SectionThreeContent)
     </div>
-    @Html.Raw(Model.ColumnFourContent)
+    await Html.RenderPartialAsync("AdSpacePartial");
+}
+@if (!string.IsNullOrWhiteSpace(Model.SectionFourContent))
+{
+    <div class="clearfix">
+        @if (!string.IsNullOrWhiteSpace(Model.SectionFourHeading))
+        {
+            <h3>@Model.SectionFourHeading</h3>
+        }
+        <div class="float-md-left simple-side-image mr-md-2">
+            <img class="image-responsive" src="@Model.SectionFourResizedUrl" alt="@Model.SectionFourAltText" />
+        </div>
+        @Html.Raw(Model.SectionFourContent)
+    </div>
     await Html.RenderPartialAsync("AdSpacePartial");
 }

@@ -1,10 +1,10 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel
 @{
     var columnCount = 0;
-    if (!string.IsNullOrWhiteSpace(Model.ColumnOneContent)) { columnCount += 1; }
-    if (!string.IsNullOrWhiteSpace(Model.ColumnTwoContent)) { columnCount += 1; }
-    if (!string.IsNullOrWhiteSpace(Model.ColumnThreeContent)) { columnCount += 1; }
-    if (!string.IsNullOrWhiteSpace(Model.ColumnFourContent)) { columnCount += 1; }
+    if (!string.IsNullOrWhiteSpace(Model.SectionOneContent)) { columnCount += 1; }
+    if (!string.IsNullOrWhiteSpace(Model.SectionTwoContent)) { columnCount += 1; }
+    if (!string.IsNullOrWhiteSpace(Model.SectionThreeContent)) { columnCount += 1; }
+    if (!string.IsNullOrWhiteSpace(Model.SectionFourContent)) { columnCount += 1; }
 
 }
 @functions{
@@ -27,44 +27,60 @@
     }
 }
 <div class="row">
-    @if (!string.IsNullOrWhiteSpace(Model.ColumnOneContent))
+    @if (!string.IsNullOrWhiteSpace(Model.SectionOneContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if (!string.IsNullOrWhiteSpace(Model.ColumnOneResizedUrl))
+            @if(!string.IsNullOrWhiteSpace(Model.SectionOneHeading))
             {
-                <img src="@Model.ColumnOneResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnOneAltText" />
+                <h3>@Model.SectionOneHeading</h3>
             }
-            @Html.Raw(Model.ColumnOneContent)
+            @if (!string.IsNullOrWhiteSpace(Model.SectionOneResizedUrl))
+            {
+                <img src="@Model.SectionOneResizedUrl" class="image-responsive mb-1" alt="@Model.SectionOneAltText" />
+            }
+            @Html.Raw(Model.SectionOneContent)
         </div>
     }
-    @if (!string.IsNullOrWhiteSpace(Model.ColumnTwoContent))
+    @if (!string.IsNullOrWhiteSpace(Model.SectionTwoContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if (!string.IsNullOrWhiteSpace(Model.ColumnTwoResizedUrl))
+            @if (!string.IsNullOrWhiteSpace(Model.SectionTwoHeading))
             {
-                <img src="@Model.ColumnTwoResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnTwoAltText" />
+                <h3>@Model.SectionTwoHeading</h3>
             }
-            @Html.Raw(Model.ColumnTwoContent)
+            @if (!string.IsNullOrWhiteSpace(Model.SectionTwoResizedUrl))
+            {
+                <img src="@Model.SectionTwoResizedUrl" class="image-responsive mb-1" alt="@Model.SectionTwoAltText" />
+            }
+            @Html.Raw(Model.SectionTwoContent)
         </div>
     }
-    @if (!string.IsNullOrWhiteSpace(Model.ColumnThreeContent))
+    @if (!string.IsNullOrWhiteSpace(Model.SectionThreeContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if (!string.IsNullOrWhiteSpace(Model.ColumnThreeResizedUrl))
+            @if (!string.IsNullOrWhiteSpace(Model.SectionThreeHeading))
             {
-                <img src="@Model.ColumnThreeResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnThreeAltText" />
+                <h3>@Model.SectionThreeHeading</h3>
             }
-            @Html.Raw(Model.ColumnThreeContent)
+            @if (!string.IsNullOrWhiteSpace(Model.SectionThreeResizedUrl))
+            {
+                <img src="@Model.SectionThreeResizedUrl" class="image-responsive mb-1" alt="@Model.SectionThreeAltText" />
+            }
+            @Html.Raw(Model.SectionThreeContent)
         </div>
     }
-    @if (!string.IsNullOrWhiteSpace(Model.ColumnFourContent))
+    @if (!string.IsNullOrWhiteSpace(Model.SectionFourContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if (!string.IsNullOrWhiteSpace(Model.ColumnFourResizedUrl))
+            @if (!string.IsNullOrWhiteSpace(Model.SectionFourHeading))
             {
-                <img src="@Model.ColumnFourResizedUrl" class="image-responsive mb-1" alt="@Model.ColumnFourAltText" />
+                <h3>@Model.SectionFourHeading</h3>
             }
-            @Html.Raw(Model.ColumnFourContent)
+            @if (!string.IsNullOrWhiteSpace(Model.SectionFourResizedUrl))
+            {
+                <img src="@Model.SectionFourResizedUrl" class="image-responsive mb-1" alt="@Model.SectionFourAltText" />
+            }
+            @Html.Raw(Model.SectionFourContent)
         </div>
     }
 </div>
