@@ -7,31 +7,31 @@
 <div class="content-top">
     @Html.Raw(Model.ContentAbove)
 </div>
-<div class="row">
-    <div class="col-md-8">
-        <div id="bingMap1" class='bingMap' style="width: 100%;height: 400px;"
-             data-bing-map=""
-             data-location-title="@Model.LocationName"
-             data-address="@Model.LocationAddress"
-             data-directions-element-id="bingMap1Directions"
-             data-itinerary-element-id="bingMap1Itinerary"
-             data-from-address-element-id="bingMap1FromAddress"
-             data-get-directions-button-id="bingMap1GetDirectionsButton"></div>
-    </div>
-    <div class="col-md-4">
-        <div id="bingMap1Directions" class="map-directions mt-2 mb-2">
-            <div class="form-group">
-                <input id="bingMap1FromAddress" type="text" class="form-control" placeholder="From Address" />
-            </div>
-            <button id="bingMap1GetDirectionsButton" type="button" class="btn btn-primary">Get Directions</button>
-            <a href="@Context.Request.Path">Clear</a>
+@if (!string.IsNullOrWhiteSpace(Model.ApiKey))
+{
+    <div id="bingMap1" class='bingMap' style="width: 100%;height: 400px;"
+            data-bing-map=""
+            data-location-title="@Model.LocationName"
+            data-address="@Model.LocationAddress"
+            data-directions-element-id="bingMap1Directions"
+            data-itinerary-element-id="bingMap1Itinerary"
+            data-from-address-element-id="bingMap1FromAddress"
+            data-get-directions-button-id="bingMap1GetDirectionsButton"></div>
+        
+    <div id="bingMap1Directions" class="map-directions mt-2 mb-2">
+        <div class="form-group">
+            <input id="bingMap1FromAddress" type="text" class="form-control" placeholder="From Address" />
         </div>
-        <div id='bingMap1Itinerary'></div>
-
+        <button id="bingMap1GetDirectionsButton" type="button" class="btn btn-primary">@sr["Get Directions"]</button>
+        <a href="javascript:window.location.reload(true)">@sr["Clear"]</a>
     </div>
-</div>
+    <div id='bingMap1Itinerary'></div>  
+}
 <div class="content-bottom">
     @Html.Raw(Model.ContentBelow)
 </div>
+@if (!string.IsNullOrWhiteSpace(Model.ApiKey))
+{
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario&key=@Model.ApiKey' async defer></script>
+}
 
-<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario&key=@Model.ApiKey' async defer></script>

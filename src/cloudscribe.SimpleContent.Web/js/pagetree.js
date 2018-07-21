@@ -86,7 +86,7 @@ $(function () {
                 type: "POST",
                 url: pageTree.urls.moveUrl,
                 async: false,
-                headers: { 'X-XSRF-TOKEN': this.xsrfToken },
+                headers: { 'X-CSRFToken': this.xsrfToken },
                 dataType: "json",
                 data: obj,
                 success: function (data, textStatus, jqXHR) {
@@ -118,7 +118,7 @@ $(function () {
                     $.ajax({
                         type: "POST",
                         url: pageTree.urls.sortUrl,
-                        headers: { 'X-XSRF-TOKEN': pageTree.xsrfToken },
+                        headers: { 'X-CSRFToken': pageTree.xsrfToken },
                         async: false,
                         processData: true,
                         dataType: "json",
@@ -163,7 +163,7 @@ $(function () {
                     $.ajax({
                         type: "POST",
                         url: pageTree.urls.deleteUrl,
-                        headers: { 'X-XSRF-TOKEN': pageTree.xsrfToken },
+                        headers: { 'X-CSRFToken': pageTree.xsrfToken },
                         async: false,
                         dataType: "json",
                         data: objDel,
