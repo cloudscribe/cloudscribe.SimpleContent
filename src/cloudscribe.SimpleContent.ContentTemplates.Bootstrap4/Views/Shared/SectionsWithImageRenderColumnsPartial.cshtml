@@ -30,13 +30,13 @@
     @if (!string.IsNullOrWhiteSpace(Model.SectionOneContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if(!string.IsNullOrWhiteSpace(Model.SectionOneHeading))
-            {
-                <h3>@Model.SectionOneHeading</h3>
-            }
             @if (!string.IsNullOrWhiteSpace(Model.SectionOneResizedUrl))
             {
                 <img src="@Model.SectionOneResizedUrl" class="image-responsive mb-1" alt="@Model.SectionOneAltText" />
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.SectionOneHeading))
+            {
+                <h3>@Model.SectionOneHeading</h3>
             }
             @Html.Raw(Model.SectionOneContent)
         </div>
@@ -44,13 +44,13 @@
     @if (!string.IsNullOrWhiteSpace(Model.SectionTwoContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if (!string.IsNullOrWhiteSpace(Model.SectionTwoHeading))
-            {
-                <h3>@Model.SectionTwoHeading</h3>
-            }
             @if (!string.IsNullOrWhiteSpace(Model.SectionTwoResizedUrl))
             {
                 <img src="@Model.SectionTwoResizedUrl" class="image-responsive mb-1" alt="@Model.SectionTwoAltText" />
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.SectionTwoHeading))
+            {
+                <h3>@Model.SectionTwoHeading</h3>
             }
             @Html.Raw(Model.SectionTwoContent)
         </div>
@@ -58,13 +58,13 @@
     @if (!string.IsNullOrWhiteSpace(Model.SectionThreeContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if (!string.IsNullOrWhiteSpace(Model.SectionThreeHeading))
-            {
-                <h3>@Model.SectionThreeHeading</h3>
-            }
             @if (!string.IsNullOrWhiteSpace(Model.SectionThreeResizedUrl))
             {
                 <img src="@Model.SectionThreeResizedUrl" class="image-responsive mb-1" alt="@Model.SectionThreeAltText" />
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.SectionThreeHeading))
+            {
+                <h3>@Model.SectionThreeHeading</h3>
             }
             @Html.Raw(Model.SectionThreeContent)
         </div>
@@ -72,13 +72,13 @@
     @if (!string.IsNullOrWhiteSpace(Model.SectionFourContent))
     {
         <div class="@GetCssClass(columnCount)">
-            @if (!string.IsNullOrWhiteSpace(Model.SectionFourHeading))
-            {
-                <h3>@Model.SectionFourHeading</h3>
-            }
             @if (!string.IsNullOrWhiteSpace(Model.SectionFourResizedUrl))
             {
                 <img src="@Model.SectionFourResizedUrl" class="image-responsive mb-1" alt="@Model.SectionFourAltText" />
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.SectionFourHeading))
+            {
+                <h3>@Model.SectionFourHeading</h3>
             }
             @Html.Raw(Model.SectionFourContent)
         </div>

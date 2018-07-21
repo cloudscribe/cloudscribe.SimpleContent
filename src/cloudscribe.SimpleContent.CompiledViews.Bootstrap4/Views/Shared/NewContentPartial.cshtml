@@ -23,15 +23,16 @@
     </div>
     @foreach (var template in Model.Templates.Data)
     {
-        <div class="form-check">
-            <input class="form-check-input" type="radio" asp-for="SelectedTemplate" value="@template.Key" id="@(template.Key)" />
-            <label class="form-check-label" for="@(template.Key)">
-                @template.Title
-            </label>
-            <p>@template.Description</p>
-        </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" asp-for="SelectedTemplate" value="@template.Key" id="@(template.Key)" />
+        <span asp-validation-for="SelectedTemplate" class="invalid-feedback"></span>
+        <label class="form-check-label" for="@(template.Key)">
+            @template.Title
+        </label>
+        <p>@template.Description</p>
+    </div>
     }
-    <span asp-validation-for="SelectedTemplate" class="invalid-feedback"></span>
+    
 
 </form>
 <div class="mt-2">
