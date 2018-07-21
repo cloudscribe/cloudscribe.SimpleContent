@@ -111,7 +111,10 @@ function ItemListViewModel(initialData) {
     self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
         var item = new ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort);
         item.Sort.subscribe(self.handleSortItemChanged);
-        self.Items.push(item)
+        self.Items.push(item);
+        window.thisPage = window.thisPage || {};
+        window.thisPage.hasUnsavedChanges = true;
+
     }
 
     self.newItemTitle = ko.observable(null).extend({ required: "Title is required" });
@@ -138,7 +141,11 @@ function ItemListViewModel(initialData) {
         window.cloudscribeDropAndCrop.clearAllItems();
     }
 
-    self.removeItem = function (item) { self.Items.remove(item) }
+    self.removeItem = function (item) {
+        self.Items.remove(item);
+        window.thisPage = window.thisPage || {};
+        window.thisPage.hasUnsavedChanges = true;
+    }
 
     self.getCssClass = function (index) {
         if (index === 0) { return "carousel-item active"; }

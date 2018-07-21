@@ -437,33 +437,11 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
                 EditCss = new List<CssFile>()
                 {
-                    //new CssFile
-                    //{
-                    //    Url = "/cr/css/dropzone.min.css",
-                    //    Environment = "any",
-                    //    Sort = 1
-                    //},
-                    //new CssFile
-                    //{
-                    //    Url = "/cr/css/croppie.min.css",
-                    //    Environment = "any",
-                    //    Sort = 2
-                    //},
-                    //new CssFile
-                    //{
-                    //    Url = "/cr/css/croppie-cloudscribe.css",
-                    //    Environment = "any",
-                    //    Sort = 3
-                    //}
+                    
                 },
                 EditScripts = new List<ScriptFile>()
                 {
-                    //new ScriptFile()
-                    //{
-                    //    Url = "/js/simple-googlemap-edit.js",
-                    //    Environment = "any",
-                    //    Sort = 1
-                    //}
+                    
                 },
 
                 RenderCss = new List<CssFile>()
