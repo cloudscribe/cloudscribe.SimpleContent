@@ -288,7 +288,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         .IsRequired()
                         .HasMaxLength(36);
 
-                    b.Property<DateTime>("PubDate");
+                    b.Property<DateTime?>("PubDate");
 
                     b.Property<bool>("ShowCategories");
 
@@ -463,7 +463,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
                     b.Property<string>("MetaJson");
 
-                    b.Property<DateTime>("PubDate");
+                    b.Property<DateTime?>("PubDate");
 
                     b.Property<string>("Slug")
                         .IsRequired()

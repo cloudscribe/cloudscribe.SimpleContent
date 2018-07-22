@@ -95,7 +95,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     ParentId = table.Column<string>(maxLength: 36, nullable: true),
                     ParentSlug = table.Column<string>(maxLength: 255, nullable: true),
                     ProjectId = table.Column<string>(maxLength: 36, nullable: false),
-                    PubDate = table.Column<DateTime>(nullable: false),
+                    PubDate = table.Column<DateTime>(nullable: true),
                     ShowCategories = table.Column<bool>(nullable: false),
                     ShowComments = table.Column<bool>(nullable: false),
                     ShowHeading = table.Column<bool>(nullable: false),
@@ -142,7 +142,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     MetaDescription = table.Column<string>(maxLength: 500, nullable: true),
                     MetaHtml = table.Column<string>(nullable: true),
                     MetaJson = table.Column<string>(nullable: true),
-                    PubDate = table.Column<DateTime>(nullable: false),
+                    PubDate = table.Column<DateTime>(nullable: true),
                     Slug = table.Column<string>(maxLength: 255, nullable: false),
                     ThumbnailUrl = table.Column<string>(maxLength: 250, nullable: true),
                     Title = table.Column<string>(maxLength: 255, nullable: false)
