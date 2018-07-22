@@ -7,11 +7,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PubDate",
-                table: "cs_Post",
-                nullable: true,
-                oldClrType: typeof(DateTime));
+            //migrationBuilder.AlterColumn<DateTime>(
+            //    name: "PubDate",
+            //    table: "cs_Post",
+            //    nullable: true,
+            //    oldClrType: typeof(DateTime));
 
             migrationBuilder.AddColumn<string>(
                 name: "CreatedByUser",
@@ -69,11 +69,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                 maxLength: 255,
                 nullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PubDate",
-                table: "cs_Page",
-                nullable: true,
-                oldClrType: typeof(DateTime));
+            //migrationBuilder.AlterColumn<DateTime>(
+            //    name: "PubDate",
+            //    table: "cs_Page",
+            //    nullable: true,
+            //    oldClrType: typeof(DateTime));
 
             migrationBuilder.AddColumn<string>(
                 name: "CreatedByUser",
@@ -131,23 +131,23 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                 maxLength: 255,
                 nullable: true);
 
-            migrationBuilder.AlterColumn<byte>(
-                name: "TeaserTruncationMode",
-                table: "cs_ContentProject",
-                nullable: false,
-                defaultValue: (byte)0,
-                oldClrType: typeof(byte),
-                oldDefaultValue: (byte)0)
-                .OldAnnotation("Sqlite:Autoincrement", true);
+            //migrationBuilder.AlterColumn<byte>(
+            //    name: "TeaserTruncationMode",
+            //    table: "cs_ContentProject",
+            //    nullable: false,
+            //    defaultValue: (byte)0,
+            //    oldClrType: typeof(byte),
+            //    oldDefaultValue: (byte)0)
+            //    .OldAnnotation("Sqlite:Autoincrement", true);
 
-            migrationBuilder.AlterColumn<byte>(
-                name: "TeaserMode",
-                table: "cs_ContentProject",
-                nullable: false,
-                defaultValue: (byte)0,
-                oldClrType: typeof(byte),
-                oldDefaultValue: (byte)0)
-                .OldAnnotation("Sqlite:Autoincrement", true);
+            //migrationBuilder.AlterColumn<byte>(
+            //    name: "TeaserMode",
+            //    table: "cs_ContentProject",
+            //    nullable: false,
+            //    defaultValue: (byte)0,
+            //    oldClrType: typeof(byte),
+            //    oldDefaultValue: (byte)0)
+            //    .OldAnnotation("Sqlite:Autoincrement", true);
 
             migrationBuilder.AddColumn<int>(
                 name: "DefaultFeedItems",
@@ -230,128 +230,128 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "cs_ContentHistory");
+            //migrationBuilder.DropTable(
+            //    name: "cs_ContentHistory");
 
-            migrationBuilder.DropColumn(
-                name: "CreatedByUser",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "CreatedByUser",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "CreatedUtc",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "CreatedUtc",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "DraftAuthor",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftAuthor",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "DraftContent",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftContent",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "DraftPubDate",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftPubDate",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "DraftSerializedModel",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftSerializedModel",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "LastModifiedByUser",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "LastModifiedByUser",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "SerializedModel",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "SerializedModel",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "Serializer",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "Serializer",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "TemplateKey",
-                table: "cs_Post");
+            //migrationBuilder.DropColumn(
+            //    name: "TemplateKey",
+            //    table: "cs_Post");
 
-            migrationBuilder.DropColumn(
-                name: "CreatedByUser",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "CreatedByUser",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "CreatedUtc",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "CreatedUtc",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "DraftAuthor",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftAuthor",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "DraftContent",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftContent",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "DraftPubDate",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftPubDate",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "DraftSerializedModel",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "DraftSerializedModel",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "LastModifiedByUser",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "LastModifiedByUser",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "SerializedModel",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "SerializedModel",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "Serializer",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "Serializer",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "TemplateKey",
-                table: "cs_Page");
+            //migrationBuilder.DropColumn(
+            //    name: "TemplateKey",
+            //    table: "cs_Page");
 
-            migrationBuilder.DropColumn(
-                name: "DefaultFeedItems",
-                table: "cs_ContentProject");
+            //migrationBuilder.DropColumn(
+            //    name: "DefaultFeedItems",
+            //    table: "cs_ContentProject");
 
-            migrationBuilder.DropColumn(
-                name: "MaxFeedItems",
-                table: "cs_ContentProject");
+            //migrationBuilder.DropColumn(
+            //    name: "MaxFeedItems",
+            //    table: "cs_ContentProject");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PubDate",
-                table: "cs_Post",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldNullable: true);
+            //migrationBuilder.AlterColumn<DateTime>(
+            //    name: "PubDate",
+            //    table: "cs_Post",
+            //    nullable: false,
+            //    oldClrType: typeof(DateTime),
+            //    oldNullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "PubDate",
-                table: "cs_Page",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldNullable: true);
+            //migrationBuilder.AlterColumn<DateTime>(
+            //    name: "PubDate",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    oldClrType: typeof(DateTime),
+            //    oldNullable: true);
 
-            migrationBuilder.AlterColumn<byte>(
-                name: "TeaserTruncationMode",
-                table: "cs_ContentProject",
-                nullable: false,
-                defaultValue: (byte)0,
-                oldClrType: typeof(byte),
-                oldDefaultValue: (byte)0)
-                .Annotation("Sqlite:Autoincrement", true);
+            //migrationBuilder.AlterColumn<byte>(
+            //    name: "TeaserTruncationMode",
+            //    table: "cs_ContentProject",
+            //    nullable: false,
+            //    defaultValue: (byte)0,
+            //    oldClrType: typeof(byte),
+            //    oldDefaultValue: (byte)0)
+            //    .Annotation("Sqlite:Autoincrement", true);
 
-            migrationBuilder.AlterColumn<byte>(
-                name: "TeaserMode",
-                table: "cs_ContentProject",
-                nullable: false,
-                defaultValue: (byte)0,
-                oldClrType: typeof(byte),
-                oldDefaultValue: (byte)0)
-                .Annotation("Sqlite:Autoincrement", true);
+            //migrationBuilder.AlterColumn<byte>(
+            //    name: "TeaserMode",
+            //    table: "cs_ContentProject",
+            //    nullable: false,
+            //    defaultValue: (byte)0,
+            //    oldClrType: typeof(byte),
+            //    oldDefaultValue: (byte)0)
+            //    .Annotation("Sqlite:Autoincrement", true);
         }
     }
 }
