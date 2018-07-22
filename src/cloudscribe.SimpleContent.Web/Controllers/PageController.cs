@@ -635,6 +635,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
             
                 this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+                if(response.Value.Slug == project.DefaultPageSlug)
+                {
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+                }
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
             }
             else
@@ -915,6 +919,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     this.AlertWarning(StringLocalizer["Note that since this page has an override url, the menu item will link to the url so the page is used only as a means to add a link in the menu, the content is not used."], true);
                     return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = response.Value.Slug });
+                }
+
+                if(response.Value.Slug == project.DefaultPageSlug)
+                {
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
                 
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
