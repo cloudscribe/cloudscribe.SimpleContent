@@ -151,4 +151,8 @@ opacity: 1;
         width: 690px;
     }
 }
+/* IE 11 fixes */
+body.IE .cards-gallery .lightbox {
+    flex: 0 0 auto;
+}
 

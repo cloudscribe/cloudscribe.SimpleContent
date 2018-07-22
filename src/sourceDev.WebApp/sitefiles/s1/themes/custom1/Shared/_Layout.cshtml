@@ -27,13 +27,16 @@ var ieBodyClass = isIE ? "IE" : "";
     @RenderSection("Meta", required: false)
     <environment names="Development">
         <link rel="stylesheet" href="~/css/style.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
-        
+
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" />
-        
     </environment>
     @RenderSection("Styles", required: false)
+    @if (isIE)
+    {
+        <link rel="stylesheet" href="~/css/ie11.css" />
+    }
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
     <base href="@Context.Request.Path" />
 </head>
@@ -58,7 +61,7 @@ var ieBodyClass = isIE ? "IE" : "";
     </header>
     <div id="wrapper" class="container-fluid cs-container flex-fill">
         @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
-        <div class="row">
+        <div class="row mainrow">
             <main id="content" role="main" class="col order-3">
                 @await Html.PartialAsync("AlertsPartial")
                 @RenderBody()
