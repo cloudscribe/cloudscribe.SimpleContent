@@ -173,6 +173,14 @@ namespace cloudscribe.SimpleContent.Web.Services
                     page.MenuFilters = request.ViewModel.MenuFilters;
                     page.MetaDescription = request.ViewModel.MetaDescription;
                     page.PageOrder = request.ViewModel.PageOrder;
+
+                    page.ShowHeading = request.ViewModel.ShowHeading;
+                    page.ShowMenu = request.ViewModel.ShowMenu;
+                    page.ShowComments = request.ViewModel.ShowComments;
+                    page.MenuFilters = request.ViewModel.MenuFilters;
+                    
+                    page.ViewRoles = request.ViewModel.ViewRoles;
+
                     if (!string.IsNullOrEmpty(request.ViewModel.Slug))
                     {
                         page.Slug = request.ViewModel.Slug;

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-10
-// Last Modified:           2018-07-18
+// Last Modified:           2018-07-23
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -305,13 +305,14 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                         Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
                         Environment = "any",
                         Sort = 3
-                    },
-                    new ScriptFile()
-                    {
-                        Url = "/cr/js/unsaved-changes-prompt.min.js",
-                        Environment = "any",
-                        Sort = 4
                     }
+                    //,
+                    //new ScriptFile()
+                    //{
+                    //    Url = "/cr/js/unsaved-changes-prompt.min.js",
+                    //    Environment = "any",
+                    //    Sort = 4
+                    //}
 
                 },
                 
@@ -429,7 +430,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.BingMapViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
                 ScreenshotUrl = "",
                 ProjectId = "*",
-                AvailbleForFeature = "*",
+                AvailbleForFeature = "Page",
                 Enabled = true,
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
