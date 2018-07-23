@@ -353,7 +353,7 @@ namespace Microsoft.Extensions.DependencyInjection
                );
 
             routes.MapRoute(
-               name: ProjectConstants.PageHistoryRouteName,
+               name: ProjectConstants.FolderPageHistoryRouteName,
                template: "{sitefolder}/" + prefix + "/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { name = siteFolderConstraint }
