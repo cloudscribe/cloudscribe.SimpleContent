@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
-    public class PageEditRequestHandler : IRequestHandler<PageEditRquest, PageEditContext>
+    public class PageEditContextRequestHandler : IRequestHandler<PageEditContextRequest, PageEditContext>
     {
-        public PageEditRequestHandler(
+        public PageEditContextRequestHandler(
             IProjectService projectService,
             IPageService pageService,
             IAuthorizationService authorizationService,
@@ -37,7 +37,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IAutoPublishDraftPage _autoPublishDraftPage;
         private readonly IContentHistoryQueries _historyQueries;
 
-        public async Task<PageEditContext> Handle(PageEditRquest request, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<PageEditContext> Handle(PageEditContextRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             IPage page = null;
             ContentHistory history = null;

@@ -4,9 +4,9 @@ using System.Security.Claims;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
-    public class PageEditRquest : IRequest<PageEditContext>
+    public class PageEditContextRequest : IRequest<PageEditContext>
     {
-        public PageEditRquest(
+        public PageEditContextRequest(
             ClaimsPrincipal user,
             string slug,
             string pageId,

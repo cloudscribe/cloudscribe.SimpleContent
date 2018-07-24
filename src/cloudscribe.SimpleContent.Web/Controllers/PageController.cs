@@ -171,12 +171,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     if (HttpContext.Request.Path == "/")
                     {
                         ViewData["Title"] = StringLocalizer["Home"];
-                        page.Title = "No pages found, please click the pencil to create the home page";
+                        page.Title = "No pages found, please click the plus icon to create the home page";
                     }
                     else
                     {
                         ViewData["Title"] = StringLocalizer["No Pages Found"];
-                        page.Title = "No pages found, please click the pencil to create the first page";
+                        page.Title = "No pages found, please click the plus icon to create the first page";
 
                     }
                 }
@@ -312,7 +312,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             int pageSize = 10
             )
         {
-            var editContextRequest = new PageEditRquest(User, null, null, null);
+            var editContextRequest = new PageEditContextRequest(User, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
 
             if (!editContext.IsValidRequest)
@@ -504,7 +504,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> EditWithTemplate(PageEditWithTemplateViewModel model)
         {
-            var editContextRequest = new PageEditRquest(User, null, model.Id, model.HistoryId);
+            var editContextRequest = new PageEditContextRequest(User, null, model.Id, model.HistoryId);
             var editContext = await Mediator.Send(editContextRequest);
 
             if (!editContext.IsValidRequest)
@@ -569,9 +569,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
         }
 
-
         
-
         [HttpGet]
         [AllowAnonymous]
         public virtual async Task<IActionResult> Edit(
@@ -582,7 +580,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Guid? historyId = null
             )
         {
-            var request = new PageEditRquest(User, slug, null, historyId);
+            var request = new PageEditContextRequest(User, slug, null, historyId);
             var editContext = await Mediator.Send(request);
             if(!editContext.IsValidRequest)
             {
@@ -710,6 +708,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Edit(PageEditViewModel model)
         {
+            var editContextRequest = new PageEditContextRequest(User, null, model.Id, model.HistoryId);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
             if (!ModelState.IsValid)
             {
                 if (string.IsNullOrEmpty(model.Id))
@@ -720,50 +726,30 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], model.Title);
                 }
+                model.DisqusShortname = editContext.Project.DisqusShortName;
+                model.ProjectDefaultSlug = editContext.Project.DefaultPageSlug;
+
                 return View(model);
             }
-
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            
+            if (editContext.CurrentPage == null && model.HistoryId.HasValue) // restore a deleted page from history
             {
-                Log.LogInformation("redirecting to index because project settings not found");
-
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogInformation("redirecting to index because user is not allowed to edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
-            IPage page = null;
-            if (!string.IsNullOrEmpty(model.Id))
-            {
-                page = await PageService.GetPage(model.Id);
-            }
-
-            if (page == null && model.HistoryId.HasValue) // restore a deleted page from history
-            {
-                var history = await HistoryQueries.Fetch(project.Id, model.HistoryId.Value).ConfigureAwait(false);
+                var history = await HistoryQueries.Fetch(editContext.Project.Id, model.HistoryId.Value).ConfigureAwait(false);
                 if (history != null)
                 {
-                    page = new Page();
-                    history.CopyTo(page);
-                    await PageService.Create(page); // re-create page here because handler expects existing page and only updates
+                    var hxPage = new Page();
+                    history.CopyTo(hxPage);
+                    await PageService.Create(hxPage); // re-create page here because handler expects existing page and only updates
                 }
             }
 
-            var isNew = (page == null);
+            var isNew = (editContext.CurrentPage == null);
 
             var request = new CreateOrUpdatePageRequest(
-                project.Id,
+                editContext.Project.Id,
                 User.Identity.Name,
                 model,
-                page,
+                editContext.CurrentPage,
                 ModelState
                 );
 
@@ -785,7 +771,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = response.Value.Slug });
                 }
 
-                if(response.Value.Slug == project.DefaultPageSlug)
+                if(response.Value.Slug == editContext.Project.DefaultPageSlug)
                 {
                     return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
@@ -794,8 +780,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             else
             {
-                model.DisqusShortname = project.DisqusShortName;
-                model.ProjectDefaultSlug = project.DefaultPageSlug;
+                model.DisqusShortname = editContext.Project.DisqusShortName;
+                model.ProjectDefaultSlug = editContext.Project.DefaultPageSlug;
 
                 return View(model);
             }
@@ -808,21 +794,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             CancellationToken cancellationToken,
             string slug)
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, slug, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
-                return RedirectToRoute(PageRoutes.PageRouteName);
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" } );
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-            if (!canEdit)
-            {
-                Log.LogInformation("redirecting to index because user cannot edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
+            
             var canDev = EditOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(EditOptions.DeveloperAllowedRole);
 
             if (!canDev)
@@ -830,36 +809,31 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-
-            IPage page = null;
-            if (!string.IsNullOrEmpty(slug))
-            {
-                page = await PageService.GetPageBySlug(slug, cancellationToken);
-            }
-            if (page == null)
+            
+            if (editContext.CurrentPage == null)
             {
                 Log.LogInformation("page not found, redirecting");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            if ((!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles)))
             {
-                if (!User.IsInRoles(page.ViewRoles))
+                if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
                 {
-                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
-                    return RedirectToRoute(PageRoutes.PageRouteName);
+                    Log.LogWarning($"page {editContext.CurrentPage.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
             }
 
-            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Developer Tools - {0}"], page.Title);
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Developer Tools - {0}"], editContext.CurrentPage.Title);
 
             var model = new PageDevelopmentViewModel
             {
-                Slug = page.Slug
+                Slug = editContext.CurrentPage.Slug
             };
-            model.AddResourceViewModel.Slug = page.Slug;
-            model.Css = page.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
-            model.Js = page.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
+            model.AddResourceViewModel.Slug = editContext.CurrentPage.Slug;
+            model.Css = editContext.CurrentPage.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
+            model.Js = editContext.CurrentPage.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
             
             return View(model);
 
@@ -870,67 +844,55 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> AddResource(AddPageResourceViewModel model)
         {
-            if(!ModelState.IsValid)
+            var editContextRequest = new PageEditContextRequest(User, model.Slug, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if (!ModelState.IsValid)
             {
                 this.AlertDanger(StringLocalizer["Invalid request"], true);
                 return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = model.Slug });
             }
-
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
-            {
-                Log.LogInformation("redirecting to index because project settings not found");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-            if (!canEdit)
-            {
-                Log.LogInformation("redirecting to index because user is not allowed to edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
+            
             var canDev = EditOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(EditOptions.DeveloperAllowedRole);
             if (!canDev)
             {
                 Log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-
-            IPage page = null;
-            if (!string.IsNullOrEmpty(model.Slug))
-            {
-                page = await PageService.GetPageBySlug(model.Slug);
-            }
-
-            if (page == null)
+            
+            if (editContext.CurrentPage == null)
             {
                 Log.LogInformation("page not found, redirecting");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            if ((!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles)))
             {
-                if (!User.IsInRoles(page.ViewRoles))
+                if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
                 {
-                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
-                    return RedirectToRoute(PageRoutes.PageRouteName);
+                    Log.LogWarning($"page {editContext.CurrentPage.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
             }
 
             var resource = new PageResource
             {
-                ContentId = page.Id,
+                ContentId = editContext.CurrentPage.Id,
                 Type = model.Type,
                 Environment = model.Environment,
                 Sort = model.Sort,
                 Url = model.Url
             };
-            page.Resources.Add(resource);
+            editContext.CurrentPage.Resources.Add(resource);
             
-            await PageService.Update(page);
+            await PageService.Update(editContext.CurrentPage);
 
-            return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = page.Slug });
+            return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
         }
 
         [HttpPost]
@@ -938,50 +900,38 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> RemoveResource(string slug, string id)
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, slug, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
-                return RedirectToRoute(PageRoutes.PageRouteName);
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-            if (!canEdit)
-            {
-                Log.LogInformation("redirecting to index because user is not allowed to edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
+            
             var canDev = EditOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(EditOptions.DeveloperAllowedRole);
             if (!canDev)
             {
                 Log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-
-            IPage page = null;
-            if (!string.IsNullOrEmpty(slug))
-            {
-                page = await PageService.GetPageBySlug(slug);
-            }
-
-            if (page == null)
+            
+            if (editContext.CurrentPage == null)
             {
                 Log.LogInformation("page not found, redirecting");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            if ((!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles)))
             {
-                if (!User.IsInRoles(page.ViewRoles))
+                if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
                 {
-                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
-                    return RedirectToRoute(PageRoutes.PageRouteName);
+                    Log.LogWarning($"page {editContext.CurrentPage.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
             }
 
             var found = false;
-            var copyOfResources = page.Resources.ToList();
+            var copyOfResources = editContext.CurrentPage.Resources.ToList();
             for (var i = 0; i < copyOfResources.Count; i++)
             {
                 if(copyOfResources[i].Id == id)
@@ -993,15 +943,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if(found)
             {
                 // needed so the ef entity shadow copy of resources gets synced
-                page.Resources = copyOfResources;
-                await PageService.Update(page);
+                editContext.CurrentPage.Resources = copyOfResources;
+                await PageService.Update(editContext.CurrentPage);
             }
             else
             {
                 Log.LogWarning($"page resource not found for {slug} and {id}");
             }
             
-            return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = page.Slug });
+            return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
 
         }
 
@@ -1011,6 +961,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Delete(string id)
         {
+            var editContextRequest = new PageEditContextRequest(User, null, id, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
+            {
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
             if (string.IsNullOrEmpty(id))
             {
                 Log.LogInformation("postid not provided, redirecting/rejecting");
@@ -1020,34 +982,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
-
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
-            {
-                Log.LogWarning("project not found, redirecting/rejecting");
-                if (Request.IsAjaxRequest())
-                {
-                    return BadRequest();
-                }
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug="" });
-            }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogWarning("user is not allowed to edit, redirecting/rejecting");
-                if (Request.IsAjaxRequest())
-                {
-                    return BadRequest();
-                }
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
-            }
             
-            var page = await PageService.GetPage(id);
-
-            if (page == null)
+            if (editContext.CurrentPage == null)
             {
                 Log.LogInformation($"page not found for {id}, redirecting/rejecting");
                 if (Request.IsAjaxRequest())
@@ -1057,20 +993,20 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            if ((!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles)))
             {
-                if (!User.IsInRoles(page.ViewRoles))
+                if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
                 {
-                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                    Log.LogWarning($"page {editContext.CurrentPage.Title} is protected by roles that user is not in so redirecting");
                     return RedirectToRoute(PageRoutes.PageRouteName);
                 }
             }
 
             if(!EditOptions.AllowDeleteDefaultPage)
             {
-                if (page.Slug == project.DefaultPageSlug) // don't allow delete the home/default page from the ui
+                if (editContext.CurrentPage.Slug == editContext.Project.DefaultPageSlug) // don't allow delete the home/default page from the ui
                 {
-                    Log.LogError($"Rejecting/redirecting, user {User.Identity.Name} tried to delete the default page {page.Title}");
+                    Log.LogError($"Rejecting/redirecting, user {User.Identity.Name} tried to delete the default page {editContext.CurrentPage.Title}");
                     if (Request.IsAjaxRequest())
                     {
                         return BadRequest();
@@ -1081,18 +1017,18 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
 
-            if (string.IsNullOrWhiteSpace(page.ExternalUrl) && !page.MenuOnly)
+            if (string.IsNullOrWhiteSpace(editContext.CurrentPage.ExternalUrl) && !editContext.CurrentPage.MenuOnly)
             {
                 //don't create history for deleted page that was just a menu item with an external url
-                var history = page.CreateHistory(User.Identity.Name, true);
-                await HistoryCommands.Create(project.Id, history);
+                var history = editContext.CurrentPage.CreateHistory(User.Identity.Name, true);
+                await HistoryCommands.Create(editContext.Project.Id, history);
             }
             
             
-            await PageService.DeletePage(page.Id);
+            await PageService.DeletePage(editContext.CurrentPage.Id);
             PageService.ClearNavigationCache();
 
-            Log.LogWarning($"user {User.Identity.Name} deleted page {page.Title}");
+            Log.LogWarning($"user {User.Identity.Name} deleted page {editContext.CurrentPage.Title}");
 
             if (Request.IsAjaxRequest())
             {
@@ -1114,79 +1050,73 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, null, id, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
-                Log.LogWarning("project not found, redirecting/rejecting");
+                if (Request.IsAjaxRequest())
+                {
+                    return BadRequest();
+                }
+                Log.LogInformation("redirecting to index because project settings not found");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogWarning("user is not allowed to edit, redirecting/rejecting");
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
-            }
-
-            var page = await PageService.GetPage(id);
-
-            if (page == null)
+            
+            if (editContext.CurrentPage == null)
             {
                 Log.LogInformation($"page not found for {id}, redirecting/rejecting");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            if ((!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles)))
             {
-                if (!User.IsInRoles(page.ViewRoles))
+                if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
                 {
-                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so redirecting");
+                    Log.LogWarning($"page {editContext.CurrentPage.Title} is protected by roles that user is not in so redirecting");
                     return RedirectToRoute(PageRoutes.PageRouteName);
                 }
             }
             
-            if (string.IsNullOrWhiteSpace(page.ExternalUrl) && !page.MenuOnly)
+            if (string.IsNullOrWhiteSpace(editContext.CurrentPage.ExternalUrl) && !editContext.CurrentPage.MenuOnly)
             {
                 //don't create history for deleted page that was just a menu item with an external url
-                var history = page.CreateHistory(User.Identity.Name, true);
-                await HistoryCommands.Create(project.Id, history);
+                var history = editContext.CurrentPage.CreateHistory(User.Identity.Name, true);
+                await HistoryCommands.Create(editContext.Project.Id, history);
             }
 
-            if (!string.IsNullOrWhiteSpace(page.ExternalUrl))
+            if (!string.IsNullOrWhiteSpace(editContext.CurrentPage.ExternalUrl))
             {
                 //don't unpublish links just delete
-                await PageService.DeletePage(page.Id);
+                await PageService.DeletePage(editContext.CurrentPage.Id);
             }
             else
             {
-                if(page.HasPublishedVersion())
+                if(editContext.CurrentPage.HasPublishedVersion())
                 {
-                    await PageService.FireUnPublishEvent(page);
+                    await PageService.FireUnPublishEvent(editContext.CurrentPage);
 
-                    page.DraftAuthor = page.Author;
-                    page.DraftContent = page.Content;
-                    page.DraftSerializedModel = page.SerializedModel;
-                    page.Content = null;
-                    page.SerializedModel = null;  
+                    editContext.CurrentPage.DraftAuthor = editContext.CurrentPage.Author;
+                    editContext.CurrentPage.DraftContent = editContext.CurrentPage.Content;
+                    editContext.CurrentPage.DraftSerializedModel = editContext.CurrentPage.SerializedModel;
+                    editContext.CurrentPage.Content = null;
+                    editContext.CurrentPage.SerializedModel = null;  
                 }
-                
-                page.DraftPubDate = null;
-                page.PubDate = null;
-                page.IsPublished = false;
-                await PageService.Update(page);
+
+                editContext.CurrentPage.DraftPubDate = null;
+                editContext.CurrentPage.PubDate = null;
+                editContext.CurrentPage.IsPublished = false;
+                await PageService.Update(editContext.CurrentPage);
                 
             }
             
             PageService.ClearNavigationCache();
 
-            Log.LogWarning($"user {User.Identity.Name} unpublished page {page.Title}");
+            Log.LogWarning($"user {User.Identity.Name} unpublished page {editContext.CurrentPage.Title}");
 
-            var slug = page.Slug;
-            if(slug == project.DefaultPageSlug) { slug = string.Empty; }
+            var slug = editContext.CurrentPage.Slug;
+            if(slug == editContext.Project.DefaultPageSlug) { slug = string.Empty; }
 
-            return RedirectToRoute(PageRoutes.PageRouteName, new { slug = slug });
+            return RedirectToRoute(PageRoutes.PageRouteName, new { slug });
 
         }
 
@@ -1195,25 +1125,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteHistoryOlderThan(string id, int days)
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, null, id, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
-                Log.LogWarning("project not found, redirecting/rejecting");
+                Log.LogInformation("redirecting to index because project settings not found");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogWarning("user is not allowed to edit, redirecting/rejecting");
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
-            }
-
-            var page = await PageService.GetPage(id);
-
-            if (page == null)
+            
+            if (editContext.CurrentPage == null)
             {
                 Log.LogInformation($"page not found for {id}, redirecting/rejecting");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
@@ -1221,15 +1141,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (days < 0) //delete all history
             {
-                await HistoryCommands.DeleteByContent(project.Id, id).ConfigureAwait(false);
+                await HistoryCommands.DeleteByContent(editContext.Project.Id, id).ConfigureAwait(false);
             }
             else
             {
                 var cutoffUtc = DateTime.UtcNow.AddDays(-days);
-                await HistoryCommands.DeleteByContent(project.Id, id, cutoffUtc).ConfigureAwait(false);
+                await HistoryCommands.DeleteByContent(editContext.Project.Id, id, cutoffUtc).ConfigureAwait(false);
             }
             
-            return RedirectToRoute(PageRoutes.PageHistoryRouteName, new { slug = page.Slug });
+            return RedirectToRoute(PageRoutes.PageHistoryRouteName, new { slug = editContext.CurrentPage.Slug });
         }
 
         [HttpGet]
@@ -1242,22 +1162,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
   
         public virtual async Task<IActionResult> Tree()
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
-                Log.LogInformation("project not found, redirecting");
+                Log.LogInformation("redirecting to index because invalid edit request");
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogInformation("user is not allowed to edit, redirecting");
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
-            }
-
+            
             ViewData["Title"] = StringLocalizer["Page Management"];
             var model = new PageTreeViewModel
             {
@@ -1276,25 +1188,17 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [AllowAnonymous]
         public virtual async Task<IActionResult> TreeJson(CancellationToken cancellationToken, string node = "root")
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
-                Log.LogInformation("project not found");
+                Log.LogInformation("invalid edit request");
                 return BadRequest();
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogInformation("user is not allowed to edit");
-                return BadRequest();
-            }
-
+            
             string resolveUrl(IPage page)
             {
-                if (page.Slug == project.DefaultPageSlug)
+                if (page.Slug == editContext.Project.DefaultPageSlug)
                 {
                     return Url.RouteUrl(PageRoutes.PageRouteName);
                 }
@@ -1324,23 +1228,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return BadRequest();
             }
 
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
-                Log.LogInformation("project not found");
+                Log.LogInformation("invalid edit request");
                 return BadRequest();
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogInformation("user is not allowed to edit");
-                return BadRequest();
-            }
-
-
+            
             var result = await PageService.Move(model);
 
             return Json(result);
@@ -1351,23 +1246,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> SortChildPagesAlpha(string pageId)
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            if (!editContext.IsValidRequest)
             {
-                Log.LogInformation("project not found");
+                Log.LogInformation("invalid edit request");
                 return BadRequest();
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogInformation("user is not allowed to edit");
-                return BadRequest();
-            }
-
-
+            
             var result = await PageService.SortChildPagesAlpha(pageId);
 
             return Json(result);
