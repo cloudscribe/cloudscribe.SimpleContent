@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-24
 // 
 
 
@@ -92,12 +92,23 @@ namespace cloudscribe.SimpleContent.Services
             
             if (string.IsNullOrEmpty(page.Slug))
             {
-                var slug = ContentUtils.CreateSlug(page.Title);
-                var available = await SlugIsAvailable(slug);
-                if (available)
+                var rootList = await GetRootPages().ConfigureAwait(false);
+                if(rootList.Count == 0)
                 {
-                    page.Slug = slug;
+                    // no pages yet, creating first one so use default slug
+                    page.Slug = _settings.DefaultPageSlug;
                 }
+                else
+                {
+                    var slug = ContentUtils.CreateSlug(page.Title);
+                    var available = await SlugIsAvailable(slug);
+                    if (available)
+                    {
+                        page.Slug = slug;
+                    }
+                }
+
+                
             }
 
             if(convertToRelativeUrls)

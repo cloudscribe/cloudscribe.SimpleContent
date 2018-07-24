@@ -14,15 +14,15 @@
         legend = string.Format(legendFormat, Model.Template.Title);
 
     }
-    var slug = Model.Slug;
-    if (Model.Slug == Model.ProjectDefaultSlug) { slug = string.Empty; }
+    var cancelSlug = Model.Slug;
+    if (Model.Slug == Model.ProjectDefaultSlug || Model.DidRestoreDeleted) { cancelSlug = string.Empty; }
 
 }
 @section Styles {
     @{ await Html.RenderPartialAsync("EditWithTemplateStylesPartial", Model); }
 }
 <h2>
-    @ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug })">@sr["Cancel"]</a></small>
+    @ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a></small>
 </h2>
 @if (!string.IsNullOrEmpty(Model.Id))
 {

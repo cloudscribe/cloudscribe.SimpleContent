@@ -17,6 +17,8 @@
     var editOptions = pageEditOptionsAccessor.Value;
     var showDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
+    var cancelSlug = Model.Slug;
+    if (Model.Slug == Model.ProjectDefaultSlug || Model.DidRestoreDeleted) { cancelSlug = string.Empty; }
 
 }
 @section Styles {
@@ -31,7 +33,7 @@
         </style>
     }
 }
-<h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h2>
+<h2>@ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a></small></h2>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
     <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(pageRoutes.PageHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>

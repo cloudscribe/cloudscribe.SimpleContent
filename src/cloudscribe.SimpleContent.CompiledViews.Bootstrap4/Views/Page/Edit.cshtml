@@ -7,15 +7,15 @@
     var editOptions = pageEditOptionsAccessor.Value;
     var showDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
-    var slug = Model.Slug;
-    if (Model.Slug == Model.ProjectDefaultSlug) { slug = string.Empty; }
+    var cancelSlug = Model.Slug;
+    if (Model.Slug == Model.ProjectDefaultSlug || Model.DidRestoreDeleted) { cancelSlug = string.Empty; }
 
 }
 @section Styles {
     @{ await Html.RenderPartialAsync("EditStylesPartial", Model); }
 }
 <h2>
-    @ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug })">@sr["Cancel"]</a></small>
+    @ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a></small>
 </h2>
 @if (!string.IsNullOrEmpty(Model.Id))
 {

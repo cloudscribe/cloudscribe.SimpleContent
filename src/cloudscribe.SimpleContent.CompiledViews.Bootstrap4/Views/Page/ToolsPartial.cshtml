@@ -12,7 +12,7 @@
 <a id="newPageLink" href="@Model.NewItemPath" title="@sr["New Page"]" class="btn btn-sm content-new">
     <span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span>
 </a>
-@if (Model.CurrentPage != null)
+@if (Model.CurrentPage != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.Id))
 {
     <a id="editPageLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit">
         <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
