@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-10
-// Last Modified:           2018-07-23
+// Last Modified:           2018-07-24
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -31,6 +31,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
             _list = new List<ContentTemplate>();
             _list.Add(BuildSectionsWithImages());
+            _list.Add(BuildTwoSectionsWithImages());
             _list.Add(BuildImageWithContent());
             _list.Add(BuildGalleryWithContent());
             _list.Add(BuildListOfLinks());
@@ -54,7 +55,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             {
                 Key = "sct-GalleryWithContent",
                 Title = _sr["Simple image gallery with optional content above and below"],
-                Description = _sr["The gallery has 6 layouts to choose from: cards, compact, grid, carousel full width, carousel left with wrapped content, and carousel right with wrapped content."],
+                Description = _sr["The gallery has six layouts to choose from: cards, compact, grid, carousel full width, carousel left with wrapped content, and carousel right with wrapped content."],
                 EditView = "ContentTemplates/GalleryWithContentEdit",
                 RenderView = "ContentTemplates/GalleryWithContentRender",
                 ScreenshotUrl = "",
@@ -253,7 +254,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             {
                 Key = "sct-ColumnsWithImages",
                 Title = _sr["One to four sections with an optional image per section"],
-                Description = _sr["There are 2 layouts to choose from, responsive columns with images on top, or images floated to alternate sides per section to wrap content around the images."],
+                Description = _sr["There are two layouts to choose from, responsive columns with images on top, or images floated to alternate sides per section to wrap content around the images."],
                 EditView = "ContentTemplates/SectionsWithImageEdit",
                 RenderView = "ContentTemplates/SectionsWithImageRender",
                 ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
@@ -330,6 +331,95 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
                 }
                 
+            };
+
+            return template;
+
+        }
+
+        private ContentTemplate BuildTwoSectionsWithImages()
+        {
+            var template = new ContentTemplate()
+            {
+                Key = "sct-TwoColumnsWithImages",
+                Title = _sr["Two column layout with an optional image per column"],
+                Description = _sr["There are two layouts to choose from, one with left column wider and one with right column wider."],
+                EditView = "ContentTemplates/TwoSectionsWithImageEdit",
+                RenderView = "ContentTemplates/TwoSectionsWithImageRender",
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+
+                EditCss = new List<CssFile>()
+                {
+                    new CssFile
+                    {
+                        Url = "/cr/css/dropzone.min.css",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie-cloudscribe.css",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                },
+                EditScripts = new List<ScriptFile>()
+                {
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/dropzone.min.js",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/croppie.min.js",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                    //,
+                    //new ScriptFile()
+                    //{
+                    //    Url = "/cr/js/unsaved-changes-prompt.min.js",
+                    //    Environment = "any",
+                    //    Sort = 4
+                    //}
+
+                },
+
+                RenderCss = new List<CssFile>()
+                {
+                    new CssFile
+                    {
+                        Url = "/sctr/css/simple-image.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    }
+                },
+                RenderScripts = new List<ScriptFile>()
+                {
+
+                }
+
             };
 
             return template;
