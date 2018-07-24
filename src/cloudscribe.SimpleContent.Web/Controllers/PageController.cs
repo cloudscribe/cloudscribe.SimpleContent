@@ -312,30 +312,23 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             int pageSize = 10
             )
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
+            var editContextRequest = new PageEditRquest(User, null, null, null);
+            var editContext = await Mediator.Send(editContextRequest);
 
-            if (project == null)
+            if (!editContext.IsValidRequest)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
-            {
-                Log.LogInformation("redirecting to index because user is not allowed to edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
-            var templateCount = await TemplateService.GetCountOfTemplates(project.Id, ProjectConstants.PageFeatureName);
+            
+            var templateCount = await TemplateService.GetCountOfTemplates(editContext.Project.Id, ProjectConstants.PageFeatureName);
             if (templateCount == 0)
             {
                 return RedirectToRoute(PageRoutes.PageEditRouteName, new { parentSlug });
             }
 
             var templates = await TemplateService.GetTemplates(
-                project.Id, 
+                editContext.Project.Id, 
                 ProjectConstants.PageFeatureName, 
                 query,
                 pageNumber,
@@ -358,6 +351,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if(!string.IsNullOrWhiteSpace(parentSlug))
             {
                 model.PageOrder = await PageService.GetNextChildPageOrder(parentSlug);
+            }
+            if(editContext.RootPageCount == 0)
+            {
+                model.Title = StringLocalizer["Home"];
             }
             
             return View(model);
@@ -419,7 +416,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if(response.Succeeded)
             {
                 Log.LogDebug($"succeeded in initializing a page with template {model.SelectedTemplate}");
-                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, new { slug = response.Value.Slug });
+                return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = response.Value.Slug });
             }
             else
             {
@@ -434,141 +431,72 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
             return RedirectToRoute(PageRoutes.PageRouteName);
         }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public virtual async Task<IActionResult> EditWithTemplate(
-            CancellationToken cancellationToken,
-            string slug,
-            Guid? historyId = null
-            )
+        
+        protected virtual async Task<IActionResult> EditWithTemplate(CancellationToken cancellationToken, PageEditContext editContext)
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], editContext.CurrentPage.Title);
 
-            if (project == null)
-            {
-                Log.LogInformation("redirecting to index because project settings not found");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-            if (!canEdit)
-            {
-                Log.LogInformation("redirecting to index because user cannot edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
-            var page = await PageService.GetPageBySlug(slug, cancellationToken);
-            ContentHistory history = null;
-            var didReplaceDraft = false;
-            var didRestoreDeleted = false;
-
-            if (historyId.HasValue)
-            {
-                history = await HistoryQueries.Fetch(project.Id, historyId.Value).ConfigureAwait(false);
-                if(history != null)
-                {
-                    if(page == null) // page was deleted, restore it from history
-                    {
-                        page = new Page();
-                        history.CopyTo(page);
-                        if(history.IsDraftHx)
-                        {
-                            page.PromoteDraftTemporarilyForRender();
-                        }
-                        didRestoreDeleted = true;
-                    }
-                    else
-                    {
-                        didReplaceDraft = page.HasDraftVersion();
-                        var pageCopy = new Page();
-                        page.CopyTo(pageCopy);
-                        if (history.IsDraftHx)
-                        {
-                            pageCopy.DraftAuthor = history.DraftAuthor;
-                            pageCopy.DraftContent = history.DraftContent;
-                            pageCopy.DraftSerializedModel = history.DraftSerializedModel;
-                        }
-                        else
-                        {
-                            pageCopy.DraftAuthor = history.Author;
-                            pageCopy.DraftContent = history.Content;
-                            pageCopy.DraftSerializedModel = history.SerializedModel;
-                        }
-
-                        page = pageCopy;
-                    }
-                }
-            }
-            
-            if (page == null)
-            {
-                Log.LogError($"redirecting to index because page was not found for slug {slug}");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
-
-            var template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
+            var template = await TemplateService.GetTemplate(editContext.Project.Id, editContext.CurrentPage.TemplateKey);
             if (template == null)
             {
-                Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
+                Log.LogError($"redirecting to index because content template {editContext.CurrentPage.TemplateKey} was not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-            
+
             var model = new PageEditWithTemplateViewModel()
             {
-                ProjectId = project.Id,
-                DisqusShortname = project.DisqusShortName,
-                Author = page.Author,
-                Id = page.Id,
-                CorrelationKey = page.CorrelationKey,
-                IsPublished = page.IsPublished,
-                ShowMenu = page.ShowMenu,
-                MetaDescription = page.MetaDescription,
-                PageOrder = page.PageOrder,
-                ParentId = page.ParentId,
-                ParentSlug = page.ParentSlug,
-                ShowHeading = page.ShowHeading,
-                Slug = page.Slug,
-                Title = page.Title,
-                MenuFilters = page.MenuFilters,
-                ViewRoles = page.ViewRoles,
-                ShowComments = page.ShowComments,
+                ProjectId = editContext.Project.Id,
+                DisqusShortname = editContext.Project.DisqusShortName,
+                Author = editContext.CurrentPage.Author,
+                Id = editContext.CurrentPage.Id,
+                CorrelationKey = editContext.CurrentPage.CorrelationKey,
+                IsPublished = editContext.CurrentPage.IsPublished,
+                ShowMenu = editContext.CurrentPage.ShowMenu,
+                MetaDescription = editContext.CurrentPage.MetaDescription,
+                PageOrder = editContext.CurrentPage.PageOrder,
+                ParentId = editContext.CurrentPage.ParentId,
+                ParentSlug = editContext.CurrentPage.ParentSlug,
+                ShowHeading = editContext.CurrentPage.ShowHeading,
+                Slug = editContext.CurrentPage.Slug,
+                Title = editContext.CurrentPage.Title,
+                MenuFilters = editContext.CurrentPage.MenuFilters,
+                ViewRoles = editContext.CurrentPage.ViewRoles,
+                ShowComments = editContext.CurrentPage.ShowComments,
                 Template = template,
-                TemplateModel = TemplateService.DesrializeTemplateModel(page, template),
-                ProjectDefaultSlug = project.DefaultPageSlug,
-                DidReplaceDraft = didReplaceDraft,
-                DidRestoreDeleted = didRestoreDeleted
+                TemplateModel = TemplateService.DesrializeTemplateModel(editContext.CurrentPage, template),
+                ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
+                DidReplaceDraft = editContext.DidReplaceDraft,
+                DidRestoreDeleted = editContext.DidRestoreDeleted
             };
 
-            if(history != null)
+            if (editContext.History != null)
             {
-                model.HistoryArchiveDate = history.ArchivedUtc;
-                model.HistoryId = history.Id;
-            }
-            
-            if (page.PubDate.HasValue)
-            {
-                model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
+                model.HistoryArchiveDate = editContext.History.ArchivedUtc;
+                model.HistoryId = editContext.History.Id;
             }
 
-            if (page.DraftPubDate.HasValue)
+            if (editContext.CurrentPage.PubDate.HasValue)
             {
-                model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
+                model.PubDate = TimeZoneHelper.ConvertToLocalTime(editContext.CurrentPage.PubDate.Value, editContext.Project.TimeZoneId);
             }
 
-            if (!string.IsNullOrWhiteSpace(page.DraftAuthor))
+            if (editContext.CurrentPage.DraftPubDate.HasValue)
             {
-                model.Author = page.DraftAuthor;
+                model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(editContext.CurrentPage.DraftPubDate.Value, editContext.Project.TimeZoneId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(editContext.CurrentPage.DraftAuthor))
+            {
+                model.Author = editContext.CurrentPage.DraftAuthor;
             }
 
             if (model.TemplateModel == null)
             {
-                Log.LogError($"redirecting to index model desrialization failed for page {page.Title}");
+                Log.LogError($"redirecting to index model desrialization failed for page {editContext.CurrentPage.Title}");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-            
-            return View(model);
+
+            return View("EditWithTemplate", model);
         }
 
         [HttpPost]
@@ -576,56 +504,46 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> EditWithTemplate(PageEditWithTemplateViewModel model)
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
+            var editContextRequest = new PageEditRquest(User, null, model.Id, model.HistoryId);
+            var editContext = await Mediator.Send(editContextRequest);
 
-            if (project == null)
+            if (!editContext.IsValidRequest)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
-
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if (!canEdit)
+            if(editContext.DidRestoreDeleted && model.HistoryId.HasValue)
             {
-                Log.LogInformation("redirecting to index because user is not allowed to edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
-            }
-
-            var page = await PageService.GetPage(model.Id);
-            
-            if(page == null && model.HistoryId.HasValue) // restore a deleted page from history
-            {
-                var history = await HistoryQueries.Fetch(project.Id, model.HistoryId.Value).ConfigureAwait(false);
-                if(history != null)
+                var history = await HistoryQueries.Fetch(editContext.Project.Id, model.HistoryId.Value).ConfigureAwait(false);
+                if (history != null)
                 {
-                    page = new Page();
-                    history.CopyTo(page);
-                    await PageService.Create(page); // re-create page here because handler expects existing page and only updates
+                    var hxPage = new Page();
+                    history.CopyTo(hxPage);
+                    await PageService.Create(hxPage); // re-create page here because handler expects existing page and only updates
                 }
             }
             
-            if (page == null)
+            if (editContext.CurrentPage == null)
             {
                 Log.LogError($"redirecting to index because page was not found for id {model.Id}");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], editContext.CurrentPage.Title);
 
-            var template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
+            var template = await TemplateService.GetTemplate(editContext.Project.Id, editContext.CurrentPage.TemplateKey);
             if (template == null)
             {
-                Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
+                Log.LogError($"redirecting to index because content template {editContext.CurrentPage.TemplateKey} was not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
             
             var request = new UpdateTemplatedPageRequest(
-                project.Id,
+                editContext.Project.Id,
                 User.Identity.Name,
                 model,
                 template,
-                page,
+                editContext.CurrentPage,
                 Request.Form,
                 ModelState
                 );
@@ -635,7 +553,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
             
                 this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
-                if(response.Value.Slug == project.DefaultPageSlug)
+                if(response.Value.Slug == editContext.Project.DefaultPageSlug)
                 {
                     return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
@@ -644,13 +562,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             else
             {
                 model.Template = template;
-                model.ProjectDefaultSlug = project.DefaultPageSlug;
+                model.ProjectDefaultSlug = editContext.Project.DefaultPageSlug;
 
-                return View(model);
+                return View("EditWithTemplate", model);
             }
             
         }
 
+
+        
 
         [HttpGet]
         [AllowAnonymous]
@@ -658,40 +578,31 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             CancellationToken cancellationToken,
             string slug = "",
             string parentSlug = "",
-            string type ="",
+            string type = "",
             Guid? historyId = null
             )
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var request = new PageEditRquest(User, slug, null, historyId);
+            var editContext = await Mediator.Send(request);
+            if(!editContext.IsValidRequest)
             {
                 Log.LogInformation("redirecting to index because project settings not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-            if(!canEdit)
+            if (editContext.CurrentPage != null && !string.IsNullOrWhiteSpace(editContext.CurrentPage.TemplateKey))
             {
-                Log.LogInformation("redirecting to index because user cannot edit");
-                return RedirectToRoute(PageRoutes.PageRouteName);
+                //return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, routeVals);
+                return await EditWithTemplate(cancellationToken, editContext);
             }
-
-            if (slug == "none") { slug = string.Empty; }
 
             var model = new PageEditViewModel
             {
-                ProjectId = project.Id,
-                DisqusShortname = project.DisqusShortName,
-                ProjectDefaultSlug = project.DefaultPageSlug
+                ProjectId = editContext.Project.Id,
+                DisqusShortname = editContext.Project.DisqusShortName,
+                ProjectDefaultSlug = editContext.Project.DefaultPageSlug
             };
-
-            IPage page = null;
-            if (!string.IsNullOrEmpty(slug))
-            {
-                page = await PageService.GetPageBySlug(slug, cancellationToken);
-            }
-
+            
             var routeVals = new RouteValueDictionary
             {
                 { "slug", slug }
@@ -700,68 +611,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 routeVals.Add("historyId", historyId.Value);
             }
-
-            if (page != null && !string.IsNullOrWhiteSpace(page.TemplateKey))
-            {
-                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, routeVals);
-            }
-
-            ContentHistory history = null;
-            var didReplaceDraft = false;
-            var didRestoreDeleted = false;
-
-            if (historyId.HasValue)
-            {
-                history = await HistoryQueries.Fetch(project.Id, historyId.Value).ConfigureAwait(false);
-                if (history != null)
-                {
-                    if(!string.IsNullOrWhiteSpace(history.TemplateKey))
-                    {
-                        return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, routeVals);
-                    }
-                    
-                    if (page == null) // page was deleted, restore it from history
-                    {
-                        page = new Page();
-                        history.CopyTo(page);
-                        if (history.IsDraftHx)
-                        {
-                            page.PromoteDraftTemporarilyForRender();
-                        }
-                        didRestoreDeleted = true;
-                    }
-                    else
-                    {
-                        didReplaceDraft = page.HasDraftVersion();
-                        var pageCopy = new Page();
-                        page.CopyTo(pageCopy);
-                        if (history.IsDraftHx)
-                        {
-                            pageCopy.DraftAuthor = history.DraftAuthor;
-                            pageCopy.DraftContent = history.DraftContent;
-                        }
-                        else
-                        {
-                            pageCopy.DraftAuthor = history.Author;
-                            pageCopy.DraftContent = history.Content;
-                        }
-                        page = pageCopy; 
-                    }
-
-                    model.HistoryArchiveDate = history.ArchivedUtc;
-                    model.HistoryId = history.Id;
-                    model.DidReplaceDraft = didReplaceDraft;
-                    model.DidRestoreDeleted = didRestoreDeleted;
-                }
-            }
             
-            if (page == null) // new page
+            if (editContext.CurrentPage == null) // new page
             {
                 ViewData["Title"] = StringLocalizer["New Page"];
                 model.ParentSlug = parentSlug;
                 model.PageOrder = await PageService.GetNextChildPageOrder(parentSlug, cancellationToken);
-                model.ContentType = project.DefaultContentType;
-                
+                model.ContentType = editContext.Project.DefaultContentType;
+
                 if (EditOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
                 {
                     model.ContentType = "markdown";
@@ -770,17 +627,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     model.ContentType = "html";
                 }
-
-                var rootList = await PageService.GetRootPages(cancellationToken).ConfigureAwait(false);
-                if(rootList.Count == 0) // expected if home page doesn't exist yet
+                
+                if (editContext.RootPageCount == 0) // expected if home page doesn't exist yet
                 {
                     var rootPagePath = Url.RouteUrl(PageRoutes.PageRouteName);
-                    if(string.IsNullOrWhiteSpace(slug))
+                    if (string.IsNullOrWhiteSpace(slug))
                     {
-                        slug = project.DefaultPageSlug;
+                        slug = editContext.Project.DefaultPageSlug;
                         model.Title = StringLocalizer["Home"];
                     }
-                    
+
                 }
                 model.Author = await AuthorNameResolver.GetAuthorName(User);
                 model.Slug = slug;
@@ -788,56 +644,64 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             else // page not null
             {
                 // if the page is protected by view roles return 404 if user is not in an allowed role
-                if ((!string.IsNullOrEmpty(page.ViewRoles)))
+                if ((!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles)))
                 {
-                    if (!User.IsInRoles(page.ViewRoles))
+                    if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
                     {
-                        Log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 404");
+                        Log.LogWarning($"page {editContext.CurrentPage.Title} is protected by roles that user is not in so returning 404");
                         return NotFound();
                     }
                 }
 
-                ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
-                if(string.IsNullOrWhiteSpace(page.DraftContent))
+                ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], editContext.CurrentPage.Title);
+                if (string.IsNullOrWhiteSpace(editContext.CurrentPage.DraftContent))
                 {
-                    model.Author = page.Author;
-                    model.Content = page.Content;
+                    model.Author = editContext.CurrentPage.Author;
+                    model.Content = editContext.CurrentPage.Content;
                 }
                 else
                 {
-                    model.Author = page.DraftAuthor;
-                    model.Content = page.DraftContent; 
-                }
-                
-                model.Id = page.Id;
-                model.CorrelationKey = page.CorrelationKey;
-                model.IsPublished = page.IsPublished;
-                model.ShowMenu = page.ShowMenu;
-                model.MenuOnly = page.MenuOnly;
-                model.MetaDescription = page.MetaDescription;
-                model.PageOrder = page.PageOrder;
-                model.ParentId = page.ParentId;
-                model.ParentSlug = page.ParentSlug;
-                model.ShowHeading = page.ShowHeading;
-                model.Slug = page.Slug;
-                model.ExternalUrl = page.ExternalUrl;
-                model.Title = page.Title;
-                model.MenuFilters = page.MenuFilters;
-                model.ViewRoles = page.ViewRoles;
-                model.ShowComments = page.ShowComments;
-                model.DisableEditor = page.DisableEditor;
-                model.ContentType = page.ContentType;
-                if (page.PubDate.HasValue)
-                {
-                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
+                    model.Author = editContext.CurrentPage.DraftAuthor;
+                    model.Content = editContext.CurrentPage.DraftContent;
                 }
 
-                if (page.DraftPubDate.HasValue)
+                model.Id = editContext.CurrentPage.Id;
+                model.CorrelationKey = editContext.CurrentPage.CorrelationKey;
+                model.IsPublished = editContext.CurrentPage.IsPublished;
+                model.ShowMenu = editContext.CurrentPage.ShowMenu;
+                model.MenuOnly = editContext.CurrentPage.MenuOnly;
+                model.MetaDescription = editContext.CurrentPage.MetaDescription;
+                model.PageOrder = editContext.CurrentPage.PageOrder;
+                model.ParentId = editContext.CurrentPage.ParentId;
+                model.ParentSlug = editContext.CurrentPage.ParentSlug;
+                model.ShowHeading = editContext.CurrentPage.ShowHeading;
+                model.Slug = editContext.CurrentPage.Slug;
+                model.ExternalUrl = editContext.CurrentPage.ExternalUrl;
+                model.Title = editContext.CurrentPage.Title;
+                model.MenuFilters = editContext.CurrentPage.MenuFilters;
+                model.ViewRoles = editContext.CurrentPage.ViewRoles;
+                model.ShowComments = editContext.CurrentPage.ShowComments;
+                model.DisableEditor = editContext.CurrentPage.DisableEditor;
+                model.ContentType = editContext.CurrentPage.ContentType;
+                model.DidReplaceDraft = editContext.DidReplaceDraft;
+                model.DidRestoreDeleted = editContext.DidRestoreDeleted;
+                if(editContext.History != null)
                 {
-                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
+                    model.HistoryArchiveDate = editContext.History.ArchivedUtc;
+                    model.HistoryId = editContext.History.Id;
+                }
+                
+                if (editContext.CurrentPage.PubDate.HasValue)
+                {
+                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(editContext.CurrentPage.PubDate.Value, editContext.Project.TimeZoneId);
+                }
+
+                if (editContext.CurrentPage.DraftPubDate.HasValue)
+                {
+                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(editContext.CurrentPage.DraftPubDate.Value, editContext.Project.TimeZoneId);
                 }
             }
-            
+
             return View(model);
         }
 
@@ -1553,6 +1417,331 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             return View(model);
 
         }
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public virtual async Task<IActionResult> EditWithTemplate(
+        //    CancellationToken cancellationToken,
+        //    string slug,
+        //    Guid? historyId = null
+        //    )
+        //{
+        //    var project = await ProjectService.GetCurrentProjectSettings();
+
+        //    if (project == null)
+        //    {
+        //        Log.LogInformation("redirecting to index because project settings not found");
+        //        return RedirectToRoute(PageRoutes.PageRouteName);
+        //    }
+
+        //    var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+        //    if (!canEdit)
+        //    {
+        //        Log.LogInformation("redirecting to index because user cannot edit");
+        //        return RedirectToRoute(PageRoutes.PageRouteName);
+        //    }
+
+        //    var page = await PageService.GetPageBySlug(slug, cancellationToken);
+        //    ContentHistory history = null;
+        //    var didReplaceDraft = false;
+        //    var didRestoreDeleted = false;
+
+        //    if (historyId.HasValue)
+        //    {
+        //        history = await HistoryQueries.Fetch(project.Id, historyId.Value).ConfigureAwait(false);
+        //        if(history != null)
+        //        {
+        //            if(page == null) // page was deleted, restore it from history
+        //            {
+        //                page = new Page();
+        //                history.CopyTo(page);
+        //                if(history.IsDraftHx)
+        //                {
+        //                    page.PromoteDraftTemporarilyForRender();
+        //                }
+        //                didRestoreDeleted = true;
+        //            }
+        //            else
+        //            {
+        //                didReplaceDraft = page.HasDraftVersion();
+        //                var pageCopy = new Page();
+        //                page.CopyTo(pageCopy);
+        //                if (history.IsDraftHx)
+        //                {
+        //                    pageCopy.DraftAuthor = history.DraftAuthor;
+        //                    pageCopy.DraftContent = history.DraftContent;
+        //                    pageCopy.DraftSerializedModel = history.DraftSerializedModel;
+        //                }
+        //                else
+        //                {
+        //                    pageCopy.DraftAuthor = history.Author;
+        //                    pageCopy.DraftContent = history.Content;
+        //                    pageCopy.DraftSerializedModel = history.SerializedModel;
+        //                }
+
+        //                page = pageCopy;
+        //            }
+        //        }
+        //    }
+
+        //    if (page == null)
+        //    {
+        //        Log.LogError($"redirecting to index because page was not found for slug {slug}");
+        //        return RedirectToRoute(PageRoutes.PageRouteName);
+        //    }
+        //    ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
+
+        //    var template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
+        //    if (template == null)
+        //    {
+        //        Log.LogError($"redirecting to index because content template {page.TemplateKey} was not found");
+        //        return RedirectToRoute(PageRoutes.PageRouteName);
+        //    }
+
+        //    var model = new PageEditWithTemplateViewModel()
+        //    {
+        //        ProjectId = project.Id,
+        //        DisqusShortname = project.DisqusShortName,
+        //        Author = page.Author,
+        //        Id = page.Id,
+        //        CorrelationKey = page.CorrelationKey,
+        //        IsPublished = page.IsPublished,
+        //        ShowMenu = page.ShowMenu,
+        //        MetaDescription = page.MetaDescription,
+        //        PageOrder = page.PageOrder,
+        //        ParentId = page.ParentId,
+        //        ParentSlug = page.ParentSlug,
+        //        ShowHeading = page.ShowHeading,
+        //        Slug = page.Slug,
+        //        Title = page.Title,
+        //        MenuFilters = page.MenuFilters,
+        //        ViewRoles = page.ViewRoles,
+        //        ShowComments = page.ShowComments,
+        //        Template = template,
+        //        TemplateModel = TemplateService.DesrializeTemplateModel(page, template),
+        //        ProjectDefaultSlug = project.DefaultPageSlug,
+        //        DidReplaceDraft = didReplaceDraft,
+        //        DidRestoreDeleted = didRestoreDeleted
+        //    };
+
+        //    if(history != null)
+        //    {
+        //        model.HistoryArchiveDate = history.ArchivedUtc;
+        //        model.HistoryId = history.Id;
+        //    }
+
+        //    if (page.PubDate.HasValue)
+        //    {
+        //        model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
+        //    }
+
+        //    if (page.DraftPubDate.HasValue)
+        //    {
+        //        model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
+        //    }
+
+        //    if (!string.IsNullOrWhiteSpace(page.DraftAuthor))
+        //    {
+        //        model.Author = page.DraftAuthor;
+        //    }
+
+        //    if (model.TemplateModel == null)
+        //    {
+        //        Log.LogError($"redirecting to index model desrialization failed for page {page.Title}");
+        //        return RedirectToRoute(PageRoutes.PageRouteName);
+        //    }
+
+        //    return View(model);
+        //}
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public virtual async Task<IActionResult> Edit(
+        //    CancellationToken cancellationToken,
+        //    string slug = "",
+        //    string parentSlug = "",
+        //    string type ="",
+        //    Guid? historyId = null
+        //    )
+        //{
+        //    var project = await ProjectService.GetCurrentProjectSettings();
+
+        //    if (project == null)
+        //    {
+        //        Log.LogInformation("redirecting to index because project settings not found");
+        //        return RedirectToRoute(PageRoutes.PageRouteName);
+        //    }
+
+        //    var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+        //    if(!canEdit)
+        //    {
+        //        Log.LogInformation("redirecting to index because user cannot edit");
+        //        return RedirectToRoute(PageRoutes.PageRouteName);
+        //    }
+
+        //    if (slug == "none") { slug = string.Empty; }
+
+        //    var model = new PageEditViewModel
+        //    {
+        //        ProjectId = project.Id,
+        //        DisqusShortname = project.DisqusShortName,
+        //        ProjectDefaultSlug = project.DefaultPageSlug
+        //    };
+
+        //    IPage page = null;
+        //    if (!string.IsNullOrEmpty(slug))
+        //    {
+        //        page = await PageService.GetPageBySlug(slug, cancellationToken);
+        //    }
+
+        //    var routeVals = new RouteValueDictionary
+        //    {
+        //        { "slug", slug }
+        //    };
+        //    if (historyId.HasValue)
+        //    {
+        //        routeVals.Add("historyId", historyId.Value);
+        //    }
+
+        //    if (page != null && !string.IsNullOrWhiteSpace(page.TemplateKey))
+        //    {
+        //        return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, routeVals);
+        //    }
+
+        //    ContentHistory history = null;
+        //    var didReplaceDraft = false;
+        //    var didRestoreDeleted = false;
+
+        //    if (historyId.HasValue)
+        //    {
+        //        history = await HistoryQueries.Fetch(project.Id, historyId.Value).ConfigureAwait(false);
+        //        if (history != null)
+        //        {
+        //            if(!string.IsNullOrWhiteSpace(history.TemplateKey))
+        //            {
+        //                return RedirectToRoute(PageRoutes.PageEditWithTemplateRouteName, routeVals);
+        //            }
+
+        //            if (page == null) // page was deleted, restore it from history
+        //            {
+        //                page = new Page();
+        //                history.CopyTo(page);
+        //                if (history.IsDraftHx)
+        //                {
+        //                    page.PromoteDraftTemporarilyForRender();
+        //                }
+        //                didRestoreDeleted = true;
+        //            }
+        //            else
+        //            {
+        //                didReplaceDraft = page.HasDraftVersion();
+        //                var pageCopy = new Page();
+        //                page.CopyTo(pageCopy);
+        //                if (history.IsDraftHx)
+        //                {
+        //                    pageCopy.DraftAuthor = history.DraftAuthor;
+        //                    pageCopy.DraftContent = history.DraftContent;
+        //                }
+        //                else
+        //                {
+        //                    pageCopy.DraftAuthor = history.Author;
+        //                    pageCopy.DraftContent = history.Content;
+        //                }
+        //                page = pageCopy; 
+        //            }
+
+        //            model.HistoryArchiveDate = history.ArchivedUtc;
+        //            model.HistoryId = history.Id;
+        //            model.DidReplaceDraft = didReplaceDraft;
+        //            model.DidRestoreDeleted = didRestoreDeleted;
+        //        }
+        //    }
+
+        //    if (page == null) // new page
+        //    {
+        //        ViewData["Title"] = StringLocalizer["New Page"];
+        //        model.ParentSlug = parentSlug;
+        //        model.PageOrder = await PageService.GetNextChildPageOrder(parentSlug, cancellationToken);
+        //        model.ContentType = project.DefaultContentType;
+
+        //        if (EditOptions.AllowMarkdown && !string.IsNullOrWhiteSpace(type) && type == "markdown")
+        //        {
+        //            model.ContentType = "markdown";
+        //        }
+        //        if (!string.IsNullOrWhiteSpace(type) && type == "html")
+        //        {
+        //            model.ContentType = "html";
+        //        }
+
+        //        var rootList = await PageService.GetRootPages(cancellationToken).ConfigureAwait(false);
+        //        if(rootList.Count == 0) // expected if home page doesn't exist yet
+        //        {
+        //            var rootPagePath = Url.RouteUrl(PageRoutes.PageRouteName);
+        //            if(string.IsNullOrWhiteSpace(slug))
+        //            {
+        //                slug = project.DefaultPageSlug;
+        //                model.Title = StringLocalizer["Home"];
+        //            }
+
+        //        }
+        //        model.Author = await AuthorNameResolver.GetAuthorName(User);
+        //        model.Slug = slug;
+        //    }
+        //    else // page not null
+        //    {
+        //        // if the page is protected by view roles return 404 if user is not in an allowed role
+        //        if ((!string.IsNullOrEmpty(page.ViewRoles)))
+        //        {
+        //            if (!User.IsInRoles(page.ViewRoles))
+        //            {
+        //                Log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 404");
+        //                return NotFound();
+        //            }
+        //        }
+
+        //        ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], page.Title);
+        //        if(string.IsNullOrWhiteSpace(page.DraftContent))
+        //        {
+        //            model.Author = page.Author;
+        //            model.Content = page.Content;
+        //        }
+        //        else
+        //        {
+        //            model.Author = page.DraftAuthor;
+        //            model.Content = page.DraftContent; 
+        //        }
+
+        //        model.Id = page.Id;
+        //        model.CorrelationKey = page.CorrelationKey;
+        //        model.IsPublished = page.IsPublished;
+        //        model.ShowMenu = page.ShowMenu;
+        //        model.MenuOnly = page.MenuOnly;
+        //        model.MetaDescription = page.MetaDescription;
+        //        model.PageOrder = page.PageOrder;
+        //        model.ParentId = page.ParentId;
+        //        model.ParentSlug = page.ParentSlug;
+        //        model.ShowHeading = page.ShowHeading;
+        //        model.Slug = page.Slug;
+        //        model.ExternalUrl = page.ExternalUrl;
+        //        model.Title = page.Title;
+        //        model.MenuFilters = page.MenuFilters;
+        //        model.ViewRoles = page.ViewRoles;
+        //        model.ShowComments = page.ShowComments;
+        //        model.DisableEditor = page.DisableEditor;
+        //        model.ContentType = page.ContentType;
+        //        if (page.PubDate.HasValue)
+        //        {
+        //            model.PubDate = TimeZoneHelper.ConvertToLocalTime(page.PubDate.Value, project.TimeZoneId);
+        //        }
+
+        //        if (page.DraftPubDate.HasValue)
+        //        {
+        //            model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
+        //        }
+        //    }
+
+        //    return View(model);
+        //}
 
     }
 }

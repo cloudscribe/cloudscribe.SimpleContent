@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-07-12
+// Last Modified:           2018-07-24
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -91,6 +91,7 @@ namespace cloudscribe.SimpleContent.Web.Services
 
                 if (request.ModelState.IsValid)
                 {
+                    post.Title = request.ViewModel.Title;
                     post.CorrelationKey = request.ViewModel.CorrelationKey;
                     post.ImageUrl = request.ViewModel.ImageUrl;
                     post.ThumbnailUrl = request.ViewModel.ThumbnailUrl;
