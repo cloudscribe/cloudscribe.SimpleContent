@@ -8,7 +8,6 @@
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
-using cloudscribe.SimpleContent.Web.Templating;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Extensions;
@@ -89,84 +88,22 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Guid? historyId = null
             )
         {
-            var project = await ProjectService.GetCurrentProjectSettings();
-
-            if (project == null)
+            var viewContextRequest = new PageViewContextRequest(User, slug, showDraft, historyId);
+            var viewContext = await Mediator.Send(viewContextRequest);
+            if (viewContext.Project == null)
             {
                 Log.LogError("project settings not found returning 404");
                 return NotFound();
             }
 
-            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
-
-            if(string.IsNullOrEmpty(slug) || slug == "none") { slug = project.DefaultPageSlug; }
-
-            IPage page = await PageService.GetPageBySlug(slug, cancellationToken);
-
-            await AutoPublishDraftPage.PublishIfNeeded(page);
-
-            ContentHistory history = null;
-            var pageWasDeleted = false;
-            var showingDraft = false;
-            var hasDraft = false;
-            var hasPublishedVersion = false;
-            if(page != null)
-            {
-                hasDraft = page.HasDraftVersion();
-                hasPublishedVersion = page.HasPublishedVersion();
-            }
-
-            if(canEdit && historyId.HasValue)
-            {
-                history = await HistoryQueries.Fetch(project.Id, historyId.Value);
-                if (history != null)
-                {
-                    if(page == null) //page must have been deleted, restore from hx
-                    {
-                        page = new Page();
-                        history.CopyTo(page);
-                        if(history.IsDraftHx)
-                        {
-                            page.PromoteDraftTemporarilyForRender();
-                        }
-                        pageWasDeleted = true;
-                    }
-                    else
-                    {
-                        var pageCopy = new Page();
-                        page.CopyTo(pageCopy);
-                        if (history.IsDraftHx)
-                        {
-                            pageCopy.Content = history.DraftContent;
-                            pageCopy.Author = history.DraftAuthor;
-                        }
-                        else
-                        {
-                            pageCopy.Content = history.Content;
-                            pageCopy.Author = history.Author;
-                        }
-
-                        page = pageCopy;
-                    }         
-                } 
-            }
-            else if(canEdit && page != null && (showDraft || !page.HasPublishedVersion()))
-            {
-                var pageCopy = new Page();
-                page.CopyTo(pageCopy);
-                pageCopy.PromoteDraftTemporarilyForRender();
-                page = pageCopy;
-                showingDraft = true;
-                
-            }
-            else if(page == null)
-            {
-                var rootList = await PageService.GetRootPages(cancellationToken).ConfigureAwait(false);
-                if (canEdit && rootList.Count == 0)
+            var page = viewContext.CurrentPage;
+            if(page == null)
+            { 
+                if (viewContext.CanEdit && viewContext.RootPageCount == 0)
                 {
                     page = new Page
                     {
-                        ProjectId = project.Id
+                        ProjectId = viewContext.Project.Id
                     };
                     if (HttpContext.Request.Path == "/")
                     {
@@ -177,14 +114,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     {
                         ViewData["Title"] = StringLocalizer["No Pages Found"];
                         page.Title = "No pages found, please click the plus icon to create the first page";
-
                     }
                 }
                 else
                 {
-                    if (rootList.Count > 0)
+                    if (viewContext.RootPageCount > 0)
                     {
-                        if (slug == project.DefaultPageSlug)
+                        if (slug == viewContext.Project.DefaultPageSlug)
                         {
                             // slug was empty and no matching page found for default slug
                             // but since there exist root level pages we should
@@ -194,11 +130,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                             ViewData["Title"] = StringLocalizer["Content Index"];
                             var emptyModel = new PageViewModel(ContentProcessor)
                             {
-                                ProjectSettings = project,
-                                CanEdit = canEdit,
+                                ProjectSettings = viewContext.Project,
+                                CanEdit = viewContext.CanEdit,
                                 CommentsAreOpen = false,
                                 TimeZoneHelper = TimeZoneHelper,
-                                TimeZoneId = project.TimeZoneId,
+                                TimeZoneId = viewContext.Project.TimeZoneId,
                                 PageTreePath = Url.Action("Tree"),
                                 NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "" }),
                                 EditPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug })
@@ -229,7 +165,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             if (!string.IsNullOrEmpty(page.ExternalUrl))
             {
-                if (canEdit)
+                if (viewContext.CanEdit)
                 {
                     Log.LogWarning($"page {page.Title} has override url {page.ExternalUrl}, redirecting to edit since user can edit");
                     return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = page.Slug });
@@ -241,7 +177,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
             }
             
-            if (!canEdit )
+            if (!viewContext.CanEdit)
             {
                 if (!page.HasPublishedVersion())
                 {
@@ -253,27 +189,27 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var model = new PageViewModel(ContentProcessor)
             {
                 CurrentPage = page,
-                ProjectSettings = project,
-                CanEdit = canEdit,
+                ProjectSettings = viewContext.Project,
+                CanEdit = viewContext.CanEdit,
                 CommentsAreOpen = false,
                 TimeZoneHelper = TimeZoneHelper,
-                TimeZoneId = project.TimeZoneId,
+                TimeZoneId = viewContext.Project.TimeZoneId,
                 PageTreePath = Url.Action("Tree"),
-                HasPublishedVersion = hasPublishedVersion,
-                HasDraft = hasDraft,
-                ShowingDraft = showingDraft
+                HasPublishedVersion = viewContext.HasPublishedVersion,
+                HasDraft = viewContext.HasDraft,
+                ShowingDraft = viewContext.ShowingDraft
             };
 
-            if(history != null)
+            if(viewContext.History != null)
             {
-                model.HistoryId = history.Id;
-                model.HistoryArchiveDate = history.ArchivedUtc;
-                model.ShowingDeleted = pageWasDeleted;
+                model.HistoryId = viewContext.History.Id;
+                model.HistoryArchiveDate = viewContext.History.ArchivedUtc;
+                model.ShowingDeleted = viewContext.DidRestoreDeleted;
             }
 
             model.EditPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
 
-            if (model.CurrentPage.Slug == project.DefaultPageSlug)
+            if (model.CurrentPage.Slug == viewContext.Project.DefaultPageSlug)
             {
                 // not setting the parent slug if the current page is home page
                 // otherwise it would be awkward to create more root level pages
@@ -287,7 +223,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             if(!string.IsNullOrWhiteSpace(page.TemplateKey))
             {
-                model.Template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
+                model.Template = await TemplateService.GetTemplate(viewContext.Project.Id, page.TemplateKey);
             }
             
             ViewData["Title"] = page.Title;
@@ -1624,6 +1560,226 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         //        {
         //            model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(page.DraftPubDate.Value, project.TimeZoneId);
         //        }
+        //    }
+
+        //    return View(model);
+        //}
+
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public virtual async Task<IActionResult> Index(
+        //    CancellationToken cancellationToken,
+        //    string slug = "",
+        //    bool showDraft = false,
+        //    Guid? historyId = null
+        //    )
+        //{
+        //    var project = await ProjectService.GetCurrentProjectSettings();
+
+        //    if (project == null)
+        //    {
+        //        Log.LogError("project settings not found returning 404");
+        //        return NotFound();
+        //    }
+
+        //    var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+        //    if (string.IsNullOrEmpty(slug) || slug == "none") { slug = project.DefaultPageSlug; }
+
+        //    IPage page = await PageService.GetPageBySlug(slug, cancellationToken);
+
+        //    await AutoPublishDraftPage.PublishIfNeeded(page);
+
+        //    ContentHistory history = null;
+        //    var pageWasDeleted = false;
+        //    var showingDraft = false;
+        //    var hasDraft = false;
+        //    var hasPublishedVersion = false;
+        //    if (page != null)
+        //    {
+        //        hasDraft = page.HasDraftVersion();
+        //        hasPublishedVersion = page.HasPublishedVersion();
+        //    }
+
+        //    if (canEdit && historyId.HasValue)
+        //    {
+        //        history = await HistoryQueries.Fetch(project.Id, historyId.Value);
+        //        if (history != null)
+        //        {
+        //            if (page == null) //page must have been deleted, restore from hx
+        //            {
+        //                page = new Page();
+        //                history.CopyTo(page);
+        //                if (history.IsDraftHx)
+        //                {
+        //                    page.PromoteDraftTemporarilyForRender();
+        //                }
+        //                pageWasDeleted = true;
+        //            }
+        //            else
+        //            {
+        //                var pageCopy = new Page();
+        //                page.CopyTo(pageCopy);
+        //                if (history.IsDraftHx)
+        //                {
+        //                    pageCopy.Content = history.DraftContent;
+        //                    pageCopy.Author = history.DraftAuthor;
+        //                }
+        //                else
+        //                {
+        //                    pageCopy.Content = history.Content;
+        //                    pageCopy.Author = history.Author;
+        //                }
+
+        //                page = pageCopy;
+        //            }
+        //        }
+        //    }
+        //    else if (canEdit && page != null && (showDraft || !page.HasPublishedVersion()))
+        //    {
+        //        var pageCopy = new Page();
+        //        page.CopyTo(pageCopy);
+        //        pageCopy.PromoteDraftTemporarilyForRender();
+        //        page = pageCopy;
+        //        showingDraft = true;
+
+        //    }
+        //    else if (page == null)
+        //    {
+        //        var rootList = await PageService.GetRootPages(cancellationToken).ConfigureAwait(false);
+        //        if (canEdit && rootList.Count == 0)
+        //        {
+        //            page = new Page
+        //            {
+        //                ProjectId = project.Id
+        //            };
+        //            if (HttpContext.Request.Path == "/")
+        //            {
+        //                ViewData["Title"] = StringLocalizer["Home"];
+        //                page.Title = "No pages found, please click the plus icon to create the home page";
+        //            }
+        //            else
+        //            {
+        //                ViewData["Title"] = StringLocalizer["No Pages Found"];
+        //                page.Title = "No pages found, please click the plus icon to create the first page";
+
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (rootList.Count > 0)
+        //            {
+        //                if (slug == project.DefaultPageSlug)
+        //                {
+        //                    // slug was empty and no matching page found for default slug
+        //                    // but since there exist root level pages we should
+        //                    // show an index menu. 
+        //                    // esp useful if not using pages as the default route
+        //                    // /p or /docs
+        //                    ViewData["Title"] = StringLocalizer["Content Index"];
+        //                    var emptyModel = new PageViewModel(ContentProcessor)
+        //                    {
+        //                        ProjectSettings = project,
+        //                        CanEdit = canEdit,
+        //                        CommentsAreOpen = false,
+        //                        TimeZoneHelper = TimeZoneHelper,
+        //                        TimeZoneId = project.TimeZoneId,
+        //                        PageTreePath = Url.Action("Tree"),
+        //                        NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "" }),
+        //                        EditPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug })
+        //                    };
+
+        //                    return View("IndexMenu", emptyModel);
+        //                }
+
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                Response.StatusCode = 404;
+        //                return View("NoPages", 404);
+        //            }
+        //        }
+        //    }
+        //    // page is not null at this point
+
+        //    if ((!string.IsNullOrEmpty(page.ViewRoles)))
+        //    {
+        //        if (!User.IsInRoles(page.ViewRoles))
+        //        {
+        //            Log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 404");
+        //            return NotFound();
+        //        }
+        //    }
+
+        //    if (!string.IsNullOrEmpty(page.ExternalUrl))
+        //    {
+        //        if (canEdit)
+        //        {
+        //            Log.LogWarning($"page {page.Title} has override url {page.ExternalUrl}, redirecting to edit since user can edit");
+        //            return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = page.Slug });
+        //        }
+        //        else
+        //        {
+        //            Log.LogWarning($"page {page.Title} has override url {page.ExternalUrl}, not intended to be viewed so returning 404");
+        //            return NotFound();
+        //        }
+        //    }
+
+        //    if (!canEdit)
+        //    {
+        //        if (!page.HasPublishedVersion())
+        //        {
+        //            Log.LogWarning($"page {page.Title} is unpublished and user is not editor so returning 404");
+        //            return NotFound();
+        //        }
+        //    }
+
+        //    var model = new PageViewModel(ContentProcessor)
+        //    {
+        //        CurrentPage = page,
+        //        ProjectSettings = project,
+        //        CanEdit = canEdit,
+        //        CommentsAreOpen = false,
+        //        TimeZoneHelper = TimeZoneHelper,
+        //        TimeZoneId = project.TimeZoneId,
+        //        PageTreePath = Url.Action("Tree"),
+        //        HasPublishedVersion = hasPublishedVersion,
+        //        HasDraft = hasDraft,
+        //        ShowingDraft = showingDraft
+        //    };
+
+        //    if (history != null)
+        //    {
+        //        model.HistoryId = history.Id;
+        //        model.HistoryArchiveDate = history.ArchivedUtc;
+        //        model.ShowingDeleted = pageWasDeleted;
+        //    }
+
+        //    model.EditPath = Url.RouteUrl(PageRoutes.PageEditRouteName, new { slug = model.CurrentPage.Slug });
+
+        //    if (model.CurrentPage.Slug == project.DefaultPageSlug)
+        //    {
+        //        // not setting the parent slug if the current page is home page
+        //        // otherwise it would be awkward to create more root level pages
+        //        model.NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "" });
+        //    }
+        //    else
+        //    {
+        //        // for non home pages if the user clicks the new link
+        //        // make it use the current page slug as the parent slug for the new item
+        //        model.NewItemPath = Url.RouteUrl(PageRoutes.NewPageRouteName, new { slug = "", parentSlug = model.CurrentPage.Slug });
+        //    }
+        //    if (!string.IsNullOrWhiteSpace(page.TemplateKey))
+        //    {
+        //        model.Template = await TemplateService.GetTemplate(project.Id, page.TemplateKey);
+        //    }
+
+        //    ViewData["Title"] = page.Title;
+
+        //    if (page.MenuOnly)
+        //    {
+        //        return View("ChildMenu", model);
         //    }
 
         //    return View(model);
