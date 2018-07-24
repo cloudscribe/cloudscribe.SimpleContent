@@ -37,7 +37,8 @@ $(function () {
             sortUrl: $('#config').data("sort-url"),
             moveUrl: $('#config').data("move-url"),
             deleteUrl: $('#config').data("delete-url"),
-            editUrl: $('#config').data("edit-url")
+            editUrl: $('#config').data("edit-url"),
+            newPageUrl: $('#config').data("new-page-url")
         },
         xsrfToken: $('[name="__RequestVerificationToken"]:first').val(),
         showCommands : function (node) {
@@ -45,7 +46,7 @@ $(function () {
             pageTree.ui.cmdHeading.html(node.name);
             pageTree.ui.editLink.attr('href', this.urls.editUrl + '/' + node.slug);
             pageTree.ui.viewLink.attr('href', node.url);
-            pageTree.ui.newChildLink.attr('href', this.urls.editUrl + "?parentslug=" + node.slug);
+            pageTree.ui.newChildLink.attr('href', this.urls.newPageUrl + "?parentslug=" + node.slug);
             pageTree.ui.pubStatusLabel.html(node.pubstatus);
             pageTree.ui.cmdBarDiv.show();
             new Tether({

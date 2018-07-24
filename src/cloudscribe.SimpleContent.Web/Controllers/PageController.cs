@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-07-14
+// Last Modified:           2018-07-24
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -1110,6 +1110,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var model = new PageTreeViewModel
             {
                 TreeServiceUrl = Url.Action("TreeJson"),
+                NewPageUrl = Url.RouteUrl(PageRoutes.NewPageRouteName),
                 EditUrl = Url.RouteUrl(PageRoutes.PageEditRouteName),
                 ViewUrl = Url.RouteUrl(PageRoutes.PageRouteName),
                 MoveUrl = Url.Action("Move"),
