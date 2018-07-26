@@ -4,7 +4,7 @@
     Layout = "_LayoutEmpty";
 }
 <div>
-    <a href="@Model.ImageFullSizeUrl"><img src="@Model.ImageUrl" alt="@Model.FirstName" /></a>
+    <a href="@Model.ImageFullSizeUrl"><img src="@Model.ImageUrl" style="width:690px;" alt="@Model.FirstName" /></a>
     <dl class="row">
         <dt class="col-sm-2">
             @sr["Name"]
@@ -79,10 +79,10 @@
         @if (Model.JoinDate.HasValue)
         {
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.JoinDate)
+                @Model.JoinDate
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.JoinDate.Value.ToShortDateString())
+                @Model.JoinDate.Value.ToShortDateString())
             </dd>
         }
 
