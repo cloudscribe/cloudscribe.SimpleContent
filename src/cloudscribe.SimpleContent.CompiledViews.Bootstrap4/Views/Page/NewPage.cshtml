@@ -5,7 +5,7 @@
     ViewData["Title"] = sr["Create a New Page"];
 }
 <h2>@ViewData["Title"]</h2>
-<a class="btn btn-link" asp-route="@pageRoutes.PageEditRouteName" asp-route-parentslug="@Model.ParentSlug">@sr["New Page with Standard Content Editor"]</a>
+<a class="btn btn-primary" asp-route="@pageRoutes.PageEditRouteName" asp-route-parentslug="@Model.ParentSlug">@sr["New Page with Standard Content Editor"]</a>
 @if (Model.CountOfTemplates > 0)
 {
     <h3>@sr["Create Page From Template"]</h3>

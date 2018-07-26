@@ -7,7 +7,7 @@
         @sr["You are currently viewing a previous version of this post that was archived"]&nbsp;@Model.FormatDateForEdit(Model.HistoryArchiveDate.Value)
         @if (Model.HasPublishedVersion)
         {
-            <a class="btn btn-link" href="@Url.RouteUrl(blogRoutes.PostWithoutDateRouteName, new { slug = Model.CurrentPost.Slug })">@sr["View published version."]</a>
+            <a class="btn btn-primary btn-sm" href="@Url.RouteUrl(blogRoutes.PostWithoutDateRouteName, new { slug = Model.CurrentPost.Slug })">@sr["View published version."]</a>
         }
         <a class="btn btn-primary btn-sm" href="@Url.RouteUrl(blogRoutes.PostEditRouteName, new { slug = Model.CurrentPost.Slug, historyId = Model.HistoryId.Value })">@sr["Restore this version to editor"]</a>
         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteHistory">
