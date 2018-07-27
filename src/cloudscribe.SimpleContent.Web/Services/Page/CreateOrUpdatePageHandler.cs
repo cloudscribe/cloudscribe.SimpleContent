@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -109,6 +109,11 @@ namespace cloudscribe.SimpleContent.Web.Services
                     if (!string.IsNullOrEmpty(request.ViewModel.Slug))
                     {
                         page.Slug = request.ViewModel.Slug;
+                    }
+                    if(page.Slug == project.DefaultPageSlug)
+                    {
+                        _log.LogWarning($"{request.UserName} tried to explicitely set the default page slug as the parent slug which is not allowed since all root pages are alreaydy children of the default page");
+                        page.Slug = null;
                     }
                     
 

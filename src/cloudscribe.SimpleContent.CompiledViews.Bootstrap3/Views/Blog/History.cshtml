@@ -6,6 +6,7 @@
     ViewData["Title"] = string.Format(format, Model.ContentTitle);
 }
 <h1>@ViewData["Title"]</h1>
+<a asp-route="@blogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.ContentSlug" itemprop="url">@sr["View current version"]</a>
 @{ await Html.RenderPartialAsync("HistoryGridPartial", Model); }
 
 <cs-pager asp-route="@blogRoutes.PostHistoryRouteName"

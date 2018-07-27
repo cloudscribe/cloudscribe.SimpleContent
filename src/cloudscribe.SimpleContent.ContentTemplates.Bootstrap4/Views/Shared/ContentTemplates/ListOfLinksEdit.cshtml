@@ -37,88 +37,93 @@
     <div class="tab-pane pt-2 active" id="tabMain" role="tabpanel" aria-labelledby="cedit-tab1">
         <input id="ItemsConfig" type="hidden" value="@itemsJson" />
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
-
-        <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">
-            <div class="row">
-                <div class="col-3" data-bind="attr: { visible: ResizedUrl !== undefined }">
-                    <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }" />
-                </div>
-                <div class="col-8">
-                    <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
-                    <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
-                    <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
-                    <span class="text-danger" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
-                    <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
-                </div>
-                <div class="col-1">
-                    <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
-                    <a href="#" data-bind="click: decrementSort, visible: Sort() > 0" title="@sr["Move Up"]"><i class="fas fa-sort-up fa-2x"></i></a>
-                    <a href="#" data-bind="click: incrementSort" title="@sr["Move Down"]"><i class="fas fa-sort-down fa-2x"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex align-items-stretch">
-            <div class="cs-crop-container">
-                <img id="dz1Image" style="max-width:350px;" src="/cr/images/350x250-placeholder.png" />
-            </div>
-            <div class="d-flex flex-column">
-                <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
-                     data-dropzone=""
-                     data-upload-url="@Url.Action("DropFile", "FileManager")"
-                     data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
-                     data-target-path="@options.NewImagePath"
-                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
-                     data-resize-image="true"
-                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
-                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
-                     data-enable-crop="@options.EnableCropping"
-                     data-accepted-files="image/*"
-                     data-target-fullsize-input-id="imgUrlFull"
-                     data-target-resized-input-id=""
-                     data-target-thumb-input-id=""
-                     data-target-fullsize-image-id="dz1Image"
-                     data-target-resized-image-id=""
-                     data-target-thumb-image-id=""
-                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
-                     data-resized-placeholder-image=""
-                     data-thumb-placeholder-image=""
-                     data-resize-width="@options.ResizeMaxWidth"
-                     data-resize-height="@options.ResizeMaxHeight"
-                     data-crop-area-width="@options.CropAreaWidth"
-                     data-crop-area-height="@options.CropAreaHeight"
-                     >
-                    @sr["Drop file here or click to browse device for file."]
-                </div>
-                <div class="pl-1 pt-1">
-                    <div class="d-flex flex-column">
-                        <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
-                        <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
-
+        <fieldset class="border p-2 mb-2">
+            <legend class="w-auto">@sr["Current Links"]</legend>
+            <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">
+                <div class="row">
+                    <div class="col-3" data-bind="attr: { visible: ResizedUrl !== undefined }">
+                        <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }" />
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
+                        <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
+                        <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
+                        <span class="text-danger" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
+                        <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
+                    </div>
+                    <div class="col-1">
+                        <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
+                        <a href="#" data-bind="click: decrementSort, visible: Sort() > 0" title="@sr["Move Up"]"><i class="fas fa-sort-up fa-2x"></i></a>
+                        <a href="#" data-bind="click: incrementSort" title="@sr["Move Down"]"><i class="fas fa-sort-down fa-2x"></i></a>
                     </div>
                 </div>
             </div>
-        </div>
-        <input id="imgUrlFull" type="hidden" />
-        <input id="imgUrlResized" type="hidden" />
-        <div class="form-group">
-            <label for="NewTitle">@sr["Link Title"]</label>
-            <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
-            <span class="text-danger" data-bind='visible: newItemTitle.hasError, text: newItemTitle.validationMessage'> </span>
-        </div>
-        <div class="form-group">
-            <label for="NewUrl">@sr["Link Url"]</label>
-            <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
-            <span class="text-danger" data-bind='visible: newItemLinkUrl.hasError, text: newItemLinkUrl.validationMessage'> </span>
-        </div>
-        <div class="form-group">
-            <label for="NewDescription">@sr["Link Description"]</label>
-            <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
-        </div>
+        </fieldset>
+        <fieldset class="border p-2 mb-2">
+            <legend class="w-auto">@sr["Add a New Link"]</legend>
+            <div class="d-flex align-items-stretch">
+                <div class="cs-crop-container">
+                    <img id="dz1Image" style="max-width:350px;" src="/cr/images/350x250-placeholder.png" />
+                </div>
+                <div class="d-flex flex-column">
+                    <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                         data-dropzone=""
+                         data-upload-url="@Url.Action("DropFile", "FileManager")"
+                         data-anti-forgery-token="@tokens.RequestToken"
+                         data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                         data-file-crop-url="@ckOptions.CropFileUrl"
+                         data-target-path="@options.NewImagePath"
+                         data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                         data-resize-image="true"
+                         data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                         data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                         data-enable-crop="@options.EnableCropping"
+                         data-accepted-files="image/*"
+                         data-target-fullsize-input-id="imgUrlFull"
+                         data-target-resized-input-id=""
+                         data-target-thumb-input-id=""
+                         data-target-fullsize-image-id="dz1Image"
+                         data-target-resized-image-id=""
+                         data-target-thumb-image-id=""
+                         data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                         data-resized-placeholder-image=""
+                         data-thumb-placeholder-image=""
+                         data-resize-width="@options.ResizeMaxWidth"
+                         data-resize-height="@options.ResizeMaxHeight"
+                         data-crop-area-width="@options.CropAreaWidth"
+                         data-crop-area-height="@options.CropAreaHeight">
+                        @sr["Drop file here or click to browse device for file."]
+                    </div>
+                    <div class="pl-1 pt-1">
+                        <div class="d-flex flex-column">
+                            <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                            <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
 
-        <button data-bind="click: addNewItem, enable: isValidNewItemLink()" type="button" class="mb-1 btn btn-primary">@sr["Add Link"] <i class="fas fa-plus" aria-hidden="true"></i></button>
-        <span class="text-danger" data-bind="css: { collapse: isValidNewItemLink() } ">@sr["A link must have a title and a valid url."]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="imgUrlFull" type="hidden" />
+            <input id="imgUrlResized" type="hidden" />
+            <div class="form-group">
+                <label for="NewTitle">@sr["Link Title"]</label>
+                <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
+                <span class="text-danger" data-bind='visible: newItemTitle.hasError, text: newItemTitle.validationMessage'> </span>
+            </div>
+            <div class="form-group">
+                <label for="NewUrl">@sr["Link Url"]</label>
+                <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
+                <span class="text-danger" data-bind='visible: newItemLinkUrl.hasError, text: newItemLinkUrl.validationMessage'> </span>
+            </div>
+            <div class="form-group">
+                <label for="NewDescription">@sr["Link Description"]</label>
+                <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
+            </div>
+
+            <button data-bind="click: addNewItem, enable: isValidNewItemLink()" type="button" class="mb-1 btn btn-primary">@sr["Add Link"] <i class="fas fa-plus" aria-hidden="true"></i></button>
+            <span class="text-danger" data-bind="css: { collapse: isValidNewItemLink() } ">@sr["A link must have a title and a valid url."]</span>
+        </fieldset>
+        
     </div>
     <div class="tab-pane pt-2" id="tabTopContent" role="tabpanel" aria-labelledby="cedit-tab2">
         <textarea asp-for="ContentAbove" class="form-control"
