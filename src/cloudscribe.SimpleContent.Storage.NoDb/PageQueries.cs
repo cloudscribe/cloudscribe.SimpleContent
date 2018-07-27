@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2018-07-04
+// Last Modified:           2018-07-27
 // 
 
 
@@ -46,6 +46,18 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             result.AddRange(list);
             
             return result;
+        }
+
+        public async Task<List<IPage>> GetPagesReadyForPublish(
+            string projectId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var allPages = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
+            var currentTime = DateTime.UtcNow;
+            return allPages.Where(x => x.DraftPubDate != null && x.DraftPubDate < currentTime).ToList();
+
         }
 
 

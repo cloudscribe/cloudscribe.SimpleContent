@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-07-24
+// Last Modified:           2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -26,6 +26,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             IBlogService blogService,
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
+            ITimeZoneIdResolver timeZoneIdResolver,
             IOptions<BlogEditOptions> configOptionsAccessor,
             IStringLocalizer<SimpleContent> localizer,
             ILogger<CreateOrUpdatePostHandler> logger
@@ -35,6 +36,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             _blogService = blogService;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
+            _timeZoneIdResolver = timeZoneIdResolver;
             _editOptions = configOptionsAccessor.Value;
             _localizer = localizer;
             _log = logger;
@@ -44,6 +46,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IBlogService _blogService;
         private readonly IContentHistoryCommands _historyCommands;
         private ITimeZoneHelper _timeZoneHelper;
+        private readonly ITimeZoneIdResolver _timeZoneIdResolver;
         private readonly BlogEditOptions _editOptions;
         private readonly IStringLocalizer _localizer;
         private readonly ILogger _log;
@@ -152,7 +155,8 @@ namespace cloudscribe.SimpleContent.Web.Services
                             post.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                post.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, project.TimeZoneId);
+                                var tzId = await _timeZoneIdResolver.GetUserTimeZoneId(CancellationToken.None);
+                                post.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, tzId);
                             }
                             if (!post.PubDate.HasValue) { post.IsPublished = false; }
 

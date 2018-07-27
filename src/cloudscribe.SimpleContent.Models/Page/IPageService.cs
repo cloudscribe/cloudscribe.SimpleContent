@@ -33,5 +33,7 @@ namespace cloudscribe.SimpleContent.Models
 
         Task FirePublishEvent(IPage page);
         Task FireUnPublishEvent(IPage page);
+
+        Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

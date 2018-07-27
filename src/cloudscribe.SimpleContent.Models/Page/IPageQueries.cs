@@ -42,6 +42,11 @@ namespace cloudscribe.SimpleContent.Models
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
+        Task<List<IPage>> GetPagesReadyForPublish(
+            string projectId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
         Task<List<IPage>> GetRootPages(
             string projectId,
             CancellationToken cancellationToken = default(CancellationToken)
