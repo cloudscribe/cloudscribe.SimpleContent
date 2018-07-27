@@ -2,11 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-14
+// Last Modified:           2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common;
@@ -43,11 +42,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IProjectEmailService emailService,
             IAuthorizationService authorizationService,
             IAuthorNameResolver authorNameResolver,
-            IAutoPublishDraftPost autoPublishDraftPost,
             IContentTemplateService templateService,
             IContentHistoryCommands historyCommands,
             IContentHistoryQueries historyQueries,
             ITimeZoneHelper timeZoneHelper,
+            ITimeZoneIdResolver timeZoneIdResolver,
             IRecaptchaServerSideValidator recaptchaServerSideValidator,
             IStringLocalizer<SimpleContent> localizer,
             IOptions<BlogEditOptions> configOptionsAccessor,
@@ -63,12 +62,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             TemplateService = templateService;
             BlogRoutes = blogRoutes;
             AuthorNameResolver = authorNameResolver;
-            AutoPublishDraftPost = autoPublishDraftPost;
             HistoryCommands = historyCommands;
             HistoryQueries = historyQueries;
             EmailService = emailService;
             AuthorizationService = authorizationService;
             TimeZoneHelper = timeZoneHelper;
+            TimeZoneIdResolver = timeZoneIdResolver;
             StringLocalizer = localizer;
             Log = logger;
             EditOptions = configOptionsAccessor.Value;
@@ -86,10 +85,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IContentProcessor ContentProcessor { get; private set; }
         protected ILogger Log { get; private set; }
         protected ITimeZoneHelper TimeZoneHelper { get; private set; }
+        protected ITimeZoneIdResolver TimeZoneIdResolver { get; private set; }
         protected IAuthorizationService AuthorizationService { get; private set; }
         protected IStringLocalizer<SimpleContent> StringLocalizer { get; private set; }
         protected BlogEditOptions EditOptions { get; private set; }
-        protected IAutoPublishDraftPost AutoPublishDraftPost { get; private set; }
         protected IContentHistoryCommands HistoryCommands { get; private set; }
         protected IContentHistoryQueries HistoryQueries { get; private set; }
 
@@ -103,6 +102,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             string category = "",
             int page = 1)
         {
+            await BlogService.PublishReadyDrafts(cancellationToken);
+
             var project = await ProjectService.GetCurrentProjectSettings();
 
             if (project == null)
@@ -138,7 +139,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.Paging.CurrentPage = page;
             model.Paging.TotalItems = result.TotalItems; 
             model.TimeZoneHelper = TimeZoneHelper;
-            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+            model.TimeZoneId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
             model.NewItemPath = Url.RouteUrl(BlogRoutes.NewPostRouteName);
 
             return View("Index", model);
@@ -204,7 +205,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.Paging.TotalItems = result.TotalItems;
             
             model.TimeZoneHelper = TimeZoneHelper;
-            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+            model.TimeZoneId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
             model.Year = year;
             model.Month = month;
             model.Day = day;
@@ -348,8 +349,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.HistoryArchiveDate = history.ArchivedUtc;
             }
             
-            await AutoPublishDraftPost.PublishIfNeeded(result.Post);
-
             if (project.IncludePubDateInPostUrls)
             {
                 if(year == 0)
@@ -429,7 +428,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.ShowComments = true; //mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = await BlogService.CommentsAreOpen(result.Post, canEdit);
             model.TimeZoneHelper = TimeZoneHelper;
-            model.TimeZoneId = model.ProjectSettings.TimeZoneId;
+            model.TimeZoneId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
 
             if (!string.IsNullOrWhiteSpace(model.CurrentPost.TemplateKey))
             {
@@ -669,6 +668,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 TemplateModel = TemplateService.DesrializeTemplateModel(postResult.Post, template),
                 DidReplaceDraft = didReplaceDraft,
                 DidRestoreDeleted = didRestoreDeleted
+                 
             };
             
             if (history != null)
@@ -677,14 +677,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.HistoryId = history.Id;
             }
 
+            var tzId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
+
             if (postResult.Post.PubDate.HasValue)
             {
-                model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, project.TimeZoneId);
+                model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, tzId);
             }
 
             if (postResult.Post.DraftPubDate.HasValue)
             {
-                model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, project.TimeZoneId);
+                model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, tzId);
             }
 
             if (!string.IsNullOrWhiteSpace(postResult.Post.DraftAuthor))
@@ -921,14 +923,17 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ContentType = postResult.Post.ContentType;
                 model.TeaserOverride = postResult.Post.TeaserOverride;
                 model.SuppressTeaser = postResult.Post.SuppressTeaser;
+
+                var tzId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
+
                 if (postResult.Post.PubDate.HasValue)
                 {
-                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, project.TimeZoneId);
+                    model.PubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.PubDate.Value, tzId);
                 }
 
                 if (postResult.Post.DraftPubDate.HasValue)
                 {
-                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, project.TimeZoneId);
+                    model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, tzId);
                 }
             }
             

@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-24
-// Last Modified:           2018-07-24
+// Last Modified:           2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Models.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -20,21 +19,18 @@ namespace cloudscribe.SimpleContent.Web.Services
             IProjectService projectService,
             IPageService pageService,
             IAuthorizationService authorizationService,
-            IAutoPublishDraftPage autoPublishDraftPage,
             IContentHistoryQueries historyQueries
             )
         {
             _projectService = projectService;
             _pageService = pageService;
             _authorizationService = authorizationService;
-            _autoPublishDraftPage = autoPublishDraftPage;
             _historyQueries = historyQueries;
         }
 
         private readonly IProjectService _projectService;
         private readonly IPageService _pageService;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAutoPublishDraftPage _autoPublishDraftPage;
         private readonly IContentHistoryQueries _historyQueries;
 
         public async Task<PageViewContext> Handle(PageViewContextRequest request, CancellationToken cancellationToken = default(CancellationToken))
@@ -57,8 +53,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 if (string.IsNullOrEmpty(slug) || slug == "none") { slug = project.DefaultPageSlug; }
 
                 page = await _pageService.GetPageBySlug(slug, cancellationToken);
-                await _autoPublishDraftPage.PublishIfNeeded(page);
-
+                
                 if (page != null)
                 {
                     hasDraft = page.HasDraftVersion();
@@ -100,7 +95,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                         }
                     }
                 }
-                else if (canEdit && page != null && (request.ShowDraft || !page.HasPublishedVersion()))
+                else if (canEdit && page != null && ((request.ShowDraft && page.HasDraftVersion()) || !page.HasPublishedVersion()))
                 {
                     var pageCopy = new Page();
                     page.CopyTo(pageCopy);

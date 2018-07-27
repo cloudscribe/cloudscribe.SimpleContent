@@ -7,6 +7,7 @@ using cloudscribe.SimpleContent.Web.Mvc;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.SimpleContent.Web.Templating;
+using cloudscribe.Web.Common;
 using cloudscribe.Web.Common.Razor;
 using cloudscribe.Web.Common.Setup;
 using cloudscribe.Web.Navigation;
@@ -86,15 +87,15 @@ namespace Microsoft.Extensions.DependencyInjection
             
             services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
             services.AddScoped<IValidateTemplateModel, DefaultTemplateModelValidator>();
-
-            services.TryAddScoped<IAutoPublishDraftPage, AutoPublishDraftPage>();
-            services.TryAddScoped<IAutoPublishDraftPost, AutoPublishDraftPost>();
+            
             services.TryAddScoped<IPageUrlResolver, PageUrlResolver>();
             services.TryAddScoped<IBlogUrlResolver, BlogUrlResolver>();
 
             services.AddSingleton<IModelSerializer, JsonModelSerializer>();
             services.AddSingleton<IContentTemplateProvider, ConfigContentTemplateProvider>();
             services.TryAddSingleton<IContentTemplateService, ContentTemplateService>();
+
+            services.TryAddScoped<ITimeZoneIdResolver, DefaultTimeZoneIdResolver>();
 
             return services;
         }

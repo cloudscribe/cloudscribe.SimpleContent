@@ -128,5 +128,10 @@ namespace cloudscribe.SimpleContent.Models
             throw new NotImplementedException();
         }
 
+        public Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

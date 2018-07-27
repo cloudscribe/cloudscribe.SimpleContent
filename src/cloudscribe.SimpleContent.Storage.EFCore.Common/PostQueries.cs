@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-07-04
+// Last Modified:			2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -27,6 +27,30 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         private readonly ISimpleContentDbContext _dbContext;
 
         private const string PostContentType = "Post";
+
+
+        public async Task<List<IPost>> GetPostsReadyForPublish(
+            string blogId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var currentTime = DateTime.UtcNow;
+
+            var query = from x in _dbContext.Posts
+                        where x.BlogId == blogId
+                        && x.DraftPubDate != null
+                        && x.DraftPubDate < currentTime
+                        select x;
+
+            var items = await query
+                .AsNoTracking()
+                .ToListAsync<IPost>(cancellationToken)
+                .ConfigureAwait(false);
+
+            return items;
+
+        }
 
         /// <summary>
         /// this query is only used for the google site map so we don't need to get comments

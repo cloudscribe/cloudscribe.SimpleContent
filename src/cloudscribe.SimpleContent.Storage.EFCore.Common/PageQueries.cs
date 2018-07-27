@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-07-09
+// Last Modified:			2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -34,6 +34,29 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
             var query = from x in dbContext.Pages
                         where x.ProjectId == projectId
+                        select x;
+
+            var items = await query
+                .AsNoTracking()
+                .ToListAsync<IPage>(cancellationToken)
+                .ConfigureAwait(false);
+
+            return items;
+
+        }
+
+        public async Task<List<IPage>> GetPagesReadyForPublish(
+            string projectId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var currentTime = DateTime.UtcNow;
+
+            var query = from x in dbContext.Pages
+                        where x.ProjectId == projectId
+                        && x.DraftPubDate != null
+                        && x.DraftPubDate < currentTime
                         select x;
 
             var items = await query

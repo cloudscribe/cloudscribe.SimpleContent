@@ -23,6 +23,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             IProjectService projectService,
             IPageService pageService,
             ITimeZoneHelper timeZoneHelper,
+            ITimeZoneIdResolver timeZoneIdResolver,
             IContentHistoryCommands historyCommands,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             ILogger<CreateOrUpdatePageHandler> logger
@@ -32,6 +33,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             _pageService = pageService;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
+            _timeZoneIdResolver = timeZoneIdResolver;
             _localizer = localizer;
             _log = logger;
         }
@@ -41,6 +43,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IContentHistoryCommands _historyCommands;
         private readonly IStringLocalizer _localizer;
         private readonly ITimeZoneHelper _timeZoneHelper;
+        private readonly ITimeZoneIdResolver _timeZoneIdResolver;
         private readonly ILogger _log;
 
         public async Task<CommandResult<IPage>> Handle(CreateOrUpdatePageRequest request, CancellationToken cancellationToken = default(CancellationToken))
@@ -110,13 +113,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     {
                         page.Slug = request.ViewModel.Slug;
                     }
-                    if(page.Slug == project.DefaultPageSlug)
-                    {
-                        _log.LogWarning($"{request.UserName} tried to explicitely set the default page slug as the parent slug which is not allowed since all root pages are alreaydy children of the default page");
-                        page.Slug = null;
-                    }
                     
-
                     if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
                     {
                         var parentPage = await _pageService.GetPageBySlug(request.ViewModel.ParentSlug);
@@ -132,6 +129,13 @@ namespace cloudscribe.SimpleContent.Web.Services
                     else
                     {
                         // empty means root level
+                        page.ParentSlug = string.Empty;
+                        page.ParentId = "0";
+                    }
+
+                    if (page.ParentSlug == project.DefaultPageSlug)
+                    {
+                        _log.LogWarning($"{request.UserName} tried to explicitely set the default page slug as the parent slug which is not allowed since all root pages are already children of the default page");
                         page.ParentSlug = string.Empty;
                         page.ParentId = "0";
                     }
@@ -169,7 +173,8 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                page.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, project.TimeZoneId); 
+                                var tzId = await _timeZoneIdResolver.GetUserTimeZoneId(CancellationToken.None);
+                                page.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, tzId); 
                             }
                             if (!page.PubDate.HasValue) { page.IsPublished = false; }
 

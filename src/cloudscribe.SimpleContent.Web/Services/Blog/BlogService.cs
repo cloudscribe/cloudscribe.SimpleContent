@@ -2,11 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-08
+// Last Modified:           2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -24,7 +25,9 @@ namespace cloudscribe.SimpleContent.Services
             IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
             IBlogUrlResolver blogUrlResolver,
-            PostEvents eventHandlers
+            PostEvents eventHandlers,
+            IContentHistoryCommands historyCommands,
+            ILogger<BlogService> logger
            )
         {
             _postQueries = postQueries;
@@ -34,6 +37,8 @@ namespace cloudscribe.SimpleContent.Services
             _contentProcessor = contentProcessor;
             _blogUrlResolver = blogUrlResolver;
             _eventHandlers = eventHandlers;
+            _historyCommands = historyCommands;
+            _log = logger;
         }
 
         private readonly IProjectService _projectService;
@@ -44,13 +49,41 @@ namespace cloudscribe.SimpleContent.Services
         private readonly IContentProcessor _contentProcessor;
         private readonly IBlogUrlResolver _blogUrlResolver;
         private readonly PostEvents _eventHandlers;
+        private readonly IContentHistoryCommands _historyCommands;
+        private readonly ILogger _log;
 
         private async Task EnsureBlogSettings()
         {
             if(_settings != null) { return; }
             _settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);    
         }
-        
+
+        public async Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await EnsureBlogSettings();
+            var drafts = await _postQueries.GetPostsReadyForPublish(_settings.Id, cancellationToken);
+            foreach (var post in drafts)
+            {
+                post.Content = post.DraftContent;
+                post.Author = post.DraftAuthor;
+                post.PubDate = post.DraftPubDate.Value;
+                post.SerializedModel = post.DraftSerializedModel;
+                post.IsPublished = true;
+
+                post.DraftAuthor = null;
+                post.DraftContent = null;
+                post.DraftSerializedModel = null;
+                post.DraftPubDate = null;
+
+                await Update(post);
+
+                await _eventHandlers.HandlePublished(post.BlogId, post).ConfigureAwait(false);
+                await _historyCommands.DeleteDraftHistory(post.BlogId, post.Id).ConfigureAwait(false);
+                
+                _log.LogDebug($"auto published draft for post {post.Title}");
+            }
+        }
+
         public async Task<List<IPost>> GetPosts(bool includeUnpublished, CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings().ConfigureAwait(false);

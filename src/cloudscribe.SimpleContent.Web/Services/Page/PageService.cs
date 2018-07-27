@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-24
+// Last Modified:           2018-07-27
 // 
 
 
@@ -11,6 +11,7 @@ using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Web.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,9 @@ namespace cloudscribe.SimpleContent.Services
             IPageUrlResolver pageUrlResolver,
             IMemoryCache cache,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
-            IPageNavigationCacheKeys cacheKeys
+            IPageNavigationCacheKeys cacheKeys,
+            IContentHistoryCommands historyCommands,
+            ILogger<PageService> logger
             )
         {
 
@@ -47,6 +50,8 @@ namespace cloudscribe.SimpleContent.Services
             _cacheKeys = cacheKeys;
             _eventHandlers = eventHandlers;
             _sr = localizer;
+            _historyCommands = historyCommands;
+            _log = logger;
         }
         
         private readonly IPageQueries _pageQueries;
@@ -59,6 +64,8 @@ namespace cloudscribe.SimpleContent.Services
         private readonly PageEvents _eventHandlers;
         private readonly IPageUrlResolver _pageUrlResolver;
         private readonly IStringLocalizer _sr;
+        private readonly IContentHistoryCommands _historyCommands;
+        private readonly ILogger _log;
 
         private IProjectSettings _settings = null;
 
@@ -84,6 +91,34 @@ namespace cloudscribe.SimpleContent.Services
                 slug,
                 CancellationToken.None
                 ).ConfigureAwait(false);
+        }
+
+        public async Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await EnsureProjectSettings();
+            var drafts = await _pageQueries.GetPagesReadyForPublish(_settings.Id, cancellationToken);
+            foreach(var page in drafts)
+            {
+                page.Content = page.DraftContent;
+                page.Author = page.DraftAuthor;
+                page.PubDate = page.DraftPubDate.Value;
+                page.SerializedModel = page.DraftSerializedModel;
+                page.IsPublished = true;
+
+                page.DraftAuthor = null;
+                page.DraftContent = null;
+                page.DraftSerializedModel = null;
+                page.DraftPubDate = null;
+
+                await Update(page);
+
+                await _eventHandlers.HandlePublished(page.ProjectId, page).ConfigureAwait(false);
+                await _historyCommands.DeleteDraftHistory(page.ProjectId, page.Id).ConfigureAwait(false);
+
+                ClearNavigationCache();
+
+                _log.LogDebug($"auto published draft for page {page.Title}");
+            }
         }
         
         public async Task Create(IPage page, bool convertToRelativeUrls = false)
