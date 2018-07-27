@@ -80,7 +80,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [Authorize(Policy = "ViewContentHistoryPolicy")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteHistory(Guid id)
+        public async Task<IActionResult> DeleteHistory(Guid id, string returnUrl = null)
         {
             var project = await ProjectService.GetCurrentProjectSettings();
             if (project == null)
@@ -112,6 +112,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
                         break;
                 }
+            }
+
+            if(!string.IsNullOrEmpty(returnUrl))
+            {
+                return LocalRedirect(returnUrl);
             }
 
             return RedirectToAction("Index");

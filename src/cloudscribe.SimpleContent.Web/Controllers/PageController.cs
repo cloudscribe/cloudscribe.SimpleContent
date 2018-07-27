@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-07-24
+// Last Modified:           2018-07-27
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -440,7 +440,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> EditWithTemplate(PageEditWithTemplateViewModel model)
         {
-            var editContextRequest = new PageEditContextRequest(User, null, model.Id, model.HistoryId);
+            var editContextRequest = new PageEditContextRequest(User, null, model.Id, null);
             var editContext = await Mediator.Send(editContextRequest);
 
             if (!editContext.IsValidRequest)
@@ -449,7 +449,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
 
-            if(editContext.DidRestoreDeleted && model.HistoryId.HasValue)
+            var currentPage = editContext.CurrentPage;
+
+            if (editContext.CurrentPage == null && model.HistoryId.HasValue)
             {
                 var history = await HistoryQueries.Fetch(editContext.Project.Id, model.HistoryId.Value).ConfigureAwait(false);
                 if (history != null)
@@ -457,20 +459,21 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     var hxPage = new Page();
                     history.CopyTo(hxPage);
                     await PageService.Create(hxPage); // re-create page here because handler expects existing page and only updates
+                    currentPage = hxPage;
                 }
             }
             
-            if (editContext.CurrentPage == null)
+            if (currentPage == null)
             {
                 Log.LogError($"redirecting to index because page was not found for id {model.Id}");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], editContext.CurrentPage.Title);
+            ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Edit - {0}"], currentPage.Title);
 
-            var template = await TemplateService.GetTemplate(editContext.Project.Id, editContext.CurrentPage.TemplateKey);
+            var template = await TemplateService.GetTemplate(editContext.Project.Id, currentPage.TemplateKey);
             if (template == null)
             {
-                Log.LogError($"redirecting to index because content template {editContext.CurrentPage.TemplateKey} was not found");
+                Log.LogError($"redirecting to index because content template {currentPage.TemplateKey} was not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
             
@@ -479,7 +482,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 User.Identity.Name,
                 model,
                 template,
-                editContext.CurrentPage,
+                currentPage,
                 Request.Form,
                 ModelState
                 );
@@ -644,7 +647,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Edit(PageEditViewModel model)
         {
-            var editContextRequest = new PageEditContextRequest(User, null, model.Id, model.HistoryId);
+            var editContextRequest = new PageEditContextRequest(User, null, model.Id, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -667,7 +670,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
                 return View(model);
             }
-            
+
+            var currentPage = editContext.CurrentPage;
+
+
             if (editContext.CurrentPage == null && model.HistoryId.HasValue) // restore a deleted page from history
             {
                 var history = await HistoryQueries.Fetch(editContext.Project.Id, model.HistoryId.Value).ConfigureAwait(false);
@@ -676,16 +682,17 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     var hxPage = new Page();
                     history.CopyTo(hxPage);
                     await PageService.Create(hxPage); // re-create page here because handler expects existing page and only updates
+                    currentPage = hxPage;
                 }
             }
 
-            var isNew = (editContext.CurrentPage == null);
+            var isNew = (currentPage == null);
 
             var request = new CreateOrUpdatePageRequest(
                 editContext.Project.Id,
                 User.Identity.Name,
                 model,
-                editContext.CurrentPage,
+                currentPage,
                 ModelState
                 );
 

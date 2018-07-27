@@ -4,7 +4,7 @@
     var message = "";
     if(Model.DraftPubDate.HasValue)
     {
-        var format = sr["This content is scheduled to be published {0}."].ToString();
+        var format = sr["This content is scheduled to be published {0}. You can still edit and save changes to this draft before it is published by clicking \"Save Darft\""].ToString();
         message = string.Format(format, Model.DraftPubDate.Value);
     }
 
