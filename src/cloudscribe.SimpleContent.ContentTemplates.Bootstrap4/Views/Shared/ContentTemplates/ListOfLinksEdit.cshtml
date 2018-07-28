@@ -39,6 +39,9 @@
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
         <fieldset class="border p-2 mb-2">
             <legend class="w-auto">@sr["Current Links"]</legend>
+            <div data-bind="visible: Items().length === 0">
+                @sr["No links have been added yet, use the form below to add links."]
+            </div>
             <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">
                 <div class="row">
                     <div class="col-3" data-bind="attr: { visible: ResizedUrl !== undefined }">
@@ -48,7 +51,7 @@
                         <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
                         <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
                         <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
-                        <span class="text-danger" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
+                        <span class="invalid-feedback" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
                         <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
                     </div>
                     <div class="col-1">
@@ -61,7 +64,23 @@
         </fieldset>
         <fieldset class="border p-2 mb-2">
             <legend class="w-auto">@sr["Add a New Link"]</legend>
-            <div class="d-flex align-items-stretch">
+
+            <div class="form-group">
+                <label for="NewTitle">@sr["Link Title - required"]</label>
+                <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
+                <span class="invalid-feedback" data-bind='visible: newItemTitle.hasError, text: newItemTitle.validationMessage'> </span>
+            </div>
+            <div class="form-group">
+                <label for="NewUrl">@sr["Link Url - required"]</label>
+                <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
+                <span class="invalid-feedback" data-bind='visible: newItemLinkUrl.hasError, text: newItemLinkUrl.validationMessage'> </span>
+            </div>
+            <div class="form-group">
+                <label for="NewDescription">@sr["Link Description - optional"]</label>
+                <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
+            </div>
+            <label>@sr["Link Thumbnail - optional"]</label>
+            <div class="d-flex align-items-stretch mb-2">
                 <div class="cs-crop-container">
                     <img id="dz1Image" style="max-width:350px;" src="/cr/images/350x250-placeholder.png" />
                 </div>
@@ -105,20 +124,6 @@
             </div>
             <input id="imgUrlFull" type="hidden" />
             <input id="imgUrlResized" type="hidden" />
-            <div class="form-group">
-                <label for="NewTitle">@sr["Link Title"]</label>
-                <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
-                <span class="text-danger" data-bind='visible: newItemTitle.hasError, text: newItemTitle.validationMessage'> </span>
-            </div>
-            <div class="form-group">
-                <label for="NewUrl">@sr["Link Url"]</label>
-                <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
-                <span class="text-danger" data-bind='visible: newItemLinkUrl.hasError, text: newItemLinkUrl.validationMessage'> </span>
-            </div>
-            <div class="form-group">
-                <label for="NewDescription">@sr["Link Description"]</label>
-                <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
-            </div>
 
             <button data-bind="click: addNewItem, enable: isValidNewItemLink()" type="button" class="mb-1 btn btn-primary">@sr["Add Link"] <i class="fas fa-plus" aria-hidden="true"></i></button>
             <span class="text-danger" data-bind="css: { collapse: isValidNewItemLink() } ">@sr["A link must have a title and a valid url."]</span>
