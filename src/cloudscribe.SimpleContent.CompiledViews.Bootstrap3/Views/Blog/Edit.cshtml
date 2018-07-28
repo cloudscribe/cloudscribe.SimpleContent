@@ -32,7 +32,7 @@
 <h2>@ViewBag.Title <small><a id="lnkCancel" href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
-    <a id="lnkHistory" target="_blank" href="@Url.RouteUrl(blogRoutes.PostHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
+    <a id="lnkHistory" href="@Url.RouteUrl(blogRoutes.PostHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
 }
 @{ await Html.RenderPartialAsync("EditHistoryInfoPartial", Model); }
 <form method="post" class="form-horizontal" role="form" asp-antiforgery="true" data-submit-once="true">
