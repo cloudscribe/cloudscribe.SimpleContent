@@ -39,53 +39,53 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                 maxLength: 255,
                 nullable: true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowPubDate",
-                table: "cs_Page",
-                nullable: false,
-                defaultValue: false,
-                oldClrType: typeof(bool))
-                .Annotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowPubDate",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    defaultValue: false,
+            //    oldClrType: typeof(bool))
+            //    .Annotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowLastModified",
-                table: "cs_Page",
-                nullable: false,
-                defaultValue: false,
-                oldClrType: typeof(bool))
-                .Annotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowLastModified",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    defaultValue: false,
+            //    oldClrType: typeof(bool))
+            //    .Annotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowHeading",
-                table: "cs_Page",
-                nullable: false,
-                defaultValue: true,
-                oldClrType: typeof(bool))
-                .Annotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowHeading",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    defaultValue: true,
+            //    oldClrType: typeof(bool))
+            //    .Annotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowComments",
-                table: "cs_Page",
-                nullable: false,
-                defaultValue: false,
-                oldClrType: typeof(bool))
-                .Annotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowComments",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    defaultValue: false,
+            //    oldClrType: typeof(bool))
+            //    .Annotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowCategories",
-                table: "cs_Page",
-                nullable: false,
-                defaultValue: false,
-                oldClrType: typeof(bool))
-                .Annotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowCategories",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    defaultValue: false,
+            //    oldClrType: typeof(bool))
+            //    .Annotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "IsPublished",
-                table: "cs_Page",
-                nullable: false,
-                defaultValue: true,
-                oldClrType: typeof(bool))
-                .Annotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "IsPublished",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    defaultValue: true,
+            //    oldClrType: typeof(bool))
+            //    .Annotation("MySql:ValueGeneratedOnAdd", true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_cs_Page_CorrelationKey",
@@ -119,53 +119,53 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                 name: "PublisherLogoUrl",
                 table: "cs_ContentProject");
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowPubDate",
-                table: "cs_Page",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldDefaultValue: false)
-                .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowPubDate",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    oldClrType: typeof(bool),
+            //    oldDefaultValue: false)
+            //    .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowLastModified",
-                table: "cs_Page",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldDefaultValue: false)
-                .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowLastModified",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    oldClrType: typeof(bool),
+            //    oldDefaultValue: false)
+            //    .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowHeading",
-                table: "cs_Page",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldDefaultValue: true)
-                .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowHeading",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    oldClrType: typeof(bool),
+            //    oldDefaultValue: true)
+            //    .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowComments",
-                table: "cs_Page",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldDefaultValue: false)
-                .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowComments",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    oldClrType: typeof(bool),
+            //    oldDefaultValue: false)
+            //    .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "ShowCategories",
-                table: "cs_Page",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldDefaultValue: false)
-                .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "ShowCategories",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    oldClrType: typeof(bool),
+            //    oldDefaultValue: false)
+            //    .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
 
-            migrationBuilder.AlterColumn<bool>(
-                name: "IsPublished",
-                table: "cs_Page",
-                nullable: false,
-                oldClrType: typeof(bool),
-                oldDefaultValue: true)
-                .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
+            //migrationBuilder.AlterColumn<bool>(
+            //    name: "IsPublished",
+            //    table: "cs_Page",
+            //    nullable: false,
+            //    oldClrType: typeof(bool),
+            //    oldDefaultValue: true)
+            //    .OldAnnotation("MySql:ValueGeneratedOnAdd", true);
         }
     }
 }
