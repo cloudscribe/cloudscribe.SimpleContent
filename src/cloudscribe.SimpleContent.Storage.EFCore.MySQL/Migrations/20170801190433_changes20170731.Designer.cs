@@ -282,29 +282,29 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<DateTime>("PubDate");
 
-                    b.Property<bool>("ShowCategories")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
+                    b.Property<bool>("ShowCategories");
+                    //.ValueGeneratedOnAdd()
+                    //.HasDefaultValue(false);
 
-                    b.Property<bool>("ShowComments")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
+                    b.Property<bool>("ShowComments");
+                    //.ValueGeneratedOnAdd()
+                    //.HasDefaultValue(false);
 
-                    b.Property<bool>("ShowHeading")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(true);
+                    b.Property<bool>("ShowHeading");
+                    //.ValueGeneratedOnAdd()
+                    //.HasDefaultValue(true);
 
-                    b.Property<bool>("ShowLastModified")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
+                    b.Property<bool>("ShowLastModified");
+                    //.ValueGeneratedOnAdd()
+                    //.HasDefaultValue(false);
 
-                    b.Property<bool>("ShowMenu")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
+                    b.Property<bool>("ShowMenu");
+                    //.ValueGeneratedOnAdd()
+                    //.HasDefaultValue(false);
 
-                    b.Property<bool>("ShowPubDate")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
+                    b.Property<bool>("ShowPubDate");
+                        //.ValueGeneratedOnAdd()
+                        //.HasDefaultValue(false);
 
                     b.Property<string>("Slug")
                         .IsRequired()
