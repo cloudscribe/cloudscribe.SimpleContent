@@ -6,7 +6,7 @@
   <correlationkey />
   <author>Joe Audette</author>
   <pubDate>2016-02-22T16:58:00.0000000Z</pubDate>
-  <lastModified>2018-02-05T21:22:40.8088227Z</lastModified>
+  <lastModified>2018-08-20T15:16:42</lastModified>
   <excerpt>a post about nothing really</excerpt>
   <content>&lt;p&gt;so they say so they say&lt;/p&gt;
 
@@ -21,10 +21,26 @@
   <contentType />
   <imageUrl />
   <thumbnailUrl />
+  <createdUtc>2018-08-20T15:16:42</createdUtc>
+  <createdByUser></createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor />
+  <draftContent />
+  <draftPubDate />
+  <templateKey></templateKey>
+  <serializedModel></serializedModel>
+  <draftSerializedModel></draftSerializedModel>
+  <serializer></serializer>
+  <blogId></blogId>
   <ispublished>true</ispublished>
   <isFeatured>true</isFeatured>
+  <autoTeaser>&lt;p&gt;so they say so they say&lt;/p&gt;
+
+&lt;p&gt;more more more&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="raised bed garden" src="/media/images/raisedbeds1.jpg" style="height:456px; width:607px"&gt;&lt;/p&gt;</autoTeaser>
   <teaserOverride />
-  <suppressAutoTeaser>false</suppressAutoTeaser>
+  <suppressTeaser>false</suppressTeaser>
   <categories>
     <category>food</category>
     <category>vegan</category>

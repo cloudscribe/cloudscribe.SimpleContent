@@ -4,9 +4,9 @@
   <title>Starsky and Hutch</title>
   <slug>starsky-and-hutch</slug>
   <correlationkey />
-  <author></author>
+  <author />
   <pubDate>2016-03-13T22:23:00.0000000Z</pubDate>
-  <lastModified>2018-06-28T16:09:34.4878080Z</lastModified>
+  <lastModified>2018-08-20T15:11:16</lastModified>
   <excerpt>Starsky and Hutch</excerpt>
   <content>&lt;p&gt;Starsky and Hutcherson&lt;br /&gt;
 &lt;img alt="dudes" src="/media/images/dudes1-550x412.jpeg" style="height:412px; width:550px" /&gt;&lt;br /&gt;
@@ -17,8 +17,21 @@ cool dudes man!&lt;/p&gt;
   <contentType />
   <imageUrl />
   <thumbnailUrl />
+  <createdUtc>2018-08-20T15:11:16</createdUtc>
+  <createdByUser></createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor />
+  <draftContent />
+  <draftPubDate />
+  <templateKey></templateKey>
+  <serializedModel></serializedModel>
+  <draftSerializedModel></draftSerializedModel>
+  <serializer></serializer>
+  <blogId></blogId>
   <ispublished>true</ispublished>
   <isFeatured>true</isFeatured>
+  <autoTeaser>&lt;p&gt;&lt;/p&gt;Starsky and Hutcherson&lt;br&gt;
+&lt;img alt="dudes" src="/media/images/dudes1-550x412.jpeg" style="height:412px; width:550px"&gt;&lt;br&gt;</autoTeaser>
   <teaserOverride />
   <suppressTeaser>false</suppressTeaser>
   <categories>

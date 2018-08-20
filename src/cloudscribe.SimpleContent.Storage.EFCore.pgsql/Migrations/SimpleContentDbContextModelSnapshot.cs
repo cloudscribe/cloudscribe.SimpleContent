@@ -17,7 +17,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ContentHistory", b =>
@@ -570,6 +570,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.Property<string>("Author")
                         .HasMaxLength(255);
+
+                    b.Property<string>("AutoTeaser");
 
                     b.Property<string>("BlogId")
                         .IsRequired()

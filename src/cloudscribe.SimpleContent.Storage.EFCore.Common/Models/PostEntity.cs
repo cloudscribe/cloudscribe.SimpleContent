@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-08
-// Last Modified:			2018-07-01
+// Last Modified:			2018-08-20
 // 
 
 
@@ -110,6 +110,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         public string ContentType { get; set; } = "html";
 
         // Teaser.
+        public string AutoTeaser { get; set; }
         public string TeaserOverride { get; set; }
         public bool SuppressTeaser { get; set; }
 

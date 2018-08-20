@@ -178,6 +178,16 @@ namespace cloudscribe.SimpleContent.Web.Services
                     result.FilteredContent = teaser;
                     result.IsFullContent = false;
                 }
+                else if (!string.IsNullOrWhiteSpace(post.AutoTeaser)) // as of 2018-08-20 this gets populated on save
+                {
+                    teaser = MapImageUrlsToCdn(
+                        post.AutoTeaser,
+                        settings.CdnUrl,
+                        settings.LocalMediaVirtualPath);
+                    
+                    result.FilteredContent = teaser;
+                    result.IsFullContent = false;
+                }
                 else
                 {
                     // need to generate teaser

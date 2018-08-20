@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-27
+// Last Modified:           2018-08-20
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -77,8 +77,8 @@ namespace cloudscribe.SimpleContent.Services
 
                 await Update(post);
 
-                await _eventHandlers.HandlePublished(post.BlogId, post).ConfigureAwait(false);
-                await _historyCommands.DeleteDraftHistory(post.BlogId, post.Id).ConfigureAwait(false);
+                await _eventHandlers.HandlePublished(_settings.Id, post).ConfigureAwait(false);
+                await _historyCommands.DeleteDraftHistory(_settings.Id, post.Id).ConfigureAwait(false);
                 
                 _log.LogDebug($"auto published draft for post {post.Title}");
             }

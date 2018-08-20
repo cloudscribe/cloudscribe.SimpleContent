@@ -1,7 +1,4 @@
 ﻿using cloudscribe.SimpleContent.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
@@ -21,7 +18,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             string html,
             string cacheKey,
             string slug,
-            string languageCode)
+            string languageCode,
+            bool logWarnings = true)
         {
             var result = new TeaserResult();
             result.Content = html;

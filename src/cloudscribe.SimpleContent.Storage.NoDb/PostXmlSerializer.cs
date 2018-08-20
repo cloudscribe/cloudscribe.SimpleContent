@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-25
-// Last Modified:           2018-07-03
+// Last Modified:           2018-08-20
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -61,6 +61,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
                                 new XElement("ispublished", post.IsPublished),
                                 new XElement("isFeatured", post.IsFeatured),
+                                new XElement("autoTeaser", post.AutoTeaser),
                                 new XElement("teaserOverride", post.TeaserOverride),
                                 new XElement("suppressTeaser", post.SuppressTeaser),
                                 new XElement("categories", string.Empty),
@@ -139,6 +140,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 LastModified = GetDate(doc.Root, "lastModified"),
                 IsPublished = bool.Parse(ReadValue(doc.Root, "ispublished", "true")),
                 IsFeatured = bool.Parse(ReadValue(doc.Root, "isFeatured", "false")),
+                AutoTeaser = ReadValue(doc.Root, "autoTeaser"),
                 TeaserOverride = ReadValue(doc.Root, "teaserOverride"),
                 SuppressTeaser = bool.Parse(ReadValue(doc.Root, "suppressTeaser", "false")),
 

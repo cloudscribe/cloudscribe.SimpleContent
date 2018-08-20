@@ -51,7 +51,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             string html,
             string cacheKey,
             string slug,
-            string languageCode)
+            string languageCode,
+            bool logWarnings = true)
         {
             var result = new TeaserResult();
 
@@ -108,9 +109,9 @@ namespace cloudscribe.SimpleContent.Web.Services
             while (!IsValidMarkup(text) && truncationLengthToUse <= contentLength)
             {
                 truncationLengthToUse += 1;
-                if (_log != null)
+                if (_log != null && logWarnings)
                 {
-                    _log.LogWarning($"teaser truncation for post {slug}, produced invalid html, so trying again and increasing the truncation length to {truncationLengthToUse} {modeDesc}. Might be best to make an explicit teaser for this post.");
+                    _log.LogWarning($"teaser truncation for post {slug}, produced invalid html, so trying again and increasing the truncation length to {truncationLengthToUse} {modeDesc}. You should re-publish this post to create a persistent teaser.");
                 }
 
                 text = TruncatePost(truncationMode, html, truncationLengthToUse, isRightToLeftLanguage);
