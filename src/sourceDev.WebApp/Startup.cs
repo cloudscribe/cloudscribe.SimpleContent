@@ -48,7 +48,22 @@ namespace sourceDev.WebApp
             
             services.SetupLocalization(_configuration);
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = cloudscribe.Core.Identity.SiteCookieConsent.NeedsConsent;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.ConsentCookie.Name = "cookieconsent_status";
+            });
+
+            services.Configure<Microsoft.AspNetCore.Mvc.CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+
             services.SetupMvc(_configuration, _sslIsAvailable);
+
+
             
         }
 
@@ -78,11 +93,21 @@ namespace sourceDev.WebApp
             else
             {
                 app.UseExceptionHandler("/oops/error");
+                if(_sslIsAvailable)
+                {
+                    app.UseHsts();
+                }
             }
 
-            app.UseForwardedHeaders();
+            if (_sslIsAvailable)
+            {
+                app.UseHttpsRedirection();
+            }
+
+
             app.UseStaticFiles();
             app.UseCloudscribeCommonStaticFiles();
+            app.UseCookiePolicy();
 
             //app.UseSession();
 

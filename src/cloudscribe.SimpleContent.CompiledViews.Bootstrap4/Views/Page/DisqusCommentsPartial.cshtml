@@ -1,13 +1,16 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@using Microsoft.AspNetCore.Http.Features
 @inject IStringLocalizer<SimpleContent> sr
 @{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var allowDisqus = consentFeature?.CanTrack ?? true; // disqus has cookies
     var disqusScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/embed.js";
 }
-@if ((Model.CurrentPage != null) && (!string.IsNullOrEmpty(Model.CurrentPage.Id)))
+@if (allowDisqus && (Model.CurrentPage != null) && (!string.IsNullOrEmpty(Model.CurrentPage.Id)))
 {
     @sr["Comments"]
     <div id="disqus_thread"></div>
-        <script>
+    <script>
         var disqus_config = function () {
             this.page.url = "@Context.Request.GetCurrentFullUrl()";
             this.page.identifier = "@Model.CurrentPage.Id";
@@ -19,6 +22,10 @@
             s.setAttribute('data-timestamp', +new Date());
             (d.head || d.body).appendChild(s);
         })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+}
+@if (!allowDisqus)
+{
+    <p class="alert alert-info">@sr["If you want to view or submit comments you must accept the cookie consent."]</p>
 }
