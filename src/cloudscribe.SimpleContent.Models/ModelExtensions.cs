@@ -175,6 +175,7 @@ namespace cloudscribe.SimpleContent.Models
         public static void CopyTo(this IPost input, IPost target)
         {
             target.Author = input.Author;
+            target.AutoTeaser = input.AutoTeaser;
             target.BlogId = input.BlogId;
             target.Categories = input.Categories;
             target.Comments = input.Comments;

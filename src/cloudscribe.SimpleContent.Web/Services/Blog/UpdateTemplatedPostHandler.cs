@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-14
-// Last Modified:           2018-07-27
+// Last Modified:           2018-08-20
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -31,6 +31,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             ITimeZoneIdResolver timeZoneIdResolver,
+            ITeaserService teaserService,
             IEnumerable<IModelSerializer> serializers,
             IEnumerable<IParseModelFromForm> formParsers,
             IEnumerable<IValidateTemplateModel> modelValidators,
@@ -45,6 +46,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _timeZoneIdResolver = timeZoneIdResolver;
+            _teaserService = teaserService;
             _serializers = serializers;
             _formParsers = formParsers;
             _modelValidators = modelValidators;
@@ -59,6 +61,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IContentHistoryCommands _historyCommands;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly ITimeZoneIdResolver _timeZoneIdResolver;
+        private readonly ITeaserService _teaserService;
         private readonly IEnumerable<IModelSerializer> _serializers;
         private readonly IEnumerable<IParseModelFromForm> _formParsers;
         private readonly IEnumerable<IValidateTemplateModel> _modelValidators;
@@ -255,6 +258,21 @@ namespace cloudscribe.SimpleContent.Web.Services
                             post.DraftSerializedModel = null;
 
                             break;
+                    }
+
+                    if (project.TeaserMode != TeaserMode.Off)
+                    {
+                        // need to generate the teaser on save
+                        var teaserResult = _teaserService.GenerateTeaser(
+                            project.TeaserTruncationMode,
+                            project.TeaserTruncationLength,
+                            post.Content,
+                            Guid.NewGuid().ToString(),//cache key
+                            post.Slug,
+                            project.LanguageCode,
+                            false //logWarnings
+                            );
+                        post.AutoTeaser = teaserResult.Content;
                     }
 
                     await _historyCommands.Create(request.ProjectId, history).ConfigureAwait(false);

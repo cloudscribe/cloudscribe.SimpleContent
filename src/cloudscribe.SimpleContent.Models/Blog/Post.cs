@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2018-07-01
+// Last Modified:			2018-08-20
 // 
 using System;
 using System.Collections.Generic;
@@ -62,6 +62,11 @@ namespace cloudscribe.SimpleContent.Models
         /// If not null or whitespace, displays this teaser on blog index/listing views regardless of <see cref="TeaserMode"/> settings.
         /// </summary>
         public string TeaserOverride { get; set; }
+
+        /// <summary>
+        /// a place to store the generated teaser so it doens'yt have to be generated on every request
+        /// </summary>
+        public string AutoTeaser { get; set; }
 
         /// <summary>
         /// If true, will display an entire blog post on index/listing views regardless of <see cref="TeaserMode"/> settings.

@@ -97,6 +97,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 28)]
         public string Serializer { get; set; }
 
+        [YamlMember(Order = 29)]
+        public string AutoTeaser { get; set; }
+
 
 
         [YamlIgnore]

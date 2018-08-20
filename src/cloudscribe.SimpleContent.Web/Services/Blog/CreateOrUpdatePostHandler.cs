@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-07-27
+// Last Modified:           2018-08-20
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.Web.Common;
+using Markdig;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             ITimeZoneIdResolver timeZoneIdResolver,
+            ITeaserService teaserService,
+            IMarkdownProcessor markdownProcessor,
             IOptions<BlogEditOptions> configOptionsAccessor,
             IStringLocalizer<SimpleContent> localizer,
             ILogger<CreateOrUpdatePostHandler> logger
@@ -37,6 +40,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _timeZoneIdResolver = timeZoneIdResolver;
+            _teaserService = teaserService;
+            _markdownProcessor = markdownProcessor;
             _editOptions = configOptionsAccessor.Value;
             _localizer = localizer;
             _log = logger;
@@ -45,8 +50,10 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IProjectService _projectService;
         private readonly IBlogService _blogService;
         private readonly IContentHistoryCommands _historyCommands;
-        private ITimeZoneHelper _timeZoneHelper;
+        private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly ITimeZoneIdResolver _timeZoneIdResolver;
+        private readonly ITeaserService _teaserService;
+        private readonly IMarkdownProcessor _markdownProcessor;
         private readonly BlogEditOptions _editOptions;
         private readonly IStringLocalizer _localizer;
         private readonly ILogger _log;
@@ -183,6 +190,31 @@ namespace cloudscribe.SimpleContent.Web.Services
                             post.DraftPubDate = null;
 
                             break;
+                    }
+
+                    if(project.TeaserMode != TeaserMode.Off)
+                    {
+                        // need to generate the teaser on save
+                        string html = null;
+                        if(post.ContentType == "markdown")
+                        {
+                            var mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+                            html = Markdown.ToHtml(post.Content, mdPipeline);
+                        }
+                        else
+                        {
+                            html = post.Content;
+                        }
+                        var teaserResult = _teaserService.GenerateTeaser(
+                            project.TeaserTruncationMode,
+                            project.TeaserTruncationLength,
+                            html,
+                            Guid.NewGuid().ToString(),//cache key
+                            post.Slug,
+                            project.LanguageCode,
+                            false //logWarnings
+                            );
+                        post.AutoTeaser = teaserResult.Content;
                     }
 
                     if (history != null)

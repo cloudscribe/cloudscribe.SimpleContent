@@ -21,7 +21,8 @@
             string html,
             string cacheKey,
             string slug,
-            string languageCode);
+            string languageCode,
+            bool logWarnings = true);
 
     }
 }
