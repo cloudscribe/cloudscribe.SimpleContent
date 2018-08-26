@@ -18,6 +18,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.Controllers
     /// <summary>
     /// SimpleContentTemplateResourcesController - sctr
     /// </summary>
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class SctrController : Controller
     {
         public SctrController(

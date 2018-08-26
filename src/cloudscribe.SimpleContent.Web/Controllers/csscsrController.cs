@@ -19,6 +19,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
     /// csscsr:cloudscribe SimpleContent static resource controller
     /// 
     /// </summary>
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class CsscsrController : Controller
     {
         public CsscsrController(
