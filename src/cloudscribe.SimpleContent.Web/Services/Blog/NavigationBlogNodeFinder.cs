@@ -34,12 +34,13 @@ namespace cloudscribe.SimpleContent.Web.Services
             if (rootNode.Value.NamedRoute == _blogRoutes.MostRecentPostRouteName) return rootNode;
 
             var blogUrl = urlHelper.RouteUrl(_blogRoutes.BlogIndexRouteName);
+            
             if (rootNode.Value.Url == blogUrl) return rootNode;
             
             Func<TreeNode<NavigationNode>, bool> match = delegate (TreeNode<NavigationNode> n)
             {
                 if (n == null) { return false; }
-
+                if(blogUrl == null) { return false; }
                 if (currentUrl.StartsWith(blogUrl))
                 {
                     if (n.Value.Controller == "Blog") return true;

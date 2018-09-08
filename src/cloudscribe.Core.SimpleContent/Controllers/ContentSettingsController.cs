@@ -103,6 +103,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.TeaserTruncationMode = projectSettings.TeaserTruncationMode;
             model.TeaserTruncationLength = projectSettings.TeaserTruncationLength;
 
+            model.DefaultFeedItems = projectSettings.DefaultFeedItems;
+            model.MaxFeedItems = projectSettings.MaxFeedItems;
+
             bool canManageUsers = false;
             try
             {
@@ -218,6 +221,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.TeaserMode = model.TeaserMode;
             projectSettings.TeaserTruncationLength = model.TeaserTruncationLength;
             projectSettings.TeaserTruncationMode = model.TeaserTruncationMode;
+
+            projectSettings.DefaultFeedItems = model.DefaultFeedItems;
+            projectSettings.MaxFeedItems = model.MaxFeedItems;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)
