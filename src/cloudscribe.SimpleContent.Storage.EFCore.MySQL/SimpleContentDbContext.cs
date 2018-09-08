@@ -223,6 +223,12 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.TeaserTruncationLength)
                 .HasDefaultValue(20);
 
+                entity.Property(p => p.DefaultFeedItems)
+                .HasDefaultValue(20);
+
+                entity.Property(p => p.MaxFeedItems)
+                .HasDefaultValue(1000);
+
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
