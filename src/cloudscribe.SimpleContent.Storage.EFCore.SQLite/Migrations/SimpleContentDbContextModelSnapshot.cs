@@ -172,7 +172,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
-                    b.Property<int>("DefaultFeedItems");
+                    b.Property<int>("DefaultFeedItems")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(20);
 
                     b.Property<string>("DefaultPageSlug")
                         .HasMaxLength(255);
@@ -199,7 +201,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     b.Property<string>("ManagingEditorEmail")
                         .HasMaxLength(100);
 
-                    b.Property<int>("MaxFeedItems");
+                    b.Property<int>("MaxFeedItems")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(1000);
 
                     b.Property<bool>("ModerateComments");
 
