@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2018-07-09
+// Last Modified:           2018-09-27
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -294,7 +294,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                     return structs;
                 }
                 
-                foreach (Post p in blogPosts)
+                foreach (var p in blogPosts)
                 {
                     var commentsOpen = await _blogService.CommentsAreOpen(p, false);
                     var postUrl = await _blogUrlResolver.ResolvePostUrl(p, project);
