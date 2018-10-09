@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2018-07-02
+// Last Modified:			2018-10-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -27,7 +27,20 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
 
             services.TryAddScoped<IContentHistoryCommands, ContentHistoryCommands>();
             services.TryAddScoped<IContentHistoryQueries, ContentHistoryQueries>();
-            
+
+            // singleton versions for graphql
+            services.TryAddSingleton<IPageQueriesSingleton, PageQueries>();
+            services.TryAddSingleton<IPageCommandsSingleton, PageCommands>();
+
+            services.TryAddSingleton<IPostQueriesSingleton, PostQueries>();
+            services.TryAddSingleton<IPostCommandsSingleton, PostCommands>();
+
+            services.TryAddSingleton<IProjectQueriesSingleton, ProjectQueries>();
+            services.TryAddSingleton<IProjectCommandsSingleton, ProjectCommands>();
+
+            services.TryAddSingleton<IContentHistoryCommandsSingleton, ContentHistoryCommands>();
+            services.TryAddSingleton<IContentHistoryQueriesSingleton, ContentHistoryQueries>();
+
 
             return services;
         }

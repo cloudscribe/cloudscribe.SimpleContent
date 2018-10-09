@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.Common
 {
-    public class ContentHistoryCommands : IContentHistoryCommands
+    public class ContentHistoryCommands : IContentHistoryCommands, IContentHistoryCommandsSingleton
     {
         public ContentHistoryCommands(ISimpleContentDbContextFactory contextFactory)
         {

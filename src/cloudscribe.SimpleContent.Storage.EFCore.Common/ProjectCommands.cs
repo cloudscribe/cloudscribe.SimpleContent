@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2016-11-09
+// Last Modified:			2018-10-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -15,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore
 {
-    public class ProjectCommands : IProjectCommands
+    public class ProjectCommands : IProjectCommands, IProjectCommandsSingleton
     {
-        public ProjectCommands(ISimpleContentDbContext dbContext)
+        public ProjectCommands(ISimpleContentDbContextFactory contextFactory)
         {
-            this.dbContext = dbContext;
+            _contextFactory = contextFactory;
         }
 
-        private ISimpleContentDbContext dbContext;
+        private readonly ISimpleContentDbContextFactory _contextFactory;
 
         public async Task Create(
             string projectId,
@@ -36,12 +36,15 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             var p = ProjectSettings.FromIProjectSettings(project);
 
             if (string.IsNullOrEmpty(p.Id)) { p.Id = projectId; }
+
+            using (var db = _contextFactory.CreateContext())
+            {
+                db.Projects.Add(p);
+
+                int rowsAffected = await db.SaveChangesAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
             
-            dbContext.Projects.Add(p);
-
-            int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
-
         }
 
         public async Task Update(
@@ -56,14 +59,18 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             //if (string.IsNullOrEmpty(projectId)) throw new ArgumentException("projectId must be provided");
             var p = ProjectSettings.FromIProjectSettings(project);
 
-            bool tracking = dbContext.ChangeTracker.Entries<ProjectSettings>().Any(x => x.Entity.Id == p.Id);
-            if (!tracking)
+            using (var db = _contextFactory.CreateContext())
             {
-                dbContext.Projects.Update(p);
-            }
+                bool tracking = db.ChangeTracker.Entries<ProjectSettings>().Any(x => x.Entity.Id == p.Id);
+                if (!tracking)
+                {
+                    db.Projects.Update(p);
+                }
 
-            int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
+                int rowsAffected = await db.SaveChangesAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            
         }
 
         public async Task Delete(
@@ -72,16 +79,20 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            var itemToRemove = await dbContext.Projects.SingleOrDefaultAsync(
-               x => x.Id == projectKey 
+            using (var db = _contextFactory.CreateContext())
+            {
+                var itemToRemove = await db.Projects.SingleOrDefaultAsync(
+               x => x.Id == projectKey
                , cancellationToken)
                .ConfigureAwait(false);
 
-            if (itemToRemove == null) throw new InvalidOperationException("Post not found");
+                if (itemToRemove == null) throw new InvalidOperationException("Post not found");
 
-            dbContext.Projects.Remove(itemToRemove);
-            int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
+                db.Projects.Remove(itemToRemove);
+                int rowsAffected = await db.SaveChangesAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            
         }
 
     }

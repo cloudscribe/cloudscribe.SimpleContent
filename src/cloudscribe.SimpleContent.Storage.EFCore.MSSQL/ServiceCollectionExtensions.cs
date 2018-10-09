@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2018-02-28
+// Last Modified:			2018-10-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -26,11 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
             bool useSql2008Compatibility = false
             )
         {
-            //services.AddEntityFrameworkSqlServer()
-            //    .AddDbContext<SimpleContentDbContext>(optionsBuilder =>
-            //        optionsBuilder.UseSqlServer(connectionString)
-            //       );
-
+            
             services.AddEntityFrameworkSqlServer()
                 .AddDbContext<SimpleContentDbContext>(optionsBuilder =>
                     optionsBuilder.UseSqlServer(connectionString,
@@ -50,9 +46,12 @@ namespace Microsoft.Extensions.DependencyInjection
                        }
 
 
-                   }));
+                   }),
+                   optionsLifetime: ServiceLifetime.Singleton
+                   );
 
-            services.AddScoped<ISimpleContentDbContextFactory, SimpleContentDbContextFactory>();
+            services.AddSingleton<ISimpleContentDbContextFactory, SimpleContentDbContextFactory>();
+
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 
             services.AddCloudscribeSimpleContentEFStorageCommon();

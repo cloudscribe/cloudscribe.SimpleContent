@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-09-02
-// Last Modified:			2018-02-06
+// Last Modified:			2018-10-09
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -25,11 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             ICollection<int> transientSqlErrorNumbersToAdd = null
             )
         {
-            //services.AddEntityFrameworkMySql()
-            //    .AddDbContext<SimpleContentDbContext>(optionsBuilder =>
-            //        optionsBuilder.UseMySql(connectionString)
-            //        );
-
+           
             services.AddEntityFrameworkMySql()
                 .AddDbContext<SimpleContentDbContext>(optionsBuilder =>
                     optionsBuilder.UseMySql(connectionString,
@@ -45,10 +41,13 @@ namespace Microsoft.Extensions.DependencyInjection
                         }
 
 
-                    }));
+                    }),
+                     optionsLifetime: ServiceLifetime.Singleton
+                    );
 
 
-            services.AddScoped<ISimpleContentDbContextFactory, SimpleContentDbContextFactory>();
+            services.AddSingleton<ISimpleContentDbContextFactory, SimpleContentDbContextFactory>();
+
             services.AddScoped<ISimpleContentDbContext, SimpleContentDbContext>();
 
             services.AddCloudscribeSimpleContentEFStorageCommon();

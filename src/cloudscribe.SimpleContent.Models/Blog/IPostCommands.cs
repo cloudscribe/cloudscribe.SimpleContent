@@ -4,6 +4,11 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
+    public interface IPostCommandsSingleton : IPostCommands
+    {
+
+    }
+
     public interface IPostCommands
     {
         Task Delete(

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.Common
 {
-    public class ContentHistoryQueries : IContentHistoryQueries
+    public class ContentHistoryQueries : IContentHistoryQueries, IContentHistoryQueriesSingleton
     {
         public ContentHistoryQueries(ISimpleContentDbContextFactory contextFactory)
         {

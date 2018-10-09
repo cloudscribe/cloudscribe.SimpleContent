@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
+    public interface IContentHistoryQueriesSingleton : IContentHistoryQueries
+    {
+
+    }
+
     public interface IContentHistoryQueries
     {
         Task<ContentHistory> Fetch(
