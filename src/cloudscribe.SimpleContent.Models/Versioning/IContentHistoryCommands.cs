@@ -4,6 +4,11 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
+    public interface IContentHistoryCommandsSingleton : IContentHistoryCommands
+    {
+
+    }
+
     public interface IContentHistoryCommands
     {
         Task Create(

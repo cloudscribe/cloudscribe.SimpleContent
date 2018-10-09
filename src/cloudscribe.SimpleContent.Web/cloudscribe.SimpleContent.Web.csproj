@@ -2,14 +2,16 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>4.0.10</VersionPrefix>
-    <AssemblyVersion>4.0.10</AssemblyVersion>
+    <VersionPrefix>4.0.11</VersionPrefix>
+    <AssemblyVersion>4.0.11</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog,content</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     
   </PropertyGroup>
 
@@ -24,12 +26,12 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.*" />
-    <PackageReference Include="cloudscribe.Email.Senders" Version="2.0.*" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.*" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.1.*" />
-    <PackageReference Include="cloudscribe.Web.Pagination" Version="2.1.*" />
-    <PackageReference Include="cloudscribe.Web.SiteMap" Version="2.1.*" />
-    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.1.*" />
+    <PackageReference Include="cloudscribe.Email.Senders" Version="2.0.1" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.14" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.1.6" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="2.1.6" />
+   
+    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.1.2" />
     
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.1.0" />
@@ -44,7 +46,7 @@
     <PackageReference Include="Microsoft.Extensions.Localization" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0" />
     
-    <PackageReference Include="Markdig" Version="0.14.*" />
+    <PackageReference Include="Markdig" Version="0.15.4" />
 
     <PackageReference Include="MediatR" Version="5.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />

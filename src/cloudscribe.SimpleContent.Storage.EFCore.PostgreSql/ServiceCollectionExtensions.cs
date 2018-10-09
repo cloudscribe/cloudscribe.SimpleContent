@@ -7,7 +7,7 @@
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
-using cloudscribe.SimpleContent.Storage.EFCore.pgsql;
+using cloudscribe.SimpleContent.Storage.EFCore.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class SimpleContentEFMSSQLServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddCloudscribeSimpleContentEFStoragePostgreSql(
+        public static IServiceCollection AddCloudscribeSimpleContentPostgreSqlStorage(
             this IServiceCollection services,
             string connectionString,
             int maxConnectionRetryCount = 0,

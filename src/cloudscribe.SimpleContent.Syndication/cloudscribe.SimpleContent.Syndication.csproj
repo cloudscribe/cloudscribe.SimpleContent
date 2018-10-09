@@ -2,14 +2,16 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Syndication Class Library</Description>
-    <VersionPrefix>4.0.2</VersionPrefix>
-    <AssemblyVersion>4.0.2</AssemblyVersion>
+    <VersionPrefix>4.0.3</VersionPrefix>
+    <AssemblyVersion>4.0.3</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>syndication;rss;atom;cloudscribe</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     
   </PropertyGroup>
 
@@ -19,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="2.1.*" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="2.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.0" />
   </ItemGroup>

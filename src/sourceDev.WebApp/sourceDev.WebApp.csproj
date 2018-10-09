@@ -36,6 +36,7 @@
     <ProjectReference Include="..\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.MySQL\cloudscribe.SimpleContent.Storage.EFCore.MySQL.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.pgsql\cloudscribe.SimpleContent.Storage.EFCore.pgsql.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.NoDb\cloudscribe.SimpleContent.Storage.NoDb.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.Common\cloudscribe.SimpleContent.Storage.EFCore.Common.csproj" />
@@ -55,6 +56,7 @@
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.pgsql" Version="3.0.*" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.PostgreSql" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.SQLite" Version="3.0.*" />
     
     
@@ -63,6 +65,7 @@
     <PackageReference Include="cloudscribe.Logging.EFCore.MSSQL" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Logging.EFCore.MySql" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Logging.EFCore.pgsql" Version="3.0.*" />
+    <PackageReference Include="cloudscribe.Logging.EFCore.PostgreSql" Version="3.0.*" />
     <PackageReference Include="cloudscribe.Logging.EFCore.SQLite" Version="3.0.*" />
 	
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="2.0.*" />

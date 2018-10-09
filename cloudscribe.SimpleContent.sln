@@ -45,7 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.CompiledViews.Bootstrap4", "src\cloudscribe.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.SimpleContent.CompiledViews.Bootstrap4.csproj", "{20ECAB1E-CF0B-4901-893B-ADF3C99C2093}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.SimpleContent.ContentTemplates.Bootstrap4", "src\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.csproj", "{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.ContentTemplates.Bootstrap4", "src\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.csproj", "{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.SimpleContent.Storage.EFCore.PostgreSql", "src\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.csproj", "{76A12B64-BF45-464F-8B23-1AEBF9427E9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,10 @@ Global
 		{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A12B64-BF45-464F-8B23-1AEBF9427E9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A12B64-BF45-464F-8B23-1AEBF9427E9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A12B64-BF45-464F-8B23-1AEBF9427E9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A12B64-BF45-464F-8B23-1AEBF9427E9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,6 +159,7 @@ Global
 		{7F5B360A-789D-4428-8CE5-ECFD721AAE1A} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{20ECAB1E-CF0B-4901-893B-ADF3C99C2093} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6} = {5243DE57-7C89-4208-8876-405E13605D16}
+		{76A12B64-BF45-464F-8B23-1AEBF9427E9B} = {5243DE57-7C89-4208-8876-405E13605D16}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADB1ABEA-D5DB-4F22-BEA1-26E93BFF1BDD}

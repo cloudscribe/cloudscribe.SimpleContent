@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2018-07-07
+// Last Modified:           2018-10-09
 // 
 
 
@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
+    public interface IProjectQueriesSingleton : IProjectQueries
+    {
+
+    }
+
     /// <summary>
     /// there are 2 "project" concepts that are kind of overlayed on top of each other
     /// there is the "Content Project" with settings encapsulated in ProjectSettings class

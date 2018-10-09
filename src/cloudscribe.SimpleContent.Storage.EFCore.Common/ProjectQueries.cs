@@ -2,28 +2,26 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-07-07
+// Last Modified:			2018-10-09
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore
 {
-    public class ProjectQueries : IProjectQueries
+    public class ProjectQueries : IProjectQueries, IProjectQueriesSingleton
     {
-        public ProjectQueries(ISimpleContentDbContext dbContext)
+        public ProjectQueries(ISimpleContentDbContextFactory contextFactory)
         {
-            _dbContext = dbContext;
+            _contextFactory = contextFactory;
         }
 
-        private ISimpleContentDbContext _dbContext;
+        private readonly ISimpleContentDbContextFactory _contextFactory;
 
         public async Task<IProjectSettings> GetProjectSettings(
             string projectId,
@@ -32,10 +30,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return await _dbContext.Projects
-                .Where(p => p.Id == projectId)
-                .FirstOrDefaultAsync(cancellationToken)
-                .ConfigureAwait(false);
+            using (var db = _contextFactory.CreateContext())
+            {
+                return await db.Projects
+                    .Where(p => p.Id == projectId)
+                    .FirstOrDefaultAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+   
         }
         
     }
