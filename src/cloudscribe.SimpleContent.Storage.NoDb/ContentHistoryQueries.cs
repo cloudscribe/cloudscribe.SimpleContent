@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class ContentHistoryQueries : IContentHistoryQueries
+    public class ContentHistoryQueries : IContentHistoryQueries, IContentHistoryQueriesSingleton
     {
         public ContentHistoryQueries(
             IBasicQueries<ContentHistory> queries

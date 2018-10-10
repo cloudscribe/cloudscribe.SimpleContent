@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class PostQueries : IPostQueries
+    public class PostQueries : IPostQueries, IPostQueriesSingleton
     {
         public PostQueries(
             PostCache cache,

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class ContentHistoryCommands : IContentHistoryCommands
+    public class ContentHistoryCommands : IContentHistoryCommands, IContentHistoryCommandsSingleton
     {
         public ContentHistoryCommands(
             IBasicCommands<ContentHistory> commands,

@@ -38,17 +38,18 @@ namespace Microsoft.Extensions.DependencyInjection
             if (useSingletons)
             {
                 services.AddNoDbSingleton<ContentHistory>();
-                services.TryAddSingleton<IContentHistoryCommands, ContentHistoryCommands>();
-                services.TryAddSingleton<IContentHistoryQueries, ContentHistoryQueries>();
+                services.TryAddSingleton<IContentHistoryCommandsSingleton, ContentHistoryCommands>();
+                services.TryAddSingleton<IContentHistoryQueriesSingleton, ContentHistoryQueries>();
             }
             else
             {
                 services.AddNoDb<ContentHistory>();
-                services.TryAddScoped<IContentHistoryCommands, ContentHistoryCommands>();
-                services.TryAddScoped<IContentHistoryQueries, ContentHistoryQueries>();
+                
             }
 
-            
+            services.TryAddScoped<IContentHistoryCommands, ContentHistoryCommands>();
+            services.TryAddScoped<IContentHistoryQueries, ContentHistoryQueries>();
+
 
             return services;
         }
@@ -67,8 +68,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddSingleton<IStoragePathResolver<Page>, PageStoragePathResolver>();
 
                 services.AddNoDbSingleton<Page>();
-                services.TryAddSingleton<IPageQueries, PageQueries>();
-                services.TryAddSingleton<IPageCommands, PageCommands>();
+                services.TryAddSingleton<IPageQueriesSingleton, PageQueries>();
+                services.TryAddSingleton<IPageCommandsSingleton, PageCommands>();
             }
             else
             {
@@ -79,11 +80,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddScoped<IStoragePathResolver<Page>, PageStoragePathResolver>();
 
                 services.AddNoDb<Page>();
-                services.TryAddScoped<IPageQueries, PageQueries>();
-                services.TryAddScoped<IPageCommands, PageCommands>();
+                
             }
 
-           
+            services.TryAddScoped<IPageQueries, PageQueries>();
+            services.TryAddScoped<IPageCommands, PageCommands>();
+
 
             return services;
         }
@@ -102,8 +104,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddSingleton<IStoragePathResolver<Post>, PostStoragePathResolver>();
 
                 services.AddNoDbSingleton<Post>();
-                services.TryAddSingleton<IPostQueries, PostQueries>();
-                services.TryAddSingleton<IPostCommands, PostCommands>();
+
+                services.TryAddSingleton<IPostQueriesSingleton, PostQueries>();
+                services.TryAddSingleton<IPostCommandsSingleton, PostCommands>();
+
                 services.TryAddSingleton<PostCache, PostCache>();
             }
             else
@@ -116,12 +120,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.TryAddScoped<IStoragePathResolver<Post>, PostStoragePathResolver>();
 
                 services.AddNoDb<Post>();
-                services.TryAddScoped<IPostQueries, PostQueries>();
-                services.TryAddScoped<IPostCommands, PostCommands>();
+                
                 services.TryAddScoped<PostCache, PostCache>();
             }
 
-            
+            services.TryAddScoped<IPostQueries, PostQueries>();
+            services.TryAddScoped<IPostCommands, PostCommands>();
 
             return services;
         }
