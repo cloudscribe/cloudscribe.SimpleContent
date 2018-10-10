@@ -19,10 +19,11 @@ namespace Microsoft.Extensions.DependencyInjection
             switch (storage)
             {
                 case "NoDb":
-                    services.AddCloudscribeCoreNoDbStorage();
+                    var useSingletons = true;
+                    services.AddCloudscribeCoreNoDbStorage(useSingletons);
                     // only needed if using cloudscribe logging with NoDb storage
                     services.AddCloudscribeLoggingNoDbStorage(config);
-                    services.AddNoDbStorageForSimpleContent();
+                    services.AddNoDbStorageForSimpleContent(useSingletons);
 
                     break;
 
