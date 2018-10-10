@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class PageQueries : IPageQueries
+    public class PageQueries : IPageQueries, IPageQueriesSingleton
     {
         public PageQueries(
             IBasicQueries<Page> pageQueries

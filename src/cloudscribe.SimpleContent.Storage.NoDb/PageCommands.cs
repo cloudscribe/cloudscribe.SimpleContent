@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class PageCommands : IPageCommands
+    public class PageCommands : IPageCommands, IPageCommandsSingleton
     {
         public PageCommands(
             IBasicCommands<Page> pageCommands,

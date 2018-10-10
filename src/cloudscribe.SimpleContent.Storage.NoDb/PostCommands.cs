@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Storage.NoDb
 {
-    public class PostCommands : IPostCommands
+    public class PostCommands : IPostCommands, IPostCommandsSingleton
     {
         public PostCommands(
             PostCache cache,
