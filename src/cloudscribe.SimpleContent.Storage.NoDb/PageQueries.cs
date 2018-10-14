@@ -20,17 +20,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
     {
         public PageQueries(
             IBasicQueries<Page> pageQueries
-            //,ILogger<PageQueries> logger
             )
         {
             _query = pageQueries;
-            //_log = logger;
         }
 
-        //private IBasicCommands<Page> commands;
         private IBasicQueries<Page> _query;
-        //private ILogger _log;
-
         
 
         public async Task<List<IPage>> GetAllPages(

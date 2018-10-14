@@ -20,19 +20,15 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public PostQueries(
             PostCache cache,
             IBasicQueries<Post> postQueries
-            //,ILogger<PostQueries> logger
             )
         {
             _cache = cache;
             _query = postQueries;
-           // log = logger;
         }
 
         private readonly PostCache _cache;
-       // private IBasicCommands<Post> commands;
         private readonly IBasicQueries<Post> _query;
-       // private ILogger log;
-        
+  
         
         private async Task<List<Post>> GetAllPosts(
             string projectId,

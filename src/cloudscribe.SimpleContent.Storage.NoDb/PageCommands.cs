@@ -21,21 +21,18 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             IBasicCommands<Page> pageCommands,
             IBasicQueries<Page> pageQueries,
             IKeyGenerator keyGenerator
-            //,ILogger<PageCommands> logger
             )
         {
             _commands = pageCommands;
             _query = pageQueries;
             _keyGenerator = keyGenerator;
-            //_log = logger;
+           
         }
 
         private IBasicCommands<Page> _commands;
         private IBasicQueries<Page> _query;
         private IKeyGenerator _keyGenerator;
-        //private ILogger _log;
-
-
+        
         public async Task Create(
             string projectId,
             IPage page,
