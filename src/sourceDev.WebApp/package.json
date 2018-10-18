@@ -13,7 +13,6 @@
     "file-loader": "^1.1.5",
     "@fortawesome/fontawesome-free": "5.1.1",
     "baguettebox.js": "^1.10.0",
-
     "gulp": "latest",
     "gulp-cssmin": "latest",
     "gulp-util": "latest",
@@ -23,7 +22,6 @@
     "gulp-concat": "latest",
     "gulp-connect": "latest",
     "merge-stream": "latest",
-
     "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "smartmenus": "^1.1.0",
@@ -50,7 +48,6 @@
     "react-hot-loader": "3.0.0-beta.7",
     "react-router-dom": "4.1.1",
     "url-loader": "0.5.9",
-
     "aspnet-prerendering": "^3.0.1",
     "@types/react-redux": "4.4.45",
     "@types/react-router-redux": "5.0.3",
@@ -59,11 +56,7 @@
     "react-router-redux": "5.0.0-alpha.6",
     "redux": "3.7.1",
     "redux-thunk": "2.2.0"
-
-
-
   },
-
   "scripts": {
     "build": "webpack",
     "build-production": "webpack --config webpack.production.config.js",
@@ -80,7 +73,4 @@
       ]
     }
   ]
-  
-
-
 }
