@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="A comma separated list of navigation component filter names used to filter the blog out of the menu. Leave this blank so the blog menu item is not filtered from any of the menu views. There are some standard filter names like topnav and breadcrumbs but it is also possible to use custom names with custom views. As soon as you populate this field it becomes filtered to only show the blog menu item in the included views, whereas blank means unfiltered." xml:space="preserve">
+    <value>Un elenco separato da virgola dei nomi dei filtri dei componenti di navigazione utilizzati per filtrare il blog dal menu. Lascia questo vuoto in modo che l'elemento del menu del blog non venga filtrato da nessuna delle visualizzazioni del menu. Esistono alcuni nomi di filtri standard come topnav e breadcrumbs, ma è anche possibile utilizzare nomi personalizzati con visualizzazioni personalizzate. Non appena si popola questo campo, viene filtrato per mostrare solo la voce di menu del blog nelle viste incluse, mentre vuoto significa non filtrati.</value>
+  </data>
+  <data name="About me" xml:space="preserve">
+    <value>Riguardo a me</value>
+  </data>
+  <data name="Add Blog To Menu" xml:space="preserve">
+    <value>Aggiungi Blog al Menu</value>
+  </data>
+  <data name="Add CSS Url" xml:space="preserve">
+    <value>Aggiungi CSS Url</value>
+  </data>
+  <data name="Add Javascript Url" xml:space="preserve">
+    <value>Aggiungi Javascript Url</value>
+  </data>
+  <data name="Add the blog as a top level menu item. There are multiple other ways of adding the blog to the menu. You can make a page that links to /blog or it can be done from the navigation.xml file. If you see it in the menu more than once it means you have multiple ways it is configured to be added." xml:space="preserve">
+    <value>Aggiungi il blog come elemento di menu di livello superiore. Ci sono molti altri modi per aggiungere il blog al menu. Puoi creare una pagina che rimandi a /blog o che possa essere eseguita dal file navigation.xml. Se lo vedi nel menu più di una volta significa che hai diversi modi per configurarlo.</value>
+  </data>
+  <data name="Any" xml:space="preserve">
+    <value>Qualunque</value>
+  </data>
+  <data name="Archives" xml:space="preserve">
+    <value>Archivi</value>
+  </data>
+  <data name="Are you sure you want to delete the post {0}? You cannot undo this action." xml:space="preserve">
+    <value>Sei sicuro di voler eliminare il post {0}? Non puoi tornare indietro.</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Autore</value>
+  </data>
+  <data name="Blog Menu Links To Newest Post" xml:space="preserve">
+    <value>Menu blog link al post più recente</value>
+  </data>
+  <data name="Blog Menu Position" xml:space="preserve">
+    <value>Posizione del menu Blog</value>
+  </data>
+  <data name="Blog Page Menu Text" xml:space="preserve">
+    <value>Testo del menu pagina Blog</value>
+  </data>
+  <data name="Blog Page Menu Visibility" xml:space="preserve">
+    <value>Visibilità del menu pagina Blog</value>
+  </data>
+  <data name="Blog Page Title" xml:space="preserve">
+    <value>Titolo della pagina del Blog</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categorie</value>
+  </data>
+  <data name="Comma Separated Channel Categories" xml:space="preserve">
+    <value>Categorie canali separati da virgola</value>
+  </data>
+  <data name="Comment Notification Email" xml:space="preserve">
+    <value>Email per la notifica dei commenti</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Commenti</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Contenuto</value>
+  </data>
+  <data name="Content Index" xml:space="preserve">
+    <value>Indice contenuti</value>
+  </data>
+  <data name="Correlation Key" xml:space="preserve">
+    <value>Chiave correlata</value>
+  </data>
+  <data name="Date Format" xml:space="preserve">
+    <value>Formato data</value>
+  </data>
+  <data name="Days To Comment" xml:space="preserve">
+    <value>Giorni per commentare</value>
+  </data>
+  <data name="Default Page" xml:space="preserve">
+    <value>Pagina predefinita</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Elimina</value>
+  </data>
+  <data name="Developer Tools - {0}" xml:space="preserve">
+    <value>Strumenti per sviluppatori - {0}</value>
+  </data>
+  <data name="Development" xml:space="preserve">
+    <value>Sviluppo</value>
+  </data>
+  <data name="Disqus Short Name" xml:space="preserve">
+    <value>Nome breve Disqus</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifica</value>
+  </data>
+  <data name="Edit - {0}" xml:space="preserve">
+    <value>Modifica - {0}</value>
+  </data>
+  <data name="Environment" xml:space="preserve">
+    <value>Ambiente</value>
+  </data>
+  <data name="Feedburner Url" xml:space="preserve">
+    <value>Feedburner Url</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="If checked the blog menu item will link to the most recent post instead of the post list." xml:space="preserve">
+    <value>Se selezionato, l'elemento del menu del blog si collegherà al post più recente anziché all'elenco dei post.</value>
+  </data>
+  <data name="If checked will show the blog title and description at the top of the post list." xml:space="preserve">
+    <value>Se selezionato mostrerà il titolo del blog e la descrizione nella parte superiore dell'elenco dei post.</value>
+  </data>
+  <data name="Image Path" xml:space="preserve">
+    <value>Percorso immagine</value>
+  </data>
+  <data name="Include Date In Post Urls" xml:space="preserve">
+    <value>Includi la data negli url dei post</value>
+  </data>
+  <data name="Invalid request" xml:space="preserve">
+    <value>Richiesta non valida</value>
+  </data>
+  <data name="Is Published" xml:space="preserve">
+    <value>Pubblicato</value>
+  </data>
+  <data name="Language Code" xml:space="preserve">
+    <value>Codice lingua</value>
+  </data>
+  <data name="Managing Editor Email" xml:space="preserve">
+    <value>Gestione editor email</value>
+  </data>
+  <data name="Meta Description" xml:space="preserve">
+    <value>Descrizioni Meta</value>
+  </data>
+  <data name="Moderate Comments" xml:space="preserve">
+    <value>Commenti moderati</value>
+  </data>
+  <data name="New Page" xml:space="preserve">
+    <value>Nuova pagina</value>
+  </data>
+  <data name="New Post" xml:space="preserve">
+    <value>Nuovo post</value>
+  </data>
+  <data name="Next Post" xml:space="preserve">
+    <value>Prossimo post</value>
+  </data>
+  <data name="Note that since this page has an override url, the menu item will link to the url so the page is used only as a means to add a link in the menu, the content is not used." xml:space="preserve">
+    <value>Tieni presente che poiché questa pagina ha un URL di sostituzione, la voce di menu si collegherà all'URL in modo che la pagina venga utilizzata solo come mezzo per aggiungere un collegamento nel menu, il contenuto non viene utilizzato.</value>
+  </data>
+  <data name="Number of posts to show per page on the post list." xml:space="preserve">
+    <value>Numero di post da mostrare per pagina nell'elenco dei post.</value>
+  </data>
+  <data name="On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front." xml:space="preserve">
+    <value>Nelle pagine pubbliche, la descrizione meta è molto importante per i motori di ricerca. Non deve superare i 135-160 caratteri (sebbene Google abbia recentemente testato snippet più lunghi). Testi più lunghi verranno tagliati alla fine, quindi assicurati che le parole chiave più importanti siano all'inizio.</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organizazione</value>
+  </data>
+  <data name="Page Management" xml:space="preserve">
+    <value>Gestione pagine</value>
+  </data>
+  <data name="Person" xml:space="preserve">
+    <value>Persona</value>
+  </data>
+  <data name="Please enter a valid e-mail address" xml:space="preserve">
+    <value>Inserire un indirizzo email valido</value>
+  </data>
+  <data name="Posted in:" xml:space="preserve">
+    <value>Postato in:</value>
+  </data>
+  <data name="Posts Per Page" xml:space="preserve">
+    <value>Post per pagina</value>
+  </data>
+  <data name="Previous Post" xml:space="preserve">
+    <value>Post precedente</value>
+  </data>
+  <data name="Production" xml:space="preserve">
+    <value>Produzione</value>
+  </data>
+  <data name="Provide your Disqus site name aka short name to use Disqus instead of the internal comment system. Highly recommended." xml:space="preserve">
+    <value>Fornire il nome del sito Disqus o il nome abbreviato per utilizzare Disqus anziché il sistema di commenti interni. Altamente raccomandato.</value>
+  </data>
+  <data name="Publication Date" xml:space="preserve">
+    <value>Data pubblicazione</value>
+  </data>
+  <data name="Publisher" xml:space="preserve">
+    <value>Editore</value>
+  </data>
+  <data name="Publisher Logo Height" xml:space="preserve">
+    <value>Altezza logo editore</value>
+  </data>
+  <data name="Publisher Logo Url" xml:space="preserve">
+    <value>Url logo editore</value>
+  </data>
+  <data name="Publisher Logo Width" xml:space="preserve">
+    <value>Larghezza logo editore</value>
+  </data>
+  <data name="Publisher Type" xml:space="preserve">
+    <value>Tipo editore</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salva</value>
+  </data>
+  <data name="Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="Show Blog Title and Description" xml:space="preserve">
+    <value>Mostra titolo e descrizione Blog</value>
+  </data>
+  <data name="Show Recent Posts on Default Page" xml:space="preserve">
+    <value>Mostra post recenti nella pagina predefinita</value>
+  </data>
+  <data name="Slug" xml:space="preserve">
+    <value>Url semplice</value>
+  </data>
+  <data name="slug is already in use." xml:space="preserve">
+    <value>url semplice già utilizzato.</value>
+  </data>
+  <data name="Sort" xml:space="preserve">
+    <value>Ordina</value>
+  </data>
+  <data name="The description also is used as the channel description in the RSS feed." xml:space="preserve">
+    <value>La descrizione viene anche utilizzata come descrizione del canale nel feed RSS.</value>
+  </data>
+  <data name="The page was created successfully." xml:space="preserve">
+    <value>La pagina è stata creata correttamente.</value>
+  </data>
+  <data name="The page was updated successfully." xml:space="preserve">
+    <value>La pagina è stata aggiornata correttamente.</value>
+  </data>
+  <data name="The position of the blog within the top level menu." xml:space="preserve">
+    <value>La posizione del blog nel menu di livello superiore.</value>
+  </data>
+  <data name="This is used in meta data, see http://schema.org/logo." xml:space="preserve">
+    <value>Questo è usato nei metadati, vedi http://schema.org/logo.</value>
+  </data>
+  <data name="This is used in meta data, see http://schema.org/publisher." xml:space="preserve">
+    <value>Questo è usato nei metadati, vedi http://schema.org/publisher.</value>
+  </data>
+  <data name="This setting only applies to using the internal comment system, it does not impact Disqus comments." xml:space="preserve">
+    <value>Questa impostazione si applica solo all'utilizzo del sistema di commenti interni, non ha alcun impatto sui commenti di Disqus.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titolo</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="Use Meta Description In Feed" xml:space="preserve">
+    <value>Usa la descrione meta nel feed</value>
+  </data>
+  <data name="Webmaster Email" xml:space="preserve">
+    <value>Email webmaster</value>
+  </data>
+  <data name="With great power comes great responsibility. This page is intended for use by developers, for adding javscript and css into the page. Use this page only if you understand what you are doing." xml:space="preserve">
+    <value>Con un grande potere viene una grande responsabilità. Questa pagina è destinata agli sviluppatori, per l'aggiunta di javscript e css nella pagina. Usa questa pagina solo se capisci cosa stai facendo.</value>
+  </data>
+  <data name="A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager." xml:space="preserve">
+    <value>Una pagina diventa una pagina figlio di un'altra pagina se si inserisce lo slug dell'altra pagina come slug genitore. La gerarchia dei menu è determinata dalla relazione padre figlio tra le pagine. Se inserisci uno slug genitore non valido, verrà ignorato ma non causerà alcun errore. È inoltre possibile gestire la gerarchia dal Gestore pagine.</value>
+  </data>
+  <data name="A page is visible to the public if the Is Published checkbox is checked and if the Publication Date is before the current moment, and if not protected by roles." xml:space="preserve">
+    <value>Una pagina è visibile al pubblico se la casella Pubblicato è selezionata e se la data di pubblicazione è precedente ad ora e se non è protetta dai ruoli.</value>
+  </data>
+  <data name="Are you sure you want to delete the page {0}?" xml:space="preserve">
+    <value>Sei sicuro di voler eliminare la pagina {0}?</value>
+  </data>
+  <data name="Are you sure you want to delete the page {0}? You cannot undo this action." xml:space="preserve">
+    <value>Sei sicuro di voler eliminare la pagina {0}? Non puoi tornare indietro.</value>
+  </data>
+  <data name="Are you sure you want to move the page {0} {1} {2}?" xml:space="preserve">
+    <value>Sei sicuro di voler spostare la pagina {0} {1} {2}?</value>
+  </data>
+  <data name="Are you sure you want to sort the child pages of {0} alphabetically?" xml:space="preserve">
+    <value>Sei sicuro di voler ordinare alfabeticamente le pagine figlie di {0}?</value>
+  </data>
+  <data name="Bad Request" xml:space="preserve">
+    <value>Richiesta errata</value>
+  </data>
+  <data name="Check this box if the current page is only meant as a parent container for other pages and has no content of it's own." xml:space="preserve">
+    <value>Seleziona questa casella se la pagina corrente è intesa solo come contenitore genitore per altre pagine e non ha contenuto di sua proprietà.</value>
+  </data>
+  <data name="Developer Tools" xml:space="preserve">
+    <value>Strumenti per sviluppatori</value>
+  </data>
+  <data name="Edit Page" xml:space="preserve">
+    <value>Modifica pagina</value>
+  </data>
+  <data name="Enable Comments" xml:space="preserve">
+    <value>Abilita commenti</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Proibito</value>
+  </data>
+  <data name="If the page is a parent of other pages, you check this box to make it show a menu of links to the child pages." xml:space="preserve">
+    <value>Se la pagina è padre di altre pagine, seleziona questa casella per mostrare un menu di collegamenti alle pagine secondarie.</value>
+  </data>
+  <data name="If you populate this field with an url then the page is used only as a means to add the url as a menu item. The page content in that case is not used or visible to users. You can use a relative url or a fully qualified url so it can link to external sites. Use this with caution and note that once populated the only way to edit the page is from the link in Page Manager." xml:space="preserve">
+    <value>Se si popola questo campo con un url, la pagina viene utilizzata solo come mezzo per aggiungere l'url come voce di menu. Il contenuto della pagina in quel caso non viene utilizzato o visibile agli utenti. Puoi utilizzare un url relativo o un URL assoluto in modo che possa collegarsi a siti esterni. Usalo con cautela e nota che una volta popolato l'unico modo per modificare la pagina è dal link Gestione pagine.</value>
+  </data>
+  <data name="Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree" xml:space="preserve">
+    <value>Lascia vuoto per includere questa pagina in tutte le visualizzazioni del menu. Un elenco separato da virgole di nomi di filtri di menu può essere utilizzato per filtrare la pagina dalle varie visualizzazioni di menu. Ad esempio, inserisci breadcrumbs per lasciare una pagina fuori dalle altre visualizzazioni ma mantienila nel breadcrumbs. I nomi dei filtri di menu standard includono: topnav, breadcrumbs, childtree</value>
+  </data>
+  <data name="Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members." xml:space="preserve">
+    <value>Lascia vuota la vista ruoli per le pagine pubbliche. Puoi mettere i nomi dei ruoli separati da virgola qui per rendere una pagina visibile solo agli utenti che sono membri di ruolo.</value>
+  </data>
+  <data name="Manage Page Hierarchy" xml:space="preserve">
+    <value>Gestione gerarchia di pagine</value>
+  </data>
+  <data name="Menu Filters" xml:space="preserve">
+    <value>Filtri menu</value>
+  </data>
+  <data name="New Child Page" xml:space="preserve">
+    <value>Nuova pagina figlio</value>
+  </data>
+  <data name="New Root Level Page" xml:space="preserve">
+    <value>Nuova pagina radice</value>
+  </data>
+  <data name="No Content Only Show Child Menu" xml:space="preserve">
+    <value>Nessun contenuto mostra solo il menu secondario</value>
+  </data>
+  <data name="No Pages Found" xml:space="preserve">
+    <value>Nessuna pagina trovata</value>
+  </data>
+  <data name="No pages have been created yet, if this is your site, please login to create your first page" xml:space="preserve">
+    <value>Nessuna pagina è stata ancora creata, se questo è il tuo sito, effettua il login per creare la tua prima pagina</value>
+  </data>
+  <data name="On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown." xml:space="preserve">
+    <value>Sulla maggior parte delle pagine probabilmente vorrai mostrare l'intestazione della pagina, ma forse non sulla home page. Se deselezionata, l'intestazione della pagina non verrà mostrata.</value>
+  </data>
+  <data name="Override Url" xml:space="preserve">
+    <value>Sovrascrivi Url</value>
+  </data>
+  <data name="Page Heading" xml:space="preserve">
+    <value>Intestazione pagina</value>
+  </data>
+  <data name="Page Not Found" xml:space="preserve">
+    <value>Pagina non trovata</value>
+  </data>
+  <data name="Page Order" xml:space="preserve">
+    <value>Ordinamento pagina</value>
+  </data>
+  <data name="Parent Slug" xml:space="preserve">
+    <value>Url semplice padre</value>
+  </data>
+  <data name="Select Roles" xml:space="preserve">
+    <value>Seleziona ruoli</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
+  <data name="Show Child Menu" xml:space="preserve">
+    <value>Mostra sottomenu</value>
+  </data>
+  <data name="Show Heading" xml:space="preserve">
+    <value>Mostra intestazione</value>
+  </data>
+  <data name="Site Home" xml:space="preserve">
+    <value>Home sito</value>
+  </data>
+  <data name="Sorry, but the page requires authentication." xml:space="preserve">
+    <value>La pagina richiede l'autenticazione.</value>
+  </data>
+  <data name="Sorry, but the page you were looking for can't be found." xml:space="preserve">
+    <value>La pagina che stai cercando non è stata trovata.</value>
+  </data>
+  <data name="Sorry, but you don't have permission to access this page." xml:space="preserve">
+    <value>Non hai le autorizzazioni per accedere a questa pagina.</value>
+  </data>
+  <data name="Sort Child Pages Alpha" xml:space="preserve">
+    <value>Ordina sottopagine</value>
+  </data>
+  <data name="The page {0} has child pages, if you delete it, all of the child pages will become root level pages. You should delete child pages before deleting the parent page. Are you sure you want to delete {1}?" xml:space="preserve">
+    <value>La pagina {0} ha pagine figlio, se la elimini, tutte le pagine figlio diventeranno pagine di livello root. È necessario eliminare le pagine figlio prima di eliminare la pagina padre. Sei sicuro di voler eliminare {1}?</value>
+  </data>
+  <data name="This is the heading and title of the page. For new pages the url slug will be generated based on the title." xml:space="preserve">
+    <value>Questa è l'intestazione e il titolo della pagina. Per le nuove pagine l'url slug verrà generato in base al titolo.</value>
+  </data>
+  <data name="This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order." xml:space="preserve">
+    <value>Questo è l'ordinamento di questa pagina all'interno della sottostruttura del menu. Puoi anche spostare facilmente le pagine da Gestore pagine, che aggiornerà l'ordine delle pagine.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Non autorizzato</value>
+  </data>
+  <data name="Unexpected Error" xml:space="preserve">
+    <value>Errore inaspettato</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Mostra</value>
+  </data>
+  <data name="View Roles" xml:space="preserve">
+    <value>Visibile ai rouli</value>
+  </data>
+  <data name="Well, this is embarrassing. An error occurred while processing your request. Rest assured, this problem has been logged and hamsters have been released to fix the problem." xml:space="preserve">
+    <value>Beh, questo è imbarazzante. Si è verificato un errore durante l'elaborazione della richiesta. Questo problema è stato registrato e i tecnici si occuperanno di risolvere il problema al più presto.</value>
+  </data>
+  <data name="You can drag and drop page nodes in the treeview below to move them around in the site hierarchy or to change their sort position. Click on a page to show a menu of commands related to that page. Note that changes will not be reflected in the main menu until you refresh the page." xml:space="preserve">
+    <value>È possibile trascinare e rilasciare i nodi della pagina nella vista albero qui di seguito per spostarli nella gerarchia del sito o per modificare la loro posizione di ordinamento. Clicca su una pagina per mostrare un menu di comandi relativi a quella pagina. Si noti che le modifiche non si rifletteranno nel menu principale fino a quando non si aggiorna la pagina.</value>
+  </data>
+  <data name="Your browser sent a request that this server could not understand." xml:space="preserve">
+    <value>Il tuo browser ha inviato una richiesta che questo server non è riuscito a capire.</value>
+  </data>
+  <data name="Content Settings" xml:space="preserve">
+    <value>Impostazioni contenuti</value>
+  </data>
+  <data name="Content Settings were successfully updated." xml:space="preserve">
+    <value>Impostazioni contenuti salvate correttamente.</value>
+  </data>
+  <data name="Image Url" xml:space="preserve">
+    <value>Url immagine</value>
+  </data>
+  <data name="Is Featured" xml:space="preserve">
+    <value>In primo piano</value>
+  </data>
+  <data name="Thumbnail Url" xml:space="preserve">
+    <value>Url miniatura</value>
+  </data>
+  <data name="Show Featured Posts on Default Page" xml:space="preserve">
+    <value>Mostra post in primo piano nella pagina predefinita</value>
+  </data>
+  <data name="Featured Posts" xml:space="preserve">
+    <value>Messaggi in primo piano</value>
+  </data>
+  <data name="Recent Posts" xml:space="preserve">
+    <value>Post recenti</value>
+  </data>
+  <data name="Creator Twitter Handle" xml:space="preserve">
+    <value>Twitter Handle autore</value>
+  </data>
+  <data name="Date Required" xml:space="preserve">
+    <value>Richiesta data</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descrizione</value>
+  </data>
+  <data name="Disable HTML Editor" xml:space="preserve">
+    <value>Disattiva editor HTML</value>
+  </data>
+  <data name="Publish Later:" xml:space="preserve">
+    <value>Pubblica il:</value>
+  </data>
+  <data name="Publish Now" xml:space="preserve">
+    <value>Pubblica ora</value>
+  </data>
+  <data name="Publisher Twitter Handle" xml:space="preserve">
+    <value>Twitter Handle editore</value>
+  </data>
+  <data name="Save Draft" xml:space="preserve">
+    <value>Salva bozza</value>
+  </data>
+  <data name="Site Name" xml:space="preserve">
+    <value>Nome sito</value>
+  </data>
+  <data name="To publish later you must enter a date." xml:space="preserve">
+    <value>Inserire una data di pubblicazione.</value>
+  </data>
+  <data name="Version History" xml:space="preserve">
+    <value>Cronologia versione</value>
+  </data>
+</root>
