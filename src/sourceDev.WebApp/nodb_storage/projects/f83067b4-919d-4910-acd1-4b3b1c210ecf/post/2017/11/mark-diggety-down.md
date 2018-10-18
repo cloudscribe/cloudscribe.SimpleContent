@@ -8,7 +8,7 @@ author: Admin
 metaDescription: Developers love markdown
 isPublished: true
 pubDate: 2017-11-21T06:53:00.0000000-05:00
-lastModified: 2018-07-02T12:56:42.2687943Z
+lastModified: 2018-10-18T12:21:25.4099852Z
 isFeatured: true
 categories:
 - markdown
@@ -18,6 +18,10 @@ categories:
 comments: []
 createdUtc: 2018-06-28T12:10:21.9591410-04:00
 lastModifiedByUser: admin
+autoTeaser: >-
+  <h2 id="markdown-rocks">Markdown Rocks!</h2>
+
+  <p></p>develop
 ---
 ## Markdown Rocks!
 
@@ -25,4 +29,4 @@ developers love it!
 
 ![dudes](/media/images/dudes1-550x412.jpeg)
 
-Say what?
+Say what? yeah
