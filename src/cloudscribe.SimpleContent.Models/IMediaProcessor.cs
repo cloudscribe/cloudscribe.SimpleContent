@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
+    // this is only uised in MetaweblogService
     public interface IMediaProcessor
     {
         Task<string> ResolveMediaUrl(string mediaVirtualPath, string fileName);

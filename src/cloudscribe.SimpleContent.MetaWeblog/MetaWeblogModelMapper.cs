@@ -47,6 +47,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         {
             PostStruct p = new PostStruct();
 
+
+
             p.author = post.Author;
             p.categories = post.Categories;
             p.commentPolicy = commentsOpen ? "1" : "0";

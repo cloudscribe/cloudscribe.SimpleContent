@@ -5,6 +5,7 @@ namespace cloudscribe.SimpleContent.Models
     public interface IPageUrlResolver
     {
         Task<string> ResolvePageUrl(IPage page);
-        Task ConvertToRelativeUrls(IPage page, IProjectSettings projectSettings);
+        Task ConvertMediaToRelativeUrls(IPage page);
+        Task ConvertMediaToAbsoluteUrls(IPage page, IProjectSettings projectSettings);
     }
 }

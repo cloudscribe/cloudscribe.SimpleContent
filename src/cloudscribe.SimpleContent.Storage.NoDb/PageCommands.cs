@@ -40,7 +40,12 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             )
         {
             var p = Page.FromIPage(page);
-            p.Id = _keyGenerator.GenerateKey(p);
+            // metaweblog sets the id, don't change it if it exists
+            if (string.IsNullOrWhiteSpace(p.Id))
+            {
+                p.Id = _keyGenerator.GenerateKey(p);
+            }
+
             p.LastModified = DateTime.UtcNow;
            
             await _commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);

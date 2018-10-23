@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.MetaWeblog Class Library</Description>
-    <VersionPrefix>4.0.4</VersionPrefix>
-    <AssemblyVersion>4.0.4</AssemblyVersion>
+    <VersionPrefix>4.0.5</VersionPrefix>
+    <AssemblyVersion>4.0.5</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;metaweblog;blog;cms</PackageTags>
@@ -22,6 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.0" />
     <PackageReference Include="cloudscribe.MetaWeblog" Version="2.1.4" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.14" />
   </ItemGroup>
 
  

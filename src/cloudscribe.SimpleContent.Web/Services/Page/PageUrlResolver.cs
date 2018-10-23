@@ -1,5 +1,4 @@
 ﻿using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -38,19 +37,16 @@ namespace cloudscribe.SimpleContent.Web.Services
             return Task.FromResult(result);
         }
 
-        public async Task ConvertToRelativeUrls(IPage page, IProjectSettings projectSettings)
+        public async Task ConvertMediaToRelativeUrls(IPage page)
         {
-            var httpContext = _contextAccessor.HttpContext;
-            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
-            var imageAbsoluteBaseUrl = urlHelper.Content("~" + projectSettings.LocalMediaVirtualPath);
-            if (httpContext != null)
-            {
-                imageAbsoluteBaseUrl = httpContext.Request.AppBaseUrl() + projectSettings.LocalMediaVirtualPath;
-            }
+            var baseUrl = string.Concat(
+                        _contextAccessor.HttpContext.Request.Scheme,
+                        "://",
+                        _contextAccessor.HttpContext.Request.Host.ToUriComponent()
+                        );
 
             page.DraftContent = await _contentProcessor.ConvertMediaUrlsToRelative(
-                projectSettings.LocalMediaVirtualPath,
-                imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
+                baseUrl, 
                 page.DraftContent);
 
             // olw also adds hard coded style to images
@@ -60,12 +56,29 @@ namespace cloudscribe.SimpleContent.Web.Services
             // we want to change them to relative to keep the files portable
             // to a different root url
             page.Content = await _contentProcessor.ConvertMediaUrlsToRelative(
-                projectSettings.LocalMediaVirtualPath,
-                imageAbsoluteBaseUrl, //this shold be resolved from virtual using urlhelper
+                baseUrl, 
                 page.Content);
 
             // olw also adds hard coded style to images
             page.Content = _contentProcessor.RemoveImageStyleAttribute(page.Content);
+        }
+
+        public Task ConvertMediaToAbsoluteUrls(IPage page, IProjectSettings projectSettings)
+        {
+            string baseUrl = projectSettings.CdnUrl;
+            if (string.IsNullOrWhiteSpace(baseUrl))
+            {
+                baseUrl = string.Concat(
+                        _contextAccessor.HttpContext.Request.Scheme,
+                        "://",
+                        _contextAccessor.HttpContext.Request.Host.ToUriComponent()
+                        );
+            }
+
+            page.Content = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, page.Content);
+            page.DraftContent = _contentProcessor.ConvertUrlsToAbsolute(baseUrl, page.DraftContent);
+
+            return Task.CompletedTask;
         }
 
     }

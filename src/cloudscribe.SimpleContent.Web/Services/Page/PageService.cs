@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-27
+// Last Modified:           2018-10-23
 // 
 
 
@@ -29,9 +29,7 @@ namespace cloudscribe.SimpleContent.Services
             IPageQueries pageQueries,
             IPageCommands pageCommands,
             PageEvents eventHandlers,
-            IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
-            IPageUrlResolver pageUrlResolver,
             IMemoryCache cache,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
             IPageNavigationCacheKeys cacheKeys,
@@ -43,8 +41,6 @@ namespace cloudscribe.SimpleContent.Services
             _projectService = projectService;
             _pageQueries = pageQueries;
             _pageCommands = pageCommands;
-            _mediaProcessor = mediaProcessor;
-            _pageUrlResolver = pageUrlResolver;
             _contentProcessor = contentProcessor;
             _cache = cache;
             _cacheKeys = cacheKeys;
@@ -56,13 +52,11 @@ namespace cloudscribe.SimpleContent.Services
         
         private readonly IPageQueries _pageQueries;
         private readonly IPageCommands _pageCommands;
-        private readonly IMediaProcessor _mediaProcessor;
         private readonly IProjectService _projectService;
         private readonly IContentProcessor _contentProcessor;
         private readonly IMemoryCache _cache;
         private readonly IPageNavigationCacheKeys _cacheKeys;
         private readonly PageEvents _eventHandlers;
-        private readonly IPageUrlResolver _pageUrlResolver;
         private readonly IStringLocalizer _sr;
         private readonly IContentHistoryCommands _historyCommands;
         private readonly ILogger _log;
@@ -121,7 +115,7 @@ namespace cloudscribe.SimpleContent.Services
             }
         }
         
-        public async Task Create(IPage page, bool convertToRelativeUrls = false)
+        public async Task Create(IPage page)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
             
@@ -145,26 +139,15 @@ namespace cloudscribe.SimpleContent.Services
 
                 
             }
-
-            if(convertToRelativeUrls)
-            {
-                await _pageUrlResolver.ConvertToRelativeUrls(page, _settings).ConfigureAwait(false);
-            }
             
             await _pageCommands.Create(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleCreated(_settings.Id, page).ConfigureAwait(false);
            
         }
 
-        public async Task Update(IPage page, bool convertToRelativeUrls = false)
+        public async Task Update(IPage page)
         {
             await EnsureProjectSettings().ConfigureAwait(false);
-
-            if (convertToRelativeUrls)
-            {
-                await _pageUrlResolver.ConvertToRelativeUrls(page, _settings).ConfigureAwait(false);
-            }
-
             await _eventHandlers.HandlePreUpdate(_settings.Id, page.Id).ConfigureAwait(false);
             await _pageCommands.Update(_settings.Id, page).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, page).ConfigureAwait(false);

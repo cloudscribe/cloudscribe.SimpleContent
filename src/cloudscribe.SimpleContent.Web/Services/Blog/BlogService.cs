@@ -22,7 +22,6 @@ namespace cloudscribe.SimpleContent.Services
             IProjectService projectService,
             IPostQueries postQueries,
             IPostCommands postCommands,
-            IMediaProcessor mediaProcessor,
             IContentProcessor contentProcessor,
             IBlogUrlResolver blogUrlResolver,
             PostEvents eventHandlers,
@@ -32,7 +31,6 @@ namespace cloudscribe.SimpleContent.Services
         {
             _postQueries = postQueries;
             _postCommands = postCommands;
-            _mediaProcessor = mediaProcessor;
             _projectService = projectService;
             _contentProcessor = contentProcessor;
             _blogUrlResolver = blogUrlResolver;
@@ -44,7 +42,6 @@ namespace cloudscribe.SimpleContent.Services
         private readonly IProjectService _projectService;
         private readonly IPostQueries _postQueries;
         private readonly IPostCommands _postCommands;
-        private readonly IMediaProcessor _mediaProcessor;
         private IProjectSettings _settings = null;
         private readonly IContentProcessor _contentProcessor;
         private readonly IBlogUrlResolver _blogUrlResolver;
@@ -191,14 +188,14 @@ namespace cloudscribe.SimpleContent.Services
             await _eventHandlers.HandleUnPublished(post.BlogId, post);
         }
 
-        public async Task Create(IPost post, bool convertToRelativeUrls = false)
+        public async Task Create(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
 
-            if(convertToRelativeUrls)
-            {
-                await _blogUrlResolver.ConvertToRelativeUrls(post, _settings).ConfigureAwait(false);
-            }
+            //if(convertToRelativeUrls)
+            //{
+            //    await _blogUrlResolver.ConvertToRelativeUrls(post, _settings).ConfigureAwait(false);
+            //}
 
             if (string.IsNullOrEmpty(post.Slug))
             {
@@ -214,15 +211,15 @@ namespace cloudscribe.SimpleContent.Services
             await _eventHandlers.HandleCreated(_settings.Id, post).ConfigureAwait(false);
         }
         
-        public async Task Update(IPost post, bool convertToRelativeUrls = false)
+        public async Task Update(IPost post)
         {
             await EnsureBlogSettings().ConfigureAwait(false);
             await _eventHandlers.HandlePreUpdate(_settings.Id, post.Id).ConfigureAwait(false);
 
-            if (convertToRelativeUrls)
-            {
-                await _blogUrlResolver.ConvertToRelativeUrls(post, _settings).ConfigureAwait(false);
-            }
+            //if (convertToRelativeUrls)
+            //{
+            //    await _blogUrlResolver.ConvertToRelativeUrls(post, _settings).ConfigureAwait(false);
+            //}
 
             await _postCommands.Update(_settings.Id, post).ConfigureAwait(false);
             await _eventHandlers.HandleUpdated(_settings.Id, post).ConfigureAwait(false);
@@ -338,21 +335,21 @@ namespace cloudscribe.SimpleContent.Services
             return result;
         }
         
-        /// <summary>
-        /// this is only used for processing images added via metaweblog api
-        /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="bytes"></param>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        public async Task SaveMedia(
-            string projectId, 
-            byte[] bytes, string 
-            fileName)
-        {          
-            var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
-            await _mediaProcessor.SaveMedia(settings.LocalMediaVirtualPath, fileName, bytes).ConfigureAwait(false);
-        }
+        ///// <summary>
+        ///// this is only used for processing images added via metaweblog api
+        ///// </summary>
+        ///// <param name="projectId"></param>
+        ///// <param name="bytes"></param>
+        ///// <param name="fileName"></param>
+        ///// <returns></returns>
+        //public async Task SaveMedia(
+        //    string projectId, 
+        //    byte[] bytes, string 
+        //    fileName)
+        //{          
+        //    var settings = await _projectService.GetProjectSettings(projectId).ConfigureAwait(false);
+        //    await _mediaProcessor.SaveMedia(settings.LocalMediaVirtualPath, fileName, bytes).ConfigureAwait(false);
+        //}
 
         
     }

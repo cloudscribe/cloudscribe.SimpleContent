@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-15
-// Last Modified:           2016-08-11
+// Last Modified:           2018-10-23
 // 
 
 
@@ -15,7 +15,8 @@ namespace cloudscribe.SimpleContent.Models
             string projectId,
             bool isAuthenticated, 
             bool canEditPosts,
-            bool canEditPages
+            bool canEditPages,
+            string timeZoneId = "GMT"
             )
         {
             this.displayName = displayName;
@@ -23,6 +24,7 @@ namespace cloudscribe.SimpleContent.Models
             this.isAuthenticated = isAuthenticated;
             this.canEditPosts = canEditPosts;
             this.canEditPages = canEditPages;
+            this.timeZoneId = timeZoneId;
         }
 
         private string displayName = string.Empty;
@@ -30,6 +32,7 @@ namespace cloudscribe.SimpleContent.Models
         private bool isAuthenticated = false;
         private bool canEditPosts = false;
         private bool canEditPages = false;
+        private string timeZoneId = "GMT";
 
         public string DisplayName
         {
@@ -54,6 +57,11 @@ namespace cloudscribe.SimpleContent.Models
         public bool CanEditPages
         {
             get { return canEditPages; }
+        }
+
+        public string TimeZoneId
+        {
+            get { return timeZoneId; }
         }
     }
 }

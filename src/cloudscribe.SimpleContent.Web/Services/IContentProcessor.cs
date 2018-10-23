@@ -16,7 +16,8 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         string ConvertMarkdownToHtml(string markdown);
 
-        Task<string> ConvertMediaUrlsToRelative(string mediaVirtualPath, string absoluteBaseMediaUrl, string htmlInput);
+        //Task<string> ConvertMediaUrlsToRelative(string mediaVirtualPath, string absoluteBaseMediaUrl, string htmlInput);
+        Task<string> ConvertMediaUrlsToRelative(string absoluteBaseMediaUrl, string htmlInput);
         string ConvertUrlsToAbsolute(string absoluteBaseMediaUrl, string htmlInput);
         string RemoveImageStyleAttribute(string htmlInput);
     }

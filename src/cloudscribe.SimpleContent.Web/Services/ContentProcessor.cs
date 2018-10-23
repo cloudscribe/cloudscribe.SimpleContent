@@ -318,8 +318,55 @@ namespace cloudscribe.SimpleContent.Web.Services
             return htmlOutput;
         }
 
+        //public Task<string> ConvertMediaUrlsToRelative(
+        //    string mediaVirtualPath,
+        //    string absoluteBaseMediaUrl,
+        //    string htmlInput)
+        //{
+        //    if (string.IsNullOrEmpty(htmlInput)) { return Task.FromResult(htmlInput); }
+
+        //    var htmlOutput = htmlInput;
+        //    // convert any fully qualified image urls to relative urls
+        //    if (absoluteBaseMediaUrl.Length > 0)
+        //    {
+
+        //        // need to change absolute urls to relative urls
+        //        // absolute image urls are created when posting from open live writer
+
+        //        htmlOutput = Regex.Replace(htmlOutput, "<img.*?src=\"([^\"]+)\"", (Match m) =>
+        //        {
+        //            string src = m.Groups[1].Value;
+        //            int index = src.IndexOf(absoluteBaseMediaUrl);
+
+        //            if (index > -1)
+        //            {
+        //                string clean = src.Substring(absoluteBaseMediaUrl.Length);
+        //                return m.Value.Replace(src, mediaVirtualPath + clean);
+        //            }
+
+        //            return m.Value;
+        //        });
+
+        //        htmlOutput = Regex.Replace(htmlOutput, "<a.*?href=\"([^\"]+)\"", (Match m) =>
+        //        {
+        //            string src = m.Groups[1].Value;
+        //            int index = src.IndexOf(absoluteBaseMediaUrl);
+
+        //            if (index > -1)
+        //            {
+        //                string clean = src.Substring(absoluteBaseMediaUrl.Length);
+        //                return m.Value.Replace(src, mediaVirtualPath + clean);
+        //            }
+
+        //            return m.Value;
+        //        });
+                
+        //    }
+
+        //    return Task.FromResult(htmlOutput);
+        //}
+
         public Task<string> ConvertMediaUrlsToRelative(
-            string mediaVirtualPath,
             string absoluteBaseMediaUrl,
             string htmlInput)
         {
@@ -327,7 +374,7 @@ namespace cloudscribe.SimpleContent.Web.Services
 
             var htmlOutput = htmlInput;
             // convert any fully qualified image urls to relative urls
-            if (absoluteBaseMediaUrl.Length > 0)
+            if (!string.IsNullOrWhiteSpace(absoluteBaseMediaUrl))
             {
 
                 // need to change absolute urls to relative urls
@@ -341,7 +388,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     if (index > -1)
                     {
                         string clean = src.Substring(absoluteBaseMediaUrl.Length);
-                        return m.Value.Replace(src, mediaVirtualPath + clean);
+                        return m.Value.Replace(src, clean);
                     }
 
                     return m.Value;
@@ -355,12 +402,12 @@ namespace cloudscribe.SimpleContent.Web.Services
                     if (index > -1)
                     {
                         string clean = src.Substring(absoluteBaseMediaUrl.Length);
-                        return m.Value.Replace(src, mediaVirtualPath + clean);
+                        return m.Value.Replace(src, clean);
                     }
 
                     return m.Value;
                 });
-                
+
             }
 
             return Task.FromResult(htmlOutput);

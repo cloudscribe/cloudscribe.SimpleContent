@@ -2,12 +2,13 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-08
-// Last Modified:           2018-09-27
+// Last Modified:           2018-10-23
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.MetaWeblog;
 using cloudscribe.MetaWeblog.Models;
+using cloudscribe.Web.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             IPageUrlResolver pageUrlResolver,
             IBlogUrlResolver blogUrlResolver,
             IMediaProcessor mediaProcessor,
+            ITimeZoneHelper timeZoneHelper,
             ILogger<MetaWeblogService> logger,
             IBlogService blogService = null,
             IPageService pageService = null
@@ -37,6 +39,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             _contentHistoryCommands = contentHistoryCommands;
             _pageUrlResolver = pageUrlResolver;
             _blogUrlResolver = blogUrlResolver;
+            _timeZoneHelper = timeZoneHelper;
             _blogService = blogService ?? new NotImplementedBlogService();
             _pageService = pageService ?? new NotImplementedPageService();
             _mediaProcessor = mediaProcessor;
@@ -54,6 +57,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         private readonly IBlogService _blogService;
         private readonly IPageService _pageService;
         private readonly MetaWeblogModelMapper _mapper;
+        private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly ILogger _log;
 
         public async Task<string> NewPost(
@@ -83,25 +87,53 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             post.Id = Guid.NewGuid().ToString();
             post.Author = authorDisplayName;
             post.CreatedByUser = permission.DisplayName;
-            if(publish)
+            var utcPubDate = _timeZoneHelper.ConvertToUtc(newPost.postDate, permission.TimeZoneId);
+            
+            if (publish)
             {
-                post.IsPublished = true;
-                if (post.IsPublished) { post.PubDate = DateTime.UtcNow; }
+                if(utcPubDate.Year == 1)
+                {
+                    //invalid because not supplied
+                    utcPubDate = DateTime.UtcNow;
+                }
+
+                if(utcPubDate <= DateTime.UtcNow)
+                {
+                    post.IsPublished = true;
+                    post.PubDate = utcPubDate;
+                }
+                else
+                {
+                    //future date needs to be draft, it will auto publish after pub date
+                    post.DraftAuthor = post.Author;
+                    post.DraftContent = post.Content;
+                    post.DraftPubDate = utcPubDate;
+                    post.IsPublished = false;
+                    post.PubDate = null;
+                    post.Content = null;
+                }
+                
+                
             }
             else
             {
                 post.DraftAuthor = post.Author;
                 post.DraftContent = post.Content;
+                if(utcPubDate > DateTime.UtcNow)
+                {
+                    post.DraftPubDate = utcPubDate;
+                }
+                
                 post.Content = null;
                 post.PubDate = null;
             }
             
-            var convertToRelativeUrls = true;
+            await _blogUrlResolver.ConvertMediaToRelativeUrls(post).ConfigureAwait(false);
 
-            await _blogService.Create(post, convertToRelativeUrls).ConfigureAwait(false);
+            await _blogService.Create(post).ConfigureAwait(false);
             if (publish)
             {
-                await _blogService.FirePublishEvent(post);
+                await _blogService.FirePublishEvent(post).ConfigureAwait(false);
             }
 
             return post.Id; 
@@ -138,13 +170,13 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             
             if(!string.IsNullOrWhiteSpace(existing.TemplateKey))
             {
-                _log.LogError($"post {postId} uses a content template and cannot be edited via metaweblog api");
-                return false;
+                //_log.LogError($"post {postId} uses a content template and cannot be edited via metaweblog api");
+                throw new InvalidOperationException("templated posts cannot be edited via metaweblog api");
             }
             if (existing.ContentType != ProjectConstants.HtmlContentType)
             {
-                _log.LogError($"post {postId} uses a content type {existing.ContentType} and cannot be edited via metaweblog api");
-                return false;
+                //_log.LogError($"post {postId} uses a content type {existing.ContentType} and cannot be edited via metaweblog api");
+                throw new InvalidOperationException("posts that have content type other than html cannot be edited via metaweblog api");
             }
 
             var history = existing.CreateHistory(userName);
@@ -169,32 +201,53 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             }
                
             existing.Categories = update.Categories;
-            
-            if(publish)
+            var utcPubDate = _timeZoneHelper.ConvertToUtc(post.postDate, permission.TimeZoneId);
+
+            if (publish)
             {
-                existing.Content = update.Content;
-                existing.IsPublished = true;
-                if(!existing.PubDate.HasValue)
+                if (utcPubDate <= DateTime.UtcNow)
                 {
-                    existing.PubDate = DateTime.UtcNow;
+                    existing.Content = update.Content;
+                    existing.IsPublished = true;
+                    if (utcPubDate.Year != 1) // no date specified
+                    {
+                        existing.PubDate = utcPubDate;
+                    }
+                    if(!existing.PubDate.HasValue)
+                    {
+                        existing.PubDate = DateTime.UtcNow;
+                    }
+                        
+                    existing.DraftAuthor = null;
+                    existing.DraftContent = null;
+                    existing.DraftPubDate = null;
                 }
-                existing.DraftAuthor = null;
-                existing.DraftContent = null;
-                existing.DraftPubDate = null;
+                else
+                {
+                    existing.DraftContent = update.Content;
+                    existing.DraftPubDate = utcPubDate;
+                    existing.DraftAuthor = update.Author;
+                }       
             }
             else
             {
                 existing.DraftContent = update.Content;
-            }  
-            
-            var convertToRelativeUrls = true;
-            await _blogService.Update(existing, convertToRelativeUrls).ConfigureAwait(false);
-            await _contentHistoryCommands.Create(blogId, history);
+                existing.DraftAuthor = update.Author;
+                if(utcPubDate > DateTime.UtcNow)
+                {
+                    existing.DraftPubDate = utcPubDate;
+                }
+                
+            }
+
+            await _blogUrlResolver.ConvertMediaToRelativeUrls(existing).ConfigureAwait(false);
+            await _blogService.Update(existing).ConfigureAwait(false);
+            await _contentHistoryCommands.Create(blogId, history).ConfigureAwait(false);
 
             if(publish)
             {
-                await _blogService.FirePublishEvent(existing);
-                await _contentHistoryCommands.DeleteDraftHistory(blogId, history.ContentId);
+                await _blogService.FirePublishEvent(existing).ConfigureAwait(false);
+                await _contentHistoryCommands.DeleteDraftHistory(blogId, history.ContentId).ConfigureAwait(false);
             }
 
             return true;
@@ -224,14 +277,18 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             
             if (existing == null) { return new PostStruct(); }
 
-            var commentsOpen = await _blogService.CommentsAreOpen(existing, false);
-            var project = await _projectService.GetCurrentProjectSettings();
+            
+
+            var commentsOpen = await _blogService.CommentsAreOpen(existing, false).ConfigureAwait(false);
+            var project = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             if(project == null)
             {
                 _log.LogError($"could not resolve project settings");
                 return new PostStruct();
             }
-            var postUrl = await _blogUrlResolver.ResolvePostUrl(existing, project);
+            await _blogUrlResolver.ConvertMediaToAbsoluteUrls(existing, project).ConfigureAwait(false);
+
+            var postUrl = await _blogUrlResolver.ResolvePostUrl(existing, project).ConfigureAwait(false);
             var postStruct = _mapper.GetStructFromPost(existing,postUrl, commentsOpen);
             return postStruct;
         }
@@ -287,7 +344,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             if(permission.CanEditPosts)
             {
                 var blogPosts = await _blogService.GetRecentPosts(numberOfPosts, cancellationToken).ConfigureAwait(false);
-                var project = await _projectService.GetCurrentProjectSettings();
+                var project = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
                 if(project == null)
                 {
                     _log.LogError($"could not resolve project settings");
@@ -296,8 +353,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 
                 foreach (var p in blogPosts)
                 {
-                    var commentsOpen = await _blogService.CommentsAreOpen(p, false);
-                    var postUrl = await _blogUrlResolver.ResolvePostUrl(p, project);
+                    var commentsOpen = await _blogService.CommentsAreOpen(p, false).ConfigureAwait(false);
+                    var postUrl = await _blogUrlResolver.ResolvePostUrl(p, project).ConfigureAwait(false);
                     var s = _mapper.GetStructFromPost(p, postUrl, commentsOpen);
                     structs.Add(s);
                 }
@@ -331,20 +388,24 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             string extension = Path.GetExtension(mediaObject.name);
             string fileName = Path.GetFileName(mediaObject.name).ToLowerInvariant().Replace("_thumb", "-wlw");
-            var project = await _projectService.GetCurrentProjectSettings();
+            var project = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             if(project == null)
             {
                 _log.LogError("failed to resolve proejct settings");
                 return new MediaInfoStruct();
             }
 
-            await _blogService.SaveMedia(
-                blogId, 
-                mediaObject.bytes, 
-                fileName
-                ).ConfigureAwait(false);
+            //https://github.com/cloudscribe/cloudscribe.SimpleContent/issues/345
+            var currentTime = DateTime.UtcNow;
+            var storageVirtualPath = "/media/images/" + currentTime.Year.ToInvariantString()
+                + "/" + currentTime.Month.ToString("00")
+                + "/" + currentTime.Day.ToString("00")
+                + "/"
+                ;
+            
+            await _mediaProcessor.SaveMedia(storageVirtualPath, fileName, mediaObject.bytes).ConfigureAwait(false);
 
-            var mediaUrl = await _mediaProcessor.ResolveMediaUrl(project.LocalMediaVirtualPath, fileName); ;
+            var mediaUrl = await _mediaProcessor.ResolveMediaUrl(storageVirtualPath, fileName).ConfigureAwait(false);
             var result = new MediaInfoStruct() { url = mediaUrl };
 
             return result;
@@ -370,7 +431,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 return false;
             }
 
-            var post = await _blogService.GetPost(postId);
+            var post = await _blogService.GetPost(postId).ConfigureAwait(false);
             if(post == null)
             {
                 _log.LogError($"post was null for id {postId}");
@@ -379,9 +440,9 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             }
 
             var history = post.CreateHistory(userName);
-            await _contentHistoryCommands.Create(blogId, history);
+            await _contentHistoryCommands.Create(blogId, history).ConfigureAwait(false);
 
-            await _blogService.Delete(postId);
+            await _blogService.Delete(postId).ConfigureAwait(false);
 
             return true;
         }
@@ -407,7 +468,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 return result; //empty
             }
 
-            var project = await _projectService.GetCurrentProjectSettings();
+            var project = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             if(project == null)
             {
                 _log.LogError($"could not resolve project settings");
@@ -458,7 +519,9 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             foreach (var p in pages)
             {
-                var pageUrl = await _pageUrlResolver.ResolvePageUrl(p);
+                if (!string.IsNullOrWhiteSpace(p.ViewRoles)) { continue; }
+
+                var pageUrl = await _pageUrlResolver.ResolvePageUrl(p).ConfigureAwait(false);
                 var s = _mapper.GetStructFromPage(p, pageUrl, false);
                 list.Add(s);
             }
@@ -491,7 +554,10 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             
             foreach (var p in pages)
             {
-                var pageUrl = await _pageUrlResolver.ResolvePageUrl(p);
+
+                if(!string.IsNullOrWhiteSpace(p.ViewRoles)) { continue; }
+
+                var pageUrl = await _pageUrlResolver.ResolvePageUrl(p).ConfigureAwait(false);
                 var s = _mapper.GetStructFromPage(p, pageUrl, false);
                 list.Add(s);
             }
@@ -524,7 +590,10 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             if (existing == null) { return new PageStruct(); }
 
             var commentsOpen = false;
-            var pageUrl = await _pageUrlResolver.ResolvePageUrl(existing);
+            var pageUrl = await _pageUrlResolver.ResolvePageUrl(existing).ConfigureAwait(false);
+            var project = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
+            await _pageUrlResolver.ConvertMediaToAbsoluteUrls(existing, project).ConfigureAwait(false);
+
             var pageStruct = _mapper.GetStructFromPage(existing, pageUrl, commentsOpen);
             return pageStruct;
         }
@@ -557,7 +626,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             page.LastModifiedByUser = permission.DisplayName;
             if(!string.IsNullOrWhiteSpace(page.ParentId))
             {
-                var parent = await _pageService.GetPage(page.ParentId);
+                var parent = await _pageService.GetPage(page.ParentId).ConfigureAwait(false);
                 if(parent != null)
                 {
                     page.ParentSlug = parent.Slug;
@@ -572,27 +641,54 @@ namespace cloudscribe.SimpleContent.MetaWeblog
                 page.PageOrder = await _pageService.GetNextChildPageOrder(page.ParentSlug).ConfigureAwait(false);
             }
 
+            var utcPubDate = _timeZoneHelper.ConvertToUtc(newPage.pageDate, permission.TimeZoneId);
+
             if (publish)
             {
-                page.IsPublished = true;
-                page.PubDate = DateTime.UtcNow;
+                if (utcPubDate.Year == 1)
+                {
+                    //invalid because not supplied
+                    utcPubDate = DateTime.UtcNow;
+                }
+
+                if (utcPubDate < DateTime.UtcNow)
+                {
+                    page.IsPublished = true;
+                    page.PubDate = utcPubDate;
+                }
+                else
+                {
+                    //future date needs to be draft, it will auto publish after pub date
+                    page.DraftAuthor = page.Author;
+                    page.DraftContent = page.Content;
+                    page.DraftPubDate = utcPubDate;
+                    page.IsPublished = false;
+                    page.PubDate = null;
+                    page.Content = null;
+                }
+                
             }
             else
             {
                 page.DraftAuthor = page.Author;
                 page.DraftContent = page.Content;
+                if (utcPubDate > DateTime.UtcNow)
+                {
+                    page.DraftPubDate = utcPubDate;
+                }
                 page.Content = null;
                 page.IsPublished = false;
                 page.PubDate = null;
+
             }
 
-            var convertToRelativeUrls = true;
-
-            await _pageService.Create(page, convertToRelativeUrls).ConfigureAwait(false);
+            await _pageUrlResolver.ConvertMediaToRelativeUrls(page).ConfigureAwait(false);
+            
+            await _pageService.Create(page).ConfigureAwait(false);
             _pageService.ClearNavigationCache();
             if (publish)
             {
-                await _pageService.FirePublishEvent(page);
+                await _pageService.FirePublishEvent(page).ConfigureAwait(false);
             }
 
             return page.Id;
@@ -629,33 +725,53 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             if (!string.IsNullOrWhiteSpace(page.TemplateKey))
             {
-                _log.LogError($"page {pageId} uses a content template and cannot be edited via metaweblog api");
-                return false;
+                throw new InvalidOperationException("templated pages cannot be edited via metaweblog api");  
             }
             if (page.ContentType != ProjectConstants.HtmlContentType)
             {
-                _log.LogError($"page {pageId} uses a content type {page.ContentType} and cannot be edited via metaweblog api");
-                return false;
+                throw new InvalidOperationException("non html content cannot be edited via metaweblog api");
             }
 
             var history = page.CreateHistory(permission.DisplayName);
             var update = _mapper.GetPageFromStruct(pageStruct);
-            
+            var utcPubDate = _timeZoneHelper.ConvertToUtc(pageStruct.pageDate, permission.TimeZoneId);
+
             if (publish)
             {
-                page.Content = update.Content;
-                page.IsPublished = true;
-                if (!page.PubDate.HasValue)
+                if (utcPubDate < DateTime.UtcNow)
                 {
-                    page.PubDate = DateTime.UtcNow;
+                    page.IsPublished = true;
+                    if (utcPubDate.Year != 1) // no date specified
+                    {
+                        page.PubDate = utcPubDate;
+                    }
+                    if(!page.PubDate.HasValue)
+                    {
+                        page.PubDate = DateTime.UtcNow;
+                    }
+                    page.Content = update.Content;
+                    page.DraftAuthor = null;
+                    page.DraftContent = null;
+                    page.DraftPubDate = null;
                 }
-                page.DraftAuthor = null;
-                page.DraftContent = null;
-                page.DraftPubDate = null;
+                else
+                {
+                    //future date needs to be draft, it will auto publish after pub date
+                    page.DraftAuthor = update.Author;
+                    page.DraftContent = update.Content;
+                    page.DraftPubDate = utcPubDate;
+                   
+                }
+                
             }
             else
             {
+                page.DraftAuthor = update.Author;
                 page.DraftContent = update.Content;
+                if (utcPubDate > DateTime.UtcNow)
+                {
+                    page.DraftPubDate = utcPubDate;
+                }
             }
             
             page.PageOrder = update.PageOrder;
@@ -675,15 +791,17 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             page.Title = update.Title;
             page.LastModifiedByUser = permission.DisplayName;
 
-            await _contentHistoryCommands.Create(blogId, history);
+            await _contentHistoryCommands.Create(blogId, history).ConfigureAwait(false);
 
-            var convertToRelativeUrls = true;
-            await _pageService.Update(page, convertToRelativeUrls).ConfigureAwait(false);
+            await _pageUrlResolver.ConvertMediaToRelativeUrls(page).ConfigureAwait(false);
+
+            await _pageService.Update(page).ConfigureAwait(false);
+
             _pageService.ClearNavigationCache();
             if (publish)
             {
-                await _pageService.FirePublishEvent(page);
-                await _contentHistoryCommands.DeleteDraftHistory(blogId, history.ContentId);
+                await _pageService.FirePublishEvent(page).ConfigureAwait(false);
+                await _contentHistoryCommands.DeleteDraftHistory(blogId, history.ContentId).ConfigureAwait(false);
             }
 
             return true;
@@ -696,6 +814,19 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             string password
             )
         {
+            //var permission = await _security.ValidatePermissions(
+            //    blogId,
+            //    userName,
+            //    password,
+            //    CancellationToken.None
+            //    ).ConfigureAwait(false);
+
+            //if (!permission.CanEditPages)
+            //{
+            //    _log.LogWarning($"user {userName} cannot edit pages");
+            //    return false;
+            //}
+
             //TODO: implement
             //return await blogService.Delete(blogId, postId);
             throw new NotImplementedException();
