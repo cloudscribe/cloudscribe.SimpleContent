@@ -6,6 +6,7 @@ namespace cloudscribe.SimpleContent.Models
     {
         Task<string> ResolveBlogUrl(IProjectSettings project);
         Task<string> ResolvePostUrl(IPost post, IProjectSettings projectSettings);
-        Task ConvertToRelativeUrls(IPost post, IProjectSettings projectSettings);
+        Task ConvertMediaToRelativeUrls(IPost post);
+        Task ConvertMediaToAbsoluteUrls(IPost post, IProjectSettings projectSettings);
     }
 }

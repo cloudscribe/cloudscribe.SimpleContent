@@ -17,9 +17,9 @@ namespace cloudscribe.SimpleContent.Models
         Task<IPage> GetPageBySlug(string slug, CancellationToken cancellationToken = default(CancellationToken));
         Task<bool> SlugIsAvailable(string slug);
         
-        Task Create(IPage page, bool convertToRelativeUrls = false);
+        Task Create(IPage page);
 
-        Task Update(IPage page, bool convertToRelativeUrls = false);
+        Task Update(IPage page);
         
         void ClearNavigationCache();
 

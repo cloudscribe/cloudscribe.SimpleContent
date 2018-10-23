@@ -93,20 +93,20 @@ namespace cloudscribe.SimpleContent.Models
         }
         
        
-        public Task Create(IPost post, bool convertToRelativeUrls = false)
+        public Task Create(IPost post)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(IPost post, bool convertToRelativeUrls = false)
+        public Task Update(IPost post)
         {
             throw new NotImplementedException();
         }
         
-        public Task SaveMedia(string blogId, byte[] bytes, string fileName)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task SaveMedia(string blogId, byte[] bytes, string fileName)
+        //{
+        //    throw new NotImplementedException();
+        //}
         
         public Task<bool> SlugIsAvailable(string slug)
         {

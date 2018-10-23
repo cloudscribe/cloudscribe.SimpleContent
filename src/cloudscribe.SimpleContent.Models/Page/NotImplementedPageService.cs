@@ -49,12 +49,12 @@ namespace cloudscribe.SimpleContent.Models
         }
 
         
-        public Task Create(IPage page, bool convertToRelativeUrls = false)
+        public Task Create(IPage page)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(IPage page, bool convertToRelativeUrls = false)
+        public Task Update(IPage page)
         {
             throw new NotImplementedException();
         }

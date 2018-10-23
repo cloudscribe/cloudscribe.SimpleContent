@@ -51,14 +51,14 @@ namespace cloudscribe.SimpleContent.Models
 
         Task Delete(string postId);
         
-        Task Create(IPost post, bool convertToRelativeUrls = false);
+        Task Create(IPost post);
 
-        Task Update(IPost post, bool convertToRelativeUrls = false);
+        Task Update(IPost post);
         
-        Task SaveMedia(
-            string projectId,
-            byte[] bytes, 
-            string fileName);
+        //Task SaveMedia(
+        //    string projectId,
+        //    byte[] bytes, 
+        //    string fileName);
         
         Task FirePublishEvent(IPost post);
         Task FireUnPublishEvent(IPost post);
