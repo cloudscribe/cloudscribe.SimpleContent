@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Security.SimpleAuth Class Library</Description>
-    <VersionPrefix>3.0.2</VersionPrefix>
-    <AssemblyVersion>3.0.2</AssemblyVersion>
+    <VersionPrefix>3.0.3</VersionPrefix>
+    <AssemblyVersion>3.0.3</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;security;blog;cms</PackageTags>
@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.Web.SimpleAuth" Version="2.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.2" />
   </ItemGroup>
 
   

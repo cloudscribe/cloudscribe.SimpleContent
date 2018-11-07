@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>380c6e5c-f455-4c16-9b4b-c2e6bcdbc8ad</id>
+  <title>Futurama</title>
+  <slug>futurama</slug>
+  <correlationkey></correlationkey>
+  <author>admin</author>
+  <pubDate />
+  <lastModified>2018-10-25T12:41:36</lastModified>
+  <excerpt></excerpt>
+  <content />
+  <contentType>html</contentType>
+  <imageUrl />
+  <thumbnailUrl />
+  <createdUtc>2018-10-25T12:41:36</createdUtc>
+  <createdByUser>admin</createdByUser>
+  <lastModifiedByUser />
+  <draftAuthor>admin</draftAuthor>
+  <draftContent>&lt;p&gt;a future post&lt;/p&gt;</draftContent>
+  <draftPubDate>2018-10-26T00:40:00.0000000Z</draftPubDate>
+  <templateKey />
+  <serializedModel />
+  <draftSerializedModel />
+  <serializer />
+  <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf</blogId>
+  <ispublished>false</ispublished>
+  <isFeatured>false</isFeatured>
+  <autoTeaser />
+  <teaserOverride />
+  <suppressTeaser>false</suppressTeaser>
+  <categories></categories>
+  <comments></comments>
+</post>
