@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>base package - Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <VersionPrefix>4.0.3</VersionPrefix>
-    <AssemblyVersion>4.0.3</AssemblyVersion>
+    <VersionPrefix>4.0.4</VersionPrefix>
+    <AssemblyVersion>4.0.4</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;commands;queries;ef</PackageTags>
@@ -21,8 +21,8 @@
 
   <ItemGroup>
     
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
   </ItemGroup>
 
   

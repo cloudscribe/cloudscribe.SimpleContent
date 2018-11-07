@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Pagination.Models" Version="1.0.*" />
+    <PackageReference Include="cloudscribe.Pagination.Models" Version="1.0.4" />
 
     <PackageReference Include="System.Security.Claims" Version="4.3.0" />
   </ItemGroup>
