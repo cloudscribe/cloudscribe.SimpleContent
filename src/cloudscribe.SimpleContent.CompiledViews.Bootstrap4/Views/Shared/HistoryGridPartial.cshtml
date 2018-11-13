@@ -2,8 +2,8 @@
 @inject IStringLocalizer<SimpleContent> sr
 @inject IBlogRoutes  blogRoutes
 @inject IPageRoutes pageRoutes
-@inject ITimeZoneHelper tzHelper
-@inject ITimeZoneIdResolver tzResolver
+@inject cloudscribe.DateTimeUtils.ITimeZoneHelper tzHelper
+@inject cloudscribe.DateTimeUtils.ITimeZoneIdResolver tzResolver
 @{ 
     var timeZoneId = await tzResolver.GetUserTimeZoneId();
 }

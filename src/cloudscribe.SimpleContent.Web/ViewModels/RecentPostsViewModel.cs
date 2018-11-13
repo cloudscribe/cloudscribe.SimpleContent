@@ -1,9 +1,9 @@
 ﻿using cloudscribe.SimpleContent.Models;
 using System.Collections.Generic;
-using cloudscribe.Web.Common;
 using System;
 using cloudscribe.SimpleContent.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using cloudscribe.DateTimeUtils;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {
