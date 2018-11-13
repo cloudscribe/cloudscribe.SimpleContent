@@ -1,5 +1,6 @@
 ﻿using cloudscribe.MetaWeblog;
 using cloudscribe.SimpleContent.MetaWeblog;
+using cloudscribe.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -15,6 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IMetaWeblogSecurity, MetaWeblogSecurity>();
             services.TryAddScoped<IMetaWeblogService, MetaWeblogService>();
             services.TryAddScoped<MetaWeblogModelMapper, MetaWeblogModelMapper>();
+            services.AddScoped<IVersionProvider, VersionProvider>();
 
             services.AddCloudscribeMetaWeblog(configuration);
             

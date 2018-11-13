@@ -7,7 +7,7 @@
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
-using cloudscribe.Web.Common.Setup;
+using cloudscribe.Versioning;
 using System;
 using System.Reflection;
 

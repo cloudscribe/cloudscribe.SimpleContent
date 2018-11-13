@@ -5,12 +5,11 @@
 // Last Modified:           2018-07-03
 // 
 
+using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.Web.Common;
-using Microsoft.AspNetCore.Mvc;
-using Markdig;
-using System;
 using cloudscribe.SimpleContent.Web.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace cloudscribe.SimpleContent.Web.ViewModels
 {

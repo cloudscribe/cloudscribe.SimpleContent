@@ -1,5 +1,5 @@
-﻿using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Models.Versioning;
+﻿using cloudscribe.DateTimeUtils;
+using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Web.Design;
@@ -7,9 +7,8 @@ using cloudscribe.SimpleContent.Web.Mvc;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.SimpleContent.Web.Templating;
-using cloudscribe.Web.Common;
+using cloudscribe.Versioning;
 using cloudscribe.Web.Common.Razor;
-using cloudscribe.Web.Common.Setup;
 using cloudscribe.Web.Navigation;
 using cloudscribe.Web.SiteMap;
 using MediatR;
@@ -80,9 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             
             services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
-
-            services.AddScoped<IVersionProvider, ControllerVersionInfo>();
-
+            
             services.AddMediatR(typeof(PageService).Assembly);
             
             services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
