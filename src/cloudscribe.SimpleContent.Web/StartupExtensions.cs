@@ -135,7 +135,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.PageEditRouteName,
-               template: "edit/{slug?}"
+               template: "editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                );
 
@@ -159,7 +159,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.PageDeleteRouteName,
-               template: "delete/{id}"
+               template: "deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                );
 
@@ -194,7 +194,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
               name: ProjectConstants.FolderPageEditRouteName,
-              template: "{sitefolder}/edit/{slug?}"
+              template: "{sitefolder}/editpage/{slug?}"
               , defaults: new { controller = "Page", action = "Edit" }
               , constraints: new { name = siteFolderConstraint }
               );
@@ -222,7 +222,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
               name: ProjectConstants.FolderPageDeleteRouteName,
-              template: "{sitefolder}/delete/{id}"
+              template: "{sitefolder}/deletepage/{id}"
               , defaults: new { controller = "Page", action = "Delete" }
               , constraints: new { name = siteFolderConstraint }
               );
@@ -256,7 +256,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.PageEditRouteName,
-               template: prefix + "/edit/{slug?}"
+               template: prefix + "/editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                );
 
@@ -280,7 +280,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.PageDeleteRouteName,
-               template: prefix + "/delete/{id}"
+               template: prefix + "/deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                );
 
@@ -310,14 +310,14 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             routes.MapRoute(
                name: ProjectConstants.FolderNewPageRouteName,
-               template: "{sitefolder}/" + prefix + "/new/{parentSlug?}"
+               template: "{sitefolder}/" + prefix + "/newpage/{parentSlug?}"
                , defaults: new { controller = "Page", action = "NewPage" }
                , constraints: new { name = siteFolderConstraint }
                );
 
             routes.MapRoute(
                name: ProjectConstants.FolderPageEditRouteName,
-               template: "{sitefolder}/" + prefix + "/edit/{slug?}"
+               template: "{sitefolder}/" + prefix + "/editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                , constraints: new { name = siteFolderConstraint }
                );
@@ -345,7 +345,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             routes.MapRoute(
                name: ProjectConstants.FolderPageDeleteRouteName,
-               template: "{sitefolder}/" + prefix + "/delete/{id}"
+               template: "{sitefolder}/" + prefix + "/deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                , constraints: new { name = siteFolderConstraint }
                );
