@@ -98,6 +98,13 @@ namespace cloudscribe.SimpleContent.Web.Templating
                                 prop.SetValue(model, Convert.ToBoolean(formVal), null);
                             }      
                         }
+                        else if (prop.PropertyType == typeof(Guid?))
+                        {
+                            if (!string.IsNullOrWhiteSpace(formVal) && formVal.Length == 36)
+                            {
+                                prop.SetValue(model, new Guid(formVal), null);
+                            }
+                        }
                         else
                         {
                             if (!string.IsNullOrWhiteSpace(formVal))

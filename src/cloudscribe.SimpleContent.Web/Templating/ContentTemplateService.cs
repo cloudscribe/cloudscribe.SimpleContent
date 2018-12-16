@@ -166,7 +166,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
                 .ToList();
 
             result.TotalItems = list.Count;
-            result.Data = list.OrderBy(x => x.Title)
+            result.Data = list.OrderBy(x => x.GroupSort1).ThenBy(x => x.GroupSort2).ThenBy(x => x.Title)
                 .Skip(offset)
                 .Take(pageSize)
                 .ToList()
