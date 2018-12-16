@@ -66,6 +66,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1= "555555",
+                GroupSort2= "555544",
 
                 EditCss = new List<CssFile>()
                 {
@@ -176,6 +178,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555548",
 
                 EditCss = new List<CssFile>()
                 {
@@ -265,6 +269,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555545",
 
                 EditCss = new List<CssFile>()
                 {
@@ -354,6 +360,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555546",
 
                 EditCss = new List<CssFile>()
                 {
@@ -443,6 +451,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555547",
 
                 EditCss = new List<CssFile>()
                 {
@@ -525,6 +535,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 FormParserName = "DefaultModelFormParser",
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555549",
 
                 EditCss = new List<CssFile>()
                 {

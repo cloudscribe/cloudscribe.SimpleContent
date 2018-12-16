@@ -24,6 +24,10 @@ namespace cloudscribe.SimpleContent.Models
         public string Key { get; set; }
         public bool Enabled { get; set; }
         public string Title { get; set; }
+
+        public string GroupSort1 { get; set; } = "777777";
+        public string GroupSort2 { get; set; } = "777777";
+
         public string Description { get; set; }
         public string ModelType { get; set; }
         public string EditView { get; set; }
