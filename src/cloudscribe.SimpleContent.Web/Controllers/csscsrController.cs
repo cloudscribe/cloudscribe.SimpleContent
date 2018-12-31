@@ -47,6 +47,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             Log.LogDebug("resource found for " + resourceName);
 
+            var status = ETagGenerator.AddEtagForStream(HttpContext, resourceStream);
+            if (status != null) { return status; } //304
+
             return new FileStreamResult(resourceStream, contentType);
         }
 

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <VersionPrefix>4.0.5</VersionPrefix>
-    <AssemblyVersion>4.0.5</AssemblyVersion>
+    <VersionPrefix>4.0.6</VersionPrefix>
+    <AssemblyVersion>4.0.6</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog</PackageTags>
@@ -21,11 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Identity" Version="3.0.8" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="3.0.9" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.28" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.16" />
-    <PackageReference Include="cloudscribe.FileManager.Web" Version="3.0.12" />
+    <PackageReference Include="cloudscribe.Core.Identity" Version="3.0.10" />
+    <PackageReference Include="cloudscribe.Core.Models" Version="3.0.10" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.40" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.24" />
+    <PackageReference Include="cloudscribe.FileManager.Web" Version="3.0.13" />
     <PackageReference Include="cloudscribe.MetaWeblog" Version="2.1.5" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="2.1.2" />
     
