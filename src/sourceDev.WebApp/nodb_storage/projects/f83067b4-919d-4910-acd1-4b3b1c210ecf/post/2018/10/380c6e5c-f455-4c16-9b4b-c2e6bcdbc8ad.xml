@@ -5,28 +5,28 @@
   <slug>futurama</slug>
   <correlationkey></correlationkey>
   <author>admin</author>
-  <pubDate />
-  <lastModified>2018-10-25T12:41:36</lastModified>
+  <pubDate>2018-10-26T00:40:00.0000000Z</pubDate>
+  <lastModified>2018-12-31T12:20:41</lastModified>
   <excerpt></excerpt>
-  <content />
+  <content>&lt;p&gt;a future post&lt;/p&gt;</content>
   <contentType>html</contentType>
-  <imageUrl />
-  <thumbnailUrl />
+  <imageUrl></imageUrl>
+  <thumbnailUrl></thumbnailUrl>
   <createdUtc>2018-10-25T12:41:36</createdUtc>
   <createdByUser>admin</createdByUser>
-  <lastModifiedByUser />
-  <draftAuthor>admin</draftAuthor>
-  <draftContent>&lt;p&gt;a future post&lt;/p&gt;</draftContent>
-  <draftPubDate>2018-10-26T00:40:00.0000000Z</draftPubDate>
-  <templateKey />
-  <serializedModel />
+  <lastModifiedByUser></lastModifiedByUser>
+  <draftAuthor />
+  <draftContent />
+  <draftPubDate />
+  <templateKey></templateKey>
+  <serializedModel></serializedModel>
   <draftSerializedModel />
-  <serializer />
+  <serializer></serializer>
   <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf</blogId>
-  <ispublished>false</ispublished>
+  <ispublished>true</ispublished>
   <isFeatured>false</isFeatured>
-  <autoTeaser />
-  <teaserOverride />
+  <autoTeaser></autoTeaser>
+  <teaserOverride></teaserOverride>
   <suppressTeaser>false</suppressTeaser>
   <categories></categories>
   <comments></comments>

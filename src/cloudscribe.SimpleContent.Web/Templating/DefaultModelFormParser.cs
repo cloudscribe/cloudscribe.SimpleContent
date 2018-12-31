@@ -63,42 +63,42 @@ namespace cloudscribe.SimpleContent.Web.Templating
                             }
                                     
                         }
-                        else if(prop.PropertyType == typeof(decimal?))
+                        else if(prop.PropertyType == typeof(decimal?) || prop.PropertyType == typeof(decimal))
                         {
                             if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToDecimal(formVal), null);
                             }    
                         }
-                        else if (prop.PropertyType == typeof(int?))
+                        else if (prop.PropertyType == typeof(int?) || prop.PropertyType == typeof(int))
                         {
                             if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToInt32(formVal), null);
                             }     
                         }
-                        else if (prop.PropertyType == typeof(long?))
+                        else if (prop.PropertyType == typeof(long?) || prop.PropertyType == typeof(long))
                         {
                             if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToInt64(formVal), null);
                             }       
                         }
-                        else if (prop.PropertyType == typeof(double?))
+                        else if (prop.PropertyType == typeof(double?) || prop.PropertyType == typeof(double))
                         {
                             if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToDouble(formVal), null);
                             }     
                         }
-                        else if (prop.PropertyType == typeof(bool?))
+                        else if (prop.PropertyType == typeof(bool?) || prop.PropertyType == typeof(bool))
                         {
                             if (!string.IsNullOrWhiteSpace(formVal))
                             {
                                 prop.SetValue(model, Convert.ToBoolean(formVal), null);
                             }      
                         }
-                        else if (prop.PropertyType == typeof(Guid?))
+                        else if (prop.PropertyType == typeof(Guid?) || prop.PropertyType == typeof(Guid))
                         {
                             if (!string.IsNullOrWhiteSpace(formVal) && formVal.Length == 36)
                             {
