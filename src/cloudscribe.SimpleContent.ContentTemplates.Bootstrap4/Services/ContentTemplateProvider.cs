@@ -67,7 +67,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
                 GroupSort1= "555555",
-                GroupSort2= "555544",
+                GroupSort2= "555100",
 
                 EditCss = new List<CssFile>()
                 {
@@ -161,97 +161,6 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
         }
 
-        private ContentTemplate BuildListOfLinks()
-        {
-            var template = new ContentTemplate()
-            {
-                Key = "sct-ListOfLinks",
-                Title = _sr["A list of links with optional thumbnail per link and content above and below."],
-                Description = _sr["This is a simple non-paginated list, suitable for modestly sized lists that can fit on a single page."],
-                EditView = "ContentTemplates/ListOfLinksEdit",
-                RenderView = "ContentTemplates/ListOfLinksRender",
-                ScreenshotUrl = "",
-                ProjectId = "*",
-                AvailbleForFeature = "*",
-                Enabled = true,
-                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
-                FormParserName = "DefaultModelFormParser",
-                SerializerName = "Json",
-                ValidatorName = "DefaultTemplateModelValidator",
-                GroupSort1 = "555555",
-                GroupSort2 = "555548",
-
-                EditCss = new List<CssFile>()
-                {
-                    new CssFile
-                    {
-                        Url = "/cr/css/dropzone.min.css",
-                        Environment = "any",
-                        Sort = 1
-                    },
-                    new CssFile
-                    {
-                        Url = "/cr/css/croppie.min.css",
-                        Environment = "any",
-                        Sort = 2
-                    },
-                    new CssFile
-                    {
-                        Url = "/cr/css/croppie-cloudscribe.css",
-                        Environment = "any",
-                        Sort = 3
-                    }
-                },
-                EditScripts = new List<ScriptFile>()
-                {
-                    new ScriptFile()
-                    {
-                        Url = "/cr/js/dropzone.min.js",
-                        Environment = "any",
-                        Sort = 1
-                    },
-                    new ScriptFile()
-                    {
-                        Url = "/cr/js/croppie.min.js",
-                        Environment = "any",
-                        Sort = 2
-                    },
-                    new ScriptFile()
-                    {
-                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
-                        Environment = "any",
-                        Sort = 3
-                    },
-                    new ScriptFile()
-                    {
-                        Url = "/cr/js/knockout-3.4.2.js",
-                        Environment = "any",
-                        Sort = 4
-                    },
-                    new ScriptFile()
-                    {
-                        Url = "/sctr/js/cst-link-list.min.js",
-                        Environment = "any",
-                        Sort = 5
-                    }
-                },
-                
-                RenderCss = new List<CssFile>()
-                {
-
-                },
-                RenderScripts = new List<ScriptFile>()
-                {
-
-                }
-                
-            };
-
-            return template;
-
-        }
-
-
         private ContentTemplate BuildSectionsWithImages()
         {
             var template = new ContentTemplate()
@@ -270,7 +179,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
                 GroupSort1 = "555555",
-                GroupSort2 = "555545",
+                GroupSort2 = "555200",
 
                 EditCss = new List<CssFile>()
                 {
@@ -322,7 +231,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     //}
 
                 },
-                
+
                 RenderCss = new List<CssFile>()
                 {
                     new CssFile
@@ -336,7 +245,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 {
 
                 }
-                
+
             };
 
             return template;
@@ -361,7 +270,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
                 GroupSort1 = "555555",
-                GroupSort2 = "555546",
+                GroupSort2 = "555300",
 
                 EditCss = new List<CssFile>()
                 {
@@ -452,7 +361,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
                 GroupSort1 = "555555",
-                GroupSort2 = "555547",
+                GroupSort2 = "555400",
 
                 EditCss = new List<CssFile>()
                 {
@@ -517,7 +426,96 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
         }
 
+        private ContentTemplate BuildListOfLinks()
+        {
+            var template = new ContentTemplate()
+            {
+                Key = "sct-ListOfLinks",
+                Title = _sr["A list of links with optional thumbnail per link and content above and below."],
+                Description = _sr["This is a simple non-paginated list, suitable for modestly sized lists that can fit on a single page."],
+                EditView = "ContentTemplates/ListOfLinksEdit",
+                RenderView = "ContentTemplates/ListOfLinksRender",
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555500",
 
+                EditCss = new List<CssFile>()
+                {
+                    new CssFile
+                    {
+                        Url = "/cr/css/dropzone.min.css",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie-cloudscribe.css",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                },
+                EditScripts = new List<ScriptFile>()
+                {
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/dropzone.min.js",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/croppie.min.js",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
+                        Environment = "any",
+                        Sort = 3
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/knockout-3.4.2.js",
+                        Environment = "any",
+                        Sort = 4
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/sctr/js/cst-link-list.min.js",
+                        Environment = "any",
+                        Sort = 5
+                    }
+                },
+                
+                RenderCss = new List<CssFile>()
+                {
+
+                },
+                RenderScripts = new List<ScriptFile>()
+                {
+
+                }
+                
+            };
+
+            return template;
+
+        }
+        
         private ContentTemplate BuildBingLocationMap()
         {
             var template = new ContentTemplate()
@@ -536,7 +534,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
                 GroupSort1 = "555555",
-                GroupSort2 = "555549",
+                GroupSort2 = "555600",
 
                 EditCss = new List<CssFile>()
                 {
