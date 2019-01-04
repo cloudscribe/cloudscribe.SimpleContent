@@ -53,6 +53,10 @@
                         <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
                         <span class="invalid-feedback" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
                         <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
+                        <div class="form-group form-check">
+                            <input data-bind="checked: OpensInNewWindow, attr:{ id: 'chkNewWindow' + $index() }" type="checkbox" class="form-check-input">
+                            <label data-bind="attr:{ 'for': 'chkNewWindow' + $index() }" class="form-check-label">@sr["Opens in new window"]</label>
+                        </div>
                     </div>
                     <div class="col-1">
                         <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
@@ -78,6 +82,10 @@
             <div class="form-group">
                 <label for="NewDescription">@sr["Link Description - optional"]</label>
                 <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
+            </div>
+            <div class="form-group form-check">
+                <input data-bind="checked: newItemOpensInNewWindow" id="chkNewWindow" type="checkbox" class="form-check-input">
+                <label for="chkNewWindow" class="form-check-label">@sr["Opens in new window"]</label>
             </div>
             <label>@sr["Link Thumbnail - optional"]</label>
             <div class="d-flex align-items-stretch mb-2">

@@ -26,7 +26,11 @@ ko.extenders.isValidUrl = function(target, overrideMessage) {
     var _testEle = null;
     function validate(newValue) {
         if (newValue) {
-
+            if (newValue.startsWith("/")) {
+                target.hasError(false);
+                target.validationMessage("");
+                return;
+            }
             if (!self._testEle) {
                 _testEle = document.createElement('input');
                 _testEle.setAttribute('type', 'url');
@@ -54,7 +58,7 @@ ko.extenders.isValidUrl = function(target, overrideMessage) {
 
 
 //class to represent a list item
-function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
+function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow) {
     var self = this;
 
     self.Title = ko.observable(decodeEncodedJson(title)).extend({ required: "Title is required" });
@@ -64,18 +68,20 @@ function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, lin
     self.ThumbnailUrl = ko.observable(thumbnailUrl);
     self.LinkUrl = ko.observable(linkUrl).extend({ required: "Link Url is required", isValidUrl: "Must be a valid url" });
     self.Sort = ko.observable(sort);
+    self.OpensInNewWindow = ko.observable(opensInNewWindow);
 
     self.incrementSort = function () {
         self.Sort(self.Sort() + 3);
-    }
+    };
     self.decrementSort = function () {
         var newSort = self.Sort() - 3;
         if (newSort < 0) { newSort = 0; }
         self.Sort(newSort);
-    }
+    };
     self._testEle = null;
 
     self.isValidUrl = function (url) {
+        if (url.startsWith("/")) { return true; }
         if (!self._testEle) {
             self._testEle = document.createElement('input');
             self._testEle.setAttribute('type', 'url');
@@ -83,7 +89,7 @@ function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, lin
         self._testEle.value = url;
         var result = self._testEle.validity.valid;
         return result;
-    }
+    };
 }
 
 function ItemListViewModel(initialData) {
@@ -91,31 +97,41 @@ function ItemListViewModel(initialData) {
     self.hiddenField = document.getElementById("ItemsJson");
 
     self.handleSortItemChanged = function (sortVal) {
-        self.sortItems(); 
+        self.sortItems();
         var sort = 1;
         for (i = 0; i < self.Items().length; i++) {
             var item = self.Items()[i];
             item.Sort.silentUpdate(sort); //avoid infinite loop of event by silent update
             sort += 2;
-           
+
         }
-        self.sortItems(); 
-    }
+        self.sortItems();
+    };
     
     self.Items = ko.observableArray(ko.utils.arrayMap(initialData, function (item) {
-        var item = new ListItem(item.Title, item.Description, item.FullSizeUrl, item.ResizedUrl, item.ThumbnailUrl, item.LinkUrl, item.Sort);
-        item.Sort.subscribe(self.handleSortItemChanged);
-        return item;
+        var newItem = new ListItem(
+            item.Title,
+            item.Description,
+            item.FullSizeUrl,
+            item.ResizedUrl,
+            item.ThumbnailUrl,
+            item.LinkUrl,
+            item.Sort,
+            item.OpensInNewWindow
+        );
+
+        newItem.Sort.subscribe(self.handleSortItemChanged);
+        return newItem;
     }));
     
-    self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
-        var item = new ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort);
+    self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow) {
+        var item = new ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow);
         item.Sort.subscribe(self.handleSortItemChanged);
         self.Items.push(item);
         window.thisPage = window.thisPage || {};
         window.thisPage.hasUnsavedChanges = true;
 
-    }
+    };
 
     self.newItemTitle = ko.observable(null).extend({ required: "Title is required" });
     self.newItemDescription = ko.observable(null);
@@ -123,57 +139,67 @@ function ItemListViewModel(initialData) {
     self.newItemResizedUrl = ko.observable(null);
     self.newItemThumbnailUrl = ko.observable(null);
     self.newItemLinkUrl = ko.observable(null).extend({ isValidUrl: null });
+    self.newItemOpensInNewWindow = ko.observable(false);
 
     self.newItemSort = function () {
         if (self.Items().length === 0) { return 1; }
-        var result = Math.max.apply(Math, self.Items().map(function (o) { return o.Sort(); }))
+        var result = Math.max.apply(Math, self.Items().map(function (o) { return o.Sort(); }));
         return result + 2;
-    }
+    };
    
     self.addNewItem = function () {
-        self.addItem(self.newItemTitle(), self.newItemDescription(), self.newItemFullSizeUrl(), self.newItemResizedUrl(), self.newItemThumbnailUrl(), self.newItemLinkUrl(), self.newItemSort());
+        self.addItem(self.newItemTitle(),
+            self.newItemDescription(),
+            self.newItemFullSizeUrl(),
+            self.newItemResizedUrl(),
+            self.newItemThumbnailUrl(),
+            self.newItemLinkUrl(),
+            self.newItemSort(),
+            self.newItemOpensInNewWindow()
+        );
         self.newItemTitle(null);
         self.newItemDescription(null);
         self.newItemFullSizeUrl(null);
         self.newItemResizedUrl(null);
         self.newItemThumbnailUrl(null);
         self.newItemLinkUrl(null);
+        self.newItemOpensInNewWindow(false);
         window.cloudscribeDropAndCrop.clearAllItems();
-    }
+    };
 
     self.removeItem = function (item) {
         self.Items.remove(item);
         window.thisPage = window.thisPage || {};
         window.thisPage.hasUnsavedChanges = true;
-    }
+    };
 
     self.getCssClass = function (index) {
         if (index === 0) { return "carousel-item active"; }
         return "carousel-item";
-    }
+    };
     
     self.dropZoneSuccess = function (file, serverResponse) {
         //console.log(serverResponse);
         self.newItemFullSizeUrl(serverResponse[0].originalUrl);
         self.newItemResizedUrl(serverResponse[0].resizedUrl);
-        self.newItemThumbnailUrl(serverResponse[0].thumbUrl)
-    }
+        self.newItemThumbnailUrl(serverResponse[0].thumbUrl);
+    };
 
     window.DropZoneSuccessHandler = self.dropZoneSuccess;
 
     self.handleCropSave = function (resizedUrl) {
         self.newItemResizedUrl(resizedUrl);
-    }
+    };
     window.HandleCropResult = self.handleCropSave;
 
     self.serverFileSelected = function (url) {
         self.newItemResizedUrl(url);
-    }
+    };
     window.ServerFileSelected = self.serverFileSelected;
 
     self.filteredItems = ko.computed(function () {
         return ko.utils.arrayFilter(self.Items(), function (item) {
-            return item.LinkUrl.hasError() == false && item.Title.hasError() == false;
+            return item.LinkUrl.hasError() === false && item.Title.hasError() === false;
         });
     });
     
@@ -185,8 +211,8 @@ function ItemListViewModel(initialData) {
             if (a.Sort() < b.Sort()) { return -1; }
             if (a.Sort() > b.Sort()) { return 1; }
             return 0;
-        })
-    }
+        });
+    };
 
     self._testEle = null;
 
