@@ -26,5 +26,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.ViewModels
         public string Description { get; set; }
 
         public int Sort { get; set; } = 3;
+
+        public bool OpensInNewWindow { get; set; }
     }
 }

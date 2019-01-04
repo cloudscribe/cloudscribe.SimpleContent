@@ -499,6 +499,12 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                         Environment = "any",
                         Sort = 5
                     }
+                    //new ScriptFile()
+                    //{
+                    //    Url = "/js/cst-link-list.js",
+                    //    Environment = "any",
+                    //    Sort = 5
+                    //}
                 },
                 
                 RenderCss = new List<CssFile>()

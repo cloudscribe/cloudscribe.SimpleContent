@@ -1,6 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
 @using cloudscribe.SimpleContent.ContentTemplates
 @using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using cloudscribe.SimpleContent.ContentTemplates.ViewModels
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject ILinkListOptionsProvider optionsProvider
 @{
@@ -9,6 +10,13 @@
     var options = await optionsProvider.ResolveLinkListOptions(Context.Request.Host.Host, Context.Request.Path);
     var imageStyle = "height:" + options.ImageRenderMaxHeight.ToString() + "px;";
 }
+@functions {
+    public string GetTarget(ListItemModel item)
+    {
+        if(item.OpensInNewWindow) { return "_blank"; }
+        return null;
+    }
+}
 <div class="content-top">
     @Html.Raw(Model.ContentAbove)
 </div>
@@ -16,8 +24,8 @@
     @for (int i = 0; i < Model.Items.Count; i++)
     {
         <div class="clearfix linklist-item">
-            <h2 class="h4"><a href="@sorted[i].LinkUrl" target="_blank">@sorted[i].Title</a></h2>
-            <a class="" target="_blank" href="@sorted[i].LinkUrl">
+            <h2 class="h4"><a href="@sorted[i].LinkUrl" target="@GetTarget(sorted[i])">@sorted[i].Title</a></h2>
+            <a class="" target="@GetTarget(sorted[i])" href="@sorted[i].LinkUrl">
                 @if (!string.IsNullOrWhiteSpace(sorted[i].ResizedUrl))
                 {
                     <img class="float-left mr-2" src="@sorted[i].ResizedUrl" style="@imageStyle" alt="@sorted[i].Description" />
