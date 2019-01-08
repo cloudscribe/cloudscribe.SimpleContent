@@ -1,5 +1,24 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 @inject IStringLocalizer<SimpleContent> sr
-
-<div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
-
+@inject IContentTemplateService templateService;
+@{
+    string dynamicViewName = null;
+    object templateModel = null;
+    if (Model.CurrentPage != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.TemplateKey))
+    {
+        var template = await templateService.GetTemplate(Model.CurrentPage.ProjectId, Model.CurrentPage.TemplateKey);
+        if (template != null && !string.IsNullOrWhiteSpace(template.DynamicRenderPartialView))
+        {
+            templateModel = templateService.DesrializeTemplateModel(Model.CurrentPage, template);
+            dynamicViewName = template.DynamicRenderPartialView;
+        }
+    }
+}
+@if (templateModel != null && !string.IsNullOrWhiteSpace(dynamicViewName))
+{
+    <partial name="@dynamicViewName" model="@templateModel" />
+}
+else
+{
+    <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
+}

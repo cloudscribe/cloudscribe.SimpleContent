@@ -435,6 +435,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 Description = _sr["This is a simple non-paginated list, suitable for modestly sized lists that can fit on a single page."],
                 EditView = "ContentTemplates/ListOfLinksEdit",
                 RenderView = "ContentTemplates/ListOfLinksRender",
+                //DynamicRenderPartialView = "LinksRenderPartial",
                 ScreenshotUrl = "",
                 ProjectId = "*",
                 AvailbleForFeature = "*",
