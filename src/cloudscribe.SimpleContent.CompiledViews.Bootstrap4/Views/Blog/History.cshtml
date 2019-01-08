@@ -8,8 +8,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 <a asp-route="@blogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.ContentSlug" itemprop="url">@sr["View current version"]</a>
-@{ await Html.RenderPartialAsync("HistoryGridPartial", Model); }
-
+<partial name="HistoryGridPartial" model="@Model" />
 <cs-pager asp-route="@blogRoutes.PostHistoryRouteName"
           asp-route-slug="@Model.ContentSlug"
           asp-route-sortmode="@Model.SortMode"

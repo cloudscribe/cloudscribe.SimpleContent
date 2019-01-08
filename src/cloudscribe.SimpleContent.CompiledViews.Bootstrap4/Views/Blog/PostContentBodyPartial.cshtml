@@ -1,0 +1,3 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+<div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPost))</div>

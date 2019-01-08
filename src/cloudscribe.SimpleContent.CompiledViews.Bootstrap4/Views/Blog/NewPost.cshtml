@@ -9,10 +9,10 @@
 @if (Model.CountOfTemplates > 0)
 {
     <h3>@sr["Create Post From Template"]</h3>
-    await Html.RenderPartialAsync("NewContentPartial", Model); 
+    <partial name="NewContentPartial" model="@Model" />
 }
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
+    <partial name="_UnobtrusiveValidationScriptsPartial" />
     <script src="~/cr/js/unobtrusive-validation-bs4.min.js"></script>
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
     <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>

@@ -5,26 +5,26 @@
     ViewData["AsidePrimaryToggle"] = "show";
 }
 @section Meta {
-    @{await Html.RenderPartialAsync("BlogMetaPartial", Model); }
+    <partial name="BlogMetaPartial" model="@Model" />
 }
 @section Styles {
-    @{await Html.RenderPartialAsync("BlogStylePartial", Model); }
+    <partial name="BlogStylePartial" model="@Model" />
 }
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("ToolsPartial", Model);
+        <partial name="ToolsPartial" model="@Model" />
     }
 }
 @if (Model.ProjectSettings.ShowTitle)
 {
-    await Html.RenderPartialAsync("BlogHeaderPartial", Model.ProjectSettings);
+    <partial name="BlogHeaderPartial" model="@Model" />
 }
 <div itemscope itemtype="http://schema.org/Blog" class="blogroot">
-    @{await Html.RenderPartialAsync("PostDetailPartial", Model); }
+    <partial name="PostDetailPartial" model="@Model" />
 </div>
 @section AsidePrimary {
-    @{await Html.RenderPartialAsync("SideBarPartial", Model); }
+    <partial name="SideBarPartial" model="@Model" />
 }
 @section Scripts {
     @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
@@ -33,7 +33,7 @@
     }
     else if (Model.CommentsAreOpen)
     {
-        await Html.RenderPartialAsync("CommentScriptsPartial");
+        <partial name="CommentScriptsPartial" />
     }
-    @{await Html.RenderPartialAsync("BlogScriptsPartial", Model); }
+    <partial name="BlogScriptsPartial" model="@Model" />
 }

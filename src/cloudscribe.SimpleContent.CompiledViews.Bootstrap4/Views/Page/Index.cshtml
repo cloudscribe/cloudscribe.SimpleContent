@@ -1,10 +1,10 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 
 @section Meta {
-    @{await Html.RenderPartialAsync("MetaPartial", Model); }
+    <partial name="MetaPartial" model="@Model" />
 }
 @section Styles {
-    @{await Html.RenderPartialAsync("StylePartial", Model); }
+    <partial name="StylePartial" model="@Model" />
     @if (Model.CurrentPage != null)
     {
         <environment names="Development">
@@ -39,10 +39,10 @@
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("ToolsPartial", Model);
+        <partial name="ToolsPartial" model="@Model" />
     }
 }
-@{await Html.RenderPartialAsync("PageDetailPartial", Model); }
+<partial name="PageDetailPartial" model="@Model" />
 @if (Model.ProjectSettings.ShowRecentPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
 {
     @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
@@ -67,7 +67,7 @@
             }
         </environment>
     }
-    @{await Html.RenderPartialAsync("PageScriptsPartial", Model); }
+    <partial name="PageScriptsPartial" model="@Model" />
 
     @if (Model.Template != null)
     {
