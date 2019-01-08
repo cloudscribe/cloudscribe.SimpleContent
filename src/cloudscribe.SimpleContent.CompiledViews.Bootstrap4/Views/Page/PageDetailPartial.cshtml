@@ -22,17 +22,17 @@
          data-approve-comment-url="@Url.Action("AjaxApproveComment", "Page")"
          data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Page")"
          itemscope itemtype="http://schema.org/Article">
-    @{await Html.RenderPartialAsync("DraftInfoPartial", Model); }
-    @{await Html.RenderPartialAsync("HistoryInfoPartial", Model); }
+    <partial name="DraftInfoPartial" model="@Model" />
+    <partial name="HistoryInfoPartial" model="@Model" />
     @if (Model.CurrentPage.ShowHeading)
     {
         <header class="">
             <h1 id="article-title" itemprop="headline name">@Model.CurrentPage.Title</h1>
-            @{await Html.RenderPartialAsync("PageTopPartial", Model); }
+            <partial name="PageTopPartial" model="@Model" />
         </header>
     }
-    <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
-    @{await Html.RenderPartialAsync("PageBottomPartial", Model); }
+    <partial name="PageContentBodyPartial" model="@Model" />
+    <partial name="PageBottomPartial" model="@Model" />
     @if (!Model.CurrentPage.ShowHeading)
     {
         <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta>
@@ -77,7 +77,7 @@
     }
     @if ((Model.CurrentPage.ShowComments) && (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName)) && !Model.ShowingDraft && !Model.HistoryId.HasValue)
     {
-        await Html.RenderPartialAsync("DisqusCommentsPartial", Model);
+        <partial name="DisqusCommentsPartial" model="@Model" />
     }
 </article>
 @if (Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)

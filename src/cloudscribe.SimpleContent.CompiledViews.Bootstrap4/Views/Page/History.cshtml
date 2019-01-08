@@ -7,8 +7,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 <a asp-route="@pageRoutes.PageRouteName" asp-route-slug="@Model.ContentSlug" itemprop="url">@sr["View current version"]</a>
-@{ await Html.RenderPartialAsync("HistoryGridPartial", Model); }
-
+<partial name="HistoryGridPartial" model="@Model" />
 <cs-pager asp-route="@pageRoutes.PageHistoryRouteName"
           asp-route-slug="@Model.ContentSlug"
           asp-route-pagesize="@Model.History.PageSize"

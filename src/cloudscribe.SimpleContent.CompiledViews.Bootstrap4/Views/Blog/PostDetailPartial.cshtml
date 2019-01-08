@@ -42,8 +42,8 @@
          data-approve-comment-url="@Url.Action("AjaxApproveComment", "Blog")"
          data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Blog")"
          itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
-    @{await Html.RenderPartialAsync("DraftInfoPartial", Model); }
-    @{await Html.RenderPartialAsync("HistoryInfoPartial", Model); }
+    <partial name="DraftInfoPartial" model="@Model" />
+    <partial name="HistoryInfoPartial" model="@Model" />
     <header class="jumbotron">
         <h1 itemprop="headline name">@Model.CurrentPost.Title</h1>
         <div class="bh">
@@ -82,8 +82,8 @@
             }
         </div>
     </header>
-    @{ await Html.RenderPartialAsync("NextPreviousPartial", Model); }
-    <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPost))</div>
+    <partial name="NextPreviousPartial" model="@Model" />
+    <partial name="PostContentBodyPartial" model="@Model" />
     @{
         var imageUrl = Model.ExtractFirstImageUrl(Model.CurrentPost, Url);
         var imageSize = Model.ExtractFirstImageDimensions(Model.CurrentPost);
@@ -121,11 +121,11 @@
     {
         @if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
         {
-            await Html.RenderPartialAsync("CommentWrapperPartial", Model);
+            <partial name="CommentWrapperPartial" model="@Model" />
         }
         else
         {
-            await Html.RenderPartialAsync("DisqusCommentsPartial", Model);
+            <partial name="DisqusCommentsPartial" model="@Model" />
         }
     }
 

@@ -1,0 +1,5 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@inject IStringLocalizer<SimpleContent> sr
+
+<div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPage))</div>
+
