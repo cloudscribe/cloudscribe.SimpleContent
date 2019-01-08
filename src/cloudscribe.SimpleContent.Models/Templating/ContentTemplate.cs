@@ -32,6 +32,7 @@ namespace cloudscribe.SimpleContent.Models
         public string ModelType { get; set; }
         public string EditView { get; set; }
         public string RenderView { get; set; }
+        public string DynamicRenderPartialView { get; set; }
         public string ScreenshotUrl { get; set; }
 
         public List<ScriptFile> EditScripts { get; set; }
