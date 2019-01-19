@@ -72,6 +72,10 @@
     <PackageReference Include="cloudscribe.Web.Localization" Version="2.0.*" />
 
     <PackageReference Include="Microsoft.AspNetCore.App" />
+
+    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.138" />
+
+    <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.138" />
     
   </ItemGroup>
   
