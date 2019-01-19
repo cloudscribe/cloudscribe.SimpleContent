@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var storage = config["DevOptions:DbPlatform"];
             var efProvider = config["DevOptions:EFProvider"];
+            var useMiniProfiler = config.GetValue<bool>("DevOptions:EnableMiniProfiler");
 
             switch (storage)
             {
@@ -25,10 +26,21 @@ namespace Microsoft.Extensions.DependencyInjection
                     services.AddCloudscribeLoggingNoDbStorage(config);
                     services.AddNoDbStorageForSimpleContent(useSingletons);
 
+                    if (useMiniProfiler)
+                    {
+                        services.AddMiniProfiler();
+                    }
+
                     break;
 
                 case "ef":
                 default:
+
+                    if (useMiniProfiler)
+                    {
+                        services.AddMiniProfiler()
+                            .AddEntityFramework();
+                    }
 
                     switch (efProvider)
                     {

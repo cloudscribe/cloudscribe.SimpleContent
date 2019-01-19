@@ -76,6 +76,12 @@ namespace sourceDev.WebApp
             IOptions<RequestLocalizationOptions> localizationOptionsAccessor
             )
         {
+            var useMiniProfiler = _configuration.GetValue<bool>("DevOptions:EnableMiniProfiler");
+            if(useMiniProfiler)
+            {
+                app.UseMiniProfiler();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
