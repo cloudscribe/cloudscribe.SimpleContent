@@ -47,14 +47,14 @@
   
   
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.40" />
-    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.19" />
-    <PackageReference Include="cloudscribe.Web.StaticFiles" Version="1.0.8" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.41" />
+    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.21" />
+    <PackageReference Include="cloudscribe.Web.StaticFiles" Version="1.0.9" />
    
     
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="3.0.9" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.MSSQL" Version="3.0.9" />
-    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="3.0.9" />
+    <PackageReference Include="cloudscribe.Core.Storage.EFCore.MySql" Version="3.0.10" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.pgsql" Version="3.0.8" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.PostgreSql" Version="3.0.9" />
     <PackageReference Include="cloudscribe.Core.Storage.EFCore.SQLite" Version="3.0.10" />
@@ -74,7 +74,6 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
 
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.138" />
-
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.138" />
     
   </ItemGroup>
