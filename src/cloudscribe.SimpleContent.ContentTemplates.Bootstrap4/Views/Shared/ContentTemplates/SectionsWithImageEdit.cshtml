@@ -20,7 +20,7 @@
     }
 }
 <p>@sr["Sections with no content body will not be shown even if they have images."]</p>
-@{ await Html.RenderPartialAsync("SectionsWithImageEditLayoutSelector", Model);}
+<partial name="SectionsWithImageEditLayoutSelector" model="Model" />
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
         <a id="cedit-tab1" class="nav-link active" href="#tabCol1" data-toggle="tab" role="tab" aria-controls="tabCol1" aria-selected="true">@sr["Section 1"]</a>

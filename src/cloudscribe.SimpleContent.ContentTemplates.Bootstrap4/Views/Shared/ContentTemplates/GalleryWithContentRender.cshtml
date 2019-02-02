@@ -5,4 +5,5 @@
     Layout = "_LayoutEmpty";
     Model.Items = Model.Items.OrderBy(x => x.Sort).ToList();
 }
-@{ await Html.RenderPartialAsync(Model.Layout, Model);}
+<partial name="@Model.Layout" model="Model" />
+

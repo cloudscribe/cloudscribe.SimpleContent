@@ -4,8 +4,7 @@
     ViewData["Title"] = sr["Content Edit History"];
 }
 <h1>@ViewData["Title"]</h1>
-@{ await Html.RenderPartialAsync("HistoryGridPartial", Model); }
-
+<partial name="HistoryGridPartial" model="Model" />
 <cs-pager asp-action="Index"
           asp-controller="ContentHistory"
           asp-route-contentsource="@Model.ContentSource"

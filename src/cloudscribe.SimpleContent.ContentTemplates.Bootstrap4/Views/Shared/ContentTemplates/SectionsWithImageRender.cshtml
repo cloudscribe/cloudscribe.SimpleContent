@@ -2,4 +2,4 @@
 @{
     Layout = "_LayoutEmpty";
 }
-@{ await Html.RenderPartialAsync(Model.Layout, Model);}
+<partial name="@Model.Layout" model="Model" />

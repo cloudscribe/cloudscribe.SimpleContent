@@ -4,12 +4,12 @@
     <meta name="robots" content="noindex, follow" />
 }
 @section Styles {
-    @{await Html.RenderPartialAsync("StylePartial", Model); }
+    <partial name="StylePartial" model="Model" />
 }
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("ToolsPartial", Model);
+        <partial name="ToolsPartial" model="Model" />
     }
 }
 @if (Model.CurrentPage.ShowHeading)

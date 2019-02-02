@@ -11,13 +11,13 @@
                 Model.TmpComment = comment;
                 if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || Model.CanEdit)
                 {
-                    await Html.RenderPartialAsync("CommentPartial", Model);
+                    <partial name="CommentPartial" model="Model" />
                 }
             }
         </section>
     }
     @if (Model.CommentsAreOpen)
     {
-        await Html.RenderPartialAsync("CommentFormPartial", Model);
+        <partial name="CommentFormPartial" model="Model" />
     }
 }

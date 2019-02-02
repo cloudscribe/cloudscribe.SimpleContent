@@ -38,7 +38,7 @@
     <div class="tab-pane pt-2 active" id="tabMain" role="tabpanel" aria-labelledby="cedit-tab1">
         <input id="ItemsConfig" type="hidden" value="@itemsJson" />
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
-        @{ await Html.RenderPartialAsync("GalleryWithContentEditLayoutSelector", Model);}
+        <partial name="GalleryWithContentEditLayoutSelector" model="Model" />
         <fieldset class="border p-2 mb-2">
             <legend class="w-auto">@sr["Current Images"]</legend>
             <div data-bind="visible: Items().length === 0">
