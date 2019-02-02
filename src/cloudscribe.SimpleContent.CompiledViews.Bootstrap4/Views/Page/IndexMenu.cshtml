@@ -3,12 +3,12 @@
     <meta name="robots" content="noindex, follow" />
 }
 @section Styles {
-    @{await Html.RenderPartialAsync("StylePartial", Model); }
+    <partial name="StylePartial" model="@Model" />
 }
 @section Toolbar {
     @if (Model.CanEdit)
     {
-        await Html.RenderPartialAsync("ToolsPartial", Model);
+        <partial name="ToolsPartial" model="@Model" />
     }
 }
 @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "RootNode" })

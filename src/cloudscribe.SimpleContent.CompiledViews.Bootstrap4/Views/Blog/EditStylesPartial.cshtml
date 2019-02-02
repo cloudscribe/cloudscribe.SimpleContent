@@ -1,5 +1,5 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
-@{ await Html.RenderPartialAsync("DatePickerBs4Css"); }
+<link rel="stylesheet" href="~/cr/css/bootstrap4-datetimepicker.min.css" />
 @if (Model.ContentType == "markdown")
 {
     <link rel="stylesheet" href="~/cr/css/simplemde.min.css" />

@@ -5,10 +5,9 @@
     var themeSettings = themeHelper.GetThemeSettings();
 }
 @section Styles {
-    @{await Html.RenderPartialAsync("TreeStylePartial"); }
+    <partial name="TreeStylePartial" />
 }
-
-@{await Html.RenderPartialAsync("TreeMainPartial", Model); }
+<partial name="TreeMainPartial" model="Model" />
 @section Scripts {
-    @{await Html.RenderPartialAsync("TreeScriptsPartial"); }
+    <partial name="TreeScriptsPartial" />
 }

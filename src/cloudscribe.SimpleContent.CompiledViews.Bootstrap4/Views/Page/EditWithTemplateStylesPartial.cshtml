@@ -1,5 +1,5 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditWithTemplateViewModel
-@{ await Html.RenderPartialAsync("DatePickerBs4Css"); }
+<link rel="stylesheet" href="~/cr/css/bootstrap4-datetimepicker.min.css" />
 <environment names="Development">
     @foreach (var c in Model.Template.EditCss.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
     {

@@ -9,18 +9,16 @@
     ViewData["SideNavVisible"] = true;
 }
 @section Styles {
-    @{await Html.RenderPartialAsync("TreeStylePartial"); }
+    <partial name="TreeStylePartial" />
 }
-
-@{await Html.RenderPartialAsync("TreeMainPartial", Model); }
-
+<partial name="TreeMainPartial" model="Model" />
 @section SideNav {
-    @{ await Html.RenderPartialAsync("AdminSideNav"); }
+    <partial name="AdminSideNav" />
 }
 @section Toolbar{
-    @{ await Html.RenderPartialAsync("AdminSideNavToggle"); }
+    <partial name="AdminSideNavToggle" />
 }
 @section Scripts {
-    @{ await Html.RenderPartialAsync("AdminSideNavScripts"); }
-    @{await Html.RenderPartialAsync("TreeScriptsPartial"); }
+    <partial name="AdminSideNavScripts" />
+    <partial name="TreeScriptsPartial" />
 }
