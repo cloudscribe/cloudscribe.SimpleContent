@@ -105,19 +105,7 @@
                     <label asp-for="MenuOnly" class="form-check-label">@sr["No Content Only Show Child Menu"]</label>
                 </div>
             </div>
-            @if (string.IsNullOrEmpty(Model.DisqusShortname))
-            {
-                <input asp-for="ShowComments" type="hidden" />
-            }
-            else
-            {
-                <div class="form-group">
-                    <div class="form-check">
-                        <input asp-for="ShowComments" class="form-check-input" />
-                        <label asp-for="ShowComments" class="form-check-label">@sr["Enable Comments"]</label>
-                    </div>
-                </div>
-            }
+            <partial name="EditCommentsEnabledPartial" model="Model" />
             <div class="form-group">
                 <label asp-for="PageOrder">@sr["Page Order"]</label>
                 <input asp-for="PageOrder" class="form-control" data-toggle="tooltip" title='@sr["This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order."]' />
