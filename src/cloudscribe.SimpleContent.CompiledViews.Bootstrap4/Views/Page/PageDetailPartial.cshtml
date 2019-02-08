@@ -75,10 +75,7 @@
     {
         @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
     }
-    @if ((Model.CurrentPage.ShowComments) && (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName)) && !Model.ShowingDraft && !Model.HistoryId.HasValue)
-    {
-        <partial name="DisqusCommentsPartial" model="@Model" />
-    }
+   <partial name="CommentWrapperPartial" model="@Model" />
 </article>
 @if (Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
 {
