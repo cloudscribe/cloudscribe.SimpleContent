@@ -210,6 +210,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.Month = month;
             model.Day = day;
 
+            var breadCrumbHelper = new TailCrumbUtility(HttpContext);
+            var crumbText = year.ToString() + "-" + month.ToString("00");
+            breadCrumbHelper.AddTailCrumb("archive", crumbText, "");
+
             return View("Archive", model);
         }
 
@@ -220,6 +224,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             string category = "",
             int page = 1)
         {
+            var breadCrumbHelper = new TailCrumbUtility(HttpContext);
+            breadCrumbHelper.AddTailCrumb("category", category, "");
+
             return await Index(cancellationToken, category, page);
         }
         
