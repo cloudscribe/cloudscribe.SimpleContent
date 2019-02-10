@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-05
-// Last Modified:			2018-06-30
+// Last Modified:			2019-02-10
 // 
 
 using cloudscribe.Core.Models;
@@ -50,7 +50,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
 
 
-        //public string AllowedEditRoles { get; set; } = "Administrators";
+        public string AboutContent { get; set; } 
+
 
 
         // if true automatically add the blog index

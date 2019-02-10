@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					
-// Last Modified:			2018-03-15
+// Last Modified:			2019-02-10
 // 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -66,6 +66,8 @@ namespace cloudscribe.SimpleContent.Models
         string TwitterPublisher { get; set; }
         string TwitterCreator { get; set; }
         string DefaultContentType { get; set; }
+
+        string AboutContent { get; set; }
 
         // Teaser properties.
         /// <summary>

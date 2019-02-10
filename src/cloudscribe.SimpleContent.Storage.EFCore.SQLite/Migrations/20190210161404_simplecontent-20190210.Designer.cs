@@ -2,23 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Storage.EFCore.MSSQL;
+using cloudscribe.SimpleContent.Storage.EFCore.SQLite;
 
-namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
+namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190210161404_simplecontent-20190210")]
+    partial class simplecontent20190210
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ContentHistory", b =>
                 {
@@ -70,8 +69,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<bool>("IsDraftHx");
 
-                    b.Property<bool>("IsPublished")
-                        .HasColumnType("bit");
+                    b.Property<bool>("IsPublished");
 
                     b.Property<DateTime>("LastModified");
 
@@ -142,11 +140,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<string>("AboutContent");
 
-                    b.Property<bool>("AddBlogToPagesTree")
-                        .HasColumnType("bit");
+                    b.Property<bool>("AddBlogToPagesTree");
 
-                    b.Property<bool>("BlogMenuLinksToNewestPost")
-                        .HasColumnType("bit");
+                    b.Property<bool>("BlogMenuLinksToNewestPost");
 
                     b.Property<string>("BlogPageNavComponentVisibility")
                         .HasMaxLength(255);
@@ -198,8 +194,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("Image")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("IncludePubDateInPostUrls")
-                        .HasColumnType("bit");
+                    b.Property<bool>("IncludePubDateInPostUrls");
 
                     b.Property<string>("LanguageCode")
                         .HasMaxLength(10);
@@ -214,8 +209,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(1000);
 
-                    b.Property<bool>("ModerateComments")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ModerateComments");
 
                     b.Property<int>("PostsPerPage");
 
@@ -249,14 +243,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("RemoteFeedUrl")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowFeaturedPostsOnDefaultPage");
 
-                    b.Property<bool>("ShowRecentPostsOnDefaultPage")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowRecentPostsOnDefaultPage");
 
-                    b.Property<bool>("ShowTitle")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowTitle");
 
                     b.Property<string>("SiteName")
                         .HasMaxLength(200);
@@ -285,8 +276,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("TwitterPublisher")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("UseDefaultPageAsRootNode")
-                        .HasColumnType("bit");
+                    b.Property<bool>("UseDefaultPageAsRootNode");
 
                     b.Property<string>("WebmasterEmail")
                         .HasMaxLength(100);
@@ -405,8 +395,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("ExternalUrl")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("IsPublished")
-                        .HasColumnType("bit");
+                    b.Property<bool>("IsPublished");
 
                     b.Property<DateTime>("LastModified");
 
@@ -416,8 +405,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("MenuFilters")
                         .HasMaxLength(500);
 
-                    b.Property<bool>("MenuOnly")
-                        .HasColumnType("bit");
+                    b.Property<bool>("MenuOnly");
 
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(500);
@@ -445,23 +433,17 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<string>("Serializer")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("ShowCategories")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowCategories");
 
-                    b.Property<bool>("ShowComments")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowComments");
 
-                    b.Property<bool>("ShowHeading")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowHeading");
 
-                    b.Property<bool>("ShowLastModified")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowLastModified");
 
-                    b.Property<bool>("ShowMenu")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowMenu");
 
-                    b.Property<bool>("ShowPubDate")
-                        .HasColumnType("bit");
+                    b.Property<bool>("ShowPubDate");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -632,8 +614,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<bool>("IsFeatured");
 
-                    b.Property<bool>("IsPublished")
-                        .HasColumnType("bit");
+                    b.Property<bool>("IsPublished");
 
                     b.Property<DateTime>("LastModified");
 
