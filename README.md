@@ -43,7 +43,6 @@ See the [Introduction](https://www.cloudscribe.com/docs/introduction) to get the
 * [Supports Localization](https://www.cloudscribe.com/docs/localization)
 
 ### Planned Features
-* More advanced meta data capabilities
 * Support for using MongoDb - hoping for a community member to do that
 * A Utility for importing the NoDb content into Entity Framework Core or MongoDb for easy migration
 
