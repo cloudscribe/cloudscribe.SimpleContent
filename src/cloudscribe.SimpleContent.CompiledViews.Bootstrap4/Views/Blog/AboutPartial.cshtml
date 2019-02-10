@@ -1,4 +1,5 @@
-﻿@inject IStringLocalizer<SimpleContent> sr
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
 @inject IBlogRoutes blogRoutes
 @inject ISimpleContentThemeHelper themeHelper
 @{
@@ -10,9 +11,12 @@
         <h3><i class="@themeSettings.Icons.About" aria-hidden="true"></i>&nbsp;@sr["About me"]</h3>
     </div>
     <div class="panel-body">
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque id convallis dolor. Aenean sed lectus a ante tempor ultricies. Nunc eu vulputate lorem, vel feugiat eros. Pellentesque rutrum rhoncus viverra. Curabitur at nunc at erat varius tristique non a turpis. Fusce placerat mi nec libero viverra aliquam. In quis ultricies risus, non dignissim urna. Cras eget dui sem. 
-
-        </p>
+        @if (Model.CanEdit && string.IsNullOrWhiteSpace(Model.ProjectSettings.AboutContent))
+        {
+            <p>
+                @sr["You can edit this from Administration > Content Settings"]
+            </p>
+        }
+        @Html.Raw(Model.ProjectSettings.AboutContent)
     </div>
 </section>

@@ -15,7 +15,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ContentHistory", b =>
@@ -136,6 +136,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(36);
+
+                    b.Property<string>("AboutContent");
 
                     b.Property<bool>("AddBlogToPagesTree");
 

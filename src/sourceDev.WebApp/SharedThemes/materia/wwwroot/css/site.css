@@ -21,6 +21,12 @@ body {
     right: 0px;
 }
 
+#unpublishPostLink {
+    position: absolute;
+    top: 210px !important;
+    right: 0px !important;
+}
+
 #pageManagerLink {
     position: absolute;
     top: 140px;
@@ -38,6 +44,13 @@ body {
     top: 210px;
     right: 0px
 }
+
+#unpublishPageLink {
+    position: absolute;
+    top: 245px !important;
+    right: 0px !important
+}
+
 #sidenavtoggle {
     position: absolute;
     top: 140px;

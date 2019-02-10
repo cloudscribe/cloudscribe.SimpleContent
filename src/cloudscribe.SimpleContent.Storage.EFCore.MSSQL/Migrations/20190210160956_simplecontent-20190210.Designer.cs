@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.MSSQL;
@@ -10,9 +11,10 @@ using cloudscribe.SimpleContent.Storage.EFCore.MSSQL;
 namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190210160956_simplecontent-20190210")]
+    partial class simplecontent20190210
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

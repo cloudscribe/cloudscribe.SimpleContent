@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2018-02-10
+// Last Modified:			2019-02-10
 // 
 
 using cloudscribe.Core.Models;
@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 {
-    [Authorize(Policy = "AdminPolicy")]
+    
     public class ContentSettingsController : Controller
     {
         public ContentSettingsController(
@@ -45,6 +45,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
         private bool _teasersDisabled = false;
         private IStringLocalizer sr;
 
+        [Authorize(Policy = "AdminPolicy")]
         // GET: /ContentSettings
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -105,6 +106,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 
             model.DefaultFeedItems = projectSettings.DefaultFeedItems;
             model.MaxFeedItems = projectSettings.MaxFeedItems;
+            model.AboutContent = projectSettings.AboutContent;
 
             bool canManageUsers = false;
             try
@@ -154,6 +156,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<IActionResult> Index(ContentSettingsViewModel model)
         {
@@ -224,6 +227,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 
             projectSettings.DefaultFeedItems = model.DefaultFeedItems;
             projectSettings.MaxFeedItems = model.MaxFeedItems;
+            projectSettings.AboutContent = model.AboutContent;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)
