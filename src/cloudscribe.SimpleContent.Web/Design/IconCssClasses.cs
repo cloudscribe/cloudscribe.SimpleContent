@@ -43,6 +43,9 @@
 
         public string Unpublish { get; set; } = "glyphicon glyphicon-eye-close";
 
+        public string RelatedPosts { get; set; } = "far fa-hand-point-right"; //"fas fa-asterisk";
+
+        //<i class="far fa-hand-point-right"></i>
 
 
 
