@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-10-09
+// Last Modified:			2019-02-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -89,6 +90,49 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
             
         }
+
+        public async Task<List<IPost>> GetRelatedPosts(
+            string blogId,
+            string currentPostId,
+            int numberToGet,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var currentTime = DateTime.UtcNow;
+            var currentPost = await GetPost(blogId, currentPostId, cancellationToken);
+            if (currentPost != null && currentPost.Categories.Count > 0)
+            {
+                var cats = currentPost.Categories.ToArray();
+
+                using (var db = _contextFactory.CreateContext())
+                {
+                    var query = from pc in db.PostCategories
+                                join p in db.Posts
+                                on pc.PostEntityId equals p.Id
+                                where pc.ProjectId == blogId
+                                && p.Id != currentPostId
+                                && p.IsPublished == true && p.PubDate <= currentTime
+                                && cats.Contains(pc.Value)
+                                select p;
+                    
+                    var posts = await query
+                        .AsNoTracking()
+                        .OrderByDescending(x => x.PubDate)
+                        .Take(numberToGet)
+                        .ToListAsync<IPost>(cancellationToken)
+                        .ConfigureAwait(false);
+
+                    return posts;
+                }
+
+            }
+            else
+            {
+                return new List<IPost>();
+            }
+        }
+
 
         public async Task<PagedPostResult> GetPosts(
             string blogId,

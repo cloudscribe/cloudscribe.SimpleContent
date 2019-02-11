@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-04-24
-// Last Modified:           2018-07-27
+// Last Modified:           2019-02-11
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -206,6 +206,39 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
             var result = new List<IPost>();
             result.AddRange(posts);
+
+            return result;
+
+        }
+
+        public async Task<List<IPost>> GetRelatedPosts(
+            string blogId,
+            string currentPostId,
+            int numberToGet,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var result = new List<IPost>();
+
+            var posts = await GetAllPosts(blogId, cancellationToken).ConfigureAwait(false);
+            var currentPost = posts.Where(x => x.Id == currentPostId).SingleOrDefault();
+            if(currentPost != null)
+            {
+                posts = posts.Where(p =>
+                p.IsPublished
+                && p.Id != currentPostId
+                && p.Categories.Any(x => currentPost.Categories.Contains(x))
+                && p.PubDate <= DateTime.UtcNow)
+                .OrderByDescending(p => p.PubDate)
+                .Take(numberToGet).ToList<Post>();
+
+
+                result.AddRange(posts);
+            }
+
+            
 
             return result;
 
