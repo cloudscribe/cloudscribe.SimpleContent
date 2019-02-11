@@ -1,0 +1,7 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@{
+}
+@if (Model.CurrentPost != null && Model.CurrentPost.Categories.Count > 0)
+{
+    @await Component.InvokeAsync("RelatedPosts", new { currentPostId = Model.CurrentPost.Id, viewName = "RelatedPosts", numberToShow = 5 })
+}

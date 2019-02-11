@@ -5,11 +5,11 @@ using cloudscribe.SimpleContent.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace cloudscribe.SimpleContent.Web
+namespace cloudscribe.SimpleContent.Web.ViewComponents
 {
-    public class FeaturedPostsViewComponent : ViewComponent
+    public class RelatedPostsViewComponent : ViewComponent
     {
-        public FeaturedPostsViewComponent(
+        public RelatedPostsViewComponent(
             IProjectService projectService,
             IPostQueries postQueries,
             IContentProcessor contentProcessor,
@@ -27,11 +27,11 @@ namespace cloudscribe.SimpleContent.Web
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly IContentProcessor _contentProcessor;
 
-        public async Task<IViewComponentResult> InvokeAsync(string viewName = "FeaturedPosts", int numberToShow = 5)
+        public async Task<IViewComponentResult> InvokeAsync(string currentPostId, string viewName = "RelatedPosts", int numberToShow = 5)
         {
             var model = new RecentPostsViewModel(_contentProcessor);
             var settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
-            var list = await _postQueries.GetFeaturedPosts(settings.Id, numberToShow);
+            var list = await _postQueries.GetRelatedPosts(settings.Id, currentPostId, numberToShow);
             model.ProjectSettings = settings;
             model.Posts = list;
             model.TimeZoneHelper = _timeZoneHelper;
@@ -39,5 +39,7 @@ namespace cloudscribe.SimpleContent.Web
 
             return View(viewName, model);
         }
+
+
     }
 }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2018-10-09
+// Last Modified:           2019-02-11
 // 
 
 using System;
@@ -112,6 +112,13 @@ namespace cloudscribe.SimpleContent.Models
 
         Task<List<IPost>> GetPostsReadyForPublish(
             string blogId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
+        Task<List<IPost>> GetRelatedPosts(
+            string blogId,
+            string currentPostId,
+            int numberToGet,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 
