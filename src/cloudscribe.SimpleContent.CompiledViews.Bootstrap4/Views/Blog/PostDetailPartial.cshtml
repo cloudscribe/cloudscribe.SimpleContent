@@ -7,9 +7,9 @@
 @using Microsoft.Extensions.Localization
 @using System.Globalization
 @inject IStringLocalizer<SimpleContent> sr
-@inject IOptions<IconCssClasses> iconClassesAccessor
+@inject ISimpleContentThemeHelper themeHelper
 @{
-    var icons = iconClassesAccessor.Value;
+    var themeSettings = themeHelper.GetThemeSettings();
 }
 @functions{
 
@@ -19,15 +19,24 @@
 
         return null;
     }
-    public string GetCommentString()
+
+    public string GetCommentString(cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel model, SimpleContentThemeSettings themeSettings)
     {
+        
+
         if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
         {
-            return Model.CurrentPost.ApprovedCommentCount() + " " + sr["Comments"];
+            if (!model.CommentsAreOpen || model.CurrentPost.ApprovedCommentCount() == 0)
+            {
+                return string.Empty;
+            }
+
+            return "<i class='" + themeSettings.Icons.Comments + "'></i> " + Model.CurrentPost.ApprovedCommentCount() + " " + sr["Comments"];
 
         }
-        return "<span class=\"disqus-comment-count\" data-disqus-identifier=\"" + Model.CurrentPost.Id + "\"></span>";
+        return "<i class='" + themeSettings.Icons.Comments + "'></i> " + "<span class=\"disqus-comment-count\" data-disqus-identifier=\"" + Model.CurrentPost.Id + "\"></span>";
     }
+
     public string GetCommentFragment()
     {
         if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
@@ -62,16 +71,16 @@
                    asp-route-day="@pubDate.Value.Day.ToString("00")"
                    asp-route-slug="@Model.CurrentPost.Slug"
                    asp-fragment="@GetCommentFragment()"
-                   itemprop="url"><i class="@icons.Comments"></i>@Html.Raw(GetCommentString())</a>
+                   itemprop="url">@Html.Raw(GetCommentString(Model, themeSettings))</a>
             }
             else
             {
-                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="@GetCommentFragment()" itemprop="url"><i class="@icons.Comments"></i> @Html.Raw(GetCommentString())</a>
+                <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="@GetCommentFragment()" itemprop="url"> @Html.Raw(GetCommentString(Model, themeSettings))</a>
             }
             @if (Model.CurrentPost.Categories.Count > 0)
             {
                 <ul class="categories">
-                    <li><i class="@icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
+                    <li><i class="@themeSettings.Icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
                     @foreach (string cat in Model.CurrentPost.Categories)
                     {
                         <li itemprop="articleSection">
