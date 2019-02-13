@@ -120,6 +120,10 @@ namespace cloudscribe.SimpleContent.Models
         public int DefaultFeedItems { get; set; } = 20;
         public int MaxFeedItems { get; set; } = 1000;
 
+        public bool ShowRelatedPosts { get; set; } = true;
+
+        public bool ShowAboutBox { get; set; } = true;
+        public string AboutHeading { get; set; } = "About";
         public string AboutContent { get; set; }
 
         public static ProjectSettings FromIProjectSettings(IProjectSettings project)

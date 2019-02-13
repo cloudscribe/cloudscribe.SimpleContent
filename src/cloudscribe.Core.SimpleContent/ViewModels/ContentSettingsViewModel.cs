@@ -49,6 +49,10 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         //public bool UseDefaultPageAsRootNode { get; set; } = true;
 
 
+        public bool ShowRelatedPosts { get; set; } = true;
+
+        public bool ShowAboutBox { get; set; } = true;
+        public string AboutHeading { get; set; } = "About";
 
         public string AboutContent { get; set; } 
 
