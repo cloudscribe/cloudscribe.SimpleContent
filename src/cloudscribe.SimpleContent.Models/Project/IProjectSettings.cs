@@ -67,6 +67,10 @@ namespace cloudscribe.SimpleContent.Models
         string TwitterCreator { get; set; }
         string DefaultContentType { get; set; }
 
+        bool ShowRelatedPosts { get; set; }
+
+        bool ShowAboutBox { get; set; } 
+        string AboutHeading { get; set; }
         string AboutContent { get; set; }
 
         // Teaser properties.

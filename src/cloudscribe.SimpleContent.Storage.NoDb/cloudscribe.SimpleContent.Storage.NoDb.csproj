@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Storage implemented with NoDb file system storage</Description>
-    <VersionPrefix>4.0.10</VersionPrefix>
-    <AssemblyVersion>4.0.10</AssemblyVersion>
+    <VersionPrefix>4.0.11</VersionPrefix>
+    <AssemblyVersion>4.0.11</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog;json</PackageTags>

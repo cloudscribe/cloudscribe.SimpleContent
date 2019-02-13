@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using cloudscribe.SimpleContent.Models;
@@ -10,9 +11,10 @@ using cloudscribe.SimpleContent.Storage.EFCore.PostgreSql;
 namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190213121205_simplecontent-20190212")]
+    partial class simplecontent20190212
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,7 +332,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasMaxLength(255);
 
                     b.Property<bool>("ShowAboutBox")
-                        .HasColumnName("show_about_box");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("show_about_box")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
                         .HasColumnName("show_featured_posts_on_default_page");
@@ -339,7 +343,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasColumnName("show_recent_posts_on_default_page");
 
                     b.Property<bool>("ShowRelatedPosts")
-                        .HasColumnName("show_related_posts");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("show_related_posts")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("ShowTitle")
                         .HasColumnName("show_title");

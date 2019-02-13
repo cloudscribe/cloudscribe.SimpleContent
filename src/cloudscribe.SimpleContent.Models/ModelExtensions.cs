@@ -427,6 +427,9 @@ namespace cloudscribe.SimpleContent.Models
             target.DefaultFeedItems = input.DefaultFeedItems;
             target.MaxFeedItems = input.MaxFeedItems;
             target.AboutContent = input.AboutContent;
+            target.AboutHeading = input.AboutHeading;
+            target.ShowAboutBox = input.ShowAboutBox;
+            target.ShowRelatedPosts = input.ShowRelatedPosts;
         }
     }
 }

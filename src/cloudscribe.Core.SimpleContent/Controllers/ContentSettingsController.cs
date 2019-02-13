@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2019-02-10
+// Last Modified:			2019-02-13
 // 
 
 using cloudscribe.Core.Models;
@@ -107,6 +107,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.DefaultFeedItems = projectSettings.DefaultFeedItems;
             model.MaxFeedItems = projectSettings.MaxFeedItems;
             model.AboutContent = projectSettings.AboutContent;
+            model.AboutHeading = projectSettings.AboutHeading;
+            model.ShowAboutBox = projectSettings.ShowAboutBox;
+            model.ShowRelatedPosts = projectSettings.ShowRelatedPosts;
 
             bool canManageUsers = false;
             try
@@ -228,6 +231,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.DefaultFeedItems = model.DefaultFeedItems;
             projectSettings.MaxFeedItems = model.MaxFeedItems;
             projectSettings.AboutContent = model.AboutContent;
+            projectSettings.AboutHeading = model.AboutHeading;
+            projectSettings.ShowAboutBox = model.ShowAboutBox;
+            projectSettings.ShowRelatedPosts = model.ShowRelatedPosts;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

@@ -17,7 +17,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ContentHistory", b =>
@@ -141,6 +141,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
 
                     b.Property<string>("AboutContent");
 
+                    b.Property<string>("AboutHeading")
+                        .HasMaxLength(255);
+
                     b.Property<bool>("AddBlogToPagesTree");
 
                     b.Property<bool>("BlogMenuLinksToNewestPost");
@@ -244,9 +247,13 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql.Migrations
                     b.Property<string>("RemoteFeedUrl")
                         .HasMaxLength(255);
 
+                    b.Property<bool>("ShowAboutBox");
+
                     b.Property<bool>("ShowFeaturedPostsOnDefaultPage");
 
                     b.Property<bool>("ShowRecentPostsOnDefaultPage");
+
+                    b.Property<bool>("ShowRelatedPosts");
 
                     b.Property<bool>("ShowTitle");
 

@@ -229,6 +229,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 entity.Property(p => p.MaxFeedItems)
                 .HasDefaultValue(1000);
 
+                entity.Property(p => p.AboutHeading).HasMaxLength(255);
+                entity.Property(p => p.ShowAboutBox);
+                entity.Property(p => p.ShowRelatedPosts);
+
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
