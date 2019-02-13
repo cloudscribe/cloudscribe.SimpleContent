@@ -201,6 +201,11 @@ namespace cloudscribe.SimpleContent.Services
             {
                 var slug = CreateSlug(post.Title);
                 var available = await SlugIsAvailable(slug);
+                while (!available)
+                {
+                    slug = slug + "-";
+                    available = await SlugIsAvailable(slug);
+                }
                 if (available)
                 {
                     post.Slug = slug;
