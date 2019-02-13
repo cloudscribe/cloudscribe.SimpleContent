@@ -6,7 +6,7 @@
   <correlationkey />
   <author>Admin</author>
   <pubDate>2018-07-02T12:14:46.4646000Z</pubDate>
-  <lastModified>2018-07-04T17:54:48</lastModified>
+  <lastModified>2019-02-13T14:43:20</lastModified>
   <excerpt>A fresh draft of a new post</excerpt>
   <content>&lt;p&gt;This will be a post some day, once it gets all polished up.&lt;/p&gt;
 
@@ -30,10 +30,12 @@
   <blogId></blogId>
   <ispublished>true</ispublished>
   <isFeatured>false</isFeatured>
+  <autoTeaser></autoTeaser>
   <teaserOverride />
   <suppressTeaser>false</suppressTeaser>
   <categories>
     <category>weather</category>
+    <category>sports</category>
   </categories>
   <comments></comments>
 </post>

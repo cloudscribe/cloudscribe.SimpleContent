@@ -119,6 +119,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     var posts = await query
                         .AsNoTracking()
                         .OrderByDescending(x => x.PubDate)
+                        .Distinct()
                         .Take(numberToGet)
                         .ToListAsync<IPost>(cancellationToken)
                         .ConfigureAwait(false);
