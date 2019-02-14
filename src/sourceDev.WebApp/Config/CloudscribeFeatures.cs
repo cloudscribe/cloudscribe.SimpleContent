@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration config
             )
         {
-            services.AddScoped<cloudscribe.Core.Models.Setup.ISetupTask, cloudscribe.Core.Web.Components.EnsureInitialDataSetupTask>();
+            //services.AddScoped<cloudscribe.Core.Models.Setup.ISetupTask, cloudscribe.Core.Web.Components.EnsureInitialDataSetupTask>();
 
             var storage = config["DevOptions:DbPlatform"];
             var efProvider = config["DevOptions:EFProvider"];
