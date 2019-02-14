@@ -244,6 +244,10 @@ namespace cloudscribe.SimpleContent.Services
                     node.ExcludeFromSearchSiteMap = true;
                     node.Target = "_blank"; // the default nav cshtml templates don't use this but could be customized to use it
                 }
+                else if(!page.ExternalUrl.StartsWith("/"))
+                {
+                    page.ExternalUrl = "/" + page.ExternalUrl;
+                }
                 node.Url = urlHelper.Content(page.ExternalUrl);
             }
             else
