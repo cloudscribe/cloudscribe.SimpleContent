@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             //services.AddScoped<MediaFolderHelper, MediaFolderHelper>();
             services.AddScoped<IBlogRoutes, MultiTenantBlogRoutes>();
             services.AddScoped<IPageRoutes, MultiTenantPageRoutes>();
-            services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
+            //services.AddScoped<IPageNavigationCacheKeys, SiteNavigationCacheKeys>();
             services.AddScoped<IRoleSelectorProperties, SiteRoleSelectorProperties>();
             services.TryAddScoped<IAuthorNameResolver, AuthorNameResolver>();
             services.TryAddScoped<IProjectEmailService, CoreProjectEmailService>();

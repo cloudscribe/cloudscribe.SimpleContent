@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using cloudscribe.SimpleContent.Models;
+﻿using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -12,6 +10,6 @@ namespace cloudscribe.SimpleContent.Models
         Task<IProjectSettings> GetProjectSettings(string projectId);
         
 
-        void ClearNavigationCache();
+        //void ClearNavigationCache();
     }
 }

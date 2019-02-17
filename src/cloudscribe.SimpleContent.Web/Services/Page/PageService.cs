@@ -2,14 +2,13 @@
 // Licensed under the Apache License, Version 2.0. 
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-10-23
+// Last Modified:           2019-02-17
 // 
 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Web.Services;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -30,9 +29,7 @@ namespace cloudscribe.SimpleContent.Services
             IPageCommands pageCommands,
             PageEvents eventHandlers,
             IContentProcessor contentProcessor,
-            IMemoryCache cache,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
-            IPageNavigationCacheKeys cacheKeys,
             IContentHistoryCommands historyCommands,
             ILogger<PageService> logger
             )
@@ -42,11 +39,10 @@ namespace cloudscribe.SimpleContent.Services
             _pageQueries = pageQueries;
             _pageCommands = pageCommands;
             _contentProcessor = contentProcessor;
-            _cache = cache;
-            _cacheKeys = cacheKeys;
             _eventHandlers = eventHandlers;
             _sr = localizer;
             _historyCommands = historyCommands;
+            
             _log = logger;
         }
         
@@ -54,11 +50,10 @@ namespace cloudscribe.SimpleContent.Services
         private readonly IPageCommands _pageCommands;
         private readonly IProjectService _projectService;
         private readonly IContentProcessor _contentProcessor;
-        private readonly IMemoryCache _cache;
-        private readonly IPageNavigationCacheKeys _cacheKeys;
         private readonly PageEvents _eventHandlers;
         private readonly IStringLocalizer _sr;
         private readonly IContentHistoryCommands _historyCommands;
+        
         private readonly ILogger _log;
 
         private IProjectSettings _settings = null;
@@ -69,13 +64,6 @@ namespace cloudscribe.SimpleContent.Services
             _settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
             
         }
-
-        public void ClearNavigationCache()
-        {  
-            _cache.Remove(_cacheKeys.PageTreeCacheKey);
-            _cache.Remove(_cacheKeys.XmlTreeCacheKey);
-            _cache.Remove(_cacheKeys.JsonTreeCacheKey);
-        }
         
         public async Task<bool> SlugIsAvailable(string slug)
         {
@@ -85,34 +73,6 @@ namespace cloudscribe.SimpleContent.Services
                 slug,
                 CancellationToken.None
                 ).ConfigureAwait(false);
-        }
-
-        public async Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            await EnsureProjectSettings();
-            var drafts = await _pageQueries.GetPagesReadyForPublish(_settings.Id, cancellationToken);
-            foreach(var page in drafts)
-            {
-                page.Content = page.DraftContent;
-                page.Author = page.DraftAuthor;
-                page.PubDate = page.DraftPubDate.Value;
-                page.SerializedModel = page.DraftSerializedModel;
-                page.IsPublished = true;
-
-                page.DraftAuthor = null;
-                page.DraftContent = null;
-                page.DraftSerializedModel = null;
-                page.DraftPubDate = null;
-
-                await Update(page);
-
-                await _eventHandlers.HandlePublished(page.ProjectId, page).ConfigureAwait(false);
-                await _historyCommands.DeleteDraftHistory(page.ProjectId, page.Id).ConfigureAwait(false);
-
-                ClearNavigationCache();
-
-                _log.LogDebug($"auto published draft for page {page.Title}");
-            }
         }
         
         public async Task Create(IPage page)
@@ -345,7 +305,7 @@ namespace cloudscribe.SimpleContent.Services
                     break;
             }
 
-            ClearNavigationCache();
+            //ClearNavigationCache();
 
             result = new PageActionResult(true, "operation succeeded");
 
@@ -376,7 +336,7 @@ namespace cloudscribe.SimpleContent.Services
                 i += 2;
             }
 
-            ClearNavigationCache();
+            //ClearNavigationCache();
             return new PageActionResult(true, "operation succeeded");
 
         }

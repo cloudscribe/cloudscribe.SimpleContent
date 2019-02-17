@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2018-11-13
+// Last Modified:           2019-02-17
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -9,6 +9,7 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Templating;
 using cloudscribe.Web.Common.Razor;
+using cloudscribe.Web.Navigation.Caching;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -26,6 +27,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         public UpdateTemplatedPageHandler(
             IProjectService projectService,
             IPageService pageService,
+            ITreeCache treeCache,
             IContentHistoryCommands historyCommands,
             ITimeZoneHelper timeZoneHelper,
             ITimeZoneIdResolver timeZoneIdResolver,
@@ -39,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         {
             _projectService = projectService;
             _pageService = pageService;
+            _navigationCache = treeCache;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
             _timeZoneIdResolver = timeZoneIdResolver;
@@ -60,6 +63,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IEnumerable<IValidateTemplateModel> _modelValidators;
         private readonly ViewRenderer _viewRenderer;
         private readonly IStringLocalizer _localizer;
+        private readonly ITreeCache _navigationCache;
         private readonly ILogger _log;
 
         private IModelSerializer GetSerializer(string name)
@@ -269,9 +273,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                         await _pageService.FirePublishEvent(page).ConfigureAwait(false);
                         await _historyCommands.DeleteDraftHistory(project.Id, page.Id).ConfigureAwait(false);
                     }
-                    
-                    _pageService.ClearNavigationCache();
-                    
+
+                    await _navigationCache.ClearTreeCache();
+
+
                 }
                 
                 return new CommandResult<IPage>(page, customModelIsValid && request.ModelState.IsValid, errors);

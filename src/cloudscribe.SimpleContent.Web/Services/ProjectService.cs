@@ -2,11 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-07-08
+// Last Modified:           2019-02-17
 // 
 
 using cloudscribe.SimpleContent.Models;
-using Microsoft.Extensions.Caching.Memory;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,33 +17,21 @@ namespace cloudscribe.SimpleContent.Services
         public ProjectService(
             IProjectSettingsResolver settingsResolver,
             IProjectQueries projectQueries,
-            IProjectCommands projectCommands,
-            IMemoryCache cache,
-            IPageNavigationCacheKeys cacheKeys
+            IProjectCommands projectCommands
             )
         {
             _projectQueries = projectQueries;
             _projectCommands = projectCommands;
             _settingsResolver = settingsResolver;
-            _cacheKeys = cacheKeys;
-            _cache = cache;
+           
            
         }
         
         private readonly IProjectQueries _projectQueries;
         private readonly IProjectCommands _projectCommands;
         private readonly IProjectSettingsResolver _settingsResolver;
-        private readonly IPageNavigationCacheKeys _cacheKeys;
-        private readonly IMemoryCache _cache;
         private IProjectSettings _currentSettings = null;
-
-        public void ClearNavigationCache()
-        {
-            _cache.Remove(_cacheKeys.PageTreeCacheKey);
-            _cache.Remove(_cacheKeys.XmlTreeCacheKey);
-            _cache.Remove(_cacheKeys.JsonTreeCacheKey);
-        }
-
+        
         private async Task<bool> EnsureSettings()
         {
             if (_currentSettings != null) { return true; }

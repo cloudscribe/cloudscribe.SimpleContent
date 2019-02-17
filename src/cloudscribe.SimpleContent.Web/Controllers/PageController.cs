@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-24
-// Last Modified:           2018-11-13
+// Last Modified:           2019-02-17
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -10,6 +10,7 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
+using cloudscribe.Web.Navigation.Caching;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IContentHistoryCommands historyCommands,
             IContentHistoryQueries historyQueries,
             IStringLocalizer<SimpleContent> localizer,
+            ITreeCache treeCache,
+            DraftPublishService draftPublishService,
             IOptions<PageEditOptions> pageEditOptionsAccessor,
             ILogger<PageController> logger)
         {
@@ -58,6 +61,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             PageRoutes = pageRoutes;
             EditOptions = pageEditOptionsAccessor.Value;
             StringLocalizer = localizer;
+            NavigationCache = treeCache;
+            DraftPublishService = draftPublishService;
             Log = logger;
         }
 
@@ -76,6 +81,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         protected IContentHistoryCommands HistoryCommands { get; private set; }
         protected IContentHistoryQueries HistoryQueries { get; private set; }
 
+        protected ITreeCache NavigationCache { get; private set; }
+        protected DraftPublishService DraftPublishService { get; private set; }
+
         protected IMediator Mediator { get; private set; }
 
         [HttpGet]
@@ -87,7 +95,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Guid? historyId = null
             )
         {
-            await PageService.PublishReadyDrafts(cancellationToken);
+            await DraftPublishService.PublishReadyDrafts(cancellationToken);
 
             var viewContextRequest = new PageViewContextRequest(User, slug, showDraft, historyId);
             var viewContext = await Mediator.Send(viewContextRequest);
@@ -974,7 +982,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             
             
             await PageService.DeletePage(editContext.CurrentPage.Id);
-            PageService.ClearNavigationCache();
+            await NavigationCache.ClearTreeCache();
 
             Log.LogWarning($"user {User.Identity.Name} deleted page {editContext.CurrentPage.Title}");
 
@@ -1056,8 +1064,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 await PageService.Update(editContext.CurrentPage);
                 
             }
-            
-            PageService.ClearNavigationCache();
+
+            await NavigationCache.ClearTreeCache();
 
             Log.LogWarning($"user {User.Identity.Name} unpublished page {editContext.CurrentPage.Title}");
 
@@ -1186,6 +1194,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             
             var result = await PageService.Move(model);
+            await NavigationCache.ClearTreeCache();
 
             return Json(result);
         }
@@ -1204,6 +1213,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             
             var result = await PageService.SortChildPagesAlpha(pageId);
+            await NavigationCache.ClearTreeCache();
 
             return Json(result);
         }

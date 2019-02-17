@@ -21,8 +21,6 @@ namespace cloudscribe.SimpleContent.Models
 
         Task Update(IPage page);
         
-        void ClearNavigationCache();
-
         Task<string> GetPageTreeJson(ClaimsPrincipal user, Func<IPage, string> urlResolver, string node = "root", CancellationToken cancellationToken = default(CancellationToken));
 
         Task<PageActionResult> Move(PageMoveModel model);
@@ -34,6 +32,6 @@ namespace cloudscribe.SimpleContent.Models
         Task FirePublishEvent(IPage page);
         Task FireUnPublishEvent(IPage page);
 
-        Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken));
+        
     }
 }

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2019-02-13
+// Last Modified:			2019-02-17
 // 
 
 using cloudscribe.Core.Models;
@@ -10,6 +10,7 @@ using cloudscribe.Core.SimpleContent.Integration.ViewModels;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common.Extensions;
+using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -26,6 +27,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             IAuthorizationService authorizationService,
             IUserQueries userQueries,
             ITeaserService teaserService,
+            NavigationTreeBuilderService navigationTreeBuilderService,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer
             )
         {
@@ -37,6 +39,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             {
                 _teasersDisabled = true;
             }
+            _navigationTreeBuilderService = navigationTreeBuilderService;
         }
 
         private IProjectService projectService;
@@ -44,6 +47,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
         private IUserQueries userQueries;
         private bool _teasersDisabled = false;
         private IStringLocalizer sr;
+        private readonly NavigationTreeBuilderService _navigationTreeBuilderService;
 
         [Authorize(Policy = "AdminPolicy")]
         // GET: /ContentSettings
@@ -238,7 +242,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)
             {
-                projectService.ClearNavigationCache();
+                //projectService.ClearNavigationCache();
+                await _navigationTreeBuilderService.ClearTreeCache();
+                
             }
 
             this.AlertSuccess(sr["Content Settings were successfully updated."], true);

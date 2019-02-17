@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using cloudscribe.DateTimeUtils;
+using cloudscribe.Web.Navigation.Caching;
 
 namespace cloudscribe.SimpleContent.MetaWeblog
 {
@@ -29,6 +30,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             IBlogUrlResolver blogUrlResolver,
             IMediaProcessor mediaProcessor,
             ITimeZoneHelper timeZoneHelper,
+            ITreeCache treeCache,
             ILogger<MetaWeblogService> logger,
             IBlogService blogService = null,
             IPageService pageService = null
@@ -44,6 +46,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             _pageService = pageService ?? new NotImplementedPageService();
             _mediaProcessor = mediaProcessor;
             _mapper = new MetaWeblogModelMapper();
+            _navigationCache = treeCache;
             _log = logger;
             
         }
@@ -58,6 +61,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
         private readonly IPageService _pageService;
         private readonly MetaWeblogModelMapper _mapper;
         private readonly ITimeZoneHelper _timeZoneHelper;
+        private readonly ITreeCache _navigationCache;
         private readonly ILogger _log;
 
         public async Task<string> NewPost(
@@ -685,7 +689,7 @@ namespace cloudscribe.SimpleContent.MetaWeblog
             await _pageUrlResolver.ConvertMediaToRelativeUrls(page).ConfigureAwait(false);
             
             await _pageService.Create(page).ConfigureAwait(false);
-            _pageService.ClearNavigationCache();
+            await _navigationCache.ClearTreeCache();
             if (publish)
             {
                 await _pageService.FirePublishEvent(page).ConfigureAwait(false);
@@ -797,7 +801,8 @@ namespace cloudscribe.SimpleContent.MetaWeblog
 
             await _pageService.Update(page).ConfigureAwait(false);
 
-            _pageService.ClearNavigationCache();
+            await _navigationCache.ClearTreeCache();
+
             if (publish)
             {
                 await _pageService.FirePublishEvent(page).ConfigureAwait(false);

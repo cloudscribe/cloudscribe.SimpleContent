@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-21
-// Last Modified:           2018-07-14
+// Last Modified:           2019-02-17
 // 
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.Web.Common.Razor;
+using cloudscribe.Web.Navigation.Caching;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -21,6 +22,7 @@ namespace cloudscribe.SimpleContent.Web.Services
     {
         public InitTemplatedPageHandler(
             IPageService pageService,
+            ITreeCache treeCache,
             IEnumerable<IModelSerializer> serializers,
             ViewRenderer viewRenderer,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer,
@@ -28,6 +30,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             )
         {
             _pageService = pageService;
+            _navigationCache = treeCache;
             _serializers = serializers;
             _viewRenderer = viewRenderer;
             _localizer = localizer;
@@ -38,6 +41,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IEnumerable<IModelSerializer> _serializers;
         private readonly ViewRenderer _viewRenderer;
         private readonly IStringLocalizer _localizer;
+        private readonly ITreeCache _navigationCache;
         private readonly ILogger _log;
 
         private IModelSerializer GetSerializer(string name)
@@ -98,7 +102,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 }
                 
                 await _pageService.Create(page);
-                _pageService.ClearNavigationCache();
+                await _navigationCache.ClearTreeCache();
 
                 var result = new CommandResult<IPage>(page, true, errors);
 
