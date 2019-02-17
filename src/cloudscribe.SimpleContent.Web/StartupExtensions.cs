@@ -34,6 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<PostEvents, PostEvents>();
 
             services.TryAddScoped<IPageService, PageService>();
+            services.AddScoped<DraftPublishService>();
             services.TryAddScoped<IProjectService, ProjectService>();
             services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
             services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
@@ -47,7 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IProjectEmailService, ProjectEmailService>();
             services.TryAddScoped<ViewRenderer, ViewRenderer>();
             
-            services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
+            //services.TryAddScoped<IPageNavigationCacheKeys, PageNavigationCacheKeys>();
             services.AddScoped<INavigationTreeBuilder, PagesNavigationTreeBuilder>();
             services.AddScoped<ISiteMapNodeService, BlogSiteMapNodeService>();
             services.AddScoped<IFindCurrentNode, NavigationBlogNodeFinder>();

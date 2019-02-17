@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-27
-// Last Modified:           2018-11-13
+// Last Modified:           2019-02-17
 // 
 
 using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
+using cloudscribe.Web.Navigation.Caching;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         public CreateOrUpdatePageHandler(
             IProjectService projectService,
             IPageService pageService,
+            ITreeCache treeCache,
             ITimeZoneHelper timeZoneHelper,
             ITimeZoneIdResolver timeZoneIdResolver,
             IContentHistoryCommands historyCommands,
@@ -30,6 +32,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             )
         {
             _projectService = projectService;
+            _navigationCache = treeCache;
             _pageService = pageService;
             _historyCommands = historyCommands;
             _timeZoneHelper = timeZoneHelper;
@@ -44,6 +47,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private readonly IStringLocalizer _localizer;
         private readonly ITimeZoneHelper _timeZoneHelper;
         private readonly ITimeZoneIdResolver _timeZoneIdResolver;
+        private readonly ITreeCache _navigationCache;
         private readonly ILogger _log;
 
         public async Task<CommandResult<IPage>> Handle(CreateOrUpdatePageRequest request, CancellationToken cancellationToken = default(CancellationToken))
@@ -219,8 +223,8 @@ namespace cloudscribe.SimpleContent.Web.Services
                     //{
                     //    await _pageService.FireUnPublishEvent(page).ConfigureAwait(false);
                     //}
-                    
-                    _pageService.ClearNavigationCache();
+
+                    await _navigationCache.ClearTreeCache();
 
                 }
 

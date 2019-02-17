@@ -8,16 +8,6 @@ namespace cloudscribe.SimpleContent.Models
 {
     public class NotImplementedPageService : IPageService
     {
-        public void ClearNavigationCache()
-        {
-            
-        }
-
-        public Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            throw new NotImplementedException();
-        }
-
         public Task DeletePage(string pageId)
         {
             throw new NotImplementedException();

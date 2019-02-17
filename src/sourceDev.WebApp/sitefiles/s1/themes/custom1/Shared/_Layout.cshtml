@@ -16,10 +16,15 @@ var siteRoot = "";
 if (!string.IsNullOrWhiteSpace(Tenant.SiteFolderName)) { siteRoot = "/" + Tenant.SiteFolderName; }
 var isIE = Context.Request.Headers["User-Agent"].ToString().Contains("Trident");
 var ieBodyClass = isIE ? "IE" : "";
+var lang = "en";
+if(!string.IsNullOrWhiteSpace(Tenant.ForcedUICulture))
+{
+    lang = Tenant.ForcedUICulture;
+}
 
 }
 <!DOCTYPE html>
-<html>
+<html lang="@lang">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - @(Tenant?.SiteName ?? "Sample")</title>
@@ -62,7 +67,7 @@ var ieBodyClass = isIE ? "IE" : "";
     <div id="wrapper" class="container-fluid cs-container flex-fill">
         @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
         <div class="row mainrow">
-            <main id="content" role="main" class="col order-3">
+            <main id="content" class="col order-3">
                 @await Html.PartialAsync("AlertsPartial")
                 <partial name="_CookieConsentPartial" />
                 @RenderBody()
