@@ -3,30 +3,39 @@
   <id>380c6e5c-f455-4c16-9b4b-c2e6bcdbc8ad</id>
   <title>Futurama</title>
   <slug>futurama</slug>
-  <correlationkey></correlationkey>
+  <correlationkey />
   <author>admin</author>
   <pubDate>2018-10-26T00:40:00.0000000Z</pubDate>
-  <lastModified>2018-12-31T12:20:41</lastModified>
+  <lastModified>2019-02-17T20:07:39</lastModified>
   <excerpt></excerpt>
-  <content>&lt;p&gt;a future post&lt;/p&gt;</content>
+  <content>&lt;p&gt;a future post blah blah blah&lt;/p&gt;
+
+&lt;p&gt;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&lt;/p&gt;
+
+&lt;p&gt;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&lt;/p&gt;
+
+&lt;p&gt;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&lt;/p&gt;
+</content>
   <contentType>html</contentType>
-  <imageUrl></imageUrl>
-  <thumbnailUrl></thumbnailUrl>
+  <imageUrl />
+  <thumbnailUrl />
   <createdUtc>2018-10-25T12:41:36</createdUtc>
   <createdByUser>admin</createdByUser>
-  <lastModifiedByUser></lastModifiedByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
   <draftAuthor />
   <draftContent />
   <draftPubDate />
   <templateKey></templateKey>
   <serializedModel></serializedModel>
-  <draftSerializedModel />
+  <draftSerializedModel></draftSerializedModel>
   <serializer></serializer>
   <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf</blogId>
   <ispublished>true</ispublished>
   <isFeatured>false</isFeatured>
-  <autoTeaser></autoTeaser>
-  <teaserOverride></teaserOverride>
+  <autoTeaser>&lt;p&gt;a future post blah blah blah&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah blah blah&amp;nbsp;blah blah</autoTeaser>
+  <teaserOverride />
   <suppressTeaser>false</suppressTeaser>
   <categories></categories>
   <comments></comments>
