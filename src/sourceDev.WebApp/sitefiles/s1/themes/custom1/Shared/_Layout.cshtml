@@ -130,6 +130,6 @@ if(!string.IsNullOrWhiteSpace(Tenant.ForcedUICulture))
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
     <add-this profile-id="@Tenant.AddThisDotComUsername" async></add-this>
-    <mini-profiler />
+    <mini-profiler position="RenderPosition.BottomLeft" />
 </body>
 </html>
