@@ -35,6 +35,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             _list.Add(BuildImageWithContent());
             _list.Add(BuildGalleryWithContent());
             _list.Add(BuildListOfLinks());
+            _list.Add(BuildEverythingTemplate());
             _list.Add(BuildBingLocationMap());
 
         }
@@ -48,6 +49,9 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
             return Task.FromResult(_list);
         }
+
+        
+
 
         private ContentTemplate BuildGalleryWithContent()
         {
@@ -107,6 +111,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     new ScriptFile()
                     {
                         Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
+                        //Url = "/js/cloudscribe-unobtrusive-file-drop.js",
                         Environment = "any",
                         Sort = 3
                     },
@@ -118,7 +123,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     },
                     new ScriptFile()
                     {
-                        Url = "/sctr/js/cst-basic-list.min.js",
+                        //Url = "/sctr/js/cst-basic-list.min.js",
+                        Url = "/js/cst-basic-list.js",
                         Environment = "any",
                         Sort = 5
                     }
@@ -219,6 +225,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     new ScriptFile()
                     {
                         Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
+                       // Url = "/js/cloudscribe-unobtrusive-file-drop.js",
                         Environment = "any",
                         Sort = 3
                     }
@@ -522,7 +529,129 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             return template;
 
         }
-        
+
+
+        private ContentTemplate BuildEverythingTemplate()
+        {
+            var template = new ContentTemplate()
+            {
+                Key = "sct-EverythingTemplate",
+                Title = _sr["Flexible complex page template"],
+                Description = _sr["1 to 4 optional top sections, an optional image gallery in the middle and 1 - 4 optional bottom sections"],
+                EditView = "ContentTemplates/EverythingEdit",
+                RenderView = "ContentTemplates/EverythingRender",
+
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailbleForFeature = "*",
+                Enabled = true,
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.EverythingModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555600",
+
+                EditCss = new List<CssFile>()
+                {
+                    new CssFile
+                    {
+                        Url = "/cr/css/dropzone.min.css",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie.min.css",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new CssFile
+                    {
+                        Url = "/cr/css/croppie-cloudscribe.css",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                },
+                EditScripts = new List<ScriptFile>()
+                {
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/dropzone.min.js",
+                        Environment = "any",
+                        Sort = 1
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/croppie.min.js",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/filemanager/js/cloudscribe-unobtrusive-file-drop.min.js",
+                        //Url = "/js/cloudscribe-unobtrusive-file-drop.js",
+                        Environment = "any",
+                        Sort = 3
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/knockout-3.4.2.js",
+                        Environment = "any",
+                        Sort = 4
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/sctr/js/cst-basic-list.min.js",
+                         //Url = "/js/cst-basic-list.js",
+                        Environment = "any",
+                        Sort = 5
+                    }
+                },
+
+                RenderCss = new List<CssFile>()
+                {
+                    new CssFile
+                    {
+                        Url = "/cr/css/baguetteBox.min.css",
+                        Environment = "any",
+                        Sort = 3
+                    },
+                    new CssFile
+                    {
+                        Url = "/sctr/css/simple-gallery.min.css",
+                        Environment = "any",
+                        Sort = 4
+                    },
+                    new CssFile
+                    {
+                        Url = "/sctr/css/simple-image.min.css",
+                        Environment = "any",
+                        Sort = 5
+                    }
+                },
+                RenderScripts = new List<ScriptFile>()
+                {
+                    new ScriptFile()
+                    {
+                        Url = "/cr/js/baguetteBox.min.js",
+                        Environment = "any",
+                        Sort = 2
+                    },
+                    new ScriptFile()
+                    {
+                        Url = "/sctr/js/simple-gallery.js",
+                        Environment = "any",
+                        Sort = 3
+                    }
+                }
+
+            };
+
+            return template;
+
+        }
+
         private ContentTemplate BuildBingLocationMap()
         {
             var template = new ContentTemplate()
@@ -541,7 +670,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                 SerializerName = "Json",
                 ValidatorName = "DefaultTemplateModelValidator",
                 GroupSort1 = "555555",
-                GroupSort2 = "555600",
+                GroupSort2 = "555700",
 
                 EditCss = new List<CssFile>()
                 {
