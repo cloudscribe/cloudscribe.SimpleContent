@@ -1,0 +1,16 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.EverythingModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+<div class="form-group row">
+    <label asp-for="GalleryLayout" class="control-label col-md-1 pl-5">@sr["Layout"]</label>
+    <div class="col-md-11">
+        <select asp-for="GalleryLayout" class="form-control">
+            <option value="EverythingCardsPartial">@sr["Cards"]</option>
+            <option value="EverythingCompactPartial">@sr["Compact"]</option>
+            <option value="EverythingGridPartial">@sr["Grid"]</option>
+            <option value="EverythingCarouselFullPartial">@sr["Carousel - Full Width"]</option>
+            <option value="EverythingCarouselLeftPartial">@sr["Carousel on Left With Wrapped Top Content"]</option>
+            <option value="EverythingCarouselRightPartial">@sr["Carousel on Right With Wrapped Top Content"]</option>
+        </select>
+    </div>
+</div>

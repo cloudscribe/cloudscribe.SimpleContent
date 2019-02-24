@@ -1,0 +1,11 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.EverythingModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+<partial name="@Model.TopSectionsLayout" model="Model" />
+@if (Model.Items.Count > 0)
+{
+    <div class="w-100">
+        <partial name="@Model.GalleryLayout" model="Model" />
+    </div>
+}
+    <partial name="@Model.BottomSectionsLayout" model="Model" />

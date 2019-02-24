@@ -1,0 +1,7 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.EverythingModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+@{
+    Layout = "_LayoutEmpty";
+}
+<partial name="EverythingRenderPartial" model="Model" />

@@ -1,0 +1,69 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.EverythingModel
+@if (!string.IsNullOrWhiteSpace(Model.SectionOneContent))
+{
+<div class="clearfix">
+    @if (!string.IsNullOrWhiteSpace(Model.SectionFiveHeading))
+    {
+        <h3>@Model.SectionFiveHeading</h3>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.SectionFiveResizedUrl))
+    {
+        <div class="float-md-right simple-side-image ml-md-2">
+            <img class="image-responsive" src="@Model.SectionFiveResizedUrl" alt="@Model.SectionFiveAltText" />
+        </div>
+    }
+    @Html.Raw(Model.SectionFiveContent)
+</div>
+    await Html.RenderPartialAsync("AdSpacePartial");
+}
+@if (!string.IsNullOrWhiteSpace(Model.SectionSixContent))
+{
+<div class="clearfix">
+    @if (!string.IsNullOrWhiteSpace(Model.SectionSixHeading))
+    {
+        <h3>@Model.SectionSixHeading</h3>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.SectionSixResizedUrl))
+    {
+        <div class="float-md-left simple-side-image mr-md-2">
+            <img class="image-responsive" src="@Model.SectionSixResizedUrl" alt="@Model.SectionSixAltText" />
+        </div>
+    }
+    @Html.Raw(Model.SectionSixContent)
+</div>
+    await Html.RenderPartialAsync("AdSpacePartial");
+}
+@if (!string.IsNullOrWhiteSpace(Model.SectionSevenContent))
+{
+<div class="clearfix">
+    @if (!string.IsNullOrWhiteSpace(Model.SectionSevenHeading))
+    {
+        <h3>@Model.SectionSevenHeading</h3>
+    }
+    @if (!string.IsNullOrWhiteSpace(@Model.SectionSevenResizedUrl))
+    {
+        <div class="float-md-right simple-side-image ml-md-2">
+            <img class="image-responsive" src="@Model.SectionSevenResizedUrl" alt="@Model.SectionSevenAltText" />
+        </div>
+    }
+    @Html.Raw(Model.SectionSevenContent)
+</div>
+    await Html.RenderPartialAsync("AdSpacePartial");
+}
+@if (!string.IsNullOrWhiteSpace(Model.SectionEightContent))
+{
+<div class="clearfix">
+    @if (!string.IsNullOrWhiteSpace(Model.SectionEightHeading))
+    {
+        <h3>@Model.SectionEightHeading</h3>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.SectionEightResizedUrl))
+    {
+        <div class="float-md-left simple-side-image mr-md-2">
+            <img class="image-responsive" src="@Model.SectionEightResizedUrl" alt="@Model.SectionEightAltText" />
+        </div>
+    }
+    @Html.Raw(Model.SectionEightContent)
+</div>
+    await Html.RenderPartialAsync("AdSpacePartial");
+}

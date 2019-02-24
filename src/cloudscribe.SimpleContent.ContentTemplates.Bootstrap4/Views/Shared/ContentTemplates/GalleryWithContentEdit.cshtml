@@ -39,6 +39,11 @@
         <input id="ItemsConfig" type="hidden" value="@itemsJson" />
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
         <partial name="GalleryWithContentEditLayoutSelector" model="Model" />
+        <div class="form-group">
+            <label asp-for="CarouselIntervalInMilliseconds">@sr["Carousel slide interval in milliseconds"]</label>
+            <input asp-for="CarouselIntervalInMilliseconds" class="form-control" />
+            <span asp-validation-for="CarouselIntervalInMilliseconds" class="text-danger"></span>
+        </div>
         <fieldset class="border p-2 mb-2">
             <legend class="w-auto">@sr["Current Images"]</legend>
             <div data-bind="visible: Items().length === 0">
