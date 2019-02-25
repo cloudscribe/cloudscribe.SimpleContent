@@ -18,6 +18,13 @@
         </div>
 
     }
+    if (Model.Layout == "ImageNotFloated")
+    {
+        <div class="w-100">
+            <img class="img-fluid" src="@Model.ResizedUrl" alt="@Model.AltText" />
+        </div>
+
+    }
 
 }
 @Html.Raw(Model.Content)

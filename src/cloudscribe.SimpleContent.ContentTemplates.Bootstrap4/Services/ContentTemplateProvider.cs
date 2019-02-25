@@ -355,8 +355,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             var template = new ContentTemplate()
             {
                 Key = "sct-ImageWithContent",
-                Title = _sr["Image with wrapped content"],
-                Description = _sr["A simple image floated left or right so that content wraps around it."],
+                Title = _sr["Image with content"],
+                Description = _sr["A simple image floated left or right so that content wraps around it, or not floated for a responsive image with content below."],
                 EditView = "ContentTemplates/ImageWithContentEdit",
                 RenderView = "ContentTemplates/ImageWithContentRender",
                 ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.ImageWithContentViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap4",
