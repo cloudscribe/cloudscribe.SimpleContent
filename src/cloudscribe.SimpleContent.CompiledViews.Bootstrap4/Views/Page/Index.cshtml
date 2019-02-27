@@ -43,14 +43,8 @@
     }
 }
 <partial name="PageDetailPartial" model="@Model" />
-@if (Model.ProjectSettings.ShowRecentPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
-{
-    @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = 3 })
-}
-@if (Model.ProjectSettings.ShowFeaturedPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
-{
-    @await Component.InvokeAsync("FeaturedPosts", new { viewName = "FeaturedPosts", numberToShow = 3 })
-}
+<partial name="RecentPostsPartial" model="@Model" />
+<partial name="FeaturedPostsPartial" model="@Model" />
 @section Scripts {
     @if (Model.CurrentPage != null)
     {

@@ -15,5 +15,8 @@ namespace cloudscribe.SimpleContent.Web.Design
         public string IconSetId { get; set; } = "fontawesome4x";
 
         public IconCssClasses Icons { get; set; }
+
+        public int NumberOfRecentPostsToShow { get; set; } = 3;
+        public int NumberOfFeaturedPostsToShow { get; set; } = 3;
     }
 }
