@@ -123,8 +123,8 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
                     },
                     new ScriptFile()
                     {
-                        //Url = "/sctr/js/cst-basic-list.min.js",
-                        Url = "/js/cst-basic-list.js",
+                        Url = "/sctr/js/cst-basic-list.min.js",
+                       // Url = "/js/cst-basic-list.js",
                         Environment = "any",
                         Sort = 5
                     }
