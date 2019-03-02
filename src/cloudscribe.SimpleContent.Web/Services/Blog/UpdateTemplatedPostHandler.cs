@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-14
-// Last Modified:           2018-11-13
+// Last Modified:           2019-03-02
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -162,11 +162,18 @@ namespace cloudscribe.SimpleContent.Web.Services
                     request.ViewModel.Slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
                     if (request.ViewModel.Slug != post.Slug)
                     {
-                        var slugIsAvailable = await _blogService.SlugIsAvailable(request.ViewModel.Slug);
-                        if (!slugIsAvailable)
+                        var slug = request.ViewModel.Slug;
+                        var slugIsAvailable = await _blogService.SlugIsAvailable(slug);
+                        while (!slugIsAvailable)
                         {
-                            errors.Add(_localizer["The post slug was not changed because the requested slug is already in use."]);
-                            request.ModelState.AddModelError("Slug", _localizer["The post slug was not changed because the requested slug is already in use."]);
+                            slug += "-";
+                            slugIsAvailable = await _blogService.SlugIsAvailable(slug);
+                            
+                        }
+
+                        if (slugIsAvailable)
+                        {
+                            post.Slug = slug;
                         }
                     }
                 }
@@ -186,10 +193,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                     post.LastModified = DateTime.UtcNow;
                     post.LastModifiedByUser = request.UserName;
                     post.MetaDescription = request.ViewModel.MetaDescription;
-                    if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                    {
-                        post.Slug = request.ViewModel.Slug;
-                    }
+                    //if (!string.IsNullOrEmpty(request.ViewModel.Slug))
+                    //{
+                    //    post.Slug = request.ViewModel.Slug;
+                    //}
 
                     var categories = new List<string>();
                     if (!string.IsNullOrEmpty(request.ViewModel.Categories))

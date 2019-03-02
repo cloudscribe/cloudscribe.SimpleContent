@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2019-02-17
+// Last Modified:           2019-03-02
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -156,14 +156,18 @@ namespace cloudscribe.SimpleContent.Web.Services
                 if (!string.IsNullOrEmpty(request.ViewModel.Slug))
                 {
                     // remove any bad characters
-                    request.ViewModel.Slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
-                    if (request.ViewModel.Slug != page.Slug)
+                    var slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
+                    if (slug != page.Slug)
                     {
-                        var slugIsAvailable = await _pageService.SlugIsAvailable(request.ViewModel.Slug);
-                        if (!slugIsAvailable)
+                        var slugIsAvailable = await _pageService.SlugIsAvailable(slug);
+                        while (!slugIsAvailable)
                         {
-                            errors.Add(_localizer["The page slug was not changed because the requested slug is already in use."]);
-                            request.ModelState.AddModelError("Slug", _localizer["The page slug was not changed because the requested slug is already in use."]);
+                            slug += "-";
+                            slugIsAvailable = await _pageService.SlugIsAvailable(slug);
+                        }
+                        if (slugIsAvailable)
+                        {
+                            page.Slug = slug;
                         }
                     }
                 }
@@ -188,10 +192,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                     
                     page.ViewRoles = request.ViewModel.ViewRoles;
 
-                    if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                    {
-                        page.Slug = request.ViewModel.Slug;
-                    }
+                    //if (!string.IsNullOrEmpty(request.ViewModel.Slug))
+                    //{
+                    //    page.Slug = request.ViewModel.Slug;
+                    //}
                     
                     page.ViewRoles = request.ViewModel.ViewRoles;
 

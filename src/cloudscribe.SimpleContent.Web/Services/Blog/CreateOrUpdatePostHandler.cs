@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2018-11-13
+// Last Modified:           2019-03-02
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -76,28 +76,50 @@ namespace cloudscribe.SimpleContent.Web.Services
                         BlogId = request.ProjectId,
                         Title = request.ViewModel.Title,
                         MetaDescription = request.ViewModel.MetaDescription,                  
-                        Slug = ContentUtils.CreateSlug(request.ViewModel.Title),
                         CreatedByUser = request.UserName
                     };
+                    
                 }
                 else
                 {
                     history = post.CreateHistory(request.UserName);
                 }
 
+                //normally empty since not in the views
                 if (!string.IsNullOrEmpty(request.ViewModel.Slug))
                 {
                     // remove any bad characters
                     request.ViewModel.Slug = ContentUtils.CreateSlug(request.ViewModel.Slug);
                     if (request.ViewModel.Slug != post.Slug)
                     {
-                        var slugIsAvailable = await _blogService.SlugIsAvailable(request.ViewModel.Slug);
-                        if (!slugIsAvailable)
+                        var slug = request.ViewModel.Slug;
+                        var slugIsAvailable = await _blogService.SlugIsAvailable(slug);
+                        while (!slugIsAvailable)
                         {
-                            request.ModelState.AddModelError("Slug", _localizer["The page slug was not changed because the requested slug is already in use."]);
+                            slug += "-";
+                            slugIsAvailable = await _blogService.SlugIsAvailable(slug);
+                        }
+                        if(slugIsAvailable)
+                        {
+                            post.Slug = slug;
                         }
                     }
                 }
+                //this will happen in BlogService if it is empty
+                //else if(string.IsNullOrWhiteSpace(post.Slug))
+                //{
+                //    var slug = ContentUtils.CreateSlug(request.ViewModel.Title);
+                //    var slugIsAvailable = await _blogService.SlugIsAvailable(slug);
+                //    while (!slugIsAvailable)
+                //    {
+                //        slug += "-";
+                //        slugIsAvailable = await _blogService.SlugIsAvailable(slug); 
+                //    }
+                //    if (slugIsAvailable)
+                //    {
+                //        post.Slug = slug;
+                //    }
+                //}
 
                 if (request.ModelState.IsValid)
                 {
@@ -112,10 +134,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                     post.LastModified = DateTime.UtcNow;
                     post.LastModifiedByUser = request.UserName;
 
-                    if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                    {
-                        post.Slug = request.ViewModel.Slug;
-                    }
+                    //if (!string.IsNullOrEmpty(request.ViewModel.Slug))
+                    //{
+                    //    post.Slug = request.ViewModel.Slug;
+                    //}
 
 
                     var categories = new List<string>();
