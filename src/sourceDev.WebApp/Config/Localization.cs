@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using cloudscribe.Core.Web.Localization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -20,16 +22,20 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
 
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                var supportedCultures = new[]
-                {
+            var supportedCultures = new[]
+               {
                     new CultureInfo("en-US"),
                     new CultureInfo("en-GB"),
                     new CultureInfo("fr-FR"),
-                    new CultureInfo("fr"),
-                    new CultureInfo("cy"),
+                    new CultureInfo("cy-GB"),
                 };
+
+            //this comes from cloudscribe core
+            var routeSegmentLocalizationProvider = new UrlSegmentRequestCultureProvider(supportedCultures.ToList());
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+               
 
                 // State what the default culture for your application is. This will be used if no specific culture
                 // can be determined for a given request.
@@ -54,6 +60,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 //  // My custom request culture logic
                 //  return new ProviderCultureResult("en");
                 //}));
+
+                options.RequestCultureProviders.Insert(0, routeSegmentLocalizationProvider);
+
             });
 
             return services;

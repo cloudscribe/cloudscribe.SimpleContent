@@ -58,6 +58,65 @@
         public const string FolderNewPageRouteName = "foldernewpage";
         public const string FolderPageHistoryRouteName = "folderpagehistory";
 
+
+
+        /******************************************************************************************/
+
+        public const string CulturePostWithDateRouteName = "postwithdate-culture";
+        public const string CulturePostWithoutDateRouteName = "postwithoutdate-culture";
+        public const string CultureBlogCategoryRouteName = "blogcategory-culture";
+        public const string CultureBlogArchiveRouteName = "blogarchive-culture";
+        public const string CultureBlogIndexRouteName = "blogindex-culture";
+        public const string CultureNewPostRouteName = "newpost-culture";
+        public const string CultureMostRecentPostRouteName = "mostrecentpost-culture";
+        public const string CulturePostEditRouteName = "postedit-culture";
+        public const string CulturePostEditWithTemplateRouteName = "posteditwithtemplate-culture";
+        public const string CulturePostDeleteRouteName = "postdelete-culture";
+        public const string CulturePostHistoryRouteName = "posthistory-culture";
+
+        public const string CultureFolderPostWithDateRouteName = "folderpostwithdate-culture";
+        public const string CultureFolderPostWithoutDateRouteName = "folderpostwithoutdate-culture";
+        public const string CultureFolderBlogCategoryRouteName = "folderblogcategory-culture";
+        public const string CultureFolderBlogArchiveRouteName = "folderblogarchive-culture";
+        public const string CultureFolderBlogIndexRouteName = "folderblogindex-culture";
+        public const string CultureFolderNewPostRouteName = "foldernewpost-culture";
+        public const string CultureFolderMostRecentPostRouteName = "foldermostrecentpost-culture";
+        public const string CultureFolderPostEditRouteName = "folderpostedit-culture";
+        public const string CultureFolderPostEditWithTemplateRouteName = "folderposteditwithtemplate-culture";
+        public const string CultureFolderPostDeleteRouteName = "folderpostdelete-culture";
+        public const string CultureFolderPostHistoryRouteName = "folderposthistory-culture";
+
+        public const string CulturePageIndexRouteName = "pageindex-culture";
+        public const string CulturePageEditRouteName = "pageedit-culture";
+        public const string CulturePageEditWithTemplateRouteName = "pageeditwithtemplate-culture";
+        public const string CulturePageDeleteRouteName = "pagedelete-culture";
+        public const string CulturePageDevelopRouteName = "pagedevelop-culture";
+        public const string CulturePageTreeRouteName = "pagetree-culture";
+        public const string CultureNewPageRouteName = "newpage-culture";
+        public const string CulturePageHistoryRouteName = "pagehistory-culture";
+
+        public const string CultureFolderPageIndexRouteName = "folderpageindex-culture";
+        public const string CultureFolderPageEditRouteName = "folderpageedit-culture";
+        public const string CultureFolderPageEditWithTemplateRouteName = "folderpageeditwithtemplate-culture";
+        public const string CultureFolderPageDeleteRouteName = "folderpagedelete-culture";
+        public const string CultureFolderPageDevelopRouteName = "folderpagedevelop-culture";
+        public const string CultureFolderPageTreeRouteName = "folderpagetree-culture";
+        public const string CultureFolderNewPageRouteName = "foldernewpage-culture";
+        public const string CultureFolderPageHistoryRouteName = "folderpagehistory-culture";
+
+
+        /*******************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
         public const string ContentEditorClaimType = "ContentEditor";
         public const string PageEditorClaimType = "PageEditor";
         public const string BlogEditorClaimType = "BlogEditor";

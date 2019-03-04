@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-11-10
-// Last Modified:			2018-07-05
+// Last Modified:			2019-03-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -31,7 +31,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.HasKey(p => p.Id);
 
-                entity.Property(p => p.Id).HasMaxLength(36);
+                entity.Property(p => p.Id).HasMaxLength(50);
 
                 entity.Property(p => p.Title).HasMaxLength(255);
 
@@ -162,7 +162,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.HasIndex(p => p.CorrelationKey);
 
-                entity.Property(p => p.BlogId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.BlogId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.BlogId);
 
@@ -228,7 +228,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 entity.Property(p => p.PostEntityId).HasMaxLength(36);
                 entity.HasIndex(p => p.PostEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
 
@@ -258,7 +258,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.HasIndex(p => p.PostEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
             });
@@ -270,7 +270,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
 
@@ -366,7 +366,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.HasIndex(p => p.PageEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
 
@@ -396,7 +396,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
 
                 entity.HasIndex(p => p.PageEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
             });
@@ -433,6 +433,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 entity.HasKey(p => p.Id);
 
                 entity.Property(p => p.Id).HasMaxLength(36);
+
+                entity.Property(p => p.ProjectId).HasMaxLength(50);
 
                 entity.Property(p => p.CorrelationKey).HasMaxLength(255);
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2019-02-17
+// Last Modified:           2019-03-04
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -24,7 +24,7 @@ namespace cloudscribe.SimpleContent.Services
             _projectCommands = projectCommands;
             _settingsResolver = settingsResolver;
            
-           
+            
         }
         
         private readonly IProjectQueries _projectQueries;
@@ -32,6 +32,8 @@ namespace cloudscribe.SimpleContent.Services
         private readonly IProjectSettingsResolver _settingsResolver;
         private IProjectSettings _currentSettings = null;
         
+
+
         private async Task<bool> EnsureSettings()
         {
             if (_currentSettings != null) { return true; }

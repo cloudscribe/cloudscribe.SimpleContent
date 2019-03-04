@@ -107,7 +107,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             {
                 var post = request.Post;
                 var history = post.CreateHistory(request.UserName);
-                var project = await _projectService.GetProjectSettings(request.ProjectId);
+                //var project = await _projectService.GetProjectSettings(request.ProjectId);
+                var project = await _projectService.GetCurrentProjectSettings();
                 var serializer = GetSerializer(request.Template.SerializerName);
                 var parser = GetFormParser(request.Template.FormParserName);
                 var validator = GetValidator(request.Template.ValidatorName);

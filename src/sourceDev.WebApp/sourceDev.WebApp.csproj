@@ -29,7 +29,7 @@
     <Content Include="wwwroot\lib\**\*" CopyToPublishDirectory="Never" />
 
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.SimpleContent.CompiledViews.Bootstrap4.csproj" />
@@ -44,11 +44,12 @@
     <ProjectReference Include="..\cloudscribe.SimpleContent.MetaWeblog\cloudscribe.SimpleContent.MetaWeblog.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Syndication\cloudscribe.SimpleContent.Syndication.csproj" />
   </ItemGroup>
-  
-  
+
+
+
   <ItemGroup>
     <PackageReference Include="cloudscribe.Core.Web" Version="3.1.68" />
-    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.32" />
+    <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.33" />
     <PackageReference Include="cloudscribe.Web.StaticFiles" Version="1.0.10" />
    
     
@@ -77,6 +78,7 @@
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.165" />
     
   </ItemGroup>
+
   
   <!--<ItemGroup>
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.*" />
