@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <VersionPrefix>4.0.29</VersionPrefix>
-    <AssemblyVersion>4.0.29</AssemblyVersion>
+    <VersionPrefix>4.0.30</VersionPrefix>
+    <AssemblyVersion>4.0.30</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog,content</PackageTags>
@@ -27,13 +27,13 @@
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.1" />
     <PackageReference Include="cloudscribe.Email.Senders" Version="2.0.2" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.25" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.1.14" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.27" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="2.1.16" />
     <PackageReference Include="cloudscribe.Web.Pagination" Version="2.1.7" />
     <PackageReference Include="cloudscribe.DateTimeUtils" Version="1.0.0" />
     <PackageReference Include="cloudscribe.Versioning" Version="1.0.0" />
    
-    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.1.3" />
+    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="2.1.4" />
     
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.1.1" />
@@ -50,8 +50,8 @@
     
     <PackageReference Include="Markdig" Version="0.15.4" />
 
-    <PackageReference Include="MediatR" Version="5.1.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.1.0" />
+    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     
   </ItemGroup>
 
