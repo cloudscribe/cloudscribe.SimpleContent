@@ -65,7 +65,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             try
             {
                 bool isNew = false;
-                var project = await _projectService.GetProjectSettings(request.ProjectId);
+                //var project = await _projectService.GetProjectSettings(request.ProjectId);
+                var project = await _projectService.GetCurrentProjectSettings();
                 var post = request.Post;
                 ContentHistory history = null;
                 if (post == null)

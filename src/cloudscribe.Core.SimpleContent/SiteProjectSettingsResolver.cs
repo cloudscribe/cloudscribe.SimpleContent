@@ -2,11 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-07-11
-// Last Modified:           2017-09-24
+// Last Modified:           2019-03-04
 // 
 
 using cloudscribe.Core.Models;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Web.Services;
 using Microsoft.Extensions.Options;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,57 +20,71 @@ namespace cloudscribe.Core.SimpleContent.Integration
             SiteContext currentSite,
             IProjectQueries projectQueries,
             IProjectCommands projectCommands,
-            IOptions<ContentSettingsUIConfig> uiOptionsAccessor
+            IOptions<ContentSettingsUIConfig> uiOptionsAccessor,
+            CultureHelper cultureHelper
             )
         {
-            this.currentSite = currentSite;
-            this.projectQueries = projectQueries;
-            this.projectCommands = projectCommands;
-            uiOptions = uiOptionsAccessor.Value;
+            _currentSite = currentSite;
+            _projectQueries = projectQueries;
+            _projectCommands = projectCommands;
+            _uiOptions = uiOptionsAccessor.Value;
+            _cultureHelper = cultureHelper;
         }
 
-        private SiteContext currentSite;
-        private IProjectQueries projectQueries;
-        private IProjectCommands projectCommands;
-        private ContentSettingsUIConfig uiOptions;
+        private readonly SiteContext _currentSite;
+        private readonly IProjectQueries _projectQueries;
+        private readonly IProjectCommands _projectCommands;
+        private readonly ContentSettingsUIConfig _uiOptions;
+        private readonly CultureHelper _cultureHelper;
 
         public async Task<IProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {
-            var settings = await projectQueries.GetProjectSettings(currentSite.Id.ToString(), cancellationToken).ConfigureAwait(false);
+            IProjectSettings settings;
+            if (_cultureHelper.UseCultureProjectIds() && !_cultureHelper.IsDefaultCulture())
+            {
+                var settingsKey = _currentSite.Id.ToString() + "~" + _cultureHelper.CurrentUICultureName();
+                settings = await _projectQueries.GetProjectSettings(settingsKey, cancellationToken).ConfigureAwait(false);
 
+            }
+            else
+            {
+                settings = await _projectQueries.GetProjectSettings(_currentSite.Id.ToString(), cancellationToken).ConfigureAwait(false);
+            }
+            
             //ensure existence of settings
             if(settings == null)
             {
                 settings = new ProjectSettings();
-                settings.Id = currentSite.Id.ToString();
-                if(!uiOptions.ShowBlogMenuOptions)
+                settings.Id = _currentSite.Id.ToString();
+                if(!_uiOptions.ShowBlogMenuOptions)
                 {
                     settings.AddBlogToPagesTree = false;
                     settings.BlogMenuLinksToNewestPost = false;
                 }
-                
-                await projectCommands.Create(settings.Id, settings, cancellationToken).ConfigureAwait(false);
+
+                if (_cultureHelper.UseCultureProjectIds() && !_cultureHelper.IsDefaultCulture())
+                {
+                    settings.Id = settings.Id + "~" + _cultureHelper.CurrentUICultureName();
+                }
+
+                await _projectCommands.Create(settings.Id, settings, cancellationToken).ConfigureAwait(false);
             }
             
             if (string.IsNullOrEmpty(settings.RecaptchaPublicKey))
             {
-                settings.RecaptchaPublicKey = currentSite.RecaptchaPublicKey;
-                settings.RecaptchaPrivateKey = currentSite.RecaptchaPrivateKey;
+                settings.RecaptchaPublicKey = _currentSite.RecaptchaPublicKey;
+                settings.RecaptchaPrivateKey = _currentSite.RecaptchaPrivateKey;
             }
 
-            if (!uiOptions.ShowBlogMenuOptions)
+            if (!_uiOptions.ShowBlogMenuOptions)
             {
                 settings.AddBlogToPagesTree = false;        
             }
 
-            //settings.EmailFromAddress = currentSite.DefaultEmailFromAddress;
-            //settings.SmtpPassword = currentSite.SmtpPassword;
-            //settings.SmtpPort = currentSite.SmtpPort;
-            //settings.SmtpRequiresAuth = currentSite.SmtpRequiresAuth;
-            //settings.SmtpServer = currentSite.SmtpServer;
-            //settings.SmtpUser = currentSite.SmtpUser;
-            //settings.SmtpUseSsl = currentSite.SmtpUseSsl;
-            settings.TimeZoneId = currentSite.TimeZoneId;
+            
+            settings.TimeZoneId = _currentSite.TimeZoneId;
+
+            
             
             return settings;
         }

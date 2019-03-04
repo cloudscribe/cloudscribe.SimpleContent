@@ -89,7 +89,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("ParentSlug")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ProjectId");
+                    b.Property<string>("ProjectId")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime?>("PubDate");
 
@@ -135,7 +136,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<string>("AboutContent");
 
@@ -302,7 +303,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.HasKey("Value", "PageEntityId");
 
@@ -341,7 +342,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("PubDate");
 
@@ -430,7 +431,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime?>("PubDate");
 
@@ -515,7 +516,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.HasKey("Value", "PostEntityId");
 
@@ -554,7 +555,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("PubDate");
 
@@ -586,7 +587,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<string>("BlogId")
                         .IsRequired()
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<string>("CategoriesCsv")
                         .HasMaxLength(500);

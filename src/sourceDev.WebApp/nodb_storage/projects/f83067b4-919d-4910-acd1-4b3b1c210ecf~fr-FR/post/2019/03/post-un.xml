@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>post-un</id>
+  <title>Post Un</title>
+  <slug>post-un</slug>
+  <correlationkey />
+  <author>Admin</author>
+  <pubDate>2019-03-04T20:13:34.1251299Z</pubDate>
+  <lastModified>2019-03-04T20:13:34</lastModified>
+  <excerpt />
+  <content>&lt;p&gt;Le first one&lt;/p&gt;
+</content>
+  <contentType>html</contentType>
+  <imageUrl />
+  <thumbnailUrl />
+  <createdUtc>2019-03-04T20:13:34</createdUtc>
+  <createdByUser>admin</createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor />
+  <draftContent />
+  <draftPubDate />
+  <templateKey />
+  <serializedModel />
+  <draftSerializedModel />
+  <serializer />
+  <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf~fr-FR</blogId>
+  <ispublished>true</ispublished>
+  <isFeatured>false</isFeatured>
+  <autoTeaser />
+  <teaserOverride />
+  <suppressTeaser>false</suppressTeaser>
+  <categories></categories>
+  <comments></comments>
+</post>

@@ -118,7 +118,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("ProjectId")
-                        .HasColumnName("project_id");
+                        .HasColumnName("project_id")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime?>("PubDate")
                         .HasColumnName("pub_date");
@@ -181,7 +182,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<string>("AboutContent")
                         .HasColumnName("about_content");
@@ -405,7 +406,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<string>("ProjectId")
                         .IsRequired()
                         .HasColumnName("project_id")
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.HasKey("Value", "PageEntityId")
                         .HasName("pk_cs_page_category");
@@ -457,7 +458,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<string>("ProjectId")
                         .IsRequired()
                         .HasColumnName("project_id")
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("PubDate")
                         .HasColumnName("pub_date");
@@ -578,7 +579,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<string>("ProjectId")
                         .IsRequired()
                         .HasColumnName("project_id")
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime?>("PubDate")
                         .HasColumnName("pub_date");
@@ -691,7 +692,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<string>("ProjectId")
                         .IsRequired()
                         .HasColumnName("project_id")
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.HasKey("Value", "PostEntityId")
                         .HasName("pk_cs_post_category");
@@ -743,7 +744,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<string>("ProjectId")
                         .IsRequired()
                         .HasColumnName("project_id")
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("PubDate")
                         .HasColumnName("pub_date");
@@ -785,7 +786,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<string>("BlogId")
                         .IsRequired()
                         .HasColumnName("blog_id")
-                        .HasMaxLength(36);
+                        .HasMaxLength(50);
 
                     b.Property<string>("CategoriesCsv")
                         .HasColumnName("categories_csv")

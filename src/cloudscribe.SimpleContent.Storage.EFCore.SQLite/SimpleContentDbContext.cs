@@ -24,7 +24,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.HasKey(p => p.Id);
 
-                entity.Property(p => p.Id).HasMaxLength(36);
+                entity.Property(p => p.Id).HasMaxLength(50);
 
                 entity.Property(p => p.Title).HasMaxLength(255);
 
@@ -155,7 +155,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.HasIndex(p => p.CorrelationKey);
 
-                entity.Property(p => p.BlogId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.BlogId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.BlogId);
 
@@ -220,7 +220,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.Property(p => p.PostEntityId).HasMaxLength(36);
                 entity.HasIndex(p => p.PostEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
 
@@ -250,7 +250,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.HasIndex(p => p.PostEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
             });
@@ -262,7 +262,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasMaxLength(36);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
 
@@ -358,7 +358,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.HasIndex(p => p.PageEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
 
@@ -388,7 +388,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
 
                 entity.HasIndex(p => p.PageEntityId);
 
-                entity.Property(p => p.ProjectId).HasMaxLength(36).IsRequired();
+                entity.Property(p => p.ProjectId).HasMaxLength(50).IsRequired();
 
                 entity.HasIndex(p => p.ProjectId);
             });
@@ -425,6 +425,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.HasKey(p => p.Id);
 
                 entity.Property(p => p.Id).HasMaxLength(36);
+
+                entity.Property(p => p.ProjectId).HasMaxLength(50);
 
                 entity.Property(p => p.CorrelationKey).HasMaxLength(255);
 

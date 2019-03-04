@@ -2,7 +2,9 @@
 using cloudscribe.Core.SimpleContent.Integration;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Design;
+using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
+using cloudscribe.Web.Navigation.Caching;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -55,6 +57,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IAuthorNameResolver, AuthorNameResolver>();
             services.TryAddScoped<IProjectEmailService, CoreProjectEmailService>();
             services.AddScoped<ISimpleContentThemeHelper, SiteSimpleContentThemeHelper>();
+
+            services.AddScoped<ITreeCacheKeyResolver, SiteNavigationCacheKeyResolver>();
+            
 
             if (configuration != null)
             {

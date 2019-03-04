@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-07
-// Last Modified:			2019-02-17
+// Last Modified:			2019-03-04
 // 
 
 using cloudscribe.Core.Models;
@@ -126,8 +126,13 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 
             if(canManageUsers)
             {
+                var projectId = projectSettings.Id;
+                if(projectId.Length > 36)
+                {
+                    projectId = projectId.Substring(0, 36);
+                }
                 var contentEditors = await userQueries.GetUsersForClaim(
-                    new Guid(projectSettings.Id),
+                    new Guid(projectId),
                     ProjectConstants.ContentEditorClaimType,
                     projectSettings.Id
                     );
@@ -137,7 +142,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 }
                 
                 var blogEditors = await userQueries.GetUsersForClaim(
-                    new Guid(projectSettings.Id),
+                    new Guid(projectId),
                     ProjectConstants.BlogEditorClaimType,
                     projectSettings.Id
                     );
@@ -147,7 +152,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 }
                 
                 var pageEditors = await userQueries.GetUsersForClaim(
-                    new Guid(projectSettings.Id),
+                    new Guid(projectId),
                     ProjectConstants.PageEditorClaimType,
                     projectSettings.Id
                     );

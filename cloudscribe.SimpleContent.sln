@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.ContentTemplates.Bootstrap4", "src\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4\cloudscribe.SimpleContent.ContentTemplates.Bootstrap4.csproj", "{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.SimpleContent.Storage.EFCore.PostgreSql", "src\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.csproj", "{76A12B64-BF45-464F-8B23-1AEBF9427E9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.Storage.EFCore.PostgreSql", "src\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.csproj", "{76A12B64-BF45-464F-8B23-1AEBF9427E9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
