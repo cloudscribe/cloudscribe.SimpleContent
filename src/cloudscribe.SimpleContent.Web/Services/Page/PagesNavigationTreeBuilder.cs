@@ -2,16 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-05-27
-// Last Modified:           2018-07-09
+// Last Modified:           2019-03-04
 // 
 
 using cloudscribe.SimpleContent.Models;
-using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -93,6 +91,7 @@ namespace cloudscribe.SimpleContent.Services
                 {
                     Key = homePage.Id,
                     Text = homePage.Title,
+                    LastModifiedUtc = homePage.LastModified,
                     Url = urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = "" }) //_pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix) // urlHelper.Content("~/" + folderPrefix);
                 };
             }
@@ -183,6 +182,7 @@ namespace cloudscribe.SimpleContent.Services
                 node.Text = page.Title;
                 node.ViewRoles = page.ViewRoles;
                 node.ComponentVisibility = page.MenuFilters;
+                node.LastModifiedUtc = page.LastModified;
                 SetUrl(node, page, urlHelper);
                 
                 // for unpublished pages PagesNavigationNodePermissionResolver
@@ -218,7 +218,8 @@ namespace cloudscribe.SimpleContent.Services
                     Key = page.Id,
                     Text = page.Title,
                     ViewRoles = page.ViewRoles,
-                    ComponentVisibility = page.MenuFilters
+                    ComponentVisibility = page.MenuFilters,
+                    LastModifiedUtc = page.LastModified
                 };
                 SetUrl(node, page, urlHelper);
 
