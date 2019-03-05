@@ -40,7 +40,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
         public async Task<IProjectSettings> GetCurrentProjectSettings(CancellationToken cancellationToken)
         {
             IProjectSettings settings;
-            if (_cultureHelper.UseCultureProjectIds() && !_cultureHelper.IsDefaultCulture())
+            if (_cultureHelper.UseCultureRoutesAndProjects() && !_cultureHelper.IsDefaultCulture())
             {
                 var settingsKey = _currentSite.Id.ToString() + "~" + _cultureHelper.CurrentUICultureName();
                 settings = await _projectQueries.GetProjectSettings(settingsKey, cancellationToken).ConfigureAwait(false);
@@ -62,7 +62,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
                     settings.BlogMenuLinksToNewestPost = false;
                 }
 
-                if (_cultureHelper.UseCultureProjectIds() && !_cultureHelper.IsDefaultCulture())
+                if (_cultureHelper.UseCultureRoutesAndProjects() && !_cultureHelper.IsDefaultCulture())
                 {
                     settings.Id = settings.Id + "~" + _cultureHelper.CurrentUICultureName();
                 }

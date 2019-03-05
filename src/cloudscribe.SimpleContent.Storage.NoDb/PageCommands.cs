@@ -60,6 +60,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         {
             var p = Page.FromIPage(page);
             p.LastModified = DateTime.UtcNow;
+            p.Resources = page.Resources;
             
             await _commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
             

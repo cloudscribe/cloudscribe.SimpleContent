@@ -28,17 +28,11 @@ namespace cloudscribe.SimpleContent.Web.Services
         {
             return CultureInfo.CurrentUICulture.Name;
         }
-
-        public bool UseCultureProjectIds()
+        
+        public bool UseCultureRoutesAndProjects()
         {
             
-            return _contentOptions.UseCultureProjectIds;
-        }
-
-        public bool UseCultureRoutes()
-        {
-            
-            return _contentOptions.UseCultureRoutes;
+            return _contentOptions.UseCultureRoutesAndProjects;
         }
     }
 }

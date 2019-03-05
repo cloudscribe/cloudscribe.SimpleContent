@@ -282,7 +282,7 @@ namespace cloudscribe.SimpleContent.Models
             target.ParentSlug = input.ParentSlug;
             target.ProjectId = input.ProjectId;
             target.PubDate = input.PubDate;
-            target.Resources = input.Resources;
+            //target.Resources = input.Resources;
             target.ShowCategories = input.ShowCategories;
             target.ShowComments = input.ShowComments;
             target.ShowHeading = input.ShowHeading;

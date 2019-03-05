@@ -21,7 +21,7 @@ namespace cloudscribe.Core.SimpleContent
 
         public string GetCacheKey(INavigationTreeBuilder builder)
         {
-            if(_cultureHelper.UseCultureRoutes() && !_cultureHelper.IsDefaultCulture())
+            if(_cultureHelper.UseCultureRoutesAndProjects() && !_cultureHelper.IsDefaultCulture())
             {
                 return builder.Name + _currentSite.Id.ToString() + _cultureHelper.CurrentUICultureName();
             }
