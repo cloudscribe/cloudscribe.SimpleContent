@@ -6,7 +6,7 @@ namespace cloudscribe.SimpleContent.Models
 {
     public class ContentLocalizationOptions
     {
-        public bool UseCultureProjectIds { get; set; }
-        public bool UseCultureRoutes { get; set; }
+        
+        public bool UseCultureRoutesAndProjects { get; set; }
     }
 }

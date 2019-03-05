@@ -87,10 +87,10 @@ namespace Microsoft.AspNetCore.Builder
                 {
                     routes.MapRoute(
                     name: "folderdefault",
-                    template: "{sitefolder}/{controller}/{action}/{id?}"
-                    , defaults: new { controller = "Home", action = "Index" }
-                    , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
-                    );
+                        template: "{sitefolder}/{controller}/{action}/{id?}"
+                        , defaults: new { controller = "Home", action = "Index" }
+                        , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                        );
 
                     routes.AddCultureCustomPageRouteForSimpleContent(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint(), new CultureSegmentRouteConstraint(true), "docs");
 
@@ -148,7 +148,7 @@ namespace Microsoft.AspNetCore.Builder
                );
 
             routes.MapRoute(
-                       name: "api-sitemap-cluture",
+                       name: "api-sitemap-culture",
                        template: "{culture}/api/sitemap"
                        , defaults: new { controller = "CultureSiteMap", action = "Index" }
                        , constraints: new { culture = new CultureSegmentRouteConstraint() }
