@@ -56,14 +56,14 @@
             <div class="d-flex flex-wrap align-content-around ">
                 @if (!string.IsNullOrWhiteSpace(Tenant.LogoUrl))
                 {
-                    <div class="d-none d-sm-block">
-                        <partial name="CmsSiteLogoPartial" model="@Tenant" />
+                    <div>
+                         <partial name="CmsSiteLogoPartial" model="@Tenant" />
                     </div>
                 }
                 @if (Tenant.ShowSiteNameLink)
                 {
                     <div class="align-self-center pt-4 pt-sm-0">
-                        <partial name="CmsSiteTitlePartial" model="@Tenant" />
+                         <partial name="CmsSiteTitlePartial" model="@Tenant" />
                     </div>
                 }
                 @if (!string.IsNullOrWhiteSpace(Tenant.HeaderContent))

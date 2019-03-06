@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2019-03-02
+// Last Modified:           2019-03-06
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -65,7 +65,6 @@ namespace cloudscribe.SimpleContent.Web.Services
             try
             {
                 bool isNew = false;
-                //var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var project = await _projectService.GetCurrentProjectSettings();
                 var post = request.Post;
                 ContentHistory history = null;
@@ -106,25 +105,11 @@ namespace cloudscribe.SimpleContent.Web.Services
                         }
                     }
                 }
-                //this will happen in BlogService if it is empty
-                //else if(string.IsNullOrWhiteSpace(post.Slug))
-                //{
-                //    var slug = ContentUtils.CreateSlug(request.ViewModel.Title);
-                //    var slugIsAvailable = await _blogService.SlugIsAvailable(slug);
-                //    while (!slugIsAvailable)
-                //    {
-                //        slug += "-";
-                //        slugIsAvailable = await _blogService.SlugIsAvailable(slug); 
-                //    }
-                //    if (slugIsAvailable)
-                //    {
-                //        post.Slug = slug;
-                //    }
-                //}
-
+                
                 if (request.ModelState.IsValid)
                 {
                     post.Title = request.ViewModel.Title;
+                    post.MetaDescription = request.ViewModel.MetaDescription;
                     post.CorrelationKey = request.ViewModel.CorrelationKey;
                     post.ImageUrl = request.ViewModel.ImageUrl;
                     post.ThumbnailUrl = request.ViewModel.ThumbnailUrl;
@@ -134,13 +119,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     post.SuppressTeaser = request.ViewModel.SuppressTeaser;
                     post.LastModified = DateTime.UtcNow;
                     post.LastModifiedByUser = request.UserName;
-
-                    //if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                    //{
-                    //    post.Slug = request.ViewModel.Slug;
-                    //}
-
-
+                    
                     var categories = new List<string>();
 
                     if (!string.IsNullOrEmpty(request.ViewModel.Categories))
