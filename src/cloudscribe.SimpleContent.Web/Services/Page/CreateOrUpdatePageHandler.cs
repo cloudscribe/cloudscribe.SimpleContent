@@ -57,7 +57,6 @@ namespace cloudscribe.SimpleContent.Web.Services
             try
             {
                 bool isNew = false;
-                //var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var project = await _projectService.GetCurrentProjectSettings();
                 var page = request.Page;
                 ContentHistory history = null;
@@ -69,7 +68,6 @@ namespace cloudscribe.SimpleContent.Web.Services
                         ProjectId = request.ProjectId,
                         ParentId = "0",
                         CreatedByUser = request.UserName,
-                        //Slug = ContentUtils.CreateSlug(request.ViewModel.Title),
                         ContentType = request.ViewModel.ContentType
                     };
                 }
@@ -116,12 +114,6 @@ namespace cloudscribe.SimpleContent.Web.Services
                     page.MenuFilters = request.ViewModel.MenuFilters;
                     page.ExternalUrl = request.ViewModel.ExternalUrl;
                     page.ViewRoles = request.ViewModel.ViewRoles;
-
-
-                    //if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                    //{
-                    //    page.Slug = request.ViewModel.Slug;
-                    //}
                     
                     if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
                     {

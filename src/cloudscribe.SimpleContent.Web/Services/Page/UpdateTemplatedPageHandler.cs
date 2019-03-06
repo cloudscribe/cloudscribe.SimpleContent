@@ -104,7 +104,6 @@ namespace cloudscribe.SimpleContent.Web.Services
             {
                 var page = request.Page;
                 var history = page.CreateHistory(request.UserName);
-                //var project = await _projectService.GetProjectSettings(request.ProjectId);
                 var project = await _projectService.GetCurrentProjectSettings();
                 var serializer = GetSerializer(request.Template.SerializerName);
                 var parser = GetFormParser(request.Template.FormParserName);
@@ -185,19 +184,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                     page.MenuFilters = request.ViewModel.MenuFilters;
                     page.MetaDescription = request.ViewModel.MetaDescription;
                     page.PageOrder = request.ViewModel.PageOrder;
-
                     page.ShowHeading = request.ViewModel.ShowHeading;
                     page.ShowMenu = request.ViewModel.ShowMenu;
                     page.ShowComments = request.ViewModel.ShowComments;
                     page.MenuFilters = request.ViewModel.MenuFilters;
-                    
-                    page.ViewRoles = request.ViewModel.ViewRoles;
-
-                    //if (!string.IsNullOrEmpty(request.ViewModel.Slug))
-                    //{
-                    //    page.Slug = request.ViewModel.Slug;
-                    //}
-                    
                     page.ViewRoles = request.ViewModel.ViewRoles;
 
                     if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
