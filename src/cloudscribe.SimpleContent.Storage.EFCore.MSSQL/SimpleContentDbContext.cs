@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2019-03-04
+// Last Modified:			2019-03-12
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -397,7 +397,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Ignore(p => p.Comments);
 
                 entity.HasMany(p => p.PageComments)
-                    .WithOne();
+                    .WithOne()
+                    .OnDelete(DeleteBehavior.Cascade); 
 
                 // a shadow property to persist the categories/tags as a csv
                 //entity.Property<string>("CategoryCsv");
@@ -405,7 +406,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Ignore(p => p.Resources);
                 
                 entity.HasMany(p => p.PageResources)
-                    .WithOne();
+                    .WithOne().OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(p => p.DisableEditor)
                    .IsRequired();

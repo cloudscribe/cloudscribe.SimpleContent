@@ -674,14 +674,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                 {
                     b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
                         .WithMany("PageComments")
-                        .HasForeignKey("PageEntityId");
+                        .HasForeignKey("PageEntityId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
                 {
                     b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
                         .WithMany("PageResources")
-                        .HasForeignKey("PageEntityId");
+                        .HasForeignKey("PageEntityId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostComment", b =>
