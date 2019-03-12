@@ -16,14 +16,10 @@
     var Tenant = await siteResolver.ResolveSite(Context.Request.Host.Host, Context.Request.Path);
     var siteRoot = "";
     if (!string.IsNullOrWhiteSpace(Tenant.SiteFolderName)) { siteRoot = "/" + Tenant.SiteFolderName; }
-    var lang = "en";
-    if(!string.IsNullOrWhiteSpace(Tenant.ForcedUICulture))
-    {
-        lang = Tenant.ForcedUICulture;
-    }
+    
 }
 <!DOCTYPE html>
-<html lang="@lang">
+<html lang="@CultureInfo.CurrentUICulture.Name">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - @(Tenant?.SiteName ?? "Sample")</title>

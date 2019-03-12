@@ -190,7 +190,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         column: x => x.PageEntityId,
                         principalTable: "cs_Page",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,7 +212,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         column: x => x.PageEntityId,
                         principalTable: "cs_Page",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,7 +240,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         column: x => x.PostEntityId,
                         principalTable: "cs_Post",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

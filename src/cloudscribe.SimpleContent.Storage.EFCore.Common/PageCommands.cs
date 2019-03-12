@@ -105,7 +105,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 if (itemToRemove == null) throw new InvalidOperationException("Page not found");
 
+
                 dbContext.Pages.Remove(itemToRemove);
+
+
                 int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }

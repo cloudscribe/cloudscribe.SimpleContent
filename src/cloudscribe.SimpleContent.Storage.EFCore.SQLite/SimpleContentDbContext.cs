@@ -312,14 +312,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.Ignore(p => p.Comments);
 
                 entity.HasMany(p => p.PageComments)
-                    .WithOne();
+                    .WithOne().OnDelete(DeleteBehavior.Cascade);
 
                 // a shadow property to persist the categories/tags as a csv
                 //entity.Property<string>("CategoryCsv");
                 entity.Ignore(p => p.Resources);
 
                 entity.HasMany(p => p.PageResources)
-                    .WithOne();
+                    .WithOne().OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(p => p.DisableEditor)
                   .IsRequired();
