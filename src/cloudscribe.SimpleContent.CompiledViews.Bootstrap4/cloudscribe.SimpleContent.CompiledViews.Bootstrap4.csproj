@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>Bootstrap 4 pre-compiled views for cloudscribe.SimpleContent.Web</Description>
-    <VersionPrefix>4.0.25</VersionPrefix>
-    <AssemblyVersion>4.0.25</AssemblyVersion>
+    <VersionPrefix>4.0.26</VersionPrefix>
+    <AssemblyVersion>4.0.26</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;SimpleContent;Bootstrap4</PackageTags>

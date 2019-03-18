@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-14
-// Last Modified:           2019-03-02
+// Last Modified:           2019-03-18
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -221,7 +221,16 @@ namespace cloudscribe.SimpleContent.Web.Services
                     post.Categories = categories;
 
                     var shouldFirePublishEvent = false;
-                    switch (request.ViewModel.SaveMode)
+                    var saveMode = request.ViewModel.SaveMode;
+                    if (saveMode == SaveMode.PublishLater)
+                    {
+                        if (post.PubDate.HasValue && post.PubDate < DateTime.UtcNow)
+                        {
+                            saveMode = SaveMode.PublishNow;
+                        }
+
+                    }
+                    switch (saveMode)
                     {
                         case SaveMode.SaveDraft:
 
@@ -251,7 +260,11 @@ namespace cloudscribe.SimpleContent.Web.Services
                             post.Content = renderedModel;
                             post.SerializedModel = modelString;
 
-                            post.PubDate = DateTime.UtcNow;
+                            if(!post.PubDate.HasValue)
+                            {
+                                post.PubDate = DateTime.UtcNow;
+                            }
+                            
                             post.IsPublished = true;
                             shouldFirePublishEvent = true;
 

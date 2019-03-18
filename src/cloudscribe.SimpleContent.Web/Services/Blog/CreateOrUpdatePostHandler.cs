@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-28
-// Last Modified:           2019-03-06
+// Last Modified:           2019-03-18
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -149,7 +149,16 @@ namespace cloudscribe.SimpleContent.Web.Services
 
 
                     var shouldFirePublishEvent = false;
-                    switch (request.ViewModel.SaveMode)
+                    var saveMode = request.ViewModel.SaveMode;
+                    if(saveMode == SaveMode.PublishLater)
+                    {
+                        if(post.PubDate.HasValue && post.PubDate < DateTime.UtcNow)
+                        {
+                            saveMode = SaveMode.PublishNow;
+                        }
+
+                    }
+                    switch (saveMode)
                     {
                         case SaveMode.SaveDraft:
 
@@ -167,7 +176,11 @@ namespace cloudscribe.SimpleContent.Web.Services
                                 var tzId = await _timeZoneIdResolver.GetUserTimeZoneId(CancellationToken.None);
                                 post.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, tzId);
                             }
-                            if (!post.PubDate.HasValue) { post.IsPublished = false; }
+                            if (!post.PubDate.HasValue)
+                            {
+                                post.IsPublished = false;
+                            }
+                            
 
                             break;
 
