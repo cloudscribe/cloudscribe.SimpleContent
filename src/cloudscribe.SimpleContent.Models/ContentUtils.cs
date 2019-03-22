@@ -4,21 +4,30 @@ using System.Text;
 
 namespace cloudscribe.SimpleContent.Models
 {
-    public class ContentUtils
+    public static class ContentUtils
     {
         public static string CreateSlug(string title)
         {
-            title = title.ToLowerInvariant().Replace(" ", "-");
+            if (string.IsNullOrWhiteSpace(title)) { return title; }
+
+            title = title.ToLowerInvariant().Replace("  ", " ")
+                .Replace(" ", "-")
+                .Replace("\n", string.Empty)
+                .Replace("\r", string.Empty)
+                .Replace("\t", string.Empty)
+                ;
             title = RemoveDiacritics(title);
             title = RemoveReservedUrlCharacters(title);
 
-            return title.ToLowerInvariant();
+            return title.ToLowerInvariant().Trim();
         }
 
         public static string RemoveDiacritics(string text)
         {
-            //var normalizedString = text.Normalize(NormalizationForm.FormD); // not available in dnxcore50
-            var normalizedString = text;
+            if (string.IsNullOrWhiteSpace(text)) { return text; }
+
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+
             var stringBuilder = new StringBuilder();
 
             foreach (var c in normalizedString)
@@ -30,12 +39,14 @@ namespace cloudscribe.SimpleContent.Models
                 }
             }
 
-            //return stringBuilder.ToString().Normalize(NormalizationForm.FormC); // not available in dnxcore50
-            return stringBuilder.ToString();
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+
         }
 
         public static string RemoveReservedUrlCharacters(string text)
         {
+            if (string.IsNullOrWhiteSpace(text)) { return text; }
+
             var reservedCharacters = new List<string>() { "!", "#", "$", "&", "'", "(", ")", "*", ",", "/", ":", ";", "=", "?", "@", "[", "]", "\"", "%", ".", "<", ">", "\\", "^", "_", "'", "{", "}", "|", "~", "`", "+" };
 
             foreach (var chr in reservedCharacters)

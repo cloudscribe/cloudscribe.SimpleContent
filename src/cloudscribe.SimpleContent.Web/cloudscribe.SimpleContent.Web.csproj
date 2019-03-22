@@ -48,7 +48,7 @@
     <PackageReference Include="Microsoft.Extensions.Localization" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
     
-    <PackageReference Include="Markdig" Version="0.15.4" />
+    <PackageReference Include="Markdig" Version="0.16.0" />
 
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />

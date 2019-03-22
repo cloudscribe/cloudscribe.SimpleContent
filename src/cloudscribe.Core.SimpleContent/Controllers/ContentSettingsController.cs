@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
@@ -131,14 +133,18 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 {
                     projectId = projectId.Substring(0, 36);
                 }
+
+                var editors = new List<ISiteUser>();
+
                 var contentEditors = await userQueries.GetUsersForClaim(
                     new Guid(projectId),
                     ProjectConstants.ContentEditorClaimType,
                     projectSettings.Id
                     );
+
                 if(contentEditors != null)
                 {
-                    model.Editors.AddRange(contentEditors);
+                    editors.AddRange(contentEditors);
                 }
                 
                 var blogEditors = await userQueries.GetUsersForClaim(
@@ -146,9 +152,10 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                     ProjectConstants.BlogEditorClaimType,
                     projectSettings.Id
                     );
+
                 if(blogEditors != null)
                 {
-                    model.Editors.AddRange(blogEditors);
+                    editors.AddRange(blogEditors);
                 }
                 
                 var pageEditors = await userQueries.GetUsersForClaim(
@@ -156,10 +163,22 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                     ProjectConstants.PageEditorClaimType,
                     projectSettings.Id
                     );
-                if(pageEditors != null)
+
+
+                if (pageEditors != null)
                 {
-                    model.Editors.AddRange(pageEditors);
+                    editors.AddRange(pageEditors);
                 }
+
+                foreach(var e in editors)
+                {
+                    if(!model.Editors.Any(x => x.Id == e.Id))
+                    {
+                        model.Editors.Add(e);
+                    }
+                }
+
+                //model.Editors.AddRange(editors.Distinct());
                 
 
             }
