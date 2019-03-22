@@ -389,7 +389,7 @@
     <ul class="list-unstyled">
         @foreach (var user in Model.Editors)
         {
-            <li>
+            <li class="mb-2">
                 @user.DisplayName - @user.Email
                 <a class="btn btn-xs btn-primary" asp-action="UserEdit"
                    asp-controller="UserAdmin"

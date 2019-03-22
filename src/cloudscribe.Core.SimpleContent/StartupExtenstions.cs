@@ -2,29 +2,12 @@
 using cloudscribe.Core.SimpleContent.Integration;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Design;
-using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.TagHelpers;
 using cloudscribe.Web.Navigation.Caching;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-//namespace cloudscribe.Core.SimpleContent
-//{
-//    public static class Extensions
-//    {
-//        public static RazorViewEngineOptions AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration(this RazorViewEngineOptions options)
-//        {
-//            options.FileProviders.Add(new EmbeddedFileProvider(
-//                    typeof(ContentSettingsController).GetTypeInfo().Assembly,
-//                    "cloudscribe.Core.SimpleContent"
-//                ));
-
-//            return options;
-//        }
-//    }
-
-//}
 
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -72,14 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     // not doing anything just configuring the default
                 });
             }
-
-            //services.AddMvc()
-            //    .AddRazorOptions(options =>
-            //    {
-            //        options.AddEmbeddedViewsForCloudscribeCoreSimpleContentIntegration();
-
-            //    });
-
+            
             return services;
         }
 
