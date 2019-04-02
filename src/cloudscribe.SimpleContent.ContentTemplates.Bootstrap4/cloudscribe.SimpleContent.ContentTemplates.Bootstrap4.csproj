@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>A set of Content Templates for cloudscribe.SimpleContent using Bootstrap 4</Description>
-    <VersionPrefix>1.0.17</VersionPrefix>
-    <AssemblyVersion>1.0.17</AssemblyVersion>
+    <VersionPrefix>1.0.18</VersionPrefix>
+    <AssemblyVersion>1.0.18</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;SimpleContent;Bootstrap4</PackageTags>
