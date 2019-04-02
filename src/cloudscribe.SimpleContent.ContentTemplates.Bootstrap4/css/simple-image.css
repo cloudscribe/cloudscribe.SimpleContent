@@ -1,5 +1,5 @@
 ﻿@media (min-width: 690px) {
     .simple-side-image {
-        width: 690px;
+        max-width: 690px;
     }
 }

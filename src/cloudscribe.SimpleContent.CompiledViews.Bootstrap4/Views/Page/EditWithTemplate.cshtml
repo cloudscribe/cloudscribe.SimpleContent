@@ -99,7 +99,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="MenuFilters">@sr["Menu Filters"]</label>
-                <input asp-for="MenuFilters" class="form-control" data-toggle="tooltip" title='@sr["Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree"]' />
+                <input asp-for="MenuFilters" class="form-control" data-toggle="tooltip" title='@sr["Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree. If you want to exclude a page from all menus, just use a non existent view name like 'none'"]' />
                 <span asp-validation-for="MenuFilters" class="invalid-feedback"></span>
             </div>
             <div class="form-group">
