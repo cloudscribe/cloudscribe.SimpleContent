@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-06-22
-// Last Modified:           2019-03-18
+// Last Modified:           2019-04-07
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -216,13 +216,19 @@ namespace cloudscribe.SimpleContent.Web.Services
                         page.ParentId = "0";
                     }
 
+                    var tzId = await _timeZoneIdResolver.GetUserTimeZoneId(CancellationToken.None);
                     var shouldFirePublishEvent = false;
                     var saveMode = request.ViewModel.SaveMode;
                     if (saveMode == SaveMode.PublishLater)
                     {
-                        if (page.PubDate.HasValue && page.PubDate < DateTime.UtcNow)
+                        if (request.ViewModel.NewPubDate.HasValue)
                         {
-                            saveMode = SaveMode.PublishNow;
+                            var newPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, tzId);
+                            if (newPubDate < DateTime.UtcNow)
+                            {
+                                saveMode = SaveMode.PublishNow;
+                                page.PubDate = newPubDate;
+                            }
                         }
 
                     }
@@ -243,7 +249,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                var tzId = await _timeZoneIdResolver.GetUserTimeZoneId(CancellationToken.None);
+                                
                                 page.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, tzId);
                             }
                             if (!page.PubDate.HasValue) { page.IsPublished = false; }

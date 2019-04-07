@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
 // Author:                  Joe Audette
 // Created:                 2018-07-14
-// Last Modified:           2019-03-18
+// Last Modified:           2019-04-07
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -220,16 +220,22 @@ namespace cloudscribe.SimpleContent.Web.Services
                     }
                     post.Categories = categories;
 
+                    var tzId = await _timeZoneIdResolver.GetUserTimeZoneId(CancellationToken.None);
                     var shouldFirePublishEvent = false;
                     var saveMode = request.ViewModel.SaveMode;
                     if (saveMode == SaveMode.PublishLater)
                     {
-                        if (post.PubDate.HasValue && post.PubDate < DateTime.UtcNow)
+                        if (request.ViewModel.NewPubDate.HasValue)
                         {
-                            saveMode = SaveMode.PublishNow;
+                            var newPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, tzId);
+                            if (newPubDate < DateTime.UtcNow)
+                            {
+                                saveMode = SaveMode.PublishNow;
+                                post.PubDate = newPubDate;
+                            }
                         }
-
                     }
+
                     switch (saveMode)
                     {
                         case SaveMode.SaveDraft:
@@ -247,7 +253,6 @@ namespace cloudscribe.SimpleContent.Web.Services
                             post.DraftAuthor = request.ViewModel.Author;
                             if (request.ViewModel.NewPubDate.HasValue)
                             {
-                                var tzId = await _timeZoneIdResolver.GetUserTimeZoneId(CancellationToken.None);
                                 post.DraftPubDate = _timeZoneHelper.ConvertToUtc(request.ViewModel.NewPubDate.Value, tzId);
                             }
                             if (!post.PubDate.HasValue) { post.IsPublished = false; }
