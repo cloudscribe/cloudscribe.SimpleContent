@@ -94,7 +94,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         protected IRecaptchaServerSideValidator RecaptchaServerSideValidator { get; private set; }
 
-
+        [HttpHead]
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         public virtual async Task<IActionResult> Index(
@@ -166,7 +166,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             return RedirectToRoute(BlogRoutes.BlogIndexRouteName);
         }
-        
+
+        [HttpHead]
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         public virtual async Task<IActionResult> Archive(
@@ -217,6 +218,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             return View("Archive", model);
         }
 
+        [HttpHead]
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         public virtual async Task<IActionResult> Category(
@@ -229,7 +231,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             return await Index(cancellationToken, category, page);
         }
-        
+
+        [HttpHead]
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostNoDate")]
@@ -242,6 +245,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             return await Post(cancellationToken, 0, 0, 0, slug, showDraft, historyId);
         }
 
+        [HttpHead]
         [HttpGet]
         [Authorize(Policy = "BlogViewPolicy")]
         [ActionName("PostWithDate")]
