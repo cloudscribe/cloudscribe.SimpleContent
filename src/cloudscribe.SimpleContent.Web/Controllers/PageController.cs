@@ -86,6 +86,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         protected IMediator Mediator { get; private set; }
 
+        [HttpHead]
         [HttpGet]
         [AllowAnonymous]
         public virtual async Task<IActionResult> Index(
