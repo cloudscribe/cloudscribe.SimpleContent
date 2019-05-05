@@ -16,23 +16,11 @@
 @if (allowDisqus && (Model.CurrentPage != null) && (!string.IsNullOrEmpty(Model.CurrentPage.Id)))
 {
     @sr["Comments"]
-    <div id="disqus_thread"></div>
-    <script>
-        var disqus_config = function () {
-            this.page.url = "@Context.Request.GetCurrentFullUrl()";
-            this.page.identifier = "@Model.CurrentPage.Id";
-        };
-
-        (function () {
-            var d = document, s = d.createElement('script');
-            s.src = '@disqusScriptPath';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
-    </script>
+    <div id="disqus_thread" data-disqus-config data-disqus-page-url="@Context.Request.GetCurrentFullUrl()" data-disqus-page-id="@Model.CurrentPage.Id" data-disqus-script-url="@disqusScriptPath"></div>
     <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 }
 @if (!allowDisqus)
 {
     <p class="alert alert-info">@sr["If you want to view or submit comments you must accept the cookie consent."]</p>
 }
+<script src="~/cr/js/unobtrusive-disqus.min.js"></script>

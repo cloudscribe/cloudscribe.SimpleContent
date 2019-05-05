@@ -191,7 +191,8 @@
         await Html.RenderPartialAsync("_UnobtrusiveEditorScriptsPartial");
     }
     @{ await Html.RenderPartialAsync("_DatePickerScriptsPartial"); }
-    <script>
+<script src="/csscsr/js/edit-script.js"></script>
+    @*<script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
@@ -205,5 +206,5 @@
                 }
             });
         });
-    </script>
+    </script>*@
 }
