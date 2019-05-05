@@ -17,192 +17,192 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             @if (uiOptions.ShowBlogSettings)
             {
-                <div class="form-group">
-                    <label asp-for="Title" class="col-md-2 control-label">@sr["Blog Page Title"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="Title" class="form-control" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="Title" class="col-md-2 control-label">@sr["Blog Page Title"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="col-md-2 control-label">@sr["Description"]</label>
+                <div class="col-md-10">
+                    <input asp-for="Description" class="form-control" data-toggle="tooltip" title='@sr["The description also is used as the channel description in the RSS feed."]' />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If checked will show the blog title and description at the top of the post list."]'>
+                        <label>
+                            <input asp-for="ShowTitle" /> @sr["Show Blog Title and Description"]
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="col-md-2 control-label">@sr["Description"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="Description" class="form-control" data-toggle="tooltip" title='@sr["The description also is used as the channel description in the RSS feed."]' />
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If checked will show the blog title and description at the top of the post list."]'>
-                            <label>
-                                <input asp-for="ShowTitle" /> @sr["Show Blog Title and Description"]
-                            </label>
-                        </div>
-                    </div>
-                </div>
+            </div>
 
             }
             else
             {
-                <input asp-for="Title" type="hidden" />
-                <input asp-for="Description" type="hidden" />
-                <input asp-for="ShowTitle" type="hidden" />
+            <input asp-for="Title" type="hidden" />
+            <input asp-for="Description" type="hidden" />
+            <input asp-for="ShowTitle" type="hidden" />
 
             }
 
             @if (uiOptions.ShowBlogMenuOptions)
             {
-                <div class="form-group">
-                    <label asp-for="BlogPageText" class="col-md-2 control-label">@sr["Blog Page Menu Text"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="BlogPageText" class="form-control" />
-                        <span asp-validation-for="BlogPageText" class="text-danger"></span>
-                    </div>
+            <div class="form-group">
+                <label asp-for="BlogPageText" class="col-md-2 control-label">@sr["Blog Page Menu Text"]</label>
+                <div class="col-md-10">
+                    <input asp-for="BlogPageText" class="form-control" />
+                    <span asp-validation-for="BlogPageText" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="BlogPageNavComponentVisibility" class="col-md-2 control-label">@sr["Blog Page Menu Visibility"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="BlogPageNavComponentVisibility" class="form-control" data-toggle="tooltip" title='@sr["A comma separated list of navigation component filter names used to filter the blog out of the menu. Leave this blank so the blog menu item is not filtered from any of the menu views. There are some standard filter names like topnav and breadcrumbs but it is also possible to use custom names with custom views. As soon as you populate this field it becomes filtered to only show the blog menu item in the included views, whereas blank means unfiltered."]' />
-                        <span asp-validation-for="BlogPageNavComponentVisibility" class="text-danger"></span>
-                    </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="BlogPageNavComponentVisibility" class="col-md-2 control-label">@sr["Blog Page Menu Visibility"]</label>
+                <div class="col-md-10">
+                    <input asp-for="BlogPageNavComponentVisibility" class="form-control" data-toggle="tooltip" title='@sr["A comma separated list of navigation component filter names used to filter the blog out of the menu. Leave this blank so the blog menu item is not filtered from any of the menu views. There are some standard filter names like topnav and breadcrumbs but it is also possible to use custom names with custom views. As soon as you populate this field it becomes filtered to only show the blog menu item in the included views, whereas blank means unfiltered."]' />
+                    <span asp-validation-for="BlogPageNavComponentVisibility" class="text-danger"></span>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["Add the blog as a top level menu item. There are multiple other ways of adding the blog to the menu. You can make a page that links to /blog or it can be done from the navigation.xml file. If you see it in the menu more than once it means you have multiple ways it is configured to be added."]'>
-                            <label>
-                                <input asp-for="AddBlogToPagesTree" /> @sr["Add Blog To Menu"]
-                            </label>
-                        </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["Add the blog as a top level menu item. There are multiple other ways of adding the blog to the menu. You can make a page that links to /blog or it can be done from the navigation.xml file. If you see it in the menu more than once it means you have multiple ways it is configured to be added."]'>
+                        <label>
+                            <input asp-for="AddBlogToPagesTree" /> @sr["Add Blog To Menu"]
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If checked the blog menu item will link to the most recent post instead of the post list."]'>
-                            <label>
-                                <input asp-for="BlogMenuLinksToNewestPost" /> @sr["Blog Menu Links To Newest Post"]
-                            </label>
-                        </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox" data-toggle="tooltip" data-placement="left" title='@sr["If checked the blog menu item will link to the most recent post instead of the post list."]'>
+                        <label>
+                            <input asp-for="BlogMenuLinksToNewestPost" /> @sr["Blog Menu Links To Newest Post"]
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="BlogPagePosition" class="col-md-2 control-label">@sr["Blog Menu Position"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="BlogPagePosition" class="form-control" data-toggle="tooltip" title='@sr["The position of the blog within the top level menu."]' />
-                        <span asp-validation-for="BlogPagePosition" class="text-danger"></span>
-                    </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="BlogPagePosition" class="col-md-2 control-label">@sr["Blog Menu Position"]</label>
+                <div class="col-md-10">
+                    <input asp-for="BlogPagePosition" class="form-control" data-toggle="tooltip" title='@sr["The position of the blog within the top level menu."]' />
+                    <span asp-validation-for="BlogPagePosition" class="text-danger"></span>
                 </div>
+            </div>
 
             }
             else
             {
-                <input id="BlogPageText" name="BlogPageText" value="Blog" type="hidden" />
-                <input id="BlogPageNavComponentVisibility" name="BlogPageNavComponentVisibility" value="" type="hidden" />
-                <input id="AddBlogToPagesTree" name="AddBlogToPagesTree" value="false" type="hidden" />
-                <input id="BlogMenuLinksToNewestPost" name="BlogMenuLinksToNewestPost" value="false" type="hidden" />
-                <input id="BlogPagePosition" name="BlogPagePosition" value="2" type="hidden" />
+            <input id="BlogPageText" name="BlogPageText" value="Blog" type="hidden" />
+            <input id="BlogPageNavComponentVisibility" name="BlogPageNavComponentVisibility" value="" type="hidden" />
+            <input id="AddBlogToPagesTree" name="AddBlogToPagesTree" value="false" type="hidden" />
+            <input id="BlogMenuLinksToNewestPost" name="BlogMenuLinksToNewestPost" value="false" type="hidden" />
+            <input id="BlogPagePosition" name="BlogPagePosition" value="2" type="hidden" />
 
             }
             @if (uiOptions.ShowBlogSettings)
             {
-                <div class="form-group">
-                    <label asp-for="PostsPerPage" class="col-md-2 control-label">@sr["Posts Per Page"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="PostsPerPage" class="form-control" data-toggle="tooltip" title='@sr["Number of posts to show per page on the post list."]' />
-                        <span asp-validation-for="PostsPerPage" class="text-danger"></span>
-                    </div>
+            <div class="form-group">
+                <label asp-for="PostsPerPage" class="col-md-2 control-label">@sr["Posts Per Page"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PostsPerPage" class="form-control" data-toggle="tooltip" title='@sr["Number of posts to show per page on the post list."]' />
+                    <span asp-validation-for="PostsPerPage" class="text-danger"></span>
                 </div>
+            </div>
 
 
-                <div class="form-group">
-                    <label asp-for="PubDateFormat" class="col-md-2 control-label">@sr["Date Format"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="PubDateFormat" class="form-control" />
-                        <span asp-validation-for="PubDateFormat" class="text-danger"></span>
-                    </div>
+            <div class="form-group">
+                <label asp-for="PubDateFormat" class="col-md-2 control-label">@sr["Date Format"]</label>
+                <div class="col-md-10">
+                    <input asp-for="PubDateFormat" class="form-control" />
+                    <span asp-validation-for="PubDateFormat" class="text-danger"></span>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox">
-                            <label>
-                                <input asp-for="IncludePubDateInPostUrls" /> @sr["Include Date In Post Urls"]
-                            </label>
-                        </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="IncludePubDateInPostUrls" /> @sr["Include Date In Post Urls"]
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox" data-placement="left" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
-                            <label>
-                                <input asp-for="ModerateComments" /> @sr["Moderate Comments"]
-                            </label>
-                        </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox" data-placement="left" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
+                        <label>
+                            <input asp-for="ModerateComments" /> @sr["Moderate Comments"]
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="DaysToComment" class="col-md-2 control-label">@sr["Days To Comment"]</label>
-                    <div class="col-md-10">
-                        <select asp-for="DaysToComment" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
-                            <option value="-1">@sr["No Limit"]</option>
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="7">7</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
-                            <option value="60">60</option>
-                            <option value="90">90</option>
-                        </select>
-                        <span asp-validation-for="DaysToComment" class="text-danger"></span>
-                    </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="DaysToComment" class="col-md-2 control-label">@sr["Days To Comment"]</label>
+                <div class="col-md-10">
+                    <select asp-for="DaysToComment" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
+                        <option value="-1">@sr["No Limit"]</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="7">7</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                        <option value="60">60</option>
+                        <option value="90">90</option>
+                    </select>
+                    <span asp-validation-for="DaysToComment" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="CommentNotificationEmail" class="col-md-2 control-label">@sr["Comment Notification Email"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="CommentNotificationEmail" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]' />
-                        <span asp-validation-for="CommentNotificationEmail" class="text-danger"></span>
-                    </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="CommentNotificationEmail" class="col-md-2 control-label">@sr["Comment Notification Email"]</label>
+                <div class="col-md-10">
+                    <input asp-for="CommentNotificationEmail" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]' />
+                    <span asp-validation-for="CommentNotificationEmail" class="text-danger"></span>
                 </div>
-                @if (Model.TeasersDisabled)
+            </div>
+            @if (Model.TeasersDisabled)
                 {
-                    <input name="TeaserMode" value="0" type="hidden" />
-                    <input asp-for="TeaserTruncationMode" type="hidden" />
-                    <input asp-for="TeaserTruncationLength" type="hidden" />
+            <input name="TeaserMode" value="0" type="hidden" />
+            <input asp-for="TeaserTruncationMode" type="hidden" />
+            <input asp-for="TeaserTruncationLength" type="hidden" />
 
                 }
                 else
                 {
-                    <div class="form-group">
-                        <label asp-for="TeaserMode" class="col-md-2 control-label">@sr["Teaser Mode"]</label>
-                        <div class="col-md-10">
-                            <select asp-for="TeaserMode" class="form-control" data-toggle="tooltip" title='@sr["If ON, truncated 'teasers' will automatically be generated for blog list views and RSS feed, and a read more link will be shown. You can overide the auto generated teaser per post with a manually created teaser"]'>
-                                <option value="0">@sr["Off"]</option>
-                                <option value="1">@sr["Lists and Feed"]</option>
-                                <option value="2">@sr["Feed Only"]</option>
-                                <option value="3">@sr["List Only"]</option>
-                            </select>
-                            <span asp-validation-for="TeaserMode" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="TeaserTruncationMode" class="col-md-2 control-label">@sr["Teaser Truncation Mode"]</label>
-                        <div class="col-md-10">
-                            <select asp-for="TeaserTruncationMode" class="form-control" data-toggle="tooltip" title='@sr["Truncate blog posts in lists views and in the feed by character/word/length. Words is recommended."]'>
-                                <option value="0">@sr["Words"]</option>
-                                <option value="1">@sr["Absolute string lenth including white space"]</option>
-                                <option value="2">@sr["Letters or digits"]</option>
-                            </select>
-                            <span asp-validation-for="TeaserTruncationMode" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="TeaserTruncationLength" class="col-md-2 control-label">@sr["Teaser Truncation Length"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="TeaserTruncationLength" class="form-control" data-toggle="tooltip" title='@sr["Length (character/word/length) to truncate blog posts for teasers."]' />
-                            <span asp-validation-for="TeaserTruncationLength" class="text-danger"></span>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <label asp-for="TeaserMode" class="col-md-2 control-label">@sr["Teaser Mode"]</label>
+                <div class="col-md-10">
+                    <select asp-for="TeaserMode" class="form-control" data-toggle="tooltip" title='@sr["If ON, truncated 'teasers' will automatically be generated for blog list views and RSS feed, and a read more link will be shown. You can overide the auto generated teaser per post with a manually created teaser"]'>
+                        <option value="0">@sr["Off"]</option>
+                        <option value="1">@sr["Lists and Feed"]</option>
+                        <option value="2">@sr["Feed Only"]</option>
+                        <option value="3">@sr["List Only"]</option>
+                    </select>
+                    <span asp-validation-for="TeaserMode" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeaserTruncationMode" class="col-md-2 control-label">@sr["Teaser Truncation Mode"]</label>
+                <div class="col-md-10">
+                    <select asp-for="TeaserTruncationMode" class="form-control" data-toggle="tooltip" title='@sr["Truncate blog posts in lists views and in the feed by character/word/length. Words is recommended."]'>
+                        <option value="0">@sr["Words"]</option>
+                        <option value="1">@sr["Absolute string lenth including white space"]</option>
+                        <option value="2">@sr["Letters or digits"]</option>
+                    </select>
+                    <span asp-validation-for="TeaserTruncationMode" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeaserTruncationLength" class="col-md-2 control-label">@sr["Teaser Truncation Length"]</label>
+                <div class="col-md-10">
+                    <input asp-for="TeaserTruncationLength" class="form-control" data-toggle="tooltip" title='@sr["Length (character/word/length) to truncate blog posts for teasers."]' />
+                    <span asp-validation-for="TeaserTruncationLength" class="text-danger"></span>
+                </div>
+            </div>
 
                 }
 
@@ -210,12 +210,12 @@
             }
             else
             {
-                <input asp-for="PostsPerPage" type="hidden" />
-                <input asp-for="PubDateFormat" type="hidden" />
-                <input asp-for="IncludePubDateInPostUrls" type="hidden" />
-                <input asp-for="ModerateComments" type="hidden" />
-                <input asp-for="DaysToComment" type="hidden" />
-                <input asp-for="CommentNotificationEmail" type="hidden" />
+            <input asp-for="PostsPerPage" type="hidden" />
+            <input asp-for="PubDateFormat" type="hidden" />
+            <input asp-for="IncludePubDateInPostUrls" type="hidden" />
+            <input asp-for="ModerateComments" type="hidden" />
+            <input asp-for="DaysToComment" type="hidden" />
+            <input asp-for="CommentNotificationEmail" type="hidden" />
 
             }
 
@@ -228,64 +228,64 @@
             </div>
             @if (uiOptions.ShowDefaultContentType)
             {
-                <div class="form-group">
-                    <label asp-for="DefaultContentType" class="col-md-2 control-label">@sr["Default Content Type"]</label>
-                    <div class="col-md-10">
-                        <select asp-for="DefaultContentType" class="form-control" data-toggle="tooltip">
-                            <option value="html">html</option>
-                            <option value="markdown">markdown</option>
-                        </select>
-                        <span asp-validation-for="DefaultContentType" class="text-danger"></span>
-                    </div>
+            <div class="form-group">
+                <label asp-for="DefaultContentType" class="col-md-2 control-label">@sr["Default Content Type"]</label>
+                <div class="col-md-10">
+                    <select asp-for="DefaultContentType" class="form-control" data-toggle="tooltip">
+                        <option value="html">html</option>
+                        <option value="markdown">markdown</option>
+                    </select>
+                    <span asp-validation-for="DefaultContentType" class="text-danger"></span>
                 </div>
+            </div>
 
             }
             else
             {
-                <input asp-for="DefaultContentType" type="hidden" />
+            <input asp-for="DefaultContentType" type="hidden" />
             }
             @if (uiOptions.ShowPageSettings)
             {
-                <div class="form-group">
-                    <label asp-for="DefaultPageSlug" class="col-md-2 control-label">@sr["Default Page"]</label>
-                    <div class="col-md-10">
-                        <input asp-for="DefaultPageSlug" class="form-control" />
-                        <span asp-validation-for="DefaultPageSlug" class="text-danger"></span>
-                    </div>
+            <div class="form-group">
+                <label asp-for="DefaultPageSlug" class="col-md-2 control-label">@sr["Default Page"]</label>
+                <div class="col-md-10">
+                    <input asp-for="DefaultPageSlug" class="form-control" />
+                    <span asp-validation-for="DefaultPageSlug" class="text-danger"></span>
                 </div>
+            </div>
 
             }
             else
             {
-                <input asp-for="DefaultPageSlug" type="hidden" />
+            <input asp-for="DefaultPageSlug" type="hidden" />
 
             }
             @if (uiOptions.ShowBlogSettings && uiOptions.ShowPageSettings)
             {
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox">
-                            <label>
-                                <input asp-for="ShowRecentPostsOnDefaultPage" /> @sr["Show Recent Posts on Default Page"]
-                            </label>
-                        </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="ShowRecentPostsOnDefaultPage" /> @sr["Show Recent Posts on Default Page"]
+                        </label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-10 col-md-offset-2">
-                        <div class="checkbox">
-                            <label>
-                                <input asp-for="ShowFeaturedPostsOnDefaultPage" /> @sr["Show Featured Posts on Default Page"]
-                            </label>
-                        </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input asp-for="ShowFeaturedPostsOnDefaultPage" /> @sr["Show Featured Posts on Default Page"]
+                        </label>
                     </div>
                 </div>
+            </div>
 
             }
             else
             {
-                <input asp-for="ShowRecentPostsOnDefaultPage" type="hidden" />
-                <input asp-for="ShowFeaturedPostsOnDefaultPage" type="hidden" />
+            <input asp-for="ShowRecentPostsOnDefaultPage" type="hidden" />
+            <input asp-for="ShowFeaturedPostsOnDefaultPage" type="hidden" />
 
             }
 
@@ -361,69 +361,69 @@
 
             @if (uiOptions.ShowBlogSettings)
             {
-                <fieldset>
-                    <legend>@sr["Feed Settings"]</legend>
-                    <div class="form-group">
-                        <label asp-for="RemoteFeedUrl" class="col-md-2 control-label">@sr["Feedburner Url"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="RemoteFeedUrl" class="form-control" />
-                            <span asp-validation-for="RemoteFeedUrl" class="text-danger"></span>
-                        </div>
+            <fieldset>
+                <legend>@sr["Feed Settings"]</legend>
+                <div class="form-group">
+                    <label asp-for="RemoteFeedUrl" class="col-md-2 control-label">@sr["Feedburner Url"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="RemoteFeedUrl" class="form-control" />
+                        <span asp-validation-for="RemoteFeedUrl" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="LanguageCode" class="col-md-2 control-label">@sr["Language Code"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="LanguageCode" class="form-control" />
-                            <span asp-validation-for="LanguageCode" class="text-danger"></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LanguageCode" class="col-md-2 control-label">@sr["Language Code"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="LanguageCode" class="form-control" />
+                        <span asp-validation-for="LanguageCode" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ChannelCategoriesCsv" class="col-md-2 control-label">@sr["Comma Separated Channel Categories"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="ChannelCategoriesCsv" class="form-control" />
-                            <span asp-validation-for="ChannelCategoriesCsv" class="text-danger"></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ChannelCategoriesCsv" class="col-md-2 control-label">@sr["Comma Separated Channel Categories"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="ChannelCategoriesCsv" class="form-control" />
+                        <span asp-validation-for="ChannelCategoriesCsv" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ManagingEditorEmail" class="col-md-2 control-label">@sr["Managing Editor Email"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="ManagingEditorEmail" class="form-control" />
-                            <span asp-validation-for="ManagingEditorEmail" class="text-danger"></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ManagingEditorEmail" class="col-md-2 control-label">@sr["Managing Editor Email"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="ManagingEditorEmail" class="form-control" />
+                        <span asp-validation-for="ManagingEditorEmail" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="WebmasterEmail" class="col-md-2 control-label">@sr["Webmaster Email"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="WebmasterEmail" class="form-control" />
-                            <span asp-validation-for="WebmasterEmail" class="text-danger"></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WebmasterEmail" class="col-md-2 control-label">@sr["Webmaster Email"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="WebmasterEmail" class="form-control" />
+                        <span asp-validation-for="WebmasterEmail" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="DefaultFeedItems" class="col-md-2 control-label">@sr["Default Feed Items"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="DefaultFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Number of posts to show in the feed by default."]' />
-                            <span asp-validation-for="DefaultFeedItems" class="text-danger"></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DefaultFeedItems" class="col-md-2 control-label">@sr["Default Feed Items"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="DefaultFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Number of posts to show in the feed by default."]' />
+                        <span asp-validation-for="DefaultFeedItems" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="MaxFeedItems" class="col-md-2 control-label">@sr["Max Feed Items"]</label>
-                        <div class="col-md-10">
-                            <input asp-for="MaxFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Maximum number of posts to show in the feed. Used to constrain the query string paramter for feed size."]' />
-                            <span asp-validation-for="MaxFeedItems" class="text-danger"></span>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MaxFeedItems" class="col-md-2 control-label">@sr["Max Feed Items"]</label>
+                    <div class="col-md-10">
+                        <input asp-for="MaxFeedItems" class="form-control" data-toggle="tooltip" title='@sr["Maximum number of posts to show in the feed. Used to constrain the query string paramter for feed size."]' />
+                        <span asp-validation-for="MaxFeedItems" class="text-danger"></span>
                     </div>
+                </div>
 
-                </fieldset>
+            </fieldset>
 
             }
             else
             {
 
-                <input asp-for="RemoteFeedUrl" type="hidden" />
-                <input asp-for="LanguageCode" type="hidden" />
-                <input asp-for="ChannelCategoriesCsv" type="hidden" />
-                <input asp-for="ManagingEditorEmail" type="hidden" />
-                <input asp-for="WebmasterEmail" type="hidden" />
+            <input asp-for="RemoteFeedUrl" type="hidden" />
+            <input asp-for="LanguageCode" type="hidden" />
+            <input asp-for="ChannelCategoriesCsv" type="hidden" />
+            <input asp-for="ManagingEditorEmail" type="hidden" />
+            <input asp-for="WebmasterEmail" type="hidden" />
 
             }
 
@@ -435,22 +435,22 @@
         </form>
         @if (Model.Editors.Count > 0)
         {
-            <div class="col-md-10 col-md-offset-2">
-                <h3>@sr["Editors"]</h3>
-                <ul class="list-unstyled">
-                    @foreach (var user in Model.Editors)
+        <div class="col-md-10 col-md-offset-2">
+            <h3>@sr["Editors"]</h3>
+            <ul class="list-unstyled">
+                @foreach (var user in Model.Editors)
                     {
-                        <li>
-                            @user.DisplayName - @user.Email
-                            <a class="btn btn-xs btn-default" asp-action="UserEdit"
-                               asp-controller="UserAdmin"
-                               asp-route-siteId="@user.SiteId"
-                               asp-route-userId="@user.Id">@sr["Manage"]</a>
-                        </li>
+                <li>
+                    @user.DisplayName - @user.Email
+                    <a class="btn btn-xs btn-default" asp-action="UserEdit"
+                       asp-controller="UserAdmin"
+                       asp-route-siteId="@user.SiteId"
+                       asp-route-userId="@user.Id">@sr["Manage"]</a>
+                </li>
 
                     }
-                </ul>
-            </div>
+            </ul>
+        </div>
         }
 
     </div>
@@ -463,9 +463,5 @@
     @{ await Html.RenderPartialAsync("_UnobtrusiveValidationScriptsPartial"); }
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
     <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-    </script>
+    <script src="~/cr/js/jbootstrap-tooltip-toggle.js"></script>
 }
