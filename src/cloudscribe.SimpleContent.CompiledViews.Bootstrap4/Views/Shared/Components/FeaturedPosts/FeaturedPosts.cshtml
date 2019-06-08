@@ -21,25 +21,27 @@
 
     }
 
- }
+}
 @if (Model.Posts.Count > 0)
+{
+    <nav aria-labelledby="hFeaturedPosts">
+        <h3 id="hFeaturedPosts" class="featured-posts">@sr["Featured Posts"]</h3>
+        @foreach (var post in Model.Posts)
         {
-    <h3 class="featured-posts">@sr["Featured Posts"]</h3>
-    @foreach (var post in Model.Posts)
-    {
-        if(!post.PubDate.HasValue) { continue; }
-        var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
-        <div class="media mb-1">
-        @if (!string.IsNullOrWhiteSpace(imgUrl))
-        {
-            <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" alt="@post.Title"></a>
+            if (!post.PubDate.HasValue) { continue; }
+            var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
+            <div class="media mb-1">
+                @if (!string.IsNullOrWhiteSpace(imgUrl))
+                {
+                    <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" alt="@post.Title"></a>
+                }
+                <div class="media-body pl-1">
+                    <h4 class="media-heading">
+                        <a href="@GetUrl(post)">@post.Title</a>
+                    </h4>
+                    <small>@Model.FormatDate(post.PubDate.Value)</small>
+                </div>
+            </div>
         }
-        <div class="media-body pl-1">
-            <h4 class="media-heading">
-                <a href="@GetUrl(post)">@post.Title</a>
-            </h4>
-            <small>@Model.FormatDate(post.PubDate.Value)</small>
-        </div>  
-        </div>
-    }
+    </nav>  
 }
