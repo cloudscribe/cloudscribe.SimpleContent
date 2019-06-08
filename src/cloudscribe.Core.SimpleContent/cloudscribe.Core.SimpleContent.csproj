@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <VersionPrefix>4.0.13</VersionPrefix>
-    <AssemblyVersion>4.0.13</AssemblyVersion>
+    <VersionPrefix>4.0.14</VersionPrefix>
+    <AssemblyVersion>4.0.14</AssemblyVersion>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog</PackageTags>
@@ -21,13 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Identity" Version="3.0.14" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="3.0.14" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.68" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.27" />
-    <PackageReference Include="cloudscribe.FileManager.Web" Version="3.0.20" />
-    <PackageReference Include="cloudscribe.MetaWeblog" Version="2.1.5" />
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="2.1.2" />
+    <PackageReference Include="cloudscribe.Core.Identity" Version="3.0.22" />
+    <PackageReference Include="cloudscribe.Core.Models" Version="3.0.23" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.90" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="3.0.31" />
+    <PackageReference Include="cloudscribe.FileManager.Web" Version="3.0.28" />
+    <PackageReference Include="cloudscribe.MetaWeblog" Version="2.1.6" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="2.1.3" />
     
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
