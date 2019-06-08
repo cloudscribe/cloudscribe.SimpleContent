@@ -5,9 +5,9 @@
 @{
     var themeSettings = themeHelper.GetThemeSettings();
 }
-<section class="panel panel-default">
+<nav class="panel panel-default" aria-labelledby="hCategories">
     <div class="panel-heading">
-        <h3><i class="@themeSettings.Icons.Tags" aria-hidden="true"></i>&nbsp;@sr["Categories"]</h3>
+        <h3 id="hCategories"><i class="@themeSettings.Icons.Tags" aria-hidden="true"></i>&nbsp;@sr["Categories"]</h3>
     </div>
     <div class="panel-body">
         <ul class="list-inline category-list">
@@ -20,4 +20,4 @@
             }
         </ul>
     </div>
-</section>
+</nav>

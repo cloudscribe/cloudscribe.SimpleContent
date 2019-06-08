@@ -24,22 +24,24 @@
 }
 @if (Model.Posts.Count > 0)
 {
-    <h3 class="recent-posts">@sr["Recent Posts"]</h3>
-    @foreach (var post in Model.Posts)
-    {
-        if (!post.PubDate.HasValue) { continue; }
-        var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
-        <div class="media mb-1">
-            @if (!string.IsNullOrWhiteSpace(imgUrl))
-            {
-                <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" alt="@post.Title"></a>
-            }
-            <div class="media-body pl-1">
-                <h4 class="media-heading">
-                    <a href="@GetUrl(post)">@post.Title</a>
-                </h4>
-                <small>@Model.FormatDate(post.PubDate.Value)</small>
+    <nav aria-labelledby="hRecentPosts">
+        <h3 id="hRecentPosts" class="recent-posts">@sr["Recent Posts"]</h3>
+        @foreach (var post in Model.Posts)
+        {
+            if (!post.PubDate.HasValue) { continue; }
+            var imgUrl = Model.ExtractFirstImageUrl(post, Url, defaultImageUrl);
+            <div class="media mb-1">
+                @if (!string.IsNullOrWhiteSpace(imgUrl))
+                {
+                    <a class="pull-left" href="@GetUrl(post)"><img class="media-object" src="@imgUrl" width="100" alt="@post.Title"></a>
+                }
+                <div class="media-body pl-1">
+                    <h4 class="media-heading">
+                        <a href="@GetUrl(post)">@post.Title</a>
+                    </h4>
+                    <small>@Model.FormatDate(post.PubDate.Value)</small>
+                </div>
             </div>
-        </div>
-    }
+        }
+    </nav>
 }
