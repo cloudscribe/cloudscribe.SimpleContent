@@ -56,6 +56,13 @@ namespace Microsoft.AspNetCore.Builder
                        );
 
                 routes.MapRoute(
+                      name: "folderserviceworker",
+                      template: "{sitefolder}/serviceworker"
+                      , defaults: new { controller = "Pwa", action = "ServiceWorker" }
+                      , constraints: new { name = new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint() }
+                      );
+
+                routes.MapRoute(
                       name: "apifoldermetaweblog-localized",
                       template: "{sitefolder}/{culture}/api/metaweblog"
                       , defaults: new { controller = "FolderMetaweblog", action = "Index" }
@@ -167,6 +174,12 @@ namespace Microsoft.AspNetCore.Builder
                        , defaults: new { controller = "CultureMetaweblog", action = "Index" }
                        , constraints: new { culture = new CultureSegmentRouteConstraint() }
                        );
+
+            routes.MapRoute(
+                name: "serviceworker",
+                template: "serviceworker"
+                , defaults: new { controller = "Pwa", action = "ServiceWorker" }
+                );
 
             routes.MapRoute(
                 name: "sitemap-localized",

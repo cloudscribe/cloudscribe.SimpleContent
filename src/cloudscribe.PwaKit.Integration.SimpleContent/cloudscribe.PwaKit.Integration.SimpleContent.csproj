@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.PwaKit\cloudscribe.PwaKit.csproj" />
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
+  </ItemGroup>
+
+</Project>
