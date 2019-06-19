@@ -4,7 +4,7 @@
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 <article data-id="@Model.TmpComment.Id" itemscope itemtype="http://schema.org/UserComments" itemprop="comment" class="@(Model.TmpComment.IsAdmin ? "self" : null)">
     <img gravatar-email="@Model.TmpComment.Email" gravatar-size="50" alt="Comment by @Model.TmpComment.Author" />
-    <div>
+    <div class="comment-item">
         <h3><time datetime='@Model.TmpComment.PubDate.ToString("s")' itemprop="commentTime">@Model.FormatCommentDate(Model.TmpComment.PubDate)</time></h3>
         <p itemprop="commentText">@Html.Raw(Model.FilterComment(Model.TmpComment))</p>
         @if (string.IsNullOrEmpty(Model.TmpComment.Website))
