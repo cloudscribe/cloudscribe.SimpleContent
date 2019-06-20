@@ -175,11 +175,7 @@ namespace Microsoft.AspNetCore.Builder
                        , constraints: new { culture = new CultureSegmentRouteConstraint() }
                        );
 
-            routes.MapRoute(
-                name: "serviceworker",
-                template: "serviceworker"
-                , defaults: new { controller = "Pwa", action = "ServiceWorker" }
-                );
+            routes.AddPwaDefaultRoutes(new cloudscribe.Core.Web.Components.SiteFolderRouteConstraint());
 
             routes.MapRoute(
                 name: "sitemap-localized",

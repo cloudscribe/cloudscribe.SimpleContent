@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4.csproj" />
+    <ProjectReference Include="..\cloudscribe.PwaKit.Integration.CloudscribeCore\cloudscribe.PwaKit.Integration.CloudscribeCore.csproj" />
     <ProjectReference Include="..\cloudscribe.PwaKit.Integration.Navigation\cloudscribe.PwaKit.Integration.Navigation.csproj" />
     <ProjectReference Include="..\cloudscribe.PwaKit.Integration.SimpleContent\cloudscribe.PwaKit.Integration.SimpleContent.csproj" />
     <ProjectReference Include="..\cloudscribe.PwaKit\cloudscribe.PwaKit.csproj" />

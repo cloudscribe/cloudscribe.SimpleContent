@@ -130,6 +130,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSimpleContentRssSyndiction();
 
             services.AddPwaKit(config);
+            services.AddPwaKitCloudscribeCoreIntegration(config);
             services.AddPwaKitNavigationIntegration(config);
             services.AddPwaKitSimpleContentIntegration(config);
 

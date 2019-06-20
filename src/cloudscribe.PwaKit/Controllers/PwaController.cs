@@ -10,7 +10,7 @@ namespace cloudscribe.PwaKit.Controllers
     {
         public PwaController(
             IServiceWorkerBuilder serviceWorkerBuilder,
-            IServiceWorkerRouteNameProvider serviceWorkerRouteNameProvider,
+            IPwaRouteNameProvider serviceWorkerRouteNameProvider,
             IOptions<PwaOptions> pwaOptionsAccessor
             )
         {
@@ -20,7 +20,7 @@ namespace cloudscribe.PwaKit.Controllers
         }
 
         private readonly IServiceWorkerBuilder _serviceWorkerBuilder;
-        private readonly IServiceWorkerRouteNameProvider _serviceWorkerRouteNameProvider;
+        private readonly IPwaRouteNameProvider _serviceWorkerRouteNameProvider;
         private readonly PwaOptions _options;
 
 
@@ -42,12 +42,12 @@ namespace cloudscribe.PwaKit.Controllers
         {
             Response.ContentType = "application/javascript; charset=utf-8";
 
-            var url = Url.RouteUrl(_serviceWorkerRouteNameProvider.GetRouteName());
+            var url = Url.RouteUrl(_serviceWorkerRouteNameProvider.GetServiceWorkerRouteName());
 
             var script = new StringBuilder();
             script.Append("if ('serviceWorker' in navigator) {");
             script.Append("window.addEventListener('load', () => {");
-            script.Append("navigator.serviceWorker.register('" + url + "',{scope: '" + _serviceWorkerRouteNameProvider.GetScope() + "'})");
+            script.Append("navigator.serviceWorker.register('" + url + "',{scope: '" + _serviceWorkerRouteNameProvider.GetServiceWorkerScope() + "'})");
             script.Append(".then(registration => {");
             script.Append("console.log(`Service Worker registered! Scope: ${registration.scope}`);");
             script.Append(" })");
@@ -61,6 +61,12 @@ namespace cloudscribe.PwaKit.Controllers
 
             return Content(script.ToString());
 
+        }
+
+        public IActionResult Offline()
+        {
+
+            return View();
         }
 
 

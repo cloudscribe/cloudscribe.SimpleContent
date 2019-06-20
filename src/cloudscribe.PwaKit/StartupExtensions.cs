@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<IServiceWorkerBuilder, ServiceWorkerBuilder>();
 
-            services.TryAddScoped<IServiceWorkerRouteNameProvider, DefaultServiceWorkerRouteNameProvider>();
+            services.TryAddScoped<IPwaRouteNameProvider, DefaultPwaRouteNameProvider>();
 
             services.AddTransient<ITagHelperComponent, ServiceWorkerTagHelperComponent>();
 

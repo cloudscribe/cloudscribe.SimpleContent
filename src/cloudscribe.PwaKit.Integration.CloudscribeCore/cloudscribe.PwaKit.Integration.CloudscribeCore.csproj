@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Integration between cloudscribe.SimpleContent and cloudscribe.PwaKit</Description>
+    <Description>Integration between cloudscribe.Core and cloudscribe.PwaKit</Description>
     <VersionPrefix>1.0.0</VersionPrefix>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <Authors>Joe Audette</Authors>
@@ -16,7 +16,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.PwaKit\cloudscribe.PwaKit.csproj" />
-    <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    
+    <PackageReference Include="cloudscribe.Core.Models" Version="3.0.23" />
+    
   </ItemGroup>
 
 </Project>

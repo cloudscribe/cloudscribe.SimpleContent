@@ -1,0 +1,9 @@
+﻿@inject IStringLocalizer<cloudscribe.PwaKit.PwaResources> sr
+@{
+    ViewData["Title"] = sr["Offline"];
+}
+<div class="alert alert-warning">
+    <p>
+        @sr["Sorry the resource you requested is not available while offline."]
+    </p>
+</div>
