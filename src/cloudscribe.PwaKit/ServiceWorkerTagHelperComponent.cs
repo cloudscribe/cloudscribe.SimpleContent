@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 
 namespace cloudscribe.PwaKit
 {
@@ -13,7 +14,7 @@ namespace cloudscribe.PwaKit
     {
         
         private IHostingEnvironment _env;
-        private IHttpContextAccessor _accessor;
+        private IHttpContextAccessor _contextAccessor;
         private PwaOptions _options;
         private IUrlHelperFactory _urlHelperFactory;
         private IActionContextAccessor _actionContextAccesor;
@@ -29,7 +30,7 @@ namespace cloudscribe.PwaKit
             _urlHelperFactory = urlHelperFactory;
             _actionContextAccesor = actionContextAccesor;
             _env = env;
-            _accessor = accessor;
+            _contextAccessor = accessor;
             _options = pwaOptionsAccessor.Value;
 
         }
@@ -50,6 +51,22 @@ namespace cloudscribe.PwaKit
         /// <inheritdoc />
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if(!string.IsNullOrWhiteSpace(_options.ExcludedPathsCsv))
+            {
+                var currentPath = _contextAccessor.HttpContext.Request.Path.ToString();
+                var paths = _options.ExcludedPathsCsv.Split(',').ToList();
+                if(paths.Any(x => currentPath.StartsWith(x)))
+                {
+                    return;
+                }
+                
+            }
+
+            if(_contextAccessor.HttpContext.Request.Method == "POST")
+            {
+                return;
+            }
+
             if (!_options.RegisterServiceWorker)
             {
                 return;
@@ -57,7 +74,7 @@ namespace cloudscribe.PwaKit
 
             if (string.Equals(context.TagName, "body", StringComparison.OrdinalIgnoreCase))
             {
-                if ((_options.AllowHttp || _accessor.HttpContext.Request.IsHttps) || _env.IsDevelopment())
+                if ((_options.AllowHttp || _contextAccessor.HttpContext.Request.IsHttps) || _env.IsDevelopment())
                 {
                     output.PostContent.AppendHtml(BuildScript());
                 }

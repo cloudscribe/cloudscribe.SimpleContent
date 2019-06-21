@@ -54,9 +54,12 @@ namespace cloudscribe.PwaKit.Integration.Navigation
 
                 if (addedUrls.Contains(url)) continue;
 
+                
+
                 result.Add(new PreCacheItem()
                 {
-                    Url = url
+                    Url = url,
+                    LastModifiedUtc = navNode.LastModifiedUtc
                 });
 
             }
@@ -68,6 +71,8 @@ namespace cloudscribe.PwaKit.Integration.Navigation
 
         private bool ShouldRenderNode(NavigationNode node)
         {
+            if (node.Controller == "Account") return false;
+
             TreeNode<NavigationNode> treeNode = new TreeNode<NavigationNode>(node);
             foreach (var permission in _permissionResolvers)
             {

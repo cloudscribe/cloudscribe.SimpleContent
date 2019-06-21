@@ -24,10 +24,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<PwaPreCacheItems>(config.GetSection("PwaPreCacheItems"));
 
             services.AddScoped<IPreCacheItemProvider, ConfigPreCacheItemProvider>();
+            services.AddScoped<IPreCacheItemProvider, OfflinePageCacheItemProvider>();
 
             services.TryAddScoped<IServiceWorkerBuilder, ServiceWorkerBuilder>();
 
             services.TryAddScoped<IPwaRouteNameProvider, DefaultPwaRouteNameProvider>();
+            services.TryAddScoped<IOfflinePageUrlProvider, OfflinePageUrlProvider>();
 
             services.AddTransient<ITagHelperComponent, ServiceWorkerTagHelperComponent>();
 

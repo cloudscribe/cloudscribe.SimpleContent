@@ -4,5 +4,7 @@
     {
         string GetServiceWorkerRouteName();
         string GetServiceWorkerScope();
+
+        string GetOfflinePageRouteName();
     }
 }

@@ -44,6 +44,14 @@ namespace cloudscribe.PwaKit
         public bool AllowHttp { get; set; }
 
         /// <summary>
+        /// if true the current page will be reloaded after a service worker update
+        /// this is needed for example if the page shows different things for authenticated vs unauthenticated users ie login or logout links in nav
+        /// </summary>
+        public bool ReloadPageOnServiceWorkerUpdate { get; set; } = true;
+
+        public string ExcludedPathsCsv { get; set; }
+
+        /// <summary>
         /// the url for google workbox
         /// </summary>
         public string WorkBoxUrl { get; set; } = "https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js";

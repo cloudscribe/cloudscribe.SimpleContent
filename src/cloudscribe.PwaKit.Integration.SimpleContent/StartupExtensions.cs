@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using cloudscribe.PwaKit.Integration.SimpleContent;
+using cloudscribe.PwaKit.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +14,8 @@ namespace Microsoft.Extensions.DependencyInjection
            IConfiguration config
            )
         {
+
+            services.AddScoped<IPreCacheItemProvider, BlogPreCacheItemProvider>();
 
 
             return services;
