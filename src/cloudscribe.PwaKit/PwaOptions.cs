@@ -29,6 +29,11 @@ namespace cloudscribe.PwaKit
         public bool AutoRegisterServiceWorker { get; set; } = true;
 
         /// <summary>
+        /// a flag that can be used to include or exclude consile.log statement in the generated script
+        /// </summary>
+        public bool EnableServiceWorkerConsoleLog { get; set; } 
+
+        /// <summary>
         /// request paths to exclude auto registering the service worker ie /account/login,/account/register
         /// </summary>
         public string ExcludedAutoRegistrationPathsCsv { get; set; }

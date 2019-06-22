@@ -1,7 +1,6 @@
 ﻿using cloudscribe.PwaKit.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace cloudscribe.PwaKit.Controllers
@@ -10,17 +9,17 @@ namespace cloudscribe.PwaKit.Controllers
     {
         public PwaController(
             IServiceWorkerBuilder serviceWorkerBuilder,
-            IPwaRouteNameProvider serviceWorkerRouteNameProvider,
+            IGenerateServiceWorkerInitScript serviceWorkerInitScriptGenerator,
             IOptions<PwaOptions> pwaOptionsAccessor
             )
         {
             _serviceWorkerBuilder = serviceWorkerBuilder;
-            _serviceWorkerRouteNameProvider = serviceWorkerRouteNameProvider;
+            _serviceWorkerInitScriptGenerator = serviceWorkerInitScriptGenerator;
             _options = pwaOptionsAccessor.Value;
         }
 
         private readonly IServiceWorkerBuilder _serviceWorkerBuilder;
-        private readonly IPwaRouteNameProvider _serviceWorkerRouteNameProvider;
+        private readonly IGenerateServiceWorkerInitScript _serviceWorkerInitScriptGenerator;
         private readonly PwaOptions _options;
 
 
@@ -28,7 +27,8 @@ namespace cloudscribe.PwaKit.Controllers
         {
             Response.ContentType = "application/javascript; charset=utf-8";
 
-            //TODO: 
+            //TODO ?: do we need to cache this,suppose to load at least every 24 hours
+            // I think the browser makes head requests to see if any changes
             //Response.Headers[HeaderNames.CacheControl] = $"max-age={_options.ServiceWorkerCacheControlMaxAge}";
 
             var sw = await _serviceWorkerBuilder.Build(HttpContext);
@@ -38,70 +38,17 @@ namespace cloudscribe.PwaKit.Controllers
 
         }
 
-        public IActionResult ServiceWorkerInit()
+        public async Task<IActionResult> ServiceWorkerInit()
         {
-            Response.ContentType = "application/javascript; charset=utf-8";
-
-            var url = Url.RouteUrl(_serviceWorkerRouteNameProvider.GetServiceWorkerRouteName());
-
-            var script = new StringBuilder();
-            script.Append("if ('serviceWorker' in navigator) {");
-            script.Append("window.addEventListener('load', () => {");
-
-            if (_options.ReloadPageOnServiceWorkerUpdate)
+            var script = await _serviceWorkerInitScriptGenerator.BuildSwInitScript(HttpContext, Url);
+            if(string.IsNullOrWhiteSpace(script))
             {
-                script.Append("var refreshing;");
-                script.Append("navigator.serviceWorker.addEventListener('controllerchange', function(event) {");
-                script.Append("console.log('Controller loaded');");
-                script.Append("if (refreshing) return;");
-                script.Append("refreshing = true;");
-                script.Append("if(!window.location.href.indexOf('account') > -1) {");
-                //this causes login to fail
-                script.Append("console.log('reloading page because service worker updated');");
-                //script.Append("window.location.reload();");
-                script.Append("}");
-                script.Append("});");
+                return NotFound();
             }
 
-            var scope = _serviceWorkerRouteNameProvider.GetServiceWorkerScope();
-
-            script.Append("navigator.serviceWorker.register('" + url + "',{scope: '" + scope + "'})");
-            script.Append(".then(registration => {");
-
-            script.Append("console.log(`Service Worker registered! Scope: ${registration.scope}`);");
-
-            //this gets into an infinite loop of reloading
-            //if (_options.ReloadPageOnServiceWorkerUpdate)
-            //{
-            //    script.Append("if (!navigator.serviceWorker.controller) {");
-            //    script.Append("return;");
-            //    script.Append("}");
-
-            //    script.Append("registration.addEventListener('updatefound', function () {");
-            //    script.Append("const newWorker = registration.installing;");
-            //    script.Append("var refreshing;");
-            //    script.Append("newWorker.addEventListener('statechange', () => {");
-            //    script.Append("if (newWorker.state == 'activated') {");
-            //    script.Append("if (refreshing) return;");
-            //    script.Append("window.location.reload();");
-            //    script.Append("refreshing = true;");
-            //    script.Append("}");
-            //    script.Append("});");
-            //    script.Append("});");
-
-            //}
-
-
-            script.Append(" })");
-            script.Append(".catch(err => {");
-            script.Append("console.log(`Service Worker registration failed: ${err}`);");
-            script.Append("});");
-            script.Append("});");
-            script.Append("}");
-
-            //var script = "'serviceWorker'in navigator&&navigator.serviceWorker.register('" + url + "')";
-
-            return Content(script.ToString());
+            Response.ContentType = "application/javascript; charset=utf-8";
+            
+            return Content(script);
 
         }
 

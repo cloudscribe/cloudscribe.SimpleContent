@@ -30,6 +30,16 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<IPwaRouteNameProvider, DefaultPwaRouteNameProvider>();
             services.TryAddScoped<IOfflinePageUrlProvider, OfflinePageUrlProvider>();
+            services.TryAddScoped<IWorkboxCacheSuffixProvider, ConfigWorkboxCacheSuffixProvider>();
+
+            services.TryAddScoped<IConfigureServiceWorkerReloading, DefaultConfigureServiceWorkerReloading>();
+            services.TryAddScoped<IConfigureWorkboxPreCache, DefaultConfigureWorkboxPreCache>();
+            services.TryAddScoped<IConfigureWorkboxNetworkOnlyRoutes, DefaultConfigureWorkboxNetworkOnlyRoutes>();
+            services.TryAddScoped<IConfigureWorkboxCacheFirstRoutes, DefaultConfigureWorkboxCacheFirstRoutes>();
+            services.TryAddScoped<IConfigureWorkboxNetworkFirstRoutes, DefaultConfigureWorkboxNetworkFirstRoutes>();
+            services.TryAddScoped<IConfigureWorkboxCatchHandler, DefaultConfigureWorkboxCatchHandler>();
+            services.TryAddScoped<IGenerateServiceWorkerInitScript, DefaultGenerateServiceWorkerInitScript>();
+
 
             services.AddTransient<ITagHelperComponent, ServiceWorkerTagHelperComponent>();
 

@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <Description>Easy PWA support with dynamic serviceworker for ASP.NET Core</Description>
-    <VersionPrefix>1.0.0</VersionPrefix>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <Description>A set of tools for building a dynamic serviceworker at runtime for ASP.NET Core</Description>
+    <Version>1.0.0-alpha-20190622</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>pwa,serviceworker,manifest,cloudscribe</PackageTags>
