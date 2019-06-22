@@ -23,8 +23,8 @@ namespace cloudscribe.PwaKit.Services
             
             var offlinePage = new PreCacheItem()
             {
-                Url = _offlinePageUrlProvider.GetOfflineUrl(),
-                Revision = "v1.0"
+                Url = _offlinePageUrlProvider.GetOfflineUrl()
+               
             };
 
             result.Add(offlinePage);

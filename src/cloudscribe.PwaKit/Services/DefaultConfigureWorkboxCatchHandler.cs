@@ -45,7 +45,8 @@ namespace cloudscribe.PwaKit.Services
             //sw.Append("break;");
 
             sw.Append("default:");
-            sw.Append("return Response.error();");
+            sw.Append("return caches.match('" + offlineUrl + "');");
+            //sw.Append("return Response.error();");
 
             sw.Append("}");
 
