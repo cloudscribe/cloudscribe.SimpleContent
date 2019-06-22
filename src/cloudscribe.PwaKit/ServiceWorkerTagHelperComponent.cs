@@ -51,10 +51,15 @@ namespace cloudscribe.PwaKit
         /// <inheritdoc />
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if(!string.IsNullOrWhiteSpace(_options.ExcludedPathsCsv))
+            if (!_options.AutoRegisterServiceWorker)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_options.ExcludedAutoRegistrationPathsCsv))
             {
                 var currentPath = _contextAccessor.HttpContext.Request.Path.ToString();
-                var paths = _options.ExcludedPathsCsv.Split(',').ToList();
+                var paths = _options.ExcludedAutoRegistrationPathsCsv.Split(',').ToList();
                 if(paths.Any(x => currentPath.StartsWith(x)))
                 {
                     return;
@@ -67,10 +72,7 @@ namespace cloudscribe.PwaKit
                 return;
             }
 
-            if (!_options.RegisterServiceWorker)
-            {
-                return;
-            }
+            
 
             if (string.Equals(context.TagName, "body", StringComparison.OrdinalIgnoreCase))
             {

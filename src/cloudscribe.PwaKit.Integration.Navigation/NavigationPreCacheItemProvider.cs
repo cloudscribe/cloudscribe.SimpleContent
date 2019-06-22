@@ -15,6 +15,7 @@ namespace cloudscribe.PwaKit.Integration.Navigation
         public NavigationPreCacheItemProvider(
             NavigationTreeBuilderService siteMapTreeBuilder,
             IEnumerable<INavigationNodePermissionResolver> permissionResolvers,
+            IEnumerable<INavigationNodeServiceWorkerFilter> navigationNodeServiceWorkerFilters,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor,
             IHttpContextAccessor contextAccessor
@@ -22,6 +23,7 @@ namespace cloudscribe.PwaKit.Integration.Navigation
         {
             _siteMapTreeBuilder = siteMapTreeBuilder;
             _permissionResolvers = permissionResolvers;
+            _navigationNodeServiceWorkerFilters = navigationNodeServiceWorkerFilters;
             _urlHelperFactory = urlHelperFactory;
             _actionContextAccesor = actionContextAccesor;
             _contextAccessor = contextAccessor;
@@ -34,6 +36,7 @@ namespace cloudscribe.PwaKit.Integration.Navigation
         private readonly IActionContextAccessor _actionContextAccesor;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IEnumerable<INavigationNodePermissionResolver> _permissionResolvers;
+        private readonly IEnumerable<INavigationNodeServiceWorkerFilter> _navigationNodeServiceWorkerFilters;
 
         private List<string> addedUrls = new List<string>();
         

@@ -57,13 +57,15 @@ namespace cloudscribe.PwaKit.Controllers
                 script.Append("refreshing = true;");
                 script.Append("if(!window.location.href.indexOf('account') > -1) {");
                 //this causes login to fail
-                script.Append("window.location.reload();");
+                script.Append("console.log('reloading page because service worker updated');");
+                //script.Append("window.location.reload();");
                 script.Append("}");
                 script.Append("});");
             }
 
+            var scope = _serviceWorkerRouteNameProvider.GetServiceWorkerScope();
 
-            script.Append("navigator.serviceWorker.register('" + url + "',{scope: '" + _serviceWorkerRouteNameProvider.GetServiceWorkerScope() + "'})");
+            script.Append("navigator.serviceWorker.register('" + url + "',{scope: '" + scope + "'})");
             script.Append(".then(registration => {");
 
             script.Append("console.log(`Service Worker registered! Scope: ${registration.scope}`);");

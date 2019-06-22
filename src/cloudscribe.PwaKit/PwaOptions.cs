@@ -9,7 +9,7 @@ namespace cloudscribe.PwaKit
 
         public PwaOptions()
         {
-            RegisterServiceWorker = true;
+            AutoRegisterServiceWorker = true;
             EnableCspNonce = false;
             ServiceWorkerCacheControlMaxAgeInSeconds = 60 * 60 * 24 * 1;    // 1 days
         }
@@ -26,7 +26,12 @@ namespace cloudscribe.PwaKit
         /// Determines if a script that registers the service worker should be injected
         /// into the bottom of the HTML page.
         /// </summary>
-        public bool RegisterServiceWorker { get; set; }
+        public bool AutoRegisterServiceWorker { get; set; } = true;
+
+        /// <summary>
+        /// request paths to exclude auto registering the service worker ie /account/login,/account/register
+        /// </summary>
+        public string ExcludedAutoRegistrationPathsCsv { get; set; }
 
         /// <summary>
         /// Determines the value of the ServiceWorker CacheControl header Max-Age (in seconds)
@@ -49,7 +54,7 @@ namespace cloudscribe.PwaKit
         /// </summary>
         public bool ReloadPageOnServiceWorkerUpdate { get; set; } = true;
 
-        public string ExcludedPathsCsv { get; set; }
+       
 
         /// <summary>
         /// the url for google workbox
