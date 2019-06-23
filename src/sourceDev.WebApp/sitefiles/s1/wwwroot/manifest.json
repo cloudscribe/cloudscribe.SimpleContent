@@ -1,0 +1,53 @@
+{
+  "name": "cloudscribe Pwa Demo",
+  "short_name": "Pwa Demo",
+  "description": "The most awesome application in the world",
+  "icons" : [
+        {
+            "src": "/manifest/rocket48.png",
+            "sizes": "48x48"
+        },
+    {
+      "src": "/manifest/rocket72.png",
+      "sizes": "72x72"
+    },
+        {
+            "src": "/manifest/rocket76.png",
+            "sizes": "76x76"
+        },
+        {
+            "src": "/manifest/rocket96.png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "/manifest/rocket120.png",
+            "sizes": "120x120"
+        },
+        {
+            "src": "/manifest/rocket144.png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "/manifest/rocket152.png",
+            "sizes": "152x152"
+        },
+        {
+            "src": "/manifest/rocket180.png",
+            "sizes": "180x180"
+        },
+        {
+            "src": "/manifest/rocket192.png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/manifest/rocket512.png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "/manifest/rocket1024.png",
+            "sizes": "1024x1024"
+        }
+    ],
+  "display": "minimal-ui",
+  "start_url": "/"
+}
