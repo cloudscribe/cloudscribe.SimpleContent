@@ -39,6 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IConfigureWorkboxNetworkFirstRoutes, DefaultConfigureWorkboxNetworkFirstRoutes>();
             services.TryAddScoped<IConfigureWorkboxCatchHandler, DefaultConfigureWorkboxCatchHandler>();
             services.TryAddScoped<IGenerateServiceWorkerInitScript, DefaultGenerateServiceWorkerInitScript>();
+            services.TryAddScoped<IConfigureWorkboxOfflineGoogleAnalytics, DefaultConfigureWorkboxOfflineGoogleAnalytics>();
 
 
             services.AddTransient<ITagHelperComponent, ServiceWorkerTagHelperComponent>();

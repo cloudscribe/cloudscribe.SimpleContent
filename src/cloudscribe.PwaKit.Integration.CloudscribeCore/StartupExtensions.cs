@@ -15,14 +15,10 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration config
             )
         {
-
-           
-
-            services.AddScoped<IPwaRouteNameProvider, PwaRouteNameProvider>();
-
             
-
-
+            services.AddScoped<IPwaRouteNameProvider, PwaRouteNameProvider>();
+            services.AddScoped<IWorkboxCacheSuffixProvider, LastModifiedWorkboxCacheSuffixProvider>();
+            
             return services;
         }
 

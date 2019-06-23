@@ -59,12 +59,14 @@ namespace cloudscribe.PwaKit
         /// </summary>
         public bool ReloadPageOnServiceWorkerUpdate { get; set; } = true;
 
+        public bool SetupInstallPrompt { get; set; } = true;
+
        
 
         /// <summary>
         /// the url for google workbox
         /// </summary>
-        public string WorkBoxUrl { get; set; } = "https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js";
+        public string WorkBoxUrl { get; set; } = "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js";
 
 
 

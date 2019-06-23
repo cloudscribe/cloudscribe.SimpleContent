@@ -6,6 +6,10 @@ namespace cloudscribe.PwaKit.Models
 {
     public class PwaPreCacheItems
     {
+        public PwaPreCacheItems()
+        {
+            Assets = new List<PreCacheItem>();
+        }
 
         public List<PreCacheItem> Assets { get; set; }
 

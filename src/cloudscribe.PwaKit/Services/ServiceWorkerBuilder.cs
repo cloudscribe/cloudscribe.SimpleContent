@@ -115,16 +115,6 @@ namespace cloudscribe.PwaKit.Services
 
             return sw.ToString();
         }
-
-        
-        
-
-
-        
-
-
-
-        
         
 
     }

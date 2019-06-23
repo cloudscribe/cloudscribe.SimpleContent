@@ -10,15 +10,22 @@ namespace cloudscribe.PwaKit.Services
     {
         public DefaultConfigureWorkboxCacheFirstRoutes(
             IOptions<PwaOptions> pwaOptionsAccessor
+            //IWorkboxCacheSuffixProvider workboxCacheSuffixProvider
             )
         {
             _options = pwaOptionsAccessor.Value;
+            //_workboxCacheSuffixProvider = workboxCacheSuffixProvider;
         }
 
         private readonly PwaOptions _options;
+        //private readonly IWorkboxCacheSuffixProvider _workboxCacheSuffixProvider;
 
         public Task AppendToServiceWorkerScript(StringBuilder sw, PwaOptions options, HttpContext context)
         {
+            //no reason to clear the images cache if the service worker was updated
+            //that would be extra bandwidth wasted
+            //var cacheSuffix = await _workboxCacheSuffixProvider.GetWorkboxCacheSuffix();
+
             sw.Append("const cacheFirstMatcher = ({url, event}) => {");
             sw.Append("var re = new RegExp(/(.*)\\.(?:png|gif|jpg|jpeg)/);");
             sw.Append("var match = re.test(url.href);");

@@ -8,20 +8,24 @@ namespace cloudscribe.PwaKit.Services
     public class DefaultConfigureWorkboxNetworkFirstRoutes : IConfigureWorkboxNetworkFirstRoutes
     {
         public DefaultConfigureWorkboxNetworkFirstRoutes(
-            IOfflinePageUrlProvider offlinePageUrlProvider
+            IOfflinePageUrlProvider offlinePageUrlProvider,
+            IWorkboxCacheSuffixProvider workboxCacheSuffixProvider
             )
         {
             _offlinePageUrlProvider = offlinePageUrlProvider;
+            _workboxCacheSuffixProvider = workboxCacheSuffixProvider;
         }
 
         private readonly IOfflinePageUrlProvider _offlinePageUrlProvider;
+        private readonly IWorkboxCacheSuffixProvider _workboxCacheSuffixProvider;
 
 
-        public Task AppendToServiceWorkerScript(StringBuilder sw, PwaOptions options, HttpContext context)
+        public async Task AppendToServiceWorkerScript(StringBuilder sw, PwaOptions options, HttpContext context)
         {
+            var cacheSuffix = await _workboxCacheSuffixProvider.GetWorkboxCacheSuffix();
 
             sw.Append("const networkFirstHandler = new workbox.strategies.NetworkFirst({");
-            sw.Append("cacheName: 'network-first-content-cache-" + options.CacheIdSuffix + "',");
+            sw.Append("cacheName: 'network-first-content-cache-" + cacheSuffix + "',");
             sw.Append("plugins: [");
             sw.Append("new workbox.expiration.Plugin({");
             sw.Append(" maxEntries: 2000,");
@@ -65,14 +69,10 @@ namespace cloudscribe.PwaKit.Services
             sw.Append("});");
             sw.Append("});");
 
-            //vanilla
-            //sw.Append("workbox.routing.registerRoute(");
-            //sw.Append("networkFirstMatchFunction,");
-            //sw.Append("new workbox.strategies.NetworkFirst()");
-            //sw.Append(");");
+           
 
 
-            return Task.CompletedTask;
+            
         }
 
 
