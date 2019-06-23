@@ -26,12 +26,13 @@
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - @(Tenant?.SiteName ?? "Sample")</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="manifest" href="/manifest.json">
     @RenderSection("Meta", required: false)
     <environment names="Development">
-        <link rel="stylesheet" href="~/css/style.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" asp-append-version="true"  />
+        <link rel="stylesheet" href="~/css/style.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" asp-append-version="true"  />
+        <link rel="stylesheet" href="~/css/style.min.css" cs-resolve-theme-resource="true" cs-tenant="@Tenant" asp-append-version="true" />
     </environment>
     @if (isIE)
     {
@@ -86,6 +87,7 @@
         <div class="row">
             <main id="content" class="col order-3">
                 <partial name="AlertsPartial" />
+                <partial name="PwaInstallPrompt" />
                 <partial name="_CookieConsentPartial" />
                 @RenderBody()
             </main>

@@ -1,0 +1,12 @@
+﻿@inject IStringLocalizer<cloudscribe.PwaKit.PwaResources> sr
+@{
+}
+
+<div id="divPwaInstallPrompt" class="alert alert-primary alert-dismissible fade " style="display:none;" role="alert">
+    <h2>@sr["Access articles offline using our web app"]</h2>
+    <button id="btnPwaInstall" type="button" class="btn btn-success">@sr["Install"]</button>
+    
+    <button id="pwaDismissButton" type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
