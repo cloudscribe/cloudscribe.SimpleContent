@@ -40,6 +40,12 @@
     }
     @RenderSection("Styles", required: false)
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
+
+    <link rel="icon" type="image/png" href="/manifest/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/manifest/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/manifest/android-192x192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="/manifest/apple-touch-icon-180x180.png" sizes="180x180">
+
     <base href="@Context.Request.Path" />
 </head>
 <body class="d-flex flex-column @ViewData["BodyClass"] @ieBodyClass">

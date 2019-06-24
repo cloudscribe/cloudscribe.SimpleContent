@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>A set of tools for building a dynamic serviceworker at runtime for ASP.NET Core</Description>
-    <Version>1.0.0-alpha-20190622</Version>
+    <Version>1.0.0-alpha-20190623</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>pwa,serviceworker,manifest,cloudscribe</PackageTags>
