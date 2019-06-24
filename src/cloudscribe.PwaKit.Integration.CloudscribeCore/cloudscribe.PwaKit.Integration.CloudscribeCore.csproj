@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Integration between cloudscribe.Core and cloudscribe.PwaKit</Description>
-    <Version>1.0.0-alpha-20190622</Version>
+    <Version>1.0.0-alpha-20190623</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>pwa,serviceworker,cloudscribe</PackageTags>
@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.PwaKit.Integration.Navigation\cloudscribe.PwaKit.Integration.Navigation.csproj" />
     <ProjectReference Include="..\cloudscribe.PwaKit\cloudscribe.PwaKit.csproj" />
   </ItemGroup>
 
@@ -21,6 +22,7 @@
     
     <PackageReference Include="cloudscribe.Core.Models" Version="3.0.23" />
     <PackageReference Include="cloudscribe.Web.Navigation" Version="2.1.21" />
+    <PackageReference Include="cloudscribe.FileManager.CoreIntegration" Version="3.0.28" />
     
   </ItemGroup>
 

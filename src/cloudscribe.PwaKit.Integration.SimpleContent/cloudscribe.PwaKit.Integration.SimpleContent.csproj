@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Integration between cloudscribe.SimpleContent and cloudscribe.PwaKit</Description>
-    <Version>1.0.0-alpha-20190622</Version>
+    <Version>1.0.0-alpha-20190623</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>pwa,serviceworker,cloudscribe</PackageTags>

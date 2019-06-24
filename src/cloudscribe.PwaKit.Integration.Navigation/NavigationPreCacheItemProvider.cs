@@ -1,7 +1,6 @@
 ﻿using cloudscribe.PwaKit.Interfaces;
 using cloudscribe.PwaKit.Models;
 using cloudscribe.Web.Navigation;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -17,8 +16,7 @@ namespace cloudscribe.PwaKit.Integration.Navigation
             IEnumerable<INavigationNodePermissionResolver> permissionResolvers,
             IEnumerable<INavigationNodeServiceWorkerFilter> navigationNodeServiceWorkerFilters,
             IUrlHelperFactory urlHelperFactory,
-            IActionContextAccessor actionContextAccesor,
-            IHttpContextAccessor contextAccessor
+            IActionContextAccessor actionContextAccesor
             )
         {
             _siteMapTreeBuilder = siteMapTreeBuilder;
@@ -26,7 +24,6 @@ namespace cloudscribe.PwaKit.Integration.Navigation
             _navigationNodeServiceWorkerFilters = navigationNodeServiceWorkerFilters;
             _urlHelperFactory = urlHelperFactory;
             _actionContextAccesor = actionContextAccesor;
-            _contextAccessor = contextAccessor;
         }
 
 
@@ -34,7 +31,6 @@ namespace cloudscribe.PwaKit.Integration.Navigation
         private readonly NavigationTreeBuilderService _siteMapTreeBuilder;
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IActionContextAccessor _actionContextAccesor;
-        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IEnumerable<INavigationNodePermissionResolver> _permissionResolvers;
         private readonly IEnumerable<INavigationNodeServiceWorkerFilter> _navigationNodeServiceWorkerFilters;
 
@@ -49,6 +45,15 @@ namespace cloudscribe.PwaKit.Integration.Navigation
             var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             foreach (var navNode in rootNode.Flatten())
             {
+                bool include = true;
+                foreach (var filter in _navigationNodeServiceWorkerFilters)
+                {
+                    include = await filter.ShouldRenderNode(navNode);
+                }
+
+                if (!include) continue;
+
+
                 if (!ShouldRenderNode(navNode)) continue;
 
                 var url = ResolveUrl(navNode, urlHelper);
@@ -74,7 +79,8 @@ namespace cloudscribe.PwaKit.Integration.Navigation
 
         private bool ShouldRenderNode(NavigationNode node)
         {
-            if (node.Controller == "Account") return false;
+            //if (node.Controller == "Account") return false;
+            
 
             TreeNode<NavigationNode> treeNode = new TreeNode<NavigationNode>(node);
             foreach (var permission in _permissionResolvers)

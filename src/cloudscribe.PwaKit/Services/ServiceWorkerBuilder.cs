@@ -17,6 +17,7 @@ namespace cloudscribe.PwaKit.Services
             IConfigureWorkboxNetworkOnlyRoutes configureWorkboxNetworkOnlyRoutes,
             IConfigureWorkboxCacheFirstRoutes configureWorkboxCacheFirstRoutes,
             IConfigureWorkboxNetworkFirstRoutes configureWorkboxNetworkFirstRoutes,
+            IConfigureWorkboxOfflineGoogleAnalytics configureGoogleAnalytics,
             IConfigureWorkboxCatchHandler configureWorkboxCatchHandler,
             IEnumerable<IAddCodeToServiceWorker> addCodeToServiceWorkers
             )
@@ -28,6 +29,7 @@ namespace cloudscribe.PwaKit.Services
             _configureWorkboxNetworkOnlyRoutes = configureWorkboxNetworkOnlyRoutes;
             _configureWorkboxCacheFirstRoutes = configureWorkboxCacheFirstRoutes;
             _configureWorkboxNetworkFirstRoutes = configureWorkboxNetworkFirstRoutes;
+            _configureGoogleAnalytics = configureGoogleAnalytics;
             _configureWorkboxCatchHandler = configureWorkboxCatchHandler;
             _addCodeToServiceWorkers = addCodeToServiceWorkers;
         }
@@ -39,6 +41,7 @@ namespace cloudscribe.PwaKit.Services
         private readonly IConfigureWorkboxNetworkOnlyRoutes _configureWorkboxNetworkOnlyRoutes;
         private readonly IConfigureWorkboxCacheFirstRoutes _configureWorkboxCacheFirstRoutes;
         private readonly IConfigureWorkboxNetworkFirstRoutes _configureWorkboxNetworkFirstRoutes;
+        private readonly IConfigureWorkboxOfflineGoogleAnalytics _configureGoogleAnalytics;
         private readonly IConfigureWorkboxCatchHandler _configureWorkboxCatchHandler;
         private readonly IEnumerable<IAddCodeToServiceWorker> _addCodeToServiceWorkers;
 
@@ -94,8 +97,10 @@ namespace cloudscribe.PwaKit.Services
 
             await _configureWorkboxNetworkFirstRoutes.AppendToServiceWorkerScript(sw, _options, context);
 
+            await _configureGoogleAnalytics.AppendToServiceWorkerScript(sw, _options, context);
 
-            foreach(var p in _addCodeToServiceWorkers)
+
+            foreach (var p in _addCodeToServiceWorkers)
             {
                 await p.AppendToServiceWorkerScript(sw, _options, context);
             }
