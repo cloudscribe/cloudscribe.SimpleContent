@@ -81,6 +81,13 @@ namespace Microsoft.AspNetCore.Builder
                , defaults: new { controller = "Page", action = "Index" }
                );
 
+            routes.MapRoute(
+               name: ProjectConstants.PageCanEditRouteName,
+               template: "page/canedit"
+               , defaults: new { controller = "Page", action = "CanEdit" }
+               );
+
+
 
 
             return routes;
@@ -147,6 +154,13 @@ namespace Microsoft.AspNetCore.Builder
                , constraints: new { culture = cultureConstraint }
                );
 
+            routes.MapRoute(
+              name: ProjectConstants.CulturePageCanEditRouteName,
+              template: "{culture}/page/canedit"
+              , defaults: new { controller = "Page", action = "CanEdit" }
+              , constraints: new { culture = cultureConstraint }
+              );
+
 
 
             return routes;
@@ -212,6 +226,14 @@ namespace Microsoft.AspNetCore.Builder
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
+
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageCanEditRouteName,
+               template: "{sitefolder}/page/canedit"
+               , defaults: new { controller = "Page", action = "CanEdit" }
+               , constraints: new { sitefolder = siteFolderConstraint }
+               );
+
 
 
 
@@ -280,6 +302,14 @@ namespace Microsoft.AspNetCore.Builder
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
+            routes.MapRoute(
+              name: ProjectConstants.CultureFolderPageCanEditRouteName,
+              template: "{sitefolder}/{culture}/page/canedit"
+              , defaults: new { controller = "Page", action = "CanEdit" }
+              , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
+              );
+
+
 
 
             return routes;
@@ -335,6 +365,12 @@ namespace Microsoft.AspNetCore.Builder
                name: ProjectConstants.PageIndexRouteName,
                template: prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.PageCanEditRouteName,
+               template: prefix + "/page/canedit"
+               , defaults: new { controller = "Page", action = "CanEdit" }
                );
 
 
@@ -401,6 +437,13 @@ namespace Microsoft.AspNetCore.Builder
                name: ProjectConstants.CulturePageIndexRouteName,
                template: "{culture}/" + prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
+               , constraints: new { culture = cultureConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.CulturePageCanEditRouteName,
+               template: "{culture}/" + prefix + "/page/canedit"
+               , defaults: new { controller = "Page", action = "CanEdit" }
                , constraints: new { culture = cultureConstraint }
                );
 
@@ -473,6 +516,13 @@ namespace Microsoft.AspNetCore.Builder
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
+            routes.MapRoute(
+               name: ProjectConstants.FolderPageCanEditRouteName,
+               template: "{sitefolder}/" + prefix + "/page/canedit"
+               , defaults: new { controller = "Page", action = "CanEdit" }
+               , constraints: new { sitefolder = siteFolderConstraint }
+               );
+
 
 
             return routes;
@@ -539,6 +589,13 @@ namespace Microsoft.AspNetCore.Builder
                name: ProjectConstants.CultureFolderPageIndexRouteName,
                template: "{sitefolder}/{culture}/" + prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
+               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.CultureFolderPageCanEditRouteName,
+               template: "{sitefolder}/{culture}/" + prefix + "/page/canedit"
+               , defaults: new { controller = "Page", action = "CanEdit" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
@@ -640,6 +697,12 @@ namespace Microsoft.AspNetCore.Builder
                , defaults: new { controller = "Blog", action = "Index" }
                );
 
+            routes.MapRoute(
+               name: ProjectConstants.BlogCanEditRouteName,
+               template: firstSegment + "blog/canedit"
+               , defaults: new { controller = "Blog", action = "CanEdit" }
+               );
+
             return routes;
         }
 
@@ -724,6 +787,13 @@ namespace Microsoft.AspNetCore.Builder
                name: ProjectConstants.CultureBlogIndexRouteName,
                template: "{culture}/" + firstSegment
                , defaults: new { controller = "Blog", action = "Index" }
+               , constraints: new { culture = cultureConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.CultureBlogCanEditRouteName,
+               template: "{culture}/" + firstSegment + "blog/canedit"
+               , defaults: new { controller = "Blog", action = "CanEdit" }
                , constraints: new { culture = cultureConstraint }
                );
 
@@ -815,6 +885,13 @@ namespace Microsoft.AspNetCore.Builder
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
+            routes.MapRoute(
+               name: ProjectConstants.FolderBlogCanEditRouteName,
+               template: "{sitefolder}/" + firstSegment + "blog/canedit"
+               , defaults: new { controller = "Blog", action = "CanEdit" }
+               , constraints: new { sitefolder = siteFolderConstraint }
+               );
+
 
             return routes;
         }
@@ -902,6 +979,13 @@ namespace Microsoft.AspNetCore.Builder
                name: ProjectConstants.CultureFolderBlogIndexRouteName,
                template: "{sitefolder}/{culture}/" + firstSegment + ""
                , defaults: new { controller = "Blog", action = "Index" }
+               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
+               );
+
+            routes.MapRoute(
+               name: ProjectConstants.CultureFolderBlogCanEditRouteName,
+               template: "{sitefolder}/{culture}/" + firstSegment + "blog/canedit"
+               , defaults: new { controller = "Blog", action = "CanEdit" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 

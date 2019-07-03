@@ -2,13 +2,14 @@
 @inject IStringLocalizer<SimpleContent> sr
 @inject ISimpleContentThemeHelper themeHelper
 @inject IOptions<PageEditOptions> editOptionsAccessor
+@inject IPageRoutes  pageRoutes
 @{
     var themeSettings = themeHelper.GetThemeSettings();
     var editOptions = editOptionsAccessor.Value;
 }
 
-@if (Model.CanEdit)
-{
+<div data-show-if-url-check data-url-check-url="@Url.RouteUrl(pageRoutes.CanEditRouteName)" style="display:none;">
+
     <a id="pageManagerLink" href="@Model.PageTreePath" title="@sr["Manage Page Hierarchy"]" class="btn btn-sm content-tree">
         <span class="@themeSettings.Icons.PageTree" aria-hidden="true"></span>
     </a>
@@ -28,4 +29,6 @@
         </a>
     }
 
-}
+</div>
+    
+

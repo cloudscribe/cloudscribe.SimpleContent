@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2017-01-08
-// Last Modified:           2019-03-04
+// Last Modified:           2019-07-03
 
 using cloudscribe.Core.Models;
 using cloudscribe.SimpleContent.Models;
@@ -233,6 +233,32 @@ namespace cloudscribe.Core.SimpleContent.Integration
                 }
 
                 return ProjectConstants.PageHistoryRouteName;
+            }
+        }
+
+        public string CanEditRouteName
+        {
+            get
+            {
+                if (_multiTenantOptions.Mode == MultiTenantMode.FolderName)
+                {
+                    if (!string.IsNullOrEmpty(_currentSite.SiteFolderName))
+                    {
+                        if (_cultureHelper.UseCultureRoutesAndProjects() && !_cultureHelper.IsDefaultCulture())
+                        {
+                            return ProjectConstants.CultureFolderPageCanEditRouteName;
+                        }
+
+                        return ProjectConstants.FolderPageCanEditRouteName;
+                    }
+                }
+
+                if (_cultureHelper.UseCultureRoutesAndProjects() && !_cultureHelper.IsDefaultCulture())
+                {
+                    return ProjectConstants.CulturePageCanEditRouteName;
+                }
+
+                return ProjectConstants.PageCanEditRouteName;
             }
         }
 

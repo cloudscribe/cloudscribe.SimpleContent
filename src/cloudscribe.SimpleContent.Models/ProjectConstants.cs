@@ -27,6 +27,7 @@
         public const string PostEditWithTemplateRouteName = "posteditwithtemplate";
         public const string PostDeleteRouteName = "postdelete";
         public const string PostHistoryRouteName = "posthistory";
+        public const string BlogCanEditRouteName = "blogcanedit";
 
         public const string FolderPostWithDateRouteName = "folderpostwithdate";
         public const string FolderPostWithoutDateRouteName = "folderpostwithoutdate";
@@ -39,6 +40,7 @@
         public const string FolderPostEditWithTemplateRouteName = "folderposteditwithtemplate";
         public const string FolderPostDeleteRouteName = "folderpostdelete";
         public const string FolderPostHistoryRouteName = "folderposthistory";
+        public const string FolderBlogCanEditRouteName = "folderblogcanedit";
 
         public const string PageIndexRouteName = "pageindex";
         public const string PageEditRouteName = "pageedit";
@@ -48,7 +50,8 @@
         public const string PageTreeRouteName = "pagetree";
         public const string NewPageRouteName = "newpage";
         public const string PageHistoryRouteName = "pagehistory";
-        
+        public const string PageCanEditRouteName = "pagecanedit";
+
         public const string FolderPageIndexRouteName = "folderpageindex";
         public const string FolderPageEditRouteName = "folderpageedit";
         public const string FolderPageEditWithTemplateRouteName = "folderpageeditwithtemplate";
@@ -57,6 +60,7 @@
         public const string FolderPageTreeRouteName = "folderpagetree";
         public const string FolderNewPageRouteName = "foldernewpage";
         public const string FolderPageHistoryRouteName = "folderpagehistory";
+        public const string FolderPageCanEditRouteName = "folderpagecanedit";
 
 
 
@@ -73,6 +77,7 @@
         public const string CulturePostEditWithTemplateRouteName = "posteditwithtemplate-culture";
         public const string CulturePostDeleteRouteName = "postdelete-culture";
         public const string CulturePostHistoryRouteName = "posthistory-culture";
+        public const string CultureBlogCanEditRouteName = "blogcanedit-culture";
 
         public const string CultureFolderPostWithDateRouteName = "folderpostwithdate-culture";
         public const string CultureFolderPostWithoutDateRouteName = "folderpostwithoutdate-culture";
@@ -85,6 +90,7 @@
         public const string CultureFolderPostEditWithTemplateRouteName = "folderposteditwithtemplate-culture";
         public const string CultureFolderPostDeleteRouteName = "folderpostdelete-culture";
         public const string CultureFolderPostHistoryRouteName = "folderposthistory-culture";
+        public const string CultureFolderBlogCanEditRouteName = "folderblogcanedit-culture";
 
         public const string CulturePageIndexRouteName = "pageindex-culture";
         public const string CulturePageEditRouteName = "pageedit-culture";
@@ -94,6 +100,7 @@
         public const string CulturePageTreeRouteName = "pagetree-culture";
         public const string CultureNewPageRouteName = "newpage-culture";
         public const string CulturePageHistoryRouteName = "pagehistory-culture";
+        public const string CulturePageCanEditRouteName = "pagecanedit-culture";
 
         public const string CultureFolderPageIndexRouteName = "folderpageindex-culture";
         public const string CultureFolderPageEditRouteName = "folderpageedit-culture";
@@ -103,6 +110,7 @@
         public const string CultureFolderPageTreeRouteName = "folderpagetree-culture";
         public const string CultureFolderNewPageRouteName = "foldernewpage-culture";
         public const string CultureFolderPageHistoryRouteName = "folderpagehistory-culture";
+        public const string CultureFolderPageCanEditRouteName = "folderpagecanedit-culture";
 
 
         /*******************************************************************************************/

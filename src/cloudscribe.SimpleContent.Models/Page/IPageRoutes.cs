@@ -12,5 +12,7 @@
         string NewPageRouteName { get; }
 
         string PageHistoryRouteName { get; }
+
+        string CanEditRouteName { get; }
     }
 }

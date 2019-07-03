@@ -1264,6 +1264,25 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         }
 
+
+        [HttpGet]
+        [Authorize]
+        public virtual async Task<IActionResult> CanEdit(CancellationToken cancellationToken)
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+            if (project == null)
+            {
+                Log.LogError("project settings not found returning 404");
+                return NotFound();
+            }
+
+            var canEdit = await User.CanEditPages(project.Id, AuthorizationService);
+
+            return Ok(canEdit);
+        }
+
+
+
         //[HttpGet]
         //[AllowAnonymous]
         //public virtual async Task<IActionResult> EditWithTemplate(

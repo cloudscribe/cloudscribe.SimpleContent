@@ -47,5 +47,7 @@ namespace cloudscribe.SimpleContent.Models
 
         public string PostHistoryRouteName { get; } = ProjectConstants.PostHistoryRouteName;
 
+        public string CanEditRouteName { get; } = ProjectConstants.BlogCanEditRouteName;
+
     }
 }

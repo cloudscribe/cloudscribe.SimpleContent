@@ -7,10 +7,9 @@
     <partial name="StylePartial" model="Model" />
 }
 @section Toolbar {
-    @if (Model.CanEdit)
-    {
-        <partial name="ToolsPartial" model="Model" />
-    }
+   
+    <partial name="ToolsPartial" model="Model" />
+    
 }
 @if (Model.CurrentPage.ShowHeading)
 {

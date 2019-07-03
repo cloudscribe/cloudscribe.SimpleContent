@@ -48,7 +48,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.90" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="3.1.92" />
     <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="3.1.45" />
     <PackageReference Include="cloudscribe.Web.StaticFiles" Version="1.1.6" />
    
@@ -62,7 +62,7 @@
     
     
     <PackageReference Include="cloudscribe.Logging.Web" Version="3.0.10" />
-    <PackageReference Include="cloudscribe.Logging.NoDb" Version="3.0.6" />
+    <PackageReference Include="cloudscribe.Logging.NoDb" Version="3.0.7" />
     <PackageReference Include="cloudscribe.Logging.EFCore.MSSQL" Version="3.0.9" />
     <PackageReference Include="cloudscribe.Logging.EFCore.MySql" Version="3.0.9" />
     <PackageReference Include="cloudscribe.Logging.EFCore.pgsql" Version="3.0.9" />
