@@ -16,10 +16,7 @@
     <link rel="stylesheet" href="/csscsr/css/simple-gallery.min.css" />
 }
 @section Toolbar {
-    @if (Model.CanEdit)
-    {
-        <partial name="ToolsPartial" model="@Model" />
-    }
+    <partial name="ToolsPartial" model="@Model" />
 }
 @if (Model.ProjectSettings.ShowTitle)
 {

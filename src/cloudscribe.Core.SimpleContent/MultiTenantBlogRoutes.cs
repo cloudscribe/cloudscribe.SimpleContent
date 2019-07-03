@@ -314,5 +314,31 @@ namespace cloudscribe.Core.SimpleContent.Integration
             }
         }
 
+        public string CanEditRouteName
+        {
+            get
+            {
+                if (_multiTenantOptions.Mode == MultiTenantMode.FolderName)
+                {
+                    if (!string.IsNullOrEmpty(_currentSite.SiteFolderName))
+                    {
+                        if (_cultureHelper.UseCultureRoutesAndProjects() && !_cultureHelper.IsDefaultCulture())
+                        {
+                            return ProjectConstants.CultureFolderBlogCanEditRouteName;
+                        }
+
+                        return ProjectConstants.FolderBlogCanEditRouteName;
+                    }
+                }
+
+                if (_cultureHelper.UseCultureRoutesAndProjects() && !_cultureHelper.IsDefaultCulture())
+                {
+                    return ProjectConstants.CultureBlogCanEditRouteName;
+                }
+
+                return ProjectConstants.BlogCanEditRouteName;
+            }
+        }
+
     }
 }

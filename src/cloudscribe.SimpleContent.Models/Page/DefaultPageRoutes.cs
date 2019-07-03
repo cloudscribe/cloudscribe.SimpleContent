@@ -12,5 +12,7 @@
         public string PageTreeRouteName { get; } = ProjectConstants.PageTreeRouteName;
         public string NewPageRouteName { get; } = ProjectConstants.NewPageRouteName;
         public string PageHistoryRouteName { get; } = ProjectConstants.PageHistoryRouteName;
+
+        public string CanEditRouteName { get; } = ProjectConstants.PageCanEditRouteName;
     }
 }

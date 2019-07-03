@@ -2,12 +2,13 @@
 @inject ISimpleContentThemeHelper themeHelper
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<BlogEditOptions> editOptionsAccessor
+@inject IBlogRoutes  blogRoutes
 @{
     var themeSettings = themeHelper.GetThemeSettings();
     var editOptions = editOptionsAccessor.Value;
 }
-@if (Model.CanEdit)
-{
+
+<div data-show-if-url-check data-url-check-url="@Url.RouteUrl(blogRoutes.CanEditRouteName)" style="display:none;">
     <a id="newPostLink" href="@Model.NewItemPath" title="@sr["New Post"]" class="btn btn-sm content-new">
         <span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span>
     </a>
@@ -23,5 +24,4 @@
             <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>
         </a>
     }
-}
-
+</div>

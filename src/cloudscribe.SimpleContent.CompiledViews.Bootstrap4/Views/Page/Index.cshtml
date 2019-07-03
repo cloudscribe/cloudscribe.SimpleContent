@@ -37,10 +37,7 @@
     }
 }
 @section Toolbar {
-    @if (Model.CanEdit)
-    {
-        <partial name="ToolsPartial" model="@Model" />
-    }
+    <partial name="ToolsPartial" model="@Model" />
 }
 <partial name="PageDetailPartial" model="@Model" />
 <partial name="RecentPostsPartial" model="@Model" />

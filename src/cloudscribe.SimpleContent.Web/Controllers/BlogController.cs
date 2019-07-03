@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-09
-// Last Modified:           2018-11-13
+// Last Modified:           2019-07-03
 // 
 
 using cloudscribe.DateTimeUtils;
@@ -1524,6 +1524,22 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             await BlogService.Update(blogPost);
 
             return StatusCode(200);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public virtual async Task<IActionResult> CanEdit(CancellationToken cancellationToken)
+        {
+            var project = await ProjectService.GetCurrentProjectSettings();
+            if (project == null)
+            {
+                Log.LogError("project settings not found returning 404");
+                return NotFound();
+            }
+
+            var canEdit = await User.CanEditBlog(project.Id, AuthorizationService);
+
+            return Ok(canEdit);
         }
 
         protected string GetUrl(string website)
