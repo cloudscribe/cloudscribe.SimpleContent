@@ -1,0 +1,56 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject ISimpleContentThemeHelper themeHelper
+@inject IStringLocalizer<SimpleContent> sr
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+    var commentFrag = GetCommentString(Model, themeSettings);
+    DateTime? pubDate = Model.CurrentPost.PubDate;
+    if (!pubDate.HasValue) { pubDate = DateTime.UtcNow; }
+}
+@functions{
+
+    public string GetCommentString(cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel model, SimpleContentThemeSettings themeSettings)
+    {
+        if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
+            if (model.CurrentPost.ApprovedCommentCount() == 0)
+            {
+                return string.Empty;
+                //return "<span style='display:none;' data-comment-count data-thread-id=\"" + Model.CurrentPost.Id + "\"><i data-comment-count-icon class='" + themeSettings.Icons.Comments + "'></i> " + "</span>";
+            }
+
+            return "<i class='" + themeSettings.Icons.Comments + "'></i> " + Model.CurrentPost.ApprovedCommentCount() + " " + sr["Comments"];
+
+        }
+        return "<i class='" + themeSettings.Icons.Comments + "'></i> " + "<span class=\"disqus-comment-count\" data-disqus-identifier=\"" + Model.CurrentPost.Id + "\"></span>";
+    }
+
+    public string GetCommentFragment()
+    {
+        if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
+            return "comments";
+
+        }
+        return "disqus_thread";
+    }
+}
+@if (!string.IsNullOrWhiteSpace(commentFrag))
+{
+    @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+    {
+
+
+        <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
+           asp-route-year="@pubDate.Value.Year"
+           asp-route-month="@pubDate.Value.Month.ToString("00")"
+           asp-route-day="@pubDate.Value.Day.ToString("00")"
+           asp-route-slug="@Model.CurrentPost.Slug"
+           asp-fragment="@GetCommentFragment()"
+           itemprop="url">@Html.Raw(commentFrag)</a>
+    }
+    else
+    {
+        <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.CurrentPost.Slug" asp-fragment="@GetCommentFragment()" itemprop="url"> @Html.Raw(commentFrag))</a>
+    }
+}

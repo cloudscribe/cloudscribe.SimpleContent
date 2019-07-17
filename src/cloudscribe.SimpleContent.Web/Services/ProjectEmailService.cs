@@ -43,7 +43,7 @@ namespace cloudscribe.SimpleContent.Services
             var sender = await _emailSenderResolver.GetEmailSender(project.Id);
             if (sender == null)
             {
-                var logMessage = $"failed to send account confirmation email because email settings are not populated for site {project.Title}";
+                var logMessage = $"failed to send comment notification email because email settings are not populated for site {project.Title}";
                 _log.LogError(logMessage);
                 return;
             }
