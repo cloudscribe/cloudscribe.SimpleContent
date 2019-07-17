@@ -1,0 +1,55 @@
+﻿@model cloudscribe.Core.SimpleContent.Integration.ViewModels.ContentSettingsViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IOptions<ContentSettingsUIConfig> uiOptionsAccessor
+@{
+    var uiOptions = uiOptionsAccessor.Value;
+}
+@if (!uiOptions.ShowBlogSettings)
+{
+    <input asp-for="ModerateComments" type="hidden" />
+    <input asp-for="DaysToComment" type="hidden" />
+    <input asp-for="CommentNotificationEmail" type="hidden" />
+}
+@if (uiOptions.ShowBlogSettings)
+{
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox" data-placement="left" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
+                <label>
+                    <input asp-for="ModerateComments" /> @sr["Moderate Comments"]
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="DaysToComment" class="col-md-2 control-label">@sr["Days To Comment"]</label>
+        <div class="col-md-10">
+            <select asp-for="DaysToComment" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
+                <option value="-1">@sr["No Limit"]</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="7">7</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+                <option value="60">60</option>
+                <option value="90">90</option>
+            </select>
+            <span asp-validation-for="DaysToComment" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="CommentNotificationEmail" class="col-md-2 control-label">@sr["Comment Notification Email"]</label>
+        <div class="col-md-10">
+            <input asp-for="CommentNotificationEmail" class="form-control" data-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]' />
+            <span asp-validation-for="CommentNotificationEmail" class="text-danger"></span>
+        </div>
+    </div>
+}
+<div class="form-group">
+    <label asp-for="DisqusShortName" class="col-md-2 control-label">@sr["Disqus Short Name"]</label>
+    <div class="col-md-10">
+        <input asp-for="DisqusShortName" class="form-control" data-toggle="tooltip" title='@sr["Provide your Disqus site name aka short name to use Disqus instead of the internal comment system. Highly recommended."]' />
+        <span asp-validation-for="DisqusShortName" class="text-danger"></span>
+    </div>
+</div>
