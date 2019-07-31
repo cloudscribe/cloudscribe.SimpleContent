@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-12
-// Last Modified:			2016-08-13
+// Last Modified:			2019-07-31
 // 
 
 using cloudscribe.SimpleContent.Web;
@@ -10,6 +10,7 @@ using cloudscribe.Web.Navigation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Threading.Tasks;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
@@ -27,7 +28,7 @@ namespace cloudscribe.SimpleContent.Web.Services
         private IHttpContextAccessor _httpContextAccessor;
         private IAuthorizationService _authorizationService;
 
-        public virtual bool ShouldAllowView(TreeNode<NavigationNode> menuNode)
+        public virtual async Task<bool> ShouldAllowView(TreeNode<NavigationNode> menuNode)
         {
             // for unpublished pages CustomData will be populated with the projectId
             // in that case we need to filter it from navigation unless the user has edit permissions
@@ -46,7 +47,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             try
             {
                 // http://stackoverflow.com/questions/22628087/calling-async-method-synchronously
-                canEdit = user.CanEditPages(projectId, _authorizationService).Result;
+                canEdit = await user.CanEditPages(projectId, _authorizationService);
             }
             catch(InvalidOperationException)
             { }
