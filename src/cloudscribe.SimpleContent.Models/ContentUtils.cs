@@ -12,6 +12,8 @@ namespace cloudscribe.SimpleContent.Models
 
             title = title.ToLowerInvariant().Replace("  ", " ")
                 .Replace(" ", "-")
+                .Replace("--","-")
+                .Replace("--", "-")
                 .Replace("\n", string.Empty)
                 .Replace("\r", string.Empty)
                 .Replace("\t", string.Empty)
