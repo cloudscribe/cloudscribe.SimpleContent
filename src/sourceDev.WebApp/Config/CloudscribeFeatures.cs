@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                     if (useMiniProfiler)
                     {
-                        services.AddMiniProfiler();
+                        //services.AddMiniProfiler();
                     }
 
                     break;
@@ -38,8 +38,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
                     if (useMiniProfiler)
                     {
-                        services.AddMiniProfiler()
-                            .AddEntityFramework();
+                        //services.AddMiniProfiler()
+                        //    .AddEntityFramework();
                     }
 
                     switch (efProvider)

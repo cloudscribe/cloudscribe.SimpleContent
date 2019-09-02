@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <Description>A set of Content Templates for cloudscribe.SimpleContent using Bootstrap 4</Description>
-    <VersionPrefix>1.0.18</VersionPrefix>
-    <AssemblyVersion>1.0.18</AssemblyVersion>
+    <Version>3.0.0-preview20190902</Version>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageTags>cloudscribe;SimpleContent;Bootstrap4</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/joeaudette/cloudscribe</PackageProjectUrl>
@@ -26,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>

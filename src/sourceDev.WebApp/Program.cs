@@ -9,6 +9,7 @@ using Microsoft.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using cloudscribe.Logging.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace sourceDev.WebApp
 {
@@ -16,7 +17,7 @@ namespace sourceDev.WebApp
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
+            var host = CreateHostBuilder(args).Build();
             
             var config = host.Services.GetRequiredService<IConfiguration>();
             
@@ -38,16 +39,24 @@ namespace sourceDev.WebApp
             }
 
             var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
-            var env = host.Services.GetRequiredService<IHostingEnvironment>();
+            var env = host.Services.GetRequiredService<IWebHostEnvironment>();
             ConfigureLogging(env, loggerFactory, host.Services, config);
 
             host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+        //public static IWebHost BuildWebHost(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //        .UseStartup<Startup>()
+        //        .Build();
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+
 
         private static void EnsureDataStorageIsReady(IConfiguration config, IServiceProvider services)
         {
@@ -72,7 +81,7 @@ namespace sourceDev.WebApp
         }
 
         private static void ConfigureLogging(
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             ILoggerFactory loggerFactory,
             IServiceProvider serviceProvider,
             IConfiguration config

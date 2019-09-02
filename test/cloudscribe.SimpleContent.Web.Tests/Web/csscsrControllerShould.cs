@@ -2,7 +2,6 @@
 using cloudscribe.Web.Common.Helpers;
 using Castle.Core.Logging;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;

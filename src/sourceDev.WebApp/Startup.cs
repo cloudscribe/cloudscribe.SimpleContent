@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.Webpack;
+//using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -10,7 +11,7 @@ namespace sourceDev.WebApp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
             _environment = env;
@@ -18,7 +19,7 @@ namespace sourceDev.WebApp
             _enableWebpackMiddleware = _configuration.GetValue<bool>("DevOptions:EnableWebpackMiddleware");
         }
 
-        private IHostingEnvironment _environment;
+        private IWebHostEnvironment _environment;
         private IConfiguration _configuration;
         private bool _sslIsAvailable;
         private bool _enableWebpackMiddleware;
@@ -70,7 +71,7 @@ namespace sourceDev.WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app,
-            IHostingEnvironment env,
+            IWebHostEnvironment env,
             ILoggerFactory loggerFactory,
             IOptions<cloudscribe.Core.Models.MultiTenantOptions> multiTenantOptionsAccessor,
             IOptions<RequestLocalizationOptions> localizationOptionsAccessor
@@ -79,7 +80,7 @@ namespace sourceDev.WebApp
             var useMiniProfiler = _configuration.GetValue<bool>("DevOptions:EnableMiniProfiler");
             if(useMiniProfiler)
             {
-                app.UseMiniProfiler();
+                //app.UseMiniProfiler();
             }
 
             if (env.IsDevelopment())
@@ -88,11 +89,11 @@ namespace sourceDev.WebApp
                
                 if(_enableWebpackMiddleware)
                 {
-                    app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                    {
-                        HotModuleReplacement = true
-                        ,ReactHotModuleReplacement = true
-                    });
+                    //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                    //{
+                    //    HotModuleReplacement = true
+                    //    ,ReactHotModuleReplacement = true
+                    //});
                 }
                 
             }
@@ -126,16 +127,26 @@ namespace sourceDev.WebApp
                     multiTenantOptions,
                     _sslIsAvailable);
 
-            app.UseMvc(routes =>
+            var useFolders = multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName;
+            app.UseEndpoints(endpoints =>
             {
-                var useFolders = multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName;
-                //*** IMPORTANT ***
-                // this is in Config/RoutingAndMvc.cs
-                // you can change or add routes there
-                routes.UseCustomRoutes(useFolders, _configuration);
+                endpoints.UseCustomRoutes(useFolders, _configuration);
+
+
+
+                //endpoints.MapRazorPages();
             });
-            
-            
+
+            //app.UseMvc(routes =>
+            //{
+                
+            //    //*** IMPORTANT ***
+            //    // this is in Config/RoutingAndMvc.cs
+            //    // you can change or add routes there
+            //    routes.UseCustomRoutes(useFolders, _configuration);
+            //});
+
+
         }
 
         
