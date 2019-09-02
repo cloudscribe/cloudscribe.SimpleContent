@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="2.1.2" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="3.0.0-*" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0-*" />
     <PackageReference Include="cloudscribe.Versioning" Version="1.0.0" />
   </ItemGroup>
