@@ -24,7 +24,7 @@ namespace cloudscribe.Core.SimpleContent.Integration
             SiteContext currentSite,
             IMediaPathResolver mediaPathResolver,
             ILogger<FileSystemMediaProcessor> logger,
-            IHostingEnvironment env
+            IWebHostEnvironment env
             ):base(logger, env)
         {
             _currentSite = currentSite;

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-12
-// Last Modified:           2017-05-28
+// Last Modified:           2019-09-02
 // 
 
 
@@ -19,7 +19,7 @@ namespace cloudscribe.SimpleContent.Services
     {
         public FileSystemMediaProcessor(
             ILogger<FileSystemMediaProcessor> logger,
-            IHostingEnvironment env)
+            IWebHostEnvironment env)
         {
             Hosting = env;
             Log = logger;
@@ -27,7 +27,7 @@ namespace cloudscribe.SimpleContent.Services
 
         protected ILogger Log;
 
-        protected IHostingEnvironment Hosting;
+        protected IWebHostEnvironment Hosting;
 
         public virtual Task<string> ResolveMediaUrl(string mediaVirtualPath, string fileName)
         {

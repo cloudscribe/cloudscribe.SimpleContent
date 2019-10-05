@@ -14,76 +14,76 @@ namespace Microsoft.AspNetCore.Builder
         //    return routes;
         //}
 
-        public static IRouteBuilder AddSimpleContentStaticResourceRoutes(this IRouteBuilder routes)
+        public static IEndpointRouteBuilder AddSimpleContentStaticResourceRoutes(this IEndpointRouteBuilder routes)
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: "csscsrjs",
-               template: "csscsr/js/{*slug}"
+               pattern: "csscsr/js/{*slug}"
                , defaults: new { controller = "csscsr", action = "js" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: "csscsrcss",
-               template: "csscsr/css/{*slug}"
+               pattern: "csscsr/css/{*slug}"
                , defaults: new { controller = "csscsr", action = "css" }
                );
 
             return routes;
         }
 
-        public static IRouteBuilder AddDefaultPageRouteForSimpleContent(this IRouteBuilder routes)
+        public static IEndpointRouteBuilder AddDefaultPageRouteForSimpleContent(this IEndpointRouteBuilder routes)
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.NewPageRouteName,
-               template: "newpage/{parentSlug?}"
+               pattern: "newpage/{parentSlug?}"
                , defaults: new { controller = "Page", action = "NewPage" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageEditRouteName,
-               template: "editpage/{slug?}"
+               pattern: "editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageEditWithTemplateRouteName,
-               template: "editwithtemplate/{slug?}"
-               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               pattern: "editwithpattern/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithpattern" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageDevelopRouteName,
-               template: "development/{slug}"
+               pattern: "development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageTreeRouteName,
-               template: "tree"
+               pattern: "tree"
                , defaults: new { controller = "Page", action = "Tree" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageDeleteRouteName,
-               template: "deletepage/{id}"
+               pattern: "deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageHistoryRouteName,
-               template: "history/{slug?}"
+               pattern: "history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageIndexRouteName,
-               template: "{slug=none}"
+               pattern: "{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageCanEditRouteName,
-               template: "page/canedit"
+               pattern: "page/canedit"
                , defaults: new { controller = "Page", action = "CanEdit" }
                );
 
@@ -93,70 +93,70 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddCulturePageRouteForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCulturePageRouteForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint cultureConstraint
             )
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureNewPageRouteName,
-               template: "{culture}/newpage/{parentSlug?}"
+               pattern: "{culture}/newpage/{parentSlug?}"
                , defaults: new { controller = "Page", action = "NewPage" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageEditRouteName,
-               template: "{culture}/editpage/{slug?}"
+               pattern: "{culture}/editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageEditWithTemplateRouteName,
-               template: "{culture}/editwithtemplate/{slug?}"
-               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               pattern: "{culture}/editwithpattern/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithpattern" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageDevelopRouteName,
-               template: "{culture}/development/{slug}"
+               pattern: "{culture}/development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageTreeRouteName,
-               template: "{culture}/tree"
+               pattern: "{culture}/tree"
                , defaults: new { controller = "Page", action = "Tree" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageDeleteRouteName,
-               template: "{culture}/deletepage/{id}"
+               pattern: "{culture}/deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageHistoryRouteName,
-               template: "{culture}/history/{slug?}"
+               pattern: "{culture}/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageIndexRouteName,
-               template: "{culture}/{slug=none}"
+               pattern: "{culture}/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CulturePageCanEditRouteName,
-              template: "{culture}/page/canedit"
+              pattern: "{culture}/page/canedit"
               , defaults: new { controller = "Page", action = "CanEdit" }
               , constraints: new { culture = cultureConstraint }
               );
@@ -166,70 +166,70 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddDefaultPageRouteForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddDefaultPageRouteForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint siteFolderConstraint
             )
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.FolderNewPageRouteName,
-              template: "{sitefolder}/newpage/{parentSlug?}"
+              pattern: "{sitefolder}/newpage/{parentSlug?}"
               , defaults: new { controller = "Page", action = "NewPage" }
               , constraints: new { sitefolder = siteFolderConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.FolderPageEditRouteName,
-              template: "{sitefolder}/editpage/{slug?}"
+              pattern: "{sitefolder}/editpage/{slug?}"
               , defaults: new { controller = "Page", action = "Edit" }
               , constraints: new { sitefolder = siteFolderConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.FolderPageEditWithTemplateRouteName,
-              template: "{sitefolder}/editwithtemplate/{slug?}"
-              , defaults: new { controller = "Page", action = "EditWithTemplate" }
+              pattern: "{sitefolder}/editwithpattern/{slug?}"
+              , defaults: new { controller = "Page", action = "EditWithpattern" }
               , constraints: new { sitefolder = siteFolderConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.FolderPageDevelopRouteName,
-              template: "{sitefolder}/development/{slug}"
+              pattern: "{sitefolder}/development/{slug}"
               , defaults: new { controller = "Page", action = "Development" }
               , constraints: new { sitefolder = siteFolderConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.FolderPageTreeRouteName,
-              template: "{sitefolder}/tree"
+              pattern: "{sitefolder}/tree"
               , defaults: new { controller = "Page", action = "Tree" }
               , constraints: new { sitefolder = siteFolderConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.FolderPageDeleteRouteName,
-              template: "{sitefolder}/deletepage/{id}"
+              pattern: "{sitefolder}/deletepage/{id}"
               , defaults: new { controller = "Page", action = "Delete" }
               , constraints: new { sitefolder = siteFolderConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageHistoryRouteName,
-               template: "{sitefolder}/history/{slug?}"
+               pattern: "{sitefolder}/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageIndexRouteName,
-               template: "{sitefolder}/{slug=none}"
+               pattern: "{sitefolder}/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageCanEditRouteName,
-               template: "{sitefolder}/page/canedit"
+               pattern: "{sitefolder}/page/canedit"
                , defaults: new { controller = "Page", action = "CanEdit" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
@@ -240,71 +240,71 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddCulturePageRouteForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCulturePageRouteForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint siteFolderConstraint,
             IRouteConstraint cultureConstraint
             )
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderNewPageRouteName,
-              template: "{sitefolder}/{culture}/newpage/{parentSlug?}"
+              pattern: "{sitefolder}/{culture}/newpage/{parentSlug?}"
               , defaults: new { controller = "Page", action = "NewPage" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderPageEditRouteName,
-              template: "{sitefolder}/{culture}/editpage/{slug?}"
+              pattern: "{sitefolder}/{culture}/editpage/{slug?}"
               , defaults: new { controller = "Page", action = "Edit" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderPageEditWithTemplateRouteName,
-              template: "{sitefolder}/{culture}/editwithtemplate/{slug?}"
-              , defaults: new { controller = "Page", action = "EditWithTemplate" }
+              pattern: "{sitefolder}/{culture}/editwithpattern/{slug?}"
+              , defaults: new { controller = "Page", action = "EditWithpattern" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderPageDevelopRouteName,
-              template: "{sitefolder}/{culture}/development/{slug}"
+              pattern: "{sitefolder}/{culture}/development/{slug}"
               , defaults: new { controller = "Page", action = "Development" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderPageTreeRouteName,
-              template: "{sitefolder}/{culture}/tree"
+              pattern: "{sitefolder}/{culture}/tree"
               , defaults: new { controller = "Page", action = "Tree" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderPageDeleteRouteName,
-              template: "{sitefolder}/{culture}/deletepage/{id}"
+              pattern: "{sitefolder}/{culture}/deletepage/{id}"
               , defaults: new { controller = "Page", action = "Delete" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageHistoryRouteName,
-               template: "{sitefolder}/{culture}/history/{slug?}"
+               pattern: "{sitefolder}/{culture}/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageIndexRouteName,
-               template: "{sitefolder}/{culture}/{slug=none}"
+               pattern: "{sitefolder}/{culture}/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderPageCanEditRouteName,
-              template: "{sitefolder}/{culture}/page/canedit"
+              pattern: "{sitefolder}/{culture}/page/canedit"
               , defaults: new { controller = "Page", action = "CanEdit" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
@@ -315,61 +315,61 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddCustomPageRouteForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCustomPageRouteForSimpleContent(
+            this IEndpointRouteBuilder routes,
             string prefix)
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.NewPageRouteName,
-               template: prefix + "/newpage/{parentSlug?}"
+               pattern: prefix + "/newpage/{parentSlug?}"
                , defaults: new { controller = "Page", action = "NewPage" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageEditRouteName,
-               template: prefix + "/editpage/{slug?}"
+               pattern: prefix + "/editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageEditWithTemplateRouteName,
-               template: prefix + "/editwithtemplate/{slug?}"
-               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               pattern: prefix + "/editwithpattern/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithpattern" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageDevelopRouteName,
-               template: prefix + "/development/{slug}"
+               pattern: prefix + "/development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageTreeRouteName,
-               template: prefix + "/tree"
+               pattern: prefix + "/tree"
                , defaults: new { controller = "Page", action = "Tree" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageDeleteRouteName,
-               template: prefix + "/deletepage/{id}"
+               pattern: prefix + "/deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageHistoryRouteName,
-               template: prefix + "/history/{slug?}"
+               pattern: prefix + "/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageIndexRouteName,
-               template: prefix + "/{slug=none}"
+               pattern: prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PageCanEditRouteName,
-               template: prefix + "/page/canedit"
+               pattern: prefix + "/page/canedit"
                , defaults: new { controller = "Page", action = "CanEdit" }
                );
 
@@ -378,71 +378,71 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddCultureCustomPageRouteForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCultureCustomPageRouteForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint cultureConstraint,
             string prefix)
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureNewPageRouteName,
-               template: "{culture}/" + prefix + " / newpage/{parentSlug?}"
+               pattern: "{culture}/" + prefix + " / newpage/{parentSlug?}"
                , defaults: new { controller = "Page", action = "NewPage" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageEditRouteName,
-               template: "{culture}/" + prefix + "/editpage/{slug?}"
+               pattern: "{culture}/" + prefix + "/editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                , constraints: new { culture = cultureConstraint }
                );
 
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageEditWithTemplateRouteName,
-               template: "{culture}/" + prefix + "/editwithtemplate/{slug?}"
-               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               pattern: "{culture}/" + prefix + "/editwithpattern/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithpattern" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageDevelopRouteName,
-               template: "{culture}/" + prefix + "/development/{slug}"
+               pattern: "{culture}/" + prefix + "/development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageTreeRouteName,
-               template: "{culture}/" + prefix + "/tree"
+               pattern: "{culture}/" + prefix + "/tree"
                , defaults: new { controller = "Page", action = "Tree" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageDeleteRouteName,
-               template: "{culture}/" + prefix + "/deletepage/{id}"
+               pattern: "{culture}/" + prefix + "/deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageHistoryRouteName,
-               template: "{culture}/" + prefix + "/history/{slug?}"
+               pattern: "{culture}/" + prefix + "/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageIndexRouteName,
-               template: "{culture}/" + prefix + "/{slug=none}"
+               pattern: "{culture}/" + prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePageCanEditRouteName,
-               template: "{culture}/" + prefix + "/page/canedit"
+               pattern: "{culture}/" + prefix + "/page/canedit"
                , defaults: new { controller = "Page", action = "CanEdit" }
                , constraints: new { culture = cultureConstraint }
                );
@@ -453,72 +453,72 @@ namespace Microsoft.AspNetCore.Builder
         }
 
 
-        public static IRouteBuilder AddCustomPageRouteForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCustomPageRouteForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint siteFolderConstraint,
             string prefix
 
             )
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderNewPageRouteName,
-               template: "{sitefolder}/" + prefix + "/newpage/{parentSlug?}"
+               pattern: "{sitefolder}/" + prefix + "/newpage/{parentSlug?}"
                , defaults: new { controller = "Page", action = "NewPage" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageEditRouteName,
-               template: "{sitefolder}/" + prefix + "/editpage/{slug?}"
+               pattern: "{sitefolder}/" + prefix + "/editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageEditWithTemplateRouteName,
-               template: "{sitefolder}/" + prefix + "/editwithtemplate/{slug?}"
-               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               pattern: "{sitefolder}/" + prefix + "/editwithpattern/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithpattern" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageDevelopRouteName,
-               template: "{sitefolder}/" + prefix + "/development/{slug}"
+               pattern: "{sitefolder}/" + prefix + "/development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageTreeRouteName,
-               template: "{sitefolder}/" + prefix + "/tree"
+               pattern: "{sitefolder}/" + prefix + "/tree"
                , defaults: new { controller = "Page", action = "Tree" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageDeleteRouteName,
-               template: "{sitefolder}/" + prefix + "/deletepage/{id}"
+               pattern: "{sitefolder}/" + prefix + "/deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageHistoryRouteName,
-               template: "{sitefolder}/" + prefix + "/history/{slug?}"
+               pattern: "{sitefolder}/" + prefix + "/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageIndexRouteName,
-               template: "{sitefolder}/" + prefix + "/{slug=none}"
+               pattern: "{sitefolder}/" + prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPageCanEditRouteName,
-               template: "{sitefolder}/" + prefix + "/page/canedit"
+               pattern: "{sitefolder}/" + prefix + "/page/canedit"
                , defaults: new { controller = "Page", action = "CanEdit" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
@@ -528,73 +528,73 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddCultureCustomPageRouteForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCultureCustomPageRouteForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint siteFolderConstraint,
             IRouteConstraint cultureConstraint,
             string prefix
 
             )
         {
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderNewPageRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/newpage/{parentSlug?}"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/newpage/{parentSlug?}"
                , defaults: new { controller = "Page", action = "NewPage" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageEditRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/editpage/{slug?}"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/editpage/{slug?}"
                , defaults: new { controller = "Page", action = "Edit" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageEditWithTemplateRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/editwithtemplate/{slug?}"
-               , defaults: new { controller = "Page", action = "EditWithTemplate" }
+               pattern: "{sitefolder}/{culture}/" + prefix + "/editwithpattern/{slug?}"
+               , defaults: new { controller = "Page", action = "EditWithpattern" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageDevelopRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/development/{slug}"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/development/{slug}"
                , defaults: new { controller = "Page", action = "Development" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageTreeRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/tree"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/tree"
                , defaults: new { controller = "Page", action = "Tree" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageDeleteRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/deletepage/{id}"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/deletepage/{id}"
                , defaults: new { controller = "Page", action = "Delete" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageHistoryRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/history/{slug?}"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/history/{slug?}"
                , defaults: new { controller = "Page", action = "History" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageIndexRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/{slug=none}"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/{slug=none}"
                , defaults: new { controller = "Page", action = "Index" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPageCanEditRouteName,
-               template: "{sitefolder}/{culture}/" + prefix + "/page/canedit"
+               pattern: "{sitefolder}/{culture}/" + prefix + "/page/canedit"
                , defaults: new { controller = "Page", action = "CanEdit" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
@@ -604,7 +604,7 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        private static string GetSegmentTemplate(string providedStartSegment)
+        private static string GetSegmentpattern(string providedStartSegment)
         {
             string segmentResult = "";
             if (!string.IsNullOrEmpty(providedStartSegment))
@@ -621,20 +621,20 @@ namespace Microsoft.AspNetCore.Builder
             return segmentResult;
         }
 
-        public static IRouteBuilder AddBlogRoutesForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddBlogRoutesForSimpleContent(
+            this IEndpointRouteBuilder routes,
             string startSegment = "blog")
         {
-            string firstSegment = GetSegmentTemplate(startSegment);
+            string firstSegment = GetSegmentpattern(startSegment);
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                    name: ProjectConstants.BlogCategoryRouteName,
-                   template: firstSegment + "category/{category=''}/{pagenumber=1}"
+                   pattern: firstSegment + "category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    );
 
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.BlogArchiveRouteName,
                   firstSegment + "{year}/{month}/{day}",
                   new { controller = "Blog", action = "Archive", month = "00", day = "00" },
@@ -642,157 +642,157 @@ namespace Microsoft.AspNetCore.Builder
                   new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.PostWithDateRouteName,
                   firstSegment + "{year}/{month}/{day}/{slug}",
                   new { controller = "Blog", action = "PostWithDate" },
                   new { year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.NewPostRouteName,
-               template: firstSegment + "newpost"
+               pattern: firstSegment + "newpost"
                , defaults: new { controller = "Blog", action = "NewPost" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PostEditWithTemplateRouteName,
-               template: firstSegment + "editwithtemplate/{slug}"
-               , defaults: new { controller = "Blog", action = "EditWithTemplate" }
+               pattern: firstSegment + "editwithpattern/{slug}"
+               , defaults: new { controller = "Blog", action = "EditWithpattern" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PostEditRouteName,
-               template: firstSegment + "edit/{slug?}"
+               pattern: firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PostDeleteRouteName,
-               template: firstSegment + "delete/{id?}"
+               pattern: firstSegment + "delete/{id?}"
                , defaults: new { controller = "Blog", action = "Delete" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.MostRecentPostRouteName,
-              template: firstSegment + "mostrecent"
+              pattern: firstSegment + "mostrecent"
               , defaults: new { controller = "Blog", action = "MostRecent" }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PostHistoryRouteName,
-               template: firstSegment + "history/{slug?}"
+               pattern: firstSegment + "history/{slug?}"
                , defaults: new { controller = "Blog", action = "History" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.PostWithoutDateRouteName,
-               template: firstSegment + "{slug}"
+               pattern: firstSegment + "{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.BlogIndexRouteName,
-               template: firstSegment
+               pattern: firstSegment
                , defaults: new { controller = "Blog", action = "Index" }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.BlogCanEditRouteName,
-               template: firstSegment + "blog/canedit"
+               pattern: firstSegment + "blog/canedit"
                , defaults: new { controller = "Blog", action = "CanEdit" }
                );
 
             return routes;
         }
 
-        public static IRouteBuilder AddCultureBlogRoutesForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCultureBlogRoutesForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint cultureConstraint,
             string startSegment = "blog")
         {
-            string firstSegment = GetSegmentTemplate(startSegment);
+            string firstSegment = GetSegmentpattern(startSegment);
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                    name: ProjectConstants.CultureBlogCategoryRouteName,
-                   template: "{culture}/" + firstSegment + "category/{category=''}/{pagenumber=1}"
+                   pattern: "{culture}/" + firstSegment + "category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    , constraints: new { culture = cultureConstraint }
                    );
 
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.CultureBlogArchiveRouteName,
                   "{culture}/" + firstSegment + "{year}/{month}/{day}",
                   new { controller = "Blog", action = "Archive", month = "00", day = "00" },
                   new { culture = cultureConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.CulturePostWithDateRouteName,
                   "{culture}/" + firstSegment + "{year}/{month}/{day}/{slug}",
                   new { controller = "Blog", action = "PostWithDate" },
                   new { culture = cultureConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureNewPostRouteName,
-               template: "{culture}/" + firstSegment + "newpost"
+               pattern: "{culture}/" + firstSegment + "newpost"
                , defaults: new { controller = "Blog", action = "NewPost" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePostEditWithTemplateRouteName,
-               template: "{culture}/" + firstSegment + "editwithtemplate/{slug}"
-               , defaults: new { controller = "Blog", action = "EditWithTemplate" }
+               pattern: "{culture}/" + firstSegment + "editwithpattern/{slug}"
+               , defaults: new { controller = "Blog", action = "EditWithpattern" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePostEditRouteName,
-               template: "{culture}/" + firstSegment + "edit/{slug?}"
+               pattern: "{culture}/" + firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePostDeleteRouteName,
-               template: "{culture}/" + firstSegment + "delete/{id?}"
+               pattern: "{culture}/" + firstSegment + "delete/{id?}"
                , defaults: new { controller = "Blog", action = "Delete" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureMostRecentPostRouteName,
-              template: "{culture}/" + firstSegment + "mostrecent"
+              pattern: "{culture}/" + firstSegment + "mostrecent"
               , defaults: new { controller = "Blog", action = "MostRecent" }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePostHistoryRouteName,
-               template: "{culture}/" + firstSegment + "history/{slug?}"
+               pattern: "{culture}/" + firstSegment + "history/{slug?}"
                , defaults: new { controller = "Blog", action = "History" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CulturePostWithoutDateRouteName,
-               template: "{culture}/" + firstSegment + "{slug}"
+               pattern: "{culture}/" + firstSegment + "{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureBlogIndexRouteName,
-               template: "{culture}/" + firstSegment
+               pattern: "{culture}/" + firstSegment
                , defaults: new { controller = "Blog", action = "Index" }
                , constraints: new { culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureBlogCanEditRouteName,
-               template: "{culture}/" + firstSegment + "blog/canedit"
+               pattern: "{culture}/" + firstSegment + "blog/canedit"
                , defaults: new { controller = "Blog", action = "CanEdit" }
                , constraints: new { culture = cultureConstraint }
                );
@@ -800,94 +800,94 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddBlogRoutesForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddBlogRoutesForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint siteFolderConstraint,
             string startSegment = "blog"
             )
         {
-            string firstSegment = GetSegmentTemplate(startSegment);
+            string firstSegment = GetSegmentpattern(startSegment);
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                    name: ProjectConstants.FolderBlogCategoryRouteName,
-                   template: "{sitefolder}/" + firstSegment + "category/{category=''}/{pagenumber=1}"
+                   pattern: "{sitefolder}/" + firstSegment + "category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    , constraints: new { sitefolder = siteFolderConstraint }
                    );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.FolderBlogArchiveRouteName,
                   "{sitefolder}/" + firstSegment + "{year}/{month}/{day}",
                   new { controller = "Blog", action = "Archive", month = "00", day = "00" },
                   new { sitefolder = siteFolderConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.FolderPostWithDateRouteName,
                   "{sitefolder}/" + firstSegment + "{year}/{month}/{day}/{slug}",
                   new { controller = "Blog", action = "PostWithDate" },
                   new { sitefolder = siteFolderConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderNewPostRouteName,
-               template: "{sitefolder}/" + firstSegment + "newpost"
+               pattern: "{sitefolder}/" + firstSegment + "newpost"
                , defaults: new { controller = "Blog", action = "NewPost" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPostEditWithTemplateRouteName,
-               template: "{sitefolder}/" + firstSegment + "editwithtemplate/{slug}"
-               , defaults: new { controller = "Blog", action = "EditWithTemplate" }
+               pattern: "{sitefolder}/" + firstSegment + "editwithpattern/{slug}"
+               , defaults: new { controller = "Blog", action = "EditWithpattern" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPostEditRouteName,
-               template: "{sitefolder}/" + firstSegment + "edit/{slug?}"
+               pattern: "{sitefolder}/" + firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPostDeleteRouteName,
-               template: "{sitefolder}/" + firstSegment + "delete/{id?}"
+               pattern: "{sitefolder}/" + firstSegment + "delete/{id?}"
                , defaults: new { controller = "Blog", action = "Delete" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.FolderMostRecentPostRouteName,
-              template: "{sitefolder}/" + firstSegment + "mostrecent"
+              pattern: "{sitefolder}/" + firstSegment + "mostrecent"
               , defaults: new { controller = "Blog", action = "MostRecent" }
               , constraints: new { sitefolder = siteFolderConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPostHistoryRouteName,
-               template: "{sitefolder}/" + firstSegment + "history/{slug?}"
+               pattern: "{sitefolder}/" + firstSegment + "history/{slug?}"
                , defaults: new { controller = "Blog", action = "History" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderPostWithoutDateRouteName,
-               template: "{sitefolder}/" + firstSegment + "{slug}"
+               pattern: "{sitefolder}/" + firstSegment + "{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderBlogIndexRouteName,
-               template: "{sitefolder}/" + firstSegment + ""
+               pattern: "{sitefolder}/" + firstSegment + ""
                , defaults: new { controller = "Blog", action = "Index" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.FolderBlogCanEditRouteName,
-               template: "{sitefolder}/" + firstSegment + "blog/canedit"
+               pattern: "{sitefolder}/" + firstSegment + "blog/canedit"
                , defaults: new { controller = "Blog", action = "CanEdit" }
                , constraints: new { sitefolder = siteFolderConstraint }
                );
@@ -896,95 +896,95 @@ namespace Microsoft.AspNetCore.Builder
             return routes;
         }
 
-        public static IRouteBuilder AddCultureBlogRoutesForSimpleContent(
-            this IRouteBuilder routes,
+        public static IEndpointRouteBuilder AddCultureBlogRoutesForSimpleContent(
+            this IEndpointRouteBuilder routes,
             IRouteConstraint siteFolderConstraint,
             IRouteConstraint cultureConstraint,
             string startSegment = "blog"
             )
         {
-            string firstSegment = GetSegmentTemplate(startSegment);
+            string firstSegment = GetSegmentpattern(startSegment);
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                    name: ProjectConstants.CultureFolderBlogCategoryRouteName,
-                   template: "{sitefolder}/{culture}/" + firstSegment + "category/{category=''}/{pagenumber=1}"
+                   pattern: "{sitefolder}/{culture}/" + firstSegment + "category/{category=''}/{pagenumber=1}"
                    , defaults: new { controller = "Blog", action = "Category" }
                    , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                    );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.CultureFolderBlogArchiveRouteName,
                   "{sitefolder}/{culture}/" + firstSegment + "{year}/{month}/{day}",
                   new { controller = "Blog", action = "Archive", month = "00", day = "00" },
                   new { sitefolder = siteFolderConstraint, culture = cultureConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                   ProjectConstants.CultureFolderPostWithDateRouteName,
                   "{sitefolder}/{culture}/" + firstSegment + "{year}/{month}/{day}/{slug}",
                   new { controller = "Blog", action = "PostWithDate" },
                   new { sitefolder = siteFolderConstraint, culture = cultureConstraint, year = @"\d{4}", month = @"\d{2}", day = @"\d{2}" }
                 );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderNewPostRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + "newpost"
+               pattern: "{sitefolder}/{culture}/" + firstSegment + "newpost"
                , defaults: new { controller = "Blog", action = "NewPost" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPostEditWithTemplateRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + "editwithtemplate/{slug}"
-               , defaults: new { controller = "Blog", action = "EditWithTemplate" }
+               pattern: "{sitefolder}/{culture}/" + firstSegment + "editwithpattern/{slug}"
+               , defaults: new { controller = "Blog", action = "EditWithpattern" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPostEditRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + "edit/{slug?}"
+               pattern: "{sitefolder}/{culture}/" + firstSegment + "edit/{slug?}"
                , defaults: new { controller = "Blog", action = "Edit" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPostDeleteRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + "delete/{id?}"
+               pattern: "{sitefolder}/{culture}/" + firstSegment + "delete/{id?}"
                , defaults: new { controller = "Blog", action = "Delete" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
               name: ProjectConstants.CultureFolderMostRecentPostRouteName,
-              template: "{sitefolder}/{culture}/" + firstSegment + "mostrecent"
+              pattern: "{sitefolder}/{culture}/" + firstSegment + "mostrecent"
               , defaults: new { controller = "Blog", action = "MostRecent" }
               , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
               );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPostHistoryRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + "history/{slug?}"
+               pattern: "{sitefolder}/{culture}/" + firstSegment + "history/{slug?}"
                , defaults: new { controller = "Blog", action = "History" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderPostWithoutDateRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + "{slug}"
+               pattern: "{sitefolder}/{culture}/" + firstSegment + "{slug}"
                , defaults: new { controller = "Blog", action = "PostNoDate" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderBlogIndexRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + ""
+               pattern: "{sitefolder}/{culture}/" + firstSegment + ""
                , defaults: new { controller = "Blog", action = "Index" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );
 
-            routes.MapRoute(
+            routes.MapControllerRoute(
                name: ProjectConstants.CultureFolderBlogCanEditRouteName,
-               template: "{sitefolder}/{culture}/" + firstSegment + "blog/canedit"
+               pattern: "{sitefolder}/{culture}/" + firstSegment + "blog/canedit"
                , defaults: new { controller = "Blog", action = "CanEdit" }
                , constraints: new { sitefolder = siteFolderConstraint, culture = cultureConstraint }
                );

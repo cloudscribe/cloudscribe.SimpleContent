@@ -12,7 +12,7 @@ namespace cloudscribe.Core.SimpleContent.Controllers
     public class FolderMetaweblogController : MetaWeblogController
     {
         public FolderMetaweblogController(
-            IHostingEnvironment appEnv,
+            IWebHostEnvironment appEnv,
             IMetaWeblogRequestParser metaWeblogRequestParser,
             IMetaWeblogRequestProcessor metaWeblogProcessor,
             IMetaWeblogResultFormatter metaWeblogResultFormatter,
