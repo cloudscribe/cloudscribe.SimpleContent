@@ -2,18 +2,22 @@
 
   <PropertyGroup>
     <Description>Bootstrap 4 pre-compiled views for cloudscribe Core and SimpleContent integration</Description>
-    <Version>5.0.0-preview20190902</Version>
+    <Version>5.0.0</Version>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageTags>cloudscribe;SimpleContent;Bootstrap4</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/joeaudette/cloudscribe</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;0436</NoWarn>

@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Storage implemented with NoDb file system storage</Description>
-    <Version>5.0.0-preview20190902</Version>
+    <Version>5.0.0</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog;json</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -15,13 +15,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NoDb" Version="1.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.0-*" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.0" />
     <PackageReference Include="YamlDotNet" Version="5.2.1" />
   </ItemGroup>
 

@@ -2,17 +2,23 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Syndication Class Library</Description>
-    <Version>5.0.0-preview20190902</Version>
+    <Version>5.0.0</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <PackageTags>syndication;rss;atom;cloudscribe</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/joeaudette/cloudscribe/master/cloudscribe-icon-32.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/joeaudette/cloudscribe.SimpleContent</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+  
+  
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -24,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="3.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0-*" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="cloudscribe.Versioning" Version="1.0.0" />
   </ItemGroup>
 
