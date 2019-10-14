@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>base package - Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <Version>5.0.0</Version>
+    <Version>5.0.1</Version>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
     <PackageTags>cloudscribe;commands;queries;ef</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
