@@ -16,10 +16,20 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                 name: "UseMetaDescriptionInFeed",
                 table: "cs_ContentProject");
 
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "SuppressAutoTeaser",
+                table: "cs_Post");
+
+            //migrationBuilder.RenameColumn(
+            //    name: "SuppressAutoTeaser",
+            //    table: "cs_Post",
+            //    newName: "SuppressTeaser");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "SuppressTeaser",
                 table: "cs_Post",
-                newName: "SuppressTeaser");
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.AddColumn<byte>(
                 name: "TeaserMode",
