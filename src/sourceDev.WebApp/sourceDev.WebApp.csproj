@@ -48,7 +48,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Web" Version="4.0.0" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="4.0.3" />
     <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="4.0.0" />
     <PackageReference Include="cloudscribe.Web.StaticFiles" Version="3.0.0" />
    
@@ -70,7 +70,7 @@
     <PackageReference Include="cloudscribe.Logging.EFCore.SQLite" Version="4.0.0" />
 	
     <!--<PackageReference Include="cloudscribe.Web.SimpleAuth" Version="2.0.*" />-->
-    <PackageReference Include="cloudscribe.Web.Localization" Version="3.0.0" />
+    <PackageReference Include="cloudscribe.Web.Localization" Version="3.0.1" />
 
     
 
