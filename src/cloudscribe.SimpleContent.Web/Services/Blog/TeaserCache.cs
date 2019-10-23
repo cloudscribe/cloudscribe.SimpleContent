@@ -30,12 +30,16 @@ namespace cloudscribe.SimpleContent.Web.Services
 
         public void AddToCache(string teaser, string postId)
         {
-            
+            var cacheOptions = new MemoryCacheEntryOptions()
+            {
+                Size = _options.Size
+            }
+            .SetSlidingExpiration(TimeSpan.FromSeconds(_options.CacheDurationInSeconds));
+
             _cache.Set(
                 postId,
                 teaser,
-                new MemoryCacheEntryOptions()
-                 .SetSlidingExpiration(TimeSpan.FromSeconds(_options.CacheDurationInSeconds))
+                cacheOptions
                  );
         }
 

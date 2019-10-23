@@ -107,13 +107,16 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             var page = viewContext.CurrentPage;
+            
+            
             if(page == null)
             { 
                 if (viewContext.CanEdit && viewContext.RootPageCount == 0)
                 {
                     page = new Page
                     {
-                        ProjectId = viewContext.Project.Id
+                        ProjectId = viewContext.Project.Id,
+                        Slug = viewContext.Project.DefaultPageSlug
                     };
                     if (HttpContext.Request.Path == "/")
                     {

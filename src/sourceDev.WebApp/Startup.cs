@@ -62,6 +62,15 @@ namespace sourceDev.WebApp
                 options.Cookie.IsEssential = true;
             });
 
+            services.AddRouting(options =>
+            {
+                //options.ConstraintMap.Add("sitefolder", typeof(cloudscribe.Core.Web.Components.SiteFolderRouteConstraint));
+                options.ConstraintMap.Add("culture", typeof(cloudscribe.Web.Localization.CultureSegmentRouteConstraint));
+            });
+
+            services.AddControllersWithViews();
+
+
             services.SetupMvc(_configuration, _sslIsAvailable);
 
 
@@ -116,9 +125,13 @@ namespace sourceDev.WebApp
             app.UseCloudscribeCommonStaticFiles();
             app.UseCookiePolicy();
 
+            
+
             //app.UseSession();
 
             app.UseRequestLocalization(localizationOptionsAccessor.Value);
+
+            //app.UseRouting();
 
             var multiTenantOptions = multiTenantOptionsAccessor.Value;
 
@@ -128,23 +141,25 @@ namespace sourceDev.WebApp
                     _sslIsAvailable);
 
             var useFolders = multiTenantOptions.Mode == cloudscribe.Core.Models.MultiTenantMode.FolderName;
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.UseCustomRoutes(useFolders, _configuration);
-
-
-
-                //endpoints.MapRazorPages();
-            });
-
-            //app.UseMvc(routes =>
+            //app.UseEndpoints(endpoints =>
             //{
-                
-            //    //*** IMPORTANT ***
-            //    // this is in Config/RoutingAndMvc.cs
-            //    // you can change or add routes there
-            //    routes.UseCustomRoutes(useFolders, _configuration);
+            //    endpoints.UseCustomRoutes(useFolders, _configuration);
+
+
+
+            //    //endpoints.MapRazorPages();
             //});
+
+#pragma warning disable MVC1005 // Cannot use UseMvc with Endpoint Routing.
+            app.UseMvc(routes =>
+            {
+
+                //*** IMPORTANT ***
+                // this is in Config/RoutingAndMvc.cs
+                // you can change or add routes there
+                routes.UseCustomRoutes(useFolders, _configuration);
+            });
+#pragma warning restore MVC1005 // Cannot use UseMvc with Endpoint Routing.
 
 
         }
