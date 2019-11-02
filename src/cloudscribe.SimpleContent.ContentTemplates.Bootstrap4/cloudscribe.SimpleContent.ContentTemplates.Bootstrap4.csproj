@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>A set of Content Templates for cloudscribe.SimpleContent using Bootstrap 4</Description>
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
