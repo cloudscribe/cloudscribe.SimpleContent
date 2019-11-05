@@ -1,7 +1,8 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SimpleGalleryViewModel
 @using cloudscribe.SimpleContent.ContentTemplates
 @inject IStringLocalizer<ContentTemplateResources> sr
-@functions{
+@functions 
+{
     public string GetItemClass(int index)
     {
         if (index == 0) { return "carousel-item active"; }
@@ -12,15 +13,26 @@
     @Html.Raw(Model.ContentAbove)
 </div>
 <div id="carouselRender" class="carousel slide carousel-fade simple-gallery" data-ride="carousel" data-interval="@Model.CarouselIntervalInMilliseconds" data-pause="hover">
-    <div class="carousel-inner" >
+    <div class="carousel-inner">
         @for (int i = 0; i < Model.Items.Count; i++)
         {
-            <div class="@GetItemClass(i)">
-                <img class="d-block w-100" src="@Model.Items[i].ResizedUrl" alt="@Model.Items[i].Description" />
-                <div class="carousel-caption d-none d-md-block">
+        <div class="@GetItemClass(i)">
+
+            <img class="d-block w-100" src="@Model.Items[i].ResizedUrl" alt="@Model.Items[i].AltText" />
+
+            <div class="carousel-caption d-none d-md-block">
+                @if (!string.IsNullOrWhiteSpace(@Model.Items[i].LinkUrl))
+                {
+                    <a href="@Model.Items[i].LinkUrl.Trim()"><h5>@Model.Items[i].Title</h5></a>
+                }
+                else
+                {
                     <h5>@Model.Items[i].Title</h5>
-                </div>
+                }
+
+                <p>@Model.Items[i].Description</p>
             </div>
+        </div>
         }
     </div>
     <a class="carousel-control-prev" href="#carouselRender" role="button" data-slide="prev">

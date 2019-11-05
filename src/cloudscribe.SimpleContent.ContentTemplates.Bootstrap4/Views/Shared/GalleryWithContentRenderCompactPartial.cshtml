@@ -7,15 +7,24 @@
 <div class="row no-gutters gallery-block compact-gallery simple-gallery">
     @for (int i = 0; i < Model.Items.Count; i++)
     {
-        <div class="col-md-6 col-lg-4 item zoom-on-hover">
-            <a class="lightbox" href="@Model.Items[i].ResizedUrl">
-                <img class="img-fluid image" src="@Model.Items[i].ResizedUrl">
-                <span class="description">
-                    <span class="description-heading">@Model.Items[i].Title</span>
-                    <span class="description-body">@Model.Items[i].Description</span>
-                </span>
-            </a>
-        </div>
+    <div class="col-md-6 col-lg-4 item zoom-on-hover">
+        <a class="lightbox" href="@Model.Items[i].ResizedUrl">
+            <img class="img-fluid image" src="@Model.Items[i].ResizedUrl">
+
+        </a>
+        <span class="description">
+            @if (!string.IsNullOrWhiteSpace(@Model.Items[i].LinkUrl))
+            {
+                <a href="@Model.Items[i].LinkUrl.Trim()"><span class="description-heading">@Model.Items[i].Title</span></a>
+            }
+            else
+            {
+                <span class="description-heading">@Model.Items[i].Title</span>
+            }
+            
+            <span class="description-body">@Model.Items[i].Description</span>
+        </span>
+    </div>
     }
 </div>
 <div class="content-bottom">

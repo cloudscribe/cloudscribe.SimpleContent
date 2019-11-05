@@ -7,7 +7,7 @@ ko.observable.fn.silentUpdate = function (value) {
     };
 };
 //class to represent a list item
-function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
+function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, altText) {
     var self = this;
 
     self.Title = ko.observable(decodeEncodedJson(title));
@@ -17,6 +17,7 @@ function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, lin
     self.ThumbnailUrl = ko.observable(thumbnailUrl);
     self.LinkUrl = ko.observable(linkUrl);
     self.Sort = ko.observable(sort);
+    self.AltText = ko.observable(altText);
 
     self.incrementSort = function () {
         self.Sort(self.Sort() + 3);
@@ -43,15 +44,15 @@ function ItemListViewModel(initialData) {
         }
         self.sortItems();
     };
-    
+
     self.Items = ko.observableArray(ko.utils.arrayMap(initialData, function (item) {
-        var item = new ListItem(item.Title, item.Description, item.FullSizeUrl, item.ResizedUrl, item.ThumbnailUrl, item.LinkUrl, item.Sort);
-        item.Sort.subscribe(self.handleSortItemChanged);
-        return item;
+        var thisItem = new ListItem(item.Title, item.Description, item.FullSizeUrl, item.ResizedUrl, item.ThumbnailUrl, item.LinkUrl, item.Sort, item.AltText);
+        thisItem.Sort.subscribe(self.handleSortItemChanged);
+        return thisItem;
     }));
-    
-    self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort) {
-        var item = new ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort);
+
+    self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, altText) {
+        var item = new ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, altText);
         item.Sort.subscribe(self.handleSortItemChanged);
         self.Items.push(item);
         window.thisPage = window.thisPage || {};
@@ -64,22 +65,25 @@ function ItemListViewModel(initialData) {
     self.newItemResizedUrl = ko.observable(null);
     self.newItemThumbnailUrl = ko.observable(null);
     self.newItemLinkUrl = ko.observable(null);
+    self.newItemAltText = ko.observable(null);
+
 
     self.newItemSort = function () {
         if (self.Items().length === 0) { return 1; }
         var result = Math.max.apply(Math, self.Items().map(function (o) { return o.Sort(); }));
         return result + 2;
     };
-   
+
     self.addNewItem = function () {
         //console.log(self.newItemSort());
-        self.addItem(self.newItemTitle(), self.newItemDescription(), self.newItemFullSizeUrl(), self.newItemResizedUrl(), self.newItemThumbnailUrl(), self.newItemLinkUrl(), self.newItemSort());
+        self.addItem(self.newItemTitle(), self.newItemDescription(), self.newItemFullSizeUrl(), self.newItemResizedUrl(), self.newItemThumbnailUrl(), self.newItemLinkUrl(), self.newItemSort(), self.newItemAltText());
         self.newItemTitle(null);
         self.newItemDescription(null);
         self.newItemFullSizeUrl(null);
         self.newItemResizedUrl(null);
         self.newItemThumbnailUrl(null);
         self.newItemLinkUrl(null);
+        self.newItemAltText(null);
         if (self.imageEditor) {
             window.cloudscribeDropAndCrop.clearOneZoneItems(self.imageEditor.dropZoneDiv.id);
         }
@@ -97,7 +101,7 @@ function ItemListViewModel(initialData) {
         if (index === 0) { return "carousel-item active"; }
         return "carousel-item";
     };
-    
+
     self.dropZoneSuccess = function (file, serverResponse, imageEditor) {
         //console.log('dropzone success');
         //console.log(serverResponse);
@@ -108,7 +112,7 @@ function ItemListViewModel(initialData) {
         } else {
             self.newItemResizedUrl(serverResponse[0].originalUrl);
         }
-        
+
         self.newItemThumbnailUrl(serverResponse[0].thumbUrl);
     };
 
@@ -124,7 +128,7 @@ function ItemListViewModel(initialData) {
         self.newItemResizedUrl(url);
     };
     window.ServerFileSelected = self.serverFileSelected;
-    
+
     self.currentListState = ko.computed(function () {
         return encodeURIComponent(ko.toJSON(self.Items));
     });
@@ -150,9 +154,5 @@ document.addEventListener("DOMContentLoaded", function () {
     //console.log(initialData);
 
     ko.applyBindings(new ItemListViewModel(initialData));
-
 });
-
-
-
 
