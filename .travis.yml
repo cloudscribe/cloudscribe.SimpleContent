@@ -14,7 +14,7 @@ os:
 script:
   - dotnet restore
   - dotnet build -c Release
-  - dotnet test -c Release ./test/cloudscribe.SimpleContent.Web.Tests/cloudscribe.SimpleContent.Web.Tests.csproj
+#  - dotnet test -c Release ./test/cloudscribe.SimpleContent.Web.Tests/cloudscribe.SimpleContent.Web.Tests.csproj
 
 
 branches:
