@@ -129,7 +129,11 @@ opacity: 1;
     }
 
     .gallery-block.compact-gallery .item .description {
-        opacity: 0;
+        opacity: 1;
+    }
+
+    .gallery-block.compact-gallery .item .description a {
+        color: #fff;
     }
 
     .gallery-block.compact-gallery .item a:hover .description {
@@ -145,6 +149,11 @@ opacity: 1;
         box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
     }
 }
+
+.carousel-caption a {
+    color: #fff;
+}
+
 
 @media (min-width: 690px) {
     .simple-gallery-side-carousel {

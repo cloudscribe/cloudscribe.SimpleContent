@@ -8,14 +8,22 @@
         return "carousel-item";
     }
 }
-<div id="carouselRender" class="carousel slide carousel-fade simple-gallery float-md-right ml-2 simple-gallery-side-carousel" data-ride="carousel" data-interval="@Model.CarouselIntervalInMilliseconds" data-pause="hover">
+<div id="carouselRender" class="carousel slide simple-gallery float-md-right ml-2 simple-gallery-side-carousel" data-ride="carousel" data-interval="@Model.CarouselIntervalInMilliseconds" data-pause="hover">
     <div class="carousel-inner">
         @for (int i = 0; i < Model.Items.Count; i++)
         {
             <div class="@GetItemClass(i)">
-                <img class="d-block w-100" src="@Model.Items[i].ResizedUrl" alt="@Model.Items[i].Description" />
+                <img class="d-block w-100" src="@Model.Items[i].ResizedUrl" alt="@Model.Items[i].AltText" />
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>@Model.Items[i].Title</h5>
+                    @if (!string.IsNullOrWhiteSpace(@Model.Items[i].LinkUrl))
+                    {
+                        <a href="@Model.Items[i].LinkUrl.Trim()"><h5>@Model.Items[i].Title</h5></a>
+                    }
+                    else
+                    {
+                        <h5>@Model.Items[i].Title</h5>
+                    }
+                    <p>@Model.Items[i].Description</p>
                 </div>
             </div>
         }
