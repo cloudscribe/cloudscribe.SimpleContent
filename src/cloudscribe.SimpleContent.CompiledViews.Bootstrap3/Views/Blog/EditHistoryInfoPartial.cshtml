@@ -5,15 +5,15 @@
 <div class="alert alert-warning" role="alert">
     @if (Model.DidReplaceDraft)
     {
-        @sr["A previous verion of this post has been restored to the editor replacing the current draft version. If this is not intended, click cancel."]
+        @sr["A previous version of this post has been restored to the editor, replacing the current draft version. If this is not intended, do not save/publish this version."]
     }
     @if (Model.DidRestoreDeleted)
     {
-        @sr["You've just restored a previously deleted post to the editor, click save to re-create the post. If this is not intended, click cancel."]
+        @sr["You've just restored a previously deleted post to the editor; click save/publish to re-create the post. If this is not intended, do not save/publish this version."]
     }
     @if (!Model.DidReplaceDraft && !Model.DidRestoreDeleted)
     {
-        @sr["A previous verion of this post has been restored to the editor. If this is not intended, click cancel."]
+        @sr["A previous version of this post has been restored to the editor. If this is not intended, do not save/publish this version."]
     }
 </div>
 }
