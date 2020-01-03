@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Bootstrap 3 pre-compiled views for cloudscribe.SimpleContent.Web</Description>
-    <Version>5.0.0</Version>
+    <Version>5.0.1</Version>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="\"/>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
