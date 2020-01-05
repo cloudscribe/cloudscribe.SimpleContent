@@ -49,6 +49,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.ContentUtils", "src\cloudscribe.ContentUtils\cloudscribe.ContentUtils.csproj", "{4D932067-B9E4-4130-A23E-B56EEA89E9AC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.MetaWeblog", "src\cloudscribe.MetaWeblog\cloudscribe.MetaWeblog.csproj", "{9AA5C22E-496F-4E3B-8497-8B27F80BEF03}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.MetaWeblog.Tests", "test\cloudscribe.MetaWeblog.Tests\cloudscribe.MetaWeblog.Tests.csproj", "{A375EB69-B5CE-481C-9D98-CC93A33972B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +139,14 @@ Global
 		{4D932067-B9E4-4130-A23E-B56EEA89E9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D932067-B9E4-4130-A23E-B56EEA89E9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D932067-B9E4-4130-A23E-B56EEA89E9AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA5C22E-496F-4E3B-8497-8B27F80BEF03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA5C22E-496F-4E3B-8497-8B27F80BEF03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA5C22E-496F-4E3B-8497-8B27F80BEF03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA5C22E-496F-4E3B-8497-8B27F80BEF03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A375EB69-B5CE-481C-9D98-CC93A33972B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A375EB69-B5CE-481C-9D98-CC93A33972B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A375EB69-B5CE-481C-9D98-CC93A33972B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A375EB69-B5CE-481C-9D98-CC93A33972B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,6 +172,8 @@ Global
 		{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{76A12B64-BF45-464F-8B23-1AEBF9427E9B} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{4D932067-B9E4-4130-A23E-B56EEA89E9AC} = {5243DE57-7C89-4208-8876-405E13605D16}
+		{9AA5C22E-496F-4E3B-8497-8B27F80BEF03} = {5243DE57-7C89-4208-8876-405E13605D16}
+		{A375EB69-B5CE-481C-9D98-CC93A33972B8} = {E9B2D007-5701-4DEB-AC64-A435D71AA05F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADB1ABEA-D5DB-4F22-BEA1-26E93BFF1BDD}
