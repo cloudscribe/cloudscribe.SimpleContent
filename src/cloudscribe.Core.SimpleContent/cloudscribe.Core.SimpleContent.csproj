@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <Version>5.0.0</Version>
+    <Version>5.0.1</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog</PackageTags>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="\"/>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.MetaWeblog\cloudscribe.MetaWeblog.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
   </ItemGroup>
@@ -33,7 +34,6 @@
     <PackageReference Include="cloudscribe.Core.Web" Version="4.0.0" />
     <PackageReference Include="cloudscribe.Web.Common" Version="4.0.0" />
     <PackageReference Include="cloudscribe.FileManager.Web" Version="4.0.0" />
-    <PackageReference Include="cloudscribe.MetaWeblog" Version="3.0.0" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="3.0.0" />
     
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.0.0" />
