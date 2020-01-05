@@ -31,10 +31,13 @@ namespace cloudscribe.MetaWeblog
 
             if (Xml != null)
             {
-                var ms = new MemoryStream();
-                await Xml.SaveAsync(ms, SaveOptions.DisableFormatting, CancellationToken.None);
-                var bytes = ms.ToArray();
-                await context.HttpContext.Response.BodyWriter.WriteAsync(bytes); 
+                using (var ms = new MemoryStream())
+                {
+                    await Xml.SaveAsync(ms, SaveOptions.DisableFormatting, CancellationToken.None);
+                    var bytes = ms.ToArray();
+                    await context.HttpContext.Response.BodyWriter.WriteAsync(bytes);
+                }
+                    
             }
             else
             {
