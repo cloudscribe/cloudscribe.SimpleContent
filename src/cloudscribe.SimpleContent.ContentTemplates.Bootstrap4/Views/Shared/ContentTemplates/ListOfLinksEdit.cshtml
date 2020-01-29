@@ -22,6 +22,7 @@
     var itemsJson = WebUtility.UrlEncode(JsonConvert.SerializeObject(sorted, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include, }));
     var options = await optionsProvider.ResolveLinkListOptions(Context.Request.Host.Host, Context.Request.Path);
 }
+
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
         <a id="cedit-tab1" class="nav-link active" href="#tabMain" data-toggle="tab" role="tab" aria-controls="tabMain" aria-selected="true">@sr["Links"]</a>
@@ -53,6 +54,7 @@
                         <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
                         <span class="invalid-feedback" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
                         <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
+                        <input class="form-control" title="@sr["Thumbnail AltText"]" placeholder="@sr["Thumbnail AltText"]" data-bind="value: AltText" />
                         <div class="form-group form-check">
                             <input data-bind="checked: OpensInNewWindow, attr:{ id: 'chkNewWindow' + $index() }" type="checkbox" class="form-check-input">
                             <label data-bind="attr:{ 'for': 'chkNewWindow' + $index() }" class="form-check-label">@sr["Opens in new window"]</label>
@@ -88,6 +90,7 @@
                 <label for="chkNewWindow" class="form-check-label">@sr["Opens in new window"]</label>
             </div>
             <label>@sr["Link Thumbnail - optional"]</label>
+
             <div class="d-flex align-items-stretch mb-2">
                 <div class="cs-crop-container">
                     <img id="dz1Image" style="max-width:350px;" src="/cr/images/350x250-placeholder.png" />
@@ -132,7 +135,12 @@
             </div>
             <input id="imgUrlFull" type="hidden" />
             <input id="imgUrlResized" type="hidden" />
-
+            
+            <div class="form-group">
+                <label for="newAltText">@sr["Thumbnail AltText - optional"]</label>
+                <input id="newAltText" class="form-control" data-bind="value: newItemAltText" />
+            </div>
+            
             <button data-bind="click: addNewItem, enable: isValidNewItemLink()" type="button" class="mb-1 btn btn-primary">@sr["Add Link"] <i class="fas fa-plus" aria-hidden="true"></i></button>
             <span class="text-danger" data-bind="css: { collapse: isValidNewItemLink() } ">@sr["A link must have a title and a valid url."]</span>
         </fieldset>

@@ -29,7 +29,7 @@ public string GetTarget(ListItemModel item)
         @if (!string.IsNullOrWhiteSpace(sorted[i].ResizedUrl))
         {
             <a target="@GetTarget(sorted[i])" href="@sorted[i].LinkUrl">
-                <img class="float-left mr-2" src="@sorted[i].ResizedUrl" style="@imageStyle" alt="@sorted[i].Description" />
+                <img class="float-left mr-2" src="@sorted[i].ResizedUrl" style="@imageStyle" alt="@sorted[i].AltText" />
             </a>
         }
         <p class="linklist-item-description">@sorted[i].Description</p>
