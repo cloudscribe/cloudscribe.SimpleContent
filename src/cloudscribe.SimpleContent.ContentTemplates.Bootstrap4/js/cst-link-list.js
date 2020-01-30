@@ -58,7 +58,7 @@ ko.extenders.isValidUrl = function(target, overrideMessage) {
 
 
 //class to represent a list item
-function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow) {
+function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow, altText) {
     var self = this;
 
     self.Title = ko.observable(decodeEncodedJson(title)).extend({ required: "Title is required" });
@@ -69,6 +69,7 @@ function ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, lin
     self.LinkUrl = ko.observable(linkUrl).extend({ required: "Link Url is required", isValidUrl: "Must be a valid url" });
     self.Sort = ko.observable(sort);
     self.OpensInNewWindow = ko.observable(opensInNewWindow);
+    self.AltText = ko.observable(altText);
 
     self.incrementSort = function () {
         self.Sort(self.Sort() + 3);
@@ -117,15 +118,16 @@ function ItemListViewModel(initialData) {
             item.ThumbnailUrl,
             item.LinkUrl,
             item.Sort,
-            item.OpensInNewWindow
+            item.OpensInNewWindow,
+            item.AltText
         );
 
         newItem.Sort.subscribe(self.handleSortItemChanged);
         return newItem;
     }));
     
-    self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow) {
-        var item = new ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow);
+    self.addItem = function (title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow, altText) {
+        var item = new ListItem(title, description, fullSizeUrl, resizedUrl, thumbnailUrl, linkUrl, sort, opensInNewWindow, altText);
         item.Sort.subscribe(self.handleSortItemChanged);
         self.Items.push(item);
         window.thisPage = window.thisPage || {};
@@ -140,6 +142,7 @@ function ItemListViewModel(initialData) {
     self.newItemThumbnailUrl = ko.observable(null);
     self.newItemLinkUrl = ko.observable(null).extend({ isValidUrl: null });
     self.newItemOpensInNewWindow = ko.observable(false);
+    self.newItemAltText = ko.observable(null);
 
     self.newItemSort = function () {
         if (self.Items().length === 0) { return 1; }
@@ -155,7 +158,8 @@ function ItemListViewModel(initialData) {
             self.newItemThumbnailUrl(),
             self.newItemLinkUrl(),
             self.newItemSort(),
-            self.newItemOpensInNewWindow()
+            self.newItemOpensInNewWindow(),
+            self.newItemAltText()
         );
         self.newItemTitle(null);
         self.newItemDescription(null);
@@ -164,6 +168,7 @@ function ItemListViewModel(initialData) {
         self.newItemThumbnailUrl(null);
         self.newItemLinkUrl(null);
         self.newItemOpensInNewWindow(false);
+        self.newItemAltText(null);
         window.cloudscribeDropAndCrop.clearAllItems();
     };
 

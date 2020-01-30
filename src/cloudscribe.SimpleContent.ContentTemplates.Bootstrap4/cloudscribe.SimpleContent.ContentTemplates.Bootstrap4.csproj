@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>A set of Content Templates for cloudscribe.SimpleContent using Bootstrap 4</Description>
-    <Version>3.0.2</Version>
+    <Version>3.0.3</Version>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
@@ -13,8 +13,8 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>3.0.2.0</AssemblyVersion>
-    <FileVersion>3.0.2.0</FileVersion>
+    <AssemblyVersion>3.0.3.0</AssemblyVersion>
+    <FileVersion>3.0.3.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
