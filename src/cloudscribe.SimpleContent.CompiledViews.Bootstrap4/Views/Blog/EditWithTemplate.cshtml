@@ -17,7 +17,7 @@
 @section Styles {
     <partial name="EditWithTemplateStylesPartial" model="@Model" />
 }
-<h2>@ViewBag.Title <small><a id="lnkCancel" href="@Model.CurrentPostUrl">@sr["Cancel"]</a></small></h2>
+<h2>@ViewBag.Title </h2>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
     <a id="lnkHistory" href="@Url.RouteUrl(blogRoutes.PostHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
@@ -74,7 +74,11 @@
     }
 
     <div class="form-inline">
+
         <div class="form-group mt-1">
+            <a class="btn btn-secondary" id="lnkCancel" href="@Model.CurrentPostUrl">@sr["Cancel"]</a>
+        </div>
+        <div class="form-group ml-1 mt-1">
             <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
         </div>
         <div class="form-group ml-1 mt-1">
