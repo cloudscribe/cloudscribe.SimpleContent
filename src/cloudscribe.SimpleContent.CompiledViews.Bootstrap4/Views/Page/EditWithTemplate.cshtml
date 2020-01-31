@@ -22,7 +22,7 @@
     <partial name="EditWithTemplateStylesPartial" model="@Model" />
 }
 <h2>
-    @ViewBag.Title <small><a id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a></small>
+    @ViewBag.Title 
 </h2>
 @if (!string.IsNullOrEmpty(Model.Id))
 {
@@ -115,6 +115,9 @@
     </div>
     <div class="form-inline">
         <div class="form-group mt-1">
+            <a class="btn btn-secondary" id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a>
+        </div>
+        <div class="form-group ml-1 mt-1">
             <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
         </div>
         <div class="form-group ml-1 mt-1">
