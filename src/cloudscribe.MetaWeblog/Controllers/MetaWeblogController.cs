@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Hosting;
-
+using System.Text;
 
 namespace cloudscribe.MetaWeblog.Controllers
 {
@@ -75,13 +75,20 @@ namespace cloudscribe.MetaWeblog.Controllers
             try
             {
                 using (HttpContext.Request.Body)
+                    
                 {
-                    postedXml = await XDocument.LoadAsync(HttpContext.Request.Body, LoadOptions.None, cancellationToken);
+                    string tmp;
+                    using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+                    {
+                        tmp = await reader.ReadToEndAsync();
+                    }
+
+                    postedXml = XDocument.Parse(tmp, LoadOptions.None);
                 }
             }
             catch(Exception ex)
             {
-                Log.LogError("oops", ex);
+                Log.LogError(ex.Message, ex);
 
                 if (ApiOptions.DumpRequestXmlToDisk)
                 {
