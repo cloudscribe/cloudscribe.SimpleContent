@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>a re-useable implementation of the metaweblog api for asp.net core</Description>
-    <Version>3.0.2</Version>
+    <Version>3.0.3</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <PackageTags>cloudscribe;metaweblog;api;asp.net core</PackageTags>
