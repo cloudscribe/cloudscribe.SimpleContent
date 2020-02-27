@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.MetaWeblog Class Library</Description>
-    <Version>5.0.2</Version>
+    <Version>5.0.3</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <PackageTags>cloudscribe;metaweblog;blog;cms</PackageTags>
