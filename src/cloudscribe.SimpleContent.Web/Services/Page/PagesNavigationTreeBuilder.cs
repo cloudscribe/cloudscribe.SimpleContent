@@ -93,6 +93,8 @@ namespace cloudscribe.SimpleContent.Services
                     Text = homePage.Title,
                     CreatedUtc = homePage.CreatedUtc,
                     LastModifiedUtc = homePage.LastModified,
+                    ComponentVisibility = homePage.MenuFilters,
+                    ViewRoles = homePage.ViewRoles,
                     Url = urlHelper.RouteUrl(_pageRoutes.PageRouteName, new { slug = "" }) //_pageRouteHelper.ResolveHomeUrl(urlHelper, folderPrefix) // urlHelper.Content("~/" + folderPrefix);
                 };
             }
