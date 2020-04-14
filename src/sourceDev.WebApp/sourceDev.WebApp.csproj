@@ -50,7 +50,7 @@
   <ItemGroup>
     <PackageReference Include="cloudscribe.Core.Web" Version="4.0.3" />
     <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap4" Version="4.0.0" />
-    <PackageReference Include="cloudscribe.Web.StaticFiles" Version="3.0.0" />
+    <PackageReference Include="cloudscribe.Web.StaticFiles" Version="3.0.1" />
    
     
     <PackageReference Include="cloudscribe.Core.Storage.NoDb" Version="4.0.0" />
