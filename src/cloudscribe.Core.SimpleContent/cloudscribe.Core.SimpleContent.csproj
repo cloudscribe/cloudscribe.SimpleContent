@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <Version>5.0.3</Version>
+    <Version>5.1.0</Version>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageTags>cloudscribe;blog</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
@@ -29,12 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Identity" Version="4.0.0" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="4.0.0" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="4.0.0" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="4.0.0" />
-    <PackageReference Include="cloudscribe.FileManager.Web" Version="4.0.0" />
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="3.0.0" />
+    <PackageReference Include="cloudscribe.Core.Identity" Version="4.1.0" />
+    <PackageReference Include="cloudscribe.Core.Models" Version="4.1.0" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="4.1.0" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="4.1.0" />
+    <PackageReference Include="cloudscribe.FileManager.Web" Version="4.1.0" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="3.1.0" />
     
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="3.0.0" />
