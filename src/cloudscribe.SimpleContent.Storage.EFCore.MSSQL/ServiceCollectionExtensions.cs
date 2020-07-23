@@ -40,10 +40,10 @@ namespace Microsoft.Extensions.DependencyInjection
                                maxRetryDelay: TimeSpan.FromSeconds(maxConnectionRetryDelaySeconds),
                                errorNumbersToAdd: transientSqlErrorNumbersToAdd);
                        }
-                       if (useSql2008Compatibility)
-                       {
-                           sqlOptions.UseRowNumberForPaging();
-                       }
+                       //if (useSql2008Compatibility)
+                       //{
+                       //    sqlOptions.UseRowNumberForPaging();
+                       //}
 
 
                    }),
