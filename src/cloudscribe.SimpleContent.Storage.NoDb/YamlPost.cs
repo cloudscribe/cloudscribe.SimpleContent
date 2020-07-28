@@ -100,6 +100,10 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 29)]
         public string AutoTeaser { get; set; }
 
+        [YamlMember(Order = 30)]
+        public bool ShowComments { get; set; }
+
+
 
 
         [YamlIgnore]

@@ -227,6 +227,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.ThumbnailUrl)
                 .HasMaxLength(250);
 
+                entity.Property(p => p.ShowComments)
+                    .IsRequired()
+                    .HasColumnType("bit");
+
                 entity.Property(p => p.IsFeatured)
                 .IsRequired();
 

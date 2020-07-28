@@ -117,6 +117,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     post.ContentType = request.ViewModel.ContentType;
                     post.TeaserOverride = request.ViewModel.TeaserOverride;
                     post.SuppressTeaser = request.ViewModel.SuppressTeaser;
+                    post.ShowComments = request.ViewModel.ShowComments;
                     post.LastModified = DateTime.UtcNow;
                     post.LastModifiedByUser = request.UserName;
                     

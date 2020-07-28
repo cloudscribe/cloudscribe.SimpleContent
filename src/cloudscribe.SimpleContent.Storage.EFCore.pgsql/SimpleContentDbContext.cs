@@ -187,6 +187,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.pgsql
                 entity.HasMany(p => p.PostComments)
                     .WithOne();
 
+                entity.Property(p => p.ShowComments).IsRequired();
+
                 entity.Property(p => p.ImageUrl).HasMaxLength(250);
 
                 entity.Property(p => p.ThumbnailUrl).HasMaxLength(250);
