@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.MetaWeblog Class Library</Description>
-    <Version>5.0.3</Version>
+    <Version>5.1.0</Version>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageTags>cloudscribe;metaweblog;blog;cms</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
@@ -25,12 +25,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0" />
-    
     <PackageReference Include="cloudscribe.DateTimeUtils" Version="3.0.0" />
     <PackageReference Include="cloudscribe.Versioning" Version="1.0.0" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="3.0.0" />
+    
+    <!--up:-->
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="4.1.0" />
    
   </ItemGroup>
-
  
 </Project>

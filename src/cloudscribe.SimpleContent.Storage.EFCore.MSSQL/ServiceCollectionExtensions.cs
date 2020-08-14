@@ -26,8 +26,10 @@ namespace Microsoft.Extensions.DependencyInjection
             bool useSql2008Compatibility = false
             )
         {
-            
-            services.AddEntityFrameworkSqlServer()
+            //   deprecated call in EF Core3:  .AddEntityFrameworkSqlServer()
+            //   https://github.com/aspnet/EntityFrameworkCore/issues/12905
+
+            services // .AddEntityFrameworkSqlServer()
                 .AddDbContext<SimpleContentDbContext>(optionsBuilder =>
                     optionsBuilder.UseSqlServer(connectionString,
                    sqlServerOptionsAction: sqlOptions =>
@@ -40,10 +42,10 @@ namespace Microsoft.Extensions.DependencyInjection
                                maxRetryDelay: TimeSpan.FromSeconds(maxConnectionRetryDelaySeconds),
                                errorNumbersToAdd: transientSqlErrorNumbersToAdd);
                        }
-                       if (useSql2008Compatibility)
-                       {
-                           sqlOptions.UseRowNumberForPaging();
-                       }
+                       //if (useSql2008Compatibility)
+                       //{
+                       //    sqlOptions.UseRowNumberForPaging();
+                       //}
 
 
                    }),
