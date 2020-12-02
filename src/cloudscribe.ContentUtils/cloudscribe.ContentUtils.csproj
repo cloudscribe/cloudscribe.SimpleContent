@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <Description>Content utilities for html and markdown</Description>
-    <VersionPrefix>1.0.1</VersionPrefix>
-    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <Version>1.1.0</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageTags>cloudscribe;blog,content</PackageTags>
@@ -18,13 +17,9 @@
     <None Include="icon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
-
-
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.1" />
     <PackageReference Include="Markdig" Version="0.16.0" />
-
-   
 
   </ItemGroup>
 
