@@ -34,7 +34,10 @@
                 if (!pubDate.HasValue) { pubDate = DateTime.UtcNow; }
             }
             <time class="@GetPubDateClass()" datetime='@pubDate.Value.ToString("s")' itemprop="datePublished">@Model.FormatDate(pubDate.Value)</time>
-            <partial name="CommentLinkDetail" model="@Model" />
+            @if (Model.ShowComments)
+            {
+                <partial name="CommentLinkDetail" model="@Model" />
+            }
             @if (Model.CurrentPost.Categories.Count > 0)
             {
                 <ul class="categories">
@@ -47,7 +50,7 @@
                     }
                 </ul>
             }
-        </div>
+            </div>
     </header>
     <partial name="NextPreviousPartial" model="@Model" />
     <partial name="PostContentBodyPartial" model="@Model" />

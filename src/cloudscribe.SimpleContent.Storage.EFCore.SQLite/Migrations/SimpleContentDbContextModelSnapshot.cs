@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.SQLite;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
@@ -15,104 +14,140 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085");
+                .HasAnnotation("ProductVersion", "3.0.0");
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ContentHistory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("ArchivedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<DateTime>("ArchivedUtc");
+                    b.Property<DateTime>("ArchivedUtc")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Author")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("CategoriesCsv");
+                    b.Property<string>("CategoriesCsv")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ContentId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("ContentSource")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.Property<string>("ContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<string>("CorrelationKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("CreatedUtc");
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DraftAuthor")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DraftContent");
+                    b.Property<string>("DraftContent")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DraftPubDate");
+                    b.Property<DateTime?>("DraftPubDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("DraftSerializedModel");
+                    b.Property<string>("DraftSerializedModel")
+                        .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsDraftHx");
+                    b.Property<bool>("IsDraftHx")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsPublished");
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastModified");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedByUser")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<string>("MetaDescription");
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("MetaHtml");
+                    b.Property<string>("MetaHtml")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("MetaJson");
+                    b.Property<string>("MetaJson")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("PageOrder");
+                    b.Property<int>("PageOrder")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ParentId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("ParentSlug")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("ProjectId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime?>("PubDate");
+                    b.Property<DateTime?>("PubDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("SerializedModel");
+                    b.Property<string>("SerializedModel")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Serializer")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.Property<string>("Slug")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("TeaserOverride");
+                    b.Property<string>("TeaserOverride")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TemplateKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ViewRoles");
+                    b.Property<string>("ViewRoles")
+                        .HasColumnType("TEXT");
 
-                    b.Property<bool>("WasDeleted");
+                    b.Property<bool>("WasDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -134,157 +169,210 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<string>("AboutContent");
+                    b.Property<string>("AboutContent")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AboutHeading")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("AddBlogToPagesTree");
+                    b.Property<bool>("AddBlogToPagesTree")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("BlogMenuLinksToNewestPost");
+                    b.Property<bool>("BlogMenuLinksToNewestPost")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("BlogPageNavComponentVisibility")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<int>("BlogPagePosition");
+                    b.Property<int>("BlogPagePosition")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("BlogPageText")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("CdnUrl")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("ChannelCategoriesCsv")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("ChannelRating")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<int>("ChannelTimeToLive");
+                    b.Property<int>("ChannelTimeToLive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CommentNotificationEmail")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("CopyrightNotice")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<int>("DaysToComment");
+                    b.Property<int>("DaysToComment")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("DefaultContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<int>("DefaultFeedItems")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(20);
 
                     b.Property<string>("DefaultPageSlug")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DisqusShortName")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("FacebookAppId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("Image")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("IncludePubDateInPostUrls");
+                    b.Property<bool>("IncludePubDateInPostUrls")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LanguageCode")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(10);
 
                     b.Property<string>("LocalMediaVirtualPath")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("ManagingEditorEmail")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<int>("MaxFeedItems")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(1000);
 
-                    b.Property<bool>("ModerateComments");
+                    b.Property<bool>("ModerateComments")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("PostsPerPage");
+                    b.Property<int>("PostsPerPage")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PubDateFormat")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(75);
 
                     b.Property<string>("Publisher")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("PublisherEntityType")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.Property<string>("PublisherLogoHeight")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(20);
 
                     b.Property<string>("PublisherLogoUrl")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("PublisherLogoWidth")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(20);
 
                     b.Property<string>("RecaptchaPrivateKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("RecaptchaPublicKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("RemoteFeedProcessorUseAgentFragment")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("RemoteFeedUrl")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("ShowAboutBox");
+                    b.Property<bool>("ShowAboutBox")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowFeaturedPostsOnDefaultPage");
+                    b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowRecentPostsOnDefaultPage");
+                    b.Property<bool>("ShowRecentPostsOnDefaultPage")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowRelatedPosts");
+                    b.Property<bool>("ShowRelatedPosts")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowTitle");
+                    b.Property<bool>("ShowTitle")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("SiteName")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.Property<byte>("TeaserMode")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue((byte)0);
 
                     b.Property<int>("TeaserTruncationLength")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(20);
 
                     b.Property<byte>("TeaserTruncationMode")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue((byte)0);
 
                     b.Property<string>("TimeZoneId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("Title")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("TwitterCreator")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("TwitterPublisher")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("UseDefaultPageAsRootNode");
+                    b.Property<bool>("UseDefaultPageAsRootNode")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("WebmasterEmail")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
@@ -295,13 +383,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageCategory", b =>
                 {
                     b.Property<string>("Value")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.Property<string>("PageEntityId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.HasKey("Value", "PageEntityId");
@@ -318,37 +409,48 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("Ip")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsAdmin");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsApproved");
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PageEntityId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("PubDate");
+                    b.Property<DateTime>("PubDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserAgent")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("Website")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -363,106 +465,144 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("CategoriesCsv")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<string>("CorrelationKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("CreatedUtc");
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("TEXT");
 
-                    b.Property<bool>("DisableEditor");
+                    b.Property<bool>("DisableEditor")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("DraftAuthor")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DraftContent");
+                    b.Property<string>("DraftContent")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DraftPubDate");
+                    b.Property<DateTime?>("DraftPubDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("DraftSerializedModel");
+                    b.Property<string>("DraftSerializedModel")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ExternalUrl")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("IsPublished");
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastModified");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedByUser")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("MenuFilters")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(500);
 
-                    b.Property<bool>("MenuOnly");
+                    b.Property<bool>("MenuOnly")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MetaDescription")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(500);
 
-                    b.Property<string>("MetaHtml");
+                    b.Property<string>("MetaHtml")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("MetaJson");
+                    b.Property<string>("MetaJson")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("PageOrder");
+                    b.Property<int>("PageOrder")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ParentId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("ParentSlug")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime?>("PubDate");
+                    b.Property<DateTime?>("PubDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("SerializedModel");
+                    b.Property<string>("SerializedModel")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Serializer")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("ShowCategories");
+                    b.Property<bool>("ShowCategories")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowComments");
+                    b.Property<bool>("ShowComments")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowHeading");
+                    b.Property<bool>("ShowHeading")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowLastModified");
+                    b.Property<bool>("ShowLastModified")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowMenu");
+                    b.Property<bool>("ShowMenu")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowPubDate");
+                    b.Property<bool>("ShowPubDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Slug")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("TemplateKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ViewRoles");
+                    b.Property<string>("ViewRoles")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -478,24 +618,29 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("Environment")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(15);
 
                     b.Property<string>("PageEntityId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
-                    b.Property<int>("Sort");
+                    b.Property<int>("Sort")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(10);
 
                     b.Property<string>("Url")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -508,13 +653,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostCategory", b =>
                 {
                     b.Property<string>("Value")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.Property<string>("PostEntityId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.HasKey("Value", "PostEntityId");
@@ -531,37 +679,48 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostComment", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("Ip")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsAdmin");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsApproved");
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PostEntityId")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("PubDate");
+                    b.Property<DateTime>("PubDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserAgent")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("Website")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -576,87 +735,120 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("AutoTeaser");
+                    b.Property<string>("AutoTeaser")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("BlogId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.Property<string>("CategoriesCsv")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<string>("CorrelationKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("CreatedByUser")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("CreatedUtc");
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DraftAuthor")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DraftContent");
+                    b.Property<string>("DraftContent")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DraftPubDate");
+                    b.Property<DateTime?>("DraftPubDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("DraftSerializedModel");
+                    b.Property<string>("DraftSerializedModel")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("IsFeatured");
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsPublished");
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastModified");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedByUser")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(100);
 
                     b.Property<string>("MetaDescription")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(500);
 
-                    b.Property<string>("MetaHtml");
+                    b.Property<string>("MetaHtml")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("MetaJson");
+                    b.Property<string>("MetaJson")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("PubDate");
+                    b.Property<DateTime?>("PubDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("SerializedModel");
+                    b.Property<string>("SerializedModel")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Serializer")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("ShowComments")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Slug")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("SuppressTeaser");
+                    b.Property<bool>("SuppressTeaser")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("TeaserOverride");
+                    b.Property<string>("TeaserOverride")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TemplateKey")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -672,7 +864,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
                 {
-                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
+                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", null)
                         .WithMany("PageComments")
                         .HasForeignKey("PageEntityId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -680,7 +872,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
                 {
-                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
+                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", null)
                         .WithMany("PageResources")
                         .HasForeignKey("PageEntityId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -688,7 +880,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostComment", b =>
                 {
-                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity")
+                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity", null)
                         .WithMany("PostComments")
                         .HasForeignKey("PostEntityId");
                 });

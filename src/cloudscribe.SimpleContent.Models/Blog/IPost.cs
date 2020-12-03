@@ -36,6 +36,7 @@ namespace cloudscribe.SimpleContent.Models
         bool IsFeatured { get; set; }
         string ImageUrl { get; set; }
         string ThumbnailUrl { get; set; }
+        bool ShowComments { get; set; }
 
         /// <summary>
         /// If not null or whitespace, displays this teaser on blog index/listing views regardless of <see cref="TeaserMode"/> settings.

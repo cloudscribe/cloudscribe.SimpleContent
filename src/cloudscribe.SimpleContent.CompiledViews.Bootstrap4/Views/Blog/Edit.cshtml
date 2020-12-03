@@ -64,6 +64,12 @@
             <label asp-for="IsFeatured" class="form-check-label">@sr["Is Featured"]</label>
         </div>
     </div>
+    <div class="form-group">
+        <div class="form-check">
+            <input asp-for="ShowComments" class="form-check-input" />
+            <label asp-for="ShowComments" class="form-check-label">@sr["Allow Comments"]</label>
+        </div>
+    </div>
 
     @if (Model.TeasersEnabled)
     {
@@ -106,7 +112,7 @@
             </div>
         }
 
-</div>
+    </div>
 </form>
 <partial name="EditDraftPubDatePartial" model="@Model" />
 @if (!string.IsNullOrEmpty(Model.Id))

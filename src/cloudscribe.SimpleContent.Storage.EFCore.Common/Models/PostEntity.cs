@@ -52,6 +52,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         public string ImageUrl { get; set; }
         public string ThumbnailUrl { get; set; }
 
+        //added to support TalkAbout Comments switch
+        public bool ShowComments { get; set; } = false;
+
         private List<string> categories;
         public List<string> Categories
         {

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.MSSQL;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
@@ -16,7 +15,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
+                .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -24,99 +23,134 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
                         .HasMaxLength(36);
 
                     b.Property<string>("ArchivedBy")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<DateTime>("ArchivedUtc");
+                    b.Property<DateTime>("ArchivedUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Author")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("CategoriesCsv");
+                    b.Property<string>("CategoriesCsv")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContentId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("ContentSource")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("ContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<string>("CorrelationKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("CreatedByUser")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("CreatedUtc");
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DraftAuthor")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DraftContent");
+                    b.Property<string>("DraftContent")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DraftPubDate");
+                    b.Property<DateTime?>("DraftPubDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("DraftSerializedModel");
+                    b.Property<string>("DraftSerializedModel")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDraftHx");
+                    b.Property<bool>("IsDraftHx")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastModified");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedByUser")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<string>("MetaDescription");
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MetaHtml");
+                    b.Property<string>("MetaHtml")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MetaJson");
+                    b.Property<string>("MetaJson")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PageOrder");
+                    b.Property<int>("PageOrder")
+                        .HasColumnType("int");
 
                     b.Property<string>("ParentId")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("ParentSlug")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("ProjectId")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime?>("PubDate");
+                    b.Property<DateTime?>("PubDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("SerializedModel");
+                    b.Property<string>("SerializedModel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Serializer")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("TeaserOverride");
+                    b.Property<string>("TeaserOverride")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TemplateKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ViewRoles");
+                    b.Property<string>("ViewRoles")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("WasDeleted");
+                    b.Property<bool>("WasDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -138,12 +172,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Models.ProjectSettings", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("AboutContent");
+                    b.Property<string>("AboutContent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AboutHeading")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<bool>("AddBlogToPagesTree")
@@ -153,107 +189,140 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("BlogPageNavComponentVisibility")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<int>("BlogPagePosition");
+                    b.Property<int>("BlogPagePosition")
+                        .HasColumnType("int");
 
                     b.Property<string>("BlogPageText")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("CdnUrl")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("ChannelCategoriesCsv")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("ChannelRating")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("ChannelTimeToLive");
+                    b.Property<int>("ChannelTimeToLive")
+                        .HasColumnType("int");
 
                     b.Property<string>("CommentNotificationEmail")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("CopyrightNotice")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<int>("DaysToComment");
+                    b.Property<int>("DaysToComment")
+                        .HasColumnType("int");
 
                     b.Property<string>("DefaultContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<int>("DefaultFeedItems")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasDefaultValue(20);
 
                     b.Property<string>("DefaultPageSlug")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisqusShortName")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("FacebookAppId")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<bool>("IncludePubDateInPostUrls")
                         .HasColumnType("bit");
 
                     b.Property<string>("LanguageCode")
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("LocalMediaVirtualPath")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("ManagingEditorEmail")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<int>("MaxFeedItems")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasDefaultValue(1000);
 
                     b.Property<bool>("ModerateComments")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PostsPerPage");
+                    b.Property<int>("PostsPerPage")
+                        .HasColumnType("int");
 
                     b.Property<string>("PubDateFormat")
+                        .HasColumnType("nvarchar(75)")
                         .HasMaxLength(75);
 
                     b.Property<string>("Publisher")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("PublisherEntityType")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("PublisherLogoHeight")
+                        .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
                     b.Property<string>("PublisherLogoUrl")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("PublisherLogoWidth")
+                        .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
                     b.Property<string>("RecaptchaPrivateKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("RecaptchaPublicKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("RemoteFeedProcessorUseAgentFragment")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("RemoteFeedUrl")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("ShowAboutBox");
+                    b.Property<bool>("ShowAboutBox")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
                         .HasColumnType("bit");
@@ -261,42 +330,52 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<bool>("ShowRecentPostsOnDefaultPage")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ShowRelatedPosts");
+                    b.Property<bool>("ShowRelatedPosts")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("ShowTitle")
                         .HasColumnType("bit");
 
                     b.Property<string>("SiteName")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<byte>("TeaserMode")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
                         .HasDefaultValue((byte)0);
 
                     b.Property<int>("TeaserTruncationLength")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasDefaultValue(20);
 
                     b.Property<byte>("TeaserTruncationMode")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
                         .HasDefaultValue((byte)0);
 
                     b.Property<string>("TimeZoneId")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("Title")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("TwitterCreator")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("TwitterPublisher")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<bool>("UseDefaultPageAsRootNode")
                         .HasColumnType("bit");
 
                     b.Property<string>("WebmasterEmail")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
@@ -307,13 +386,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageCategory", b =>
                 {
                     b.Property<string>("Value")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("PageEntityId")
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Value", "PageEntityId");
@@ -330,37 +412,48 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("Ip")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsAdmin");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsApproved");
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PageEntityId")
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("PubDate");
+                    b.Property<DateTime>("PubDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserAgent")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Website")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -375,82 +468,108 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("CategoriesCsv")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<string>("CorrelationKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("CreatedByUser")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("CreatedUtc");
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<bool>("DisableEditor");
+                    b.Property<bool>("DisableEditor")
+                        .HasColumnType("bit");
 
                     b.Property<string>("DraftAuthor")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DraftContent");
+                    b.Property<string>("DraftContent")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DraftPubDate");
+                    b.Property<DateTime?>("DraftPubDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("DraftSerializedModel");
+                    b.Property<string>("DraftSerializedModel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExternalUrl")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastModified");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedByUser")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("MenuFilters")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
                     b.Property<bool>("MenuOnly")
                         .HasColumnType("bit");
 
                     b.Property<string>("MetaDescription")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<string>("MetaHtml");
+                    b.Property<string>("MetaHtml")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MetaJson");
+                    b.Property<string>("MetaJson")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PageOrder");
+                    b.Property<int>("PageOrder")
+                        .HasColumnType("int");
 
                     b.Property<string>("ParentId")
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("ParentSlug")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime?>("PubDate");
+                    b.Property<DateTime?>("PubDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("SerializedModel");
+                    b.Property<string>("SerializedModel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Serializer")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<bool>("ShowCategories")
@@ -473,16 +592,20 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("TemplateKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("ViewRoles");
+                    b.Property<string>("ViewRoles")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -498,24 +621,29 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("Environment")
                         .IsRequired()
+                        .HasColumnType("nvarchar(15)")
                         .HasMaxLength(15);
 
                     b.Property<string>("PageEntityId")
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
-                    b.Property<int>("Sort");
+                    b.Property<int>("Sort")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
                     b.Property<string>("Url")
                         .IsRequired()
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -528,13 +656,16 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostCategory", b =>
                 {
                     b.Property<string>("Value")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("PostEntityId")
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Value", "PostEntityId");
@@ -551,37 +682,48 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostComment", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("Ip")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("IsAdmin");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsApproved");
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PostEntityId")
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<DateTime>("PubDate");
+                    b.Property<DateTime>("PubDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserAgent")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("Website")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -596,88 +738,120 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(36)")
                         .HasMaxLength(36);
 
                     b.Property<string>("Author")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("AutoTeaser");
+                    b.Property<string>("AutoTeaser")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BlogId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("CategoriesCsv")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContentType")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50)
                         .HasDefaultValue("html");
 
                     b.Property<string>("CorrelationKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("CreatedByUser")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("CreatedUtc");
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DraftAuthor")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("DraftContent");
+                    b.Property<string>("DraftContent")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DraftPubDate");
+                    b.Property<DateTime?>("DraftPubDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("DraftSerializedModel");
+                    b.Property<string>("DraftSerializedModel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("IsFeatured");
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastModified");
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedByUser")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("MetaDescription")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<string>("MetaHtml");
+                    b.Property<string>("MetaHtml")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MetaJson");
+                    b.Property<string>("MetaJson")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("PubDate");
+                    b.Property<DateTime?>("PubDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("SerializedModel");
+                    b.Property<string>("SerializedModel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Serializer")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("ShowComments")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Slug")
                         .IsRequired()
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<bool>("SuppressTeaser");
+                    b.Property<bool>("SuppressTeaser")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("TeaserOverride");
+                    b.Property<string>("TeaserOverride")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TemplateKey")
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -693,7 +867,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageComment", b =>
                 {
-                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
+                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", null)
                         .WithMany("PageComments")
                         .HasForeignKey("PageEntityId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -701,7 +875,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PageResourceEntity", b =>
                 {
-                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity")
+                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PageEntity", null)
                         .WithMany("PageResources")
                         .HasForeignKey("PageEntityId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -709,7 +883,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
             modelBuilder.Entity("cloudscribe.SimpleContent.Storage.EFCore.Models.PostComment", b =>
                 {
-                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity")
+                    b.HasOne("cloudscribe.SimpleContent.Storage.EFCore.Models.PostEntity", null)
                         .WithMany("PostComments")
                         .HasForeignKey("PostEntityId");
                 });

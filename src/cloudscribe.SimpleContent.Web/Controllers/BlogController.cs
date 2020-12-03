@@ -436,7 +436,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             model.BlogRoutes = BlogRoutes;
             model.Categories = await BlogService.GetCategories(model.CanEdit, cancellationToken);
             model.Archives = await BlogService.GetArchives(model.CanEdit, cancellationToken);
-            model.ShowComments = true; //mode.Length == 0; // do we need this for a global disable
+            model.ShowComments = result.Post.ShowComments; //mode.Length == 0; // do we need this for a global disable
             model.CommentsAreOpen = await BlogService.CommentsAreOpen(result.Post, canEdit);
             model.TimeZoneHelper = TimeZoneHelper;
             model.TimeZoneId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
@@ -670,6 +670,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ThumbnailUrl = postResult.Post.ThumbnailUrl,
                 IsFeatured = postResult.Post.IsFeatured,
                 IsPublished = postResult.Post.IsPublished,
+                ShowComments = postResult.Post.ShowComments,
                 MetaDescription = postResult.Post.MetaDescription,
                 Slug = postResult.Post.Slug,
                 Title = postResult.Post.Title,
@@ -900,6 +901,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     model.ContentType = "html";
                 }
+                model.ShowComments = true;
             }
             else
             {
@@ -922,6 +924,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.Id = postResult.Post.Id;
                 model.CorrelationKey = postResult.Post.CorrelationKey;
                 model.IsPublished = postResult.Post.IsPublished;
+                model.ShowComments = postResult.Post.ShowComments;
                 model.MetaDescription = postResult.Post.MetaDescription;
                 model.Slug = postResult.Post.Slug;
                 model.Title = postResult.Post.Title;

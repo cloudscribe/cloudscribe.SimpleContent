@@ -57,6 +57,7 @@ namespace cloudscribe.SimpleContent.Models
         public string ThumbnailUrl { get; set; }
 
         public string ContentType { get; set; } = "html";
+        public bool ShowComments { get; set; } = true;
 
         /// <summary>
         /// If not null or whitespace, displays this teaser on blog index/listing views regardless of <see cref="TeaserMode"/> settings.

@@ -193,6 +193,7 @@ namespace cloudscribe.SimpleContent.Models
             target.CorrelationKey = input.CorrelationKey;
             target.ImageUrl = input.ImageUrl;
             target.ThumbnailUrl = input.ThumbnailUrl;
+            target.ShowComments = input.ShowComments;
             target.IsFeatured = input.IsFeatured;
             target.TeaserOverride = input.TeaserOverride;
             target.SuppressTeaser = input.SuppressTeaser;
