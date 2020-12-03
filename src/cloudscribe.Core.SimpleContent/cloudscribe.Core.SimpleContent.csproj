@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <Version>5.1.0</Version>
+    <Version>5.1.2</Version>
     <Authors>Joe Audette</Authors>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageTags>cloudscribe;blog</PackageTags>

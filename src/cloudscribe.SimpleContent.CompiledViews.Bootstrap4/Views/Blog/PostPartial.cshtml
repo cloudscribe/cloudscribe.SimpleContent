@@ -37,7 +37,10 @@
         </h1>
         <div class="bh">
             <time class="@GetPubDateClass()" datetime='@pubDate.Value.ToString("s")' itemprop="datePublished">@Model.FormatDate(pubDate.Value)</time>
-            <partial name="CommentLinkList" model="@Model" />
+            @if (Model.TmpPost.ShowComments)
+            {
+                <partial name="CommentLinkList" model="@Model" />
+            }
             @if (Model.TmpPost.Categories.Count > 0)
             {
                 <ul class="categories">
@@ -48,7 +51,7 @@
                     }
                 </ul>
             }
-        </div>
+            </div>
     </header>
     <div itemprop="articleBody">
         @if (!Model.TmpPost.IsPublished)

@@ -7,7 +7,7 @@
 
     var disqusScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/embed.js";
 }
-@if (allowDisqus && (Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)))
+@if (allowDisqus && (Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)) && (Model.ShowComments))
 {
     @sr["Comments"]
     <div id="disqus_thread" data-disqus-config data-disqus-page-url="@Context.Request.GetCurrentFullUrl()" data-disqus-page-id="@Model.CurrentPost.Id" data-disqus-script-url="@disqusScriptPath"></div>

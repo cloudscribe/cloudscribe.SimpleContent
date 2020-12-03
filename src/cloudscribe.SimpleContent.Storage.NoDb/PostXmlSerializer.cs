@@ -65,7 +65,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                                 new XElement("teaserOverride", post.TeaserOverride),
                                 new XElement("suppressTeaser", post.SuppressTeaser),
                                 new XElement("categories", string.Empty),
-                                new XElement("comments", string.Empty)
+                                new XElement("comments", string.Empty),
+                                new XElement("showcomments", post.ShowComments)
                             ));
 
             //XElement categories = doc.XPathSelectElement("post/categories");
@@ -154,6 +155,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
                 SerializedModel = ReadValue(doc.Root, "serializedModel"),
                 DraftSerializedModel = ReadValue(doc.Root, "draftSerializedModel"),
                 Serializer = ReadValue(doc.Root, "serializer"),
+                ShowComments = bool.Parse(ReadValue(doc.Root, "showcomments", "true"))
 
             };
 

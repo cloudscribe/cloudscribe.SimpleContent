@@ -101,7 +101,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         public string AutoTeaser { get; set; }
 
         [YamlMember(Order = 30)]
-        public bool ShowComments { get; set; }
+        public bool ShowComments { get; set; } = true;
 
 
 

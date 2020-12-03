@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>SQLite Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <Version>5.1.0</Version>
+    <Version>5.1.2</Version>
     <Authors>Joe Audette</Authors>
     <TargetFramework>netstandard2.1</TargetFramework>
     <PackageTags>cloudscribe;commands;queries;ef</PackageTags>

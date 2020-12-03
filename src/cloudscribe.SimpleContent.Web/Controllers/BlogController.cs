@@ -901,6 +901,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     model.ContentType = "html";
                 }
+                model.ShowComments = true;
             }
             else
             {
