@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:					Joe Audette
 // Created:					2016-08-31
-// Last Modified:			2018-10-09
+// Last Modified:			2021-01-05 jk
 // 
 
 using cloudscribe.SimpleContent.Models;
@@ -183,7 +183,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             bool saveChanges,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-
             using (var db = _contextFactory.CreateContext())
             {
                 var query = from l in db.Comments
@@ -200,8 +199,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                         .ConfigureAwait(false);
                 }
             }
-
-            
         }
 
         public async Task Delete(
@@ -210,25 +207,22 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-
             using (var db = _contextFactory.CreateContext())
             {
                 var itemToRemove = await db.Posts.SingleOrDefaultAsync(
-               x => x.Id == postId && x.BlogId == projectId
-               , cancellationToken)
-               .ConfigureAwait(false);
+                x => x.Id == postId && x.BlogId == projectId
+                , cancellationToken)
+                .ConfigureAwait(false);
 
                 if (itemToRemove == null) throw new InvalidOperationException("Post not found");
 
-                await DeleteCommentsByPost(projectId, postId, false);
-                await DeleteCategoriesByPost(projectId, postId, false);
+                await DeleteCommentsByPost  (projectId, postId, true);
+                await DeleteCategoriesByPost(projectId, postId, true);
 
                 db.Posts.Remove(itemToRemove);
                 int rowsAffected = await db.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            
         }
-        
     }
 }
