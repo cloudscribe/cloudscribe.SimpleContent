@@ -111,38 +111,18 @@ namespace cloudscribe.SimpleContent.Services
             }
             
             var treeRoot = new TreeNode<NavigationNode>(rootNav);
-
             
             var blogPosition = project.BlogPagePosition;
-            if (project.AddBlogToPagesTree)
-            {
-                if (blogPosition > rootListCount) blogPosition = rootListCount;
-            }
+
+            if (project.AddBlogToPagesTree) 
+                blogPosition--;
 
             var didAddBlog = false;
-            if (rootListCount <= 1)
+            if (rootListCount <= 1 || blogPosition < 1)
             {   // if there are no pages we won't hit the loop below so go ahead and add the blog page
                 if (project.AddBlogToPagesTree)
                 {
-                    var node = new NavigationNode
-                    {
-                        Key = project.BlogPageText,
-                        Text = project.BlogPageText
-                    };
-                    if (project.BlogMenuLinksToNewestPost)
-                    {
-                        node.NamedRoute = _blogRoutes.MostRecentPostRouteName;
-                        node.Url = urlHelper.RouteUrl(_blogRoutes.MostRecentPostRouteName);
-                    }
-                    else
-                    {
-                        node.NamedRoute = _blogRoutes.BlogIndexRouteName;
-                        node.Url = urlHelper.RouteUrl(_blogRoutes.BlogIndexRouteName);
-                        node.ExcludeFromSearchSiteMap = true;
-                    }
-                    
-                    node.ComponentVisibility = project.BlogPageNavComponentVisibility;
-                    var blogNode = treeRoot.AddChild(node);
+                    MakeBlogNode(project, urlHelper, treeRoot);
                     didAddBlog = true;
                 }
             }
@@ -150,36 +130,21 @@ namespace cloudscribe.SimpleContent.Services
             var rootPosition = 1;
             foreach (var page in rootList)
             {
-                var node = new NavigationNode();
-                if (!didAddBlog && (project.AddBlogToPagesTree && rootPosition == blogPosition))
-                {
-                    node.Key = project.BlogPageText;
-                    //node.ParentKey = "RootNode";
-                    node.Text = project.BlogPageText;
-                    if (project.BlogMenuLinksToNewestPost)
-                    {
-                        node.NamedRoute = _blogRoutes.MostRecentPostRouteName;
-                        node.Url = urlHelper.RouteUrl(_blogRoutes.MostRecentPostRouteName);
-                    }
-                    else
-                    {
-                        node.NamedRoute = _blogRoutes.BlogIndexRouteName;
-                        node.Url = urlHelper.RouteUrl(_blogRoutes.BlogIndexRouteName);
-                        node.ExcludeFromSearchSiteMap = true;
-                    }
-                    node.ComponentVisibility = project.BlogPageNavComponentVisibility;
-                    var blogNode = treeRoot.AddChild(node);
-
-                    node = new NavigationNode(); // new it up again for use below
-                }
-
                 if (project.UseDefaultPageAsRootNode && (homePage != null && homePage.Id == page.Id))
                 {
-                    rootPosition += 1;
+                    // this homepage doesn't always come through as first item, which messes up the counting
                     await AddChildNodes(treeRoot, project, urlHelper).ConfigureAwait(false);
                     continue;
                 }
-                
+
+                if (!didAddBlog && (project.AddBlogToPagesTree && rootPosition == blogPosition))
+                {
+                    MakeBlogNode(project, urlHelper, treeRoot);
+                    didAddBlog = true;
+                }
+
+                var node = new NavigationNode();
+
                 node.Key = page.Id;
                 //node.ParentKey = page.ParentId;
                 node.Text = page.Title;
@@ -202,10 +167,39 @@ namespace cloudscribe.SimpleContent.Services
                 rootPosition += 1;
             }
 
+            // if we didn't add the blog yet because we ran out of indexing - put it in after all the pages.
+            if (!didAddBlog && (project.AddBlogToPagesTree))
+            {
+                MakeBlogNode(project, urlHelper, treeRoot);
+                didAddBlog = true;
+            }
+
             return treeRoot;
         }
 
-        
+        private void MakeBlogNode(IProjectSettings project, IUrlHelper urlHelper, TreeNode<NavigationNode> treeRoot)
+        {
+            var node = new NavigationNode
+            {
+                Key  = project.BlogPageText,
+                Text = project.BlogPageText
+                //ParentKey = "RootNode";
+            };
+
+            if (project.BlogMenuLinksToNewestPost)
+            {
+                node.NamedRoute = _blogRoutes.MostRecentPostRouteName;
+                node.Url = urlHelper.RouteUrl(_blogRoutes.MostRecentPostRouteName);
+            }
+            else
+            {
+                node.NamedRoute = _blogRoutes.BlogIndexRouteName;
+                node.Url = urlHelper.RouteUrl(_blogRoutes.BlogIndexRouteName);
+                node.ExcludeFromSearchSiteMap = true;
+            }
+            node.ComponentVisibility = project.BlogPageNavComponentVisibility;
+            var blogNode = treeRoot.AddChild(node);
+        }
 
         private async Task AddChildNodes(
             TreeNode<NavigationNode> treeNode,
