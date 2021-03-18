@@ -67,6 +67,14 @@ namespace cloudscribe.Core.SimpleContent.Integration
                     settings.Id = settings.Id + "~" + _cultureHelper.CurrentUICultureName();
                 }
 
+                if (!_uiOptions.ShowBlogMenuOptions) 
+                {
+                    // ShowBlogMenuOptions is true only when "option a" in the vsix template 
+                    // which implies that the default page slug should be forced to 'home'.
+                    // Otherwise...
+                    settings.DefaultPageSlug = "page1";
+                }
+
                 await _projectCommands.Create(settings.Id, settings, cancellationToken).ConfigureAwait(false);
             }
             
