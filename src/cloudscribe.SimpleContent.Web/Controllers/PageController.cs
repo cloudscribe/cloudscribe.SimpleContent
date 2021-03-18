@@ -303,7 +303,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             if(editContext.RootPageCount == 0)
             {
-                model.Title = StringLocalizer["Home"];
+                var slug = editContext.Project.DefaultPageSlug;
+
+                if (editContext.Project.DefaultPageSlug == "home")
+                    model.Title = StringLocalizer["Home"];
+                else
+                    model.Title = StringLocalizer["Page 1"];
             }
             
             return View(model);
@@ -586,7 +591,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     if (string.IsNullOrWhiteSpace(slug))
                     {
                         slug = editContext.Project.DefaultPageSlug;
-                        model.Title = StringLocalizer["Home"];
+
+                        if(editContext.Project.DefaultPageSlug == "home")
+                            model.Title = StringLocalizer["Home"];
+                        else
+                            model.Title = StringLocalizer["Page 1"];
                     }
 
                 }
