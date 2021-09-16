@@ -417,7 +417,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ViewRoles = editContext.CurrentPage.ViewRoles,
                 ShowComments = editContext.CurrentPage.ShowComments,
                 Template = template,
-                TemplateModel = TemplateService.DesrializeTemplateModel(editContext.CurrentPage, template),
+                TemplateModel = TemplateService.DesrializeTemplateModel(editContext.CurrentPage, template), // if draft serialized model exists use that - jk
                 ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
                 DidReplaceDraft = editContext.DidReplaceDraft,
                 DidRestoreDeleted = editContext.DidRestoreDeleted
