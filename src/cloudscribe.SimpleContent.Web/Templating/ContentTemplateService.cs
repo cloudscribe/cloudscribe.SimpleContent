@@ -57,10 +57,12 @@ namespace cloudscribe.SimpleContent.Web.Templating
             return _serializers.FirstOrDefault();
         }
 
-        public object DesrializeTemplateModel(IPage page, ContentTemplate template)
+     
+        public object DesrializeTemplateModel(IPage page, ContentTemplate template, bool allowDraft = true)
         {
             string modelString;
-            if(!string.IsNullOrWhiteSpace(page.DraftSerializedModel))
+
+            if(allowDraft && !string.IsNullOrWhiteSpace(page.DraftSerializedModel))
             {
                 modelString = page.DraftSerializedModel;
             }
