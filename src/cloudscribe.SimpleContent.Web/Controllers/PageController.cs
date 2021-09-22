@@ -420,7 +420,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 TemplateModel = TemplateService.DesrializeTemplateModel(editContext.CurrentPage, template), // if draft serialized model exists use that - jk
                 ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
                 DidReplaceDraft = editContext.DidReplaceDraft,
-                DidRestoreDeleted = editContext.DidRestoreDeleted
+                DidRestoreDeleted = editContext.DidRestoreDeleted,
+                HasDraft = editContext.CurrentPage.HasDraftVersion()
             };
 
             if (editContext.History != null)
@@ -646,7 +647,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ContentType = editContext.CurrentPage.ContentType;
                 model.DidReplaceDraft = editContext.DidReplaceDraft;
                 model.DidRestoreDeleted = editContext.DidRestoreDeleted;
-                if(editContext.History != null)
+                model.HasDraft = editContext.CurrentPage.HasDraftVersion();
+                if (editContext.History != null)
                 {
                     model.HistoryArchiveDate = editContext.History.ArchivedUtc;
                     model.HistoryId = editContext.History.Id;

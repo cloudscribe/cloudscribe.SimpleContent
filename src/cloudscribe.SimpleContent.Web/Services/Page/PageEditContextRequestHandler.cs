@@ -109,11 +109,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     var rootList = await _pageService.GetRootPages(cancellationToken).ConfigureAwait(false);
                     rootPageCount = rootList.Count;
                 }
-
-
-
             }
-
 
             return new PageEditContext(
                 project,
@@ -125,6 +121,5 @@ namespace cloudscribe.SimpleContent.Web.Services
                 rootPageCount
                 );
         }
-
     }
 }

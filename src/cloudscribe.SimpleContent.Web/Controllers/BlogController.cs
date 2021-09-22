@@ -679,9 +679,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Template = template,
                 TemplateModel = TemplateService.DesrializeTemplateModel(postResult.Post, template),
                 DidReplaceDraft = didReplaceDraft,
-                DidRestoreDeleted = didRestoreDeleted
-                 
-            };
+                DidRestoreDeleted = didRestoreDeleted,
+                HasDraft = postResult.Post.HasDraftVersion()
+        };
             
             if (history != null)
             {
@@ -937,6 +937,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ContentType = postResult.Post.ContentType;
                 model.TeaserOverride = postResult.Post.TeaserOverride;
                 model.SuppressTeaser = postResult.Post.SuppressTeaser;
+                model.HasDraft = postResult.Post.HasDraftVersion();
 
                 var tzId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
 

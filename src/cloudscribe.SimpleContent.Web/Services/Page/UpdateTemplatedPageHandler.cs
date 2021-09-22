@@ -274,6 +274,17 @@ namespace cloudscribe.SimpleContent.Web.Services
                             page.DraftSerializedModel = null;
 
                             break;
+
+                        case SaveMode.DeleteCurrentDraft:
+
+                            shouldFirePublishEvent = false;
+
+                            page.DraftAuthor = null;
+                            page.DraftContent = null;
+                            page.DraftPubDate = null;
+                            page.DraftSerializedModel = null;
+
+                            break;
                     }
 
                     await _historyCommands.Create(request.ProjectId, history).ConfigureAwait(false);
