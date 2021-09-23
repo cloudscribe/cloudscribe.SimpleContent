@@ -7,6 +7,7 @@
 
 using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
@@ -511,8 +512,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if (response.Succeeded)
             {
-            
-                this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+                if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                    this.AlertSuccess(StringLocalizer["The current draft of this page has been deleted."], true);
+                else
+                    this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+
                 if(response.Value.Slug == editContext.Project.DefaultPageSlug)
                 {
                     return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
@@ -733,7 +737,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
                 else
                 {
-                    this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+                    if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                        this.AlertSuccess(StringLocalizer["The current draft of this page has been deleted."], true);
+                    else
+                        this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
                 }
 
                 if (!string.IsNullOrEmpty(response.Value.ExternalUrl))

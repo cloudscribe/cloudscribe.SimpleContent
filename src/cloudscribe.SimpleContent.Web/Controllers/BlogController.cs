@@ -7,6 +7,7 @@
 
 using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
@@ -777,8 +778,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if (response.Succeeded)
             {
+                if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                    this.AlertSuccess(StringLocalizer["The current draft of this post has been deleted."], true);
+                else
+                    this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
 
-                this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
                 return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName, new { slug = response.Value.Slug });
             }
             else
@@ -1007,7 +1011,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if(!response.Succeeded)
             {
-                
+                // // not effective here...:
+                //if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                //    this.AlertSuccess(StringLocalizer["The current draft of this post has been deleted."], true);
+                //else
+                //    this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
+
                 if (string.IsNullOrEmpty(model.Id))
                 {
                     ViewData["Title"] = StringLocalizer["New Post"];
