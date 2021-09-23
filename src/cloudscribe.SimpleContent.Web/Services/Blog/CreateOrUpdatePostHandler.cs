@@ -211,6 +211,17 @@ namespace cloudscribe.SimpleContent.Web.Services
                             post.DraftPubDate = null;
 
                             break;
+
+                        case SaveMode.DeleteCurrentDraft:
+
+                            shouldFirePublishEvent = false;
+
+                            post.DraftAuthor = null;
+                            post.DraftContent = null;
+                            post.DraftPubDate = null;
+                            post.DraftSerializedModel = null;
+
+                            break;
                     }
 
                     if(project.TeaserMode != TeaserMode.Off)

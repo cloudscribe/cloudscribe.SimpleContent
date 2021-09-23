@@ -131,6 +131,16 @@
         <div class="form-group mt-1">
             <a class="btn btn-secondary" id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a>
         </div>
+       
+        @if (Model.IsPublished && Model.HasDraft)
+        {
+            <div class="form-group ml-1 mt-1">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteDraft">
+                    @sr["Delete Draft"]
+                </button>
+            </div>
+        }
+
         <div class="form-group ml-1 mt-1">
             <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
         </div>
@@ -159,8 +169,26 @@
             </div>
         }
 
-
     </div>
+
+    <div class="modal fade" id="confirmDeleteDraft" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteDraftHeading" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="confirmDeleteDraftHeading">@sr["Confirm Delete Draft"]</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    @sr["Are you sure you want to delete the current draft version of this page?"]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">@sr["Cancel"]</button>
+                    <button id="btnDeleteCurrentDraft" name="SaveMode" value="@SaveMode.DeleteCurrentDraft" type="submit" class="btn btn-danger btn-ok" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Delete Draft"]'>@sr["Delete Draft"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </form>
 <partial name="EditDraftPubDatePartial" model="@Model" />
 @if (!string.IsNullOrEmpty(Model.Id))

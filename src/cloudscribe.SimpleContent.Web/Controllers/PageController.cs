@@ -7,6 +7,7 @@
 
 using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
@@ -420,7 +421,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 TemplateModel = TemplateService.DesrializeTemplateModel(editContext.CurrentPage, template), // if draft serialized model exists use that - jk
                 ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
                 DidReplaceDraft = editContext.DidReplaceDraft,
-                DidRestoreDeleted = editContext.DidRestoreDeleted
+                DidRestoreDeleted = editContext.DidRestoreDeleted,
+                HasDraft = editContext.CurrentPage.HasDraftVersion()
             };
 
             if (editContext.History != null)
@@ -510,8 +512,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if (response.Succeeded)
             {
-            
-                this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+                if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                    this.AlertSuccess(StringLocalizer["The current draft of this page has been deleted."], true);
+                else
+                    this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+
                 if(response.Value.Slug == editContext.Project.DefaultPageSlug)
                 {
                     return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
@@ -646,7 +651,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ContentType = editContext.CurrentPage.ContentType;
                 model.DidReplaceDraft = editContext.DidReplaceDraft;
                 model.DidRestoreDeleted = editContext.DidRestoreDeleted;
-                if(editContext.History != null)
+                model.HasDraft = editContext.CurrentPage.HasDraftVersion();
+                if (editContext.History != null)
                 {
                     model.HistoryArchiveDate = editContext.History.ArchivedUtc;
                     model.HistoryId = editContext.History.Id;
@@ -731,7 +737,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
                 else
                 {
-                    this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
+                    if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                        this.AlertSuccess(StringLocalizer["The current draft of this page has been deleted."], true);
+                    else
+                        this.AlertSuccess(StringLocalizer["The page was updated successfully."], true);
                 }
 
                 if (!string.IsNullOrEmpty(response.Value.ExternalUrl))

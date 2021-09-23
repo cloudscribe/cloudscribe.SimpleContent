@@ -65,5 +65,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool DidReplaceDraft { get; set; }
         public bool DidRestoreDeleted { get; set; }
 
+        public bool HasDraft { get; set; }
+
     }
 }

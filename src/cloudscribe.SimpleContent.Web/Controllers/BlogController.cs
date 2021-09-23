@@ -7,6 +7,7 @@
 
 using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
@@ -679,9 +680,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Template = template,
                 TemplateModel = TemplateService.DesrializeTemplateModel(postResult.Post, template),
                 DidReplaceDraft = didReplaceDraft,
-                DidRestoreDeleted = didRestoreDeleted
-                 
-            };
+                DidRestoreDeleted = didRestoreDeleted,
+                HasDraft = postResult.Post.HasDraftVersion()
+        };
             
             if (history != null)
             {
@@ -777,8 +778,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if (response.Succeeded)
             {
+                if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                    this.AlertSuccess(StringLocalizer["The current draft of this post has been deleted."], true);
+                else
+                    this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
 
-                this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
                 return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName, new { slug = response.Value.Slug });
             }
             else
@@ -937,6 +941,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 model.ContentType = postResult.Post.ContentType;
                 model.TeaserOverride = postResult.Post.TeaserOverride;
                 model.SuppressTeaser = postResult.Post.SuppressTeaser;
+                model.HasDraft = postResult.Post.HasDraftVersion();
 
                 var tzId = await TimeZoneIdResolver.GetUserTimeZoneId(cancellationToken);
 
@@ -1006,7 +1011,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             var response = await Mediator.Send(request);
             if(!response.Succeeded)
             {
-                
+                // // not effective here...:
+                //if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                //    this.AlertSuccess(StringLocalizer["The current draft of this post has been deleted."], true);
+                //else
+                //    this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
+
                 if (string.IsNullOrEmpty(model.Id))
                 {
                     ViewData["Title"] = StringLocalizer["New Post"];
