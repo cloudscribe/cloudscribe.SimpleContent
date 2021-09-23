@@ -77,7 +77,7 @@
             <td>
                 @if (Model.CanEditPages && item.ContentSource == ContentSource.Page || Model.CanEditPosts && item.ContentSource == ContentSource.Blog)
                 {
-                    <a class="btn btn-primary btn-sm" href="@GetPreviewUrl(item)" target="_blank" title="@sr["opens in a new window"]">@sr["View"]</a>
+                    <a class="btn btn-primary btn-sm" href="@GetPreviewUrl(item)" title="@sr["view this version"]">@sr["View"]</a>
                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="@("#confirmDeleteModal" + item.Id)">
                         @sr["Delete"]
                     </button>

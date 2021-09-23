@@ -13,6 +13,6 @@
 }
 @if (Model.CurrentPage.ShowHeading)
 {
-    <h2>@ViewData["Title"]</h2>
+    <h1>@ViewData["Title"]</h1>
 }
 @await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })
