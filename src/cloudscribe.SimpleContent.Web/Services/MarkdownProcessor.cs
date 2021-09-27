@@ -4,6 +4,7 @@ using Markdig;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
 using cloudscribe.SimpleContent.Models;
+using System;
 
 namespace cloudscribe.SimpleContent.Web.Services
 {
@@ -17,13 +18,16 @@ namespace cloudscribe.SimpleContent.Web.Services
                 _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             }
 
-            var doc = Markdown.Parse(markdown, _mdPipeline);
-            var img = doc.Descendants<ParagraphBlock>()
-                .SelectMany(x => x.Inline.Descendants<LinkInline>())
-                .FirstOrDefault(l => l.IsImage);
-            if(img != null)
+            if (!String.IsNullOrWhiteSpace(markdown))
             {
-                return img.Url;
+                var doc = Markdown.Parse(markdown, _mdPipeline);
+                var img = doc.Descendants<ParagraphBlock>()
+                    .SelectMany(x => x.Inline.Descendants<LinkInline>())
+                    .FirstOrDefault(l => l.IsImage);
+                if (img != null)
+                {
+                    return img.Url;
+                }
             }
 
             return string.Empty;
