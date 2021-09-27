@@ -263,7 +263,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                 _mdPipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             }
 
-            return Markdown.ToHtml(markdown, _mdPipeline);
+            return Markdown.ToHtml(markdown ?? "", _mdPipeline);
         }
 
 
