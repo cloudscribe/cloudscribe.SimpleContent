@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Storage implemented with NoDb file system storage</Description>
-    <Version>5.1.4</Version>
+    <Version>5.5.0</Version>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageTags>cloudscribe;blog;json</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
@@ -24,9 +24,13 @@
 
   <ItemGroup>
     <PackageReference Include="NoDb" Version="1.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.0" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
+
+    <!--<PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.0" />-->
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
+    
   </ItemGroup>
 
 </Project>

@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <Description>a re-useable implementation of the metaweblog api for asp.net core</Description>
-    <Version>3.1.0</Version>
+    <Version>5.5.0</Version>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Joe Audette</Authors>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <PackageTags>cloudscribe;metaweblog;api;asp.net core</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.MetaWeblog</PackageProjectUrl>
@@ -15,15 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="\"/>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
-  
-
-  
 
 </Project>
