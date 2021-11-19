@@ -20,7 +20,7 @@ namespace cloudscribe.SimpleContent.Models
         }
 
         public string ProjectId { get; set; } = "*";
-        public string AvailbleForFeature { get; set; } = "*"; // * = any, Blog or Page
+        public string AvailableForFeature { get; set; } = "*"; // * = any, Blog or Page
         public string Key { get; set; }
         public bool Enabled { get; set; }
         public string Title { get; set; }
