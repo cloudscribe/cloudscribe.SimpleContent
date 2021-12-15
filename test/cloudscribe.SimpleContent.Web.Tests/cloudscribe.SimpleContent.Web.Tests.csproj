@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>cloudscribe.SimpleContent.Web</RootNamespace>
     
@@ -20,7 +20,5 @@
     <ProjectReference Include="..\..\src\cloudscribe.SimpleContent.Models\cloudscribe.SimpleContent.Models.csproj" />
     <ProjectReference Include="..\..\src\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
   </ItemGroup>
-
- 
 
 </Project>

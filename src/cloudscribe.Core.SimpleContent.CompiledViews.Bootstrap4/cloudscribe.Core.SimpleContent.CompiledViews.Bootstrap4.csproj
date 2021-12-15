@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <Description>Bootstrap 4 pre-compiled views for cloudscribe Core and SimpleContent integration</Description>
-    <Version>5.1.0</Version>
+    <Version>5.5.0</Version>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Joe Audette</Authors>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RazorLangVersion>3.0</RazorLangVersion>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageTags>cloudscribe;SimpleContent;Bootstrap4</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
@@ -29,7 +28,6 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
   
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent\cloudscribe.Core.SimpleContent.csproj" />

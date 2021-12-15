@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <Description>A set of Content Templates for cloudscribe.SimpleContent using Bootstrap 4</Description>
-    <Version>3.1.0</Version>
+    <Version>5.5.1</Version>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Joe Audette</Authors>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RazorLangVersion>3.0</RazorLangVersion>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <PackageTags>cloudscribe;SimpleContent;Bootstrap4</PackageTags>
     <PackageIcon>icon.png</PackageIcon>

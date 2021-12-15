@@ -134,7 +134,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
             return _aggregateTemplates.Where(x =>
                  (x.ProjectId == "*" || x.ProjectId == projectId)
                   && (true.Equals(x.Enabled))
-                  && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
+                  && (x.AvailableForFeature == "*" || x.AvailableForFeature == forFeature)
                   )
                 .Count();
         }
@@ -162,7 +162,7 @@ namespace cloudscribe.SimpleContent.Web.Templating
             var list = _aggregateTemplates.Where(x =>
                  (x.ProjectId == "*" || x.ProjectId == projectId)
                   && (true.Equals(x.Enabled))
-                  && (x.AvailbleForFeature == "*" || x.AvailbleForFeature == forFeature)
+                  && (x.AvailableForFeature == "*" || x.AvailableForFeature == forFeature)
                   && ((query == null) || x.Title.ToUpper().Contains(query.ToUpper()))
                 )
                 .ToList();
