@@ -11,14 +11,11 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
-  
-  
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -30,12 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="cloudscribe.Syndication.Web" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.0" />-->
     <PackageReference Include="cloudscribe.Syndication.Web" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="cloudscribe.Versioning" Version="1.0.0" />
   </ItemGroup>
-
   
 </Project>

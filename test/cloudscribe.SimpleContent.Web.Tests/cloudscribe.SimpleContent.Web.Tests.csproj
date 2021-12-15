@@ -21,6 +21,4 @@
     <ProjectReference Include="..\..\src\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
   </ItemGroup>
 
- 
-
 </Project>

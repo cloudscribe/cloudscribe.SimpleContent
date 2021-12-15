@@ -11,7 +11,6 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,26 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="cloudscribe.Core.Identity" Version="4.1.0" />
-    <PackageReference Include="cloudscribe.Core.Models" Version="4.1.0" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="4.1.0" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="4.1.0" />
-    <PackageReference Include="cloudscribe.FileManager.Web" Version="4.1.0" />
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="3.1.0" />-->
-    
-    
     <PackageReference Include="cloudscribe.Core.Identity" Version="5.0.0" />
     <PackageReference Include="cloudscribe.Core.Models" Version="5.0.0" />
     <PackageReference Include="cloudscribe.Core.Web" Version="5.0.0" />
     <PackageReference Include="cloudscribe.Web.Common" Version="5.0.0" />
     <PackageReference Include="cloudscribe.FileManager.Web" Version="5.0.0" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="5.0.0" />
-    
-      <!--<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0" />-->
     
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.0" />

@@ -20,7 +20,6 @@
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.1" />
     <PackageReference Include="Markdig" Version="0.16.0" />
-
   </ItemGroup>
 
 </Project>
