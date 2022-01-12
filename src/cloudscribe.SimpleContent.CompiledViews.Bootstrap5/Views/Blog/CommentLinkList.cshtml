@@ -1,0 +1,53 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject ISimpleContentThemeHelper themeHelper
+@inject IStringLocalizer<SimpleContent> sr
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+    var commentFrag = GetCommentString(Model, themeSettings, Model.TmpPost);
+    DateTime? pubDate = Model.TmpPost.PubDate;
+    if (!pubDate.HasValue) { pubDate = DateTime.UtcNow; }
+}
+@functions{
+    public string GetCommentString(cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel model, SimpleContentThemeSettings themeSettings, IPost post)
+    {
+        if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
+            if (post.ApprovedCommentCount() == 0)
+            {
+                return string.Empty;
+            }
+            return "<i class='" + themeSettings.Icons.Comments + "'></i> " + post.ApprovedCommentCount() + " " + sr["Comments"];
+
+        }
+        return "<i class='" + themeSettings.Icons.Comments + "'></i> " + "<span class=\"disqus-comment-count\" data-disqus-identifier=\"" + Model.TmpPost.Id + "\"></span>";
+    }
+
+    public string GetCommentFragment()
+    {
+        if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
+            return "comments";
+
+        }
+        return "disqus_thread";
+    }
+}
+
+@if (!string.IsNullOrWhiteSpace(commentFrag))
+{
+    @if (Model.ProjectSettings.IncludePubDateInPostUrls)
+    {
+
+        <a asp-route="@Model.BlogRoutes.PostWithDateRouteName"
+           asp-route-year="@pubDate.Value.Year"
+           asp-route-month="@pubDate.Value.Month.ToString("00")"
+           asp-route-day="@pubDate.Value.Day.ToString("00")"
+           asp-route-slug="@Model.TmpPost.Slug"
+           asp-fragment="@GetCommentFragment()"
+           itemprop="url">@Html.Raw(commentFrag)</a>
+    }
+    else
+    {
+        <a asp-route="@Model.BlogRoutes.PostWithoutDateRouteName" asp-route-slug="@Model.TmpPost.Slug" asp-fragment="@GetCommentFragment()" itemprop="url"> @Html.Raw(commentFrag))</a>
+    }
+}

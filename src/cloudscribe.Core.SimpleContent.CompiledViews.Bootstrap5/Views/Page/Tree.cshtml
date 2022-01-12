@@ -1,0 +1,24 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageTreeViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject ICoreThemeHelper coreThemeHelper
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+    var coreThemeSettings = coreThemeHelper.GetThemeSettings();
+    if (coreThemeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
+    ViewData["SideNavVisible"] = true;
+}
+@section Styles {
+    <partial name="TreeStylePartial" />
+}
+<partial name="TreeMainPartial" model="Model" />
+@section SideNav {
+    <partial name="AdminSideNav" />
+}
+@section Toolbar{
+    <partial name="AdminSideNavToggle" />
+}
+@section Scripts {
+    <partial name="AdminSideNavScripts" />
+    <partial name="TreeScriptsPartial" />
+}

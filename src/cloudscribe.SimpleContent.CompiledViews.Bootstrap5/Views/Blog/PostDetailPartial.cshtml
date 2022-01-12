@@ -1,0 +1,124 @@
+﻿@using cloudscribe.SimpleContent.Web
+@using cloudscribe.SimpleContent.Models
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@using cloudscribe.SimpleContent.Web.Design
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@inject IStringLocalizer<SimpleContent> sr
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+}
+@functions{
+
+    public string GetPubDateClass()
+    {
+        if (Model.CurrentPost != null && Model.CurrentPost.PubDate > DateTime.UtcNow) return "lead text-danger";
+
+        return null;
+    }
+}
+<article class="post" data-id="@Model.CurrentPost.Id"
+         data-approve-comment-url="@Url.Action("AjaxApproveComment", "Blog")"
+         data-delete-comment-url="@Url.Action("AjaxDeleteComment", "Blog")"
+         itemscope itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+    <partial name="DraftInfoPartial" model="@Model" />
+    <partial name="HistoryInfoPartial" model="@Model" />
+    <header class="jumbotron">
+        <h1 itemprop="headline name">@Model.CurrentPost.Title</h1>
+        <div class="bh">
+            @{
+                DateTime? pubDate = Model.CurrentPost.PubDate;
+                if (!pubDate.HasValue) { pubDate = DateTime.UtcNow; }
+            }
+            <time class="@GetPubDateClass()" datetime='@pubDate.Value.ToString("s")' itemprop="datePublished">@Model.FormatDate(pubDate.Value)</time>
+            @if (Model.ShowComments)
+            {
+                <partial name="CommentLinkDetail" model="@Model" />
+            }
+            @if (Model.CurrentPost.Categories.Count > 0)
+            {
+                <ul class="categories">
+                    <li><i class="@themeSettings.Icons.Tags"></i>&nbsp; @sr["Posted in:"] </li>
+                    @foreach (string cat in Model.CurrentPost.Categories)
+                    {
+                        <li itemprop="articleSection">
+                            <a asp-controller="Blog" asp-action="Category" asp-route-category="@cat">@cat</a>
+                        </li>
+                    }
+                </ul>
+            }
+            </div>
+    </header>
+    <partial name="NextPreviousPartial" model="@Model" />
+    <partial name="PostContentBodyPartial" model="@Model" />
+    @{
+        var imageUrl = Model.ExtractFirstImageUrl(Model.CurrentPost, Url);
+        var imageSize = Model.ExtractFirstImageDimensions(Model.CurrentPost);
+    }
+    @if (!string.IsNullOrEmpty(imageUrl))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+            <schema-org-meta itemprop="url" content="@imageUrl"></schema-org-meta>
+            <schema-org-meta itemprop="width" content="@imageSize.Width"></schema-org-meta>
+            <schema-org-meta itemprop="height" content="@imageSize.Height"></schema-org-meta>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.CurrentPost.Author))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <schema-org-meta itemprop="name" content="@Model.CurrentPost.Author"></schema-org-meta>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ProjectSettings.Publisher))
+    {
+        <div class="collapse" aria-hidden="true" itemprop="publisher" itemscope itemtype="http://schema.org/@Model.ProjectSettings.PublisherEntityType">
+            <schema-org-meta itemprop="name" content="@Model.ProjectSettings.Publisher"></schema-org-meta>
+            <div class="collapse" aria-hidden="true" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                <schema-org-meta itemprop="url" content="@Model.ProjectSettings.PublisherLogoUrl"></schema-org-meta>
+                <schema-org-meta itemprop="width" content="@Model.ProjectSettings.PublisherLogoWidth"></schema-org-meta>
+                <schema-org-meta itemprop="height" content="@Model.ProjectSettings.PublisherLogoHeight"></schema-org-meta>
+            </div>
+        </div>
+    }
+    @if (Model.CurrentPost.PubDate.HasValue)
+    {
+        <schema-org-meta itemprop="dateModified" content="@Model.CurrentPost.PubDate.Value.ToString("s", CultureInfo.InvariantCulture)"></schema-org-meta>
+    }
+    @if (Model.CurrentPost.IsPublished && !Model.ShowingDraft && !Model.HistoryId.HasValue)
+    {
+        @if (string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+        {
+            <partial name="CommentWrapperPartial" model="@Model" />
+        }
+        else
+        {
+            <partial name="DisqusCommentsPartial" model="@Model" />
+        }
+    }
+</article>
+@if (Model.CurrentPost != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPost.IsPublished)
+{
+    <form id="unpubform" class="form-inline" asp-controller="Blog" asp-action="UnPublish" method="post">
+        <input name="id" value="@Model.CurrentPost.Id" type="hidden" />
+        <div class="modal fade" id="confirmUnpublishModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnpublishHeading">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="confirmUnpublishHeading">@sr["Confirm Unpublish"]</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        @string.Format(sr["Are you sure you want to unpublish the post {0}?"], Model.CurrentPost.Title)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@sr["Cancel"]</button>
+                        <input type="submit" value='@sr["Unpublish"]' class="btn btn-danger btn-ok" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}

@@ -1,0 +1,237 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
+@inject IPageRoutes pageRoutes
+@inject IRoleSelectorProperties roleSelector
+@inject IStringLocalizer<SimpleContent> sr
+@inject IOptions<PageEditOptions> pageEditOptionsAccessor
+@{
+    var editOptions = pageEditOptionsAccessor.Value;
+    var showDev = editOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(editOptions.DeveloperAllowedRole);
+    if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
+    var cancelSlug = Model.Slug;
+    if (Model.Slug == Model.ProjectDefaultSlug || Model.DidRestoreDeleted) { cancelSlug = string.Empty; }
+
+}
+@section Styles {
+    <partial name="EditStylesPartial" model="@Model" />
+}
+<h2>
+    @ViewBag.Title 
+</h2>
+@if (!string.IsNullOrEmpty(Model.Id))
+{
+    <a id="lnkHistory" href="@Url.RouteUrl(pageRoutes.PageHistoryRouteName, new { slug = Model.Slug })">@sr["Version History"]</a>
+}
+<partial name="EditHistoryInfoPartial" model="@Model" />
+<form method="post" class="form-horizontal" role="form" asp-route="@pageRoutes.PageEditRouteName" asp-antiforgery="true" data-submit-once="true">
+    <input type="hidden" id="projectId" name="projectId" value="@Model.ProjectId" />
+    <input type="hidden" id="id" name="id" value="@Model.Id" />
+    <input type="hidden" asp-for="@Model.IsPublished" />
+    <input type="hidden" asp-for="ContentType" />
+    @Html.ValidationMessage("pageediterror", new { @class = "text-danger" })
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="tab1" class="nav-item">
+            <a class="nav-link active" href="#tabContent" data-bs-toggle="tab">@sr["Content"]</a>
+        </li>
+        <li id="tab2" class="nav-item">
+            <a class="nav-link" href="#tabSettings" data-bs-toggle="tab">@sr["Settings"]</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tabContent" role="tabpanel" aria-labelledby="tab1">
+            <div class="form-group mt-2">
+                <label asp-for="Title">@sr["Page Heading"]</label>
+                <input asp-for="Title" class="form-control" data-bs-toggle="tooltip" title='@sr["This is the heading and title of the page. For new pages the url slug will be generated based on the title."]' />
+                <span asp-validation-for="Title" class="invalid-feedback"></span>
+            </div>
+            <partial name="EditCorrelationKeyPartial" model="@Model" />
+            <div class="form-group">
+                <label asp-for="MetaDescription">@sr["Meta Description"]</label>
+                <input asp-for="MetaDescription" class="form-control" data-bs-toggle="tooltip" title='@sr["On public pages, meta description is very important to search engines. It should be no longer than 135 – 160 characters long (although Google has recently been testing longer snippets). Any longer and search engines will chop the end off, so make sure any important keywords are nearer the front."]' />
+                <span asp-validation-for="MetaDescription" class="invalid-feedback"></span>
+            </div>
+            <partial name="EditorPartial" model="@Model" />
+            <div class="form-group">
+                <label asp-for="Author">@sr["Author"]</label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="invalid-feedback"></span>
+            </div>
+
+        </div>
+        <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
+            <div class="form-group mt-2">
+                <label asp-for="Slug">@sr["Slug"]</label>
+                <input asp-for="Slug" class="form-control" data-bs-toggle="tooltip" title='@sr["The slug is the url segment that will be used to link to this page. It is recommended to leave the slug blank when creating new pages, the slug will be generated based on the Page Heading. Slugs should be lower case and any characters that are not allowed in urls will be automatically removed."]' />
+                <span asp-validation-for="Slug" class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParentSlug">@sr["Parent Slug"]</label>
+                <input asp-for="ParentSlug" class="form-control" data-bs-toggle="tooltip" title='@sr["A page becomes a child page of another page if you enter the slug of the other page as the parent slug. The menu hierarchy is determined by the parent child relationship between pages. If you enter an invalid parent slug it will be ignored but will not cause any error. You can also manage the hierarchy from the Page Manager."]' />
+                <span asp-validation-for="ParentSlug" class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExternalUrl">@sr["Override Url"]</label>
+                <input asp-for="ExternalUrl" class="form-control" data-bs-toggle="tooltip" title='@sr["If you populate this field with an url then the page is used only as a means to add the url as a menu item. The page content in that case is not used or visible to users. You can use a relative url or a fully qualified url so it can link to external sites. Use this with caution and note that once populated the only way to edit the page is from the link in Page Manager."]' />
+                <span asp-validation-for="ExternalUrl" class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+                <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["On most pages you will prbably want the page heading to show, but maybe not on the home page. If unchecked then the page heading will not be shown."]'>
+                    <input asp-for="ShowHeading" class="form-check-input" />
+                    <label asp-for="ShowHeading" class="form-check-label">@sr["Show Heading"]</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If the page is a parent of other pages, you check this box to make it show a menu of links to the child pages."]'>
+                    <input asp-for="ShowMenu" class="form-check-input" />
+                    <label asp-for="ShowMenu" class="form-check-label">@sr["Show Child Menu"]</label>
+                </div>
+            </div>
+            @if (editOptions.ShowDisableEditorOption)
+            {
+                <div class="form-group">
+                    <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If you don't want to use the HTML WYSIWYG editor check this box. This would be useful if you are embedding javascript and application style markup."]'>
+                        <input asp-for="DisableEditor" class="form-check-input" />
+                        <label asp-for="DisableEditor" class="form-check-label">@sr["Disable HTML Editor"]</label>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <input type="hidden" id="DisableEditor" name="DisableEditor" value="false" />
+            }
+            <div class="form-group">
+                <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["Check this box if the current page is only meant as a parent container for other pages and has no content of it's own."]'>
+                    <input asp-for="MenuOnly" class="form-check-input" />
+                    <label asp-for="MenuOnly" class="form-check-label">@sr["No Content Only Show Child Menu"]</label>
+                </div>
+            </div>
+            <partial name="EditCommentsEnabledPartial" model="Model" />
+            <div class="form-group">
+                <label asp-for="PageOrder">@sr["Page Order"]</label>
+                <input asp-for="PageOrder" class="form-control" data-bs-toggle="tooltip" title='@sr["This is the sort order of this page within it's subtree of the menu. You can also move pages around easily from Page Manager, which will update the page order."]' />
+                <span asp-validation-for="PageOrder" class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MenuFilters">@sr["Menu Filters"]</label>
+                <input asp-for="MenuFilters" class="form-control" data-bs-toggle="tooltip" title='@sr["Leave blank to include this page in all menu views. A comma separated list of menu filter names can be used to filter the page out of the various menu views. For example enter breadcrumbs to leave a page out of other views but keep it in breadcrumbs. Standard menu filter names include: topnav,breadcrumbs,childtree. If you want to exclude a page from all menus, just use a non existent view name like 'none'."]' />
+                <span asp-validation-for="MenuFilters" class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ViewRoles">@sr["View Roles"]</label>
+                <input asp-for="ViewRoles" class="form-control" style="width:80%;" data-bs-toggle="tooltip" title='@sr["Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members."]' />
+                <a class="btn btn-primary"
+                   csc-role-selector="@roleSelector"
+                   csc-projectId="@Model.ProjectId"
+                   csc-target-id="ViewRoles">@sr["Select Roles"]</a>
+                <span asp-validation-for="ViewRoles" class="invalid-feedback"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-inline">
+        <div class="form-group mt-1">
+            <a class="btn btn-secondary" id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a>
+        </div>
+       
+        @if (Model.IsPublished && Model.HasDraft)
+        {
+            <div class="form-group ms-1 mt-1">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteDraft">
+                    @sr["Delete Draft"]
+                </button>
+            </div>
+        }
+
+        <div class="form-group ms-1 mt-1">
+            <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+        </div>
+        <div class="form-group ms-1 mt-1">
+            <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
+        </div>
+        <div class="form-group ms-1 mt-1">
+            <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish at Date/Time:"]'>@sr["Publish at Date/Time:"]</button>
+        </div>
+        <div class="form-group ms-1 mt-1">
+            <partial name="EditPubDate" model="@Model" />
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Id))
+        {
+            <div class="form-group ms-4 mt-1">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                    @sr["Delete"]
+                </button>
+            </div>
+
+        }
+        @if (showDev)
+        {
+            <div class="form-group ms-1 mt-1">
+                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
+            </div>
+        }
+
+    </div>
+
+    <div class="modal fade" id="confirmDeleteDraft" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteDraftHeading" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="confirmDeleteDraftHeading">@sr["Confirm Delete Draft"]</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    @sr["Are you sure you want to delete the current draft version of this page?"]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@sr["Cancel"]</button>
+                    <button id="btnDeleteCurrentDraft" name="SaveMode" value="@SaveMode.DeleteCurrentDraft" type="submit" class="btn btn-danger btn-ok" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Delete Draft"]'>@sr["Delete Draft"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+<partial name="EditDraftPubDatePartial" model="@Model" />
+@if (!string.IsNullOrEmpty(Model.Id))
+{
+    <form id="deleteform" class="form-inline" asp-controller="Page" asp-action="Delete" method="post">
+        <input asp-for="Id" type="hidden" />
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteHeading">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="confirmDeleteHeading">@sr["Confirm Delete"]</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        @string.Format(sr["Are you sure you want to delete the page {0}?"], Model.Title)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@sr["Cancel"]</button>
+                        <input type="submit" value='@sr["Delete"]' class="btn btn-danger btn-ok" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+<div class="modal fade" id="dateRequired" tabindex="-1" role="dialog" aria-labelledby="dateRequiredHeading">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="dateRequiredHeading">@sr["Date Required"]</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label='@sr["Close"]'><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                @sr["To publish later you must enter a date."]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@sr["Ok"]</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="EditScriptsPartial" model="@Model" />
+}

@@ -1,0 +1,19 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@if (Model.Template != null)
+{
+    <environment names="Development">
+        @foreach (var c in Model.Template.RenderScripts.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+        {
+            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+        }
+    </environment>
+    <environment names="Staging,Production">
+        @foreach (var c in Model.Template.RenderScripts.Where(x => (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+        {
+            <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+        }
+    </environment>
+}
+<script src="~/cr/js/ckeditor4114/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script src="~/cr/js/syntax-highlight-init.js"></script>
+

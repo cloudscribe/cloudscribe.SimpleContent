@@ -1,0 +1,11 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
+<link rel="stylesheet" href="~/cr/css/bootstrap4-datetimepicker.min.css" />
+@if (Model.ContentType == "markdown")
+{
+    <link rel="stylesheet" href="~/cr/css/simplemde.min.css" />
+    <style>
+        .editor-toolbar.fullscreen {
+            z-index: 1040;
+        }
+    </style>
+}

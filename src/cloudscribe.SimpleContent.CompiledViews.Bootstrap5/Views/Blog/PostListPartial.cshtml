@@ -1,0 +1,6 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@foreach (var post in Model.Posts)
+{
+    Model.TmpPost = post;
+    <partial name="PostPartial" model="@Model" />
+}

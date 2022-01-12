@@ -1,0 +1,17 @@
+﻿@model int
+@inject IStringLocalizer<SimpleContent> sr
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+}
+@{
+    ViewData["Title"] = sr["No Pages Found"];
+    ViewData["Description"] = sr["No pages have been created yet, if this is your site, please login to create your first page"];
+}
+<div class="jumbotron text-center">
+    <header>
+        <h1><span aria-hidden="true" class="@themeSettings.Icons.PageNotFound"></span> @ViewData["Title"]</h1>
+    </header>
+    <p>@ViewData["Description"]</p>
+    <a class="btn btn-primary btn-lg" href="@Url.Content("~/")"><span aria-hidden="true" class="@themeSettings.Icons.Home"></span> @sr["Site Home"]</a>
+</div>

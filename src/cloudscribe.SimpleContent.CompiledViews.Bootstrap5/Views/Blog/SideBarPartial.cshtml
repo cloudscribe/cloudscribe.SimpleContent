@@ -1,0 +1,12 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@if (Model.ProjectSettings.ShowAboutBox)
+{
+    <partial name="AboutPartial" model="Model" />
+}
+<partial name="CategoryListPartial" model="@Model.Categories" />
+<partial name="ArchiveListPartial" model="@Model.Archives" />
+@if (Model.ProjectSettings.ShowRelatedPosts)
+{
+    <partial name="RelatedPostsPartial" model="@Model" />
+}
+

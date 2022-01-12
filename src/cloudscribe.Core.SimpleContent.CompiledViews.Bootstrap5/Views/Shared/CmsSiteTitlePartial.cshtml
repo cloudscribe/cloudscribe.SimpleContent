@@ -1,0 +1,6 @@
+﻿@model SiteContext
+@inject IPageRoutes  pageRoutes
+@{ 
+    var rootUrl = Url.RouteUrl(pageRoutes.PageRouteName, new { siteFolder = Model.SiteFolderName, slug = "" });
+}
+<a href="@rootUrl" class="h2 me-3" aria-hidden="true">@Model.SiteName </a>
