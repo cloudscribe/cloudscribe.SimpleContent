@@ -1,0 +1,12 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+<div class="form-group row">
+    <label asp-for="Layout" class="control-label col-md-1 ps-5">@sr["Layout"]</label>
+    <div class="col-md-11">
+        <select asp-for="Layout" class="form-control">
+            <option value="TwoSectionsWithImageRenderColumnsLeftPartial">@sr["Wider left column"]</option>
+            <option value="TwoSectionsWithImageRenderColumnsRightPartial">@sr["Wider right column"]</option>
+        </select>
+    </div>
+</div>

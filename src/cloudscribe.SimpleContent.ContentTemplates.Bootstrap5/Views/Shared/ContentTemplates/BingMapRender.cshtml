@@ -1,0 +1,36 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.BingMapViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+@{
+    Layout = "_LayoutEmpty";
+}
+<div class="content-top">
+    @Html.Raw(Model.ContentAbove)
+</div>
+@if (!string.IsNullOrWhiteSpace(Model.ApiKey))
+{
+    <div id="bingMap1" class='bingMap' style="width: 100%;height: 400px;"
+            data-bing-map=""
+            data-location-title="@Model.LocationName"
+            data-address="@Model.LocationAddress"
+            data-directions-element-id="bingMap1Directions"
+            data-itinerary-element-id="bingMap1Itinerary"
+            data-from-address-element-id="bingMap1FromAddress"
+            data-get-directions-button-id="bingMap1GetDirectionsButton"></div>
+        
+    <div id="bingMap1Directions" class="map-directions mt-2 mb-2">
+        <div class="form-group">
+            <input id="bingMap1FromAddress" type="text" class="form-control" placeholder="From Address" />
+        </div>
+        <button id="bingMap1GetDirectionsButton" type="button" class="btn btn-primary">@sr["Get Directions"]</button>
+        <a href="javascript:window.location.reload(true)">@sr["Clear"]</a>
+    </div>
+    <div id='bingMap1Itinerary'></div>  
+}
+<div class="content-bottom">
+    @Html.Raw(Model.ContentBelow)
+</div>
+@if (!string.IsNullOrWhiteSpace(Model.ApiKey))
+{
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario&key=@Model.ApiKey' async defer></script>
+}

@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <Description>A set of Content Templates for cloudscribe.SimpleContent using Bootstrap 5</Description>
+    <Version>5.5.0</Version>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Joe Audette</Authors>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <PackageTags>cloudscribe;SimpleContent;Bootstrap5</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;0436</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;0436</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="js\**;css\**" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="css\simple-gallery.css" />
+    <None Remove="css\simple-gallery.min.css" />
+    <None Remove="css\simple-image.css" />
+    <None Remove="css\simple-image.min.css" />
+    <None Remove="js\cst-basic-list.js" />
+    <None Remove="js\cst-basic-list.min.js" />
+    <None Remove="js\cst-link-list.js" />
+    <None Remove="js\cst-link-list.min.js" />
+    <None Remove="js\simple-gallery.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\cloudscribe.SimpleContent.Web\cloudscribe.SimpleContent.Web.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.EverythingModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+<div class="form-group row">
+    <label asp-for="BottomSectionsLayout" class="control-label col-md-1 ps-5">@sr["Layout Sections 5 - 8"]</label>
+    <div class="col-md-11">
+        <select asp-for="BottomSectionsLayout" class="form-control">
+            <option value="EverythingBottomColumnsPartial">@sr["Responsive equal width columns"]</option>
+            <option value="EverythingBottomFloatedImagesPartial">@sr["Sections with floated images alternating sides"]</option>
+        </select>
+    </div>
+</div>

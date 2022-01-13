@@ -1,0 +1,16 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SimpleGalleryViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+<div class="form-group row">
+    <label asp-for="Layout" class="control-label col-md-1 ps-5">@sr["Layout"]</label>
+    <div class="col-md-11">
+        <select asp-for="Layout" class="form-control">
+            <option value="GalleryWithContentRenderCardsPartial">@sr["Cards"]</option>
+            <option value="GalleryWithContentRenderCompactPartial">@sr["Compact"]</option>
+            <option value="GalleryWithContentRenderGridPartial">@sr["Grid"]</option>
+            <option value="GalleryWithContentRenderCarouselFullPartial">@sr["Carousel - Full Width"]</option>
+            <option value="GalleryWithContentRenderCarouselLeftPartial">@sr["Carousel on Left With Wrapped Top Content"]</option>
+            <option value="GalleryWithContentRenderCarouselRightPartial">@sr["Carousel on Right With Wrapped Top Content"]</option>
+        </select>
+    </div>
+</div>

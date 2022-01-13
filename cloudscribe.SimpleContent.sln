@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.Core.SimpleCont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.SimpleContent.CompiledViews.Bootstrap5", "src\cloudscribe.SimpleContent.CompiledViews.Bootstrap5\cloudscribe.SimpleContent.CompiledViews.Bootstrap5.csproj", "{9B622839-BC4E-4424-B153-63799EB47600}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cloudscribe.SimpleContent.ContentTemplates.Bootstrap5", "src\cloudscribe.SimpleContent.ContentTemplates.Bootstrap5\cloudscribe.SimpleContent.ContentTemplates.Bootstrap5.csproj", "{FFE90C6E-D297-4863-B7DA-41F145270ACA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +161,10 @@ Global
 		{9B622839-BC4E-4424-B153-63799EB47600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B622839-BC4E-4424-B153-63799EB47600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B622839-BC4E-4424-B153-63799EB47600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFE90C6E-D297-4863-B7DA-41F145270ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFE90C6E-D297-4863-B7DA-41F145270ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFE90C6E-D297-4863-B7DA-41F145270ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFE90C6E-D297-4863-B7DA-41F145270ACA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -188,6 +194,7 @@ Global
 		{A375EB69-B5CE-481C-9D98-CC93A33972B8} = {E9B2D007-5701-4DEB-AC64-A435D71AA05F}
 		{42E7F4FE-8929-4367-9F58-85BE67043D9E} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{9B622839-BC4E-4424-B153-63799EB47600} = {5243DE57-7C89-4208-8876-405E13605D16}
+		{FFE90C6E-D297-4863-B7DA-41F145270ACA} = {5243DE57-7C89-4208-8876-405E13605D16}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADB1ABEA-D5DB-4F22-BEA1-26E93BFF1BDD}

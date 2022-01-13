@@ -1,0 +1,35 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SimpleGalleryViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+<div class="content-top">
+    @Html.Raw(Model.ContentAbove)
+</div>
+<div class="row gallery-block cards-gallery simple-gallery">
+    @for (int i = 0; i < Model.Items.Count; i++)
+    {
+        <div class="col-md-6 col-lg-4 gallery-item">
+            <div class="card border-0 transform-on-hover">
+                <a class="lightbox" href="@Model.Items[i].ResizedUrl">
+                    <img src="@Model.Items[i].ResizedUrl" alt="@Model.Items[i].AltText" class="card-img-top">
+                </a>
+                <div class="card-body">
+                    @if (!string.IsNullOrWhiteSpace(@Model.Items[i].Title))
+                    {
+                        if (!string.IsNullOrWhiteSpace(@Model.Items[i].LinkUrl))
+                        {
+                            <a href="@Model.Items[i].LinkUrl.Trim()"><h6>@Model.Items[i].Title</h6></a>
+                        }
+                        else
+                        {
+                            <h6>@Model.Items[i].Title</h6>
+                        }
+                    }
+                    <p class="text-muted card-text">@Model.Items[i].Description</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="content-bottom">
+    @Html.Raw(Model.ContentBelow)
+</div>
