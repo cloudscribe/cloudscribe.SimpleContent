@@ -41,7 +41,7 @@
     
     <PackageReference Include="cloudscribe.Email.Senders" Version="2.0.4" />
     <PackageReference Include="cloudscribe.Web.Common" Version="5.0.0" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="5.0.0" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="5.0.1" />
     <PackageReference Include="cloudscribe.Web.Pagination" Version="5.0.0" />
     <PackageReference Include="cloudscribe.DateTimeUtils" Version="5.0.0" />
     <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="5.0.0" />
