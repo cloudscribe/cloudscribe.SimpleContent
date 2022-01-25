@@ -4,7 +4,7 @@
 <form asp-controller="Page" asp-action="AddResource" class="form-inline" role="form">
     <input type="hidden" name="Type" value="js" />
     <input type="hidden" asp-for="Slug" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="Environment">@sr["Environment"]</label>
                 <select asp-for="Environment" name="Environment" class="form-control ms-1 me-1">
                     <option value="any">@sr["Any"]</option>
@@ -12,12 +12,12 @@
                     <option value="prod">@sr["Production"]</option>
                 </select>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="Sort">@sr["Sort"]</label>
             <input asp-for="Sort" name="Sort" class="form-control ms-1 me-1" style="max-width:50px;" />
             <span asp-validation-for="Sort" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="Url">@sr["Url"]</label>
             <input asp-for="Url" name="Url" class="form-control ms-1 me-1" style="min-width:350px;" />
             <span asp-validation-for="Url" class="text-danger"></span>

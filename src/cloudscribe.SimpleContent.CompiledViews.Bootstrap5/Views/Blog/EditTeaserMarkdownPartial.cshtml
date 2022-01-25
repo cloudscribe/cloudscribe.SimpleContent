@@ -6,7 +6,7 @@
     var contentId = Model.Id + "-teaser";
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-teaser-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
-<div class="form-group">
+<div class="mb-3">
     <label asp-for="TeaserOverride">@sr["Teaser Override"]</label>
     <textarea asp-for="TeaserOverride" class="form-control" rows="7" cols="70"
                 data-markdown-unobtrusive=""
@@ -19,7 +19,7 @@
                 data-markdown-filebrowseurl="/filemanager/filedialog"
                 data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
 </div>
-<div class="form-group">
+<div class="mb-3">
     <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked, then show entire blog post on index/listing pages regardless of teaser settings."]'>
         <input asp-for="SuppressTeaser" class="form-check-input" />
         <label asp-for="SuppressTeaser" class="form-check-label">@sr["No teaser, use full post"]</label>

@@ -79,43 +79,42 @@
         <partial name="EditTeaserDisabledPartial" />
     }
 
-    <div class="form-inline">
-
-        <div class="mb-3 mt-1">
+    <div class="row align-items-left">
+        <div class="mb-3 mt-1 col-sm-12">
             <a class="btn btn-secondary" id="lnkCancel" href="@Model.CurrentPostUrl">@sr["Cancel"]</a>
-        </div>
-        
-        @if (Model.IsPublished && Model.HasDraft)
-        {
-            <div class="mb-3 ms-1 mt-1">
+
+            @if (Model.IsPublished && Model.HasDraft)
+            {
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteDraft">
                     @sr["Delete Draft"]
                 </button>
-            </div>
-        }
+            }
 
-        <div class="mb-3 ms-1 mt-1">
             <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
-        </div>
-        <div class="mb-3 ms-1 mt-1">
             <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
         </div>
-        <div class="mb-3 ms-1 mt-1">
+    </div>
+
+    <div class="row align-items-left">
+        <div class="mb-3 mt-1 col-md-2 w-auto">
             <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish at Date/Time:"]'>@sr["Publish at Date/Time:"]</button>
         </div>
-        <div class="mb-3 ms-1 mt-1">
+        <div class="mb-3 ms-0 mt-1 col-md-3 w-auto">
             <partial name="EditWithTemplatePubDate" model="@Model" />
         </div>
-        @if (!string.IsNullOrEmpty(Model.Id))
-        {
-            <div class="mb-3 ms-4 mt-1">
+    </div>
+
+    <div class="row align-items-left">
+        <div class="mb-3 mt-1 col-sm-12">
+
+            @if (!string.IsNullOrEmpty(Model.Id))
+            {
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                     @sr["Delete"]
                 </button>
-            </div>
+            }
 
-        }
-
+        </div>
     </div>
 
     <div class="modal fade" id="confirmDeleteDraft" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteDraftHeading" aria-hidden="true">
