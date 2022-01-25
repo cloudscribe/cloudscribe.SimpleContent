@@ -1,5 +1,6 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
 @inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IStringLocalizer<SimpleContent> sr
 @{
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
@@ -19,7 +20,7 @@
     <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i title="Close" class="fa fa-close"></i></button>
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label='@sr["Close"]'></button>
             </div>
             <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 600px;"></iframe>
         </div>

@@ -15,13 +15,13 @@
 
     @if (uiOptions.ShowBlogSettings)
     {
-        <div class="form-group">
+        <div class="mb-3">
             <div class="form-check" data-placement="left" data-bs-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
                 <input asp-for="ModerateComments" class="form-check-input" />
                 <label asp-for="ModerateComments" class="form-check-label">@sr["Moderate Comments"]</label>
             </div>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="DaysToComment">@sr["Days To Comment"]</label>
             <select asp-for="DaysToComment" class="form-control" data-bs-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]'>
                 <option value="-1">@sr["No Limit"]</option>
@@ -36,13 +36,13 @@
             </select>
             <span asp-validation-for="DaysToComment" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="CommentNotificationEmail">@sr["Comment Notification Email"]</label>
             <input asp-for="CommentNotificationEmail" class="form-control" data-bs-toggle="tooltip" title='@sr["This setting only applies to using the internal comment system, it does not impact Disqus comments."]' />
             <span asp-validation-for="CommentNotificationEmail" class="text-danger"></span>
         </div>
     }
-    <div class="form-group">
+    <div class="mb-3">
         <label asp-for="DisqusShortName">@sr["Disqus Short Name"]</label>
         <input asp-for="DisqusShortName" class="form-control" data-bs-toggle="tooltip" title='@sr["Provide your Disqus site name aka short name to use Disqus instead of the internal comment system. Highly recommended."]' />
         <span asp-validation-for="DisqusShortName" class="text-danger"></span>
