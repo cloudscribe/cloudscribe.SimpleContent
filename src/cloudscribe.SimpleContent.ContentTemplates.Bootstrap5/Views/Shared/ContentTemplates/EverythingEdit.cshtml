@@ -112,11 +112,11 @@
         </div>
         <input asp-for="SectionOneFullSizeUrl" type="hidden" />
         <input asp-for="SectionOneResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionOneAltText">@sr["Image Description"]</label>
             <input asp-for="SectionOneAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionOneHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionOneHeading" class="form-control" />
         </div>
@@ -175,11 +175,11 @@
         </div>
         <input asp-for="SectionTwoFullSizeUrl" type="hidden" />
         <input asp-for="SectionTwoResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionTwoAltText">@sr["Image Description"]</label>
             <input asp-for="SectionTwoAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionTwoHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionTwoHeading" class="form-control" />
         </div>
@@ -239,11 +239,11 @@
         </div>
         <input asp-for="SectionThreeFullSizeUrl" type="hidden" />
         <input asp-for="SectionThreeResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionThreeAltText">@sr["Image Description"]</label>
             <input asp-for="SectionThreeAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionThreeHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionThreeHeading" class="form-control" />
         </div>
@@ -302,11 +302,11 @@
         </div>
         <input asp-for="SectionFourFullSizeUrl" type="hidden" />
         <input asp-for="SectionFourResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionFourAltText">@sr["Image Description"]</label>
             <input asp-for="SectionFourAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionFourHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionFourHeading" class="form-control" />
         </div>
@@ -324,7 +324,7 @@
         <input id="ItemsConfig" type="hidden" value="@itemsJson" />
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
         <partial name="EverythingGalleryLayoutSelector" model="Model" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="CarouselIntervalInMilliseconds">@sr["Carousel slide interval in milliseconds"]</label>
             <input asp-for="CarouselIntervalInMilliseconds" class="form-control" />
             <span asp-validation-for="CarouselIntervalInMilliseconds" class="text-danger"></span>
@@ -445,11 +445,11 @@
         </div>
         <input asp-for="SectionFiveFullSizeUrl" type="hidden" />
         <input asp-for="SectionFiveResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionFiveAltText">@sr["Image Description"]</label>
             <input asp-for="SectionFiveAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionFiveHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionFiveHeading" class="form-control" />
         </div>
@@ -508,11 +508,11 @@
         </div>
         <input asp-for="SectionSixFullSizeUrl" type="hidden" />
         <input asp-for="SectionSixResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionSixAltText">@sr["Image Description"]</label>
             <input asp-for="SectionSixAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionSixHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionSixHeading" class="form-control" />
         </div>
@@ -572,11 +572,11 @@
         </div>
         <input asp-for="SectionSevenFullSizeUrl" type="hidden" />
         <input asp-for="SectionSevenResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionSevenAltText">@sr["Image Description"]</label>
             <input asp-for="SectionSevenAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionSevenHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionSevenHeading" class="form-control" />
         </div>
@@ -635,11 +635,11 @@
         </div>
         <input asp-for="SectionEightFullSizeUrl" type="hidden" />
         <input asp-for="SectionEightResizedUrl" type="hidden" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionEightAltText">@sr["Image Description"]</label>
             <input asp-for="SectionEightAltText" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="SectionEightHeading">@sr["Section Heading - optional"]</label>
             <input asp-for="SectionEightHeading" class="form-control" />
         </div>
@@ -661,7 +661,7 @@
     <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
             </div>
             <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
         </div>

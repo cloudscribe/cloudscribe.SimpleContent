@@ -21,17 +21,17 @@
 <div class="tab-content">
     <div class="tab-pane pt-2 active" id="tabMain" role="tabpanel" aria-labelledby="cedit-tab1">
 
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="LocationName" class="control-label">@sr["Location Name"]</label>
             <input asp-for="LocationName" class="form-control" />
             <span asp-validation-for="LocationName" class="invalid-feedback"></span>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="LocationAddress" class="control-label">@sr["Location Address"]</label>
             <input asp-for="LocationAddress" class="form-control" />
             <span asp-validation-for="LocationAddress" class="invalid-feedback"></span>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="ApiKey" class="control-label">@sr["Bing Map Api Key"]</label>
             <input asp-for="ApiKey" class="form-control" />
             <span asp-validation-for="ApiKey" class="invalid-feedback"></span>
@@ -64,7 +64,7 @@
     <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
             </div>
             <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
         </div>

@@ -66,11 +66,11 @@
 </div>
 <input asp-for="FullSizeUrl" type="hidden" />
 <input asp-for="ResizedUrl" type="hidden" />
-<div class="form-group">
+<div class="mb-3">
     <label asp-for="AltText">@sr["Image Description"]</label>
     <input asp-for="AltText" class="form-control" />
 </div>
-<div class="form-group row">
+<div class="mb-3 row">
     <label asp-for="Layout" class="control-label col-md-1 ps-5">@sr["Layout"]</label>
     <div class="col-md-11">
         <select asp-for="Layout" class="form-control">
@@ -93,7 +93,7 @@
     <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
             </div>
             <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
         </div>

@@ -55,7 +55,7 @@
                         <span class="invalid-feedback" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
                         <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
                         <input class="form-control" title="@sr["Thumbnail AltText"]" placeholder="@sr["Thumbnail AltText"]" data-bind="value: AltText" />
-                        <div class="form-group form-check">
+                        <div class="mb-3 form-check">
                             <input data-bind="checked: OpensInNewWindow, attr:{ id: 'chkNewWindow' + $index() }" type="checkbox" class="form-check-input">
                             <label data-bind="attr:{ 'for': 'chkNewWindow' + $index() }" class="form-check-label">@sr["Opens in new window"]</label>
                         </div>
@@ -71,21 +71,21 @@
         <fieldset class="border p-2 mb-2">
             <legend class="w-auto">@sr["Add a New Link"]</legend>
 
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="NewTitle">@sr["Link Title - required"]</label>
                 <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
                 <span class="invalid-feedback" data-bind='visible: newItemTitle.hasError, text: newItemTitle.validationMessage'> </span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="NewUrl">@sr["Link Url - required"]</label>
                 <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
                 <span class="invalid-feedback" data-bind='visible: newItemLinkUrl.hasError, text: newItemLinkUrl.validationMessage'> </span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="NewDescription">@sr["Link Description - optional"]</label>
                 <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
             </div>
-            <div class="form-group form-check">
+            <div class="mb-3 form-check">
                 <input data-bind="checked: newItemOpensInNewWindow" id="chkNewWindow" type="checkbox" class="form-check-input">
                 <label for="chkNewWindow" class="form-check-label">@sr["Opens in new window"]</label>
             </div>
@@ -136,7 +136,7 @@
             <input id="imgUrlFull" type="hidden" />
             <input id="imgUrlResized" type="hidden" />
             
-            <div class="form-group">
+            <div class="mb-3">
                 <label for="newAltText">@sr["Thumbnail AltText - optional"]</label>
                 <input id="newAltText" class="form-control" data-bind="value: newItemAltText" />
             </div>
@@ -170,7 +170,7 @@
     <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
             </div>
             <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
         </div>

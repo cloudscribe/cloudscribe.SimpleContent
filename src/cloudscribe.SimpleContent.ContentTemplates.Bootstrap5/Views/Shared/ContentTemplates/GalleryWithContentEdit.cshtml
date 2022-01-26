@@ -39,7 +39,7 @@
         <input id="ItemsConfig" type="hidden" value="@itemsJson" />
         <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
         <partial name="GalleryWithContentEditLayoutSelector" model="Model" />
-        <div class="form-group">
+        <div class="mb-3">
             <label asp-for="CarouselIntervalInMilliseconds">@sr["Carousel slide interval in milliseconds"]</label>
             <input asp-for="CarouselIntervalInMilliseconds" class="form-control" />
             <span asp-validation-for="CarouselIntervalInMilliseconds" class="text-danger"></span>
@@ -142,7 +142,7 @@
     <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" title="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
             </div>
             <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
         </div>
