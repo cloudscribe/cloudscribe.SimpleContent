@@ -127,8 +127,11 @@
             </div>
         </div>
     </div>
+
+
     <div class="row align-items-left">
-        <div class="mb-3 mt-1 col-sm-12">
+        <div class="mb-3 mt-1 col-3 w-auto">
+
             <a class="btn btn-secondary" id="lnkCancel" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = cancelSlug })">@sr["Cancel"]</a>
 
             @if (Model.IsPublished && Model.HasDraft)
@@ -141,19 +144,26 @@
             <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
 
             <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
-        </div>
-    </div>
-    <div class="row align-items-left">
-        <div class="mb-3 mt-1 col-md-2 w-auto">
-            <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish at Date/Time:"]'>@sr["Publish at Date/Time:"]</button>
-        </div>
-        <div class="mb-3 ms-0 mt-1 col-md-3 w-auto">
-            <partial name="EditPubDate" model="@Model" />
-        </div>
-    </div>
 
-    <div class="row align-items-left">
-        <div class="mb-3 mt-1 col-sm-12">
+        </div>
+
+
+        <div class="mb-3 mt-1 col-3 w-auto">
+
+            <div class="row align-items-left gx-1">
+                <div class="col-md-2 w-auto">
+                    <button id="SaveMode" name="SaveMode" value="@SaveMode.PublishLater" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish at Date/Time:"]'>@sr["Publish at Date/Time:"]</button>
+                </div>
+                <div class="ms-0 col-md-3 w-auto">
+                    <partial name="EditPubDate" model="@Model" />
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="mb-3 mt-1 col-3 w-auto">
+
             @if (!string.IsNullOrEmpty(Model.Id))
             {
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
@@ -164,9 +174,10 @@
             {
                 <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
             }
-        </div>
 
+        </div>
     </div>
+
 
     <div class="modal fade" id="confirmDeleteDraft" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteDraftHeading" aria-hidden="true">
         <div class="modal-dialog">
