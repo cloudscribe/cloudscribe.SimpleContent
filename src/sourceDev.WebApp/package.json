@@ -22,7 +22,7 @@
     "gulp-concat": "latest",
     "gulp-connect": "latest",
     "merge-stream": "latest",
-    "node-sass": "^4.5.3",
+    "node-sass": "^7.0.0",
     "sass-loader": "^6.0.6",
     "smartmenus": "^1.1.0",
     "smartmenus-bootstrap-4": "^0.1.0",
