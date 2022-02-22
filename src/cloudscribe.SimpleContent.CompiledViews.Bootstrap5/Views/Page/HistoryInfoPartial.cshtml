@@ -1,0 +1,39 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IPageRoutes pageRoutes
+@if (Model.HistoryId.HasValue && Model.HistoryArchiveDate.HasValue)
+{
+    <div class="alert alert-warning" role="alert">
+        @sr["You are currently viewing a previous version of this page that was archived"]&nbsp;@Model.FormatDateForEdit(Model.HistoryArchiveDate.Value)
+        @if (Model.HasPublishedVersion)
+        {
+            <a class="btn btn-primary btn-sm" href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug = Model.CurrentPage.Slug })">@sr["View published version."]</a>
+        }
+        <a class="btn btn-primary btn-sm" href="@Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug = Model.CurrentPage.Slug, historyId = Model.HistoryId.Value })">@sr["Restore this version to editor"]</a>
+
+        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteHistory">
+            @sr["Delete this version history item"]
+        </button>
+    </div>
+    <form asp-controller="ContentHistory" asp-action="DeleteHistory">
+        <input type="hidden" name="id" value="@Model.HistoryId" />
+        <div class="modal fade" id="confirmDeleteHistory" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteHistoryHeading">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="confirmDeleteHistoryHeading">@sr["Confirm Delete"]</h4>
+                        <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label='@sr["Close"]'></button>
+                    </div>
+                    <div class="modal-body">
+                        @sr["Are you sure you want to permanently delete this version history item?"]
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@sr["Cancel"]</button>
+                        <input type="submit" value='@sr["Delete"]' class="btn btn-danger btn-ok" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+}

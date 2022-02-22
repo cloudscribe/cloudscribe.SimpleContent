@@ -1,0 +1,14 @@
+﻿@model cloudscribe.Core.SimpleContent.Integration.ViewModels.ContentSettingsViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@* comment this and uncomment the below if you want editable Image Path *@
+<input type="hidden" asp-for="@Model.LocalMediaVirtualPath" />
+@*
+        <div class="mb-3">
+        <label asp-for="LocalMediaVirtualPath" class="col-md-2 control-label">@sr["Image Path"]</label>
+        <div class="col-md-10">
+            <input asp-for="LocalMediaVirtualPath" class="form-control" />
+            <span asp-validation-for="LocalMediaVirtualPath" class="text-danger"></span>
+        </div>
+    </div>
+*@
+ 

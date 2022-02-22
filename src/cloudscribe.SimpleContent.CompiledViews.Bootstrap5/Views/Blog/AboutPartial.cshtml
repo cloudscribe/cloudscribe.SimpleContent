@@ -1,0 +1,27 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IBlogRoutes blogRoutes
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+    var heading = Model.ProjectSettings.AboutHeading;
+    if(string.IsNullOrWhiteSpace(heading))
+    {
+        heading = sr["About"];
+    }
+}
+
+<section class="panel panel-default">
+    <div class="panel-heading">
+        <h3><i class="@themeSettings.Icons.About" aria-hidden="true"></i>&nbsp;@heading</h3>
+    </div>
+    <div class="panel-body">
+        @if (Model.CanEdit && string.IsNullOrWhiteSpace(Model.ProjectSettings.AboutContent))
+        {
+            <p>
+                @sr["You can edit this from Administration > Content Settings"]
+            </p>
+        }
+        @Html.Raw(Model.ProjectSettings.AboutContent)
+    </div>
+</section>

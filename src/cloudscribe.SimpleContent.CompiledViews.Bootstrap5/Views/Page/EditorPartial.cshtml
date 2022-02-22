@@ -1,0 +1,55 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@{ 
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var contentId = Model.Id;
+    if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
+}  
+<div class="mb-3">
+	<label asp-for="Content">@sr["Content"]</label>
+    @if (Model.DisableEditor)
+    {
+        <textarea asp-for="Content" class="form-control" rows="10" cols="70"></textarea>
+    }
+    else
+    {
+        if (Model.ContentType == "markdown")
+        {
+            <textarea asp-for="Content" class="form-control" rows="10" cols="70"
+                      data-markdown-unobtrusive=""
+                      data-markdown-autosave="true"
+                      data-markdown-contentid="@contentId"
+                      data-markdown-forceSync="true"
+                      data-markdown-indentWithTabs="true"
+                      data-markdown-spellChecker="true"
+                      data-markdown-filemodalid="#fileBrowseDialog"
+                      data-markdown-filebrowseurl="@ckOptions.ImageBrowseUrl"
+                      data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
+                    <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label='@sr["Close"]'></button>
+                                </div>
+                                <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 600px;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+        }
+        else
+        {
+            <textarea asp-for="Content" class="form-control"
+                      data-ckeditor-unobtrusive=""
+                      data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                      data-ckeditor-config-language="@ckOptions.LanguageCode"
+                      data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                      data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                      data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+        }
+
+    }
+    <span asp-validation-for="Content" class="text-danger"></span>
+</div>

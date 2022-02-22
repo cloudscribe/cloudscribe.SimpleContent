@@ -43,12 +43,14 @@ function onModalDialogSubmitted(dialogDivId) {
 
 function openModalDialog(dialogDivId) {
     var div = $("#" + dialogDivId);
-    div.modal({ show: true, backdrop:true });
+    div.modal({ backdrop:true });
 
     div.on('hidden.bs.modal', function () {
         $(this).removeData('bs.modal');
         clearModalDialog(dialogDivId);
     });
+
+    div.modal('show');
 
     setFormDataAjaxAttributes(dialogDivId);
 }

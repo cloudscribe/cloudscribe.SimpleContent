@@ -1,0 +1,18 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@inject IRoleSelectorProperties roleSelector
+@section Meta {
+    <meta name="robots" content="noindex, follow" />
+}
+@section Styles {
+    <partial name="StylePartial" model="Model" />
+}
+@section Toolbar {
+   
+    <partial name="ToolsPartial" model="Model" />
+    
+}
+@if (Model.CurrentPage.ShowHeading)
+{
+    <h1>@ViewData["Title"]</h1>
+}
+@await Component.InvokeAsync("Navigation", new { viewName = "ChildTree", filterName = NamedNavigationFilters.ChildTree, startingNodeKey = "" })

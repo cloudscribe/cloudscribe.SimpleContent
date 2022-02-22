@@ -1,0 +1,9 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+}
+@if (Model.ProjectSettings.ShowRecentPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
+{
+    @await Component.InvokeAsync("RecentPosts", new { viewName = "RecentPosts", numberToShow = themeSettings.NumberOfRecentPostsToShow })
+}

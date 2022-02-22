@@ -1,0 +1,9 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SimpleGalleryViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+@{
+    Layout = "_LayoutEmpty";
+    Model.Items = Model.Items.OrderBy(x => x.Sort).ToList();
+}
+<partial name="@Model.Layout" model="Model" />
+

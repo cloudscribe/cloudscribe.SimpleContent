@@ -1,0 +1,50 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditWithTemplateViewModel
+@inject IRoleSelectorProperties roleSelector
+<script src="~/cr/js/moment-with-locales.min.js"></script>
+<script src="~/cr/js/bootstrap4-datetimepicker.min.js"></script>
+<script src="~/cr/js/cloudscribe-datepicker-bootstrap4-unobtrusive.min.js"></script>
+<script src="~/cr/js/jquery.validate.min.js"></script>
+<script src="~/cr/js/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/cr/js/unobtrusive-validation-bs4.min.js"></script>
+<script src="/cr/js/jquery.validate.hooks.min.js"></script>
+<script src="/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+<script src="/cr/js/unsaved-changes-prompt.min.js"></script>
+<script src="~/cr/js/ckeditor4114/ckeditor.js"></script>
+<script src="~/cr/js/cloudscribe-ckeditor-unobtrusive.min.js"></script>
+<environment names="Development">
+    @foreach (var c in Model.Template.EditScripts.Where(x => (x.Environment == "dev" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+    {
+    <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+    }
+</environment>
+<environment names="Staging,Production">
+    @foreach (var c in Model.Template.EditScripts.Where(x => (x.Environment == "prod" || x.Environment == "any")).OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList())
+    {
+    <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
+    }
+</environment>
+
+@if (roleSelector.RequiredScriptPaths != null)
+{
+    foreach (var s in roleSelector.RequiredScriptPaths)
+    {
+<script src="@Url.Content(s)"></script>
+    }
+}
+<script src="~/cr/js/bootstrap-tooltip-toggle.js"></script>
+<script src="/csscsr/js/edit-script.js"></script>
+@*<script>
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip()
+    });
+    $(document).ready(function () {
+        $('#SaveMode').click(function () {
+            var newDateVal = $('#NewPubDate').val();
+            if (newDateVal.length == 0) {
+                $('#dateRequired').modal('show')
+                $('#SaveMode').html($('#SaveMode').data("enabled-text"));
+                return false;
+            }
+        });
+    });
+</script>*@

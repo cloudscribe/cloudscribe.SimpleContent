@@ -1,5 +1,5 @@
 ﻿@charset "UTF-8";
-@import "bs4";
+@import "bs4";  // "bs5";   ---for BS5 you'll also need to adjust the package.json file and run the gulp task.
 @import "jquery-smartmenu-bootstrap";
 @import "font-awesome";
 

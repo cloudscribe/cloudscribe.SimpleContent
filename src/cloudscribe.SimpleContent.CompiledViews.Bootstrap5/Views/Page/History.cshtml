@@ -1,0 +1,54 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.ContentHistoryViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IPageRoutes  pageRoutes
+@{
+    var format = sr["{0} - Content Edit History"].ToString();
+    ViewData["Title"] = string.Format(format, Model.ContentTitle);
+}
+<h1>@ViewData["Title"]</h1>
+<a asp-route="@pageRoutes.PageRouteName" asp-route-slug="@Model.ContentSlug" itemprop="url">@sr["View current version"]</a>
+<partial name="HistoryGridPartial" model="@Model" />
+<cs-pager asp-route="@pageRoutes.PageHistoryRouteName"
+          asp-route-slug="@Model.ContentSlug"
+          asp-route-pagesize="@Model.History.PageSize"
+          cs-paging-pagesize="@Model.History.PageSize"
+          cs-paging-pagenumber="@Model.History.PageNumber"
+          cs-paging-totalitems="@Model.History.TotalItems"
+          cs-pager-ul-class="pagination d-flex flex-wrap"
+          cs-pager-li-current-class="page-item active"
+          cs-pager-li-other-class="page-item"
+          cs-pager-li-non-active-class="page-item disabled"
+          cs-pager-link-current-class="page-link"
+          cs-pager-link-other-class="page-link"
+          cs-first-page-title='@sr["First Page"]'
+          cs-last-page-title='@sr["Last Page"]'
+          cs-previous-page-title='@sr["Previous page"]'
+          cs-next-page-title='@sr["Next page"]'></cs-pager>
+@if (Model.CanEditPages)
+{
+<form role="form" asp-controller="Page" asp-action="DeleteHistoryOlderThan">
+    <div class="row align-items-left mt-1 mb-1 gx-2">
+        <div class="col-2 w-auto align-self-center">
+            <input type="hidden" name="id" value="@Model.ContentId" />
+            <input type="submit" value='@sr["Delete Older Than"]' class="btn btn-sm btn-danger " />
+
+        </div>
+        <div class="col-2 w-auto align-self-center">
+            <select class="form-control ms-1 me-1" name="days" id="days">
+                <option value="-1">All</option>
+                <option>10</option>
+                <option>20</option>
+                <option>30</option>
+                <option>60</option>
+                <option>90</option>
+                <option>120</option>
+            </select>
+        </div>
+
+        <div class="col-3 w-auto align-self-center">
+            @sr["Days"]
+        </div>
+    </div>
+</form>
+
+}

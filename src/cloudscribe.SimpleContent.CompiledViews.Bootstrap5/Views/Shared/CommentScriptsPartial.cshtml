@@ -1,0 +1,10 @@
+﻿<environment names="Development">
+    <script src="~/csscsr/js/blog-comments.js" asp-append-version="true"></script>
+</environment>
+<environment names="Staging,Production">
+    <script src="~/csscsr/js/blog-comments.min.js" async defer></script>
+</environment>
+@if (!User.Identity.IsAuthenticated)
+{
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+}

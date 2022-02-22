@@ -1,0 +1,29 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+}
+@functions{
+    public string GetDivClass()
+    {
+        if ((!string.IsNullOrEmpty(Model.PreviousPostUrl)) && (!string.IsNullOrEmpty(Model.NextPostUrl)))
+        {
+            return "col-4";
+        }
+        return "col";
+    }
+}
+@if ((!string.IsNullOrEmpty(Model.PreviousPostUrl)) || (!string.IsNullOrEmpty(Model.NextPostUrl)))
+{
+    <div class="row justify-content-between">
+        @if (!string.IsNullOrEmpty(Model.PreviousPostUrl))
+        {
+            <div class="@GetDivClass()"><a class="btn btn-link" title="@sr["Previous Post"]" href="@Model.PreviousPostUrl"><i class="@themeSettings.Icons.Previous"></i></a></div>
+        }
+        @if (!string.IsNullOrEmpty(Model.NextPostUrl))
+        {
+            <div class="@GetDivClass()"><a class="btn btn-link float-right" title="@sr["Next Post"]" href="@Model.NextPostUrl"><i class="@themeSettings.Icons.Next"></i></a></div>
+        }
+    </div>
+}

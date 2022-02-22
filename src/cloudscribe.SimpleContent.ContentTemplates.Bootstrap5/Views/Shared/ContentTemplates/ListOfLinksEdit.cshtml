@@ -1,0 +1,179 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using Microsoft.AspNetCore.Antiforgery
+@using Newtonsoft.Json;
+@using System.Net
+@inject IStringLocalizer<ContentTemplateResources> sr
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ILinkListOptionsProvider optionsProvider
+@{
+
+    var tokens = antiforgery.GetAndStoreTokens(Context);
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
+    int i = 1;
+    foreach (var item in sorted)
+    {
+        item.Sort = i;
+        i += 2;
+    }
+    var itemsJson = WebUtility.UrlEncode(JsonConvert.SerializeObject(sorted, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include, }));
+    var options = await optionsProvider.ResolveLinkListOptions(Context.Request.Host.Host, Context.Request.Path);
+}
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a id="cedit-tab1" class="nav-link active" href="#tabMain" data-bs-toggle="tab" role="tab" aria-controls="tabMain" aria-selected="true">@sr["Links"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab2" class="nav-link" href="#tabTopContent" data-bs-toggle="tab" role="tab" aria-controls="tabTopContent" aria-selected="false">@sr["Top Content"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab3" class="nav-link" href="#tabBottomContent" data-bs-toggle="tab" role="tab" aria-controls="tabBottomContent" aria-selected="false">@sr["Bottom Content"]</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane pt-2 active" id="tabMain" role="tabpanel" aria-labelledby="cedit-tab1">
+        <input id="ItemsConfig" type="hidden" value="@itemsJson" />
+        <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
+        <fieldset class="border p-2 mb-2">
+            <legend class="w-auto">@sr["Current Links"]</legend>
+            <div data-bind="visible: Items().length === 0">
+                @sr["No links have been added yet, use the form below to add links."]
+            </div>
+            <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">
+                <div class="row">
+                    <div class="col-3" data-bind="attr: { visible: ResizedUrl !== undefined }">
+                        <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }" />
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
+                        <span class="text-danger" data-bind='visible: Title.hasError, text: Title.validationMessage'> </span>
+                        <input class="form-control" title="@sr["Link Url"]" data-bind="value: LinkUrl" placeholder="@sr["Link Url"]" />
+                        <span class="invalid-feedback" data-bind='visible: LinkUrl.hasError, text: LinkUrl.validationMessage'> </span>
+                        <textarea class="form-control" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
+                        <input class="form-control" title="@sr["Thumbnail AltText"]" placeholder="@sr["Thumbnail AltText"]" data-bind="value: AltText" />
+                        <div class="mb-3 form-check">
+                            <input data-bind="checked: OpensInNewWindow, attr:{ id: 'chkNewWindow' + $index() }" type="checkbox" class="form-check-input">
+                            <label data-bind="attr:{ 'for': 'chkNewWindow' + $index() }" class="form-check-label">@sr["Opens in new window"]</label>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
+                        <a href="#" data-bind="click: decrementSort, visible: Sort() > 0" title="@sr["Move Up"]"><i class="fas fa-sort-up fa-2x"></i></a>
+                        <a href="#" data-bind="click: incrementSort" title="@sr["Move Down"]"><i class="fas fa-sort-down fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="border p-2 mb-2">
+            <legend class="w-auto">@sr["Add a New Link"]</legend>
+
+            <div class="mb-3">
+                <label for="NewTitle">@sr["Link Title - required"]</label>
+                <input id="NewTitle" class="form-control" data-bind="value: newItemTitle" />
+                <span class="invalid-feedback" data-bind='visible: newItemTitle.hasError, text: newItemTitle.validationMessage'> </span>
+            </div>
+            <div class="mb-3">
+                <label for="NewUrl">@sr["Link Url - required"]</label>
+                <input id="NewUrl" class="form-control" data-bind="value: newItemLinkUrl" />
+                <span class="invalid-feedback" data-bind='visible: newItemLinkUrl.hasError, text: newItemLinkUrl.validationMessage'> </span>
+            </div>
+            <div class="mb-3">
+                <label for="NewDescription">@sr["Link Description - optional"]</label>
+                <textarea id="NewDescription" class="form-control" data-bind="value: newItemDescription"></textarea>
+            </div>
+            <div class="mb-3 form-check">
+                <input data-bind="checked: newItemOpensInNewWindow" id="chkNewWindow" type="checkbox" class="form-check-input">
+                <label for="chkNewWindow" class="form-check-label">@sr["Opens in new window"]</label>
+            </div>
+            <label>@sr["Link Thumbnail - optional"]</label>
+
+            <div class="d-flex align-items-stretch mb-2">
+                <div class="cs-crop-container">
+                    <img id="dz1Image" style="max-width:350px;" src="/cr/images/350x250-placeholder.png" />
+                </div>
+                <div class="d-flex flex-column">
+                    <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                         data-dropzone=""
+                         data-upload-url="@Url.Action("DropFile", "FileManager")"
+                         data-anti-forgery-token="@tokens.RequestToken"
+                         data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                         data-file-crop-url="@ckOptions.CropFileUrl"
+                         data-target-path="@options.NewImagePath"
+                         data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                         data-resize-image="true"
+                         data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                         data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                         data-enable-crop="@options.EnableCropping"
+                         data-accepted-files="image/*"
+                         data-target-fullsize-input-id="imgUrlFull"
+                         data-target-resized-input-id=""
+                         data-target-thumb-input-id=""
+                         data-target-fullsize-image-id="dz1Image"
+                         data-target-resized-image-id=""
+                         data-target-thumb-image-id=""
+                         data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                         data-resized-placeholder-image=""
+                         data-thumb-placeholder-image=""
+                         data-resize-width="@options.ResizeMaxWidth"
+                         data-resize-height="@options.ResizeMaxHeight"
+                         data-crop-area-width="@options.CropAreaWidth"
+                         data-crop-area-height="@options.CropAreaHeight">
+                        @sr["Drop file here or click to browse device for file."]
+                    </div>
+                    <div class="ps-1 pt-1">
+                        <div class="d-flex flex-column">
+                            <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                            <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="imgUrlFull" type="hidden" />
+            <input id="imgUrlResized" type="hidden" />
+            
+            <div class="mb-3">
+                <label for="newAltText">@sr["Thumbnail AltText - optional"]</label>
+                <input id="newAltText" class="form-control" data-bind="value: newItemAltText" />
+            </div>
+            
+            <button data-bind="click: addNewItem, enable: isValidNewItemLink()" type="button" class="mb-1 btn btn-primary">@sr["Add Link"] <i class="fas fa-plus" aria-hidden="true"></i></button>
+            <span class="text-danger" data-bind="css: { collapse: isValidNewItemLink() } ">@sr["A link must have a title and a valid url."]</span>
+        </fieldset>
+        
+    </div>
+    <div class="tab-pane pt-2" id="tabTopContent" role="tabpanel" aria-labelledby="cedit-tab2">
+        <textarea asp-for="ContentAbove" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+    </div>
+    <div class="tab-pane pt-2" id="tabBottomContent" role="tabpanel" aria-labelledby="cedit-tab3">
+        <textarea asp-for="ContentBelow" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    </div>
+</div>
+<div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
+            </div>
+            <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
+        </div>
+    </div>
+</div>
+

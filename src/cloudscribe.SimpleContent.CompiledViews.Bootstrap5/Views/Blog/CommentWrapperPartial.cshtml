@@ -1,0 +1,23 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@if ((Model.CurrentPost != null) && (!string.IsNullOrEmpty(Model.CurrentPost.Id)) && (Model.ShowComments))
+{
+    @if ((Model.CommentsAreOpen) || (Model.CanEdit && Model.CurrentPost.CommentCount() > 0) || (Model.CurrentPost.ApprovedCommentCount() > 0))
+    {
+        <section id="comments" aria-label="Comments">
+            <h2>@sr["Comments"]</h2>
+            @foreach (var comment in Model.CurrentPost.Comments)
+            {
+                Model.TmpComment = comment;
+                if (comment.IsApproved || !Model.ProjectSettings.ModerateComments || Model.CanEdit)
+                {
+                    <partial name="CommentPartial" model="Model" />
+                }
+            }
+        </section>
+    }
+    @if (Model.CommentsAreOpen)
+    {
+        <partial name="CommentFormPartial" model="Model" />
+    }
+}

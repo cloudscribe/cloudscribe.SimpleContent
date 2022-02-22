@@ -1,0 +1,31 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject ISimpleContentThemeHelper themeHelper
+@inject IOptions<PageEditOptions> editOptionsAccessor
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+    var editOptions = editOptionsAccessor.Value;
+}
+
+@if (Model.CanEdit)
+{
+    <a id="pageManagerLink" href="@Model.PageTreePath" title="@sr["Manage Page Hierarchy"]" class="btn btn-sm content-tree">
+        <span class="@themeSettings.Icons.PageTree" aria-hidden="true"></span>
+    </a>
+    <a id="newPageLink" href="@Model.NewItemPath" title="@sr["New Page"]" class="btn btn-sm content-new">
+        <span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span>
+    </a>
+    @if (Model.CurrentPage != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.Id))
+    {
+        <a id="editPageLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit">
+            <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
+        </a>
+    }
+    @if (!editOptions.HideUnpublishButton && Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
+    {
+        <a id="unpublishPageLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:160px;right:0px;" data-bs-toggle="modal" data-bs-target="#confirmUnpublishModal">
+            <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>
+        </a>
+    }
+
+}

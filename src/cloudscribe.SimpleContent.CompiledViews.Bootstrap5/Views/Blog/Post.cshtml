@@ -1,0 +1,39 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@{
+    var disqusCommentCountScriptPath = "//" + Model.ProjectSettings.DisqusShortName + ".disqus.com/count.js";
+    ViewData["AsidePrimaryVisible"] = true;
+    ViewData["AsidePrimaryToggle"] = "show";
+}
+@section Meta {
+    <partial name="BlogMetaPartial" model="@Model" />
+}
+@section Styles {
+    <partial name="BlogStylePartial" model="@Model" />
+    <partial name="CommentStylePartial" />
+}
+@section Toolbar {
+   
+    <partial name="ToolsPartial" model="@Model" />
+    
+}
+@if (Model.ProjectSettings.ShowTitle)
+{
+    <partial name="BlogHeaderPartial" model="@Model.ProjectSettings" />
+}
+<div itemscope itemtype="http://schema.org/Blog" class="blogroot">
+    <partial name="PostDetailPartial" model="@Model" />
+</div>
+@section AsidePrimary {
+    <partial name="SideBarPartial" model="@Model" />
+}
+@section Scripts {
+    @if (!string.IsNullOrEmpty(Model.ProjectSettings.DisqusShortName))
+    {
+        <script id="dsq-count-scr" src="@disqusCommentCountScriptPath" async></script>
+    }
+    else if (Model.CommentsAreOpen)
+    {
+        <partial name="CommentScriptsPartial" />
+    }
+    <partial name="BlogScriptsPartial" model="@Model" />
+}

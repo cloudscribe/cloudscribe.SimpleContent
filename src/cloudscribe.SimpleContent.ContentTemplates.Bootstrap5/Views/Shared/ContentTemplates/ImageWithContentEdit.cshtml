@@ -1,0 +1,101 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ImageWithContentViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using Microsoft.AspNetCore.Antiforgery
+@using Newtonsoft.Json;
+@using System.Net
+@inject IStringLocalizer<ContentTemplateResources> sr
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IImageWithContentOptionsProvider optionsProvider
+@{
+
+    var tokens = antiforgery.GetAndStoreTokens(Context);
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var options = await optionsProvider.ResolveImageWithContentOptions(Context.Request.Host.Host, Context.Request.Path);
+
+}
+@functions{
+    public string GetImageUrl(string imageUrl)
+    {
+        if (!string.IsNullOrWhiteSpace(imageUrl)) { return imageUrl; }
+        return "/cr/images/690x517-placeholder.png";
+    }
+}
+<div class="d-flex align-items-stretch">
+    <div class="cs-crop-container">
+        <img id="dz1Image" style="max-width:690px;" src="@GetImageUrl(Model.ResizedUrl)" />
+    </div>
+    <div class="d-flex flex-column">
+        <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+             data-dropzone=""
+             data-upload-url="@Url.Action("DropFile", "FileManager")"
+             data-anti-forgery-token="@tokens.RequestToken"
+             data-file-browse-url="@ckOptions.ImageBrowseUrl"
+             data-file-crop-url="@ckOptions.CropFileUrl"
+             data-target-path="@options.NewImagePath"
+             data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+             data-resize-image="true"
+             data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+             data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+             data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+             data-accepted-files="image/*"
+             data-target-fullsize-input-id="FullSizeUrl"
+             data-target-resized-input-id="ResizedUrl"
+             data-target-thumb-input-id=""
+             data-target-fullsize-image-id="dz1Image"
+             data-target-resized-image-id=""
+             data-target-thumb-image-id=""
+             data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+             data-resized-placeholder-image=""
+             data-thumb-placeholder-image=""
+             data-resize-width="@options.ResizeMaxWidth"
+             data-resize-height="@options.ResizeMaxHeight"
+             data-crop-area-width="@options.CropAreaWidth"
+             data-crop-area-height="@options.CropAreaHeight"
+             >
+            @sr["Drop file here or click to browse device for file."]
+        </div>
+        <div class="ps-1 pt-1">
+            <div class="d-flex flex-column">
+                <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<input asp-for="FullSizeUrl" type="hidden" />
+<input asp-for="ResizedUrl" type="hidden" />
+<div class="mb-3">
+    <label asp-for="AltText">@sr["Image Description"]</label>
+    <input asp-for="AltText" class="form-control" />
+</div>
+<div class="mb-3 row">
+    <label asp-for="Layout" class="control-label col-md-1 ps-5">@sr["Layout"]</label>
+    <div class="col-md-11">
+        <select asp-for="Layout" class="form-control">
+            <option value="ImageOnLeft">@sr["Image floated left"]</option>
+            <option value="ImageOnRight">@sr["Image floated right"]</option>
+            <option value="ImageNotFloated">@sr["Image not floated"]</option>
+        </select>
+    </div>
+</div>
+<label asp-for="Content">@sr["Content"]</label>
+<textarea asp-for="Content" class="form-control"
+          data-ckeditor-unobtrusive=""
+          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+          data-ckeditor-config-language="@ckOptions.LanguageCode"
+          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+<div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
+            </div>
+            <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.ListWithContentModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using cloudscribe.SimpleContent.ContentTemplates.ViewModels
+@inject IStringLocalizer<ContentTemplateResources> sr
+@inject ILinkListOptionsProvider optionsProvider
+@{
+    Layout = "_LayoutEmpty";
+}
+<partial name="LinksRenderPartial" model="@Model" />

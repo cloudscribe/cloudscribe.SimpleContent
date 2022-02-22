@@ -1,0 +1,669 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.EverythingModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using Microsoft.AspNetCore.Antiforgery
+@using Newtonsoft.Json;
+@using System.Net
+@inject IStringLocalizer<ContentTemplateResources> sr
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IColumnTemplateOptionsProvider optionsProvider
+@inject IGalleryOptionsProvider galleryOptionsProvider
+@{
+    var tokens = antiforgery.GetAndStoreTokens(Context);
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var options = await optionsProvider.ResolveColumnTemplateOptions(Context.Request.Host.Host, Context.Request.Path);
+    var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
+    int i = 1;
+    foreach (var item in sorted)
+    {
+        item.Sort = i;
+        i += 2;
+    }
+    var itemsJson = WebUtility.UrlEncode(JsonConvert.SerializeObject(sorted, Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Include, }));
+    var galleryOptions = await galleryOptionsProvider.ResolveGalleryOptions(Context.Request.Host.Host, Context.Request.Path);
+
+}
+@functions{
+    public string GetImageUrl(string imageUrl)
+    {
+        if (!string.IsNullOrWhiteSpace(imageUrl)) { return imageUrl; }
+        return "/cr/images/690x517-placeholder.png";
+    }
+}
+<p>@sr["Sections with no content body will not be shown even if they have images."]</p>
+<partial name="EverythingTopSectionsLayoutSelector" model="Model" />
+<partial name="EverythingBottomSectionsLayoutSelector" model="Model" />
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a id="cedit-tab1" class="nav-link active" href="#tabCol1" data-bs-toggle="tab" role="tab" aria-controls="tabCol1" aria-selected="true">@sr["Section 1"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab2" class="nav-link" href="#tabCol2" data-bs-toggle="tab" role="tab" aria-controls="tabCol2" aria-selected="false">@sr["Section 2"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab3" class="nav-link" href="#tabCol3" data-bs-toggle="tab" role="tab" aria-controls="tabCol3" aria-selected="false">@sr["Section 3"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab4" class="nav-link" href="#tabCol4" data-bs-toggle="tab" role="tab" aria-controls="tabCol4" aria-selected="false">@sr["Section 4"]</a>
+    </li>
+
+    <li class="nav-item">
+        <a id="cedit-tabgal" class="nav-link" href="#tabGallery" data-bs-toggle="tab" role="tab" aria-controls="tabGallery" aria-selected="true">@sr["Gallery"]</a>
+    </li>
+
+    <li class="nav-item">
+        <a id="cedit-tab5" class="nav-link" href="#tabCol5" data-bs-toggle="tab" role="tab" aria-controls="tabCol5" aria-selected="true">@sr["Section 5"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab6" class="nav-link" href="#tabCol6" data-bs-toggle="tab" role="tab" aria-controls="tabCol6" aria-selected="false">@sr["Section 6"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab7" class="nav-link" href="#tabCol7" data-bs-toggle="tab" role="tab" aria-controls="tabCol7" aria-selected="false">@sr["Section 7"]</a>
+    </li>
+    <li class="nav-item">
+        <a id="cedit-tab8" class="nav-link" href="#tabCol8" data-bs-toggle="tab" role="tab" aria-controls="tabCol8" aria-selected="false">@sr["Section 8"]</a>
+    </li>
+
+</ul>
+<div id="myTabContent" class="tab-content">
+
+    <div class="tab-pane active" id="tabCol1" role="tabpanel" aria-labelledby="cedit-tab1">
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz1Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionOneResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz1" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionOneFullSizeUrl"
+                     data-target-resized-input-id="SectionOneResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz1Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz1-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz1-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionOneFullSizeUrl" type="hidden" />
+        <input asp-for="SectionOneResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionOneAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionOneAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionOneHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionOneHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionOneContent">@sr["Section 1 Content"]</label>
+        <textarea asp-for="SectionOneContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+    </div>
+
+    <div class="tab-pane" id="tabCol2" role="tabpanel" aria-labelledby="cedit-tab2">
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz2Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionTwoResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz2" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionTwoFullSizeUrl"
+                     data-target-resized-input-id="SectionTwoResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz2Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz2-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz2-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionTwoFullSizeUrl" type="hidden" />
+        <input asp-for="SectionTwoResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionTwoAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionTwoAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionTwoHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionTwoHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionTwoContent">@sr["Section 2 Content"]</label>
+        <textarea asp-for="SectionTwoContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+    </div>
+
+    <div class="tab-pane" id="tabCol3" role="tabpanel" aria-labelledby="cedit-tab3">
+
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz3Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionThreeResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz3" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionThreeFullSizeUrl"
+                     data-target-resized-input-id="SectionThreeResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz3Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz3-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz3-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionThreeFullSizeUrl" type="hidden" />
+        <input asp-for="SectionThreeResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionThreeAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionThreeAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionThreeHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionThreeHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionThreeContent">@sr["Section 3 Content"]</label>
+        <textarea asp-for="SectionThreeContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    </div>
+
+    <div class="tab-pane" id="tabCol4" role="tabpanel" aria-labelledby="cedit-tab4">
+
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz4Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionFourResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz4" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionFourFullSizeUrl"
+                     data-target-resized-input-id="SectionFourResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz4Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz4-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz4-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionFourFullSizeUrl" type="hidden" />
+        <input asp-for="SectionFourResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionFourAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionFourAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionFourHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionFourHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionFourContent">@sr["Section 4 Content"]</label>
+        <textarea asp-for="SectionFourContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    </div>
+
+    <div class="tab-pane pt-2" id="tabGallery" role="tabpanel" aria-labelledby="cedit-tabgal">
+        <input id="ItemsConfig" type="hidden" value="@itemsJson" />
+        <input id="ItemsJson" type="hidden" name="ItemsJson" data-bind="value: currentListState()" />
+        <partial name="EverythingGalleryLayoutSelector" model="Model" />
+        <div class="mb-3">
+            <label asp-for="CarouselIntervalInMilliseconds">@sr["Carousel slide interval in milliseconds"]</label>
+            <input asp-for="CarouselIntervalInMilliseconds" class="form-control" />
+            <span asp-validation-for="CarouselIntervalInMilliseconds" class="text-danger"></span>
+        </div>
+        <fieldset class="border p-2 mb-2">
+            <legend class="w-auto">@sr["Current Images"]</legend>
+            <div data-bind="visible: Items().length === 0">
+                @sr["No images have been added yet, drop or browse images below to add your first image, then click the button to add it to the gallery."]
+            </div>
+            <div id="itemsEditList" style="max-width:775px" data-bind="foreach: Items">
+                <div class="row">
+                    <div class="col-3">
+                        <img style="max-width:200px;max-height:150px;" data-bind="attr: { src: ResizedUrl }, visible: ThumbnailUrl !== undefined" />
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" title="@sr["Title"]" data-bind="value: Title" placeholder="@sr["Title"]" />
+                        <textarea class="form-control" style="height:110px;" title="@sr["Description"]" placeholder="@sr["Description"]" data-bind="value: Description"></textarea>
+                    </div>
+                    <div class="col-1">
+                        <a href="#" data-bind="click: $root.removeItem" title="@sr["Delete"]"><i class="fa fa-trash-o far fa-trash-alt fa-2x"></i></a> <br /><br />
+                        <a href="#" data-bind="click: decrementSort, visible: Sort() > 0" title="@sr["Move Up"]"><i class="fas fa-sort-up fa-2x"></i></a>
+                        <a href="#" data-bind="click: incrementSort" title="@sr["Move Down"]"><i class="fas fa-sort-down fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="border p-2 mb-2">
+            <legend class="w-auto">@sr["Add New Image"]</legend>
+            <div class="d-flex align-items-stretch">
+                <div class="cs-crop-container">
+                    <img id="dzGalImage" style="max-width:690px;" src="@options.PlaceholderImageUrl" />
+                </div>
+                <div class="d-flex flex-column">
+                    <div id="dzGal" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                         data-dropzone=""
+                         data-upload-url="@Url.Action("DropFile", "FileManager")"
+                         data-anti-forgery-token="@tokens.RequestToken"
+                         data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                         data-file-crop-url="@ckOptions.CropFileUrl"
+                         data-target-path="@galleryOptions.NewImagePath"
+                         data-create-thumb="@galleryOptions.CreateThumbnails.ToString().ToLower()"
+                         data-resize-image="true"
+                         data-keep-original="@galleryOptions.KeepOriginalSizeImages.ToString().ToLower()"
+                         data-enable-browse-server="@galleryOptions.EnableBrowseServer.ToString().ToLower()"
+                         data-enable-crop="@galleryOptions.EnableCropping.ToString().ToLower()"
+                         data-accepted-files="image/*"
+                         data-target-fullsize-input-id="galImgUrlFull"
+                         data-target-resized-input-id="galImgUrlResized"
+                         data-target-thumb-input-id="galImgUrlThumb"
+                         data-target-fullsize-image-id="dzGalImage"
+                         data-target-resized-image-id=""
+                         data-target-thumb-image-id=""
+                         data-fullsize-placeholder-image="@galleryOptions.PlaceholderImageUrl"
+                         data-resized-placeholder-image=""
+                         data-thumb-placeholder-image=""
+                         data-resize-width="@galleryOptions.ResizeMaxWidth"
+                         data-resize-height="@galleryOptions.ResizeMaxHeight"
+                         data-crop-area-width="@options.CropAreaWidth"
+                         data-crop-area-height="@galleryOptions.CropAreaHeight">
+                        @sr["Drop file here or click to browse device for file."]
+                    </div>
+                    <div class="ps-1 pt-1">
+                        <div class="d-flex flex-column">
+                            <button id="dzGal-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                            <button id="dzGal-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                            <button data-bind="click: addNewItem, visible: newItemResizedUrl() !== null" type="button" class="mb-1 btn btn-primary">@sr["Add To Gallery"] <i class="fas fa-plus" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input id="galImgUrlFull" type="hidden" />
+            <input id="galImgUrlResized" type="hidden" />
+            <input id="galImgUrlThumb" type="hidden" />
+        </fieldset>
+    </div>
+
+    <div class="tab-pane" id="tabCol5" role="tabpanel" aria-labelledby="cedit-tab5">
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz5Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionFiveResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz5" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionFiveFullSizeUrl"
+                     data-target-resized-input-id="SectionFiveResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz5Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz5-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz5-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionFiveFullSizeUrl" type="hidden" />
+        <input asp-for="SectionFiveResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionFiveAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionFiveAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionFiveHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionFiveHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionFiveContent">@sr["Section 5 Content"]</label>
+        <textarea asp-for="SectionFiveContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+    </div>
+
+    <div class="tab-pane" id="tabCol6" role="tabpanel" aria-labelledby="cedit-tab6">
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz6Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionSixResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz6" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionSixFullSizeUrl"
+                     data-target-resized-input-id="SectionSixResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz6Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz6-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz6-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionSixFullSizeUrl" type="hidden" />
+        <input asp-for="SectionSixResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionSixAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionSixAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionSixHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionSixHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionSixContent">@sr["Section 6 Content"]</label>
+        <textarea asp-for="SectionSixContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+    </div>
+
+    <div class="tab-pane" id="tabCol7" role="tabpanel" aria-labelledby="cedit-tab7">
+
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz7Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionSevenResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz7" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionSevenFullSizeUrl"
+                     data-target-resized-input-id="SectionSevenResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz7Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz7-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz7-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionSevenFullSizeUrl" type="hidden" />
+        <input asp-for="SectionSevenResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionSevenAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionSevenAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionSevenHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionSevenHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionSevenContent">@sr["Section 7 Content"]</label>
+        <textarea asp-for="SectionSevenContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    </div>
+
+    <div class="tab-pane" id="tabCol8" role="tabpanel" aria-labelledby="cedit-tab8">
+
+        <div class="d-flex align-items-stretch">
+            <div class="cs-crop-container">
+                <img id="dz8Image" style="max-width:690px;" src="@GetImageUrl(Model.SectionEightResizedUrl)" />
+            </div>
+            <div class="d-flex flex-column">
+                <div id="dz8" class="cloudscribe-dropzone-standalone" style="cursor:pointer;"
+                     data-dropzone=""
+                     data-upload-url="@Url.Action("DropFile", "FileManager")"
+                     data-anti-forgery-token="@tokens.RequestToken"
+                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
+                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-target-path="@options.NewImagePath"
+                     data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
+                     data-resize-image="true"
+                     data-keep-original="@options.KeepOriginalSizeImages.ToString().ToLower()"
+                     data-enable-browse-server="@options.EnableBrowseServer.ToString().ToLower()"
+                     data-enable-crop="@options.EnableCropping.ToString().ToLower()"
+                     data-accepted-files="image/*"
+                     data-target-fullsize-input-id="SectionEightFullSizeUrl"
+                     data-target-resized-input-id="SectionEightResizedUrl"
+                     data-target-thumb-input-id=""
+                     data-target-fullsize-image-id="dz8Image"
+                     data-target-resized-image-id=""
+                     data-target-thumb-image-id=""
+                     data-fullsize-placeholder-image="@options.PlaceholderImageUrl"
+                     data-resized-placeholder-image=""
+                     data-thumb-placeholder-image=""
+                     data-resize-width="@options.ResizeMaxWidth"
+                     data-resize-height="@options.ResizeMaxHeight"
+                     data-crop-area-width="@options.CropAreaWidth"
+                     data-crop-area-height="@options.CropAreaHeight">
+                    @sr["Drop file here or click to browse device for file."]
+                </div>
+                <div class="ps-1 pt-1">
+                    <div class="d-flex flex-column">
+                        <button id="dz8-browse-server" type="button" class="mb-1 btn btn-primary collapse">@sr["Browse Server"] <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button id="dz8-save-crop" type="button" class="mb-1 btn btn-primary collapse">@sr["Save Crop"] <i class="far fa-save" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input asp-for="SectionEightFullSizeUrl" type="hidden" />
+        <input asp-for="SectionEightResizedUrl" type="hidden" />
+        <div class="mb-3">
+            <label asp-for="SectionEightAltText">@sr["Image Description"]</label>
+            <input asp-for="SectionEightAltText" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="SectionEightHeading">@sr["Section Heading - optional"]</label>
+            <input asp-for="SectionEightHeading" class="form-control" />
+        </div>
+        <label asp-for="SectionEightContent">@sr["Section 8 Content"]</label>
+        <textarea asp-for="SectionEightContent" class="form-control"
+                  data-ckeditor-unobtrusive=""
+                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+                  data-ckeditor-config-language="@ckOptions.LanguageCode"
+                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    </div>
+
+
+
+</div>
+
+<div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
+            </div>
+            <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 650px;"></iframe>
+        </div>
+    </div>
+</div>

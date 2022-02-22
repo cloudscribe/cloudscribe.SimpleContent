@@ -1,0 +1,24 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject IContentTemplateService templateService;
+@{
+    string dynamicViewName = null;
+    object templateModel = null;
+    if (Model.CurrentPost != null && !string.IsNullOrWhiteSpace(Model.CurrentPost.TemplateKey))
+    {
+        var template = await templateService.GetTemplate(Model.CurrentPost.BlogId, Model.CurrentPost.TemplateKey);
+        if (template != null && !string.IsNullOrWhiteSpace(template.DynamicRenderPartialView))
+        {
+            templateModel = templateService.DesrializeTemplateModel(Model.CurrentPost, template);
+            dynamicViewName = template.DynamicRenderPartialView;
+        }
+    }
+}
+@if (templateModel != null && !string.IsNullOrWhiteSpace(dynamicViewName))
+{
+    <partial name="@dynamicViewName" model="@templateModel" />
+}
+else
+{
+    <div itemprop="articleBody">@Html.Raw(Model.FilterHtml(Model.CurrentPost))</div>
+}

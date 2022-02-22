@@ -1,0 +1,13 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageTreeViewModel
+@inject IStringLocalizer<SimpleContent> sr
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+}
+@section Styles {
+    <partial name="TreeStylePartial" />
+}
+<partial name="TreeMainPartial" model="Model" />
+@section Scripts {
+    <partial name="TreeScriptsPartial" />
+}

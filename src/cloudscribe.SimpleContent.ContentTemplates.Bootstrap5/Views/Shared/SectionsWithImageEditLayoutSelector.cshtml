@@ -1,0 +1,12 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.SectionsWithImageViewModel
+@using cloudscribe.SimpleContent.ContentTemplates
+@inject IStringLocalizer<ContentTemplateResources> sr
+<div class="mb-3 row">
+    <label asp-for="Layout" class="control-label col-md-1 ps-5">@sr["Layout"]</label>
+    <div class="col-md-11">
+        <select asp-for="Layout" class="form-control">
+            <option value="SectionsWithImageRenderColumnsPartial">@sr["Responsive equal width columns"]</option>
+            <option value="SectionsWithImageRenderFloatedImagesPartial">@sr["Sections with floated images alternating sides"]</option>
+        </select>
+    </div>
+</div>

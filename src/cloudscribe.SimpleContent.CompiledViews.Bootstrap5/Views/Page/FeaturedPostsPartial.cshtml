@@ -1,0 +1,9 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
+@inject ISimpleContentThemeHelper themeHelper
+@{
+    var themeSettings = themeHelper.GetThemeSettings();
+}
+@if (Model.ProjectSettings.ShowFeaturedPostsOnDefaultPage && Model.CurrentPage != null && Model.CurrentPage.Slug == Model.ProjectSettings.DefaultPageSlug)
+{
+    @await Component.InvokeAsync("FeaturedPosts", new { viewName = "FeaturedPosts", numberToShow = themeSettings.NumberOfFeaturedPostsToShow })
+}
