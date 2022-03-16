@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <Version>5.5.2</Version>
-    <TargetFramework>net5.0</TargetFramework>
+    <Version>6.0.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog,content</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
@@ -37,21 +37,22 @@
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.1" />
-    <PackageReference Include="cloudscribe.Versioning" Version="1.0.0" />
     
-    <PackageReference Include="cloudscribe.Email.Senders" Version="2.0.4" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="5.0.0" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="5.0.1" />
-    <PackageReference Include="cloudscribe.Web.Pagination" Version="5.0.0" />
-    <PackageReference Include="cloudscribe.DateTimeUtils" Version="5.0.0" />
-    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="5.0.0" />
+    <PackageReference Include="cloudscribe.Versioning" Version="6.0.0" />
     
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />  
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+    <PackageReference Include="cloudscribe.Email.Senders" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.DateTimeUtils" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="6.0.0" />
+    
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />  
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
   
     <PackageReference Include="Markdig" Version="0.16.0" />
 

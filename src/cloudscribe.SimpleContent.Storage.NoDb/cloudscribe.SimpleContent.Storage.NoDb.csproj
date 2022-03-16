@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Storage implemented with NoDb file system storage</Description>
-    <Version>5.5.0</Version>
-    <TargetFramework>net5.0</TargetFramework>
+    <Version>6.0.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog;json</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
@@ -25,8 +25,8 @@
     <PackageReference Include="NoDb" Version="1.2.1" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
 
-    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
 </Project>
