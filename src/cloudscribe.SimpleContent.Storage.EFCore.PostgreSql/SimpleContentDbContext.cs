@@ -10,6 +10,7 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql
 {
@@ -17,10 +18,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql
     {
         public SimpleContentDbContext(DbContextOptions<SimpleContentDbContext> options) : base(options)
         {
-
+            // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
-        protected SimpleContentDbContext() { }
+        protected SimpleContentDbContext() { }   // AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);  }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
