@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>MSSQL Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <Version>5.5.0</Version>
-    <TargetFramework>net5.0</TargetFramework>
+    <Version>6.0.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;commands;queries;ef</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

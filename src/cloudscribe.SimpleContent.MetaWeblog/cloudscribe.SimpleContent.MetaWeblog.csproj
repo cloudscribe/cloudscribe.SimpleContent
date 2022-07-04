@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.MetaWeblog Class Library</Description>
-    <Version>5.5.0</Version>
-    <TargetFramework>net5.0</TargetFramework>
+    <Version>6.0.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;metaweblog;blog;cms</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
@@ -25,11 +25,10 @@
 
   <ItemGroup>
 
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-    <PackageReference Include="cloudscribe.DateTimeUtils" Version="5.0.0" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="5.0.0" />
-    
-    <PackageReference Include="cloudscribe.Versioning" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.DateTimeUtils" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="6.0.0" />
+    <PackageReference Include="cloudscribe.Versioning" Version="6.0.0" />
     
   </ItemGroup>
  

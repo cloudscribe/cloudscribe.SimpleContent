@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>Content utilities for html and markdown</Description>
-    <Version>5.0.0</Version>
-    <TargetFramework>net5.0</TargetFramework>
+    <Version>6.0.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog,content</PackageTags>
     <PackageIcon>icon.png</PackageIcon>

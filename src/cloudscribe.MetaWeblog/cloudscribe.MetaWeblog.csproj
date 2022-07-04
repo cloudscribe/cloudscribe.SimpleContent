@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>a re-useable implementation of the metaweblog api for asp.net core</Description>
-    <Version>5.5.0</Version>
-    <TargetFramework>net5.0</TargetFramework>
+    <Version>6.0.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;metaweblog;api;asp.net core</PackageTags>
     <PackageIcon>icon.png</PackageIcon>

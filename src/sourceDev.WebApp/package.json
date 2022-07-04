@@ -22,7 +22,6 @@
     "gulp-concat": "latest",
     "gulp-connect": "latest",
     "merge-stream": "latest",
-    "node-sass": "^4.5.3",
     "sass-loader": "^6.0.6",
     "smartmenus": "^1.1.0",
     "smartmenus-bootstrap-4": "^0.1.0",
@@ -55,7 +54,8 @@
     "react-redux": "5.0.5",
     "react-router-redux": "5.0.0-alpha.6",
     "redux": "3.7.1",
-    "redux-thunk": "2.2.0"
+    "redux-thunk": "2.2.0",
+    "sass": "^1.53.0"
   },
   "scripts": {
     "build": "webpack",
