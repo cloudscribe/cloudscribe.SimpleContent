@@ -8,8 +8,8 @@
     }
     @if (!string.IsNullOrWhiteSpace(Model.SectionOneResizedUrl))
     {
-        <div class="float-md-right simple-side-image ms-md-2">
-            <img class="image-responsive" src="@Model.SectionOneResizedUrl" alt="@Model.SectionOneAltText" />
+        <div class="float-md-end simple-side-image ms-md-2">
+            <img class="img-fluid" src="@Model.SectionOneResizedUrl" alt="@Model.SectionOneAltText" />
         </div>
     }
     @Html.Raw(Model.SectionOneContent)
@@ -25,8 +25,8 @@
     }
     @if (!string.IsNullOrWhiteSpace(@Model.SectionTwoResizedUrl))
     {
-        <div class="float-md-left simple-side-image me-md-2">
-            <img class="image-responsive" src="@Model.SectionTwoResizedUrl" alt="@Model.SectionTwoAltText" />
+        <div class="float-md-start simple-side-image me-md-2">
+            <img class="img-fluid" src="@Model.SectionTwoResizedUrl" alt="@Model.SectionTwoAltText" />
         </div>
     }
     @Html.Raw(Model.SectionTwoContent)
@@ -42,8 +42,8 @@
     }
     @if (!string.IsNullOrWhiteSpace(Model.SectionThreeResizedUrl))
     {
-        <div class="float-md-right simple-side-image ms-md-2">
-            <img class="image-responsive" src="@Model.SectionThreeResizedUrl" alt="@Model.SectionThreeAltText" />
+        <div class="float-md-end simple-side-image ms-md-2">
+            <img class="img-fluid" src="@Model.SectionThreeResizedUrl" alt="@Model.SectionThreeAltText" />
         </div>
     }
     @Html.Raw(Model.SectionThreeContent)
@@ -59,8 +59,8 @@
     }
     @if (!string.IsNullOrWhiteSpace(Model.SectionFourResizedUrl))
     {
-        <div class="float-md-left simple-side-image me-md-2">
-            <img class="image-responsive" src="@Model.SectionFourResizedUrl" alt="@Model.SectionFourAltText" />
+        <div class="float-md-start simple-side-image me-md-2">
+            <img class="img-fluid" src="@Model.SectionFourResizedUrl" alt="@Model.SectionFourAltText" />
         </div>
     }
     @Html.Raw(Model.SectionFourContent)

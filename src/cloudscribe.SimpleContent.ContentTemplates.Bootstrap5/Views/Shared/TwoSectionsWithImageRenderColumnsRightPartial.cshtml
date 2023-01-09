@@ -41,7 +41,7 @@
         <div class="@GetLeftCssClass(columnCount)">
             @if (!string.IsNullOrWhiteSpace(Model.SectionOneResizedUrl))
             {
-                <img src="@Model.SectionOneResizedUrl" class="image-responsive mb-1" alt="@Model.SectionOneAltText" />
+                <img src="@Model.SectionOneResizedUrl" class="img-fluid mb-1" alt="@Model.SectionOneAltText" />
             }
             @if (!string.IsNullOrWhiteSpace(Model.SectionOneHeading))
             {
@@ -55,7 +55,7 @@
         <div class="@GetRightCssClass(columnCount)">
             @if (!string.IsNullOrWhiteSpace(Model.SectionTwoResizedUrl))
             {
-                <img src="@Model.SectionTwoResizedUrl" class="image-responsive mb-1" alt="@Model.SectionTwoAltText" />
+                <img src="@Model.SectionTwoResizedUrl" class="img-fluid mb-1" alt="@Model.SectionTwoAltText" />
             }
             @if (!string.IsNullOrWhiteSpace(Model.SectionTwoHeading))
             {
