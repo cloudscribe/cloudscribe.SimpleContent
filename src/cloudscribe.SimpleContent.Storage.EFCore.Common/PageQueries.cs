@@ -104,6 +104,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             using (var dbContext = _contextFactory.CreateContext())
             {
                 return await dbContext.Pages
+                .Include(p => p.PageResources)
                 .AsNoTracking()
                 .Where(p =>
                 p.ProjectId == projectId
@@ -129,6 +130,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             using (var dbContext = _contextFactory.CreateContext())
             {
                 return await dbContext.Pages
+                .Include(p => p.PageResources)
                 .AsNoTracking()
                 .Where(p =>
                 p.ParentId == pageId && p.ProjectId == projectId
@@ -173,6 +175,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             using (var dbContext = _contextFactory.CreateContext())
             {
                 return await dbContext.Pages
+               .Include(p => p.PageResources)
                .AsNoTracking()
                .Where(p =>
                p.CorrelationKey == correlationKey && p.ProjectId == projectId)
