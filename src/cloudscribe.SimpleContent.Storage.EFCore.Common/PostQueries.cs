@@ -165,6 +165,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 var posts = await query
                     .AsNoTracking()
+                    .AsSingleQuery()
                     .Skip(offset)
                     .Take(pageSize)
                     .ToListAsync<IPost>(cancellationToken)
@@ -336,6 +337,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 int offset = (pageSize * pageNumber) - pageSize;
                 var posts = await query
                     .AsNoTracking()
+                    .AsSingleQuery()
                     .Skip(offset)
                     .Take(pageSize)
                     .ToListAsync<IPost>();
@@ -453,6 +455,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                     result.PreviousPost = await db.Posts
                         .AsNoTracking()
+                        .AsSingleQuery()
                         .Where(p =>
                         p.BlogId == blogId
                         && p.PubDate < cutoff
@@ -464,6 +467,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                     result.NextPost = await db.Posts
                         .AsNoTracking()
+                        .AsSingleQuery()
                         .Where(p =>
                         p.BlogId == blogId
                         && p.PubDate > cutoff
