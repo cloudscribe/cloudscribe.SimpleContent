@@ -61,7 +61,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
                     .Take(pageSize)
                     ;
 
-                result.Data = await query.AsNoTracking().ToListAsync<ContentHistory>(cancellationToken).ConfigureAwait(false);
+                result.Data = await query.AsNoTracking().AsSingleQuery().ToListAsync<ContentHistory>(cancellationToken).ConfigureAwait(false);
                 result.TotalItems = await _db.ContentHistory
                     .Where(x =>
                         x.ProjectId == projectId
@@ -108,7 +108,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Common
                     .Take(pageSize)
                     ;
 
-                result.Data = await query.AsNoTracking().ToListAsync<ContentHistory>(cancellationToken).ConfigureAwait(false);
+                result.Data = await query.AsNoTracking().AsSingleQuery().ToListAsync<ContentHistory>(cancellationToken).ConfigureAwait(false);
                 result.TotalItems = await _db.ContentHistory
                     .Where(x =>
                         x.ProjectId == projectId
