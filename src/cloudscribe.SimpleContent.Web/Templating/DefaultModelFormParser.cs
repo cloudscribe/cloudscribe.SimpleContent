@@ -95,7 +95,12 @@ namespace cloudscribe.SimpleContent.Web.Templating
                         {
                             if (!string.IsNullOrWhiteSpace(formVal))
                             {
-                                prop.SetValue(model, Convert.ToBoolean(formVal), null);
+                                // tag helpers for bool checkboxes send back "true,false"
+
+                                if(formVal.ToLower().Contains("true"))
+                                    prop.SetValue(model, true, null);
+                                else
+                                    prop.SetValue(model, false, null);
                             }      
                         }
                         else if (prop.PropertyType == typeof(Guid?) || prop.PropertyType == typeof(Guid))
