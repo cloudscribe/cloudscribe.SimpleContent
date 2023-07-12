@@ -32,23 +32,6 @@ div.blogcontainer {
 }
     */
 
-
-header.blog-header {
-    border: none;
-    text-align: center;
-    margin: 0 0 3em 0;
-}
-
-header.blog-header a {
-        font-size: 4em;
-        /*color: #000;*/
-    }
-
-
-
-
-
-
 /*#region Post */
 
 .post header h1 {
