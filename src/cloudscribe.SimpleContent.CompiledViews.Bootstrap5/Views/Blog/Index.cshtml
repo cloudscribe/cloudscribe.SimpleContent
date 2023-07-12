@@ -18,10 +18,8 @@
 @section Toolbar {
     <partial name="ToolsPartial" model="@Model" />
 }
-@if (Model.ProjectSettings.ShowTitle)
-{
-    <partial name="BlogHeaderPartial" model="@Model.ProjectSettings" />
-}
+<partial name="BlogHeaderPartial" model="@Model.ProjectSettings" />
+
 <div itemscope itemtype="http://schema.org/Blog" class="blogroot">
     <partial name="PostListPartial" model="@Model" />
 </div>
