@@ -3,7 +3,7 @@
 // Author:					Joe Audette
 // Created:					2016-08-31
 // Last Modified:			2019-02-11
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
@@ -53,7 +53,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return items;
             }
-            
+
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return list;
             }
-            
+
         }
 
         public async Task<List<IPost>> GetRelatedPosts(
@@ -115,7 +115,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                                 && p.IsPublished == true && p.PubDate <= currentTime
                                 && cats.Contains(pc.Value)
                                 select p;
-                    
+
                     var posts = await query
                         .AsNoTracking()
                         .OrderByDescending(x => x.PubDate)
@@ -178,7 +178,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return result;
             }
-            
+
         }
 
         public async Task<int> GetCount(
@@ -212,7 +212,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     );
                 }
             }
-            
+
         }
 
         public async Task<List<IPost>> GetRecentPosts(
@@ -241,7 +241,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     .ToListAsync<IPost>()
                     .ConfigureAwait(false);
             }
-            
+
         }
 
         public async Task<List<IPost>> GetFeaturedPosts(
@@ -271,7 +271,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     .ToListAsync<IPost>()
                     .ConfigureAwait(false);
             }
-            
+
         }
 
         public async Task<PagedPostResult> GetPosts(
@@ -286,7 +286,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             )
         {
             cancellationToken.ThrowIfCancellationRequested();
-            
+
             IQueryable<PostEntity> query;
             var currentTime = DateTime.UtcNow;
 
@@ -348,7 +348,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return result;
             }
-            
+
         }
 
         public async Task<int> GetCount(
@@ -403,7 +403,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return await query.CountAsync<PostEntity>().ConfigureAwait(false);
             }
-            
+
         }
 
 
@@ -481,7 +481,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return result;
             }
-            
+
         }
 
         public async Task<IPost> GetPostByCorrelationKey(
@@ -503,7 +503,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return post;
             }
-            
+
         }
 
         public async Task<bool> SlugIsAvailable(
@@ -523,7 +523,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return !isInUse;
             }
-            
+
         }
 
 
@@ -589,7 +589,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return sorted.OrderBy(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
             }
-            
+
         }
 
 
@@ -640,8 +640,45 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return sorted.OrderByDescending(x => x.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as Dictionary<string, int>;
             }
-            
+
         }
-        
+
+        // // the following queires are used by the content cloning tool
+        // // they are not used by the app itself
+
+        // public async Task<List<IPost>> GetAllPosts( CancellationToken cancellationToken = default(CancellationToken) )
+        // {
+        //     cancellationToken.ThrowIfCancellationRequested();
+
+        //     using (var db = _contextFactory.CreateContext())
+        //     {
+        //         var query = db.Posts.OrderBy(p => p.PubDate ?? p.LastModified);
+
+        //         var list = await query
+        //             .AsNoTracking()
+        //             .ToListAsync<IPost>(cancellationToken)
+        //             .ConfigureAwait(false);
+
+        //         return list;
+        //     }
+        // }
+
+        //     public async Task<List<PostCategory>> GetAllPostCategoriess( CancellationToken cancellationToken = default(CancellationToken) )
+        // {
+        //     cancellationToken.ThrowIfCancellationRequested();
+
+        //     using (var db = _contextFactory.CreateContext())
+        //     {
+        //         var query = db.PostCategories.OrderBy(p => p.PostEntityId);
+
+        //         var list = await query
+        //             .AsNoTracking()
+        //             .ToListAsync<PostCategory>(cancellationToken)
+        //             .ConfigureAwait(false);
+
+        //         return list;
+        //     }
+        // }
+
     }
 }

@@ -3,7 +3,7 @@
 // Author:                  Joe Audette
 // Created:                 2016-04-24
 // Last Modified:           2018-07-27
-// 
+//
 
 
 using cloudscribe.SimpleContent.Models;
@@ -26,7 +26,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         }
 
         private IBasicQueries<Page> _query;
-        
+
 
         public async Task<List<IPage>> GetAllPages(
             string projectId,
@@ -39,7 +39,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var list = l.ToList();
             var result = new List<IPage>();
             result.AddRange(list);
-            
+
             return result;
         }
 
@@ -148,20 +148,21 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             p.ParentId == pageId
                      && (includeUnpublished || (p.IsPublished && p.PubDate <= DateTime.UtcNow))
                       ).ToList<IPage>();
-            
+
             return list.Count();
         }
 
-        // not implemented, do we need categories for pages?
-        //public Task<int> GetCount(
-        //    string projectId,
-        //    string category,
-        //    bool userIsBlogOwner,
-        //    CancellationToken cancellationToken = default(CancellationToken)
-        //    )
-        //{
-        //    return Task.FromResult(0);
-        //}
+        public async Task<int> GetCount(
+            string projectId,
+            bool includeUnpublished,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var list = await GetAllPages(projectId, cancellationToken).ConfigureAwait(false);
+            if(!includeUnpublished) list = list.Where(p => p.IsPublished && p.PubDate <= DateTime.UtcNow).ToList<IPage>();
+            return list.Count();
+        }
 
         //public Task<Dictionary<string, int>> GetCategories(
         //    string projectId,

@@ -3,7 +3,7 @@
 // Author:					Joe Audette
 // Created:					2016-08-31
 // Last Modified:			2018-10-09
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
@@ -45,7 +45,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return items;
             }
-            
+
         }
 
         public async Task<List<IPage>> GetPagesReadyForPublish(
@@ -71,7 +71,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return items;
             }
-            
+
         }
 
         public async Task<IPage> GetPage(
@@ -91,7 +91,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .ConfigureAwait(false)
                 ;
             }
-            
+
         }
 
         public async Task<List<IPage>> GetRootPages(
@@ -116,7 +116,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .ConfigureAwait(false)
                 ;
             }
-            
+
         }
 
         public async Task<List<IPage>> GetChildPages(
@@ -140,7 +140,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .ConfigureAwait(false)
                 ;
             }
-            
+
         }
 
         public async Task<IPage> GetPageBySlug(
@@ -161,7 +161,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 .FirstOrDefaultAsync(cancellationToken)
                 .ConfigureAwait(false)
                 ;
-            } 
+            }
         }
 
         public async Task<IPage> GetPageByCorrelationKey(
@@ -202,7 +202,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 return !isInUse;
             }
-            
+
         }
 
         public async Task<int> GetChildPageCount(
@@ -230,16 +230,23 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             }
         }
 
-        // not implemented, do we need categories for pages?
-        //public Task<int> GetCount(
-        //    string projectId,
-        //    string category,
-        //    bool userIsBlogOwner,
-        //    CancellationToken cancellationToken = default(CancellationToken)
-        //    )
-        //{
-        //    return Task.FromResult(0);
-        //}
+        public async Task<int> GetCount(
+           string projectId,
+           bool includeUnpublished,
+           CancellationToken cancellationToken = default(CancellationToken)
+           )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using (var dbContext = _contextFactory.CreateContext())
+            {
+                var currentTime = DateTime.UtcNow;
+                return await dbContext.Pages.CountAsync<IPage>(x =>
+                    x.ProjectId == projectId
+                    && (includeUnpublished || (x.IsPublished == true && x.PubDate <= currentTime))
+                );
+            }
+        }
 
         //public Task<Dictionary<string, int>> GetCategories(
         //    string projectId,

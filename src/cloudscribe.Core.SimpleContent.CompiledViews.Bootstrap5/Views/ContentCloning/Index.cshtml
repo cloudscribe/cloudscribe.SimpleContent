@@ -1,0 +1,163 @@
+@using cloudscribe.Core.SimpleContent.Integration.ViewModels
+@model ContentCloningViewModel
+@inject ICoreThemeHelper themeHelper
+@inject IStringLocalizer<SimpleContent> sr
+@inject IOptions<ContentSettingsUIConfig> uiOptionsAccessor
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@{
+    var uiOptions = uiOptionsAccessor.Value;
+    var themeSettings = themeHelper.GetThemeSettings();
+    if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
+    ViewData["SideNavVisible"] = true;
+    var submitDisabled = Model.CloneAllowed? "" : "disabled";
+}
+<div class="row">
+    <h2>@ViewBag.Title</h2>
+</div>
+
+<form method="post"  role="form" asp-antiforgery="true" data-submit-once="true">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="mb-3">
+            <label asp-for="CloneFromSiteId" class="form-label">@sr["Clone From Site"]</label>
+            <select asp-for="CloneFromSiteId"
+                asp-items="@(new SelectList(Model.CloneFromSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteName)))"
+                class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
+                title='@sr["Choose a site that you wish to clone the content from"]'
+                onchange="this.form.submit();">
+                <option>@sr["Please select one"]</option>
+            </select>
+            <span asp-validation-for="CloneFromSiteId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3">
+            <label asp-for="CloneToSiteId" class="form-label">@sr["Clone To Site"]</label>
+            <select asp-for="CloneToSiteId"
+                asp-items="@(new SelectList(Model.CloneToSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteName)))"
+                class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
+                title='@sr["Choose a site that you wish to clone the content from"]'
+                onchange="this.form.submit();">
+                <option>@sr["Please select one"]</option>
+            </select>
+            <span asp-validation-for="CloneToSiteId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone all content pages"]'>
+            <input asp-for="ClonePages" class="form-check-input" />
+            <label asp-for="ClonePages" class="form-check-label">@sr["Clone Content Pages"]</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the page tree hierarchy"]'>
+            <input asp-for="ClonePageTree" class="form-check-input" />
+            <label asp-for="ClonePageTree" class="form-check-label">@sr["Clone Content Page Tree"]</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone any media files that have been uploaded to the source site"]'>
+            <input asp-for="CloneMediaFiles" class="form-check-input" />
+            <label asp-for="CloneMediaFiles" class="form-check-label">@sr["Clone Uploaded Media Files"]</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will rewrite any URLs that are embedded in the content that still reference the source site"]'>
+            <input asp-for="RewriteContentUrls" class="form-check-input" />
+            <label asp-for="RewriteContentUrls" class="form-check-label">@sr["Rewrite Content Urls"]</label>
+        </div>
+    </div>
+
+    @if (uiOptions.ShowBlogSettings)
+    {
+        <div class="mb-3">
+            <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the Blog and it's settings"]'>
+                <input asp-for="CloneBlog" class="form-check-input" />
+                <label asp-for="CloneBlog" class="form-check-label">@sr["Clone the Blog"]</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the Blog posts"]'>
+                <input asp-for="CloneBlogPosts" class="form-check-input" />
+                <label asp-for="CloneBlogPosts" class="form-check-label">@sr["Clone Blog Posts"]</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the About page content"]'>
+                <input asp-for="CloneAboutContent" class="form-check-input" />
+                <label asp-for="CloneAboutContent" class="form-check-label">@sr["Clone About Page Content"]</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone Feed Settings"]'>
+                <input asp-for="CloneFeedSettings" class="form-check-input" />
+                <label asp-for="CloneFeedSettings" class="form-check-label">@sr["Clone Feed Settings"]</label>
+            </div>
+        </div>
+    }
+
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the content editing history"]'>
+            <input asp-for="CloneContentHistory" class="form-check-input" />
+            <label asp-for="CloneContentHistory" class="form-check-label">@sr["Clone Content History"]</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button id="btnSave" type="button" class="btn btn-primary" @submitDisabled
+            data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Clone"]'
+            data-bs-toggle="modal" data-bs-target="#confirmCloneModal">@sr["Clone"]
+        </button>
+    </div>
+
+    <div class="modal fade" id="confirmCloneModal" tabindex="-1" role="dialog" aria-labelledby="confirmCloneHeading">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="confirmCloneHeading">@sr["Confirm Cloning"]</h4>
+                    <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label='@sr["Close"]'></button>
+                </div>
+                <div class="modal-body">
+                    @sr["You are about to clone content between the following two sites:"]
+                    <br /><br />
+                    <table class="table table-bordered">
+                        <tr><td>@sr["Source Site"]:</td><td><b>@Model.CloneFromSiteName</b></td></tr>
+                        <tr><td>@sr["Destination Site"]:</td><td><b>@Model.CloneToSiteName</b></td></tr>
+                    </table>
+                    <br />
+                    @sr["Are you sure you want to do this? This operation can not be undone."]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@sr["Cancel"]</button>
+                    <button type="submit" name="Command" value="clone" class="btn btn-danger btn-ok" @submitDisabled
+                        data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Clone"]'>@sr["Clone"]
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@section SideNav {
+    <partial name="AdminSideNav" />
+}
+@section Toolbar{
+    <partial name="AdminSideNavToggle" />
+}
+@section Scripts {
+    <partial name="AdminSideNavScripts" />
+    <script src="~/cr/js/jquery.validate.min.js"></script>
+    <script src="~/cr/js/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
+    <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
+    <script src="~/cr/js/bootstrap-tooltip-toggle.js"></script>
+}
