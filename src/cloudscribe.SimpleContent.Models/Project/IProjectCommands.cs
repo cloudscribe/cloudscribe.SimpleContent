@@ -3,7 +3,7 @@
 // Author:                  Joe Audette
 // Created:                 2016-08-04
 // Last Modified:           2018-10-09
-// 
+//
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +32,13 @@ namespace cloudscribe.SimpleContent.Models
         Task Delete(
             string projectId,
             string projectKey,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
+        Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string newSiteName = null,
             CancellationToken cancellationToken = default(CancellationToken)
             );
 

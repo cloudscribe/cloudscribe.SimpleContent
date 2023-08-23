@@ -12,8 +12,8 @@ namespace cloudscribe.SimpleContent.Models
     public interface IPostCommands
     {
         Task Delete(
-            string projectId, 
-            string postId, 
+            string projectId,
+            string postId,
             CancellationToken cancellationToken = default(CancellationToken));
 
         Task Create(
@@ -28,9 +28,16 @@ namespace cloudscribe.SimpleContent.Models
 
         //Task HandlePubDateAboutToChange(
         //    string projectId,
-        //    IPost post, 
-        //    DateTime newPubDate, 
+        //    IPost post,
+        //    DateTime newPubDate,
         //    CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string postId,
+            bool includeComments = false,
+            CancellationToken cancellationToken = default(CancellationToken));
 
     }
 

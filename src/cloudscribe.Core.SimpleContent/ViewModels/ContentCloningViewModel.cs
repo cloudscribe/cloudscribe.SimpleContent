@@ -23,13 +23,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         }
 
         public Boolean ClonePages { get; set; } = true;
-        public Boolean ClonePageTree { get; set; } = true;
         public Boolean CloneMediaFiles { get; set; } = false;
         public Boolean RewriteContentUrls { get; set; } = true;
-        public Boolean CloneBlog { get; set; } = true;
         public Boolean CloneBlogPosts { get; set; } = true;
-        public Boolean CloneAboutContent { get; set; } = true;
-        public Boolean CloneFeedSettings { get; set; } = true;
         public Boolean CloneContentHistory { get; set; } = false;
 
 
@@ -54,7 +50,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public class SiteDetails
         {
             public string SiteId { get; set; }
-            public string SiteName { get; set; }
+            public string SiteIdentifier { get; set; }
         }
 
     }

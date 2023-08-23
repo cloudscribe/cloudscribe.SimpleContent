@@ -643,42 +643,5 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
         }
 
-        // // the following queires are used by the content cloning tool
-        // // they are not used by the app itself
-
-        // public async Task<List<IPost>> GetAllPosts( CancellationToken cancellationToken = default(CancellationToken) )
-        // {
-        //     cancellationToken.ThrowIfCancellationRequested();
-
-        //     using (var db = _contextFactory.CreateContext())
-        //     {
-        //         var query = db.Posts.OrderBy(p => p.PubDate ?? p.LastModified);
-
-        //         var list = await query
-        //             .AsNoTracking()
-        //             .ToListAsync<IPost>(cancellationToken)
-        //             .ConfigureAwait(false);
-
-        //         return list;
-        //     }
-        // }
-
-        //     public async Task<List<PostCategory>> GetAllPostCategoriess( CancellationToken cancellationToken = default(CancellationToken) )
-        // {
-        //     cancellationToken.ThrowIfCancellationRequested();
-
-        //     using (var db = _contextFactory.CreateContext())
-        //     {
-        //         var query = db.PostCategories.OrderBy(p => p.PostEntityId);
-
-        //         var list = await query
-        //             .AsNoTracking()
-        //             .ToListAsync<PostCategory>(cancellationToken)
-        //             .ConfigureAwait(false);
-
-        //         return list;
-        //     }
-        // }
-
     }
 }

@@ -21,7 +21,7 @@
         <div class="mb-3">
             <label asp-for="CloneFromSiteId" class="form-label">@sr["Clone From Site"]</label>
             <select asp-for="CloneFromSiteId"
-                asp-items="@(new SelectList(Model.CloneFromSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteName)))"
+                asp-items="@(new SelectList(Model.CloneFromSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteIdentifier)))"
                 class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
                 title='@sr["Choose a site that you wish to clone the content from"]'
                 onchange="this.form.submit();">
@@ -35,7 +35,7 @@
         <div class="mb-3">
             <label asp-for="CloneToSiteId" class="form-label">@sr["Clone To Site"]</label>
             <select asp-for="CloneToSiteId"
-                asp-items="@(new SelectList(Model.CloneToSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteName)))"
+                asp-items="@(new SelectList(Model.CloneToSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteIdentifier)))"
                 class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
                 title='@sr["Choose a site that you wish to clone the content from"]'
                 onchange="this.form.submit();">
@@ -47,28 +47,21 @@
 
     <div class="mb-3">
         <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone all content pages"]'>
-            <input asp-for="ClonePages" class="form-check-input" />
+            <input asp-for="ClonePages" class="form-check-input" onchange="this.form.submit();" />
             <label asp-for="ClonePages" class="form-check-label">@sr["Clone Content Pages"]</label>
         </div>
     </div>
 
     <div class="mb-3">
-        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the page tree hierarchy"]'>
-            <input asp-for="ClonePageTree" class="form-check-input" />
-            <label asp-for="ClonePageTree" class="form-check-label">@sr["Clone Content Page Tree"]</label>
-        </div>
-    </div>
-
-    <div class="mb-3">
         <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone any media files that have been uploaded to the source site"]'>
-            <input asp-for="CloneMediaFiles" class="form-check-input" />
+            <input asp-for="CloneMediaFiles" class="form-check-input" onchange="this.form.submit();" />
             <label asp-for="CloneMediaFiles" class="form-check-label">@sr["Clone Uploaded Media Files"]</label>
         </div>
     </div>
 
     <div class="mb-3">
         <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will rewrite any URLs that are embedded in the content that still reference the source site"]'>
-            <input asp-for="RewriteContentUrls" class="form-check-input" />
+            <input asp-for="RewriteContentUrls" class="form-check-input" onchange="this.form.submit();" />
             <label asp-for="RewriteContentUrls" class="form-check-label">@sr["Rewrite Content Urls"]</label>
         </div>
     </div>
@@ -76,40 +69,13 @@
     @if (uiOptions.ShowBlogSettings)
     {
         <div class="mb-3">
-            <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the Blog and it's settings"]'>
-                <input asp-for="CloneBlog" class="form-check-input" />
-                <label asp-for="CloneBlog" class="form-check-label">@sr["Clone the Blog"]</label>
-            </div>
-        </div>
-
-        <div class="mb-3">
             <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the Blog posts"]'>
-                <input asp-for="CloneBlogPosts" class="form-check-input" />
+                <input asp-for="CloneBlogPosts" class="form-check-input" onchange="this.form.submit();" />
                 <label asp-for="CloneBlogPosts" class="form-check-label">@sr["Clone Blog Posts"]</label>
             </div>
         </div>
 
-        <div class="mb-3">
-            <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the About page content"]'>
-                <input asp-for="CloneAboutContent" class="form-check-input" />
-                <label asp-for="CloneAboutContent" class="form-check-label">@sr["Clone About Page Content"]</label>
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone Feed Settings"]'>
-                <input asp-for="CloneFeedSettings" class="form-check-input" />
-                <label asp-for="CloneFeedSettings" class="form-check-label">@sr["Clone Feed Settings"]</label>
-            </div>
-        </div>
     }
-
-    <div class="mb-3">
-        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone the content editing history"]'>
-            <input asp-for="CloneContentHistory" class="form-check-input" />
-            <label asp-for="CloneContentHistory" class="form-check-label">@sr["Clone Content History"]</label>
-        </div>
-    </div>
 
     <div class="mb-3">
         <button id="btnSave" type="button" class="btn btn-primary" @submitDisabled

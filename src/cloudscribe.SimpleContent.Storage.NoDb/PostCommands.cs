@@ -3,7 +3,7 @@
 // Author:                  Joe Audette
 // Created:                 2016-04-24
 // Last Modified:           2018-06-28
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using NoDb;
@@ -34,8 +34,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         private IBasicCommands<Post> _commands;
         private IBasicQueries<Post> _query;
         private IKeyGenerator _keyGenerator;
-       
-        
+
+
 
         public async Task Create(
             string projectId,
@@ -51,8 +51,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             {
                 p.Id = _keyGenerator.GenerateKey(p);
             }
-            
-            
+
+
             await _commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
             _cache.ClearListCache(projectId);
         }
@@ -77,7 +77,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             {
                 await _commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
             }
-           
+
             _cache.ClearListCache(projectId);
 
         }
@@ -110,7 +110,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
 
         public async Task Delete(
-            string projectId, 
+            string projectId,
             string postId,
             CancellationToken cancellationToken = default(CancellationToken)
             )
@@ -124,7 +124,7 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
 
                 _cache.ClearListCache(projectId);
             }
-            
+
         }
 
         private async Task<List<Post>> GetAllPosts(
@@ -140,8 +140,30 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             _cache.AddToCache(list, projectId);
 
             return list;
-            
+
         }
-        
+
+        public async Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string postId,
+            bool includeComments = false,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var post = await _query.FetchAsync(sourceProjectId, postId, CancellationToken.None);
+            if (post == null) throw new InvalidOperationException("post not found");
+
+            var p = Post.FromIPost(post);
+            p.LastModified = DateTime.UtcNow;
+            p.Id = _keyGenerator.GenerateKey(p);
+
+            await _commands.CreateAsync(targetProjectId, p.Id, p).ConfigureAwait(false);
+
+            // NoDB posts don't have categories or comments so no need to copy those
+
+            _cache.ClearListCache(targetProjectId);
+            return p.Id;
+        }
+
     }
 }
