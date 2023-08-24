@@ -16,21 +16,13 @@
 </div>
 
 <form method="post"  role="form" asp-antiforgery="true" data-submit-once="true">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="row">
-        <div class="mb-3">
-            <label asp-for="CloneFromSiteId" class="form-label">@sr["Clone From Site"]</label>
-            <select asp-for="CloneFromSiteId"
-                asp-items="@(new SelectList(Model.CloneFromSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteIdentifier)))"
-                class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
-                title='@sr["Choose a site that you wish to clone the content from"]'
-                onchange="this.form.submit();">
-                <option>@sr["Please select one"]</option>
-            </select>
-            <span asp-validation-for="CloneFromSiteId" class="text-danger"></span>
-        </div>
-    </div>
+    @* <div asp-validation-summary="All" class="text-danger"></div> *@
 
+    <input type="hidden" asp-for="SiteId" />
+    <input type="hidden" asp-for="AllowCloneToSiteSelection" />
+
+    @if(Model.AllowCloneToSiteSelection)
+    {
     <div class="row">
         <div class="mb-3">
             <label asp-for="CloneToSiteId" class="form-label">@sr["Clone To Site"]</label>
@@ -39,9 +31,41 @@
                 class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
                 title='@sr["Choose a site that you wish to clone the content from"]'
                 onchange="this.form.submit();">
-                <option>@sr["Please select one"]</option>
+                <option value="">@sr["Please select one"]</option>
             </select>
             <span asp-validation-for="CloneToSiteId" class="text-danger"></span>
+        </div>
+    </div>
+    }
+    else
+    {
+    <div class="row">
+        <div class="mb-3">
+            <input type="hidden" asp-for="CloneToSiteId" />
+            <label for="CloneToSiteIdDisplayOnly" class="form-label">@sr["Clone To Site"]</label>
+            <input type="text" id="CloneToSiteIdDisplayOnly" class="form-control" value="@Model.CloneToSiteName" disabled readonly aria-readonly="true">
+        </div>
+    </div>
+    }
+
+    <div class="row">
+        <div class="mb-3">
+            <label asp-for="CloneFromSiteId" class="form-label">@sr["Clone From Site"]</label>
+            <select asp-for="CloneFromSiteId"
+                asp-items="@(new SelectList(Model.CloneFromSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteIdentifier)))"
+                class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
+                title='@sr["Choose a site that you wish to clone the content from"]'
+                onchange="this.form.submit();">
+                <option value="">@sr["Please select one"]</option>
+            </select>
+            <span asp-validation-for="CloneFromSiteId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone all Content Settings"]'>
+            <input asp-for="CloneContentSettings" class="form-check-input" onchange="this.form.submit();" />
+            <label asp-for="CloneContentSettings" class="form-check-label">@sr["Clone Content Settings"]</label>
         </div>
     </div>
 
@@ -49,13 +73,6 @@
         <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone all content pages"]'>
             <input asp-for="ClonePages" class="form-check-input" onchange="this.form.submit();" />
             <label asp-for="ClonePages" class="form-check-label">@sr["Clone Content Pages"]</label>
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will clone any media files that have been uploaded to the source site"]'>
-            <input asp-for="CloneMediaFiles" class="form-check-input" onchange="this.form.submit();" />
-            <label asp-for="CloneMediaFiles" class="form-check-label">@sr["Clone Uploaded Media Files"]</label>
         </div>
     </div>
 

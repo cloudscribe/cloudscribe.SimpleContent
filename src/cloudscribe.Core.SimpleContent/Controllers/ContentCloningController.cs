@@ -7,6 +7,7 @@
 
 using cloudscribe.Core.Models;
 using cloudscribe.Core.SimpleContent.Integration.ViewModels;
+using cloudscribe.Core.Web.Components;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common.Extensions;
@@ -26,18 +27,20 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 
     public class ContentCloningController : Controller
     {
-        private readonly IProjectService _projectService;
-        private readonly ISiteQueries _siteQueries;
-        private readonly IProjectCommands _projectCommands;
-        private readonly IPageQueries _pageQueries;
-        private readonly IPageCommands _pageCommands;
-        private readonly IPostQueries _postQueries;
-        private readonly IPostCommands _postCommands;
-        private readonly IConfiguration _configuration;
-        private readonly IStringLocalizer sr;
+        private readonly IProjectService    _projectService;
+        private readonly SiteManager        _siteManager;
+        private readonly ISiteQueries       _siteQueries;
+        private readonly IProjectCommands   _projectCommands;
+        private readonly IPageQueries       _pageQueries;
+        private readonly IPageCommands      _pageCommands;
+        private readonly IPostQueries       _postQueries;
+        private readonly IPostCommands      _postCommands;
+        private readonly IConfiguration     _configuration;
+        private readonly IStringLocalizer   sr;
 
         public ContentCloningController(
             IProjectService projectService,
+            SiteManager siteManager,
             ISiteQueries siteQueries,
             IProjectCommands projectCommands,
             IPageQueries pageQueries,
@@ -49,6 +52,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             )
         {
             _projectService = projectService;
+            _siteManager = siteManager;
             _siteQueries = siteQueries;
             _projectCommands = projectCommands;
             _pageQueries = pageQueries;
@@ -60,19 +64,15 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        // GET: /ContentSettings
+        // GET: /ContentCloning/index[?siteId=]
         [HttpGet]
-        public async Task<IActionResult> Index(string cloneFromSiteId = null, string cloneToSiteId = null)
+        public async Task<IActionResult> Index(string siteId = null)
         {
             ViewData["Title"] = sr["Content Cloning"];
 
-            var model = await AddSitesToModel(
-                new ContentCloningViewModel()
-                {
-                    CloneFromSiteId = cloneFromSiteId,
-                    CloneToSiteId = cloneToSiteId
-                }
-            );
+            var model = new ContentCloningViewModel() { SiteId = siteId };
+
+            model = await PopulateAndValidateModel(model); //add the list of sites to the model and do validation
 
             return View(model);
         }
@@ -88,7 +88,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 return View(model);
             }
 
-            model = await AddSitesToModel(model); //add the list of sites to the model
+            model = await PopulateAndValidateModel(model); //add the list of sites to the model and do validation
 
             if (!model.CloneAllowed)
             {
@@ -103,22 +103,26 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             // at this point we're ready to clone the ProjectSettings, Pages and Posts
 
             //Project aka Site Content Settings
-            try
+            if(model.CloneContentSettings)
             {
-                string projectId = await _projectCommands.CloneToNewProject(
-                    model.CloneFromSiteId,
-                    model.CloneToSiteId,
-                    model.CloneToSiteName
-                );
-                this.AlertSuccess(sr["Content Settings cloning was successful!"], true);
-            }
-            catch(Exception ex)
-            {
-                this.AlertDanger(sr["Failed to clone the Content Settings!"], true);
-                this.AlertDanger(ex.Message, true);
-                return View(model);
+                try
+                {
+                    string projectId = await _projectCommands.CloneToNewProject(
+                        model.CloneFromSiteId,
+                        model.CloneToSiteId,
+                        model.CloneToSiteName
+                    );
+                    this.AlertSuccess(sr["Content Settings cloning was successful!"], true);
+                }
+                catch(Exception ex)
+                {
+                    this.AlertDanger(sr["Failed to clone the Content Settings!"], true);
+                    this.AlertDanger(ex.Message, true);
+                    return View(model);
+                }
             }
 
+            //Clone the Pages
             int pageCount = 0;
             if(model.ClonePages)
             {
@@ -146,6 +150,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 }
             }
 
+            //Clone the Posts
             int postCount = 0;
             if (model.CloneBlogPosts)
             {
@@ -176,19 +181,42 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             return View(model);
         }
 
-        private async Task<ContentCloningViewModel> AddSitesToModel(ContentCloningViewModel model)
+        private async Task<ContentCloningViewModel> PopulateAndValidateModel(ContentCloningViewModel model)
         {
+
+            bool isServerAdminSite = _siteManager.CurrentSite.IsServerAdminSite;
+            string currentSiteId = _siteManager.CurrentSite.Id.ToString();
+
+            if(isServerAdminSite)
+            {
+                //if we are on a specific site settings page then we can preselect the site to clone to
+                if(!string.IsNullOrWhiteSpace(model.SiteId))
+                {
+                    model.CloneToSiteId = model.SiteId;
+                    model.AllowCloneToSiteSelection = false;
+                }
+            }
+            else
+            {   //can't allow destination site selection if we are not on the server admin site
+                model.SiteId = currentSiteId;
+                model.CloneToSiteId = currentSiteId;
+                model.AllowCloneToSiteSelection = false;
+            }
+
             bool useFolderNames = _configuration.GetSection("MultiTenantOptions").GetValue<string>("Mode") == "FolderName";
 
             List<ISiteInfo> sites = await _siteQueries.GetList();
+
+            //build the sites list for To and From, excluding any site selected in the other list
             foreach(var site in sites)
             {
                 string url = string.Empty;
                 if(useFolderNames) url = "/" + site.SiteFolderName;
                 else url = site.PreferredHostName;
 
-                bool addFrom = true;
                 bool addTo = true;
+                bool addFrom = true;
+
                 if(!string.IsNullOrWhiteSpace(model.CloneToSiteId) &&
                     model.CloneToSiteId == site.Id.ToString())
                 {
@@ -197,6 +225,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                     model.CloneToPageCount = await _pageQueries.GetCount(model.CloneToSiteId, true);
                     model.CloneToPostCount = await _postQueries.GetCount(model.CloneToSiteId, null, true);
                 }
+
                 if (!string.IsNullOrWhiteSpace(model.CloneFromSiteId) &&
                     model.CloneFromSiteId == site.Id.ToString())
                 {
@@ -204,15 +233,6 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                     model.CloneFromSiteName = site.SiteName;
                     model.CloneFromPageCount = await _pageQueries.GetCount(model.CloneFromSiteId, true);
                     model.CloneFromPostCount = await _postQueries.GetCount(model.CloneFromSiteId, null, true);
-                }
-
-                if(addFrom)
-                {
-                    model.CloneFromSites.Add(new ContentCloningViewModel.SiteDetails
-                    {
-                        SiteId = site.Id.ToString(),
-                        SiteIdentifier = site.SiteName + " (" + url + ") [ " + site.Id + " ]"
-                    });
                 }
 
                 if (addTo)
@@ -224,45 +244,88 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                     });
                 }
 
+                if(addFrom)
+                {
+                    model.CloneFromSites.Add(new ContentCloningViewModel.SiteDetails
+                    {
+                        SiteId = site.Id.ToString(),
+                        SiteIdentifier = site.SiteName + " (" + url + ") [ " + site.Id + " ]"
+                    });
+                }
             }
 
-            if(!string.IsNullOrWhiteSpace(model.CloneFromSiteId) &&
-                !string.IsNullOrWhiteSpace(model.CloneToSiteId))
+            model.CloneAllowed = true;
+
+            if(string.IsNullOrWhiteSpace(model.CloneToSiteId))
             {
-                model.CloneAllowed = true;
+                model.CloneAllowed = false;
+                this.AlertDanger(sr["Please select a destination site!"], true);
             }
-
-            if(model.CloneAllowed)
+            else
             {
-                if (model.CloneFromPageCount == 0 && model.CloneFromPostCount == 0)
-                {
-                    model.CloneAllowed = false;
-                    this.AlertDanger(
-                        sr["The source site you have chosen does not contain any content pages or blog posts!"],
-                        true);
-                }
-                else
-                {
-                    this.AlertInformation(
-                        string.Format(sr["The source site you have chosen contains {0} content pages and {1} blog posts."], model.CloneFromPageCount, model.CloneFromPostCount),
-                        true);
-                }
-
                 if (model.ClonePages && model.CloneToPageCount > 0)
                 {
                     model.CloneAllowed = false;
-                    this.AlertDanger(
-                        string.Format(sr["The destination site you have chosen already contains {0} content pages!"], model.CloneToPageCount),
-                        true);
+                    if(model.AllowCloneToSiteSelection)
+                    {
+                        this.AlertWarning(
+                            string.Format(sr["The destination site you have chosen already contains {0} content pages!"], model.CloneToPageCount),
+                            true);
+                    }
+                    else
+                    {
+                        this.AlertWarning(
+                            string.Format(sr["This site already contains {0} content pages!"], model.CloneToPageCount),
+                            true);
+                    }
                 }
 
                 if (model.CloneBlogPosts && model.CloneToPostCount > 0)
                 {
                     model.CloneAllowed = false;
-                    this.AlertDanger(
-                        string.Format(sr["The destination site you have chosen already contains {0} blog posts!"],  model.CloneToPostCount),
-                        true);
+                    if (model.AllowCloneToSiteSelection)
+                    {
+                        this.AlertWarning(
+                            string.Format(sr["The destination site you have chosen already contains {0} blog posts!"], model.CloneToPostCount),
+                            true);
+                    }
+                    else
+                    {
+                        this.AlertWarning(
+                            string.Format(sr["This site already contains {0} blog posts!"], model.CloneToPostCount),
+                            true);
+                    }
                 }
+            }
+
+            if(model.CloneAllowed)
+            {
+                if(string.IsNullOrWhiteSpace(model.CloneFromSiteId))
+                {
+                    model.CloneAllowed = false;
+                    this.AlertDanger(sr["Please select a source site!"], true);
+                }
+                else
+                {
+                    if (model.CloneFromPageCount == 0 && model.CloneFromPostCount == 0)
+                    {
+                        model.CloneAllowed = false;
+                        this.AlertWarning(
+                            sr["The source site you have chosen does not contain any content pages or blog posts!"],
+                            true);
+                    }
+                    else
+                    {
+                        this.AlertInformation(
+                            string.Format(sr["The source site you have chosen contains {0} content pages and {1} blog posts."], model.CloneFromPageCount, model.CloneFromPostCount),
+                            true);
+                    }
+                }
+            }
+            else
+            {
+                if(!string.IsNullOrWhiteSpace(model.CloneToSiteId))
+                    this.AlertDanger(sr["Content Cloning is not possible for this site."], true);
             }
 
             return model;

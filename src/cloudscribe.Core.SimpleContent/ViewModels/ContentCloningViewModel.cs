@@ -21,27 +21,30 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         {
 
         }
+        //this could be passed in from the Site Settings List page
+        public string SiteId { get; set; } = string.Empty;
 
+        public Boolean CloneContentSettings { get; set; } = true;
         public Boolean ClonePages { get; set; } = true;
-        public Boolean CloneMediaFiles { get; set; } = false;
-        public Boolean RewriteContentUrls { get; set; } = true;
+        public Boolean RewriteContentUrls { get; set; } = false;
         public Boolean CloneBlogPosts { get; set; } = true;
-        public Boolean CloneContentHistory { get; set; } = false;
 
 
-        public string CloneFromSiteId { get; set; } = string.Empty;
+        public string CloneFromSiteId { get; set; } = null;
         public string CloneFromSiteName { get; set; } = string.Empty;
         public int CloneFromPageCount { get; set; } = 0;
         public int CloneFromPostCount { get; set; } = 0;
 
         public List<SiteDetails> CloneFromSites { get; set; } = new List<SiteDetails>();
 
-        public string CloneToSiteId { get; set; } = string.Empty;
+        public string CloneToSiteId { get; set; } = null;
         public string CloneToSiteName { get; set; } = string.Empty;
         public int CloneToPageCount { get; set; } = 0;
         public int CloneToPostCount { get; set; } = 0;
 
         public List<SiteDetails> CloneToSites { get; set; } = new List<SiteDetails>();
+
+        public Boolean AllowCloneToSiteSelection { get; set; } = true;
 
         public bool CloneAllowed { get; set; } = false;
 
