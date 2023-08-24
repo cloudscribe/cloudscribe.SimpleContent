@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>base package - Entity Framework Core implementation of cloudscribe SimpleContent commands and queries</Description>
-    <Version>6.0.2</Version>
+    <Version>6.0.3</Version>
     <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;commands;queries;ef</PackageTags>
@@ -11,7 +11,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,8 +26,8 @@
 
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.0" />
-    
+
   </ItemGroup>
 
-  
+
 </Project>
