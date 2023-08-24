@@ -178,6 +178,11 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 }
             }
 
+            if(model.RewriteContentUrls)
+            {
+                this.AlertInformation(sr["Rewriting content urls is not yet implemented."], true);
+            }
+
             return View(model);
         }
 
