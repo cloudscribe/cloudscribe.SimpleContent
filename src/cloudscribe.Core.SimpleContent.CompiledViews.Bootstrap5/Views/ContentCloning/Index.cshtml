@@ -25,7 +25,7 @@
     {
     <div class="row">
         <div class="mb-3">
-            <label asp-for="CloneToSiteId" class="form-label">@sr["Clone To Site"]</label>
+            <label asp-for="CloneToSiteId" class="form-label">@sr["Destination Site"]</label>
             <select asp-for="CloneToSiteId"
                 asp-items="@(new SelectList(Model.CloneToSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteIdentifier)))"
                 class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -42,7 +42,7 @@
     <div class="row">
         <div class="mb-3">
             <input type="hidden" asp-for="CloneToSiteId" />
-            <label for="CloneToSiteIdDisplayOnly" class="form-label">@sr["Clone To Site"]</label>
+            <label for="CloneToSiteIdDisplayOnly" class="form-label">@sr["Destination Site"]</label>
             <input type="text" id="CloneToSiteIdDisplayOnly" class="form-control" value="@Model.CloneToSiteName" disabled readonly aria-readonly="true">
         </div>
     </div>
@@ -50,7 +50,7 @@
 
     <div class="row">
         <div class="mb-3">
-            <label asp-for="CloneFromSiteId" class="form-label">@sr["Clone From Site"]</label>
+            <label asp-for="CloneFromSiteId" class="form-label">@sr["Source Site"]</label>
             <select asp-for="CloneFromSiteId"
                 asp-items="@(new SelectList(Model.CloneFromSites, nameof(ContentCloningViewModel.SiteDetails.SiteId), nameof(ContentCloningViewModel.SiteDetails.SiteIdentifier)))"
                 class="form-select form-select-lg" data-bs-toggle="tooltip" data-bs-placement="top"
