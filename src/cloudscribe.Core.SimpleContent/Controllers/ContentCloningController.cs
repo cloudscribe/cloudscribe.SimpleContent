@@ -122,10 +122,13 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 }
             }
 
-            //Clone the Pages
-            int pageCount = 0;
+            //Clone the Pages. This has to be done in two passes because we need to know the new page ids
+            //in order to properly update the parent child relationships
+            int pageCopyCount = 0;
+            int pageUpdateCount = 0;
             if(model.ClonePages)
             {
+                bool copySuccessful = false;
                 try
                 {
                     List<IPage> pages = await _pageQueries.GetAllPages(model.CloneFromSiteId);
@@ -136,15 +139,48 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                             model.CloneToSiteId,
                             page.Id
                         );
-                        if(!string.IsNullOrWhiteSpace(pageId)) pageCount++;
+                        if(!string.IsNullOrWhiteSpace(pageId)) pageCopyCount++;
                     }
+                    copySuccessful = true;
                 }
                 catch (Exception ex)
                 {
-                    this.AlertDanger(string.Format(sr["An error occurred while cloning content pages. Only {0}/{1} were copied."], pageCount, model.CloneFromPageCount), true);
+                    this.AlertDanger(string.Format(sr["An error occurred while cloning content pages. Only {0}/{1} were copied."], pageCopyCount, model.CloneFromPageCount), true);
                     this.AlertDanger(ex.Message, true);
                 }
-                if(pageCount == model.CloneFromPageCount)
+                if(copySuccessful)
+                {
+                    try
+                    {
+                        List<IPage> pages = await _pageQueries.GetAllPages(model.CloneToSiteId);
+                        foreach (var page in pages)
+                        {
+                            if(!string.IsNullOrWhiteSpace(page.ParentSlug))
+                            {
+                                string parentSlug = page.ParentSlug;
+                                var parent = pages.FirstOrDefault(p => p.Slug == parentSlug);
+                                if(parent != null)
+                                {
+                                    page.ParentId = parent.Id;
+                                    await _pageCommands.Update(model.CloneToSiteId, page);
+                                }
+                                else //orphaned page - can't find the parent slug
+                                {
+                                    page.ParentId = "0"; //convert to a root/top level page
+                                    await _pageCommands.Update(model.CloneToSiteId, page);
+                                }
+                            }
+                            pageUpdateCount++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.AlertDanger(string.Format(sr["An error occurred while updating content pages tree. Only {0}/{1} were updated."], pageUpdateCount, model.CloneFromPageCount), true);
+                        this.AlertDanger(ex.Message, true);
+                    }
+                }
+
+                if(pageCopyCount == model.CloneFromPageCount && pageUpdateCount == model.CloneFromPageCount)
                 {
                     this.AlertSuccess(sr["Content pages cloning was successful!"], true);
                 }
