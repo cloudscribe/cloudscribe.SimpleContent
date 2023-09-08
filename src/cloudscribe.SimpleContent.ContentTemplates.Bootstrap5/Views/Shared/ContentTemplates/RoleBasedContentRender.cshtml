@@ -1,0 +1,20 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.RoleBasedContentViewModel
+
+@using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using Microsoft.AspNetCore.Antiforgery
+@using Newtonsoft.Json;
+@using System.Net
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+
+@{
+    Layout = "_LayoutEmpty";
+}
+
+@functions{
+
+}
+
+<partial name="RoleBasedContentRenderPartial" model="Model" />
+

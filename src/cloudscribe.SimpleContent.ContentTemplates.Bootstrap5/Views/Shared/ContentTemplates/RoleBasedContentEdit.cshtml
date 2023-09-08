@@ -1,0 +1,83 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.RoleBasedContentViewModel
+
+@using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using Microsoft.AspNetCore.Antiforgery
+@using Newtonsoft.Json;
+@using System.Net
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject IStringLocalizer<ContentTemplateResources> sr
+@{
+    var tokens = antiforgery.GetAndStoreTokens(Context);
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+}
+@functions{
+
+}
+
+<div>
+
+    <label asp-for="UnauthenticatedContent">@sr["Content for unauthenticated users"]</label>
+<textarea asp-for="UnauthenticatedContent" class="form-control"
+          data-ckeditor-unobtrusive=""
+          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+          data-ckeditor-config-language="@ckOptions.LanguageCode"
+          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+
+
+
+    <hr />
+
+
+  
+    <div class="mb-4">
+    <label asp-for="AuthenticatedContent">@sr["Content for authenticated users"]</label>
+<textarea asp-for="AuthenticatedContent" class="form-control"
+          data-ckeditor-unobtrusive=""
+          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+          data-ckeditor-config-language="@ckOptions.LanguageCode"
+          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+</div>
+
+    <hr />
+
+
+
+
+<div class="mb-3">
+    <label asp-for="RoleBasedContent">@sr["Role specific content"]</label>
+
+
+<textarea asp-for="RoleBasedContent" class="form-control"
+          data-ckeditor-unobtrusive=""
+          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
+          data-ckeditor-config-language="@ckOptions.LanguageCode"
+          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
+          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
+          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+</div>
+
+
+
+
+    <label asp-for="Roles">@sr["Roles (comma separated list)"]</label>
+    <input type="text" class="form-control" asp-for="Roles" />
+
+    <div class="mt-4 mb-4">
+        <div class="checkbox" data-placement="left">
+            <label>
+                <input asp-for="RoleContentReplacesAuthenticatedContent" /> @sr["Replace authenticated content?"]
+            </label>
+            <p>@sr["Role based content will be displayed beneath the authenticated content, if the user is in one of the specified roles."]
+                <br />
+             @sr["Select the checkbox if you want to replace the authenticated content fully."]</p>
+
+        </div>
+    </div>
+
+</div>

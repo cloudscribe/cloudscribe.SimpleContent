@@ -37,7 +37,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             _list.Add(BuildListOfLinks());
             _list.Add(BuildEverythingTemplate());
             _list.Add(BuildBingLocationMap());
-
+            _list.Add(BuildUnauthenticatedContent());
         }
 
         public Task<List<ContentTemplate>> GetAllTemplates()
@@ -530,6 +530,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
 
         }
 
+   
 
         private ContentTemplate BuildEverythingTemplate()
         {
@@ -651,6 +652,47 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
             return template;
 
         }
+
+
+        private ContentTemplate BuildUnauthenticatedContent()
+        {
+            var template = new ContentTemplate()
+            {
+                Key = "sct-UnauthenticatedContent",
+                Title = _sr["Role based content"],
+                Description = _sr["Render different content depending on whether the user is authenticated, unauthenticated, or in a particular role"],
+                EditView = "ContentTemplates/RoleBasedContentEdit",
+                RenderView = "ContentTemplates/RoleBasedContentRender",
+                DynamicRenderPartialView = "RoleBasedContentRenderPartial",
+                ScreenshotUrl = "",
+                ProjectId = "*",
+                AvailableForFeature = "*",
+                Enabled = true,
+                ModelType = "cloudscribe.SimpleContent.ContentTemplates.ViewModels.RoleBasedContentViewModel, cloudscribe.SimpleContent.ContentTemplates.Bootstrap5",
+                FormParserName = "DefaultModelFormParser",
+                SerializerName = "Json",
+                ValidatorName = "DefaultTemplateModelValidator",
+                GroupSort1 = "555555",
+                GroupSort2 = "555650",
+
+                EditCss = new List<CssFile>()
+                {
+                },
+                EditScripts = new List<ScriptFile>()
+                {
+                },
+
+                RenderCss = new List<CssFile>()
+                {
+                },
+                RenderScripts = new List<ScriptFile>()
+                {
+                }
+
+            };
+            return template;
+        }
+
 
         private ContentTemplate BuildBingLocationMap()
         {

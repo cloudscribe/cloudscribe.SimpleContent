@@ -1,0 +1,66 @@
+﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.RoleBasedContentViewModel
+
+@using System.Security.Claims
+@using cloudscribe.SimpleContent.ContentTemplates
+@using cloudscribe.SimpleContent.ContentTemplates.Configuration
+@using Microsoft.AspNetCore.Antiforgery
+@using Newtonsoft.Json;
+@using System.Net
+@inject IAntiforgery antiforgery
+@inject ICkeditorOptionsResolver editorOptionsResolver
+
+@{
+    var isAuthenticated = User.Identity.IsAuthenticated;
+    var meetsRoles = false;
+
+    if(!string.IsNullOrWhiteSpace(Model.Roles))
+    {
+        var roles = Model.Roles.Split(",").Select(r => r.Trim()).ToList();
+        meetsRoles = CaseInsensitiveRoleMatch(User, roles);
+    }
+}
+
+@functions{
+
+    private bool CaseInsensitiveRoleMatch(ClaimsPrincipal user, List<string> roles)
+    {
+        var lowerCaseRoles = roles.Select(r => r.ToLower()).ToList();
+
+        foreach (var claim in Context.User.Claims.Where(c => c.Type.Equals(ClaimTypes.Role)))
+        {
+            if (lowerCaseRoles.Contains(claim.Value.ToLower()))
+                return true;
+        }
+        return false;
+    }
+}
+
+
+@if (meetsRoles)
+{
+    if (!Model.RoleContentReplacesAuthenticatedContent && isAuthenticated)
+    {
+        <div class="mt-3 auth-content">
+            @Html.Raw(Model.AuthenticatedContent)
+        </div>
+    }
+    <div class="mt-3 auth-content">
+        @Html.Raw(Model.RoleBasedContent)
+    </div>
+}
+else if (isAuthenticated)
+{
+    <div class="mt-3 auth-content">
+        @Html.Raw(Model.AuthenticatedContent)
+    </div>
+}
+else
+{
+    <div class="mt-3 unauth-content">
+        @Html.Raw(Model.UnauthenticatedContent)
+    </div>
+}
+
+
+
+
