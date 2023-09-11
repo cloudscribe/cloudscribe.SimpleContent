@@ -658,7 +658,7 @@ namespace cloudscribe.SimpleContent.ContentTemplates.Services
         {
             var template = new ContentTemplate()
             {
-                Key = "sct-UnauthenticatedContent",
+                Key = "sct-RoleBasedContent",
                 Title = _sr["Role based content"],
                 Description = _sr["Render different content depending on whether the user is authenticated, unauthenticated, or in a particular role"],
                 EditView = "ContentTemplates/RoleBasedContentEdit",
