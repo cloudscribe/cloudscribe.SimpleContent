@@ -26,7 +26,7 @@
     {
         var lowerCaseRoles = roles.Select(r => r.ToLower()).ToList();
 
-        foreach (var claim in Context.User.Claims.Where(c => c.Type.Equals(ClaimTypes.Role)))
+        foreach (var claim in Context.User.Claims.Where(c => c.Type.Equals(ClaimTypes.Role) || c.Type.ToLower() == "role"))
         {
             if (lowerCaseRoles.Contains(claim.Value.ToLower()))
                 return true;
