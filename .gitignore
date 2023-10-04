@@ -244,4 +244,4 @@ src/sourceDev.WebApp/sitefiles/s1/wwwroot/media/testimages/**
 src/sourceDev.WebApp/cloudscribe1-dev.db
 
 
-siteuploadfiles/
+# siteuploadfiles/
