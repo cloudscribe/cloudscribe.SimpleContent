@@ -3,7 +3,7 @@
 // Author:					Joe Audette
 // Created:					2016-08-31
 // Last Modified:			2018-10-09
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
@@ -32,7 +32,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             )
         {
             if (page == null) throw new ArgumentException("page must not be null");
-            
+
             var p = PageEntity.FromIPage(page);
 
             if (string.IsNullOrEmpty(p.Id)) { p.Id = Guid.NewGuid().ToString(); }
@@ -47,7 +47,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            
+
         }
 
         public async Task Update(
@@ -59,7 +59,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
             if (page == null) throw new ArgumentException("page must not be null");
             if (string.IsNullOrEmpty(page.Id)) throw new ArgumentException("can only update an existing page with a populated Id");
             var p = PageEntity.FromIPage(page);
-            
+
             p.LastModified = DateTime.UtcNow;
 
             using (var dbContext = _contextFactory.CreateContext())
@@ -86,7 +86,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     rowsAffected = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
-            
+
         }
 
         public async Task Delete(
@@ -112,9 +112,46 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            
+
         }
 
+        public async Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string pageId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            using(var dbContext = _contextFactory.CreateContext())
+            {
+                var page = await dbContext.Pages
+                    .Include(p => p.PageResources)
+                    .FirstOrDefaultAsync(p => p.Id == pageId, cancellationToken)
+                    .ConfigureAwait(false);
+
+                if (page == null) throw new InvalidOperationException("page not found");
+
+                var p = PageEntity.FromIPage(page);
+                p.Id = Guid.NewGuid().ToString();
+                p.LastModified = DateTime.UtcNow;
+                p.ProjectId = targetProjectId;
+                dbContext.Pages.Add(p);
+
+                int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+                if (page.Resources.Count > 0)
+                {
+                    p.Resources = page.Resources;
+                    foreach (var r in page.PageResources)
+                    {
+                        r.PageEntityId = p.Id;
+                    }
+                    rowsAffected = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                }
+
+                return p.Id; //return Id of the new page
+            }
+        }
 
     }
 }

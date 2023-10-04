@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <Version>6.0.0</Version>
+    <Version>6.0.2</Version>
     <TargetFramework>net6.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog</PackageTags>
@@ -34,7 +34,7 @@
     <PackageReference Include="cloudscribe.Web.Common" Version="6.0.0" />
     <PackageReference Include="cloudscribe.FileManager.Web" Version="6.0.0" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="6.0.0" />
-    
+
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />

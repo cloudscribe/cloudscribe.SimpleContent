@@ -3,7 +3,7 @@
 // Author:					Joe Audette
 // Created:					2016-08-31
 // Last Modified:			2021-01-05 jk
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
@@ -63,7 +63,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 int rowsAffected = await db.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            
+
         }
 
         public async Task Update(
@@ -102,9 +102,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                         PostEntityId = p.Id,
                         Value = t
                     };
-                    
+
                     db.PostCategories.Add(cat);
-                   
+
                 }
 
 
@@ -148,7 +148,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                     rowsAffected = await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
-            
+
         }
 
         private async Task DeleteCategoriesByPost(
@@ -174,7 +174,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                         .ConfigureAwait(false);
                 }
             }
-            
+
         }
 
         private async Task DeleteCommentsByPost(
@@ -222,6 +222,90 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 db.Posts.Remove(itemToRemove);
                 int rowsAffected = await db.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
+            }
+        }
+
+        public async Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string postId,
+            bool includeComments = false,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            using (var db = _contextFactory.CreateContext())
+            {
+                var post = await db.Posts
+                    .Include(p => p.PostComments)
+                    .SingleOrDefaultAsync(x =>
+                        x.Id == postId && x.BlogId == sourceProjectId,
+                        cancellationToken)
+                    .ConfigureAwait(false);
+
+                if (post == null) throw new InvalidOperationException("post not found");
+
+                var p = PostEntity.FromIPost(post);
+                p.Id = Guid.NewGuid().ToString();
+                p.BlogId = targetProjectId;
+                p.LastModified = DateTime.UtcNow;
+
+                db.Posts.Add(p);
+
+                var cats = p.CategoriesCsv.Split(new char[] { ',' },
+                            StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim())
+                            .Distinct(StringComparer.OrdinalIgnoreCase)
+                            .ToList();
+
+                //need to add PostCategories
+                foreach (var c in cats)
+                {
+                    if (string.IsNullOrEmpty(c)) continue;
+                    var t = c.Trim();
+                    if (string.IsNullOrEmpty(t)) continue;
+
+                    db.PostCategories.Add(new PostCategory
+                    {
+                        ProjectId = targetProjectId,
+                        PostEntityId = p.Id,
+                        Value = t
+                    });
+                }
+
+                int rowsAffected = await db.SaveChangesAsync(cancellationToken)
+                    .ConfigureAwait(false);
+
+                if(!includeComments) { return p.Id; }
+
+                //need to add PostComments
+                if (post.Comments.Count > 0)
+                {
+                    foreach (var r in post.Comments)
+                    {
+                        var pc = new PostComment();
+                        if (!string.IsNullOrEmpty(r.Id))
+                        {
+                            pc.Id = r.Id;
+                        }
+                        pc.Author = r.Author;
+                        pc.Content = r.Content;
+                        pc.Email = r.Email;
+                        pc.Ip = r.Ip;
+                        pc.IsAdmin = r.IsAdmin;
+                        pc.IsApproved = r.IsApproved;
+                        pc.ProjectId = targetProjectId;
+                        pc.PubDate = r.PubDate;
+                        pc.UserAgent = r.UserAgent;
+                        pc.Website = r.Website;
+                        pc.PostEntityId = p.Id;
+
+                        //dbContext.Comments.Add(pc);
+                        p.PostComments.Add(pc);
+                    }
+
+                    rowsAffected = await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                }
+
+                return p.Id;
             }
         }
     }

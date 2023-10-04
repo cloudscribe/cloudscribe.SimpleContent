@@ -230,7 +230,7 @@ src/sourceDev.WebApp/nodb_storage/projects/**/contenthistory/**
 src/sourceDev.WebApp/cloudscribe-dev.db
 src/sourceDev.WebApp/cloudscribe4-dev.db
 **/wwwroot/dist/**
-**/app-react/**/*.js 
+**/app-react/**/*.js
 **/app-react/**/*.map
 **/app-react/*.js
 **/app-react/*.map
@@ -242,3 +242,6 @@ src/sourceDev.WebApp/sitefiles/s1/wwwroot/media/images/img_3646.jpg
 src/sourceDev.WebApp/sitefiles/s1/wwwroot/media/images/img_3646-ws.jpg
 src/sourceDev.WebApp/sitefiles/s1/wwwroot/media/testimages/**
 src/sourceDev.WebApp/cloudscribe1-dev.db
+
+
+siteuploadfiles/

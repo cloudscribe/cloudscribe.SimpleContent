@@ -3,7 +3,7 @@
 // Author:                  Joe Audette
 // Created:                 2016-04-24
 // Last Modified:           2018-10-09
-// 
+//
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +30,23 @@ namespace cloudscribe.SimpleContent.Models
             );
 
         Task Delete(
-            string projectId, 
+            string projectId,
+            string pageId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            );
+
+        /// <summary>
+        /// Clone a page from one project (tenant) to another
+        /// </summary>
+        /// <param name="sourceProjectId"></param>
+        /// <param name="targetProjectId"></param>
+        /// <param name="pageId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The Id of the new page</returns>
+
+        Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
             string pageId,
             CancellationToken cancellationToken = default(CancellationToken)
             );

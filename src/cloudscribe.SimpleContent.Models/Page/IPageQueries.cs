@@ -3,7 +3,7 @@
 // Author:                  Joe Audette
 // Created:                 2016-04-24
 // Last Modified:           2018-10-09
-// 
+//
 
 using System.Collections.Generic;
 using System.Threading;
@@ -69,5 +69,11 @@ namespace cloudscribe.SimpleContent.Models
             bool includeUnpublished,
             CancellationToken cancellationToken = default(CancellationToken)
             );
+
+        Task<int> GetCount(
+           string projectId,
+           bool includeUnpublished,
+           CancellationToken cancellationToken = default(CancellationToken)
+           );
     }
 }

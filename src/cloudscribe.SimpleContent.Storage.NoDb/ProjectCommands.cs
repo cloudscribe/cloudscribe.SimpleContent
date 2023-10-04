@@ -3,7 +3,7 @@
 // Author:                  Joe Audette
 // Created:                 2016-08-04
 // Last Modified:           2016-09-08
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using Microsoft.Extensions.Logging;
@@ -60,9 +60,34 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             CancellationToken cancellationToken = default(CancellationToken)
             )
         {
-            await commands.DeleteAsync(projectId, projectKey).ConfigureAwait(false);  
+            await commands.DeleteAsync(projectId, projectKey).ConfigureAwait(false);
         }
 
+        public async Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string newSiteName = null,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var sourceProject = await query.FetchAsync(sourceProjectId, sourceProjectId, cancellationToken).ConfigureAwait(false);
+            if (sourceProject == null) throw new InvalidOperationException("Project not found");
 
+            var p = ProjectSettings.FromIProjectSettings(sourceProject);
+            p.Id = targetProjectId;
+            if(!string.IsNullOrWhiteSpace(p.SiteName)) { p.SiteName = newSiteName; } //rename the site (not sure if this setting is used anywhere)
+
+            var destinationProject = await query.FetchAsync(targetProjectId, targetProjectId, cancellationToken).ConfigureAwait(false);
+            if(destinationProject == null)
+            {
+                await commands.CreateAsync(targetProjectId, p.Id, p).ConfigureAwait(false);
+            }
+            else
+            {
+                await commands.UpdateAsync(targetProjectId, p.Id, p).ConfigureAwait(false);
+            }
+            return p.Id;
+        }
     }
 }

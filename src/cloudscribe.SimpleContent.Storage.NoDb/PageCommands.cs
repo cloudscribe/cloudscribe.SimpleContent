@@ -3,7 +3,7 @@
 // Author:                  Joe Audette
 // Created:                 2016-04-24
 // Last Modified:           2018-07-04
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using NoDb;
@@ -26,13 +26,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             _commands = pageCommands;
             _query = pageQueries;
             _keyGenerator = keyGenerator;
-           
+
         }
 
         private IBasicCommands<Page> _commands;
         private IBasicQueries<Page> _query;
         private IKeyGenerator _keyGenerator;
-        
+
         public async Task Create(
             string projectId,
             IPage page,
@@ -47,9 +47,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             }
 
             p.LastModified = DateTime.UtcNow;
-           
+
             await _commands.CreateAsync(projectId, p.Id, p).ConfigureAwait(false);
-           
+
         }
 
         public async Task Update(
@@ -61,13 +61,13 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var p = Page.FromIPage(page);
             p.LastModified = DateTime.UtcNow;
             p.Resources = page.Resources;
-            
+
             await _commands.UpdateAsync(projectId, p.Id, p).ConfigureAwait(false);
-            
+
         }
 
         public async Task Delete(
-            string projectId, 
+            string projectId,
             string pageId,
             CancellationToken cancellationToken = default(CancellationToken)
             )
@@ -88,6 +88,28 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
             var l = await _query.GetAllAsync(projectId, cancellationToken).ConfigureAwait(false);
             var list = l.ToList();
             return list;
+        }
+
+        public async Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string pageId,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            var page = await _query.FetchAsync(sourceProjectId, pageId, CancellationToken.None);
+            if (page == null) throw new InvalidOperationException("page not found");
+
+            var p = Page.FromIPage(page);
+
+            p.LastModified = DateTime.UtcNow;
+            p.ProjectId = targetProjectId;
+            p.Id = _keyGenerator.GenerateKey(p);
+            p.Resources = page.Resources;
+
+            await _commands.CreateAsync(targetProjectId, p.Id, p).ConfigureAwait(false);
+
+            return p.Id;
         }
 
     }

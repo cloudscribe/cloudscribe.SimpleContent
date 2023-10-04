@@ -3,7 +3,7 @@
 // Author:					Joe Audette
 // Created:					2016-08-07
 // Last Modified:			2019-03-04
-// 
+//
 
 using cloudscribe.Core.Models;
 using cloudscribe.Core.SimpleContent.Integration.ViewModels;
@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
 {
-    
+
     public class ContentSettingsController : Controller
     {
         public ContentSettingsController(
@@ -86,7 +86,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.PublisherEntityType = projectSettings.PublisherEntityType;
             model.DisqusShortName = projectSettings.DisqusShortName;
             model.PostsPerPage = projectSettings.PostsPerPage;
-            
+
             model.BlogMenuLinksToNewestPost = projectSettings.BlogMenuLinksToNewestPost;
             model.DefaultPageSlug = projectSettings.DefaultPageSlug;
             model.ShowRecentPostsOnDefaultPage = projectSettings.ShowRecentPostsOnDefaultPage;
@@ -124,7 +124,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 canManageUsers = result.Succeeded;
             }
             catch (InvalidOperationException) { } // thrown if policy doesn't exist
-            
+
 
             if(canManageUsers)
             {
@@ -146,7 +146,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 {
                     editors.AddRange(contentEditors);
                 }
-                
+
                 var blogEditors = await userQueries.GetUsersForClaim(
                     new Guid(projectId),
                     ProjectConstants.BlogEditorClaimType,
@@ -157,7 +157,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 {
                     editors.AddRange(blogEditors);
                 }
-                
+
                 var pageEditors = await userQueries.GetUsersForClaim(
                     new Guid(projectId),
                     ProjectConstants.PageEditorClaimType,
@@ -179,7 +179,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 }
 
                 //model.Editors.AddRange(editors.Distinct());
-                
+
 
             }
 
@@ -198,7 +198,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 model.TeasersDisabled = _teasersDisabled;
                 return View(model);
             }
-            
+
             var projectSettings = await projectService.GetCurrentProjectSettings();
 
             projectSettings.ChannelCategoriesCsv = model.ChannelCategoriesCsv;
@@ -229,7 +229,7 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.ShowFeaturedPostsOnDefaultPage = model.ShowFeaturedPostsOnDefaultPage;
 
             bool needToClearMenuCache = false;
-            
+
             if (model.BlogMenuLinksToNewestPost != projectSettings.BlogMenuLinksToNewestPost) needToClearMenuCache = true;
             if (model.DefaultPageSlug != projectSettings.DefaultPageSlug) needToClearMenuCache = true;
             if (model.AddBlogToPagesTree != projectSettings.AddBlogToPagesTree) needToClearMenuCache = true;
@@ -268,13 +268,13 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             {
                 //projectService.ClearNavigationCache();
                 await _navigationTreeBuilderService.ClearTreeCache();
-                
+
             }
 
             this.AlertSuccess(sr["Content Settings were successfully updated."], true);
 
             return RedirectToAction("Index");
-            
+
 
         }
 

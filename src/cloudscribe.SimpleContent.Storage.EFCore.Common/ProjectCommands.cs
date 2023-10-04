@@ -3,7 +3,7 @@
 // Author:					Joe Audette
 // Created:					2016-08-31
 // Last Modified:			2018-10-09
-// 
+//
 
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Storage.EFCore.Common;
@@ -44,7 +44,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 int rowsAffected = await db.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            
+
         }
 
         public async Task Update(
@@ -70,7 +70,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 int rowsAffected = await db.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            
+
         }
 
         public async Task Delete(
@@ -92,7 +92,48 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
                 int rowsAffected = await db.SaveChangesAsync(cancellationToken)
                     .ConfigureAwait(false);
             }
-            
+
+        }
+
+        public async Task<string> CloneToNewProject(
+            string sourceProjectId,
+            string targetProjectId,
+            string newSiteName = null,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            using (var db = _contextFactory.CreateContext())
+            {
+
+                var destinationProject = await db.Projects.SingleOrDefaultAsync(x =>
+                    x.Id == targetProjectId,
+                    cancellationToken).ConfigureAwait(false);
+
+                var sourceProject = await db.Projects.SingleOrDefaultAsync(x =>
+                    x.Id == sourceProjectId,
+                    cancellationToken ).ConfigureAwait(false);
+
+                if (sourceProject == null) throw new InvalidOperationException("Project not found");
+
+                var p = ProjectSettings.FromIProjectSettings(sourceProject);
+                p.Id = targetProjectId;
+
+                if(destinationProject == null)
+                {
+                    db.Projects.Add(p);
+                }
+                else
+                {
+                    bool tracking = db.ChangeTracker.Entries<ProjectSettings>().Any(x => x.Entity.Id == p.Id);
+                    if (!tracking)
+                    {
+                        db.Projects.Update(p);
+                    };
+                }
+                int rowsAffected = await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+                return p.Id;
+            }
         }
 
     }
