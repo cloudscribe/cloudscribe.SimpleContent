@@ -53,7 +53,7 @@ namespace sourceDev.WebApp
             var storage = config["DevOptions:DbPlatform"].ToLowerInvariant();
             switch (storage)
             {
-                case "ef":
+                case "efcore":
                     LoggingEFStartup.InitializeDatabaseAsync(scopedServices, deleteLogsOlderThanDays).Wait();
                     CoreEFStartup.InitializeDatabaseAsync(scopedServices).Wait();
                     SimpleContentEFStartup.InitializeDatabaseAsync(scopedServices).Wait();
