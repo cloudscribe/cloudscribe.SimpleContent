@@ -15,19 +15,26 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration config
             )
         {
-            // optional but recommended if you need localization 
-            // uncomment to use cloudscribe.Web.localization https://github.com/joeaudette/cloudscribe.Web.Localization
+            // https://github.com/cloudscribe/cloudscribe.Web.Localization
+            // https://www.cloudscribe.com/localization
             services.Configure<GlobalResourceOptions>(config.GetSection("GlobalResourceOptions"));
             services.AddSingleton<IStringLocalizerFactory, GlobalResourceManagerStringLocalizerFactory>();
 
             services.AddLocalization(options => options.ResourcesPath = "GlobalResources");
 
+            //you should only add cultures that you really plan to support
+            //if you translate the resx files or other files please share them back with us, email zip to info@cloudscribe.com
             var supportedCultures = new[]
-               {
+                {
                     new CultureInfo("en-US"),
-                    new CultureInfo("it-IT"),
+                    //new CultureInfo("en-GB"),
+                    //new CultureInfo("cy"),  // deliberately not cy-GB
                     new CultureInfo("fr-FR"),
                     new CultureInfo("cy-GB"),
+                    new CultureInfo("it-IT"),
+                    //new CultureInfo("ar-AR"),
+                    //new CultureInfo("es-ES"),
+
                 };
 
             //this comes from cloudscribe core
@@ -35,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
-               
+
 
                 // State what the default culture for your application is. This will be used if no specific culture
                 // can be determined for a given request.

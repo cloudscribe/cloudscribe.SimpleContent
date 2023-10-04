@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>19c2a553-1e89-4aec-83ac-aede1931009a</id>
+  <title>Open Live Writer Rocks</title>
+  <slug>open-live-writer-rocks</slug>
+  <correlationkey />
+  <author>Joe Audette</author>
+  <pubDate>2016-02-22T16:58:00.0000000Z</pubDate>
+  <lastModified>2018-08-20T15:16:42</lastModified>
+  <excerpt>a post about nothing really</excerpt>
+  <content>&lt;p&gt;so they say so they say&lt;/p&gt;
+
+&lt;p&gt;more more more&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="raised bed garden" src="/media/images/raisedbeds1.jpg" style="height:456px; width:607px" /&gt;&lt;/p&gt;
+
+&lt;p&gt;more more more&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="/media/images/img_1150.jpg"&gt;&lt;img alt=" " data-primary-image="true" src="/media/images/img_1150-ws.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
+</content>
+  <contentType />
+  <imageUrl />
+  <thumbnailUrl />
+  <createdUtc>2018-08-20T15:16:42</createdUtc>
+  <createdByUser></createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor />
+  <draftContent />
+  <draftPubDate />
+  <templateKey></templateKey>
+  <serializedModel></serializedModel>
+  <draftSerializedModel></draftSerializedModel>
+  <serializer></serializer>
+  <blogId></blogId>
+  <ispublished>true</ispublished>
+  <isFeatured>true</isFeatured>
+  <autoTeaser>&lt;p&gt;so they say so they say&lt;/p&gt;
+
+&lt;p&gt;more more more&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="raised bed garden" src="/media/images/raisedbeds1.jpg" style="height:456px; width:607px"&gt;&lt;/p&gt;</autoTeaser>
+  <teaserOverride />
+  <suppressTeaser>false</suppressTeaser>
+  <categories>
+    <category>food</category>
+    <category>vegan</category>
+    <category>foo</category>
+  </categories>
+  <comments></comments>
+</post>

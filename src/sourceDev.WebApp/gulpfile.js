@@ -38,5 +38,5 @@ gulp.task('buildCustom1ThemeCss', function () {
 // if you run the default task it will watch for changes in files and then run the
 // array of tasks if any files changed. So for scss changes you can just refresh the page to see changes
 gulp.task('default', function () {
-    gulp.watch(config.srcFileWatchPattern, ['buildCustom1ThemeCss']);
+    gulp.watch(config.srcFileWatchPattern, gulp.series('buildCustom1ThemeCss'));
 });

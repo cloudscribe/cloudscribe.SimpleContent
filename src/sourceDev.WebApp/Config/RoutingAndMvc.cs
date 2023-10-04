@@ -249,7 +249,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="config"></param>
         /// <returns></returns>
         public static IEndpointRouteBuilder UseCustomRoutes(
-            this IEndpointRouteBuilder 
+            this IEndpointRouteBuilder
             routes, bool useFolders,
             IConfiguration config)
         {
@@ -475,10 +475,9 @@ namespace Microsoft.AspNetCore.Builder
         }
 
 
-        
+
         public static IServiceCollection SetupMvc(
             this IServiceCollection services,
-            IConfiguration config,
             bool sslIsAvailable
             )
         {
@@ -516,11 +515,9 @@ namespace Microsoft.AspNetCore.Builder
                 options.LowercaseQueryStrings = false;
             });
 
-            var boostrapVersion = config.GetValue<int>("DevOptions:BootstrapVersion");
-
             services.AddMvc()
                 .AddRazorOptions(options =>
-                { 
+                {
                     options.ViewLocationExpanders.Add(new cloudscribe.Core.Web.Components.SiteViewLocationExpander());
 
                 })

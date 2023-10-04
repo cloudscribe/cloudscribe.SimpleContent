@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>new-post</id>
+  <title>New Post</title>
+  <slug>new-post</slug>
+  <correlationkey />
+  <author>Admin</author>
+  <pubDate>2023-10-04T14:39:38.8487243Z</pubDate>
+  <lastModified>2023-10-04T14:39:38</lastModified>
+  <excerpt />
+  <content>&lt;p&gt;dsgsdgsgsgds&lt;/p&gt;
+</content>
+  <contentType>html</contentType>
+  <imageUrl />
+  <thumbnailUrl />
+  <createdUtc>2023-10-04T14:39:38</createdUtc>
+  <createdByUser>admin</createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor />
+  <draftContent />
+  <draftPubDate />
+  <templateKey />
+  <serializedModel />
+  <draftSerializedModel />
+  <serializer />
+  <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf</blogId>
+  <ispublished>true</ispublished>
+  <isFeatured>false</isFeatured>
+  <autoTeaser />
+  <teaserOverride />
+  <suppressTeaser>false</suppressTeaser>
+  <categories></categories>
+  <comments></comments>
+  <showcomments>true</showcomments>
+</post>

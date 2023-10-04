@@ -6,10 +6,12 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static AuthorizationOptions SetupAuthorizationPolicies(this AuthorizationOptions options)
         {
+            //https://docs.asp.net/en/latest/security/authorization/policies.html
 
-            options.AddCloudscribeCoreDefaultPolicies();
 
             options.AddCloudscribeLoggingDefaultPolicy();
+
+            options.AddCloudscribeCoreDefaultPolicies();
 
             options.AddCloudscribeCoreSimpleContentIntegrationDefaultPolicies();
 
@@ -34,28 +36,25 @@ namespace Microsoft.Extensions.DependencyInjection
                     authBuilder.RequireRole("Administrators", "Content Administrators");
                 });
 
-            // this is what the above extension adds
-            //options.AddPolicy(
-            //    "BlogEditPolicy",
-            //    authBuilder =>
-            //    {
-            //        //authBuilder.RequireClaim("blogId");
-            //        authBuilder.RequireRole("Administrators");
-            //    }
-            // );
 
 
 
-            //options.AddPolicy(
-            //    "PageEditPolicy",
-            //    authBuilder =>
-            //    {
-            //        authBuilder.RequireRole("Administrators");
-            //    });
 
-            // add other policies here 
+
+
+
+
+
+
+
+
+
+
+            // add other policies here
+
 
             return options;
         }
+
     }
 }

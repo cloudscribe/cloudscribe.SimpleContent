@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>futurama-</id>
+  <title>Futurama</title>
+  <slug>futurama-</slug>
+  <correlationkey></correlationkey>
+  <author>Admin</author>
+  <pubDate>2019-02-27T20:18:58.5858000Z</pubDate>
+  <lastModified>2019-07-17T15:15:15</lastModified>
+  <excerpt></excerpt>
+  <content>&lt;p&gt;a dupe&lt;/p&gt;
+</content>
+  <contentType>html</contentType>
+  <imageUrl></imageUrl>
+  <thumbnailUrl></thumbnailUrl>
+  <createdUtc>2019-03-02T20:19:06</createdUtc>
+  <createdByUser>admin</createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor></draftAuthor>
+  <draftContent></draftContent>
+  <draftPubDate />
+  <templateKey></templateKey>
+  <serializedModel></serializedModel>
+  <draftSerializedModel></draftSerializedModel>
+  <serializer></serializer>
+  <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf</blogId>
+  <ispublished>true</ispublished>
+  <isFeatured>false</isFeatured>
+  <autoTeaser></autoTeaser>
+  <teaserOverride></teaserOverride>
+  <suppressTeaser>false</suppressTeaser>
+  <categories></categories>
+  <comments>
+    <comment isAdmin="false" isApproved="true" id="db8f6aa3-23cd-4a7e-aeb7-65a24a31cedd">
+      <author>joe</author>
+      <email>joe@cloudscribe.com</email>
+      <website></website>
+      <ip>127.0.0.1</ip>
+      <userAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36</userAgent>
+      <date>2019-07-17T15:15:15.4564234Z</date>
+      <content>just testing the comments</content>
+    </comment>
+  </comments>
+</post>
