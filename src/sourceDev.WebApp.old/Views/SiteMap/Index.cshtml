@@ -1,6 +1,0 @@
-﻿@using cloudscribe.Web.Navigation
-@{
-    ViewData["Title"] = "Site Map";
-}
-<h1>@ViewData["Title"]</h1>
-@await Component.InvokeAsync("Navigation", new { viewName = "SiteMap", filterName = "sitemap", startingNodeKey = "RootNode" })
