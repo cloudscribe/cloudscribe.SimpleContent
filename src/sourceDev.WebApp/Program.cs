@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using cloudscribe.Logging.Models;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 
 namespace sourceDev.WebApp
 {
@@ -17,38 +13,32 @@ namespace sourceDev.WebApp
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-            
+            var hostBuilder = CreateHostBuilder(args);
+            var host = hostBuilder.Build();
+
             var config = host.Services.GetRequiredService<IConfiguration>();
-            
 
             using (var scope = host.Services.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                
+                var scopedServices = scope.ServiceProvider;
                 try
                 {
-                    EnsureDataStorageIsReady(config, services);
+                    EnsureDataStorageIsReady(config, scopedServices);
 
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    var logger = scopedServices.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred while migrating the database.");
                 }
             }
 
-            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
             var env = host.Services.GetRequiredService<IWebHostEnvironment>();
+            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
             ConfigureLogging(env, loggerFactory, host.Services, config);
 
             host.Run();
         }
-
-        //public static IWebHost BuildWebHost(string[] args) =>
-        //    WebHost.CreateDefaultBuilder(args)
-        //        .UseStartup<Startup>()
-        //        .Build();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -57,25 +47,21 @@ namespace sourceDev.WebApp
                     webBuilder.UseStartup<Startup>();
                 });
 
-
-        private static void EnsureDataStorageIsReady(IConfiguration config, IServiceProvider services)
+        private static void EnsureDataStorageIsReady(IConfiguration config, IServiceProvider scopedServices)
         {
-            var storage = config["DevOptions:DbPlatform"];
+            var deleteLogsOlderThanDays = 90;
+            var storage = config["DevOptions:DbPlatform"].ToLowerInvariant();
             switch (storage)
             {
-                case "NoDb":
-                    CoreNoDbStartup.InitializeDataAsync(services).Wait();
+                case "efcore":
+                    LoggingEFStartup.InitializeDatabaseAsync(scopedServices, deleteLogsOlderThanDays).Wait();
+                    CoreEFStartup.InitializeDatabaseAsync(scopedServices).Wait();
+                    SimpleContentEFStartup.InitializeDatabaseAsync(scopedServices).Wait();
                     break;
 
-                case "ef":
+                case "nodb":
                 default:
-
-                    CoreEFStartup.InitializeDatabaseAsync(services).Wait();
-
-                    LoggingEFStartup.InitializeDatabaseAsync(services).Wait();
-
-                    SimpleContentEFStartup.InitializeDatabaseAsync(services).Wait();
-
+                    CoreNoDbStartup.InitializeDataAsync(scopedServices).Wait();
                     break;
             }
         }
@@ -87,7 +73,7 @@ namespace sourceDev.WebApp
             IConfiguration config
             )
         {
-            var dbLoggerConfig = config.GetSection("DbLoggerConfig").Get<DbLoggerConfig>();
+            var dbLoggerConfig = config.GetSection("DbLoggerConfig").Get<cloudscribe.Logging.Models.DbLoggerConfig>();
             LogLevel minimumLevel;
             string levelConfig;
             if (env.IsProduction())
@@ -142,4 +128,6 @@ namespace sourceDev.WebApp
         }
 
     }
+
+
 }

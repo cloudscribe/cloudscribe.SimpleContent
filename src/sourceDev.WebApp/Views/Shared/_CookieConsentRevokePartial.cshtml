@@ -7,8 +7,7 @@
     {
         showRevoke = consentFeature.CanTrack;
     }
-
-    if (Context.Request.Path.StartsWithSegments("/offline")) { showRevoke = false; }
+	if (Context.Request.Path.ToString().Contains("/offline")) { showRevoke = false; }
 
 }
 @if (showRevoke)

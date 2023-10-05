@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>cloudscribe New Project</title>
+    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="main" class="container body-content" role="main">
+
+        <a href="https://www.cloudscribe.com?utm_source=projecttemplate&amp;utm_medium=referral&amp;utm_campaign=newproject-allstorage">
+            <img alt="cloudscribe"
+                 class="img-responsive"
+                 src="https://www.cloudscribe.com/campaignimages/projectreadmeheader.png?utm_source=projecttemplate&amp;c=Offsite-Interactions&amp;a=Project-Created&amp;m=7&amp;d=4&amp;dl=newproject-allstorage&amp;cb=91671AF7-32DD-44B9-BBF0-751A950EE9A0">
+        </a>
+
+
+        <section>
+            <h2>Thanks for starting your project with cloudscribe!</h2>
+            <p>Here are some informative tips to help you get started.</p>
+            <h3>IMPORTANT: Update all the cloudscribe NuGet packages to the latest version before you do anything else.</h3>
+            <p>
+                Right click the solution node and choose "Manage NuGet Packages for Solution", then check for any available updates.
+            </p>
+
+            <p>
+                We would really appreciate it if you could <a target="_blank" href="https://www.cloudscribe.com/account/register?utm_source=projecttemplate&amp;utm_medium=referral&amp;utm_campaign=newproject-allstorage">register on cloudscribe.com</a>
+                if you haven't already, and be sure to checkout the <a target="_blank" href="https://www.cloudscribe.com/docs?utm_source=projecttemplate&amp;utm_medium=referral&amp;utm_campaign=newproject-allstorage">documentation</a>.
+                You can also ask questions in our <a target="_blank" href="https://www.cloudscribe.com/forum?utm_source=projecttemplate&amp;utm_medium=referral&amp;utm_campaign=newproject-allstorage">community forums</a>.
+            </p>
+            <p>Click the "watch" button in the <a href="https://github.com/cloudscribe/Announcements" target="_blank">cloudscribe Announcements Repository</a> to get notified about any major or breaking changes in future updates to our NuGet packages. </p>
+            <p>
+                If you like cloudscribe and our Visual Studio project template, please give us a good review in
+                <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=joeaudette.cloudscribeProjectTemplate">the Visual Studio Marketplace</a>
+            </p>
+            <p>Follow <a target="_blank" href="https://twitter.com/cloudscribeweb">@cloudscribeweb</a> on Twitter and <a target="_blank" href="https://www.facebook.com/cloudscribeweb">Facebook</a>!</p>
+
+            <article>
+                <h3><span aria-hidden="true" class="fa fa-check"></span> Next Steps</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Login Credentials</strong>
+                        When you first run the project application an administrative user account will be created automatically with the email admin@admin.com
+                        and the password admin. Once you login with administrative permissions a new Administration menu will appear, you should take a look around
+                        the various menu items to find the configurable settings that are of interest to you. One of the first things you should do is change the email
+                        address and password of the admin user account.  You can change the email under Administration > User Management > User List.
+                        You can change the password by clicking the welcome user message at the top of the page. Be careful not to forget your password at least until
+                        you have configured SMTP settings for email because password reset emails can't be sent until you do that.
+                        If you deploy the application to public facing web hosting be sure to change these credentials immediately after deployment.
+
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Data Protection</strong>
+                        Be sure to see the comments in Startup.cs about data protection and how to configure the storage location of data protection keys.
+                        Data protection keys are used to encrypt some settings that are persisted to data storage such as the password for SMTP, and the "secrets"
+                        for social authentication.
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Configure Email Settings for email notifications</strong>
+                        In order for certain features like password reset or requiring a confirmed email to work, your site needs to be able to send email notifications.
+                        You will find settings for this under Administration > Email Settings
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Build your own custom features</strong>
+                        Now that your project is created, you likely have plans to write some code for the custom features you need. cloudscribe doesn't impose
+                        any prescriptive requirements or patterns for how you build your own features, you can typically use any patterns and approaches
+                        that you would normally use in ASP.NET Core. But there is some guidance provided for getting the current user information and how to
+                        optionally implement multi-tenancy in your own features if you need that.
+                        See the <a href="https://www.cloudscribe.com/docs/building-custom-features-that-integrate-with-cloudscribe-core?utm_source=projecttemplate&amp;utm_medium=referral&amp;utm_campaign=newproject-allstorage">Building Custom Features Documentation</a>
+                        for more information.
+                    </li>
+
+                    <li class="list-group-item">
+                        <strong>Create a Custom theme</strong>
+                        There are a bunch of bootswatch themes included and you can choose the theme from a dropdown list under Administration > Site Settings after you login to your project.
+                        But more than likely you will want to create a custom theme.
+                        You will want to customize the sass files under app-scss, and
+                        the _Layout.cshtml file under sitefiles/s1/themes/custom1/Shared. For example look in the _variables.scss file for $navbar-inverse-bg:
+                        which controls the background color of the top navigation. Change the color and refresh the page and it should change right away because
+                        we have a gulp task for hot reloading.
+                        See the <a href="https://www.cloudscribe.com/docs/themes-and-web-design?utm_source=projecttemplate&amp;utm_medium=referral&amp;utm_campaign=newproject-allstorage">Themes and Web Design</a>
+                        documentation for more information.
+                    </li>
+
+                    <li class="list-group-item">
+                        <strong>Configuration Sources</strong>
+                        By default, the configuration system will let you override appsettings.json from appsettings.Development.json when the environment is Development.
+                        It's best to avoid putting any sensitive information directly in appsettings.json because you will likely want to include that file in source control.
+                        You can copy any settings from appsettings.json into appsettings.Development.json instead of putting anything sensitive in appsettings.json.
+                        We generally add appsettings.Development.json to the .gitignore file so that any connection strings or credentials won't go into source control.
+                        It also supports overriding appsettings.json with appsettings.Production.json if the environment is Production. We don't include an
+                        appsettings.Production.json file in the template, and would create that file manually on the production server as part of the first deployment.
+                        For Azure hosting you would generally use Environment Variables or Azure Key Vault as discussed in the
+                        <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration?tabs=basicconfiguration">official documentation</a>.
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Google Analytics</strong>
+                        cloudscribe has built in support for Google Analytics - just add your profile id under Administration > Site Settings.
+                        There is also tracking of account activities such as site registration and logins, including social login tracking.
+                        To get the most benefit from Google Analytics, see the <a href="https://www.cloudscribe.com/docs/google-analytics-integration?utm_source=projecttemplate&amp;utm_medium=referral&amp;utm_campaign=newproject-allstorage">documentation</a>.
+                    </li>
+
+                </ul>
+            </article>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Need any help?</h2>
+
+                    <p>If you find you don't have enough time to achieve what you want, we might be able to help. As the maintainers of cloudscribe open source libraries and products, we understand how to get things done, and we can offer assistance ranging from a couple of hours of consultancy, or troubleshooting your issues through a screenshare, through to full analysis and development of your solution.</p>
+                    <p>
+                        Why not get in touch through our <a href="https://www.cloudscribe.com/contact">contact form</a>.
+                    </p>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Support cloudscribe by Buying Swag at Our CafePress Shop!</h2>
+                    <p>
+                        We have invested a lot of unpaid time and effort to make cloudscribe available and to keep improving it.
+                        We really appreciate anything you can do to support this work, so please help spread the word and encourage others to try
+                        cloudscribe. If you can spare a few bucks for a t-shirt or a voluntary payment we would be grateful.
+                    </p>
+                    <p>
+                        See all the available merchandise on our <a href="http://www.cafepress.com/cloudscribe">CafePress shop!</a>
+                        We make about $5 on each item and you can help us spread awareness of cloudscribe with our branded products.
+                        Only a few of our branded items are shown below.
+                    </p>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="http://www.cafepress.com/cloudscribe.81640156"><img src="https://www.cloudscribe.com/img/cloudscribewww_tshirt.jpg" /></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="http://www.cafepress.com/cloudscribe.81640151"><img src="https://www.cloudscribe.com/img/cloudscribewww_sweatshirt.jpg" /></a>
+                </div>
+                <div class="col-md-4">
+                    <a href="http://www.cafepress.com/cloudscribe.81640150"><img src="https://www.cloudscribe.com/img/cloudscribe-mug-cp.png" /></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Check out our commercial cloudscribe modules</h2>
+
+                    <p>cloudscribe commercial libraries are published as nuget packages just like <a href="/docs/complete-list-of-cloudscribe-libraries">our open source libraries</a>. You can find <a href="https://www.nuget.org/profiles/cloudscribe">all of our libraries on nuget.org</a>, the open source libraries have blue icons and the commercial libraries have green icons. The easiest way to get our products is by using our <a href="https://marketplace.visualstudio.com/items?itemName=joeaudette.cloudscribeProjectTemplate">Project Template for Visual Studio</a>, which can create an application configured with our open source and commercial libraries in various configurations based on the options you choose. We also have reference sample applications on github that show how to wire up the nuget packages in case you want to integrate our products with existing web applications. You can find links to the reference applications in the list below and in the product details listed in <a href="/store">our&nbsp;store</a>. All of our commercial products are released under our <a href="https://www.cloudscribe.com/CommercialProductLicense.md" target="_blank">commercial product license</a>.</p>
+
+                    <p>Some of our commercial libraries can be used with any ASP.NET Core MVC application and do not require cloudscribe Core, but all of our commercial libraries work optimally when used with our open source libraries.</p>
+
+                    <p>We put a lot of effort into all of our products both open source and commercial, but we depend on sales of our commercial products to support our continued work.</p>
+                    <p>
+                        Find out more about our <a href="https://www.cloudscribe.com/complete-list-of-cloudscribe-commercial-product-libraries">cloudscribe commercial libraries.</a>
+                    </p>
+                </div>
+            </div>
+            <hr />
+            <!--
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Make a Voluntary Payment to Say Thanks!</h2>
+            <div class="col-md-3 donate-button">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="LRTXQVNQWWJWU">
+                    <table>
+                        <tr><td><input type="hidden" name="on0" value="Support My Work">Support My Work</td></tr>
+                        <tr>
+                            <td>
+                                <select name="os0">
+                                    <option value="Good will contribution">Good will contribution $25.00 USD</option>
+                                    <option value="I really benefited from your work">I really benefited from your work $50.00 USD</option>
+                                    <option value="I&#x27;m really getting a lot of value from your work!">I'm really getting a lot of value from your work! $100.00 USD</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="currency_code" value="USD">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                </form>
+            </div>
+            <div class="col-md-3 donate-button">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="DHASFB2BGS5UY">
+                    <table>
+                        <tr><td><input type="hidden" name="on0" value="Beer Donation">Beer Donation</td></tr>
+                        <tr>
+                            <td>
+                                <select name="os0">
+                                    <option value="Buy Me a Pint of Beer!">Buy Me a Pint of Beer! $5.00 USD</option>
+                                    <option value="Buy Me a 6 Pack!">Buy Me a 6 Pack! $15.00 USD</option>
+                                    <option value="Buy Me a Case of Beer!">Buy Me a Case of Beer! $25.00 USD</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="currency_code" value="USD">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                </form>
+            </div>
+            <div class="col-md-3 donate-button">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="AGPRQQBGPGKYN">
+                    <table>
+                        <tr><td><input type="hidden" name="on0" value="Coffee Donation">Coffee Donation</td></tr>
+                        <tr>
+                            <td>
+                                <select name="os0">
+                                    <option value="Buy Me a Cup of Coffee!">Buy Me a Cup of Coffee! $5.00 USD</option>
+                                    <option value="Buy Me Breakfast!">Buy Me Breakfast! $15.00 USD</option>
+                                    <option value="Buy Me a Week of Coffee!">Buy Me a Week of Coffee! $25.00 USD</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="currency_code" value="USD">
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                </form>
+            </div>
+        </div>
+    </div>
+    -->
+
+        </section>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.1/bootstrap.min.js"></script>
+
+</body>
+</html>

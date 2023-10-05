@@ -1,98 +1,71 @@
-﻿using cloudscribe.SimpleContent.Models;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
+
 using Microsoft.Extensions.Configuration;
+using System.IO;
 using System.Collections.Generic;
+using cloudscribe.SimpleContent.Models;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class CloudscribeFeatures
     {
+
         public static IServiceCollection SetupDataStorage(
             this IServiceCollection services,
-            IConfiguration config
+            IConfiguration config,
+            IWebHostEnvironment env
             )
         {
-            //services.AddScoped<cloudscribe.Core.Models.Setup.ISetupTask, cloudscribe.Core.Web.Components.EnsureInitialDataSetupTask>();
-
-            var storage = config["DevOptions:DbPlatform"];
-            var efProvider = config["DevOptions:EFProvider"];
-            var useMiniProfiler = config.GetValue<bool>("DevOptions:EnableMiniProfiler");
+            var storage = config["DevOptions:DbPlatform"].ToLowerInvariant();
+            var efProvider = config["DevOptions:EFProvider"].ToLowerInvariant();
+            string connectionString;
 
             switch (storage)
             {
-                case "NoDb":
-                    var useSingletons = true;
-                    services.AddCloudscribeCoreNoDbStorage(useSingletons);
-                    // only needed if using cloudscribe logging with NoDb storage
-                    services.AddCloudscribeLoggingNoDbStorage(config);
-                    services.AddNoDbStorageForSimpleContent(useSingletons);
-
-                    if (useMiniProfiler)
-                    {
-                        //services.AddMiniProfiler();
-                    }
-
-                    break;
-
-                case "ef":
-                default:
-
-                    if (useMiniProfiler)
-                    {
-                        //services.AddMiniProfiler()
-                        //    .AddEntityFramework();
-                    }
-
+                case "efcore":
                     switch (efProvider)
                     {
-                        case "sqlite":
-                            var slConnection = config.GetConnectionString("SQLiteEntityFrameworkConnectionString");
-                            services.AddCloudscribeCoreEFStorageSQLite(slConnection);
-                            services.AddCloudscribeLoggingEFStorageSQLite(slConnection);
-                            services.AddCloudscribeSimpleContentEFStorageSQLite(slConnection);
-
-                            break;
-
-                        case "pgsql-old":
-                            var pgConnection = config.GetConnectionString("PostgreSqlEntityFrameworkConnectionString");
-                            services.AddCloudscribeCoreEFStoragePostgreSql(pgConnection);
-                            services.AddCloudscribeLoggingEFStoragePostgreSql(pgConnection);
-                            services.AddCloudscribeSimpleContentEFStoragePostgreSql(pgConnection);
-
+                        case "mysql":
+                            connectionString = config.GetConnectionString("MySqlEntityFrameworkConnection");
+                            services.AddCloudscribeCoreEFStorageMySql(connectionString);
+                            services.AddCloudscribeLoggingEFStorageMySQL(connectionString);
+                            services.AddCloudscribeSimpleContentEFStorageMySQL(connectionString);
                             break;
 
                         case "pgsql":
-                            var pgsConnection = config.GetConnectionString("PostgreSqlConnectionString");
-                            services.AddCloudscribeCorePostgreSqlStorage(pgsConnection);
-                            services.AddCloudscribeLoggingPostgreSqlStorage(pgsConnection);
-                            services.AddCloudscribeSimpleContentPostgreSqlStorage(pgsConnection);
-
+                            connectionString = config.GetConnectionString("PostgreSqlEntityFrameworkConnection");
+                            services.AddCloudscribeCorePostgreSqlStorage(connectionString);
+                            services.AddCloudscribeLoggingPostgreSqlStorage(connectionString);
+                            services.AddCloudscribeSimpleContentPostgreSqlStorage(connectionString);
                             break;
 
-                        case "MySql":
-                            var mysqlConnection = config.GetConnectionString("MySqlEntityFrameworkConnectionString");
-                            services.AddCloudscribeCoreEFStorageMySql(mysqlConnection);
-                            services.AddCloudscribeLoggingEFStorageMySQL(mysqlConnection);
-                            services.AddCloudscribeSimpleContentEFStorageMySQL(mysqlConnection);
-
+                        case "sqlite":
+                            var dbName = config.GetConnectionString("SQLiteDbName");
+                            var dbPath = Path.Combine(env.ContentRootPath, dbName);
+                            connectionString = $"Data Source={dbPath}";
+                            services.AddCloudscribeCoreEFStorageSQLite(connectionString);
+                            services.AddCloudscribeLoggingEFStorageSQLite(connectionString);
+                            services.AddCloudscribeSimpleContentEFStorageSQLite(connectionString);
                             break;
 
-                        case "MSSQL":
+                        case "mssql":
                         default:
-                            var connectionString = config.GetConnectionString("EntityFrameworkConnectionString");
+                            connectionString = config.GetConnectionString("EntityFrameworkConnection");
                             services.AddCloudscribeCoreEFStorageMSSQL(connectionString);
-
-                            // only needed if using cloudscribe logging with EF storage
                             services.AddCloudscribeLoggingEFStorageMSSQL(connectionString);
-
                             services.AddCloudscribeSimpleContentEFStorageMSSQL(connectionString);
-
-
                             break;
                     }
+                    break;
 
-
-
-
+                case "nodb":
+                default:
+                    var useSingletons = true;
+                    services.AddCloudscribeCoreNoDbStorage(useSingletons);
+                    services.AddCloudscribeLoggingNoDbStorage(config);
+                    services.AddNoDbStorageForSimpleContent(useSingletons);
                     break;
             }
 
@@ -104,14 +77,19 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration config
             )
         {
-            services.AddCloudscribeLogging();
 
-            //services.AddScoped<cloudscribe.Web.Navigation.Caching.ITreeCache, cloudscribe.Web.Navigation.Caching.NotCachedTreeCache>();
+            services.AddCloudscribeLogging(config);
 
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.Web.Navigation.NavigationNodePermissionResolver>();
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.SimpleContent.Web.Services.PagesNavigationNodePermissionResolver>();
-
             services.AddCloudscribeCoreMvc(config);
+
+            //The template should not have put this here
+            // var storage = config["DevOptions:DbPlatform"].ToLowerInvariant();
+            // if (storage == "efcore")
+            // {
+            //     services.AddScoped<IQueryTool, QueryTool>();
+            // }
 
             services.Configure<List<ProjectSettings>>(config.GetSection("ContentProjects"));
 
@@ -128,11 +106,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<cloudscribe.FileManager.Web.Models.AutomaticUploadOptions>(config.GetSection("AutomaticUploadOptions"));
 
             services.AddSimpleContentRssSyndiction();
-
-            //services.AddPwaKit(config);
-            //services.AddPwaKitCloudscribeCoreIntegration(config);
-            //services.AddPwaKitNavigationIntegration(config);
-            //services.AddPwaKitSimpleContentIntegration(config);
 
 
             return services;

@@ -246,4 +246,19 @@
   <data name="User Search" xml:space="preserve">
     <value>Recherche d'utilisateur</value>
   </data>
+  <data name="Content History" xml:space="preserve">
+    <value>Histoire du contenu</value>
+  </data>
+  <data name="Content Settings" xml:space="preserve">
+    <value>Paramètres de contenu</value>
+  </data>
+  <data name="File Manager" xml:space="preserve">
+    <value>Gestionnaire de fichiers</value>
+  </data>
+  <data name="Page Management" xml:space="preserve">
+    <value>Gestion de page</value>
+  </data>
+  <data name="Privacy Settings" xml:space="preserve">
+    <value>Paramètres de confidentialité</value>
+  </data>
 </root>

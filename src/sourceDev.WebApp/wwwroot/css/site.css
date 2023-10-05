@@ -18,8 +18,14 @@ body {
 
 #editPostLink {
     position: absolute;
-    top: 140px;
+    top: 145px;
     right: 0px;
+}
+
+#unpublishPostLink {
+    position: absolute;
+    top: 180px !important;
+    right: 0px !important;
 }
 
 #pageManagerLink {
@@ -30,15 +36,22 @@ body {
 
 #newPageLink {
     position: absolute;
-    top: 140px;
+    top: 145px;
     right: 0px;
 }
 
 #editPageLink {
     position: absolute;
-    top: 170px;
+    top: 180px;
     right: 0px
 }
+
+#unpublishPageLink {
+    position: absolute;
+    top: 215px !important;
+    right: 0px !important
+}
+
 #sidenavtoggle {
     position: absolute;
     top: 120px;
