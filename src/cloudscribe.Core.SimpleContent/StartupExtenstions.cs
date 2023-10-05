@@ -1,4 +1,6 @@
-﻿using cloudscribe.Core.SimpleContent;
+﻿using cloudscribe.Core.Models.EventHandlers;
+using cloudscribe.Core.SimpleContent;
+using cloudscribe.Core.SimpleContent.EventHandlers;
 using cloudscribe.Core.SimpleContent.Integration;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Design;
@@ -30,6 +32,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ISimpleContentThemeHelper, SiteSimpleContentThemeHelper>();
 
             services.AddScoped<ITreeCacheKeyResolver, SiteNavigationCacheKeyResolver>();
+            services.AddScoped<IHandleRoleUpdated, HandleRoleUpdated>();
+            services.AddScoped<IHandleRoleDeleted, HandleRoleDeleted>();
             
 
             if (configuration != null)
