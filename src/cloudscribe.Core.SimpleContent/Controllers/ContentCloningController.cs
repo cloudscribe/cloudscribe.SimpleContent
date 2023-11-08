@@ -12,6 +12,7 @@ using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.Web.Common.Extensions;
 using cloudscribe.Web.Navigation;
+using cloudscribe.Web.Navigation.Caching;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -36,31 +37,34 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
         private readonly IPostQueries       _postQueries;
         private readonly IPostCommands      _postCommands;
         private readonly IConfiguration     _configuration;
+        private readonly ITreeCache _treeCache;
         private readonly IStringLocalizer   sr;
 
         public ContentCloningController(
-            IProjectService projectService,
-            SiteManager siteManager,
-            ISiteQueries siteQueries,
+            IProjectService  projectService,
+            SiteManager      siteManager,
+            ISiteQueries     siteQueries,
             IProjectCommands projectCommands,
-            IPageQueries pageQueries,
-            IPageCommands pageCommands,
-            IPostQueries postQueries,
-            IPostCommands postCommands,
-            IConfiguration configuration,
+            IPageQueries     pageQueries,
+            IPageCommands    pageCommands,
+            IPostQueries     postQueries,
+            IPostCommands    postCommands,
+            IConfiguration   configuration,
+            ITreeCache       treeCache,
             IStringLocalizer<cloudscribe.SimpleContent.Web.SimpleContent> localizer
             )
         {
-            _projectService = projectService;
-            _siteManager = siteManager;
-            _siteQueries = siteQueries;
+            _projectService  = projectService;
+            _siteManager     = siteManager;
+            _siteQueries     = siteQueries;
             _projectCommands = projectCommands;
-            _pageQueries = pageQueries;
-            _pageCommands = pageCommands;
-            _postQueries = postQueries;
-            _postCommands = postCommands;
-            _configuration = configuration;
-            sr = localizer;
+            _pageQueries     = pageQueries;
+            _pageCommands    = pageCommands;
+            _postQueries     = postQueries;
+            _postCommands    = postCommands;
+            _configuration   = configuration;
+            _treeCache       = treeCache;
+            sr               = localizer;
         }
 
         [Authorize(Policy = "AdminPolicy")]
@@ -152,24 +156,41 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
                 {
                     try
                     {
-                        List<IPage> pages = await _pageQueries.GetAllPages(model.CloneToSiteId);
-                        foreach (var page in pages)
+                        List<IPage> newPages = await _pageQueries.GetAllPages(model.CloneToSiteId);
+                        List<IPage> oldPages = await _pageQueries.GetAllPages(model.CloneFromSiteId);
+
+                        foreach (var newPage in newPages)
                         {
-                            if(!string.IsNullOrWhiteSpace(page.ParentSlug))
+                            if(newPage.ParentId != null && newPage.ParentId != "0")
                             {
-                                string parentSlug = page.ParentSlug;
-                                var parent = pages.FirstOrDefault(p => p.Slug == parentSlug);
-                                if(parent != null)
+                                // find the old parent of the page that has been copied
+                                var oldParent = oldPages.FirstOrDefault(x => x.Id == newPage.ParentId);
+
+                                if (oldParent != null)
                                 {
-                                    page.ParentId = parent.Id;
-                                    await _pageCommands.Update(model.CloneToSiteId, page);
+                                    // find the matching new page that will now be the new parent
+                                    var newParent = newPages.FirstOrDefault(x => x.Slug == oldParent.Slug);
+
+                                    if (newParent != null)
+                                    { 
+                                        newPage.ParentId   = newParent.Id;
+                                        newPage.ParentSlug = newParent.Slug;
+                                    }
+                                    else  //orphaned page - can't find the old parent's slug among the newly cloned pages
+                                    {
+                                        newPage.ParentId = "0";
+                                        newPage.ParentSlug = "";
+                                    }
                                 }
-                                else //orphaned page - can't find the parent slug
+                                else  //orphaned page - can't find the old parent Id of the page that has been copied
                                 {
-                                    page.ParentId = "0"; //convert to a root/top level page
-                                    await _pageCommands.Update(model.CloneToSiteId, page);
+                                    newPage.ParentId = "0";
+                                    newPage.ParentSlug = "";
                                 }
+
+                                await _pageCommands.Update(model.CloneToSiteId, newPage);
                             }
+
                             pageUpdateCount++;
                         }
                     }
@@ -218,6 +239,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             {
                 this.AlertInformation(sr["Rewriting content urls is not yet implemented."], true);
             }
+
+            await _treeCache.ClearTreeCache();
 
             return View(model);
         }
