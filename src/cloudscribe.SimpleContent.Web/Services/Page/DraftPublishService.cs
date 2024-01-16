@@ -2,6 +2,7 @@
 using cloudscribe.SimpleContent.Services;
 using cloudscribe.Web.Navigation.Caching;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,28 +42,40 @@ namespace cloudscribe.SimpleContent.Web.Services
         public async Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken))
         {
             var settings = await _projectService.GetCurrentProjectSettings().ConfigureAwait(false);
-            var drafts = await _pageQueries.GetPagesReadyForPublish(settings.Id, cancellationToken);
-            foreach (var page in drafts)
+
+            try
             {
-                page.Content = page.DraftContent;
-                page.Author = page.DraftAuthor;
-                page.PubDate = page.DraftPubDate.Value;
-                page.SerializedModel = page.DraftSerializedModel;
-                page.IsPublished = true;
+                var drafts = await _pageQueries.GetPagesReadyForPublish(settings.Id, cancellationToken);
+                foreach (var page in drafts)
+                {
+                    page.Content = page.DraftContent;
+                    page.Author = page.DraftAuthor;
+                    page.PubDate = page.DraftPubDate.Value;
+                    page.SerializedModel = page.DraftSerializedModel;
+                    page.IsPublished = true;
 
-                page.DraftAuthor = null;
-                page.DraftContent = null;
-                page.DraftSerializedModel = null;
-                page.DraftPubDate = null;
+                    page.DraftAuthor = null;
+                    page.DraftContent = null;
+                    page.DraftSerializedModel = null;
+                    page.DraftPubDate = null;
 
-                await Update(page, settings);
+                    await Update(page, settings);
 
-                await _eventHandlers.HandlePublished(page.ProjectId, page).ConfigureAwait(false);
-                await _historyCommands.DeleteDraftHistory(page.ProjectId, page.Id).ConfigureAwait(false);
+                    await _eventHandlers.HandlePublished(page.ProjectId, page).ConfigureAwait(false);
+                    await _historyCommands.DeleteDraftHistory(page.ProjectId, page.Id).ConfigureAwait(false);
 
-                await _navigationCache.ClearTreeCache();
+                    await _navigationCache.ClearTreeCache();
 
-                _log.LogDebug($"auto published draft for page {page.Title}");
+                    _log.LogDebug($"auto published draft for page {page.Title}");
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                _log.LogDebug("PublishReadyDrafts for page cancelled");
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex, "PublishReadyDrafts for page threw exception");
             }
         }
 

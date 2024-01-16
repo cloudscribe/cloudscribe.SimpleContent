@@ -58,26 +58,38 @@ namespace cloudscribe.SimpleContent.Services
         public async Task PublishReadyDrafts(CancellationToken cancellationToken = default(CancellationToken))
         {
             await EnsureBlogSettings();
-            var drafts = await _postQueries.GetPostsReadyForPublish(_settings.Id, cancellationToken);
-            foreach (var post in drafts)
+
+            try
             {
-                post.Content = post.DraftContent;
-                post.Author = post.DraftAuthor;
-                post.PubDate = post.DraftPubDate.Value;
-                post.SerializedModel = post.DraftSerializedModel;
-                post.IsPublished = true;
+                var drafts = await _postQueries.GetPostsReadyForPublish(_settings.Id, cancellationToken);
+                foreach (var post in drafts)
+                {
+                    post.Content = post.DraftContent;
+                    post.Author = post.DraftAuthor;
+                    post.PubDate = post.DraftPubDate.Value;
+                    post.SerializedModel = post.DraftSerializedModel;
+                    post.IsPublished = true;
 
-                post.DraftAuthor = null;
-                post.DraftContent = null;
-                post.DraftSerializedModel = null;
-                post.DraftPubDate = null;
+                    post.DraftAuthor = null;
+                    post.DraftContent = null;
+                    post.DraftSerializedModel = null;
+                    post.DraftPubDate = null;
 
-                await Update(post);
+                    await Update(post);
 
-                await _eventHandlers.HandlePublished(_settings.Id, post).ConfigureAwait(false);
-                await _historyCommands.DeleteDraftHistory(_settings.Id, post.Id).ConfigureAwait(false);
-                
-                _log.LogDebug($"auto published draft for post {post.Title}");
+                    await _eventHandlers.HandlePublished(_settings.Id, post).ConfigureAwait(false);
+                    await _historyCommands.DeleteDraftHistory(_settings.Id, post.Id).ConfigureAwait(false);
+
+                    _log.LogDebug($"auto published draft for post {post.Title}");
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                _log.LogDebug("PublishReadyDrafts for post cancelled");
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex, "PublishReadyDrafts for post threw exception");
             }
         }
 
