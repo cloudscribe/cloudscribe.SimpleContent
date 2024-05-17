@@ -27,7 +27,14 @@
     <partial name="DraftInfoPartial" model="@Model" />
     <partial name="HistoryInfoPartial" model="@Model" />
     <header class="jumbotron">
-        <h1 itemprop="headline name">@Model.CurrentPost.Title</h1>
+        @if (Model.ProjectSettings.ShowTitle)
+        {
+            <h2 itemprop="headline name">@Model.CurrentPost.Title</h2>
+        }
+        else
+        {
+            <h1 itemprop="headline name">@Model.CurrentPost.Title</h1>
+        }
         <div class="bh">
             @{
                 DateTime? pubDate = Model.CurrentPost.PubDate;
