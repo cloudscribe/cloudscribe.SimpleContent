@@ -9,6 +9,7 @@
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web;
 using cloudscribe.SimpleContent.Web.Services;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
@@ -308,6 +309,8 @@ namespace cloudscribe.SimpleContent.Services
             //ClearNavigationCache();
 
             result = new PageActionResult(true, "operation succeeded");
+
+            await _eventHandlers.HandleMoved(_settings.Id, movedNode, targetNode, model.Position).ConfigureAwait(false);
 
             return result;
         }

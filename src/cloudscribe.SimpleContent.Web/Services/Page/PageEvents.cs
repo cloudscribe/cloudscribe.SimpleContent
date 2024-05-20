@@ -24,6 +24,7 @@ namespace cloudscribe.SimpleContent.Services
             IEnumerable<IHandlePageUpdated> updateHandlers,
             IEnumerable<IHandlePagePublished> publishHandlers,
             IEnumerable<IHandlePageUnPublished> unPublishHandlers,
+            IEnumerable<IHandlePageMoved> movedHandlers,
             ILogger<PageEvents> logger
             )
         {
@@ -33,6 +34,7 @@ namespace cloudscribe.SimpleContent.Services
             _updateHandlers = updateHandlers;
             _publishHandlers = publishHandlers;
             _unPublishHandlers = unPublishHandlers;
+            _movedHandlers = movedHandlers;
             _log = logger;
         }
 
@@ -42,6 +44,7 @@ namespace cloudscribe.SimpleContent.Services
         private readonly IEnumerable<IHandlePageUpdated> _updateHandlers;
         private readonly IEnumerable<IHandlePagePublished> _publishHandlers;
         private readonly IEnumerable<IHandlePageUnPublished> _unPublishHandlers;
+        private readonly IEnumerable<IHandlePageMoved> _movedHandlers;
         private readonly ILogger _log;
 
         public async Task HandlePreUpdate(
@@ -155,6 +158,29 @@ namespace cloudscribe.SimpleContent.Services
                 try
                 {
                     await handler.Handle(projectId, page, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError($"{ex.Message} : {ex.StackTrace}");
+                }
+
+            }
+        }
+
+
+        public async Task HandleMoved(
+            string projectId,
+            IPage movedPage,
+            IPage targetPage,
+            string position, // before / after / inside
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
+        {
+            foreach (var handler in _movedHandlers)
+            {
+                try
+                {
+                    await handler.Handle(projectId, movedPage, targetPage, position, cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
