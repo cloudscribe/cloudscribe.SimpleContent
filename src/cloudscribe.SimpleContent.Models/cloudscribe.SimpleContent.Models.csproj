@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Models Class Library</Description>
-    <Version>6.0.2</Version>
-    <TargetFramework>net6.0</TargetFramework>
+    <Version>8.0.0</Version>
+    <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog;cms</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
@@ -19,12 +19,12 @@
 
   <ItemGroup>
 
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="cloudscribe.Pagination.Models" Version="1.1.0" />
+    <PackageReference Include="cloudscribe.Pagination.Models" Version="8.0.0" />
 
     <PackageReference Include="System.Security.Claims" Version="4.3.0" />
   </ItemGroup>

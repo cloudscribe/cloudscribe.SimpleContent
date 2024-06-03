@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -84,8 +85,10 @@ namespace Microsoft.Extensions.DependencyInjection
             
             services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
             
-            services.AddMediatR(typeof(PageService).Assembly);
-            
+            // jk breaking change in Mediatr v12
+            // services.AddMediatR(typeof(PageService).Assembly);
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
             services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();
             services.AddScoped<IValidateTemplateModel, DefaultTemplateModelValidator>();
             
