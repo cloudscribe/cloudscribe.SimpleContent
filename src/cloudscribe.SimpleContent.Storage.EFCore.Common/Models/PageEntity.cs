@@ -75,18 +75,31 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         {
             get
             {
-                var list = CategoriesCsv.Split(new char[] { ',' },
-                        StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
+                if(string.IsNullOrWhiteSpace(CategoriesCsv)) 
+                {
+                    categories = new List<string>();
+                }
+                else 
+                {
+                    var list = CategoriesCsv.Split(new char[] { ',' },
+                            StringSplitOptions.RemoveEmptyEntries).Select(c => c.Trim().ToLower()).ToList();
 
-                categories.AddRange(list.Where(p2 =>
-                  categories.All(p1 => p1 != p2)));
-
+                    categories.AddRange(list.Where(p2 => categories.All(p1 => p1 != p2)));
+                }
                 return categories;
             }
             set
             {
-                categories = value;
-                CategoriesCsv = string.Join(",", categories);
+                if(value != null) 
+                {
+                    categories = value;
+                    CategoriesCsv = string.Join(",", categories);
+                }
+                else 
+                {
+                    categories = new List<string>();
+                    CategoriesCsv = string.Empty;
+                }
             }
         }
 
