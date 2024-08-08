@@ -21,6 +21,11 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
 
         protected SimpleContentDbContext() { }
 
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Conventions.Add(_ => new BlankTriggerAddingConvention());
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
