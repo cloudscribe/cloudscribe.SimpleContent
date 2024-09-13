@@ -31,28 +31,13 @@ body {
     right: 0px!important;
 }
 
-#pageManagerLink {
-    position: absolute;
-    top: 170px;
-    right: 0px;
+.btn-group-small-admin {
+    left: auto;
+    top: 25%;
 }
 
-#newPageLink {
-    position: absolute;
-    top: 200px;
-    right: 0px;
-}
-
-#editPageLink {
-    position: absolute;
-    top: 230px;
-    right: 0px
-}
-
-#unpublishPageLink {
-    position: absolute;
-    top: 260px!important;
-    right: 0px!important
+.btn-group-small-admin > .btn:not(:first-child), .btn-group-small-admin > .btn-group-small-admin:not(:first-child) {
+    margin-left: 0;
 }
 
 #sidenavtoggle {
