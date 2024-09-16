@@ -104,11 +104,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="ViewRoles">@sr["View Roles"]</label>
-                <input asp-for="ViewRoles" class="form-control" style="width:80%;display:inline-block;" data-toggle="tooltip" title='@sr["Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members."]' />
+                <input asp-for="ViewRoles" class="form-control" style="width:80%;" data-toggle="tooltip" title='@sr["Leave View Roles blank for public pages. You can put comma separated role names here to make a page visible only to users who are role members."]' />
                 <a class="btn btn-primary"
                    csc-role-selector="@roleSelector"
                    csc-projectId="@Model.ProjectId"
-                   csc-target-id="ViewRoles" style="margin-bottom:0.25rem;">@sr["Select Roles"]</a>
+                   csc-target-id="ViewRoles">@sr["Select Roles"]</a>
                 <span asp-validation-for="ViewRoles" class="invalid-feedback"></span>
             </div>
         </div>
