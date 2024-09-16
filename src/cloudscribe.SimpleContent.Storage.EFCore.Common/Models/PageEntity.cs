@@ -229,5 +229,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
 
             return p;
         }
+
+        public bool ShowCreatedBy { get; set; } = false;
+        public bool ShowCreatedDate { get; set; } = false;
+        public bool ShowLastModifiedBy { get; set; } = false;
+        public bool ShowLastModifiedDate { get; set; } = false;
     }
 }

@@ -56,8 +56,6 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
 
         public string AboutContent { get; set; } 
 
-
-
         // if true automatically add the blog index
         public bool AddBlogToPagesTree { get; set; } = true;
         public bool BlogMenuLinksToNewestPost { get; set; } = false;
