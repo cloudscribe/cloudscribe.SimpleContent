@@ -1,0 +1,37 @@
+﻿.btn-group-small-admin {
+    left: auto;
+    top: 25%;
+}
+
+.btn-group-small-admin > .btn:not(:first-child), .btn-group-small-admin > .btn-group-small-admin:not(:first-child) {
+    margin-left: 0;
+}
+
+/*Below won't be required if they are removed from the other stylesheets*/
+#newPostLink {
+    position: unset;
+}
+
+#editPostLink {
+    position: unset;
+}
+
+#unpublishPostLink {
+    position: unset;
+}
+
+#pageManagerLink {
+    position: unset;
+}
+
+#newPageLink {
+    position: unset;
+}
+
+#editPageLink {
+    position: unset;
+}
+
+#unpublishPageLink {
+    position: unset;
+}
