@@ -64,6 +64,5 @@ namespace cloudscribe.SimpleContent.Models
         
         string Serializer { get; set; }
 
-
     }
 }

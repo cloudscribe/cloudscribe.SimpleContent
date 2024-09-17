@@ -24,6 +24,7 @@
          itemscope itemtype="http://schema.org/Article">
     <partial name="DraftInfoPartial" model="@Model" />
     <partial name="HistoryInfoPartial" model="@Model" />
+    
     @if (Model.CurrentPage.ShowHeading)
     {
         <header class="">
@@ -33,6 +34,8 @@
     }
     <partial name="PageContentBodyPartial" model="@Model" />
     <partial name="PageBottomPartial" model="@Model" />
+    <partial name="EditorialDetailsPartial" model="@Model" />
+
     @if (!Model.CurrentPage.ShowHeading)
     {
         <schema-org-meta itemprop="headline" content="@Model.CurrentPage.Title"></schema-org-meta>

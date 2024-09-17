@@ -132,4 +132,34 @@
   <data name="Recent Posts" xml:space="preserve">
     <value>Swyddi diweddar</value>
   </data>
+  <data name="Created" xml:space="preserve">
+    <value>Wedi creu</value>
+  </data>
+  <data name="Created By" xml:space="preserve">
+    <value>Crëwyd Gan</value>
+  </data>
+  <data name="Last Updated" xml:space="preserve">
+    <value>Diweddarwyd Diwethaf</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Wedi'i ddiweddaru</value>
+  </data>
+  <data name="Updated By" xml:space="preserve">
+    <value>Diweddarwyd Gan</value>
+  </data>
+  <data name="ShowCreatedBy" xml:space="preserve">
+    <value>Dangos Crëwyd Gan</value>
+  </data>
+  <data name="ShowCreatedDate" xml:space="preserve">
+    <value>Dangos Dyddiad Creu</value>
+  </data>
+  <data name="ShowLastModifiedBy" xml:space="preserve">
+    <value>Dangos Addaswyd Diwethaf Gan</value>
+  </data>
+  <data name="ShowLastModifiedDate" xml:space="preserve">
+    <value>Dangos Dyddiad Addaswyd Diwethaf</value>
+  </data>
+  <data name="EditorialDetailsExplanation" xml:space="preserve">
+    <value>Dangos / Cuddio'r wybodaeth ganlynol ar dudalennau CMS o dan brif gynnwys y dudalen.</value>
+  </data>
 </root>

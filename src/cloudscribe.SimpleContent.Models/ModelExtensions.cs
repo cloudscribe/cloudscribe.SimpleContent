@@ -306,8 +306,6 @@ namespace cloudscribe.SimpleContent.Models
             target.TemplateKey = input.TemplateKey;
             target.SerializedModel = input.SerializedModel;
             target.Serializer = input.Serializer;
-
-
         }
 
         /// <summary>
@@ -361,8 +359,6 @@ namespace cloudscribe.SimpleContent.Models
             target.TemplateKey = input.TemplateKey;
             target.SerializedModel = input.SerializedModel;
             target.Serializer = input.Serializer;
-
-
         }
 
         public static void CopyTo(this IProjectSettings input, IProjectSettings target)

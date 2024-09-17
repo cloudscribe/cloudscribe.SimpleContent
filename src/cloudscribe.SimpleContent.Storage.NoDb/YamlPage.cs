@@ -137,7 +137,6 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 39)]
         public string Serializer { get; set; }
 
-
         [YamlIgnore]
         public string Content { get; set; } = string.Empty;
         [YamlIgnore]
