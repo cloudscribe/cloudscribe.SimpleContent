@@ -6,6 +6,7 @@
 // 
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -431,6 +432,11 @@ namespace cloudscribe.SimpleContent.Models
             target.AboutHeading = input.AboutHeading;
             target.ShowAboutBox = input.ShowAboutBox;
             target.ShowRelatedPosts = input.ShowRelatedPosts;
+
+            target.ShowCreatedBy = input.ShowCreatedBy;
+            target.ShowCreatedDate = input.ShowCreatedDate;
+            target.ShowLastModifiedBy = input.ShowLastModifiedBy;
+            target.ShowLastModifiedDate = input.ShowLastModifiedDate;
         }
     }
 }

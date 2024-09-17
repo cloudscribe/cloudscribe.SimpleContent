@@ -292,6 +292,30 @@
         <input asp-for="TwitterCreator" class="form-control" data-bs-toggle="tooltip" title='@sr["This is used in meta data."]' />
         <span asp-validation-for="TwitterCreator" class="text-danger"></span>
     </div>
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='ShowCreatedBy'>
+            <input asp-for="ShowCreatedBy" class="form-check-input" />
+            <label asp-for="ShowCreatedBy" class="form-check-label">ShowCreatedBy</label>
+        </div>
+    </div>
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='ShowCreatedDate'>
+            <input asp-for="ShowCreatedDate" class="form-check-input" />
+            <label asp-for="ShowCreatedDate" class="form-check-label">ShowCreatedDate</label>
+        </div>
+    </div>
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='ShowLastModifiedBy'>
+            <input asp-for="ShowLastModifiedBy" class="form-check-input" />
+            <label asp-for="ShowLastModifiedBy" class="form-check-label">ShowLastModifiedBy</label>
+        </div>
+    </div>
+    <div class="mb-3">
+        <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='ShowLastModifiedDate'>
+            <input asp-for="ShowLastModifiedDate" class="form-check-input" />
+            <label asp-for="ShowLastModifiedDate" class="form-check-label">ShowLastModifiedDate</label>
+        </div>
+    </div>
 
     @if (uiOptions.ShowBlogSettings)
     {
