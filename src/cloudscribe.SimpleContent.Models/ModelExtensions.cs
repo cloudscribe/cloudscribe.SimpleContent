@@ -6,6 +6,7 @@
 // 
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace cloudscribe.SimpleContent.Models
 {
@@ -305,8 +306,10 @@ namespace cloudscribe.SimpleContent.Models
             target.TemplateKey = input.TemplateKey;
             target.SerializedModel = input.SerializedModel;
             target.Serializer = input.Serializer;
-
-
+            target.ShowCreatedBy = input.ShowCreatedBy;
+            target.ShowCreatedDate = input.ShowCreatedDate;
+            target.ShowLastModifiedBy = input.ShowLastModifiedBy;
+            target.ShowLastModifiedDate = input.ShowLastModifiedDate;
         }
 
         /// <summary>
@@ -360,8 +363,10 @@ namespace cloudscribe.SimpleContent.Models
             target.TemplateKey = input.TemplateKey;
             target.SerializedModel = input.SerializedModel;
             target.Serializer = input.Serializer;
-
-
+            target.ShowCreatedBy = input.ShowCreatedBy;
+            target.ShowCreatedDate = input.ShowCreatedDate;
+            target.ShowLastModifiedBy = input.ShowLastModifiedBy;
+            target.ShowLastModifiedDate = input.ShowLastModifiedDate;
         }
 
         public static void CopyTo(this IProjectSettings input, IProjectSettings target)
@@ -431,6 +436,11 @@ namespace cloudscribe.SimpleContent.Models
             target.AboutHeading = input.AboutHeading;
             target.ShowAboutBox = input.ShowAboutBox;
             target.ShowRelatedPosts = input.ShowRelatedPosts;
+
+            target.ShowCreatedBy = input.ShowCreatedBy;
+            target.ShowCreatedDate = input.ShowCreatedDate;
+            target.ShowLastModifiedBy = input.ShowLastModifiedBy;
+            target.ShowLastModifiedDate = input.ShowLastModifiedDate;
         }
     }
 }

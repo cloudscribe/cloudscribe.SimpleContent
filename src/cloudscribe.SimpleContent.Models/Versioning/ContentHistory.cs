@@ -72,10 +72,10 @@ namespace cloudscribe.SimpleContent.Models
         public string ViewRoles { get; set; }
 
         //blog only
-
         public string TeaserOverride { get; set; }
-
-
-
+        public bool? ShowCreatedBy { get; set; }
+        public bool? ShowCreatedDate { get; set; }
+        public bool? ShowLastModifiedBy { get; set; }
+        public bool? ShowLastModifiedDate { get; set; }
     }
 }

@@ -114,6 +114,11 @@ namespace cloudscribe.SimpleContent.Web.Services
                     page.MenuFilters = request.ViewModel.MenuFilters;
                     page.ExternalUrl = request.ViewModel.ExternalUrl;
                     page.ViewRoles = request.ViewModel.ViewRoles;
+
+                    page.ShowCreatedBy = request.ViewModel.ShowCreatedBy;
+                    page.ShowCreatedDate = request.ViewModel.ShowCreatedDate;
+                    page.ShowLastModifiedBy = request.ViewModel.ShowLastModifiedBy;
+                    page.ShowLastModifiedDate = request.ViewModel.ShowLastModifiedDate;
                     
                     if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
                     {
