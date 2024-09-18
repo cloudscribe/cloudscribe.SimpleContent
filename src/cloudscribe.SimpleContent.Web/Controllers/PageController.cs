@@ -14,7 +14,9 @@ using cloudscribe.Web.Common.Extensions;
 using cloudscribe.Web.Navigation.Caching;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -211,7 +213,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 PageTreePath = Url.Action("Tree"),
                 HasPublishedVersion = viewContext.HasPublishedVersion,
                 HasDraft = viewContext.HasDraft,
-                ShowingDraft = viewContext.ShowingDraft
+                ShowingDraft = viewContext.ShowingDraft,
+                ShowCreatedBy = page.ShowCreatedBy != null ? page.ShowCreatedBy : viewContext.Project.ShowCreatedBy,
+                ShowCreatedDate = page.ShowCreatedDate != null ? page.ShowCreatedDate : viewContext.Project.ShowCreatedDate,
+                ShowLastModifiedBy = page.ShowLastModifiedBy != null ? page.ShowLastModifiedBy : viewContext.Project.ShowLastModifiedBy,
+                ShowLastModifiedDate = page.ShowLastModifiedBy != null ? page.ShowLastModifiedDate : viewContext.Project.ShowLastModifiedDate
             };
 
             if(viewContext.History != null)
@@ -295,7 +301,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 PageSize = pageSize,
                 CountOfTemplates = templateCount,
                 SearchRouteName = PageRoutes.NewPageRouteName,
-                PostActionName = "InitTemplatedPage"
+                PostActionName = "InitTemplatedPage",
+                ShowCreatedBy = editContext.Project.ShowCreatedBy,
+                ShowCreatedDate = editContext.Project.ShowCreatedDate,
+                ShowLastModifiedBy = editContext.Project.ShowLastModifiedBy,
+                ShowLastModifiedDate = editContext.Project.ShowLastModifiedDate
             };
 
             if(!string.IsNullOrWhiteSpace(parentSlug))
@@ -422,7 +432,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
                 DidReplaceDraft = editContext.DidReplaceDraft,
                 DidRestoreDeleted = editContext.DidRestoreDeleted,
-                HasDraft = editContext.CurrentPage.HasDraftVersion()
+                HasDraft = editContext.CurrentPage.HasDraftVersion(),
+                ShowCreatedBy = editContext.CurrentPage != null ? editContext.CurrentPage.ShowCreatedBy != null ? (bool)editContext.CurrentPage.ShowCreatedBy : editContext.Project.ShowCreatedBy : editContext.Project.ShowCreatedBy,
+                ShowCreatedDate = editContext.CurrentPage != null ? editContext.CurrentPage.ShowCreatedDate != null ? (bool)editContext.CurrentPage.ShowCreatedDate : editContext.Project.ShowCreatedDate : editContext.Project.ShowCreatedDate,
+                ShowLastModifiedBy = editContext.CurrentPage != null ? editContext.CurrentPage.ShowLastModifiedBy != null ? (bool)editContext.CurrentPage.ShowLastModifiedBy : editContext.Project.ShowLastModifiedBy : editContext.Project.ShowLastModifiedBy,
+                ShowLastModifiedDate = editContext.CurrentPage != null ? editContext.CurrentPage.ShowLastModifiedDate != null ? (bool)editContext.CurrentPage.ShowLastModifiedDate : editContext.Project.ShowLastModifiedDate : editContext.Project.ShowLastModifiedDate
             };
 
             if (editContext.History != null)
@@ -498,7 +512,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Log.LogError($"redirecting to index because content template {currentPage.TemplateKey} was not found");
                 return RedirectToRoute(PageRoutes.PageRouteName);
             }
-            
+
             var request = new UpdateTemplatedPageRequest(
                 editContext.Project.Id,
                 User.Identity.Name,
@@ -510,6 +524,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 );
 
             var response = await Mediator.Send(request);
+
             if (response.Succeeded)
             {
                 if (model.SaveMode == SaveMode.DeleteCurrentDraft)
@@ -562,7 +577,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             {
                 ProjectId = editContext.Project.Id,
                 DisqusShortname = editContext.Project.DisqusShortName,
-                ProjectDefaultSlug = editContext.Project.DefaultPageSlug
+                ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
+                ShowCreatedBy = editContext.CurrentPage != null ? editContext.CurrentPage.ShowCreatedBy != null ? (bool)editContext.CurrentPage.ShowCreatedBy : editContext.Project.ShowCreatedBy : editContext.Project.ShowCreatedBy,
+                ShowCreatedDate = editContext.CurrentPage != null ? editContext.CurrentPage.ShowCreatedDate != null ? (bool)editContext.CurrentPage.ShowCreatedDate : editContext.Project.ShowCreatedDate : editContext.Project.ShowCreatedDate,
+                ShowLastModifiedBy = editContext.CurrentPage != null ? editContext.CurrentPage.ShowLastModifiedBy != null ? (bool)editContext.CurrentPage.ShowLastModifiedBy : editContext.Project.ShowLastModifiedBy : editContext.Project.ShowLastModifiedBy,
+                ShowLastModifiedDate = editContext.CurrentPage != null ? editContext.CurrentPage.ShowLastModifiedDate != null ? (bool)editContext.CurrentPage.ShowLastModifiedDate : editContext.Project.ShowLastModifiedDate : editContext.Project.ShowLastModifiedDate
             };
             
             var routeVals = new RouteValueDictionary
@@ -657,6 +676,10 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     model.HistoryArchiveDate = editContext.History.ArchivedUtc;
                     model.HistoryId = editContext.History.Id;
                 }
+                model.ShowCreatedBy = editContext.CurrentPage.ShowCreatedBy != null ? (bool)editContext.CurrentPage.ShowCreatedBy : editContext.Project.ShowCreatedBy;
+                model.ShowCreatedDate = editContext.CurrentPage.ShowCreatedDate != null ? (bool)editContext.CurrentPage.ShowCreatedDate : editContext.Project.ShowCreatedDate;
+                model.ShowLastModifiedBy = editContext.CurrentPage.ShowLastModifiedBy != null ? (bool)editContext.CurrentPage.ShowLastModifiedBy : editContext.Project.ShowLastModifiedBy;
+                model.ShowLastModifiedDate = editContext.CurrentPage.ShowLastModifiedDate != null ? (bool)editContext.CurrentPage.ShowLastModifiedDate : editContext.Project.ShowLastModifiedDate;
 
                 var tzId = await TimeZoneIdResolver.GetUserTimeZoneId();
 

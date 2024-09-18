@@ -63,6 +63,9 @@ namespace cloudscribe.SimpleContent.Models
         string DraftSerializedModel { get; set; }
         
         string Serializer { get; set; }
-
+        public bool? ShowCreatedBy { get; set; }
+        public bool? ShowCreatedDate { get; set; }
+        public bool? ShowLastModifiedBy { get; set; }
+        public bool? ShowLastModifiedDate { get; set; }
     }
 }

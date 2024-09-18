@@ -137,6 +137,18 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 39)]
         public string Serializer { get; set; }
 
+        [YamlMember(Order = 40)]
+        public bool? ShowCreatedBy { get; set; }
+
+        [YamlMember(Order = 41)]
+        public bool? ShowCreatedDate { get; set; }
+
+        [YamlMember(Order = 42)]
+        public bool? ShowLastModifiedBy { get; set; }
+
+        [YamlMember(Order = 43)]
+        public bool? ShowLastModifiedDate { get; set; }
+
         [YamlIgnore]
         public string Content { get; set; } = string.Empty;
         [YamlIgnore]

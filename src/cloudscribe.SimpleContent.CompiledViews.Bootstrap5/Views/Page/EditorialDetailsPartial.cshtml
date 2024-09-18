@@ -3,32 +3,33 @@
 @inject ISimpleContentThemeHelper themeHelper
 
 <div class="my-2">
-    @if (Model.ProjectSettings.ShowCreatedDate && Model.ProjectSettings.ShowCreatedBy && Model.CurrentPage.CreatedByUser != null)
+    @if (Model.CurrentPage.ShowCreatedDate != false && Model.CurrentPage.ShowCreatedBy != false && Model.CurrentPage.CreatedByUser != null)
     {
         <small>@sr["Created"]: @Model.CurrentPage.CreatedUtc.ToString("dd/MM/yyyy") By: @Model.CurrentPage.CreatedByUser</small>
     }
-    else if (Model.ProjectSettings.ShowCreatedDate)
+    else if (Model.CurrentPage.ShowCreatedDate != false)
     {
         <small>@sr["Created"]: @Model.CurrentPage.CreatedUtc.ToString("dd/MM/yyyy")</small>
     }
-    else if (Model.ProjectSettings.ShowCreatedBy && Model.CurrentPage.CreatedByUser != null)
+    else if (Model.CurrentPage.ShowCreatedBy != false && Model.CurrentPage.CreatedByUser != null)
     {
         <small>@sr["Created By"]: @Model.CurrentPage.CreatedByUser</small>
     }
 
-    @if ((Model.ProjectSettings.ShowCreatedDate || Model.ProjectSettings.ShowCreatedBy) && (Model.ProjectSettings.ShowLastModifiedDate || Model.ProjectSettings.ShowLastModifiedBy))
+    @if ((Model.CurrentPage.ShowCreatedDate != false || Model.CurrentPage.ShowCreatedBy != false) && (Model.CurrentPage.ShowLastModifiedDate != false || Model.CurrentPage.ShowLastModifiedBy != false))
     {
         @Html.Raw("&nbsp;|&nbsp;");
     }
-    @if (Model.ProjectSettings.ShowLastModifiedDate && Model.ProjectSettings.ShowLastModifiedBy && Model.CurrentPage.LastModifiedByUser != null)
+
+    @if (Model.CurrentPage.ShowLastModifiedDate != false && Model.CurrentPage.ShowLastModifiedBy != false && Model.CurrentPage.LastModifiedByUser != null)
     {
         <small>@sr["Last Updated"]: @Model.CurrentPage.LastModified.ToString("dd/MM/yyyy") By: @Model.CurrentPage.LastModifiedByUser</small>
     }
-    else if (Model.ProjectSettings.ShowLastModifiedDate)
+    else if (Model.CurrentPage.ShowLastModifiedDate != false)
     {
         <small>@sr["Updated"]: @Model.CurrentPage.LastModified.ToString("dd/MM/yyyy")</small>
     }
-    else if (Model.ProjectSettings.ShowLastModifiedBy && Model.CurrentPage.LastModifiedByUser != null)
+    else if (Model.CurrentPage.ShowLastModifiedBy != false && Model.CurrentPage.LastModifiedByUser != null)
     {
         <small>@sr["Updated By"]: @Model.CurrentPage.LastModifiedByUser</small>
     }
