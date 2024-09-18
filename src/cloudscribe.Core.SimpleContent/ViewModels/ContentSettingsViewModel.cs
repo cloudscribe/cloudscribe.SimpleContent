@@ -44,13 +44,10 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public string CommentNotificationEmail { get; set; } = string.Empty;
         
         public string DefaultPageSlug { get; set; } = "home";
-
         public string DefaultContentType { get; set; } = "html";
-        //public bool UseDefaultPageAsRootNode { get; set; } = true;
-
-
         public bool ShowRelatedPosts { get; set; } = true;
-
+        public bool ShowBlogCategories { get; set; } = true;
+        public bool ShowArchivedPosts { get; set; } = true;
         public bool ShowAboutBox { get; set; } = true;
         public string AboutHeading { get; set; } = "About";
 

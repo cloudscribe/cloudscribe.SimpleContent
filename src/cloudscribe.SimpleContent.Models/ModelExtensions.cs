@@ -431,6 +431,8 @@ namespace cloudscribe.SimpleContent.Models
             target.AboutHeading = input.AboutHeading;
             target.ShowAboutBox = input.ShowAboutBox;
             target.ShowRelatedPosts = input.ShowRelatedPosts;
+            target.ShowBlogCategories = input.ShowBlogCategories;
+            target.ShowArchivedPosts = input.ShowArchivedPosts;
         }
     }
 }
