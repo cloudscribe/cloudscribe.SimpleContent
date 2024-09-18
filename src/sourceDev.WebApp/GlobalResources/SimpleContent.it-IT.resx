@@ -573,4 +573,16 @@
   <data name="Version History" xml:space="preserve">
     <value>Cronologia versione</value>
   </data>
+  <data name="If checked will show the blog categories in the side bar" xml:space="preserve">
+    <value>Se selezionato mostrerà le categorie del blog nella barra laterale</value>
+  </data>
+  <data name="If checked will show the blog archives in the side bar xml:space="preserve">
+    <value>Se selezionato mostrerà gli archivi del blog nella barra laterale</value>
+  </data>
+  <data name="Show the blog categories in the side bar" xml:space="preserve">
+    <value>Mostra le categorie del blog nella barra laterale</value>
+  </data>
+  <data name="Show the blog archives in the side bar" xml:space="preserve">
+    <value>Mostra gli archivi del blog nella barra laterale</value>
+  </data>
 </root>

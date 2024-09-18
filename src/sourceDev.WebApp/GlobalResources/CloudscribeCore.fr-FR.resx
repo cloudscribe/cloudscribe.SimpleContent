@@ -162,4 +162,16 @@
   <data name="Site Administration" xml:space="preserve">
     <value>Administration du site</value>
   </data>
+  <data name="If checked will show the blog categories in the side bar" xml:space="preserve">
+    <value>Si cette case est cochée, les catégories de blog s'afficheront dans la barre latérale</value>
+  </data>
+  <data name="If checked will show the blog archives in the side bar xml:space="preserve">
+    <value>Si cette case est cochée, les archives du blog s'afficheront dans la barre latérale</value>
+  </data>
+  <data name="Show the blog categories in the side bar" xml:space="preserve">
+    <value>Afficher les catégories de blog dans la barre latérale</value>
+  </data>
+  <data name="Show the blog archives in the side bar" xml:space="preserve">
+    <value>Afficher les archives du blog dans la barre latérale</value>
+  </data>
 </root>

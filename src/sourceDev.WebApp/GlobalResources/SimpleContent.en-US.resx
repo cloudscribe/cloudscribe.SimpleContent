@@ -540,4 +540,16 @@
   <data name="Recent Posts" xml:space="preserve">
     <value>Recent Posts</value>
   </data>
+  <data name="If checked will show the blog categories in the side bar" xml:space="preserve">
+    <value>If checked will show the blog categories in the side bar</value>
+  </data>
+  <data name="If checked will show the blog archives in the side bar xml:space="preserve">
+    <value>If checked will show the blog archives in the side bar</value>
+  </data>
+  <data name="Show the blog categories in the side bar" xml:space="preserve">
+    <value>Show the blog categories in the side bar</value>
+  </data>
+  <data name="Show the blog archives in the side bar" xml:space="preserve">
+    <value>Show the blog archives in the side bar</value>
+  </data>
 </root>
