@@ -135,7 +135,7 @@
   <data name="If checked will show the blog categories in the side bar" xml:space="preserve">
     <value>Os caiff ei wirio bydd yn dangos y categorïau blog yn y bar ochr</value>
   </data>
-  <data name="If checked will show the blog archives in the side bar xml:space="preserve">
+  <data name="If checked will show the blog archives in the side bar" xml:space="preserve">
     <value>Os caiff ei wirio bydd yn dangos yr archifau blog yn y bar ochr</value>
   </data>
   <data name="Show the blog categories in the side bar" xml:space="preserve">

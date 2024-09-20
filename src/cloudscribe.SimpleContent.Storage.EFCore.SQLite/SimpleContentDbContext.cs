@@ -140,7 +140,8 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite
                 entity.Property(p => p.AboutHeading).HasMaxLength(255);
                 entity.Property(p => p.ShowAboutBox);
                 entity.Property(p => p.ShowRelatedPosts);
-
+                entity.Property(p => p.ShowArchivedPosts);
+                entity.Property(p => p.ShowBlogCategories);
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
