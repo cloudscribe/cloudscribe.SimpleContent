@@ -116,6 +116,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             model.AboutHeading = projectSettings.AboutHeading;
             model.ShowAboutBox = projectSettings.ShowAboutBox;
             model.ShowRelatedPosts = projectSettings.ShowRelatedPosts;
+            model.ShowArchivedPosts = projectSettings.ShowArchivedPosts;
+            model.ShowBlogCategories = projectSettings.ShowBlogCategories;
 
             bool canManageUsers = false;
             try
@@ -262,6 +264,8 @@ namespace cloudscribe.Core.SimpleContent.Integration.Mvc.Controllers
             projectSettings.AboutHeading = model.AboutHeading;
             projectSettings.ShowAboutBox = model.ShowAboutBox;
             projectSettings.ShowRelatedPosts = model.ShowRelatedPosts;
+            projectSettings.ShowArchivedPosts = model.ShowArchivedPosts;
+            projectSettings.ShowBlogCategories = model.ShowBlogCategories;
 
             await projectService.Update(projectSettings);
             if(needToClearMenuCache)

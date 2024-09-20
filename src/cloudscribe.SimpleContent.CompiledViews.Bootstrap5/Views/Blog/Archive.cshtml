@@ -1,7 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @inject IUrlHelper myhelper
 @{
-    ViewData["AsidePrimaryVisible"] = true;
+    ViewData["AsidePrimaryVisible"] = Model.ProjectSettings.ShowBlogCategories || Model.ProjectSettings.ShowArchivedPosts || Model.ProjectSettings.ShowRelatedPosts || Model.ProjectSettings.ShowAboutBox ? true : false; ;
     ViewData["AsidePrimaryToggle"] = "show";
 }
 
@@ -40,8 +40,10 @@
               cs-pager-link-current-class="page-link"
               cs-pager-link-other-class="page-link"></cs-pager>
 </nav>
-@section AsidePrimary {
-    <partial name="SideBarPartial" model="@Model" />
-    
-}
 
+@if (Model.ProjectSettings.ShowBlogCategories || Model.ProjectSettings.ShowArchivedPosts || Model.ProjectSettings.ShowRelatedPosts || Model.ProjectSettings.ShowAboutBox)
+{
+    @section AsidePrimary {
+       <partial name="SideBarPartial" model="@Model" />
+    }
+}
