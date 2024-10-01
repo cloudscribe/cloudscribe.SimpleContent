@@ -230,10 +230,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL
                 .HasDefaultValue(1000);
 
                 entity.Property(p => p.AboutHeading).HasMaxLength(255);
-                entity.Property(p => p.ShowAboutBox);
-                entity.Property(p => p.ShowRelatedPosts);
-                entity.Property(p => p.ShowArchivedPosts);
-                entity.Property(p => p.ShowBlogCategories);
+                entity.Property(p => p.ShowAboutBox).HasDefaultValue(true);
+                entity.Property(p => p.ShowRelatedPosts).HasDefaultValue(true);
+                entity.Property(p => p.ShowArchivedPosts).HasDefaultValue(true);
+                entity.Property(p => p.ShowBlogCategories).HasDefaultValue(true);
             });
 
             modelBuilder.Entity<PostEntity>(entity =>

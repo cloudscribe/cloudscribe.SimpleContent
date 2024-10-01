@@ -322,13 +322,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("ShowAboutBox")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("ShowArchivedPosts")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("ShowBlogCategories")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
                         .HasColumnType("tinyint(1)");
@@ -337,7 +343,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("ShowRelatedPosts")
-                        .HasColumnType("tinyint(1)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("ShowTitle")
                         .HasColumnType("tinyint(1)");
