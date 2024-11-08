@@ -75,7 +75,9 @@ namespace cloudscribe.SimpleContent.Models
 
         public string TeaserOverride { get; set; }
 
-
-
+        public bool? ShowCreatedBy { get; set; }
+        public bool? ShowCreatedDate { get; set; }
+        public bool? ShowLastModifiedBy { get; set; }
+        public bool? ShowLastModifiedDate { get; set; }
     }
 }
