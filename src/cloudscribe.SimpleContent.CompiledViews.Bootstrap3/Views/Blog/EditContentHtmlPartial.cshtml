@@ -1,14 +1,14 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
 @using cloudscribe.Web.Common.Components
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
 }
 <textarea asp-for="Content" class="form-control" rows="10" cols="70"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+          data-tinymce=""
+          data-tinymce-config-url="@mceOptions.CustomConfigPath"
+          data-tinymce-config-language="@mceOptions.LanguageCode"
+          data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+          data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+          data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
 

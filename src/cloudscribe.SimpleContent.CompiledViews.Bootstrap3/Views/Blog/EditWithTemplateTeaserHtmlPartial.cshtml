@@ -1,18 +1,18 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditWithTemplateViewModel
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<SimpleContent> sr
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
 }
 <div class="form-group">
     <label asp-for="TeaserOverride">@sr["Teaser Override"]</label>
     <textarea asp-for="TeaserOverride" class="form-control" rows="10" cols="70"
-                data-ckeditor-unobtrusive=""
-                data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                data-ckeditor-config-language="@ckOptions.LanguageCode"
-                data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+              data-tinymce=""
+              data-tinymce-config-url="@mceOptions.CustomConfigPath"
+              data-tinymce-config-language="@mceOptions.LanguageCode"
+              data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+              data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+              data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
 </div>
 <div class="form-group">
     <div class="form-check" data-toggle="tooltip" data-placement="left" title='@sr["If checked, then show entire blog post on index/listing pages regardless of teaser settings."]'>

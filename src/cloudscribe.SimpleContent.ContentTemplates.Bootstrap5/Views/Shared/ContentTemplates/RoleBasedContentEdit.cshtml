@@ -5,12 +5,13 @@
 @using Microsoft.AspNetCore.Antiforgery
 @using Newtonsoft.Json;
 @using System.Net
+@using cloudscribe.SimpleContent.ContentTemplates.Bootstrap5
 @inject IAntiforgery antiforgery
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<ContentTemplateResources> sr
 @{
     var tokens = antiforgery.GetAndStoreTokens(Context);
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
 }
 @functions{
 
@@ -20,12 +21,12 @@
 
     <label asp-for="UnauthenticatedContent">@sr["Content for unauthenticated users"]</label>
 <textarea asp-for="UnauthenticatedContent" class="form-control"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+          data-tinymce=""
+          data-tinymce-config-url="@mceOptions.CustomConfigPath"
+          data-tinymce-config-language="@mceOptions.LanguageCode"
+          data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+          data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+          data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
 
 
 
@@ -36,12 +37,12 @@
     <div class="mb-4">
     <label asp-for="AuthenticatedContent">@sr["Content for authenticated users"]</label>
 <textarea asp-for="AuthenticatedContent" class="form-control"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+          data-tinymce=""
+          data-tinymce-config-url="@mceOptions.CustomConfigPath"
+          data-tinymce-config-language="@mceOptions.LanguageCode"
+          data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+          data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+          data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
 </div>
 
     <hr />
@@ -54,12 +55,12 @@
 
 
 <textarea asp-for="RoleBasedContent" class="form-control"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+          data-tinymce=""
+          data-tinymce-config-url="@mceOptions.CustomConfigPath"
+          data-tinymce-config-language="@mceOptions.LanguageCode"
+          data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+          data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+          data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
 </div>
 
 

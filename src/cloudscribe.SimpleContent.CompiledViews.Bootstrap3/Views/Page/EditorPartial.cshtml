@@ -9,12 +9,12 @@
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @using Microsoft.Extensions.Options
 @inject IStringLocalizer<SimpleContent> sr
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
 @{ 
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var meOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }  
@@ -37,29 +37,31 @@
                       data-markdown-indentWithTabs="true"
                       data-markdown-spellChecker="true"
                       data-markdown-filemodalid="#fileBrowseDialog"
-                      data-markdown-filebrowseurl="@ckOptions.ImageBrowseUrl"
-                      data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
-                    <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i title="Close" class="fa fa-close"></i></button>
-                                </div>
-                                <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 600px;"></iframe>
-                            </div>
+                      data-markdown-filebrowseurl="@meOptions.ImageBrowseUrl"
+                      data-markdown-dropfileuploadurl="@meOptions.DropFileUrl">
+            </textarea>
+            <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i title="Close" class="fa fa-close"></i></button>
                         </div>
+                        <iframe id="frFileDialog" frameborder="0" style="overflow:hidden;height:100%;width:100%;min-height: 600px;"></iframe>
                     </div>
+                </div>
+            </div>
 
         }
         else
         {
             <textarea asp-for="Content" class="form-control"
-                      data-ckeditor-unobtrusive=""
-                      data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                      data-ckeditor-config-language="@ckOptions.LanguageCode"
-                      data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                      data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                      data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+                      data-tinymce=""
+                      data-tinymce-config-url="@meOptions.CustomConfigPath"
+                      data-tinymce-config-language="@meOptions.LanguageCode"
+                      data-tinymce-config-dropfileuploadurl="@meOptions.DropFileUrl"
+                      data-tinymce-config-filebrowserurl="@meOptions.FileBrowseUrl"
+                      data-tinymce-config-imagebrowseurl="@meOptions.ImageBrowseUrl">
+            </textarea>
 
         }
 

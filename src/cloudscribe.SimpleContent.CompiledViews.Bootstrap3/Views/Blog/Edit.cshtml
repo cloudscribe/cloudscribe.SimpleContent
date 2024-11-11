@@ -8,12 +8,10 @@
 @using cloudscribe.Web.Common.Helpers
 @using cloudscribe.SimpleContent.Web.TagHelpers
 @inject IStringLocalizer<SimpleContent> sr
-@inject ICkeditorOptionsResolver editorOptionsResolver
 @inject IBlogRoutes  blogRoutes
 @addTagHelper "*, cloudscribe.Web.Common"
 @addTagHelper "*, cloudscribe.SimpleContent.Web"
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }

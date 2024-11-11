@@ -2,13 +2,13 @@
 @inject ICoreThemeHelper themeHelper
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<ContentSettingsUIConfig> uiOptionsAccessor
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @{
     var uiOptions = uiOptionsAccessor.Value;
     var themeSettings = themeHelper.GetThemeSettings();
     if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
     ViewData["SideNavVisible"] = true;
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
     if (string.IsNullOrWhiteSpace(Model.AboutHeading))
     {
         Model.AboutHeading = sr["About"];
@@ -44,12 +44,12 @@
         <div class="mb-3">
             <label asp-for="AboutContent">@sr["About Content"]</label>
             <textarea asp-for="AboutContent" class="form-control"
-                      data-ckeditor-unobtrusive=""
-                      data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                      data-ckeditor-config-language="@ckOptions.LanguageCode"
-                      data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                      data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                      data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+                      data-tinymce=""
+                      data-tinymce-config-url="@mceOptions.CustomConfigPath"
+                      data-tinymce-config-language="@mceOptions.LanguageCode"
+                      data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+                      data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+                      data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
         </div>
         <div class="mb-3">
             <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will show the blog title and description at the top of the post list."]'>
@@ -395,8 +395,8 @@
     <script src="~/cr/js/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/cr/js/jquery.validate.hooks.min.js"></script>
     <script src="~/cr/js/jqueryvaildation.submitonce-unobtrusive.min.js"></script>
-    <script src="~/cr/js/ckeditor4114/ckeditor.js"></script>
-    <script src="~/cr/js/cloudscribe-ckeditor-unobtrusive.min.js"></script>
+    <script src="~/cr/js/tinymce/tinymce.min.js"></script>
+    <script src="~/cr/js/cloudscribe-tinymceeditor-unobtrusive.js"></script>
     <script src="~/cr/js/bootstrap-tooltip-toggle.js"></script>
 
 }

@@ -2,10 +2,10 @@
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.Web.Common.Components
 @using Microsoft.Extensions.Localization
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<SimpleContent> sr
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
     var contentId = Model.Id + "-teaser";
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-teaser-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
@@ -21,7 +21,7 @@
                   data-markdown-spellChecker="true"
                   data-markdown-filemodalid="#fileBrowseDialog"
                   data-markdown-filebrowseurl="/filemanager/filedialog"
-                  data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
+                  data-markdown-dropfileuploadurl="@mceOptions.DropFileUrl"></textarea>
     </div>
 </div>
 <div class="form-group">

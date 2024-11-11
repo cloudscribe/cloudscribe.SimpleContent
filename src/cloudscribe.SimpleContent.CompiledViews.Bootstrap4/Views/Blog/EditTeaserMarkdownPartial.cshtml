@@ -1,8 +1,8 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<SimpleContent> sr
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
     var contentId = Model.Id + "-teaser";
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-teaser-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
@@ -17,7 +17,7 @@
                 data-markdown-spellChecker="true"
                 data-markdown-filemodalid="#fileBrowseDialog"
                 data-markdown-filebrowseurl="/filemanager/filedialog"
-                data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
+                data-markdown-dropfileuploadurl="@mceOptions.DropFileUrl"></textarea>
 </div>
 <div class="form-group">
     <div class="form-check" data-toggle="tooltip" data-placement="left" title='@sr["If checked, then show entire blog post on index/listing pages regardless of teaser settings."]'>
