@@ -552,4 +552,34 @@
   <data name="Show the blog archives in the side bar" xml:space="preserve">
     <value>Show the blog archives in the side bar</value>
   </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Created By" xml:space="preserve">
+    <value>Created By</value>
+  </data>
+  <data name="Last Updated" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="Updated By" xml:space="preserve">
+    <value>Updated By</value>
+  </data>
+  <data name="ShowCreatedBy" xml:space="preserve">
+    <value>Show Created By</value>
+  </data>
+  <data name="ShowCreatedDate" xml:space="preserve">
+    <value>Show Created Date</value>
+  </data>
+  <data name="ShowLastModifiedBy" xml:space="preserve">
+    <value>Show Last Modified By</value>
+  </data>
+  <data name="ShowLastModifiedDate" xml:space="preserve">
+    <value>Show Last Modified Date</value>
+  </data>
+  <data name="EditorialDetailsExplanation" xml:space="preserve">
+    <value>Show / Hide the following information on CMS pages below the main content of the page.</value>
+  </data>
 </root>

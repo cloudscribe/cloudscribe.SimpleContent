@@ -120,5 +120,9 @@ namespace cloudscribe.Core.SimpleContent.Integration.ViewModels
         public TeaserMode TeaserMode { get; set; }
         public TeaserTruncationMode TeaserTruncationMode { get; set; }
         public int TeaserTruncationLength { get; set; } = 20;   // Default 20 words.
+        public bool ShowCreatedBy { get; set; } = false;
+        public bool ShowCreatedDate { get; set; } = false;
+        public bool ShowLastModifiedBy { get; set; } = false;
+        public bool ShowLastModifiedDate { get; set; } = false;
     }
 }

@@ -30,6 +30,9 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
 
         public string SearchRouteName { get; set; }
         public string PostActionName { get; set; }
-
+        public bool ShowCreatedBy { get; set; }
+        public bool ShowCreatedDate { get; set; }
+        public bool ShowLastModifiedBy { get; set; }
+        public bool ShowLastModifiedDate { get; set; }
     }
 }

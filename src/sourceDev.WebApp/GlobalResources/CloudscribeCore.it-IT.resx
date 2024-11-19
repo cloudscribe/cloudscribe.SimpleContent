@@ -1287,4 +1287,31 @@
   <data name="Show the blog archives in the side bar" xml:space="preserve">
     <value>Mostra gli archivi del blog nella barra laterale</value>
   </data>
+  <data name="Created By" xml:space="preserve">
+    <value>Creato da</value>
+  </data>
+  <data name="Last Updated" xml:space="preserve">
+    <value>Ultimo aggiornamento</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Aggiornato</value>
+  </data>
+  <data name="Updated By" xml:space="preserve">
+    <value>Aggiornato da</value>
+  </data>
+  <data name="ShowCreatedBy" xml:space="preserve">
+    <value>Mostra Creato da</value>
+  </data>
+  <data name="ShowCreatedDate" xml:space="preserve">
+    <value>Mostra data di creazione</value>
+  </data>
+  <data name="ShowLastModifiedBy" xml:space="preserve">
+    <value>Mostra ultima modifica di</value>
+  </data>
+  <data name="ShowLastModifiedDate" xml:space="preserve">
+    <value>Mostra data ultima modifica</value>
+  </data>
+  <data name="EditorialDetailsExplanation" xml:space="preserve">
+    <value>Mostra/Nascondi le seguenti informazioni sulle pagine CMS sotto il contenuto principale della pagina.</value>
+  </data>
 </root>
