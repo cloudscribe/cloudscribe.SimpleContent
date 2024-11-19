@@ -5,8 +5,9 @@
 @using Microsoft.AspNetCore.Antiforgery
 @using Newtonsoft.Json;
 @using System.Net
+@using cloudscribe.SimpleContent.ContentTemplates.Bootstrap5
 @inject IAntiforgery antiforgery
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 
 @{
     Layout = "_LayoutEmpty";

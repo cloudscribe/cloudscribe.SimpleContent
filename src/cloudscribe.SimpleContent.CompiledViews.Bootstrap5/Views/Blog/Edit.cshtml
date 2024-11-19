@@ -1,9 +1,9 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
 @inject IStringLocalizer<SimpleContent> sr
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @inject IBlogRoutes  blogRoutes
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }

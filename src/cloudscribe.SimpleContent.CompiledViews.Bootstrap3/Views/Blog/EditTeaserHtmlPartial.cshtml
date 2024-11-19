@@ -2,21 +2,21 @@
 @using cloudscribe.SimpleContent.Web
 @using cloudscribe.Web.Common.Components
 @using Microsoft.Extensions.Localization
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<SimpleContent> sr
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
 }
 <div class="form-group">
     <label asp-for="TeaserOverride" class="col-md-2 control-label">@sr["Teaser Override"]</label>
     <div class="col-md-10">
         <textarea asp-for="TeaserOverride" class="form-control" rows="10" cols="70"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+                  data-tinymce=""
+                  data-tinymce-config-url="@mceOptions.CustomConfigPath"
+                  data-tinymce-config-language="@mceOptions.LanguageCode"
+                  data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+                  data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+                  data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
     </div>
 </div>
 <div class="form-group">

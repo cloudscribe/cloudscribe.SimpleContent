@@ -1,8 +1,8 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
 @using cloudscribe.Web.Common.Components
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
@@ -14,8 +14,8 @@
           data-markdown-indentWithTabs="true"
           data-markdown-spellChecker="true"
           data-markdown-filemodalid="#fileBrowseDialog"
-          data-markdown-filebrowseurl="@ckOptions.ImageBrowseUrl"
-          data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
+          data-markdown-filebrowseurl="@mceOptions.ImageBrowseUrl"
+          data-markdown-dropfileuploadurl="@mceOptions.DropFileUrl"></textarea>
 <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
         <div class="modal-content">

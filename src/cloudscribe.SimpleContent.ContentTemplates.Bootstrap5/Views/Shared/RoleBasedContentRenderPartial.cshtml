@@ -7,7 +7,7 @@
 @using Newtonsoft.Json;
 @using System.Net
 @inject IAntiforgery antiforgery
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 
 @{
     var isAuthenticated = User.Identity.IsAuthenticated;

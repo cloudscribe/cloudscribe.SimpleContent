@@ -1,9 +1,9 @@
 ﻿@model cloudscribe.SimpleContent.ContentTemplates.ViewModels.BingMapViewModel
 @using cloudscribe.SimpleContent.ContentTemplates
 @inject IStringLocalizer<ContentTemplateResources> sr
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ITinyMceEditorOptionsResolver editorOptionsResolver
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions(); 
+    var mceOptions = await editorOptionsResolver.GetTinyMceEditorOptions(); 
 }
 
 
@@ -42,22 +42,22 @@
     </div>
     <div class="tab-pane pt-2" id="tabTopContent" role="tabpanel" aria-labelledby="cedit-tab2">
         <textarea asp-for="ContentAbove" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+                  data-tinymce=""
+                  data-tinymce-config-url="@mceOptions.CustomConfigPath"
+                  data-tinymce-config-language="@mceOptions.LanguageCode"
+                  data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+                  data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+                  data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
 
     </div>
     <div class="tab-pane pt-2" id="tabBottomContent" role="tabpanel" aria-labelledby="cedit-tab3">
         <textarea asp-for="ContentBelow" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+                  data-tinymce=""
+                  data-tinymce-config-url="@mceOptions.CustomConfigPath"
+                  data-tinymce-config-language="@mceOptions.LanguageCode"
+                  data-tinymce-config-dropfileuploadurl="@mceOptions.DropFileUrl"
+                  data-tinymce-config-filebrowserurl="@mceOptions.FileBrowseUrl"
+                  data-tinymce-config-imagebrowseurl="@mceOptions.ImageBrowseUrl"></textarea>
     </div>
 </div>
 <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
