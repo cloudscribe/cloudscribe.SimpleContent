@@ -10,6 +10,7 @@ using cloudscribe.SimpleContent.Storage.EFCore.Common;
 using cloudscribe.SimpleContent.Storage.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -131,21 +132,33 @@ namespace cloudscribe.SimpleContent.Storage.EFCore
 
                 if (page == null) throw new InvalidOperationException("page not found");
 
-                var p = PageEntity.FromIPage(page);
-                p.Id = Guid.NewGuid().ToString();
+                var p          = PageEntity.FromIPage(page);
+                p.Id           = Guid.NewGuid().ToString();
                 p.LastModified = DateTime.UtcNow;
-                p.ProjectId = targetProjectId;
+                p.ProjectId    = targetProjectId;
                 dbContext.Pages.Add(p);
 
                 int rowsAffected = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-                if (page.Resources.Count > 0)
+                if (page.PageResources.Count > 0)
                 {
-                    p.Resources = page.Resources;
+                    p.PageResources = new List<PageResourceEntity>();
+
+                    // why did Joe need both page.Resources and page.PageResources? - jk
                     foreach (var r in page.PageResources)
                     {
-                        r.PageEntityId = p.Id;
+                        var newRes = new PageResourceEntity
+                        {
+                            PageEntityId = p.Id,
+                            ContentId    = p.Id,
+                            Environment  = r.Environment,
+                            Sort         = r.Sort,
+                            Type         = r.Type,
+                            Url          = r.Url
+                        };
+                        p.PageResources.Add(newRes);
                     }
+
                     rowsAffected = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 }
 
