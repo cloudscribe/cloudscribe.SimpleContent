@@ -640,10 +640,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("ShowCreatedBy")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<bool?>("ShowCreatedDate")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("ShowHeading")
                         .HasColumnType("bit");
@@ -652,10 +652,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("ShowLastModifiedBy")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<bool?>("ShowLastModifiedDate")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("ShowMenu")
                         .HasColumnType("bit");
