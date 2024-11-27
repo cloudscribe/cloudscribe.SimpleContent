@@ -76,5 +76,9 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public bool DidRestoreDeleted { get; set; }
 
         public bool HasDraft { get; set; }
+        public bool ShowCreatedBy { get; set; }
+        public bool ShowCreatedDate { get; set; }
+        public bool ShowLastModifiedBy { get; set; }
+        public bool ShowLastModifiedDate { get; set; }
     }
 }

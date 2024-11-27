@@ -356,6 +356,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql
                 entity.Property(p => p.DraftAuthor)
                 .HasMaxLength(255);
 
+                entity.Property(p => p.ShowCreatedBy).HasColumnType("boolean");
+                entity.Property(p => p.ShowCreatedDate).HasColumnType("boolean");
+                entity.Property(p => p.ShowLastModifiedBy).HasColumnType("boolean");
+                entity.Property(p => p.ShowLastModifiedDate).HasColumnType("boolean");
             });
 
             modelBuilder.Entity<PageComment>(entity =>

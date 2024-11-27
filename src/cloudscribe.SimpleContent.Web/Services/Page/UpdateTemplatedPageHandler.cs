@@ -102,6 +102,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             var customModelIsValid = true;
             try
             {
+                var projectSettings = await _projectService.GetProjectSettings(request.ProjectId);
                 var page = request.Page;
                 var history = page.CreateHistory(request.UserName);
                 var project = await _projectService.GetCurrentProjectSettings();
@@ -189,6 +190,10 @@ namespace cloudscribe.SimpleContent.Web.Services
                     page.ShowComments = request.ViewModel.ShowComments;
                     page.MenuFilters = request.ViewModel.MenuFilters;
                     page.ViewRoles = request.ViewModel.ViewRoles;
+                    page.ShowCreatedBy = request.ViewModel.ShowCreatedBy == projectSettings.ShowCreatedBy ? null : request.ViewModel.ShowCreatedBy;
+                    page.ShowCreatedDate = request.ViewModel.ShowCreatedDate == projectSettings.ShowCreatedDate ? null : request.ViewModel.ShowCreatedDate;
+                    page.ShowLastModifiedBy = request.ViewModel.ShowLastModifiedBy == projectSettings.ShowLastModifiedBy ? null : request.ViewModel.ShowLastModifiedBy;
+                    page.ShowLastModifiedDate = request.ViewModel.ShowLastModifiedDate == projectSettings.ShowLastModifiedDate ? null : request.ViewModel.ShowLastModifiedDate;
 
                     if (!string.IsNullOrEmpty(request.ViewModel.ParentSlug))
                     {

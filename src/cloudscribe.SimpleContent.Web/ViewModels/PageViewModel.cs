@@ -124,5 +124,10 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         {
             return _contentProcessor.ExtractFirstImageDimensions(page);
         }
+
+        public bool? ShowCreatedBy { get; set; }
+        public bool? ShowCreatedDate { get; set; }
+        public bool? ShowLastModifiedBy { get; set; }
+        public bool? ShowLastModifiedDate { get; set; }
     }
 }
