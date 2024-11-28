@@ -306,7 +306,10 @@ namespace cloudscribe.SimpleContent.Models
             target.SerializedModel = input.SerializedModel;
             target.Serializer = input.Serializer;
 
-
+            target.ShowCreatedBy = input.ShowCreatedBy;
+            target.ShowCreatedDate = input.ShowCreatedDate;
+            target.ShowLastModifiedBy = input.ShowLastModifiedBy;
+            target.ShowLastModifiedDate = input.ShowLastModifiedDate;
         }
 
         /// <summary>
@@ -361,7 +364,10 @@ namespace cloudscribe.SimpleContent.Models
             target.SerializedModel = input.SerializedModel;
             target.Serializer = input.Serializer;
 
-
+            target.ShowCreatedBy = input.ShowCreatedBy;
+            target.ShowCreatedDate = input.ShowCreatedDate;
+            target.ShowLastModifiedBy = input.ShowLastModifiedBy;
+            target.ShowLastModifiedDate = input.ShowLastModifiedDate;
         }
 
         public static void CopyTo(this IProjectSettings input, IProjectSettings target)
@@ -433,6 +439,11 @@ namespace cloudscribe.SimpleContent.Models
             target.ShowRelatedPosts = input.ShowRelatedPosts;
             target.ShowBlogCategories = input.ShowBlogCategories;
             target.ShowArchivedPosts = input.ShowArchivedPosts;
+
+            target.ShowCreatedBy = input.ShowCreatedBy;
+            target.ShowCreatedDate = input.ShowCreatedDate;
+            target.ShowLastModifiedBy = input.ShowLastModifiedBy;
+            target.ShowLastModifiedDate = input.ShowLastModifiedDate;
         }
     }
 }

@@ -64,6 +64,33 @@
                 <legend class="w-auto">@legend</legend>
                 <partial name="@Model.Template.EditView" model="@Model.TemplateModel" />
             </fieldset>
+            <div class="mb-3">
+                <p>@sr["EditorialDetailsExplanation"]</p>
+            </div>
+            <div class="mb-3">
+                <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowCreatedBy"]'>
+                    <input asp-for="ShowCreatedBy" type="checkbox" class="form-check-input" />
+                    <label asp-for="ShowCreatedBy" class="form-check-label">@sr["ShowCreatedBy"]</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowCreatedDate"]'>
+                    <input asp-for="ShowCreatedDate" type="checkbox" class="form-check-input" />
+                    <label asp-for="ShowCreatedDate" class="form-check-label">@sr["ShowCreatedDate"]</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowLastModifiedBy"]'>
+                    <input asp-for="ShowLastModifiedBy" type="checkbox" class="form-check-input" />
+                    <label asp-for="ShowLastModifiedBy" class="form-check-label">@sr["ShowLastModifiedBy"]</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowLastModifiedDate"]'>
+                    <input asp-for="ShowLastModifiedDate" type="checkbox" class="form-check-input" />
+                    <label asp-for="ShowLastModifiedDate" class="form-check-label">@sr["ShowLastModifiedDate"]</label>
+                </div>
+            </div>
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
             <div class="mb-3 mt-2">

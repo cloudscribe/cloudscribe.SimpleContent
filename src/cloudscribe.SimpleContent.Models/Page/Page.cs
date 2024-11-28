@@ -96,5 +96,10 @@ namespace cloudscribe.SimpleContent.Models
             page.CopyTo(p);
             return p;
         }
+
+        public bool? ShowCreatedBy { get; set; }
+        public bool? ShowCreatedDate { get; set; }
+        public bool? ShowLastModifiedBy { get; set; }
+        public bool? ShowLastModifiedDate { get; set; }
     }
 }

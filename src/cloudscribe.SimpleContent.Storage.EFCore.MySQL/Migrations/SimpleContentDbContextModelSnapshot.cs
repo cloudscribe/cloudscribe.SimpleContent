@@ -130,6 +130,18 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<bool?>("ShowCreatedBy")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool?>("ShowCreatedDate")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool?>("ShowLastModifiedBy")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool?>("ShowLastModifiedDate")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Slug")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -336,7 +348,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
+                    b.Property<bool>("ShowCreatedBy")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowCreatedDate")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowLastModifiedBy")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ShowLastModifiedDate")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("ShowRecentPostsOnDefaultPage")
@@ -592,11 +616,23 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<bool>("ShowComments")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool?>("ShowCreatedBy")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("ShowCreatedDate")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("ShowHeading")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("ShowLastModified")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<bool?>("ShowLastModifiedBy")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("ShowLastModifiedDate")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowMenu")
                         .HasColumnType("tinyint(1)");

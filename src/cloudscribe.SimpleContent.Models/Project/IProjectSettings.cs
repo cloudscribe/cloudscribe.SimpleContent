@@ -87,5 +87,9 @@ namespace cloudscribe.SimpleContent.Models
         /// Specifies the length in characters/words/paragraphs that a post will be truncated to create a teaser for index/listing views.
         /// </summary>
         int TeaserTruncationLength { get; set; }
+        bool ShowCreatedBy { get; set; }
+        bool ShowCreatedDate { get; set; }
+        bool ShowLastModifiedBy { get; set; }
+        bool ShowLastModifiedDate { get; set; }
     }
 }

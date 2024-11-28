@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cloudscribe.SimpleContent.Storage.EFCore.MSSQL;
 
@@ -11,9 +12,11 @@ using cloudscribe.SimpleContent.Storage.EFCore.MSSQL;
 namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108094100_simplecontent-20241108")]
+    partial class simplecontent20241108
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -640,10 +643,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("ShowCreatedBy")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool?>("ShowCreatedDate")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowHeading")
                         .HasColumnType("bit");
@@ -652,10 +655,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("ShowLastModifiedBy")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool?>("ShowLastModifiedDate")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowMenu")
                         .HasColumnType("bit");

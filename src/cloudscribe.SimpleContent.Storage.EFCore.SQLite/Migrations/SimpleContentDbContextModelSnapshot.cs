@@ -128,6 +128,18 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool?>("ShowCreatedBy")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("ShowCreatedDate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("ShowLastModifiedBy")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("ShowLastModifiedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Slug")
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
@@ -334,7 +346,19 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
+                    b.Property<bool>("ShowCreatedBy")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowCreatedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowLastModifiedBy")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowLastModifiedDate")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowRecentPostsOnDefaultPage")
@@ -590,11 +614,23 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     b.Property<bool>("ShowComments")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool?>("ShowCreatedBy")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("ShowCreatedDate")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("ShowHeading")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowLastModified")
                         .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("ShowLastModifiedBy")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("ShowLastModifiedDate")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowMenu")
                         .HasColumnType("INTEGER");
