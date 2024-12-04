@@ -2,13 +2,13 @@
 @inject ICoreThemeHelper themeHelper
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<ContentSettingsUIConfig> uiOptionsAccessor
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ISummernoteOptionsResolver summernoteOptionsResolver
 @{
     var uiOptions = uiOptionsAccessor.Value;
     var themeSettings = themeHelper.GetThemeSettings();
     if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
     ViewData["SideNavVisible"] = true;
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
     if (string.IsNullOrWhiteSpace(Model.AboutHeading))
     {
         Model.AboutHeading = sr["About"];
@@ -43,13 +43,15 @@
         </div>
         <div class="mb-3">
             <label asp-for="AboutContent">@sr["About Content"]</label>
-            <textarea asp-for="AboutContent" class="form-control"
-                      data-ckeditor-unobtrusive=""
-                      data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                      data-ckeditor-config-language="@ckOptions.LanguageCode"
-                      data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                      data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                      data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+            <textarea asp-for="AboutContent" rows="5"
+                data-summernote-unobtrusive=""
+                data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+                data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+                data-summernote-config-language="@summernoteOptions.LanguageCode"
+                data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+                data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+                data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+            </textarea>
         </div>
         <div class="mb-3">
             <div class="form-check" data-bs-toggle="tooltip" data-placement="left" title='@sr["If checked will show the blog title and description at the top of the post list."]'>

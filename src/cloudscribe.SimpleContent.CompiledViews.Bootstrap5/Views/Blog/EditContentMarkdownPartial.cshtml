@@ -1,21 +1,20 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ISummernoteOptionsResolver summernoteOptionsResolver
 @inject IStringLocalizer<SimpleContent> sr
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
 }
-<textarea asp-for="Content" class="form-control" rows="10" cols="70"
-          data-markdown-unobtrusive=""
-          data-markdown-autosave="true"
-          data-markdown-contentid="@contentId"
-          data-markdown-forceSync="true"
-          data-markdown-indentWithTabs="true"
-          data-markdown-spellChecker="true"
-          data-markdown-filemodalid="#fileBrowseDialog"
-          data-markdown-filebrowseurl="@ckOptions.ImageBrowseUrl"
-          data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
+<textarea asp-for="Content" rows="10" cols="70" class="form-control"
+    data-summernote-unobtrusive=""
+    data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+    data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+    data-summernote-config-language="@summernoteOptions.LanguageCode"
+    data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+    data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+    data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+</textarea>
 <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
         <div class="modal-content">

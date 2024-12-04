@@ -6,12 +6,12 @@
 @using System.Net
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject IAntiforgery antiforgery
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ISummernoteOptionsResolver summernoteOptionsResolver
 @inject IImageWithContentOptionsProvider optionsProvider
 @{
 
     var tokens = antiforgery.GetAndStoreTokens(Context);
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
     var options = await optionsProvider.ResolveImageWithContentOptions(Context.Request.Host.Host, Context.Request.Path);
 
 }
@@ -31,8 +31,8 @@
              data-dropzone=""
              data-upload-url="@Url.Action("DropFile", "FileManager")"
              data-anti-forgery-token="@tokens.RequestToken"
-             data-file-browse-url="@ckOptions.ImageBrowseUrl"
-             data-file-crop-url="@ckOptions.CropFileUrl"
+             data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+             data-file-crop-url="@summernoteOptions.CropFileUrl"
              data-target-path="@options.NewImagePath"
              data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
              data-resize-image="true"
@@ -81,13 +81,15 @@
     </div>
 </div>
 <label asp-for="Content">@sr["Content"]</label>
-<textarea asp-for="Content" class="form-control"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+<textarea asp-for="Content" rows="5" class="form-control"
+    data-summernote-unobtrusive=""
+    data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+    data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+    data-summernote-config-language="@summernoteOptions.LanguageCode"
+    data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+    data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+    data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+</textarea>
 
 <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" style="height:99%;min-width:99%!important;">

@@ -1,13 +1,14 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ISummernoteOptionsResolver summernoteOptionsResolver
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
 }
-<textarea asp-for="Content" class="form-control" rows="10" cols="70"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-
+<textarea asp-for="Content" rows="10" cols="70" class="form-control"
+    data-summernote-unobtrusive=""
+    data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+    data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+    data-summernote-config-language="@summernoteOptions.LanguageCode"
+    data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+    data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+    data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+</textarea>

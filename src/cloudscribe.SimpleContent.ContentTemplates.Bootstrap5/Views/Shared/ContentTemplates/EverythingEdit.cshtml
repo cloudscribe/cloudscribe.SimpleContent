@@ -6,12 +6,12 @@
 @using System.Net
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject IAntiforgery antiforgery
-@inject ICkeditorOptionsResolver editorOptionsResolver
+@inject ISummernoteOptionsResolver summernoteOptionsResolver
 @inject IColumnTemplateOptionsProvider optionsProvider
 @inject IGalleryOptionsProvider galleryOptionsProvider
 @{
     var tokens = antiforgery.GetAndStoreTokens(Context);
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
+    var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
     var options = await optionsProvider.ResolveColumnTemplateOptions(Context.Request.Host.Host, Context.Request.Path);
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
     int i = 1;
@@ -78,8 +78,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -121,14 +121,15 @@
             <input asp-for="SectionOneHeading" class="form-control" />
         </div>
         <label asp-for="SectionOneContent">@sr["Section 1 Content"]</label>
-        <textarea asp-for="SectionOneContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-
+        <textarea asp-for="SectionOneContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
     <div class="tab-pane" id="tabCol2" role="tabpanel" aria-labelledby="cedit-tab2">
@@ -141,8 +142,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -184,14 +185,15 @@
             <input asp-for="SectionTwoHeading" class="form-control" />
         </div>
         <label asp-for="SectionTwoContent">@sr["Section 2 Content"]</label>
-        <textarea asp-for="SectionTwoContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-
+        <textarea asp-for="SectionTwoContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
     <div class="tab-pane" id="tabCol3" role="tabpanel" aria-labelledby="cedit-tab3">
@@ -205,8 +207,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -248,13 +250,15 @@
             <input asp-for="SectionThreeHeading" class="form-control" />
         </div>
         <label asp-for="SectionThreeContent">@sr["Section 3 Content"]</label>
-        <textarea asp-for="SectionThreeContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+        <textarea asp-for="SectionThreeContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
     <div class="tab-pane" id="tabCol4" role="tabpanel" aria-labelledby="cedit-tab4">
@@ -268,8 +272,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -311,13 +315,15 @@
             <input asp-for="SectionFourHeading" class="form-control" />
         </div>
         <label asp-for="SectionFourContent">@sr["Section 4 Content"]</label>
-        <textarea asp-for="SectionFourContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+        <textarea asp-for="SectionFourContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
     <div class="tab-pane pt-2" id="tabGallery" role="tabpanel" aria-labelledby="cedit-tabgal">
@@ -362,8 +368,8 @@
                          data-dropzone=""
                          data-upload-url="@Url.Action("DropFile", "FileManager")"
                          data-anti-forgery-token="@tokens.RequestToken"
-                         data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                         data-file-crop-url="@ckOptions.CropFileUrl"
+                         data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                         data-file-crop-url="@summernoteOptions.CropFileUrl"
                          data-target-path="@galleryOptions.NewImagePath"
                          data-create-thumb="@galleryOptions.CreateThumbnails.ToString().ToLower()"
                          data-resize-image="true"
@@ -411,8 +417,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -454,14 +460,15 @@
             <input asp-for="SectionFiveHeading" class="form-control" />
         </div>
         <label asp-for="SectionFiveContent">@sr["Section 5 Content"]</label>
-        <textarea asp-for="SectionFiveContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-
+        <textarea asp-for="SectionFiveContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
     <div class="tab-pane" id="tabCol6" role="tabpanel" aria-labelledby="cedit-tab6">
@@ -474,8 +481,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -517,14 +524,15 @@
             <input asp-for="SectionSixHeading" class="form-control" />
         </div>
         <label asp-for="SectionSixContent">@sr["Section 6 Content"]</label>
-        <textarea asp-for="SectionSixContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-
+        <textarea asp-for="SectionSixContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
     <div class="tab-pane" id="tabCol7" role="tabpanel" aria-labelledby="cedit-tab7">
@@ -538,8 +546,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -581,13 +589,15 @@
             <input asp-for="SectionSevenHeading" class="form-control" />
         </div>
         <label asp-for="SectionSevenContent">@sr["Section 7 Content"]</label>
-        <textarea asp-for="SectionSevenContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+        <textarea asp-for="SectionSevenContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
     <div class="tab-pane" id="tabCol8" role="tabpanel" aria-labelledby="cedit-tab8">
@@ -601,8 +611,8 @@
                      data-dropzone=""
                      data-upload-url="@Url.Action("DropFile", "FileManager")"
                      data-anti-forgery-token="@tokens.RequestToken"
-                     data-file-browse-url="@ckOptions.ImageBrowseUrl"
-                     data-file-crop-url="@ckOptions.CropFileUrl"
+                     data-file-browse-url="@summernoteOptions.ImageBrowseUrl"
+                     data-file-crop-url="@summernoteOptions.CropFileUrl"
                      data-target-path="@options.NewImagePath"
                      data-create-thumb="@options.CreateThumbnails.ToString().ToLower()"
                      data-resize-image="true"
@@ -644,13 +654,15 @@
             <input asp-for="SectionEightHeading" class="form-control" />
         </div>
         <label asp-for="SectionEightContent">@sr["Section 8 Content"]</label>
-        <textarea asp-for="SectionEightContent" class="form-control"
-                  data-ckeditor-unobtrusive=""
-                  data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                  data-ckeditor-config-language="@ckOptions.LanguageCode"
-                  data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                  data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                  data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+        <textarea asp-for="SectionEightContent" rows="5" class="form-control"
+            data-summernote-unobtrusive=""
+            data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+            data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+            data-summernote-config-language="@summernoteOptions.LanguageCode"
+            data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+            data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+            data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+        </textarea>
     </div>
 
 
