@@ -1273,19 +1273,22 @@
   <data name="Updated" xml:space="preserve">
     <value>Updated</value>
   </data>
-  <data name="ShowCreatedBy" xml:space="preserve">
+  <data name="Show Created By" xml:space="preserve">
     <value>Show Created By</value>
   </data>
-  <data name="ShowCreatedDate" xml:space="preserve">
+  <data name="Show Created Date" xml:space="preserve">
     <value>Show Created Date</value>
   </data>
-  <data name="ShowLastModifiedBy" xml:space="preserve">
+  <data name="Show Last Modified By" xml:space="preserve">
     <value>Show Last Modified By</value>
   </data>
-  <data name="ShowLastModifiedDate" xml:space="preserve">
+  <data name="Show Last Modified Date" xml:space="preserve">
     <value>Show Last Modified Date</value>
   </data>
-  <data name="EditorialDetailsExplanation" xml:space="preserve">
-    <value>Show / Hide the following information on CMS pages below the main content of the page.</value>
+  <data name="Show / hide the following information below the main content of the page." xml:space="preserve">
+    <value>Show / hide the following information below the main content of the page.</value>
+  </data>
+  <data name="Show / hide the following information below the main content of pages (site default)." xml:space="preserve">
+    <value>Show / hide the following information below the main content of pages (site default).</value>
   </data>
 </root>
