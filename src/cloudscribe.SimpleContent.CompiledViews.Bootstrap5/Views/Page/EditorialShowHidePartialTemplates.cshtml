@@ -1,0 +1,84 @@
+﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditWithTemplateViewModel
+@inject IStringLocalizer<SimpleContent> sr
+
+<div class="mb-3">
+    <p>@sr["EditorialDetailsExplanation"]</p>
+</div>
+<div class="mb-3">
+    <div class="row">
+        <div class="col col-lg-3">&nbsp;</div>
+        <div class="col col-lg-1 text-center">
+            @sr["Use Site Default"]
+        </div>
+        <div class="col col-lg-1 text-center">
+            @sr["Show on this Page"]
+        </div>
+        <div class="col col-lg-1 text-center">
+            @sr["Hide on this Page"]
+        </div>
+    </div>
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowCreatedBy"]'>
+        <div class="col col-lg-3">
+            <label asp-for="ShowCreatedBy" class="form-check-label">
+                @sr["ShowCreatedBy"]
+            </label>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input id="ShowCreatedBy" name="ShowCreatedBy" type="radio" value="" @(Model.ShowCreatedBy.HasValue || Model.ShowCreatedBy != null ? "" : "checked")>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowCreatedBy" type="radio" value="true">
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowCreatedBy" type="radio" value="false">
+        </div>
+    </div>
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowCreatedDate"]'>
+        <div class="col col-lg-3">
+            <label asp-for="ShowCreatedDate" class="form-check-label">
+                @sr["ShowCreatedDate"]
+            </label>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input id="ShowCreatedDate" name="ShowCreatedDate" type="radio" value="" @(Model.ShowCreatedDate.HasValue || Model.ShowCreatedDate != null ? "" : "checked")>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowCreatedDate" type="radio" value="true">
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowCreatedDate" type="radio" value="false">
+        </div>
+    </div>
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowLastModifiedBy"]'>
+        <div class="col col-lg-3">
+            <label asp-for="ShowLastModifiedBy" class="form-check-label">
+                @sr["ShowLastModifiedBy"]
+            </label>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input id="ShowLastModifiedBy" name="ShowLastModifiedBy" type="radio" value="" @(Model.ShowLastModifiedBy.HasValue || Model.ShowLastModifiedBy != null ? "" : "checked")>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowLastModifiedBy" type="radio" value="true">
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowLastModifiedBy" type="radio" value="false">
+        </div>
+    </div>
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowLastModifiedDate"]'>
+        <div class="col col-lg-3">
+            <label asp-for="ShowLastModifiedDate" class="form-check-label">
+                @sr["ShowLastModifiedDate"]
+            </label>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input id="ShowLastModifiedDate" name="ShowLastModifiedDate" type="radio" value="" @(Model.ShowLastModifiedDate.HasValue || Model.ShowLastModifiedDate != null ? "" : "checked")>
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowLastModifiedDate" type="radio" value="true">
+        </div>
+        <div class="col col-lg-1 text-center">
+            <input asp-for="ShowLastModifiedDate" type="radio" value="false">
+        </div>
+    </div>
+</div>
