@@ -2,11 +2,11 @@
 @inject IStringLocalizer<SimpleContent> sr
 
 <div class="mb-3">
-    <p>@sr["EditorialDetailsExplanation"]</p>
+    <p>@sr["Show / hide the following information below the main content of the page."]</p>
 </div>
 <div class="mb-3">
     <div class="row">
-        <div class="col col-lg-3">&nbsp;</div>
+        <div class="col col-lg-2">&nbsp;</div>
         <div class="col col-lg-1 text-center">
             @sr["Use Site Default"]
         </div>
@@ -17,10 +17,10 @@
             @sr["Hide on this Page"]
         </div>
     </div>
-    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowCreatedBy"]'>
-        <div class="col col-lg-3">
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["Show Created By"]'>
+        <div class="col col-lg-2">
             <label asp-for="ShowCreatedBy" class="form-check-label">
-                @sr["ShowCreatedBy"]
+                @sr["Show Created By"]
             </label>
         </div>
         <div class="col col-lg-1 text-center">
@@ -33,10 +33,10 @@
             <input asp-for="ShowCreatedBy" type="radio" value="false">
         </div>
     </div>
-    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowCreatedDate"]'>
-        <div class="col col-lg-3">
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["Show Created Date"]'>
+        <div class="col col-lg-2">
             <label asp-for="ShowCreatedDate" class="form-check-label">
-                @sr["ShowCreatedDate"]
+                @sr["Show Created Date"]
             </label>
         </div>
         <div class="col col-lg-1 text-center">
@@ -49,10 +49,10 @@
             <input asp-for="ShowCreatedDate" type="radio" value="false">
         </div>
     </div>
-    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowLastModifiedBy"]'>
-        <div class="col col-lg-3">
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["Show Last Modified By"]'>
+        <div class="col col-lg-2">
             <label asp-for="ShowLastModifiedBy" class="form-check-label">
-                @sr["ShowLastModifiedBy"]
+                @sr["Show Last Modified By"]
             </label>
         </div>
         <div class="col col-lg-1 text-center">
@@ -65,10 +65,10 @@
             <input asp-for="ShowLastModifiedBy" type="radio" value="false">
         </div>
     </div>
-    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["ShowLastModifiedDate"]'>
-        <div class="col col-lg-3">
+    <div class="row" data-bs-toggle="tooltip" data-placement="left" title='@sr["Show Last Modified Date"]'>
+        <div class="col col-lg-2">
             <label asp-for="ShowLastModifiedDate" class="form-check-label">
-                @sr["ShowLastModifiedDate"]
+                @sr["Show Last Modified Date"]
             </label>
         </div>
         <div class="col col-lg-1 text-center">
