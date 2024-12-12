@@ -25,8 +25,6 @@
 
         public string Home { get; set; } = "glyphicons glyphicons-home";
 
-        //public string HideEditToolbar { get; set; } = "glyphicon glyphicon-chevron-right";
-
         public string ShowEditToolbar { get; set; } = "glyphicon glyphicon-pencil";
 
         public string NewItem { get; set; } = "glyphicon glyphicon-plus";
@@ -44,37 +42,6 @@
         public string Unpublish { get; set; } = "glyphicon glyphicon-eye-close";
 
         public string RelatedPosts { get; set; } = "far fa-hand-point-right"; //"fas fa-asterisk";
-
-        //<i class="far fa-hand-point-right"></i>
-
-
-
-        // public string JustifyLeft { get; set; } = "glyphicon glyphicon-align-left";
-
-        //public string JustifyCenter { get; set; } = "glyphicon glyphicon-align-center";
-
-        //public string JustifyRight { get; set; } = "glyphicon glyphicon-align-right";
-
-        //public string JustifyFull { get; set; } = "glyphicon glyphicon-align-justify";
-
-        //public string UnorderedList { get; set; } = "glyphicon glyphicon-list";
-
-        //public string OrderedList { get; set; } = "glyphicon glyphicon-th-list";
-
-        //public string Outdent { get; set; } = "glyphicon glyphicon-indent-left";
-
-        //public string Indent { get; set; } = "glyphicon glyphicon-indent-right";
-
-        //public string Hyperlink { get; set; } = "glyphicon glyphicon-globe";
-
-        //public string RemoveHyperlink { get; set; } = "glyphicon glyphicon-remove";
-
-        //public string InsertImage { get; set; } = "glyphicon glyphicon-picture";
-
-        //public string ToggleSource { get; set; } = "glyphicon glyphicon-eye-open";
-
-        //public string ClearAllFormatting { get; set; } = "glyphicon glyphicon-fire";
-
-
+        public string OpenInNewWindow { get; set; } = "fas fa-external-link-alt";
     }
 }
