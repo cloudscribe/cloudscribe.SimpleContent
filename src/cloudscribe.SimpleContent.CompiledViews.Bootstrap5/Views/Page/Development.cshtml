@@ -65,9 +65,17 @@
         </tr>
     </table>
 </div>
+<form asp-controller="Page" asp-action="AddScriptResource" class="form-inline" role="form">
+    <div class="mb-3">
+        <label asp-for="Script">@sr["Script Initialisation (you DO NOT need to enter any form of 'document.ready' script or function)"]</label>
+        <input type="hidden" asp-for="Slug" />
+        <textarea asp-for="Script" class="form-control" data-bs-toggle="tooltip" title='@sr["Here you can enter Javascript or JQuery for the page to run, this is useful if you have uploaded some Javascript above that requires initialising on the page in order to run. You DO NO need to enter 'document.ready'. This should be used with great caution!"]'></textarea>
+        <span asp-validation-for="Script" class="invalid-feedback"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@sr["Add Javascript"]</button>
+</form>
+
 @section Scripts {
     <script src="~/cr/js/jquery.validate.min.js"></script>
     <script src="~/cr/js/jquery.validate.unobtrusive.min.js"></script>
-
 }
-

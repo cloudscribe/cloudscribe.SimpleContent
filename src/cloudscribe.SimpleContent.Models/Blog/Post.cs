@@ -96,6 +96,6 @@ namespace cloudscribe.SimpleContent.Models
             post.CopyTo(p);
             return p;
         }
-
+        public string Script { get; set; }
     }
 }

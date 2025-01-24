@@ -13,7 +13,7 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         }
 
         public string Slug { get; set; } = string.Empty;
-
+        public string Script { get; set; } = string.Empty;
         public List<IPageResource> Css { get; set; }
         public List<IPageResource> Js { get; set; }
 
