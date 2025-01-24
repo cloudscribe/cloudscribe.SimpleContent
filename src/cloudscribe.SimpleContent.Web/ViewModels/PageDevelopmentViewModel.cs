@@ -18,7 +18,5 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         public List<IPageResource> Js { get; set; }
 
         public AddPageResourceViewModel AddResourceViewModel { get; set; }
-
-       
     }
 }

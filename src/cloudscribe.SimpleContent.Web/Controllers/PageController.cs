@@ -902,7 +902,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Type = model.Type,
                 Environment = model.Environment,
                 Sort = model.Sort,
-                Url = model.Url
+                Url = model.Url,
+                Script = model.Script
             };
             editContext.CurrentPage.Resources.Add(resource);
             
@@ -914,7 +915,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> AddScriptResource(AddPageResourceViewModelScriptOnly model)
+        public virtual async Task<IActionResult> AddScriptResource(PageEditViewModel model)
         {
             var editContextRequest = new PageEditContextRequest(User, model.Slug, null, model.Script, null);
             var editContext = await Mediator.Send(editContextRequest);
@@ -932,10 +933,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = model.Slug });
             }
 
-            if (!ModelState.IsValid)
-            { }
-
-                if (!canDev)
+            if (!canDev)
             {
                 Log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
                 return RedirectToRoute(PageRoutes.PageRouteName);
@@ -947,7 +945,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if ((!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles)))
+            if (!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles))
             {
                 if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
                 {
@@ -956,11 +954,11 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
             }
 
-            //var resource = new PageResource
-            //{
-            //    Script = model.Script
-            //};
-            //editContext.CurrentPage.Resources.Add(resource);
+            if (!model.Script.EndsWith(';'))
+            {
+                this.AlertDanger(StringLocalizer["Scripts should end with a semicolon"], true);
+                return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
+            }
 
             editContext.CurrentPage.Script = model.Script;
 
