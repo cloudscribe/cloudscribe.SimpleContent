@@ -55,6 +55,9 @@ $(function () {
                 attachment: 'top left',
                 targetAttachment: 'top right'
             });
+            setTimeout(function () {
+                tether.position();
+            })
             if (node.childcount > 1) {
                 pageTree.ui.sortLi.show();
             } else {
