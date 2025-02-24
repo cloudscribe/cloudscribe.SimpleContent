@@ -535,7 +535,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
+
+                if (model.SaveMode == SaveMode.SaveDraftAndPreview)
+                {
+                    return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = response.Value.Slug, preview = "true" });
+                }
+                else
+                {
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
+                }
             }
             else
             {
@@ -773,8 +781,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 {
                     return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
                 }
-                
-                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
+
+                if (model.SaveMode == SaveMode.SaveDraftAndPreview)
+                {
+                    return RedirectToRoute(PageRoutes.PageEditRouteName, new { slug = response.Value.Slug, preview = "true" });
+                }
+                else
+                {
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = response.Value.Slug });
+                }
             }
             else
             {
