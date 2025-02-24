@@ -167,6 +167,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     switch (saveMode)
                     {
                         case SaveMode.SaveDraft:
+                        case SaveMode.SaveDraftAndPreview:
 
                             post.DraftContent = request.ViewModel.Content;
                             post.DraftAuthor = request.ViewModel.Author;

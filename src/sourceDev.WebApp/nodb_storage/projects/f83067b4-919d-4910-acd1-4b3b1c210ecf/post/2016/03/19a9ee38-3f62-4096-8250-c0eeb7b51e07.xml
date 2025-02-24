@@ -6,13 +6,15 @@
   <correlationkey />
   <author />
   <pubDate>2016-03-13T22:23:00.0000000Z</pubDate>
-  <lastModified>2018-08-20T15:11:16</lastModified>
+  <lastModified>2025-02-21T14:31:21</lastModified>
   <excerpt>Starsky and Hutch</excerpt>
   <content>&lt;p&gt;Starsky and Hutcherson&lt;br /&gt;
 &lt;img alt="dudes" src="/media/images/dudes1-550x412.jpeg" style="height:412px; width:550px" /&gt;&lt;br /&gt;
 cool dudes man!&lt;/p&gt;
 
 &lt;p&gt;ride on!&lt;/p&gt;
+
+&lt;p&gt;CHiPS was right there!&lt;/p&gt;
 </content>
   <contentType />
   <imageUrl />
@@ -45,7 +47,7 @@ cool dudes man!&lt;/p&gt;
       <website></website>
       <ip>127.0.0.1</ip>
       <userAgent>Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36</userAgent>
-      <date>2016-09-08T11:52:04.4968035-04:00</date>
+      <date>2016-09-08T16:52:04.4968035+01:00</date>
       <content>foo was here</content>
     </comment>
     <comment isAdmin="false" isApproved="true" id="4a196ac8-60c5-4135-b860-c2bf39a2dac4">
@@ -54,8 +56,9 @@ cool dudes man!&lt;/p&gt;
       <website></website>
       <ip>127.0.0.1</ip>
       <userAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36</userAgent>
-      <date>2017-10-24T10:53:53.5406034-04:00</date>
+      <date>2017-10-24T15:53:53.5406034+01:00</date>
       <content>more foo for you</content>
     </comment>
   </comments>
+  <showcomments>true</showcomments>
 </post>

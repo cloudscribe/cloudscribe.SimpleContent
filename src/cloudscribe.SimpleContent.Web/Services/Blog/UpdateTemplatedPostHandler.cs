@@ -240,6 +240,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                     switch (saveMode)
                     {
                         case SaveMode.SaveDraft:
+                        case SaveMode.SaveDraftAndPreview:
 
                             post.DraftSerializedModel = modelString;
                             post.DraftContent = renderedModel;

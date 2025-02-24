@@ -9,7 +9,7 @@
     if (string.IsNullOrEmpty(Model.Id)) { showDev = false; }
     var cancelSlug = Model.Slug;
     if (Model.Slug == Model.ProjectDefaultSlug || Model.DidRestoreDeleted) { cancelSlug = string.Empty; }
-
+    var preview = Context.Request.Query["preview"];
 }
 @section Styles {
     <partial name="EditStylesPartial" model="@Model" />
@@ -142,7 +142,7 @@
             }
 
             <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
-
+            <button id="btnSaveDraftAndPreview" name="SaveMode" value="@SaveMode.SaveDraftAndPreview" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft & Preview"]'>@sr["Save Draft & Preview"]</button>
             <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
 
         </div>
@@ -241,5 +241,11 @@
 </div>
 
 @section Scripts {
+    @if (preview == "true")
+    {
+        <script>
+            window.open("https://localhost:44314/" + "@Model.Slug" + "?showdraft=true");
+        </script>
+    }
     <partial name="EditScriptsPartial" model="@Model" />
 }
