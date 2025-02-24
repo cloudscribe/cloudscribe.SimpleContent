@@ -580,17 +580,34 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
             Dictionary<string, bool?> editEditorialItems = EditEditorialItemsResolver(editContext.CurrentPage, editContext.Project);
+            PageEditViewModel model;
 
-            var model = new PageEditViewModel
+            if (editEditorialItems.Count > 0)
             {
-                ProjectId = editContext.Project.Id,
-                DisqusShortname = editContext.Project.DisqusShortName,
-                ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
-                ShowCreatedBy = editEditorialItems["ShowCreatedBy"],
-                ShowCreatedDate = editEditorialItems["ShowCreatedDate"],
-                ShowLastModifiedBy = editEditorialItems["ShowLastModifiedBy"],
-                ShowLastModifiedDate = editEditorialItems["ShowLastModifiedDate"]
-            };
+                model = new PageEditViewModel
+                {
+                    ProjectId = editContext.Project.Id,
+                    DisqusShortname = editContext.Project.DisqusShortName,
+                    ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
+                    ShowCreatedBy = editEditorialItems["ShowCreatedBy"],
+                    ShowCreatedDate = editEditorialItems["ShowCreatedDate"],
+                    ShowLastModifiedBy = editEditorialItems["ShowLastModifiedBy"],
+                    ShowLastModifiedDate = editEditorialItems["ShowLastModifiedDate"]
+                };
+            }
+            else
+            {
+                model = new PageEditViewModel
+                {
+                    ProjectId = editContext.Project.Id,
+                    DisqusShortname = editContext.Project.DisqusShortName,
+                    ProjectDefaultSlug = editContext.Project.DefaultPageSlug,
+                    ShowCreatedBy = null,
+                    ShowCreatedDate = null,
+                    ShowLastModifiedBy = null,
+                    ShowLastModifiedDate = null
+                };
+            }
             
             var routeVals = new RouteValueDictionary
             {
@@ -1387,46 +1404,48 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         {
             Dictionary<string, bool?> showItems = [];
 
-            if (page.ShowCreatedBy.HasValue)
+            if (page != null) //check if new page
             {
-                //page has setting so must have been overidden so use it
-                showItems.Add("ShowCreatedBy", (bool)page.ShowCreatedBy);
-            }
-            else
-            {
-                showItems.Add("ShowCreatedBy", null);
-            }
+                if (page.ShowCreatedBy != null && page.ShowCreatedBy.HasValue)
+                {
+                    //page has setting so must have been overidden so use it
+                    showItems.Add("ShowCreatedBy", (bool)page.ShowCreatedBy);
+                }
+                else
+                {
+                    showItems.Add("ShowCreatedBy", null);
+                }
 
-            if (page.ShowCreatedDate.HasValue)
-            {
-                //page has setting so must have been overidden so use it
-                showItems.Add("ShowCreatedDate", (bool)page.ShowCreatedDate);
-            }
-            else
-            {
-                showItems.Add("ShowCreatedDate", null);
-            }
+                if (page.ShowCreatedDate != null && page.ShowCreatedDate.HasValue)
+                {
+                    //page has setting so must have been overidden so use it
+                    showItems.Add("ShowCreatedDate", (bool)page.ShowCreatedDate);
+                }
+                else
+                {
+                    showItems.Add("ShowCreatedDate", null);
+                }
 
-            if (page.ShowLastModifiedBy.HasValue)
-            {
-                //page has setting so must have been overidden so use it
-                showItems.Add("ShowLastModifiedBy", (bool)page.ShowLastModifiedBy);
-            }
-            else
-            {
-                showItems.Add("ShowLastModifiedBy", null);
-            }
+                if (page.ShowLastModifiedBy != null && page.ShowLastModifiedBy.HasValue)
+                {
+                    //page has setting so must have been overidden so use it
+                    showItems.Add("ShowLastModifiedBy", (bool)page.ShowLastModifiedBy);
+                }
+                else
+                {
+                    showItems.Add("ShowLastModifiedBy", null);
+                }
 
-            if (page.ShowLastModifiedDate.HasValue)
-            {
-                //page has setting so must have been overidden so use it
-                showItems.Add("ShowLastModifiedDate", (bool)page.ShowLastModifiedDate);
+                if (page.ShowLastModifiedDate != null && page.ShowLastModifiedDate.HasValue)
+                {
+                    //page has setting so must have been overidden so use it
+                    showItems.Add("ShowLastModifiedDate", (bool)page.ShowLastModifiedDate);
+                }
+                else
+                {
+                    showItems.Add("ShowLastModifiedDate", null);
+                }
             }
-            else
-            {
-                showItems.Add("ShowLastModifiedDate", null);
-            }
-
             return showItems;
         }
     }
