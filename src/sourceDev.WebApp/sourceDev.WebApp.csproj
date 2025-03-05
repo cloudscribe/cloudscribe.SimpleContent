@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <!--
-    <UserSecretsId>sourceDev.WebApp-110CEF0D-2425-4A95-936A-16A45F93366C</UserSecretsId>
-    -->
   </PropertyGroup>
 
   <!--
