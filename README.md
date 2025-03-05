@@ -17,7 +17,7 @@ If you have questions, please visit our community forums https://www.cloudscribe
 -->
 
 <!-- Making badges prettier: -->
-[![SimpleContent Build](https://img.shields.io/github/actions/workflow/status/cloudscribe/cloudscribe.SimpleContent/cloudscribe-develop.yml?branch=develop&event=push&style=for-the-badge&label=🚀%20SimpleContent%20Develop%20Branch)](https://github.com/cloudscribe/cloudscribe.SimpleContent/actions/workflows/cloudscribe-develop.yml)
+[![SimpleContent Build](https://img.shields.io/github/actions/workflow/status/cloudscribe/cloudscribe.SimpleContent/cloudscribe-develop.yml?branch=develop&event=push&style=for-the-badge&label=🚀%20Develop%20Branch)](https://github.com/cloudscribe/cloudscribe.SimpleContent/actions/workflows/cloudscribe-develop.yml)
 
 
 ## Getting Started
