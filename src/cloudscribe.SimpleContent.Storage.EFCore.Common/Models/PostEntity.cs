@@ -136,6 +136,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             post.CopyTo(p);
             return p;
         }
-
+        public string Script { get; set; }
     }
 }
