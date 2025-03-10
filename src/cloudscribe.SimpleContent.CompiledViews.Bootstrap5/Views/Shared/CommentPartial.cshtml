@@ -2,6 +2,8 @@
 @using cloudscribe.SimpleContent.Web
 @addTagHelper "*, cloudscribe.Web.Common"
 @model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
+@inject IStringLocalizer<SimpleContent> sr
+
 <article data-id="@Model.TmpComment.Id" itemscope itemtype="http://schema.org/UserComments" itemprop="comment" class="@(Model.TmpComment.IsAdmin ? "self" : null)">
     <img gravatar-email="@Model.TmpComment.Email" gravatar-size="50" alt="Comment by @Model.TmpComment.Author" />
     <div class="comment-item">
@@ -17,7 +19,7 @@
         }
         @if (Model.CanEdit)
         {
-            <button class="deletecomment btn btn-link">Delete</button>
+            <button class="deletecomment btn btn-link">@sr["Delete"]</button>
             @if (Model.ProjectSettings.ModerateComments && !Model.TmpComment.IsApproved)
             {
                 <button class="approvecomment btn btn-link">Approve</button>
@@ -26,6 +28,6 @@
     </div>
     @if (Model.ProjectSettings.ModerateComments && !Model.TmpComment.IsApproved && !Model.CanEdit)
     {
-        <div itemprop="approvalWarning">! The comment will not be visible until a moderator approves it !</div>
+        <div itemprop="approvalWarning">@sr["! The comment will not be visible until a moderator approves it !"]</div>
     } 
 </article>

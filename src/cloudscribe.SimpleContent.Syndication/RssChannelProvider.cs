@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -30,7 +31,8 @@ namespace cloudscribe.SimpleContent.Syndication
             IHttpContextAccessor contextAccessor,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccesor,
-            IContentProcessor contentProcessor
+            IContentProcessor contentProcessor,
+            IStringLocalizer<RssChannelProvider> localizer
             )
         {
             ProjectService = projectService;
@@ -41,6 +43,7 @@ namespace cloudscribe.SimpleContent.Syndication
             ActionContextAccesor = actionContextAccesor;
             ContentProcessor = contentProcessor;
             BlogRoutes = blogRoutes;
+            sr = localizer;
         }
 
         protected IUrlHelperFactory UrlHelperFactory { get; private set; }
@@ -51,7 +54,7 @@ namespace cloudscribe.SimpleContent.Syndication
         protected IBlogRoutes BlogRoutes { get; private set; }
         protected IContentProcessor ContentProcessor { get; private set; }
         protected IBlogUrlResolver BlogUrlResolver { get; private set; }
-
+        protected IStringLocalizer sr { get; private set; }
 
         public string Name { get; } = "cloudscribe.SimpleContent.Syndication.RssChannelProvider";
 
@@ -87,7 +90,7 @@ namespace cloudscribe.SimpleContent.Syndication
             else
             {
                 // prevent error, channel desc cannot be empty
-                channel.Description = "Welcome to my blog";
+                channel.Description = sr["Welcome to my blog"];
             }
             
             if(!string.IsNullOrEmpty(project.ChannelCategoriesCsv))
@@ -199,8 +202,7 @@ namespace cloudscribe.SimpleContent.Syndication
                 rssItem.Description = filteredResult.FilteredContent;
                 if(!filteredResult.IsFullContent)
                 {
-                    //TODO: localize
-                    var readMore = " <a href='" + postUrl + "'>...read more</a>";
+                    var readMore = " <a href='" + postUrl + "'>" + sr["...read more"] + "</a>";
                     rssItem.Description += readMore;
                 }
                 

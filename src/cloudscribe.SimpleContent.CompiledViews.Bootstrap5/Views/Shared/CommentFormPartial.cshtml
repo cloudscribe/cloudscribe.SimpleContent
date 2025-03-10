@@ -1,7 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
 @using cloudscribe.SimpleContent.Models
 @using cloudscribe.SimpleContent.Web
-
+@inject IStringLocalizer<SimpleContent> sr
 
 @{
     var path = Url.Action("AjaxPostComment", "Blog");
@@ -10,28 +10,28 @@
 }
 <form id="commentform" asp-antiforgery="true" class="form-horizontal" data-blog-path="@path">
     <fieldset>
-        <legend>Post comment</legend>
+        <legend>@sr["Post comment"]</legend>
 
         <div class="mb-3 row">
-            <label for="commentname" class="control-label col-sm-2">Name</label>
+            <label for="commentname" class="control-label col-sm-2">@sr["Name"]</label>
             <div class="col-sm-7">
                 <input id="commentname" class="form-control" type="text" placeholder="Name" required />
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="commentemail" class="control-label col-sm-2">Email</label>
+            <label for="commentemail" class="control-label col-sm-2">@sr["Email"]</label>
             <div class="col-sm-7">
                 <input id="commentemail" class="form-control" type="email" placeholder="Email" required />
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="commenturl" class="control-label col-sm-2">Website</label>
+            <label for="commenturl" class="control-label col-sm-2">@sr["Website"]</label>
             <div class="col-sm-7">
                 <input id="commenturl" class="form-control" type="url" placeholder="Website URL" />
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="commentcontent" class="control-label col-sm-2">Comment (no HTML allowed)</label>
+            <label for="commentcontent" class="control-label col-sm-2">@sr["Comment (no HTML allowed)"]</label>
             <div class="col-sm-10">
                 <textarea id="commentcontent" class="form-control" rows="4" placeholder="Comment" required></textarea>
             </div>
@@ -49,7 +49,7 @@
         <div class="mb-3 row">
             <div class="col-sm-offset-2 col-sm-10">
                 <input name="postId2" type="hidden" value="@Model.CurrentPost.Id" />
-                <button class="btn btn-primary">Post comment</button>
+                <button class="btn btn-primary">@sr["Post comment"]</button>
                 <span id="status" class="alert" role="status" aria-live="polite"></span>
             </div>
         </div>
