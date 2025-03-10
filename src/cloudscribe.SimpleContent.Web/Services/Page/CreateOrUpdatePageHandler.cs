@@ -178,7 +178,7 @@ namespace cloudscribe.SimpleContent.Web.Services
                         //    break;
 
                         case SaveMode.SaveDraft:
-                            
+                        case SaveMode.SaveDraftAndPreview:
                             page.DraftContent = request.ViewModel.Content;
                             page.DraftAuthor = request.ViewModel.Author;
                             // should we clear the draft pub date if save draft clicked?

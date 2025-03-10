@@ -682,7 +682,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 DidReplaceDraft = didReplaceDraft,
                 DidRestoreDeleted = didRestoreDeleted,
                 HasDraft = postResult.Post.HasDraftVersion()
-        };
+            };
             
             if (history != null)
             {
@@ -779,11 +779,22 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             if (response.Succeeded)
             {
                 if (model.SaveMode == SaveMode.DeleteCurrentDraft)
+                {
                     this.AlertSuccess(StringLocalizer["The current draft of this post has been deleted."], true);
+                }
                 else
+                {
                     this.AlertSuccess(StringLocalizer["The post was updated successfully."], true);
+                }
 
-                return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName, new { slug = response.Value.Slug });
+                if (model.SaveMode == SaveMode.SaveDraftAndPreview)
+                {
+                    return RedirectToRoute(BlogRoutes.PostEditWithTemplateRouteName, new { slug = response.Value.Slug, preview = "true" });
+                }
+                else
+                {
+                    return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName, new { slug = response.Value.Slug });
+                }
             }
             else
             {
@@ -793,8 +804,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
 
         }
-
-
 
         [HttpGet]
         [AllowAnonymous]
@@ -955,7 +964,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     model.DraftPubDate = TimeZoneHelper.ConvertToLocalTime(postResult.Post.DraftPubDate.Value, tzId);
                 }
             }
-            
+                
             return View(model);
         }
 
@@ -1048,7 +1057,13 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     pubDate = DateTime.UtcNow;
                 }
 
-                return RedirectToRoute(BlogRoutes.PostWithDateRouteName,
+                if (model.SaveMode == SaveMode.SaveDraftAndPreview)
+                {
+                    return RedirectToRoute(BlogRoutes.PostEditRouteName, new { slug = response.Value.Slug, preview = "true" });
+                }
+                else
+                {
+                    return RedirectToRoute(BlogRoutes.PostWithDateRouteName,
                     new
                     {
                         year = pubDate.Value.Year,
@@ -1056,14 +1071,20 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         day = pubDate.Value.Day.ToString("00"),
                         slug = response.Value.Slug
                     });
+                }
             }
             else
             {
-                return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName,
+                if (model.SaveMode == SaveMode.SaveDraftAndPreview)
+                {
+                    return RedirectToRoute(BlogRoutes.PostEditRouteName, new { slug = response.Value.Slug, preview = "true" });
+                }
+                else
+                {
+                    return RedirectToRoute(BlogRoutes.PostWithoutDateRouteName,
                     new { slug = response.Value.Slug });
+                }
             }
-
-
         }
         
         [HttpPost]
