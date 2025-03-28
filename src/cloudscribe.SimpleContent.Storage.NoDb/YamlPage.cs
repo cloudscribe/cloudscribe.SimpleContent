@@ -149,6 +149,9 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 43)]
         public bool? ShowLastModifiedDate { get; set; }
 
+        [YamlMember(Order = 44)]
+        public string Script { get; set; } = string.Empty;
+
         [YamlIgnore]
         public string Content { get; set; } = string.Empty;
         [YamlIgnore]
