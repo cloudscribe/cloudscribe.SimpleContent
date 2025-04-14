@@ -8,12 +8,18 @@ If you have questions, please visit our community forums https://www.cloudscribe
 
 ### Build Status
 
+<!--
 | Windows  | Linux |
 | ------------- | ------------- |
 | [![Build status](https://ci.appveyor.com/api/projects/status/d0900wcf3y7l7jup/branch/master?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-simplecontent/branch/master)  | [![Build Status](https://travis-ci.org/cloudscribe/cloudscribe.SimpleContent.svg?branch=master)](https://travis-ci.org/cloudscribe/cloudscribe.SimpleContent) |
 
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/cloudscribeweb) [![Twitter Follow](https://img.shields.io/twitter/follow/cloudscribeweb.svg?style=social&label=Follow)](https://twitter.com/cloudscribeweb)
+-->
 
+<!-- Making badges prettier: -->
+[![SimpleContent Build Devel](https://img.shields.io/github/actions/workflow/status/cloudscribe/cloudscribe.SimpleContent/cloudscribe-develop.yml?branch=develop&event=push&style=for-the-badge&label=🚀%20Develop%20Branch)](https://github.com/cloudscribe/cloudscribe.SimpleContent/actions/workflows/cloudscribe-develop.yml)
+
+[![SimpleContent Build Master](https://img.shields.io/github/actions/workflow/status/cloudscribe/cloudscribe.SimpleContent/cloudscribe-master.yml?branch=master&event=push&style=for-the-badge&label=🚀%20Main%20Branch)](https://github.com/cloudscribe/cloudscribe.SimpleContent/actions/workflows/cloudscribe-master.yml)
 ## Getting Started
 
 See the [Introduction](https://www.cloudscribe.com/docs/introduction) to get the big picture and learn how to start new projects using our project template for Visual Studio or the .NET Core CLI
