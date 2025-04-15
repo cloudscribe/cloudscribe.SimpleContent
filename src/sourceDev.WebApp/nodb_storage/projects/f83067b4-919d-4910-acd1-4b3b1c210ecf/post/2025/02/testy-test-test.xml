@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-16"?>
 <post>
-  <id>mike-test</id>
-  <title>Mike Test</title>
-  <slug>mike-test</slug>
+  <id>testy-test-test</id>
+  <title>Testy Test Test</title>
+  <slug>testy-test-test</slug>
   <correlationkey />
   <author>Admin</author>
-  <pubDate>2020-07-21T22:55:01.5259933Z</pubDate>
-  <lastModified>2025-02-24T08:30:23</lastModified>
+  <pubDate>2025-02-24T08:31:31.1206606Z</pubDate>
+  <lastModified>2025-02-24T08:31:31</lastModified>
   <excerpt />
-  <content>&lt;p&gt;This is a Mike Test&lt;/p&gt;
+  <content>&lt;p&gt;This, unsurprisingly, is a test...&lt;/p&gt;
 </content>
   <contentType>html</contentType>
   <imageUrl />
   <thumbnailUrl />
-  <createdUtc>2020-07-21T22:55:01</createdUtc>
+  <createdUtc>2025-02-24T08:31:05</createdUtc>
   <createdByUser>admin</createdByUser>
   <lastModifiedByUser>admin</lastModifiedByUser>
   <draftAuthor />
@@ -21,7 +21,7 @@
   <draftPubDate />
   <templateKey></templateKey>
   <serializedModel></serializedModel>
-  <draftSerializedModel />
+  <draftSerializedModel></draftSerializedModel>
   <serializer></serializer>
   <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf</blogId>
   <ispublished>true</ispublished>

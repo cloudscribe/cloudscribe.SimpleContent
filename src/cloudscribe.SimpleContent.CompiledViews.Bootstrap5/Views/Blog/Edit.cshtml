@@ -6,6 +6,7 @@
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
+    var preview = Context.Request.Query["preview"];
 }
 @section Styles {
     <partial name="EditStylesPartial" model="@Model" />
@@ -102,8 +103,8 @@
             }
 
             <button id="btnSaveDraft" name="SaveMode" value="@SaveMode.SaveDraft" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft"]'>@sr["Save Draft"]</button>
+            <button id="btnSaveDraftAndPreview" name="SaveMode" value="@SaveMode.SaveDraftAndPreview" type="submit" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Save Draft & Preview"]'>@sr["Save Draft & Preview"]</button>
             <button id="btnSavePublish" name="SaveMode" type="submit" value="@SaveMode.PublishNow" class="btn btn-primary" data-disabled-text='@sr["Working..."]' data-enabled-text='@sr["Publish Now"]'>@sr["Publish Now"]</button>
-
         </div>
 
 
@@ -196,5 +197,12 @@
     </div>
 </div>
 @section Scripts {
+    @if (preview == "true")
+    {
+        <script>
+            window.open("https://localhost:44314" + "@Model.CurrentPostUrl" + "?showdraft=true");
+        </script>
+    }
+
     <partial name="EditScriptsPartial" model="@Model" />
 }

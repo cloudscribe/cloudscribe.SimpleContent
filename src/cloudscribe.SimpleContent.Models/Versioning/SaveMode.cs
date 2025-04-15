@@ -7,5 +7,6 @@
         public const string PublishNow         = "PublishNow";
         public const string UnPublish          = "UnPublish";
         public const string DeleteCurrentDraft = "DeleteCurrentDraft";
+        public const string SaveDraftAndPreview = "Preview";
     }
 }

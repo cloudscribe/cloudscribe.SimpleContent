@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-16"?>
+<post>
+  <id>image-test-template</id>
+  <title>Image Test Template</title>
+  <slug>image-test-template</slug>
+  <correlationkey />
+  <author></author>
+  <pubDate />
+  <lastModified>2025-02-24T09:11:09</lastModified>
+  <excerpt />
+  <content></content>
+  <contentType>html</contentType>
+  <imageUrl />
+  <thumbnailUrl />
+  <createdUtc>2025-02-24T08:45:48</createdUtc>
+  <createdByUser>admin</createdByUser>
+  <lastModifiedByUser>admin</lastModifiedByUser>
+  <draftAuthor>Admin</draftAuthor>
+  <draftContent>&lt;p&gt;Image template test thing.&lt;/p&gt;
+
+
+</draftContent>
+  <draftPubDate />
+  <templateKey>sct-ImageWithContent</templateKey>
+  <serializedModel></serializedModel>
+  <draftSerializedModel>{"Content":"&lt;p&gt;Image template test thing.&lt;/p&gt;\r\n","ResizedUrl":null,"FullSizeUrl":null,"AltText":null,"Layout":"ImageOnLeft"}</draftSerializedModel>
+  <serializer>Json</serializer>
+  <blogId>f83067b4-919d-4910-acd1-4b3b1c210ecf</blogId>
+  <ispublished>false</ispublished>
+  <isFeatured>false</isFeatured>
+  <autoTeaser></autoTeaser>
+  <teaserOverride />
+  <suppressTeaser>false</suppressTeaser>
+  <categories></categories>
+  <comments></comments>
+  <showcomments>true</showcomments>
+</post>
