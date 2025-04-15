@@ -159,19 +159,22 @@
   <data name="Updated By" xml:space="preserve">
     <value>Diweddarwyd Gan</value>
   </data>
-  <data name="ShowCreatedBy" xml:space="preserve">
+  <data name="Show Created By" xml:space="preserve">
     <value>Dangos Crëwyd Gan</value>
   </data>
-  <data name="ShowCreatedDate" xml:space="preserve">
+  <data name="Show Created Date" xml:space="preserve">
     <value>Dangos Dyddiad Creu</value>
   </data>
-  <data name="ShowLastModifiedBy" xml:space="preserve">
+  <data name="Show Last Modified By" xml:space="preserve">
     <value>Dangos Addaswyd Diwethaf Gan</value>
   </data>
-  <data name="ShowLastModifiedDate" xml:space="preserve">
+  <data name="Show Last Modified Date" xml:space="preserve">
     <value>Dangos Dyddiad Addaswyd Diwethaf</value>
   </data>
-  <data name="EditorialDetailsExplanation" xml:space="preserve">
-    <value>Dangos / Cuddio'r wybodaeth ganlynol ar dudalennau CMS o dan brif gynnwys y dudalen.</value>
+  <data name="Show / hide the following information below the main content of the page." xml:space="preserve">
+    <value>Dangos / cuddio'r wybodaeth ganlynol o dan brif gynnwys y dudalen.</value>
+  </data>
+  <data name="Show / hide the following information below the main content of pages (site default)." xml:space="preserve">
+    <value>Dangos / cuddio'r wybodaeth ganlynol o dan brif gynnwys tudalennau (rhagosodiad y safle).</value>
   </data>
 </root>

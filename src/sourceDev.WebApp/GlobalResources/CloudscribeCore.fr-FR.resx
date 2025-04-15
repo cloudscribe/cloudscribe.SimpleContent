@@ -189,19 +189,22 @@
   <data name="Updated By" xml:space="preserve">
     <value>Mis à jour par</value>
   </data>
-  <data name="ShowCreatedBy" xml:space="preserve">
+  <data name="Show Created By" xml:space="preserve">
     <value>Afficher créé par</value>
   </data>
-  <data name="ShowCreatedDate" xml:space="preserve">
+  <data name="Show Created Date" xml:space="preserve">
     <value>Afficher la date de création</value>
   </data>
-  <data name="ShowLastModifiedBy" xml:space="preserve">
+  <data name="Show Last Modified By" xml:space="preserve">
     <value>Afficher Dernière modification par</value>
   </data>
-  <data name="ShowLastModifiedDate" xml:space="preserve">
+  <data name="Show Last Modified Date" xml:space="preserve">
     <value>Afficher la date de la dernière modification</value>
   </data>
-  <data name="EditorialDetailsExplanation" xml:space="preserve">
-    <value>Afficher/Masquer les informations suivantes sur les pages CMS sous le contenu principal de la page.</value>
+  <data name="Show / hide the following information below the main content of the page." xml:space="preserve">
+    <value>Afficher/masquer les informations suivantes sous le contenu principal de la page.</value>
+  </data>
+  <data name="Show / hide the following information below the main content of pages (site default)." xml:space="preserve">
+    <value>Afficher/masquer les informations suivantes sous le contenu principal des pages (par défaut du site).</value>
   </data>
 </root>
