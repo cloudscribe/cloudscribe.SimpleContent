@@ -1,9 +1,7 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditWithTemplateViewModel
 @inject IStringLocalizer<SimpleContent> sr
-@inject ICkeditorOptionsResolver editorOptionsResolver
 @inject IBlogRoutes  blogRoutes
 @{
-    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-post-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
     var legend = sr["Template Fields"].ToString();
