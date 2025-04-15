@@ -2,8 +2,10 @@
 @using cloudscribe.SimpleContent.ContentTemplates
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject ISummernoteOptionsResolver summernoteOptionsResolver
+@inject ICkeditorOptionsResolver editorOptionsResolver
 @{
     var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
 }
 
 

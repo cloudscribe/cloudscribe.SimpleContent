@@ -1,8 +1,10 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PostEditViewModel
 @inject ISummernoteOptionsResolver summernoteOptionsResolver
+@inject ICkeditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<SimpleContent> sr
 @{
     var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
 }
 <div class="mb-3">
     <label asp-for="TeaserOverride">@sr["Teaser Override"]</label>

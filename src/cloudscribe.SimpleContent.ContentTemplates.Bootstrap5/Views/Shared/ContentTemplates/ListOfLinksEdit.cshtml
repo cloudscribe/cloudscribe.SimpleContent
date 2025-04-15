@@ -7,11 +7,13 @@
 @inject IStringLocalizer<ContentTemplateResources> sr
 @inject IAntiforgery antiforgery
 @inject ISummernoteOptionsResolver summernoteOptionsResolver
+@inject ICkeditorOptionsResolver editorOptionsResolver
 @inject ILinkListOptionsProvider optionsProvider
 @{
 
     var tokens = antiforgery.GetAndStoreTokens(Context);
     var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var sorted = Model.Items.OrderBy(x => x.Sort).ToList();
     int i = 1;
     foreach (var item in sorted)

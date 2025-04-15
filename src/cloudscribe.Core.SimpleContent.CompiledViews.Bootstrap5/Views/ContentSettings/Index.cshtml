@@ -3,12 +3,14 @@
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<ContentSettingsUIConfig> uiOptionsAccessor
 @inject ISummernoteOptionsResolver summernoteOptionsResolver
+@inject ICkeditorOptionsResolver editorOptionsResolver
 @{
     var uiOptions = uiOptionsAccessor.Value;
     var themeSettings = themeHelper.GetThemeSettings();
     if (themeSettings.AdminSideNavExpanded) { ViewData["SideNavToggle"] = "show"; }
     ViewData["SideNavVisible"] = true;
     var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     if (string.IsNullOrWhiteSpace(Model.AboutHeading))
     {
         Model.AboutHeading = sr["About"];

@@ -7,10 +7,12 @@
 @using System.Net
 @inject IAntiforgery antiforgery
 @inject ISummernoteOptionsResolver summernoteOptionsResolver
+@inject ICkeditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<ContentTemplateResources> sr
 @{
     var tokens = antiforgery.GetAndStoreTokens(Context);
     var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
+    var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
 }
 @functions{
 
