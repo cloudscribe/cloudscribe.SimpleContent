@@ -42,16 +42,4 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <Content Update="..\cloudscribe.SimpleContent.Syndication\rss-style.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="..\cloudscribe.SimpleContent.Syndication\rss.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <Target Name="CopyFilesToRoot" AfterTargets="Build">
-    <Copy SourceFiles="@(Content)" DestinationFolder="..\sourceDev.WebApp" />
-  </Target>-->
 </Project>
