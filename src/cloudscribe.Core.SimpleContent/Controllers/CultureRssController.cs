@@ -1,5 +1,6 @@
 ﻿using cloudscribe.Syndication.Models.Rss;
 using cloudscribe.Syndication.Web.Controllers;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -11,10 +12,11 @@ namespace cloudscribe.Core.SimpleContent.Controllers
     {
         public CultureRssController(
             ILogger<RssController> logger,
+            IWebHostEnvironment env,
             IEnumerable<IChannelProvider> channelProviders = null,
             IChannelProviderResolver channelResolver = null,
             IXmlFormatter xmlFormatter = null
-            ) : base(logger, channelProviders, channelResolver, xmlFormatter)
+            ) : base(logger, env, channelProviders, channelResolver, xmlFormatter)
         {
 
         }

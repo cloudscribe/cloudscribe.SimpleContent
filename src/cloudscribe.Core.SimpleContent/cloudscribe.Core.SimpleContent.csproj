@@ -33,7 +33,7 @@
     <PackageReference Include="cloudscribe.Core.Web" Version="8.1.0" />
     <PackageReference Include="cloudscribe.Web.Common" Version="8.1.0" />
     <PackageReference Include="cloudscribe.FileManager.Web" Version="8.1.0" />
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="8.1.0" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="8.1.93" />
 
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
@@ -42,4 +42,16 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
   </ItemGroup>
 
+  <!--<ItemGroup>
+    <Content Update="..\cloudscribe.SimpleContent.Syndication\rss-style.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="..\cloudscribe.SimpleContent.Syndication\rss.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="CopyFilesToRoot" AfterTargets="Build">
+    <Copy SourceFiles="@(Content)" DestinationFolder="..\sourceDev.WebApp" />
+  </Target>-->
 </Project>
