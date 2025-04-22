@@ -31,22 +31,4 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="cloudscribe.Versioning" Version="8.1.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="..\cloudscribe.SimpleContent.Syndication\rss-style.xsl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="..\cloudscribe.SimpleContent.Syndication\rss.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <PropertyGroup>
-    <_RootFolder>..\wwwroot</_RootFolder>
-    <_RootFolder Condition="Exists('..\sourceDev.WebApp')">..\sourceDev.WebApp\wwwroot</_RootFolder>
-  </PropertyGroup>
-
-  <Target Name="CopyFilesToRoot" AfterTargets="Build">
-    <Copy SourceFiles="@(Content)" DestinationFolder="$(_RootFolder)" />
-  </Target>
 </Project>
