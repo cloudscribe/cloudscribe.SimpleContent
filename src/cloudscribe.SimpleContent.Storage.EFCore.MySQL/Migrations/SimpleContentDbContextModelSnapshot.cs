@@ -603,6 +603,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Script")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SerializedModel")
                         .HasColumnType("longtext");
 
@@ -682,6 +685,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("PageEntityId")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Sort")
                         .HasColumnType("int");
@@ -869,6 +875,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("SerializedModel")
                         .HasColumnType("longtext");
