@@ -1308,7 +1308,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Log.LogDebug("returning 403 because no content was posted");
                 Response.StatusCode = 403;
                 //await Response.WriteAsync("Please enter a valid content");
-                return Content("Please enter a valid content");
+                return Content(StringLocalizer["Please enter valid content"]);
             }
 
             var blogPost = await BlogService.GetPost(model.PostId);
@@ -1329,7 +1329,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                         Log.LogDebug("returning 403 captcha validation failed");
                         Response.StatusCode = 403;
                         //await Response.WriteAsync("captcha validation failed");
-                        return Content("captcha validation failed");
+                        return Content(StringLocalizer["captcha validation failed"]);
                     }
                 }
             }

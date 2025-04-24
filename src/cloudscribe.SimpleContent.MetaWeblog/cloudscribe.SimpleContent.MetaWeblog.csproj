@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.MetaWeblog Class Library</Description>
-    <Version>8.0.0</Version>
+    <Version>8.1.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;metaweblog;blog;cms</PackageTags>
@@ -25,9 +25,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.DateTimeUtils" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Versioning" Version="8.0.0" />
+    <PackageReference Include="cloudscribe.DateTimeUtils" Version="8.1.0" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="8.1.0" />
+    <PackageReference Include="cloudscribe.Versioning" Version="8.1.0" />
   </ItemGroup>
 
 </Project>

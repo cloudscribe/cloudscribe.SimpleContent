@@ -124,12 +124,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                     if (HttpContext.Request.Path == "/")
                     {
                         ViewData["Title"] = StringLocalizer["Home"];
-                        page.Title = "No pages found, please click the plus icon to create the home page";
+                        page.Title = StringLocalizer["No pages found, please click the plus icon to create the home page"];
                     }
                     else
                     {
                         ViewData["Title"] = StringLocalizer["No Pages Found"];
-                        page.Title = "No pages found, please click the plus icon to create the first page";
+                        page.Title = StringLocalizer["No pages found, please click the plus icon to create the first page"];
                     }
                 }
                 else
