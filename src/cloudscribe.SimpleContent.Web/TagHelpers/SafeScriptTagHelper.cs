@@ -3,6 +3,7 @@ using System.Text.Encodings.Web;
 
 namespace cloudscribe.SimpleContent.Web.TagHelpers
 {
+    // Not currently in production use - jk
     [HtmlTargetElement("safe-script")]
     public class SafeScriptTagHelper : TagHelper
     {

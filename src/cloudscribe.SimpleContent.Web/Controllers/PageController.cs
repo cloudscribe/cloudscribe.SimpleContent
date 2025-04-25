@@ -8,6 +8,7 @@
 using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
+using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
@@ -47,7 +48,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IStringLocalizer<SimpleContent> localizer,
             ITreeCache treeCache,
             DraftPublishService draftPublishService,
+            JsSecuritySanitizer jsSecuritySanitizer,
             IOptions<PageEditOptions> pageEditOptionsAccessor,
+
             ILogger<PageController> logger)
         {
             Mediator = mediator;
@@ -66,6 +69,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             StringLocalizer = localizer;
             NavigationCache = treeCache;
             DraftPublishService = draftPublishService;
+            JsSecuritySanitizer = jsSecuritySanitizer;
             Log = logger;
         }
 
@@ -86,7 +90,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         protected ITreeCache NavigationCache { get; private set; }
         protected DraftPublishService DraftPublishService { get; private set; }
-
+        public JsSecuritySanitizer JsSecuritySanitizer { get; private set; }
         protected IMediator Mediator { get; private set; }
 
         [HttpHead]
@@ -1489,6 +1493,27 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
             }
             return showItems;
+        }
+
+        public async Task<IActionResult> InlineScript(string pageId)
+        {
+            IPage page =  await PageService.GetPage(pageId);
+
+            if (page != null && !string.IsNullOrWhiteSpace(page.Script))
+            {
+                var sanitizer = new JsSecuritySanitizer();
+
+                if (!sanitizer.IsSafe(page.Script, out var issues))
+                {
+                    Log.LogWarning("Unsafe user-defined script blocked on page " + (page.Slug ?? pageId) + " : " + string.Join(", ", issues));
+                    return Content("// Unsafe user-defined script blocked!", "application/javascript");
+                }
+
+                Response.Headers["Content-Security-Policy"] = "default-src 'none'; script-src 'self';";
+                return Content(page.Script, "application/javascript");
+            }
+
+            return NoContent(); // HTTP 204
         }
     }
 }
