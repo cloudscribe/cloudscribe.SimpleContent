@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -50,7 +50,7 @@
   <ItemGroup Label="Package References">
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
 
-    <PackageReference Include="cloudscribe.Core.Web" Version="8.1.0" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="8.1.1" />
     <PackageReference Include="cloudscribe.Core.CompiledViews.Bootstrap5" Version="8.1.0" />
     <PackageReference Include="cloudscribe.Web.StaticFiles" Version="8.1.0" />
 
