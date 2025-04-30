@@ -32,7 +32,7 @@
     <PackageReference Include="cloudscribe.Core.Identity" Version="8.1.0" />
     <PackageReference Include="cloudscribe.Core.Web" Version="8.1.0" />
     <PackageReference Include="cloudscribe.Web.Common" Version="8.1.0" />
-    <PackageReference Include="cloudscribe.FileManager.Web" Version="8.1.0" />
+    <PackageReference Include="cloudscribe.FileManager.Web" Version="8.1.2" />
     <PackageReference Include="cloudscribe.Syndication.Web" Version="8.1.0" />
 
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
