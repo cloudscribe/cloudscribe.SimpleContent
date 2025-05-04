@@ -103,8 +103,8 @@ namespace cloudscribe.SimpleContent.Storage.NoDb
         [YamlMember(Order = 30)]
         public bool ShowComments { get; set; } = true;
 
-
-
+        [YamlMember(Order = 31)]
+        public string Script { get; set; } = string.Empty;
 
         [YamlIgnore]
         public List<IComment> Comments { get; set; }

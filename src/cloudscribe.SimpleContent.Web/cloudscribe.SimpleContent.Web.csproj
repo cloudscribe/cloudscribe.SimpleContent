@@ -57,6 +57,8 @@
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+
+    <PackageReference Include="Esprima" Version="3.0.5" />
   </ItemGroup>
 
 </Project>
