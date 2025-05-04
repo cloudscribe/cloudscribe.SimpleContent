@@ -6,10 +6,12 @@
 @using Newtonsoft.Json;
 @using System.Net
 @inject IAntiforgery antiforgery
+@inject ISummernoteOptionsResolver summernoteOptionsResolver
 @inject ICkeditorOptionsResolver editorOptionsResolver
 @inject IStringLocalizer<ContentTemplateResources> sr
 @{
     var tokens = antiforgery.GetAndStoreTokens(Context);
+    var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
 }
 @functions{
@@ -19,14 +21,15 @@
 <div>
 
     <label asp-for="UnauthenticatedContent">@sr["Content for unauthenticated users"]</label>
-<textarea asp-for="UnauthenticatedContent" class="form-control"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-
+    <textarea asp-for="UnauthenticatedContent" rows="5" class="form-control"
+        data-summernote-unobtrusive=""
+        data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+        data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+        data-summernote-config-language="@summernoteOptions.LanguageCode"
+        data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+        data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+        data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+    </textarea>
 
 
     <hr />
@@ -35,13 +38,15 @@
   
     <div class="mb-4">
     <label asp-for="AuthenticatedContent">@sr["Content for authenticated users"]</label>
-<textarea asp-for="AuthenticatedContent" class="form-control"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    <textarea asp-for="AuthenticatedContent" rows="5" class="form-control"
+        data-summernote-unobtrusive=""
+        data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+        data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+        data-summernote-config-language="@summernoteOptions.LanguageCode"
+        data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+        data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+        data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+    </textarea>
 </div>
 
     <hr />
@@ -51,15 +56,15 @@
 
 <div class="mb-3">
     <label asp-for="RoleBasedContent">@sr["Role specific content"]</label>
-
-
-<textarea asp-for="RoleBasedContent" class="form-control"
-          data-ckeditor-unobtrusive=""
-          data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-          data-ckeditor-config-language="@ckOptions.LanguageCode"
-          data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-          data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-          data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
+    <textarea asp-for="RoleBasedContent" rows="5" class="form-control"
+        data-summernote-unobtrusive=""
+        data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+        data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+        data-summernote-config-language="@summernoteOptions.LanguageCode"
+        data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+        data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+        data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+    </textarea>
 </div>
 
 

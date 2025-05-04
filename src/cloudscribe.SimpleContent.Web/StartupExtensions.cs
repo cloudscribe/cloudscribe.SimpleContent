@@ -86,8 +86,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
 
             // jk breaking change in Mediatr v12 will be...:
-            // services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-            services.AddMediatR(typeof(PageService).Assembly);
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+            //services.AddMediatR(typeof(PageService).Assembly);
             
 
             services.AddScoped<IParseModelFromForm, DefaultModelFormParser>();

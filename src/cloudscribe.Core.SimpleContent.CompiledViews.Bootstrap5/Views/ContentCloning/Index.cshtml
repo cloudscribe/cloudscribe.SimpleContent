@@ -3,7 +3,6 @@
 @inject ICoreThemeHelper themeHelper
 @inject IStringLocalizer<SimpleContent> sr
 @inject IOptions<ContentSettingsUIConfig> uiOptionsAccessor
-@inject ICkeditorOptionsResolver editorOptionsResolver
 @{
     var uiOptions = uiOptionsAccessor.Value;
     var themeSettings = themeHelper.GetThemeSettings();
