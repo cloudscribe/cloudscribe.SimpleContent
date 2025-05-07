@@ -16,7 +16,7 @@ namespace cloudscribe.SimpleContent.Web
 {
     public class VersionInfo : IVersionProvider
     {
-        public string Name { get { return "cloudscribe.SimpleContent"; } }
+        public string Name { get { return "cloudscribe.SimpleContent.Web"; } }
 
         public Guid ApplicationId { get { return new Guid("f83067b4-919d-4910-acd1-4b3b1c210ecf"); } }
 
