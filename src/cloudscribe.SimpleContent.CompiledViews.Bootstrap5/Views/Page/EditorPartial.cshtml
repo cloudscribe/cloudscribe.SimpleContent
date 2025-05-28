@@ -1,7 +1,9 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageEditViewModel
 @inject IStringLocalizer<SimpleContent> sr
+@inject ISummernoteOptionsResolver summernoteOptionsResolver
 @inject ICkeditorOptionsResolver editorOptionsResolver
 @{ 
+    var summernoteOptions = await summernoteOptionsResolver.GetSummernoteOptions();
     var ckOptions = await editorOptionsResolver.GetCkeditorOptions();
     var contentId = Model.Id;
     if (string.IsNullOrWhiteSpace(contentId)) { contentId = "draft-page-" + DateTime.UtcNow.ToString("yyyy-MM-dd-hh"); }
@@ -24,8 +26,8 @@
                       data-markdown-indentWithTabs="true"
                       data-markdown-spellChecker="true"
                       data-markdown-filemodalid="#fileBrowseDialog"
-                      data-markdown-filebrowseurl="@ckOptions.ImageBrowseUrl"
-                      data-markdown-dropfileuploadurl="@ckOptions.DropFileUrl"></textarea>
+                      data-markdown-filebrowseurl="@summernoteOptions.ImageBrowseUrl"
+                      data-markdown-dropfileuploadurl="@summernoteOptions.DropFileUrl"></textarea>
                     <div id="fileBrowseDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-lg" style="height:99%;width:99%;">
                             <div class="modal-content">
@@ -40,14 +42,15 @@
         }
         else
         {
-            <textarea asp-for="Content" class="form-control"
-                      data-ckeditor-unobtrusive=""
-                      data-ckeditor-config-url="@ckOptions.CustomConfigPath"
-                      data-ckeditor-config-language="@ckOptions.LanguageCode"
-                      data-ckeditor-config-dropfileuploadurl="@ckOptions.DropFileUrl"
-                      data-ckeditor-config-filebrowserurl="@ckOptions.FileBrowseUrl"
-                      data-ckeditor-config-imagebrowseurl="@ckOptions.ImageBrowseUrl"></textarea>
-
+            <textarea asp-for="Content" rows="5" class="form-control"
+                data-summernote-unobtrusive=""
+                data-summernote-config-url="@summernoteOptions.CustomConfigPath"
+                data-summernote-toolbar-config-url="@summernoteOptions.CustomToolbarConfigPath"
+                data-summernote-config-language="@summernoteOptions.LanguageCode"
+                data-summernote-config-dropfileuploadurl="@summernoteOptions.DropFileUrl"
+                data-summernote-config-filebrowserurl="@summernoteOptions.FileBrowseUrl"
+                data-summernote-config-imagebrowseurl="@summernoteOptions.ImageBrowseUrl">
+            </textarea>
         }
 
     }
