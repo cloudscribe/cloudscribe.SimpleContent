@@ -36,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<IPageService, PageService>();
             services.AddScoped<DraftPublishService>();
+            services.AddScoped<JsSecuritySanitizer>();
             services.TryAddScoped<IProjectService, ProjectService>();
             services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
             services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
