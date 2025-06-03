@@ -5,6 +5,7 @@ using cloudscribe.Core.SimpleContent.Integration;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Web.Design;
 using cloudscribe.SimpleContent.Web.TagHelpers;
+using cloudscribe.Versioning;
 using cloudscribe.Web.Navigation.Caching;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ITreeCacheKeyResolver, SiteNavigationCacheKeyResolver>();
             services.AddScoped<IHandleRoleUpdated, HandleRoleUpdated>();
             services.AddScoped<IHandleRoleDeleted, HandleRoleDeleted>();
-            
+            services.AddScoped<IVersionProvider, VersionProvider>();
 
             if (configuration != null)
             {
