@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Bootstrap 3 pre-compiled views for cloudscribe Core and SimpleContent integration</Description>
-    <Version>8.3.0</Version>
+    <Version>8.4.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -31,5 +31,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\cloudscribe.Core.SimpleContent\cloudscribe.Core.SimpleContent.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
 </Project>
