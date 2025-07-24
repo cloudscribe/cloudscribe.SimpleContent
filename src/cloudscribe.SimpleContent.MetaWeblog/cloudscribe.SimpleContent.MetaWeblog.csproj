@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.MetaWeblog Class Library</Description>
-    <Version>8.3.0</Version>
+    <Version>8.4.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;metaweblog;blog;cms</PackageTags>
@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,9 +26,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.DateTimeUtils" Version="8.3.0" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="8.3.0" />
-    <PackageReference Include="cloudscribe.Versioning" Version="8.3.0" />
+    <PackageReference Include="cloudscribe.DateTimeUtils" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Versioning" Version="8.4.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>

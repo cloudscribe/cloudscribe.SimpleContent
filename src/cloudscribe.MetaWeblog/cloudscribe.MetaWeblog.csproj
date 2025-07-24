@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>a re-useable implementation of the metaweblog api for asp.net core</Description>
-    <Version>8.3.0</Version>
+    <Version>8.4.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;metaweblog;api;asp.net core</PackageTags>
@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.MetaWeblog.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,5 +22,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>

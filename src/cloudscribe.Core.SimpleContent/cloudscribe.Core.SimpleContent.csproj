@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>integration library for integrating cloudscribe SimpleContent with cloudscribe Core multi-tenant web app foundation</Description>
-    <Version>8.3.0</Version>
+    <Version>8.4.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog</PackageTags>
@@ -11,6 +11,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,12 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Core.Models" Version="8.3.0" />
-    <PackageReference Include="cloudscribe.Core.Identity" Version="8.3.0" />
-    <PackageReference Include="cloudscribe.Core.Web" Version="8.3.0" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="8.3.0" />
-    <PackageReference Include="cloudscribe.FileManager.Web" Version="8.3.0" />
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="8.3.0" />
+    <PackageReference Include="cloudscribe.Core.Models" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Core.Identity" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Core.Web" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.FileManager.Web" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="8.4.0" />
 
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
@@ -41,5 +42,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>
