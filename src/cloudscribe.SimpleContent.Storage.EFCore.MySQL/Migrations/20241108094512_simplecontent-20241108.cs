@@ -13,25 +13,25 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
             migrationBuilder.AddColumn<bool>(
                 name: "ShowCreatedBy",
                 table: "cs_Page",
-                type: "boolean(1)",
+                type: "tinyint(1)",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "ShowCreatedDate",
                 table: "cs_Page",
-                type: "boolean(1)",
+                type: "tinyint(1)",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "ShowLastModifiedBy",
                 table: "cs_Page",
-                type: "boolean(1)",
+                type: "tinyint(1)",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "ShowLastModifiedDate",
                 table: "cs_Page",
-                type: "boolean(1)",
+                type: "tinyint(1)",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
