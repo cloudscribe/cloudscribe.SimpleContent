@@ -11,6 +11,6 @@ namespace cloudscribe.SimpleContent.Models
         string Content { get; set; }
         DateTime? PubDate { get; set; }
         string MetaDescription { get; set; }
-
+        string Script { get; set; }
     }
 }
