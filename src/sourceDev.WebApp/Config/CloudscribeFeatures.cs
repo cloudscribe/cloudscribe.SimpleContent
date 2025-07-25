@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Collections.Generic;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.Versioning;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -77,7 +78,8 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration config
             )
         {
-
+            services.AddScoped<IVersionProvider, cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap5.VersionProvider>();
+            services.AddScoped<IVersionProvider, cloudscribe.SimpleContent.CompiledViews.Bootstrap5.VersionProvider>();
             services.AddCloudscribeLogging(config);
 
             services.AddScoped<cloudscribe.Web.Navigation.INavigationNodePermissionResolver, cloudscribe.Web.Navigation.NavigationNodePermissionResolver>();
