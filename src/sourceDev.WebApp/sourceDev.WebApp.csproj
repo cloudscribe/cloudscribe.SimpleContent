@@ -37,7 +37,6 @@
     <ProjectReference Include="..\cloudscribe.SimpleContent.CompiledViews.Bootstrap5\cloudscribe.SimpleContent.CompiledViews.Bootstrap5.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.ContentTemplates.Bootstrap5\cloudscribe.SimpleContent.ContentTemplates.Bootstrap5.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.MySQL\cloudscribe.SimpleContent.Storage.EFCore.MySQL.csproj" />
-    <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.pgsql\cloudscribe.SimpleContent.Storage.EFCore.pgsql.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql\cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj" />
     <ProjectReference Include="..\cloudscribe.SimpleContent.Storage.NoDb\cloudscribe.SimpleContent.Storage.NoDb.csproj" />

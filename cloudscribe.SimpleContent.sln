@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5243DE57-7C89-4208-8876-405E13605D16}"
 EndProject
@@ -23,19 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.Storage.EFCore.MySQL", "src\cloudscribe.SimpleContent.Storage.EFCore.MySQL\cloudscribe.SimpleContent.Storage.EFCore.MySQL.csproj", "{4713D574-918D-4129-A11C-2287AE4B119F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.Storage.EFCore.pgsql", "src\cloudscribe.SimpleContent.Storage.EFCore.pgsql\cloudscribe.SimpleContent.Storage.EFCore.pgsql.csproj", "{194BE097-4347-4B9D-87C9-F3B13D337DA4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.Storage.EFCore.SQLite", "src\cloudscribe.SimpleContent.Storage.EFCore.SQLite\cloudscribe.SimpleContent.Storage.EFCore.SQLite.csproj", "{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E9B2D007-5701-4DEB-AC64-A435D71AA05F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.Web.Tests", "test\cloudscribe.SimpleContent.Web.Tests\cloudscribe.SimpleContent.Web.Tests.csproj", "{16735222-D50E-4535-A9BD-85EE05AA5308}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap3", "src\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap3\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap3.csproj", "{94D5F158-FC61-4548-984C-786369AC519F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4", "src\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.Core.SimpleContent.CompiledViews.Bootstrap4.csproj", "{AD0BEF33-2C26-4ABB-BD71-9BF9E46A7DB4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.CompiledViews.Bootstrap3", "src\cloudscribe.SimpleContent.CompiledViews.Bootstrap3\cloudscribe.SimpleContent.CompiledViews.Bootstrap3.csproj", "{7F5B360A-789D-4428-8CE5-ECFD721AAE1A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.SimpleContent.CompiledViews.Bootstrap4", "src\cloudscribe.SimpleContent.CompiledViews.Bootstrap4\cloudscribe.SimpleContent.CompiledViews.Bootstrap4.csproj", "{20ECAB1E-CF0B-4901-893B-ADF3C99C2093}"
 EndProject
@@ -99,10 +93,6 @@ Global
 		{4713D574-918D-4129-A11C-2287AE4B119F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4713D574-918D-4129-A11C-2287AE4B119F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4713D574-918D-4129-A11C-2287AE4B119F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{194BE097-4347-4B9D-87C9-F3B13D337DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{194BE097-4347-4B9D-87C9-F3B13D337DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{194BE097-4347-4B9D-87C9-F3B13D337DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{194BE097-4347-4B9D-87C9-F3B13D337DA4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -111,18 +101,10 @@ Global
 		{16735222-D50E-4535-A9BD-85EE05AA5308}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16735222-D50E-4535-A9BD-85EE05AA5308}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16735222-D50E-4535-A9BD-85EE05AA5308}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94D5F158-FC61-4548-984C-786369AC519F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94D5F158-FC61-4548-984C-786369AC519F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94D5F158-FC61-4548-984C-786369AC519F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94D5F158-FC61-4548-984C-786369AC519F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD0BEF33-2C26-4ABB-BD71-9BF9E46A7DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD0BEF33-2C26-4ABB-BD71-9BF9E46A7DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD0BEF33-2C26-4ABB-BD71-9BF9E46A7DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD0BEF33-2C26-4ABB-BD71-9BF9E46A7DB4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F5B360A-789D-4428-8CE5-ECFD721AAE1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F5B360A-789D-4428-8CE5-ECFD721AAE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F5B360A-789D-4428-8CE5-ECFD721AAE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F5B360A-789D-4428-8CE5-ECFD721AAE1A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20ECAB1E-CF0B-4901-893B-ADF3C99C2093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20ECAB1E-CF0B-4901-893B-ADF3C99C2093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20ECAB1E-CF0B-4901-893B-ADF3C99C2093}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -177,12 +159,9 @@ Global
 		{AC7D7A37-B684-4F02-A725-1625E96DE2B8} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{B23CA546-4B27-472F-B962-7E2C981CE89C} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{4713D574-918D-4129-A11C-2287AE4B119F} = {5243DE57-7C89-4208-8876-405E13605D16}
-		{194BE097-4347-4B9D-87C9-F3B13D337DA4} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{CBB0F82E-371E-4F0C-8474-C1B7D30754A9} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{16735222-D50E-4535-A9BD-85EE05AA5308} = {E9B2D007-5701-4DEB-AC64-A435D71AA05F}
-		{94D5F158-FC61-4548-984C-786369AC519F} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{AD0BEF33-2C26-4ABB-BD71-9BF9E46A7DB4} = {5243DE57-7C89-4208-8876-405E13605D16}
-		{7F5B360A-789D-4428-8CE5-ECFD721AAE1A} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{20ECAB1E-CF0B-4901-893B-ADF3C99C2093} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{C5A157C3-8A3D-467D-8D5A-52EA1A9297C6} = {5243DE57-7C89-4208-8876-405E13605D16}
 		{76A12B64-BF45-464F-8B23-1AEBF9427E9B} = {5243DE57-7C89-4208-8876-405E13605D16}
