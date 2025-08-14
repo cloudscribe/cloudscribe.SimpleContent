@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Syndication Class Library</Description>
-    <Version>8.1.0</Version>
+    <Version>8.4.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>syndication;rss;atom;cloudscribe</PackageTags>
@@ -11,6 +11,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,9 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="cloudscribe.Syndication.Web" Version="8.1.0" />
+    <PackageReference Include="cloudscribe.Syndication.Web" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Versioning" Version="8.1.0" />
+    <PackageReference Include="cloudscribe.Versioning" Version="8.4.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>

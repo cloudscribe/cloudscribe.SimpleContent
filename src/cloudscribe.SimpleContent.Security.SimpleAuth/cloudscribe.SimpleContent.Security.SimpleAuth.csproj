@@ -13,6 +13,7 @@
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,5 +26,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.1.2" />
   </ItemGroup>
 
-  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
 </Project>

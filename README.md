@@ -1,6 +1,6 @@
 # cloudscribe SimpleContent
 
-A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database. This project has borrowed significantly from [Mads Kristensen's MiniBlog](https://github.com/madskristensen/MiniBlog) both for ideas and code but re-implemented and extended in the newer ASP.NET Core framework. Get the big picture at [cloudscribe.com](https://www.cloudscribe.com/docs/introduction)
+A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database. This project has borrowed significantly from [Mads Kristensen's MiniBlog](https://github.com/madskristensen/MiniBlog) both for ideas and code but re-implemented and extended in the newer ASP.NET Core framework. Get the big picture at [cloudscribe.com](https://www.cloudscribe.com/docs/introduction) 
 
 [Documentation](https://www.cloudscribe.com/docs/cloudscribe-simplecontent) - in progress so check back often. Also note that cloudscribe SimpleContent is being used to make the documentation on [cloudscribe.com](https://www.cloudscribe.com)
 

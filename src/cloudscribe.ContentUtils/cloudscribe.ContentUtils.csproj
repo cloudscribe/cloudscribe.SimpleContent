@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Content utilities for html and markdown</Description>
-    <Version>8.1.0</Version>
+    <Version>8.4.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog,content</PackageTags>
@@ -11,6 +11,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,5 +22,7 @@
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.1" />
     <PackageReference Include="Markdig" Version="0.37.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>
