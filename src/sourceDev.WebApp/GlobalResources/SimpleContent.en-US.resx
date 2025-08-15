@@ -591,14 +591,14 @@
   <data name="Raw JavaScript" xml:space="preserve">
     <value>Raw JavaScript</value>
   </data>
-  <data name="Enter your JavaScript below. Do not include <script> tags." xml:space="preserve">
-    <value>Enter your JavaScript below. Do not include <script> tags.</value>
+  <data name="Enter your JavaScript below. Do not include script tags." xml:space="preserve">
+    <value>Enter your JavaScript below. Do not include script tags.</value>
   </data>
   <data name="Scripts are automatically validated for security - only safe DOM manipulation and event handling are permitted." xml:space="preserve">
     <value>Scripts are automatically validated for security - only safe DOM manipulation and event handling are permitted.</value>
   </data>
-  <data name="Enter custom Javascript to run on your page. Do not include <script> tags." xml:space="preserve">
-    <value>Enter custom Javascript to run on your page. Do not include <script> tags.</value>
+  <data name="Enter custom Javascript to run on your page. Do not include script tags." xml:space="preserve">
+    <value>Enter custom Javascript to run on your page. Do not include script tags.</value>
   </data>
   <data name="Save JavaScript" xml:space="preserve">
     <value>Save JavaScript</value>
