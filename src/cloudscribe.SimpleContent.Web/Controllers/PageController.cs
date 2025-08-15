@@ -931,12 +931,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            if (string.IsNullOrEmpty(model.Script))
-            {
-                this.AlertDanger(StringLocalizer["Invalid request"], true);
-                return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = model.Slug });
-            }
-
             if (!canDev)
             {
                 Log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
@@ -958,9 +952,29 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
             }
 
+            // Allow empty script to clear/remove existing script
+            if (string.IsNullOrEmpty(model.Script))
+            {
+                editContext.CurrentPage.Script = null; // Clear the script
+                await PageService.Update(editContext.CurrentPage);
+                this.AlertSuccess(StringLocalizer["Script cleared successfully"], true);
+                return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
+            }
+
             if (!model.Script.EndsWith(';'))
             {
                 this.AlertDanger(StringLocalizer["Scripts should end with a semicolon"], true);
+                return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
+            }
+
+            // Validate script security before saving
+            var sanitizer = new JsSecuritySanitizer();
+            if (!sanitizer.IsSafe(model.Script, out var issues))
+            {
+                var errorMessage = $"Script blocked due to security violations: {string.Join(", ", issues)}"; // too helpful?!
+                // var errorMessage = $"Script blocked due to security violations - check the log for details";
+                this.AlertDanger(StringLocalizer[errorMessage], true);
+                Log.LogWarning("Unsafe user-defined script blocked for page " + (editContext.CurrentPage.Slug ?? editContext.CurrentPage.Id) + " : " + string.Join(", ", issues));
                 return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
             }
 
@@ -1495,25 +1509,53 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             return showItems;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> InlineScript(string pageId)
         {
-            IPage page =  await PageService.GetPage(pageId);
-
-            if (page != null && !string.IsNullOrWhiteSpace(page.Script))
+            if (string.IsNullOrWhiteSpace(pageId))
             {
-                var sanitizer = new JsSecuritySanitizer();
-
-                if (!sanitizer.IsSafe(page.Script, out var issues))
-                {
-                    Log.LogWarning("Unsafe user-defined script blocked on page " + (page.Slug ?? pageId) + " : " + string.Join(", ", issues));
-                    return Content("// Unsafe user-defined script blocked!", "application/javascript");
-                }
-
-                Response.Headers["Content-Security-Policy"] = "default-src 'none'; script-src 'self';";
-                return Content(page.Script, "application/javascript");
+                return NoContent();
             }
 
-            return NoContent(); // HTTP 204
+            IPage page = await PageService.GetPage(pageId);
+
+            if (page?.Script == null)
+            {
+                return NoContent(); // HTTP 204
+            }
+
+            if (string.IsNullOrWhiteSpace(page.Script))
+            {
+                return NoContent();
+            }
+
+            var sanitizer = new JsSecuritySanitizer();
+
+            if (!sanitizer.IsSafe(page.Script, out var issues))
+            {
+                Log.LogWarning("Unsafe user-defined script blocked on page " + (page.Slug ?? pageId) + " : " + string.Join(", ", issues));
+                
+                // Return a more helpful error message for developers
+                var errorScript = $"console.warn('Script blocked due to security violations: {string.Join(", ", issues)}');";
+                return Content(errorScript, "application/javascript");
+            }
+
+            // Add caching headers for performance
+            var etag = $"\"{page.Id}-{page.LastModified.Ticks}\"";
+            Response.Headers["ETag"] = etag;
+            Response.Headers["Cache-Control"] = "public, max-age=3600"; // Cache for 1 hour
+            
+            // Check if client has cached version
+            if (Request.Headers.IfNoneMatch == etag)
+            {
+                return StatusCode(304); // Not Modified
+            }
+
+            // Improved CSP header - less restrictive but still secure
+            Response.Headers["Content-Security-Policy"] = "script-src 'self'; object-src 'none';";
+            
+            return Content(page.Script, "application/javascript");
         }
     }
 }
