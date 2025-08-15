@@ -845,13 +845,15 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Developer Tools - {0}"], editContext.CurrentPage.Title);
 
+            var invalidScript = TempData["InvalidScript"] as string;
+            
             var model = new PageDevelopmentViewModel
             {
                 Slug = editContext.CurrentPage.Slug,
-                Script = editContext.CurrentPage.Script
+                Script = invalidScript ?? editContext.CurrentPage.Script
             };
             model.AddResourceViewModel.Slug = editContext.CurrentPage.Slug;
-            model.AddResourceViewModel.Script = editContext.CurrentPage.Script;
+            model.AddResourceViewModel.Script = invalidScript ?? editContext.CurrentPage.Script;
             model.Css = editContext.CurrentPage.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
             model.Js = editContext.CurrentPage.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
             
@@ -961,9 +963,14 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
             }
 
+            // Trim whitespace before validation
+            model.Script = model.Script.Trim();
+
             if (!model.Script.EndsWith(';'))
             {
                 this.AlertDanger(StringLocalizer["Scripts should end with a semicolon"], true);
+                // Preserve the invalid script so user doesn't lose their work
+                TempData["InvalidScript"] = model.Script;
                 return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
             }
 
@@ -975,6 +982,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 // var errorMessage = $"Script blocked due to security violations - check the log for details";
                 this.AlertDanger(StringLocalizer[errorMessage], true);
                 Log.LogWarning("Unsafe user-defined script blocked for page " + (editContext.CurrentPage.Slug ?? editContext.CurrentPage.Id) + " : " + string.Join(", ", issues));
+                
+                // Preserve the invalid script so user doesn't lose their work
+                TempData["InvalidScript"] = model.Script;
                 return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
             }
 

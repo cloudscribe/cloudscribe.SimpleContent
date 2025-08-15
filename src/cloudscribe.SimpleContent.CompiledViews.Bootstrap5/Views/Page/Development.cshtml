@@ -1,9 +1,33 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageDevelopmentViewModel
 @inject IPageRoutes pageRoutes
 @inject IStringLocalizer<SimpleContent> sr
-<h1>@ViewBag.Title <small><a href="@Url.RouteUrl(pageRoutes.PageRouteName, new { slug=Model.Slug })">@sr["Cancel"]</a></small></h1>
-<p>@sr["With great power comes great responsibility. This page is intended for use by developers, for adding javscript and css into the page. Use this page only if you understand what you are doing."]</p>
-<div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>@ViewBag.Title</h1>
+    <a href="@Url.RouteUrl(pageRoutes.PageEditRouteName, new { slug=Model.Slug })" class="btn btn-secondary">@sr["Return to Page Editing"]</a>
+</div>
+<div class="alert alert-warning col-md-10 col-lg-8 py-2">
+    @sr["With great power comes great responsibility. This page is intended for use by developers, for adding javscript and css into the page. Use this page only if you understand what you are doing."]
+</div>
+
+<h2>@sr["Raw JavaScript"]</h2>
+<div class="mb-4">
+    <form asp-controller="Page" asp-action="AddScriptResource" role="form">
+        <div class="mb-3">
+            <label asp-for="Script" class="form-label">@sr["Enter your JavaScript below. Do not include <script> tags."]</label>
+            <p>
+                @sr["Scripts are automatically validated for security - only safe DOM manipulation and event handling are permitted."] <br />
+            </p>
+            <input type="hidden" asp-for="Slug" />
+            <textarea asp-for="Script" class="form-control" rows="8" data-bs-toggle="tooltip"
+                      title='@sr["Enter custom Javascript to run on your page. Do not include <script> tags."]'></textarea>
+            <span asp-validation-for="Script" class="invalid-feedback"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">@sr["Save JavaScript"]</button>
+    </form>
+</div>
+
+<h2>@sr["JavaScript URLs"]</h2>
+<div class="mb-4">
     <table class="table table-striped table-hover">
         <tr>
             <th>@sr["Environment"]</th>
@@ -32,10 +56,10 @@
             </td>
         </tr>
     </table>
-
 </div>
-<div>
 
+<h2>@sr["CSS URLs"]</h2>
+<div class="mb-4">
     <table class="table table-striped table-hover">
         <tr>
             <th>@sr["Environment"]</th>
@@ -65,15 +89,6 @@
         </tr>
     </table>
 </div>
-<form asp-controller="Page" asp-action="AddScriptResource" class="form-inline" role="form">
-    <div class="mb-3">
-        <label asp-for="Script">@sr["Script Initialisation (you DO NOT need to enter any form of 'document.ready' script or function)"]</label>
-        <input type="hidden" asp-for="Slug" />
-        <textarea asp-for="Script" class="form-control" data-bs-toggle="tooltip" title='@sr["Here you can enter Javascript or JQuery for the page to run, this is useful if you have uploaded some Javascript above that requires initialising on the page in order to run. You DO NOT need to enter 'document.ready'. This should be used with great caution!"]'></textarea>
-        <span asp-validation-for="Script" class="invalid-feedback"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">@sr["Add Javascript"]</button>
-</form>
 
 @section Scripts {
     <script src="~/cr/js/jquery.validate.min.js"></script>
