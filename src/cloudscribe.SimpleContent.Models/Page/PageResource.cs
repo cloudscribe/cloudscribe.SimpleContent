@@ -19,7 +19,6 @@ namespace cloudscribe.SimpleContent.Models
         /// </summary>
         string Environment { get; set; }
         string Url { get; set; }
-        string Script { get; set; }
     }
 
     public class PageResource : IPageResource
@@ -35,7 +34,6 @@ namespace cloudscribe.SimpleContent.Models
         public string Type { get; set; }
         public string Environment { get; set; }
         public string Url { get; set; }
-        public string Script { get; set; }
 
         public static PageResource FromIPageResource(IPageResource r)
         {
@@ -46,7 +44,6 @@ namespace cloudscribe.SimpleContent.Models
             resource.Sort = r.Sort;
             resource.Type = r.Type;
             resource.Url = r.Url;
-            resource.Script = r.Script;
 
             return resource;
 

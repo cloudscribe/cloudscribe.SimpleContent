@@ -684,9 +684,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Script")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Sort")
                         .HasColumnType("INTEGER");
 

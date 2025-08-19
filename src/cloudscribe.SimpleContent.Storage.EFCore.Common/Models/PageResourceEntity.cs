@@ -28,7 +28,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
         public string Type { get; set; }
         public string Environment { get; set; }
         public string Url { get; set; }
-        public string Script { get; set; }
 
         public static PageResourceEntity FromIPageResource(IPageResource r)
         {
@@ -39,7 +38,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             resource.Sort = r.Sort;
             resource.Type = r.Type;
             resource.Url = r.Url;
-            resource.Script = r.Script;
 
             return resource;
 

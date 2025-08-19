@@ -4,5 +4,5 @@
 
 @if (Model.CurrentPage?.Script != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.Script))
 {
-    <script src="@Url.Action("InlineScript", "Page", new { pageId = Model.CurrentPage.Id })"></script>
+    <script src="@Url.Action("InlineScript", "Page", new { pageId = Model.CurrentPage.Id, v = Model.CurrentPage.LastModified.Ticks })"></script>
 }

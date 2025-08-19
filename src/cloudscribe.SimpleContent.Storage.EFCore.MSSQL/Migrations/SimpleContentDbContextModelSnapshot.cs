@@ -714,9 +714,6 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("Script")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Sort")
                         .HasColumnType("int");
 

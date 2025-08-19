@@ -853,7 +853,6 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Script = invalidScript ?? editContext.CurrentPage.Script
             };
             model.AddResourceViewModel.Slug = editContext.CurrentPage.Slug;
-            model.AddResourceViewModel.Script = invalidScript ?? editContext.CurrentPage.Script;
             model.Css = editContext.CurrentPage.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
             model.Js = editContext.CurrentPage.Resources.Where(x => x.Type == "js").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
             
@@ -908,8 +907,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 Type = model.Type,
                 Environment = model.Environment,
                 Sort = model.Sort,
-                Url = model.Url,
-                Script = model.Script
+                Url = model.Url
             };
             editContext.CurrentPage.Resources.Add(resource);
             
@@ -921,7 +919,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> AddScriptResource(PageEditViewModel model)
+        public virtual async Task<IActionResult> AddScriptResource(PageDevelopmentViewModel model)
         {
             var editContextRequest = new PageEditContextRequest(User, model.Slug, null, model.Script, null);
             var editContext = await Mediator.Send(editContextRequest);
