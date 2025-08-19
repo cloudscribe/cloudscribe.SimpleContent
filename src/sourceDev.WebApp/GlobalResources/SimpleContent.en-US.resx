@@ -645,4 +645,10 @@
   <data name="Version History" xml:space="preserve">
     <value>Version History</value>
   </data>
+  <data name="Script saved successfully" xml:space="preserve">
+    <value>Script saved successfully</value>
+  </data>
+  <data name="Script cleared successfully" xml:space="preserve">
+    <value>Script cleared successfully</value>
+  </data>
 </root>

@@ -989,6 +989,8 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             editContext.CurrentPage.Script = model.Script;
 
             await PageService.Update(editContext.CurrentPage);
+            
+            this.AlertSuccess(StringLocalizer["Script saved successfully"], true);
 
             return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
         }
