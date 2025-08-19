@@ -1,6 +1,8 @@
-﻿using cloudscribe.SimpleContent.ContentTemplates.Configuration;
+﻿using cloudscribe.SimpleContent.ContentTemplates.Bootstrap5;
+using cloudscribe.SimpleContent.ContentTemplates.Configuration;
 using cloudscribe.SimpleContent.ContentTemplates.Services;
 using cloudscribe.SimpleContent.Models;
+using cloudscribe.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -26,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.Configure<ImageWithContentOptions>(configuration.GetSection("ContentTemplateSettings:ImageWithContentOptions"));
             services.TryAddScoped<IImageWithContentOptionsProvider, ConfigImageWithContentOptionsProvider>();
-
+            services.AddScoped<IVersionProvider, VersionProvider>();
 
 
 
