@@ -1,3 +1,8 @@
 ﻿@model cloudscribe.SimpleContent.Web.ViewModels.PageViewModel
 <script src="~/cr/js/ckeditor4114/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script src="~/cr/js/syntax-highlight-init.js"></script>
+
+@if (Model.CurrentPage?.Script != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.Script))
+{
+    <script src="@Url.Action("InlineScript", "Page", new { pageId = Model.CurrentPage.Id, v = Model.CurrentPage.LastModified.Ticks })"></script>
+}

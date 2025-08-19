@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using cloudscribe.SimpleContent.Storage.EFCore.PostgreSql;
@@ -11,9 +12,11 @@ using cloudscribe.SimpleContent.Storage.EFCore.PostgreSql;
 namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423094338_user-script-20250423")]
+    partial class userscript20250423
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -869,6 +872,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("character varying(36)")
                         .HasColumnName("page_entity_id");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("text")
+                        .HasColumnName("script");
 
                     b.Property<int>("Sort")
                         .HasColumnType("integer")

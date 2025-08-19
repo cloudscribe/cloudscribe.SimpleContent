@@ -19,4 +19,5 @@ namespace cloudscribe.SimpleContent.Web.ViewModels
         [RegularExpression(@"^(http(s)?://)?(\/?)[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-‌​\.\?\,\'\/\\\+&amp;%\$#_]*)?$", ErrorMessage ="Please provide a valid url or relative url")]
         public string Url { get; set; }
     }
+
 }

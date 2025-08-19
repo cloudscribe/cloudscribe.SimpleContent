@@ -8,6 +8,7 @@
 using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
+using cloudscribe.SimpleContent.Services;
 using cloudscribe.SimpleContent.Web.Services;
 using cloudscribe.SimpleContent.Web.ViewModels;
 using cloudscribe.Web.Common.Extensions;
@@ -19,6 +20,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Org.BouncyCastle.Asn1.Cmp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -46,7 +48,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             IStringLocalizer<SimpleContent> localizer,
             ITreeCache treeCache,
             DraftPublishService draftPublishService,
+            JsSecuritySanitizer jsSecuritySanitizer,
             IOptions<PageEditOptions> pageEditOptionsAccessor,
+
             ILogger<PageController> logger)
         {
             Mediator = mediator;
@@ -65,6 +69,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             StringLocalizer = localizer;
             NavigationCache = treeCache;
             DraftPublishService = draftPublishService;
+            JsSecuritySanitizer = jsSecuritySanitizer;
             Log = logger;
         }
 
@@ -85,7 +90,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
         protected ITreeCache NavigationCache { get; private set; }
         protected DraftPublishService DraftPublishService { get; private set; }
-
+        public JsSecuritySanitizer JsSecuritySanitizer { get; private set; }
         protected IMediator Mediator { get; private set; }
 
         [HttpHead]
@@ -266,7 +271,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             int pageSize = 10
             )
         {
-            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContextRequest = new PageEditContextRequest(User, null, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
 
             if (!editContext.IsValidRequest)
@@ -476,7 +481,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> EditWithTemplate(PageEditWithTemplateViewModel model)
         {
-            var editContextRequest = new PageEditContextRequest(User, null, model.Id, null);
+            var editContextRequest = new PageEditContextRequest(User, null, model.Id, null, null);
             var editContext = await Mediator.Send(editContextRequest);
 
             if (!editContext.IsValidRequest)
@@ -557,7 +562,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             Guid? historyId = null
             )
         {
-            var request = new PageEditContextRequest(User, slug, null, historyId);
+            var request = new PageEditContextRequest(User, slug, null, null, historyId);
             var editContext = await Mediator.Send(request);
             if(!editContext.IsValidRequest)
             {
@@ -715,7 +720,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Edit(PageEditViewModel model)
         {
-            var editContextRequest = new PageEditContextRequest(User, null, model.Id, null);
+            var editContextRequest = new PageEditContextRequest(User, null, model.Id, null, null);
             var editContext = await Mediator.Send(editContextRequest);
 
             if (!editContext.IsValidRequest)
@@ -805,11 +810,9 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         
         [HttpGet]
         [AllowAnonymous]
-        public virtual async Task<IActionResult> Development(
-            CancellationToken cancellationToken,
-            string slug)
+        public virtual async Task<IActionResult> Development(CancellationToken cancellationToken, string slug, string script)
         {
-            var editContextRequest = new PageEditContextRequest(User, slug, null, null);
+            var editContextRequest = new PageEditContextRequest(User, slug, null, script, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -842,9 +845,12 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
 
             ViewData["Title"] = string.Format(CultureInfo.CurrentUICulture, StringLocalizer["Developer Tools - {0}"], editContext.CurrentPage.Title);
 
+            var invalidScript = TempData["InvalidScript"] as string;
+            
             var model = new PageDevelopmentViewModel
             {
-                Slug = editContext.CurrentPage.Slug
+                Slug = editContext.CurrentPage.Slug,
+                Script = invalidScript ?? editContext.CurrentPage.Script
             };
             model.AddResourceViewModel.Slug = editContext.CurrentPage.Slug;
             model.Css = editContext.CurrentPage.Resources.Where(x => x.Type == "css").OrderBy(x => x.Sort).ThenBy(x => x.Url).ToList<IPageResource>();
@@ -859,7 +865,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> AddResource(AddPageResourceViewModel model)
         {
-            var editContextRequest = new PageEditContextRequest(User, model.Slug, null, null);
+            var editContextRequest = new PageEditContextRequest(User, model.Slug, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -913,9 +919,88 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        public virtual async Task<IActionResult> AddScriptResource(PageDevelopmentViewModel model)
+        {
+            var editContextRequest = new PageEditContextRequest(User, model.Slug, null, model.Script, null);
+            var editContext = await Mediator.Send(editContextRequest);
+            var canDev = EditOptions.AlwaysShowDeveloperLink ? true : User.IsInRole(EditOptions.DeveloperAllowedRole);
+
+            if (!editContext.IsValidRequest)
+            {
+                Log.LogInformation("redirecting to index because project settings not found");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if (!canDev)
+            {
+                Log.LogInformation("redirecting to index because user is not allowed by edit config for developer tools");
+                return RedirectToRoute(PageRoutes.PageRouteName);
+            }
+
+            if (editContext.CurrentPage == null)
+            {
+                Log.LogInformation("page not found, redirecting");
+                return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+            }
+
+            if (!string.IsNullOrEmpty(editContext.CurrentPage.ViewRoles))
+            {
+                if (!User.IsInRoles(editContext.CurrentPage.ViewRoles))
+                {
+                    Log.LogWarning($"page {editContext.CurrentPage.Title} is protected by roles that user is not in so redirecting");
+                    return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
+                }
+            }
+
+            // Allow empty script to clear/remove existing script
+            if (string.IsNullOrEmpty(model.Script))
+            {
+                editContext.CurrentPage.Script = null; // Clear the script
+                await PageService.Update(editContext.CurrentPage);
+                this.AlertSuccess(StringLocalizer["Script cleared successfully"], true);
+                return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
+            }
+
+            // Trim whitespace before validation
+            model.Script = model.Script.Trim();
+
+            if (!model.Script.EndsWith(';'))
+            {
+                this.AlertDanger(StringLocalizer["Scripts should end with a semicolon"], true);
+                // Preserve the invalid script so user doesn't lose their work
+                TempData["InvalidScript"] = model.Script;
+                return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
+            }
+
+            // Validate script security before saving
+            var sanitizer = new JsSecuritySanitizer();
+            if (!sanitizer.IsSafe(model.Script, out var issues))
+            {
+                var errorMessage = $"Script blocked due to security violations: {string.Join(", ", issues)}"; // too helpful?!
+                // var errorMessage = $"Script blocked due to security violations - check the log for details";
+                this.AlertDanger(StringLocalizer[errorMessage], true);
+                Log.LogWarning("Unsafe user-defined script blocked for page " + (editContext.CurrentPage.Slug ?? editContext.CurrentPage.Id) + " : " + string.Join(", ", issues));
+                
+                // Preserve the invalid script so user doesn't lose their work
+                TempData["InvalidScript"] = model.Script;
+                return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
+            }
+
+            editContext.CurrentPage.Script = model.Script;
+
+            await PageService.Update(editContext.CurrentPage);
+            
+            this.AlertSuccess(StringLocalizer["Script saved successfully"], true);
+
+            return RedirectToRoute(PageRoutes.PageDevelopRouteName, new { slug = editContext.CurrentPage.Slug });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> RemoveResource(string slug, string id)
         {
-            var editContextRequest = new PageEditContextRequest(User, slug, null, null);
+            var editContextRequest = new PageEditContextRequest(User, slug, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -976,7 +1061,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> Delete(string id)
         {
-            var editContextRequest = new PageEditContextRequest(User, null, id, null);
+            var editContextRequest = new PageEditContextRequest(User, null, id, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -1065,7 +1150,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return RedirectToRoute(PageRoutes.PageRouteName, new { slug = "" });
             }
 
-            var editContextRequest = new PageEditContextRequest(User, null, id, null);
+            var editContextRequest = new PageEditContextRequest(User, null, id, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -1140,7 +1225,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteHistoryOlderThan(string id, int days)
         {
-            var editContextRequest = new PageEditContextRequest(User, null, id, null);
+            var editContextRequest = new PageEditContextRequest(User, null, id, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -1177,7 +1262,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
   
         public virtual async Task<IActionResult> Tree()
         {
-            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContextRequest = new PageEditContextRequest(User, null, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -1204,7 +1289,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [AllowAnonymous]
         public virtual async Task<IActionResult> TreeJson(CancellationToken cancellationToken, string node = "root")
         {
-            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContextRequest = new PageEditContextRequest(User, null, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -1244,7 +1329,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 return BadRequest();
             }
 
-            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContextRequest = new PageEditContextRequest(User, null, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -1263,7 +1348,7 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public virtual async Task<IActionResult> SortChildPagesAlpha(string pageId)
         {
-            var editContextRequest = new PageEditContextRequest(User, null, null, null);
+            var editContextRequest = new PageEditContextRequest(User, null, null, null, null);
             var editContext = await Mediator.Send(editContextRequest);
             if (!editContext.IsValidRequest)
             {
@@ -1432,6 +1517,55 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
                 }
             }
             return showItems;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> InlineScript(string pageId)
+        {
+            if (string.IsNullOrWhiteSpace(pageId))
+            {
+                return NoContent();
+            }
+
+            IPage page = await PageService.GetPage(pageId);
+
+            if (page?.Script == null)
+            {
+                return NoContent(); // HTTP 204
+            }
+
+            if (string.IsNullOrWhiteSpace(page.Script))
+            {
+                return NoContent();
+            }
+
+            var sanitizer = new JsSecuritySanitizer();
+
+            if (!sanitizer.IsSafe(page.Script, out var issues))
+            {
+                Log.LogWarning("Unsafe user-defined script blocked on page " + (page.Slug ?? pageId) + " : " + string.Join(", ", issues));
+                
+                // Return a more helpful error message for developers
+                var errorScript = $"console.warn('Script blocked due to security violations: {string.Join(", ", issues)}');";
+                return Content(errorScript, "application/javascript");
+            }
+
+            // Add caching headers for performance
+            var etag = $"\"{page.Id}-{page.LastModified.Ticks}\"";
+            Response.Headers["ETag"] = etag;
+            Response.Headers["Cache-Control"] = "public, max-age=3600"; // Cache for 1 hour
+            
+            // Check if client has cached version
+            if (Request.Headers.IfNoneMatch == etag)
+            {
+                return StatusCode(304); // Not Modified
+            }
+
+            // Improved CSP header - less restrictive but still secure
+            Response.Headers["Content-Security-Policy"] = "script-src 'self'; object-src 'none';";
+            
+            return Content(page.Script, "application/javascript");
         }
     }
 }

@@ -156,7 +156,7 @@
             }
             @if (showDev)
             {
-                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
+                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug" data-unsaved-warning="@sr["You have unsaved changes in the editor. Are you sure you want to navigate to Developer Tools? Your changes will be lost."]">@sr["Developer Tools"]</a>
             }
 
         </div>

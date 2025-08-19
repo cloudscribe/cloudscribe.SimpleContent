@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cloudscribe.SimpleContent.Storage.EFCore.MySQL;
 
@@ -10,9 +11,11 @@ using cloudscribe.SimpleContent.Storage.EFCore.MySQL;
 namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 {
     [DbContext(typeof(SimpleContentDbContext))]
-    partial class SimpleContentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423093954_user-script-20250423")]
+    partial class userscript20250423
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -685,6 +688,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<string>("PageEntityId")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Sort")
                         .HasColumnType("int");

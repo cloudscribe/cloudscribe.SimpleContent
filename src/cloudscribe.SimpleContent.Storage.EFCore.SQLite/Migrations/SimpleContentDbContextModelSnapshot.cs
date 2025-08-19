@@ -601,6 +601,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Script")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SerializedModel")
                         .HasColumnType("TEXT");
 
@@ -866,6 +869,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.SQLite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("PubDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Script")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SerializedModel")

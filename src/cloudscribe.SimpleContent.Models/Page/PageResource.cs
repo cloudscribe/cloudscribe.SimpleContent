@@ -31,7 +31,6 @@ namespace cloudscribe.SimpleContent.Models
         public string Id { get; set; }
         public string ContentId { get; set; }
         public int Sort { get; set; } = 1;
-
         public string Type { get; set; }
         public string Environment { get; set; }
         public string Url { get; set; }
