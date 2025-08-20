@@ -64,8 +64,8 @@ namespace cloudscribe.SimpleContent.Web.Services
             "location.href",          // Commonly set to redirect
             "document.location",      // Same
             "window.name",            // Used to pass data between domains
-            "localStorage",           // Persistent local storage
-            "sessionStorage",         // Session-scoped storage
+            "localStorage",           // Persistent local storage (including .setItem, .getItem, etc.)
+            "sessionStorage",         // Session-scoped storage (including .setItem, .getItem, etc.)
             "indexedDB",              // DB access
             "navigator.geolocation",  // Gets user location
             "navigator.clipboard",    // Read/write clipboard
@@ -107,6 +107,27 @@ namespace cloudscribe.SimpleContent.Web.Services
                     DangerousCalls.Contains(ident.Name))
                 {
                     issues.Add($"Call to disallowed function: {ident.Name}");
+                }
+                
+                // Check for method calls on dangerous objects (e.g., localStorage.setItem)
+                if (callExpr.Callee is MemberExpression memberCall &&
+                    memberCall.Object is Identifier objIdent)
+                {
+                    // Check if it's a dangerous object being called
+                    if (DangerousProperties.Contains(objIdent.Name))
+                    {
+                        issues.Add($"Method call on disallowed object: {objIdent.Name}");
+                    }
+                }
+            }
+
+            // Check for dangerous constructor calls (new XMLHttpRequest(), new Function(), etc.)
+            if (node is NewExpression newExpr)
+            {
+                if (newExpr.Callee is Identifier ident &&
+                    DangerousCalls.Contains(ident.Name))
+                {
+                    issues.Add($"Use of disallowed constructor: new {ident.Name}()");
                 }
             }
 
