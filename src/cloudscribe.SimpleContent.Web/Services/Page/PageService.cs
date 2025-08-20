@@ -227,7 +227,7 @@ namespace cloudscribe.SimpleContent.Services
             
             if (string.IsNullOrEmpty(model.MovedNode) || string.IsNullOrEmpty(model.TargetNode) || (model.MovedNode == "-1") || (model.TargetNode == "-1") || (string.IsNullOrEmpty(model.Position)))
             {
-                result = new PageActionResult(false, "bad request, failed to move page");
+                result = new PageActionResult(false, _sr["bad request, failed to move page"]);
                 return result;
             }
 
@@ -236,7 +236,7 @@ namespace cloudscribe.SimpleContent.Services
 
             if ((movedNode == null) || (targetNode == null))
             {
-                result = new PageActionResult(false, "bad request, page or target page not found");
+                result = new PageActionResult(false, _sr["bad request, page or target page not found"]);
                 return result;
             }
 
@@ -308,7 +308,7 @@ namespace cloudscribe.SimpleContent.Services
 
             //ClearNavigationCache();
 
-            result = new PageActionResult(true, "operation succeeded");
+            result = new PageActionResult(true, _sr["operation succeeded"]);
 
             await _eventHandlers.HandleMoved(_settings.Id, movedNode, targetNode, model.Position).ConfigureAwait(false);
 
@@ -340,7 +340,7 @@ namespace cloudscribe.SimpleContent.Services
             }
 
             //ClearNavigationCache();
-            return new PageActionResult(true, "operation succeeded");
+            return new PageActionResult(true, _sr["operation succeeded"]);
 
         }
 

@@ -1275,4 +1275,46 @@
   <data name="Working..." xml:space="preserve">
     <value>Attendere prego</value>
   </data>
+  <data name="If checked will show the blog categories in the side bar" xml:space="preserve">
+    <value>Se selezionato mostrerà le categorie del blog nella barra laterale</value>
+  </data>
+  <data name="If checked will show the blog archives in the side bar" xml:space="preserve">
+    <value>Se selezionato mostrerà gli archivi del blog nella barra laterale</value>
+  </data>
+  <data name="Show the blog categories in the side bar" xml:space="preserve">
+    <value>Mostra le categorie del blog nella barra laterale</value>
+  </data>
+  <data name="Show the blog archives in the side bar" xml:space="preserve">
+    <value>Mostra gli archivi del blog nella barra laterale</value>
+  </data>
+  <data name="Created By" xml:space="preserve">
+    <value>Creato da</value>
+  </data>
+  <data name="Last Updated" xml:space="preserve">
+    <value>Ultimo aggiornamento</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Aggiornato</value>
+  </data>
+  <data name="Updated By" xml:space="preserve">
+    <value>Aggiornato da</value>
+  </data>
+  <data name="Show Created By" xml:space="preserve">
+    <value>Mostra Creato da</value>
+  </data>
+  <data name="Show Created Date" xml:space="preserve">
+    <value>Mostra data di creazione</value>
+  </data>
+  <data name="Show Last Modified By" xml:space="preserve">
+    <value>Mostra ultima modifica di</value>
+  </data>
+  <data name="Show Last Modified Date" xml:space="preserve">
+    <value>Mostra data ultima modifica</value>
+  </data>
+  <data name="Show / hide the following information below the main content of the page." xml:space="preserve">
+    <value>Mostra/nascondi le seguenti informazioni sotto il contenuto principale della pagina.</value>
+  </data>
+  <data name="Show / hide the following information below the main content of pages (site default)." xml:space="preserve">
+    <value>Mostra/nascondi le seguenti informazioni sotto il contenuto principale delle pagine (impostazione predefinita del sito).</value>
+  </data>
 </root>

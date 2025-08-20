@@ -24,9 +24,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.Models
             get { return pageEntityId; }
             set { pageEntityId = value; }
         }
-
         public int Sort { get; set; } = 1;
-
         public string Type { get; set; }
         public string Environment { get; set; }
         public string Url { get; set; }

@@ -66,9 +66,9 @@ namespace cloudscribe.SimpleContent.Models
         string TwitterPublisher { get; set; }
         string TwitterCreator { get; set; }
         string DefaultContentType { get; set; }
-
         bool ShowRelatedPosts { get; set; }
-
+        public bool ShowBlogCategories { get; set; }
+        public bool ShowArchivedPosts { get; set; }
         bool ShowAboutBox { get; set; } 
         string AboutHeading { get; set; }
         string AboutContent { get; set; }
@@ -87,5 +87,9 @@ namespace cloudscribe.SimpleContent.Models
         /// Specifies the length in characters/words/paragraphs that a post will be truncated to create a teaser for index/listing views.
         /// </summary>
         int TeaserTruncationLength { get; set; }
+        bool ShowCreatedBy { get; set; }
+        bool ShowCreatedDate { get; set; }
+        bool ShowLastModifiedBy { get; set; }
+        bool ShowLastModifiedDate { get; set; }
     }
 }

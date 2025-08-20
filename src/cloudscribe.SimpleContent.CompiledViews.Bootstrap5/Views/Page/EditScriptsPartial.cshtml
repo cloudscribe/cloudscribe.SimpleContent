@@ -27,18 +27,5 @@ else
     }
 }
 <script src="/csscsr/js/edit-script.js"></script>
-@*<script>
-    $(function () {
-        $('[data-bs-toggle="tooltip"]').tooltip()
-    });
-    $(document).ready(function () {
-        $('#SaveMode').click(function () {
-            var newDateVal = $('#NewPubDate').val();
-            if (newDateVal.length == 0) {
-                $('#dateRequired').modal('show')
-                $('#SaveMode').html($('#SaveMode').data("enabled-text"));
-                return false;
-            }
-        });
-    });
-</script>*@
+<script src="/csscsr/js/unsaved-changes-warning.js"></script>
+<partial name="SummernoteScripts" />

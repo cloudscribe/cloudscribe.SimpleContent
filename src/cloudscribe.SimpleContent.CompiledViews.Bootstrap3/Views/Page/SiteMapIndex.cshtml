@@ -1,9 +1,0 @@
-﻿@using cloudscribe.Web.Navigation
-@using cloudscribe.SimpleContent.Web
-@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<SimpleContent> sr
-@{
-    ViewData["Title"] = sr["Site Map"];
-}
-<h1>@sr["Site Map"]</h1>
-@await Component.InvokeAsync("Navigation", new { viewName = "SiteMap", filterName = "sitemap", startingNodeKey = "RootNode" })

@@ -9,23 +9,24 @@
 
 @if (Model.CanEdit)
 {
-    <a id="pageManagerLink" href="@Model.PageTreePath" title="@sr["Manage Page Hierarchy"]" class="btn btn-sm content-tree">
-        <span class="@themeSettings.Icons.PageTree" aria-hidden="true"></span>
-    </a>
-    <a id="newPageLink" href="@Model.NewItemPath" title="@sr["New Page"]" class="btn btn-sm content-new">
-        <span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span>
-    </a>
-    @if (Model.CurrentPage != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.Id))
-    {
-        <a id="editPageLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit">
-            <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
+    <div class="btn-group btn-group-small-admin btn-group-vertical end-0 me-3 fixed-top">
+        <a id="pageManagerLink" href="@Model.PageTreePath" title="@sr["Manage Page Hierarchy"]" class="btn btn-sm content-tree btn-outline-primary btn-light">
+            <span class="@themeSettings.Icons.PageTree" aria-hidden="true"></span>
         </a>
-    }
-    @if (!editOptions.HideUnpublishButton && Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
-    {
-        <a id="unpublishPageLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish" style="position:absolute;top:160px;right:0px;" data-bs-toggle="modal" data-bs-target="#confirmUnpublishModal">
-            <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>
+        <a id="newPageLink" href="@Model.NewItemPath" title="@sr["New Page"]" class="btn btn-sm content-new btn-outline-primary btn-light">
+            <span class="@themeSettings.Icons.NewItem" aria-hidden="true"></span>
         </a>
-    }
-
+        @if (Model.CurrentPage != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.Id))
+        {
+            <a id="editPageLink" href="@Model.EditPath" title="@sr["Edit"]" class="btn btn-sm content-edit btn-outline-primary btn-light">
+                <span class="@themeSettings.Icons.Edit" aria-hidden="true"></span>
+            </a>
+        }
+        @if (!editOptions.HideUnpublishButton && Model.CurrentPage != null && Model.CanEdit && !Model.ShowingDeleted && !Model.ShowingDraft && !Model.HistoryId.HasValue && Model.CurrentPage.IsPublished)
+        {
+            <a id="unpublishPageLink" title="@sr["Unpublish"]" class="btn btn-sm content-unpublish btn-outline-primary btn-light" data-bs-toggle="modal" data-bs-target="#confirmUnpublishModal">
+                <span class="@themeSettings.Icons.Unpublish" aria-hidden="true"></span>
+            </a>
+        }
+    </div>
 }

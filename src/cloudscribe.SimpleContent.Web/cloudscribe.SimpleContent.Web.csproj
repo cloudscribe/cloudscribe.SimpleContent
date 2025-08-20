@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>A simple, yet flexible content and blog engine for ASP.NET Core that can work with or without a database</Description>
-    <Version>8.0.1</Version>
+    <Version>8.4.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog,content</PackageTags>
@@ -11,6 +11,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/cloudscribe/cloudscribe.SimpleContent.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="css\editing-side-menu.css" />
     <None Remove="js\edit-script.js" />
     <None Remove="js\sc-simple-gallery-init.js" />
   </ItemGroup>
@@ -38,13 +40,13 @@
   <ItemGroup>
     <PackageReference Include="cloudscribe.HtmlAgilityPack" Version="1.0.1" />
 
-    <PackageReference Include="cloudscribe.Versioning" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Email.Senders" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Web.Common" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Web.Navigation" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Web.Pagination" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.DateTimeUtils" Version="8.0.0" />
-    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="8.0.0" />
+    <PackageReference Include="cloudscribe.Versioning" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Email.Senders" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Web.Common" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Web.Navigation" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Web.Pagination" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.DateTimeUtils" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Web.SiteMap.FromNavigation" Version="8.4.0" />
 
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
@@ -56,6 +58,10 @@
     <PackageReference Include="Markdig" Version="0.37.0" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
-  </ItemGroup>
 
+    <PackageReference Include="Esprima" Version="3.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>

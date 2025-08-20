@@ -173,9 +173,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 .HasDefaultValue(1000);
 
                 entity.Property(p => p.AboutHeading).HasMaxLength(255);
-                entity.Property(p => p.ShowAboutBox);
-                entity.Property(p => p.ShowRelatedPosts);
-
+                entity.Property(p => p.ShowAboutBox).HasDefaultValue(true);
+                entity.Property(p => p.ShowRelatedPosts).HasDefaultValue(true);
+                entity.Property(p => p.ShowArchivedPosts).HasDefaultValue(true);
+                entity.Property(p => p.ShowBlogCategories).HasDefaultValue(true);
             });
 
             modelBuilder.Entity<PostEntity>(entity =>
@@ -439,6 +440,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL
                 entity.Property(p => p.DraftAuthor)
                 .HasMaxLength(255);
 
+                entity.Property(p => p.ShowCreatedBy).HasColumnType("bit");
+                entity.Property(p => p.ShowCreatedDate).HasColumnType("bit");
+                entity.Property(p => p.ShowLastModifiedBy).HasColumnType("bit");
+                entity.Property(p => p.ShowLastModifiedDate).HasColumnType("bit");
             });
 
             modelBuilder.Entity<PageComment>(entity =>

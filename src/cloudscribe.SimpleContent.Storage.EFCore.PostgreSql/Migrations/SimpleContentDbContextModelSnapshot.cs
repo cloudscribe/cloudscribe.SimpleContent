@@ -17,7 +17,7 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -162,6 +162,22 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("serializer");
+
+                    b.Property<bool?>("ShowCreatedBy")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_created_by");
+
+                    b.Property<bool?>("ShowCreatedDate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_created_date");
+
+                    b.Property<bool?>("ShowLastModifiedBy")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_last_modified_by");
+
+                    b.Property<bool?>("ShowLastModifiedDate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_last_modified_date");
 
                     b.Property<string>("Slug")
                         .HasMaxLength(255)
@@ -407,19 +423,51 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasColumnName("remote_feed_url");
 
                     b.Property<bool>("ShowAboutBox")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("show_about_box");
+
+                    b.Property<bool>("ShowArchivedPosts")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("show_archived_posts");
+
+                    b.Property<bool>("ShowBlogCategories")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("show_blog_categories");
+
+                    b.Property<bool>("ShowCreatedBy")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_created_by");
+
+                    b.Property<bool>("ShowCreatedDate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_created_date");
 
                     b.Property<bool>("ShowFeaturedPostsOnDefaultPage")
                         .HasColumnType("boolean")
                         .HasColumnName("show_featured_posts_on_default_page");
+
+                    b.Property<bool>("ShowLastModifiedBy")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_last_modified_by");
+
+                    b.Property<bool>("ShowLastModifiedDate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_last_modified_date");
 
                     b.Property<bool>("ShowRecentPostsOnDefaultPage")
                         .HasColumnType("boolean")
                         .HasColumnName("show_recent_posts_on_default_page");
 
                     b.Property<bool>("ShowRelatedPosts")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(true)
                         .HasColumnName("show_related_posts");
 
                     b.Property<bool>("ShowTitle")
@@ -715,6 +763,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("pub_date");
 
+                    b.Property<string>("Script")
+                        .HasColumnType("text")
+                        .HasColumnName("script");
+
                     b.Property<string>("SerializedModel")
                         .HasColumnType("text")
                         .HasColumnName("serialized_model");
@@ -732,6 +784,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("show_comments");
 
+                    b.Property<bool?>("ShowCreatedBy")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_created_by");
+
+                    b.Property<bool?>("ShowCreatedDate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_created_date");
+
                     b.Property<bool>("ShowHeading")
                         .HasColumnType("boolean")
                         .HasColumnName("show_heading");
@@ -739,6 +799,14 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<bool>("ShowLastModified")
                         .HasColumnType("boolean")
                         .HasColumnName("show_last_modified");
+
+                    b.Property<bool?>("ShowLastModifiedBy")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_last_modified_by");
+
+                    b.Property<bool?>("ShowLastModifiedDate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_last_modified_date");
 
                     b.Property<bool>("ShowMenu")
                         .HasColumnType("boolean")
@@ -1038,6 +1106,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("pub_date");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("text")
+                        .HasColumnName("script");
 
                     b.Property<string>("SerializedModel")
                         .HasColumnType("text")
