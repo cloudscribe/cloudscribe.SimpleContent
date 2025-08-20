@@ -1,11 +1,4 @@
-﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-// Author:                  Joe Audette
-// Created:                 2016-02-24
-// Last Modified:           2019-02-17
-// 
-
-using cloudscribe.DateTimeUtils;
+﻿using cloudscribe.DateTimeUtils;
 using cloudscribe.SimpleContent.Models;
 using cloudscribe.SimpleContent.Models.Versioning;
 using cloudscribe.SimpleContent.Services;
@@ -174,12 +167,17 @@ namespace cloudscribe.SimpleContent.Web.Mvc.Controllers
             }
             // page is not null at this point
 
-            if ((!string.IsNullOrEmpty(page.ViewRoles)))
+            if (!string.IsNullOrEmpty(page.ViewRoles))
             {
-                if (!User.IsInRoles(page.ViewRoles))
+                if (!User.Identity.IsAuthenticated)
                 {
-                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 404");
-                    return NotFound();
+                    Log.LogWarning($"page {page.Title} is protected and user is not authenticated, returning login page and 302");
+                    return View("NotFound", 401);
+                }
+                else if (!User.IsInRoles(page.ViewRoles))
+                {
+                    Log.LogWarning($"page {page.Title} is protected by roles that user is not in so returning 403");
+                    return View("NotFound", 403);
                 }
             }
 
