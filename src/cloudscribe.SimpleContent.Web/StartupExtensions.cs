@@ -36,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<IPageService, PageService>();
             services.AddScoped<DraftPublishService>();
+            services.AddScoped<JsSecuritySanitizer>();
             services.TryAddScoped<IProjectService, ProjectService>();
             services.TryAddScoped<IProjectSettingsResolver, DefaultProjectSettingsResolver>();
             services.TryAddScoped<IMediaProcessor, FileSystemMediaProcessor>();
@@ -86,7 +87,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<ISimpleContentThemeHelper, DefaultSimpleContentThemeHelper>();
 
             // jk breaking change in Mediatr v12 will be...:
-            // services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+            //services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             services.AddMediatR(typeof(PageService).Assembly);
             
 

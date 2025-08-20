@@ -64,7 +64,6 @@
                 <legend class="w-auto">@legend</legend>
                 <partial name="@Model.Template.EditView" model="@Model.TemplateModel" />
             </fieldset>
-            <partial name="EditorialShowHidePartialTemplates" model="@Model" />
         </div>
         <div class="tab-pane" id="tabSettings" role="tabpanel" aria-labelledby="tab2">
             <div class="mb-3 mt-2">
@@ -91,7 +90,7 @@
                 </div>
             </div>
 
-
+            <partial name="EditorialShowHidePartialTemplates" model="@Model" />
             <partial name="EditWithTemplateCommentsEnabledPartial" model="Model" />
             <div class="mb-3">
                 <label asp-for="PageOrder">@sr["Page Order"]</label>
@@ -157,7 +156,7 @@
             }
             @if (showDev)
             {
-                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug">@sr["Developer Tools"]</a>
+                <a class="btn btn-primary" asp-route="@pageRoutes.PageDevelopRouteName" asp-route-slug="@Model.Slug" data-unsaved-warning="@sr["You have unsaved changes in the editor. Are you sure you want to navigate to Developer Tools? Your changes will be lost."]">@sr["Developer Tools"]</a>
             }
 
         </div>

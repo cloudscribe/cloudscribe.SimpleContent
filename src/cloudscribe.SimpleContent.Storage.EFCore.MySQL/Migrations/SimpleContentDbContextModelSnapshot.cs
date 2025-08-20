@@ -603,6 +603,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Script")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("SerializedModel")
                         .HasColumnType("longtext");
 
@@ -869,6 +872,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MySQL.Migrations
 
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("SerializedModel")
                         .HasColumnType("longtext");

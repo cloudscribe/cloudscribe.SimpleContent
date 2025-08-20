@@ -763,6 +763,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("pub_date");
 
+                    b.Property<string>("Script")
+                        .HasColumnType("text")
+                        .HasColumnName("script");
+
                     b.Property<string>("SerializedModel")
                         .HasColumnType("text")
                         .HasColumnName("serialized_model");
@@ -1102,6 +1106,10 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.PostgreSql.Migrations
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("pub_date");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("text")
+                        .HasColumnName("script");
 
                     b.Property<string>("SerializedModel")
                         .HasColumnType("text")

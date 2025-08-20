@@ -310,6 +310,7 @@ namespace cloudscribe.SimpleContent.Models
             target.ShowCreatedDate = input.ShowCreatedDate;
             target.ShowLastModifiedBy = input.ShowLastModifiedBy;
             target.ShowLastModifiedDate = input.ShowLastModifiedDate;
+            target.Script = input.Script;
         }
 
         /// <summary>

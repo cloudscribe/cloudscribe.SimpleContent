@@ -57,6 +57,12 @@
                 <script src="@Url.Content(c.Url)" asp-append-version="@(c.Url.StartsWith("/"))"></script>
             }
         </environment>
+        
+        @* User custom inline script - render after all external JS resources *@
+        @if (Model.CurrentPage?.Script != null && !string.IsNullOrWhiteSpace(Model.CurrentPage.Script))
+        {
+            <script src="@Url.Action("InlineScript", "Page", new { pageId = Model.CurrentPage.Id, v = Model.CurrentPage.LastModified.Ticks })"></script>
+        }
     }
     <partial name="PageScriptsPartial" model="@Model" />
 
