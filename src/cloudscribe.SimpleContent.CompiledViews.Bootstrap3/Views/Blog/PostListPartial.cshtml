@@ -1,6 +1,0 @@
-﻿@model cloudscribe.SimpleContent.Web.ViewModels.BlogViewModel
-@foreach (var post in Model.Posts)
-{
-    Model.TmpPost = post;
-    await Html.RenderPartialAsync("PostPartial", Model);
-}

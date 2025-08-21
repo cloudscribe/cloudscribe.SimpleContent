@@ -626,6 +626,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Script")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SerializedModel")
                         .HasColumnType("nvarchar(max)");
 
@@ -912,6 +915,9 @@ namespace cloudscribe.SimpleContent.Storage.EFCore.MSSQL.Migrations
 
                     b.Property<DateTime?>("PubDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Script")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SerializedModel")
                         .HasColumnType("nvarchar(max)");

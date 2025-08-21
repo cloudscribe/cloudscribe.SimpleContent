@@ -1,5 +1,6 @@
 ﻿// Author: Joe Audette
 // Version: 2018-02-12
+var tetherInstance;
 $(function () {
 
     String.format = function () {
@@ -10,7 +11,7 @@ $(function () {
         }
         return s;
     };
-
+    
     var pageTree = {
         ui: {
             treeDiv: $('#tree1'),
@@ -49,12 +50,20 @@ $(function () {
             pageTree.ui.newChildLink.attr('href', this.urls.newPageUrl + "?parentslug=" + node.slug);
             pageTree.ui.pubStatusLabel.html(node.pubstatus);
             pageTree.ui.cmdBarDiv.show();
-            new Tether({
+            tetherInstance = new Tether({
                 element: '.commandPanel',
                 target: '.jqtree-selected',
                 attachment: 'top left',
                 targetAttachment: 'top right'
             });
+            setTimeout(function () {
+                if (tetherInstance) {
+                    tetherInstance.position();
+                }
+            });
+            setTimeout(function () {
+                tetherInstance.position();
+            })
             if (node.childcount > 1) {
                 pageTree.ui.sortLi.show();
             } else {
@@ -272,3 +281,9 @@ $(function () {
     };
     pageTree.init();
 }); 
+
+$(window).on('scroll', function () {
+    if (tetherInstance) {
+        tetherInstance.position();
+    }
+});

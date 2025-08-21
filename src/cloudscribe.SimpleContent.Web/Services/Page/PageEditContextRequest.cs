@@ -10,6 +10,7 @@ namespace cloudscribe.SimpleContent.Web.Services
             ClaimsPrincipal user,
             string slug,
             string pageId,
+            string script,
             Guid? historyId
             )
         {
@@ -17,10 +18,12 @@ namespace cloudscribe.SimpleContent.Web.Services
             Slug = slug;
             PageId = pageId;
             HistoryId = historyId;
+            Script = script;
         }
 
         public ClaimsPrincipal User { get; private set; }
         public string Slug { get; private set; }
+        public string Script { get; private set; }
         public string PageId { get; private set; }
         public Guid? HistoryId { get; private set; }
     }
