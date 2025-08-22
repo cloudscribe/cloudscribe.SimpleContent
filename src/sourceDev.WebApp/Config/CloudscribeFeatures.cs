@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             switch (storage)
             {
                 case "efcore":
-                    switch (efProvider)
+                    switch (efProvider.ToLower())
                     {
                         case "mysql":
                             connectionString = config.GetConnectionString("MySqlEntityFrameworkConnection");
