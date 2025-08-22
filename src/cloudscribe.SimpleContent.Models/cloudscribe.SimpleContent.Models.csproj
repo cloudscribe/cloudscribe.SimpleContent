@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>cloudscribe.SimpleContent.Models Class Library</Description>
-    <Version>8.4.0</Version>
+    <Version>8.5.0</Version>
     <TargetFramework>net8.0</TargetFramework>
     <Authors>Joe Audette</Authors>
     <PackageTags>cloudscribe;blog;cms</PackageTags>
@@ -25,7 +25,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Include="cloudscribe.Pagination.Models" Version="8.4.0" />
+    <PackageReference Include="cloudscribe.Pagination.Models" Version="8.5.0" />
 
     <PackageReference Include="System.Security.Claims" Version="4.3.0" />
   </ItemGroup>
